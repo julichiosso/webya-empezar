@@ -5,7 +5,7 @@ description: Procedimiento exacto para agregar un rubro nuevo a WebYa /empezar (
 
 # Agregar un rubro nuevo
 
-**Regla de oro:** agregar un rubro = crear **un archivo** en `src/config/rubros/`. No se toca ningún componente, schema ni test genérico. Si algo te obliga a tocar un componente, es un bug de arquitectura: arreglalo en el componente, no hagas excepciones.
+**Regla de oro:** agregar un rubro = crear **un archivo** en `src/config/rubros/` (más su línea de registro en `index.ts`, paso 3). No se toca ningún componente, schema ni test genérico. Si algo te obliga a tocar un componente, es un bug de arquitectura: arreglalo en el componente, no hagas excepciones.
 
 ## Pasos
 
@@ -38,7 +38,7 @@ description: Procedimiento exacto para agregar un rubro nuevo a WebYa /empezar (
 
 3. **Registrar:** agregá el `import` y la entrada en `src/config/rubros/index.ts`. (El orden del array define el orden en la grilla; “Otro” siempre va último.)
 
-4. **Tests:** no escribas tests nuevos por rubro. Los tests genéricos de `src/config/rubros/rubros.test.ts` validan solos que cada rubro: tenga ids únicos, módulos válidos, al menos 2 objetivos, ícono existente y textos dentro de los límites. Corré:
+4. **Tests:** no escribas tests nuevos por rubro. Los tests genéricos de `src/config/rubros/rubros.test.ts` validan solos que cada rubro: tenga ids únicos y en snake_case, módulos válidos, al menos 2 objetivos, textos dentro de los límites y sin promesas de precios o plazos. Cuando exista el registro de íconos (etapa de UI), otro test genérico verifica que `icono` exista en él. Corré:
 
    ```bash
    pnpm test src/config
