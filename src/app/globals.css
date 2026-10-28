@@ -25,6 +25,15 @@
   --accent-soft: rgb(52 229 161 / 0.12);
   --danger: #ff7a7a;
 
+  /* Movimiento (ver webya-design-system: solo transform y opacity). Van en :root para poder
+     usarlos en CSS crudo; Tailwind descarta las variables de @theme que no usa. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-instant: 100ms;
+  --duration-fast: 160ms;
+  --duration-base: 280ms;
+  --duration-slow: 520ms;
+
   --noise-opacity: 0.035;
   /* Ruido fractal como máscara: el canal alfa sale del canal rojo del ruido. */
   --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1.4 0 0 0 -.2'/%3E%3C/filter%3E%3Crect width='128' height='128' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -91,14 +100,6 @@
   /* Elevación mínima: borde de 1px + un hilo de luz arriba, nunca sombras pesadas. */
   --shadow-raised: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 8px 24px -12px rgb(0 0 0 / 0.5);
 
-  /* Movimiento (ver webya-design-system: solo transform y opacity). */
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --duration-instant: 100ms;
-  --duration-fast: 160ms;
-  --duration-base: 280ms;
-  --duration-slow: 520ms;
-
   /* Altura mínima táctil (WCAG 2.5.8 pide 24px; nosotros exigimos 48px). */
   --spacing-tap: 3rem;
 }
@@ -155,10 +156,52 @@
     border-radius: 4px;
   }
 
+  /* El logo es un SVG negro: en oscuro se invierte a blanco. */
+  .logo {
+    filter: invert(1);
+  }
+  :root[data-theme='light'] .logo {
+    filter: none;
+  }
+
   /* Cifras alineadas en cualquier lugar donde haya números. */
   .tabular {
     font-variant-numeric: tabular-nums;
   }
+}
+
+/*
+ * Íconos que "se dibujan". Excepción acotada del presupuesto de animación: stroke-dashoffset es
+ * una propiedad de pintado, pero solo se usa en íconos de ≤ 24px, una vez, al activarse.
+ */
+@keyframes ic-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.ic-draw .ic-path {
+  stroke-dasharray: 1 1;
+}
+.ic-draw[data-active='true'] .ic-path {
+  animation: ic-draw var(--duration-slow) var(--ease-out) both;
+}
+@media (hover: hover) {
+  .group:hover .ic-draw .ic-path {
+    animation: ic-draw var(--duration-slow) var(--ease-out) both;
+  }
+}
+
+/* Spinner del botón en carga: solo rota (transform). */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin {
+  animation: spin 800ms linear infinite;
 }
 
 /* Movimiento reducido: sin transiciones ni animaciones; el contenido queda visible y estático. */
