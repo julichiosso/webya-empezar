@@ -1,0 +1,22 @@
+node_modules
+.next
+out
+*.tsbuildinfo
+next-env.d.ts
+
+# Entorno y secretos: solo .env.example va al repo
+.env
+.env.*
+!.env.example
+
+# Leads de desarrollo (LeadRepository en archivo)
+.data
+
+# Tests
+coverage
+playwright-report
+test-results
+e2e/.screenshots-actual
+
+.vercel
+.DS_Store

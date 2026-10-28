@@ -1,0 +1,60 @@
+---
+name: webya-qa-checklist
+description: Checklist obligatorio antes de dar por terminada una etapa o la entrega de WebYa /empezar (lint, typecheck, tests, a11y, Lighthouse, mobile, performance de animación y seguridad de la tabla leads). Usala al cerrar cada etapa.
+---
+
+# QA antes de dar algo por terminado
+
+No declares nada “verificado” sin evidencia. Reportá resultados reales (comando + salida resumida) y lo que **no** pudiste verificar.
+
+## A. Automático (cada etapa)
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+```
+
+Los tres deben terminar sin errores. Antes de la entrega final, además: `pnpm build` (sin warnings críticos) y `pnpm test:e2e`.
+
+## B. Funcional
+
+- [ ] Flujo completo en viewport móvil (375×667): rubro → objetivos → datos → confirmación, en < 90 s.
+- [ ] Recarga a mitad del flujo: el estado se conserva (sessionStorage).
+- [ ] Atrás funciona y no pierde datos. `Enter` avanza. “Otro” muestra su campo.
+- [ ] WhatsApp inválido muestra error amable al salir del campo; válido se formatea solo.
+- [ ] El lead queda guardado con **todos** los campos y los UTM (`?utm_source=ig&utm_medium=bio&utm_campaign=test`).
+- [ ] Honeypot lleno → no se guarda (y no avisa al bot). Rate limit → 429 claro. Falla del repositorio → 500 genérico, sin detalles internos.
+
+## C. Accesibilidad
+
+- [ ] Todo operable solo con teclado, foco visible y en orden lógico.
+- [ ] Labels asociados; errores con `aria-live`; tarjetas con roles `radio`/`checkbox` y `aria-checked`.
+- [ ] Contraste AA en dark y light (texto ≥ 4.5:1, UI ≥ 3:1).
+- [ ] Zoom 200% sin pérdida; `prefers-reduced-motion` con versión estática equivalente.
+
+## D. Performance (build de producción, no `dev`)
+
+- [ ] Lighthouse móvil: Performance ≥ 90, Accessibility ≥ 95, SEO ≥ 95 (reportar números reales).
+- [ ] CLS < 0.05; reportar LCP e INP medidos.
+- [ ] JS de la ruta < 150 KB gzip (reportar el número real).
+- [ ] Animaciones a 60 fps con CPU throttling ×4; solo `transform`/`opacity`; hero pausado fuera de pantalla y con pestaña oculta.
+- [ ] Si el “wow” compromete algo de esto: simplificar y avisar.
+
+## E. Seguridad de `leads`
+
+- [ ] La migración activa RLS y **no** define políticas para `anon`/`authenticated`.
+- [ ] Con la clave `anon` NO se puede `select` ni `insert` en `leads` (test automatizado cuando haya credenciales; si no, dejar el test marcado como `skip` con motivo y decirlo en el reporte).
+- [ ] No se guarda IP en claro (solo `ip_hash` con sal). Sin secretos en el repo (`git grep -i "service_role"` solo en código/doc, sin valores).
+- [ ] Ninguna variable secreta con prefijo `NEXT_PUBLIC_`.
+- [ ] Errores internos nunca llegan al cliente.
+
+## F. Visual
+
+- [ ] Capturas por paso en: iPhone SE, iPhone 15, Pixel 7, tablet y desktop (Playwright).
+- [ ] Sin valores sueltos de diseño; checklist de `webya-design-system` cumplido.
+- [ ] Probado en navegador in-app de Instagram **en dispositivo real** (iOS y Android). Si no se pudo, declararlo como pendiente: emular el user agent no equivale a probarlo.
+
+## G. Reporte final (formato)
+
+1. Qué se hizo. 2. Resultado de lint / typecheck / tests / build (con números). 3. Lighthouse móvil, peso JS, CLS/LCP/INP. 4. Capturas. 5. **No verificado / pendiente** (honesto). 6. `TODO:` que debe completar el dueño.
