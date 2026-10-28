@@ -1,7 +1,8 @@
 import { Icon } from '../icons/Icon';
 import { ButtonLink } from '../ui/Button';
+import { HeroArt } from './HeroArt';
 
-/** Hero de /empezar. La composición vectorial animada se suma en la etapa de secciones. */
+/** Hero de /empezar: promesa, CTA que baja al wizard y la web que se arma por bloques. */
 export function Hero() {
   return (
     <section aria-labelledby="hero-title" className="pt-10 pb-12 sm:pt-16">
@@ -16,6 +17,9 @@ export function Hero() {
         Empezar
         <Icon name="arrowDown" size={20} />
       </ButtonLink>
+      <div className="mt-12">
+        <HeroArt />
+      </div>
     </section>
   );
 }
