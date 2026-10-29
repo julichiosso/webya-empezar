@@ -116,6 +116,8 @@ export function esProsa(texto: string): boolean {
   const t = texto.trim();
   if (!/\p{L}/u.test(t)) return false;
   if (/^(data:|https?:|mailto:|tel:|node_modules\/|\/)/.test(t)) return false;
+  // Datos de path SVG (`M12 4h1v1z`): comandos de una letra y números, no palabras.
+  if (/^[MLHVCSQTAZ][\d\s.,MLHVCSQTAZmlhvcsqtaz-]*$/.test(t)) return false;
   // Listas de clases de Tailwind o selectores CSS: todo en minúscula, sin acentos.
   if (t.split(/\s+/).every((p) => /^[a-z0-9_:/.[\]()%#!&>*,=@'"-]+$/.test(p))) return false;
   if (/^[a-z0-9_:/.#[\]()-]+$/i.test(t) && !/\s/.test(t) && !/[áéíóúñ¿¡]/i.test(t)) {

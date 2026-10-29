@@ -11,6 +11,7 @@ const config = [
       'playwright-report/**',
       'test-results/**',
       'next-env.d.ts',
+      '.claude/worktrees/**',
     ],
   },
   {

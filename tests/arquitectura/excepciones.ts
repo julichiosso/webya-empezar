@@ -27,7 +27,6 @@ export const EXCEPCIONES_CAPAS: Record<string, string> = {
 
 /** Archivo (ruta dentro de src/) → motivo y dueño. */
 export const EXCEPCIONES_COPY: Record<string, string> = {
-  'app/demo/gastronomia/page.tsx': 'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
   'app/empezar/opengraph-image.tsx':
     'Ola 1, agente copy-empezar: mover el texto tal cual a src/content',
   'app/empezar/page.tsx': 'Ola 1, agente copy-empezar: mover el texto tal cual a src/content',
@@ -56,34 +55,6 @@ export const EXCEPCIONES_COPY: Record<string, string> = {
     'Ola 1, agente copy-empezar: mover el texto tal cual a src/content',
   'components/ui/ProgressBar.tsx':
     'Ola 1, agente copy-empezar: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/CodigoQR.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/DemoGastronomia.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/Personalizar.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/cliente/Cantidad.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/cliente/CarritoHoja.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/cliente/Carta.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/cliente/DemoCliente.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/cliente/PlatoDetalle.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/cliente/Seguimiento.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/compartir.ts':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/duenio/Comanda.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/duenio/PanelDuenio.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/duenio/TarjetaPedido.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/demo/gastronomia/duenio/calculos.ts':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
   'features/empezar/Wizard.tsx':
     'Ola 1, agente copy-empezar: mover el texto tal cual a src/content',
   'features/empezar/WizardLazy.tsx':
@@ -97,10 +68,4 @@ export const EXCEPCIONES_COPY: Record<string, string> = {
     'Ola 1, agente copy-empezar: mover el texto tal cual a src/content',
   'features/empezar/steps/StepRubro.tsx':
     'Ola 1, agente copy-empezar: mover el texto tal cual a src/content',
-  'features/explicativo/BotonExplicativo.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/explicativo/Reproductor.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
-  'features/explicativo/escenas.tsx':
-    'Ola 1, agente copy-demo: mover el texto tal cual a src/content',
 };
