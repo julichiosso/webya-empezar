@@ -20,3 +20,6 @@ e2e/.screenshots-actual
 
 .vercel
 .DS_Store
+
+# Worktrees de los subagentes (cada uno es su propio checkout)
+.claude/worktrees/

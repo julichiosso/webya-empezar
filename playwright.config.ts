@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = 3100;
+/** Configurable para correr E2E en dos worktrees a la vez sin chocar (E2E_PORT=3200 pnpm test:e2e). */
+const PORT = Number(process.env.E2E_PORT ?? 3100);
 
 /** Archivo de leads propio de E2E: no mezcla datos de desarrollo y se puede inspeccionar. */
 export const E2E_LEADS_FILE = '.data/e2e-leads.json';
