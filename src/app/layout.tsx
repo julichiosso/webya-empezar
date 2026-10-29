@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Outfit } from 'next/font/google';
 import { BASE } from '@/brand/tokens/colores';
+import { SEO_SITIO } from '@/content/seo';
 import { siteConfig } from '@/lib/site-config';
 import './globals.css';
 
@@ -13,8 +14,8 @@ const outfit = Outfit({
 // Metadata base del sitio. Cada página completa lo suyo (título, canonical, Open Graph).
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  applicationName: 'WebYa',
-  title: { default: 'WebYa', template: '%s | WebYa' },
+  applicationName: SEO_SITIO.nombre,
+  title: { default: SEO_SITIO.nombre, template: SEO_SITIO.plantillaTitulo },
   robots: { index: true, follow: true },
   formatDetection: { telephone: false },
 };

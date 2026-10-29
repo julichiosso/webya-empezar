@@ -13,11 +13,13 @@ import {
   variablesDePaleta,
 } from '@/brand/tokens/colores';
 import { formatearPesos, pesos } from '@/domain/pedidos/dinero';
+import { MARCA } from '@/content/marca';
+import { SEO_MARCA } from '@/content/seo';
 import { contraste } from '@/lib/color';
 
 // Página interna para comparar paletas: no se indexa ni se lista en el sitemap.
 export const metadata: Metadata = {
-  title: 'Marca',
+  title: SEO_MARCA.titulo,
   robots: { index: false, follow: false },
 };
 
@@ -26,15 +28,10 @@ const RATIO = new Intl.NumberFormat('es-AR', {
   maximumFractionDigits: 2,
 });
 
-/** Pedido de ejemplo para la tarjeta (datos inventados a propósito: es una muestra de diseño). */
+/** Pedido de ejemplo para la tarjeta (el texto y los precios de muestra, en content/marca). */
 const PEDIDO = {
-  numero: 42,
-  detalle: 'Mesa 4 · hace 3 min',
-  items: [
-    { cantidad: 2, nombre: 'Muzzarella grande', nota: 'Sin aceitunas', unitario: pesos(9_800) },
-    { cantidad: 1, nombre: 'Fainá', nota: null, unitario: pesos(2_400) },
-    { cantidad: 1, nombre: 'Agua sin gas', nota: null, unitario: pesos(1_900) },
-  ],
+  ...MARCA.pedidoMuestra,
+  items: MARCA.pedidoMuestra.items.map((i) => ({ ...i, unitario: pesos(i.precio) })),
 };
 const TOTAL = PEDIDO.items.reduce((t, i) => t + i.cantidad * i.unitario, 0);
 
@@ -43,14 +40,9 @@ export default function MarcaPage() {
     <main className="mx-auto w-full max-w-xl px-4 pt-10 pb-16 lg:max-w-page lg:px-8 lg:pt-16">
       <header className="max-w-2xl">
         <Logo />
-        <h1 className="mt-10 text-title font-semibold text-balance">Paletas de marca</h1>
-        <p className="mt-4 text-lead text-muted">
-          Concepto Encastre: tu negocio se arma pieza por pieza, y la pieza que encaja se enciende.
-          Compará las tres paletas; si no elegís, queda Brasa.
-        </p>
-        <p className="mt-4 text-small text-subtle">
-          Página interna, no se indexa. Pedido y precios de ejemplo.
-        </p>
+        <h1 className="mt-10 text-title font-semibold text-balance">{MARCA.titulo}</h1>
+        <p className="mt-4 text-lead text-muted">{MARCA.bajada}</p>
+        <p className="mt-4 text-small text-subtle">{MARCA.nota}</p>
       </header>
 
       {PALETAS_MARCA.map((p) => (
@@ -59,13 +51,15 @@ export default function MarcaPage() {
 
       <section aria-labelledby="base-title" className="mt-16 border-t border-line pt-10">
         <h2 id="base-title" className="text-heading font-semibold">
-          Base, igual en las tres
+          {MARCA.base.titulo}
         </h2>
-        <TablaContraste combinaciones={COMBINACIONES_BASE} titulo="Contraste medido de la base" />
+        <TablaContraste combinaciones={COMBINACIONES_BASE} titulo={MARCA.base.tablaTitulo} />
       </section>
     </main>
   );
 }
+
+const MUESTRAS = MARCA.paleta.muestras;
 
 function Paleta({ paleta }: { paleta: PaletaMarca }) {
   const id = `paleta-${paleta.id}`;
@@ -81,18 +75,26 @@ function Paleta({ paleta }: { paleta: PaletaMarca }) {
         </h2>
         {paleta.id === PALETA_POR_DEFECTO && (
           <span className="rounded-full border border-accent px-2 text-small leading-6 text-accent">
-            Por defecto
+            {MARCA.paleta.porDefecto}
           </span>
         )}
       </div>
       <p className="mt-2 text-muted">{paleta.idea}</p>
 
       <ul className="mt-6 flex flex-wrap gap-4 text-small">
-        <Muestra className="bg-accent" nombre="Acento" valor={paleta.accent} />
-        <Muestra className="bg-accent-ink" nombre="Acento sobre papel" valor={paleta.accentInk} />
-        <Muestra className="bg-paper" nombre="Crema" valor="var(--paper)" />
-        <Muestra className="border border-line-strong bg-bg" nombre="Negro" valor="var(--bg)" />
-        <Muestra className="bg-danger" nombre="Error" valor={paleta.danger} />
+        <Muestra className="bg-accent" nombre={MUESTRAS.acento} valor={paleta.accent} />
+        <Muestra
+          className="bg-accent-ink"
+          nombre={MUESTRAS.acentoSobrePapel}
+          valor={paleta.accentInk}
+        />
+        <Muestra className="bg-paper" nombre={MUESTRAS.crema} valor="var(--paper)" />
+        <Muestra
+          className="border border-line-strong bg-bg"
+          nombre={MUESTRAS.negro}
+          valor="var(--bg)"
+        />
+        <Muestra className="bg-danger" nombre={MUESTRAS.error} valor={paleta.danger} />
       </ul>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:items-start">
@@ -102,7 +104,7 @@ function Paleta({ paleta }: { paleta: PaletaMarca }) {
 
       <TablaContraste
         combinaciones={combinaciones(paleta)}
-        titulo={`Contraste medido de ${paleta.nombre}`}
+        titulo={MARCA.paleta.tablaTitulo(paleta.nombre)}
       />
     </section>
   );
@@ -131,23 +133,24 @@ function Muestra({
 
 /** El hero de /empezar en miniatura, con la paleta aplicada. Estático: no hay nada para tocar. */
 function HeroMuestra() {
+  const hero = MARCA.heroMuestra;
   return (
     <figure className="rounded-panel border border-line bg-bg p-6 lg:p-8">
-      <figcaption className="text-small text-subtle">Hero</figcaption>
+      <figcaption className="text-small text-subtle">{hero.etiqueta}</figcaption>
       <p className="mt-6 text-title font-semibold text-balance">
-        Creá tu negocio online.
-        <span className="block text-muted">Elegí tu rubro. Activá lo que necesitás.</span>
+        {hero.titulo}
+        <span className="block text-muted">{hero.subtitulo}</span>
       </p>
       <div className="mt-8 flex flex-wrap items-center gap-4">
         <span className={buttonClasses()}>
-          Empezar a crear
+          {hero.cta}
           <Icon name="arrowDown" size={20} />
         </span>
-        <span className="text-small text-accent">Te respondemos en menos de 24 hs</span>
+        <span className="text-small text-accent">{hero.acento}</span>
       </div>
       <ul className="mt-8 grid grid-cols-2 gap-3">
-        <Pieza id="carta_qr" nombre="Carta con QR" encendida />
-        <Pieza id="pagos" nombre="Pagos online" encendida={false} />
+        <Pieza id="carta_qr" nombre={hero.piezas.cartaQr} encendida />
+        <Pieza id="pagos" nombre={hero.piezas.pagos} encendida={false} />
       </ul>
     </figure>
   );
@@ -173,7 +176,9 @@ function Pieza({
       </span>
       <span className="font-semibold">
         {nombre}
-        <span className="sr-only">{encendida ? ' (activado)' : ' (sin activar)'}</span>
+        <span className="sr-only">
+          {encendida ? MARCA.heroMuestra.activado : MARCA.heroMuestra.sinActivar}
+        </span>
       </span>
       {encendida && (
         <span
@@ -191,11 +196,11 @@ function Pieza({
 function PedidoMuestra() {
   return (
     <figure className="papel encastre rounded-card bg-paper p-6 pt-8 text-paper-fg">
-      <figcaption className="text-small text-paper-muted">Tarjeta de pedido</figcaption>
+      <figcaption className="text-small text-paper-muted">{PEDIDO.etiqueta}</figcaption>
       <div className="mt-4 flex items-center justify-between gap-4">
-        <p className="tabular text-heading font-semibold">Pedido #{PEDIDO.numero}</p>
+        <p className="tabular text-heading font-semibold">{PEDIDO.titulo(PEDIDO.numero)}</p>
         <span className="rounded-full bg-accent px-2 text-small leading-6 font-semibold text-accent-fg">
-          En preparación
+          {PEDIDO.estado}
         </span>
       </div>
       <p className="tabular mt-1 text-small text-paper-muted">{PEDIDO.detalle}</p>
@@ -215,14 +220,16 @@ function PedidoMuestra() {
         ))}
       </ul>
       <p className="mt-4 flex items-center justify-between font-semibold">
-        <span>Total</span>
+        <span>{PEDIDO.total}</span>
         <span className="tabular">{formatearPesos(TOTAL)}</span>
       </p>
-      <p className="mt-4 text-small font-semibold text-accent-ink">Nuevo: entró hace 3 minutos</p>
-      <span className={`${buttonClasses('primary', true)} mt-4`}>Marcar como listo</span>
+      <p className="mt-4 text-small font-semibold text-accent-ink">{PEDIDO.aviso}</p>
+      <span className={`${buttonClasses('primary', true)} mt-4`}>{PEDIDO.accion}</span>
     </figure>
   );
 }
+
+const TABLA = MARCA.tabla;
 
 function TablaContraste({
   combinaciones: filas,
@@ -237,16 +244,16 @@ function TablaContraste({
       <thead className="text-subtle">
         <tr className="border-b border-line">
           <th scope="col" className="py-2 font-normal">
-            Combinación
+            {TABLA.combinacion}
           </th>
           <th scope="col" className="py-2 text-right font-normal">
-            Contraste
+            {TABLA.contraste}
           </th>
           <th scope="col" className="py-2 pl-4 text-right font-normal">
-            Mínimo
+            {TABLA.minimo}
           </th>
           <th scope="col" className="py-2 pl-4 text-right font-normal">
-            AA
+            {TABLA.aa}
           </th>
         </tr>
       </thead>
@@ -263,7 +270,7 @@ function TablaContraste({
                     className="inline-flex size-8 shrink-0 items-center justify-center rounded-control font-semibold"
                     style={{ color: c.texto, background: c.fondo }}
                   >
-                    Aa
+                    {TABLA.muestra}
                   </span>
                   {c.nombre}
                 </span>
@@ -271,7 +278,7 @@ function TablaContraste({
               <td className="tabular py-2 text-right">{RATIO.format(ratio)}:1</td>
               <td className="tabular py-2 pl-4 text-right text-muted">{RATIO.format(c.minimo)}</td>
               <td className={`py-2 pl-4 text-right font-semibold ${pasa ? '' : 'text-danger'}`}>
-                {pasa ? 'Pasa' : 'No llega'}
+                {pasa ? TABLA.pasa : TABLA.noLlega}
               </td>
             </tr>
           );

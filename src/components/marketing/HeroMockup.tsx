@@ -70,8 +70,7 @@ export function HeroMockup() {
   };
 
   const cantidad = seleccionados.length;
-  const resumen =
-    cantidad === 0 ? '' : HERO_MOCKUP.activados(cantidad);
+  const resumen = cantidad === 0 ? '' : HERO_MOCKUP.activados(cantidad);
   // Cuantos más módulos, más se nota el resplandor (de 0,35 a 1).
   const brillo = Math.min(1, 0.35 + cantidad * 0.2);
 

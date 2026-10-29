@@ -55,11 +55,7 @@ export function StepRubro({
       }}
       onKeyDown={onKeyDown}
     >
-      <StepHeader
-        title={PASO_RUBRO.titulo}
-        subtitle={PASO_RUBRO.bajada}
-        headingRef={headingRef}
-      />
+      <StepHeader title={PASO_RUBRO.titulo} subtitle={PASO_RUBRO.bajada} headingRef={headingRef} />
 
       <fieldset>
         <legend className="sr-only">{PASO_RUBRO.leyendaRubros}</legend>

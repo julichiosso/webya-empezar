@@ -110,11 +110,7 @@ export function StepDatos({
 
   return (
     <form noValidate onSubmit={enviar} className="lg:max-w-xl">
-      <StepHeader
-        title={PASO_DATOS.titulo}
-        subtitle={PASO_DATOS.bajada}
-        headingRef={headingRef}
-      />
+      <StepHeader title={PASO_DATOS.titulo} subtitle={PASO_DATOS.bajada} headingRef={headingRef} />
 
       <div className="flex flex-col gap-5">
         <Input
@@ -209,8 +205,7 @@ export function StepDatos({
       </Button>
 
       <p className="mt-4 text-small text-subtle">
-        {PASO_DATOS.privacidad}{' '}
-        <span className="text-muted">{PASO_DATOS.todoPrivacidad}</span>
+        {PASO_DATOS.privacidad} <span className="text-muted">{PASO_DATOS.todoPrivacidad}</span>
       </p>
     </form>
   );

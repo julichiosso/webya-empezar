@@ -64,7 +64,8 @@ export const PASO_DATOS = {
   whatsappRespaldo: 'Escribinos por WhatsApp',
   enviar: 'Enviar',
   enviando: 'Enviando…',
-  privacidad: 'Usamos tus datos solo para contactarte por tu proyecto y no los compartimos con nadie.',
+  privacidad:
+    'Usamos tus datos solo para contactarte por tu proyecto y no los compartimos con nadie.',
   /** Visible hasta que exista la política de privacidad. */
   todoPrivacidad: 'TODO: enlazar la política de privacidad.',
 } as const;

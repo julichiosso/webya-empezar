@@ -2,9 +2,12 @@ import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { BASE, LOGO_RELLENO_ORIGINAL } from '@/brand/tokens/colores';
+import { SEO_EMPEZAR } from '@/content/seo';
 import { mezclar } from '@/lib/color';
 
-export const alt = 'WebYa: creá tu negocio online. Elegí tu rubro. Activá lo que necesitás.';
+const { og: OG } = SEO_EMPEZAR;
+
+export const alt = OG.alt;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -13,7 +16,7 @@ const { bg: BG, fg: FG, muted: MUTED } = BASE;
 // Borde de las pastillas: blanco al 20 % sobre el fondo, ya mezclado (opaco: Satori no necesita alfa).
 const LINE = mezclar(FG, BG, 0.2);
 
-const MODULOS = ['Turnos', 'Tienda y catálogo', 'Carta con QR', 'Pagos online'];
+const MODULOS = OG.modulos;
 
 export default async function Image() {
   const [fuente, logoSvg] = await Promise.all([
@@ -45,7 +48,7 @@ export default async function Image() {
 
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div style={{ fontSize: 96, lineHeight: 1, letterSpacing: -4, fontWeight: 700 }}>
-          Creá tu negocio online.
+          {OG.titulo}
         </div>
         <div
           style={{
@@ -57,7 +60,7 @@ export default async function Image() {
             color: MUTED,
           }}
         >
-          Elegí tu rubro. Activá lo que necesitás.
+          {OG.subtitulo}
         </div>
       </div>
 
