@@ -1,0 +1,53 @@
+import { expect, test } from '@playwright/test';
+import { completarDatos, irAlPaso, negocioUnico, wizard } from './helpers';
+
+// Capturas de referencia por paso y por viewport. Sin animaciones para que sean deterministas.
+// Se generan con `pnpm test:e2e visual --update-snapshots` y se revisan a ojo antes de commitear.
+test.use({ reducedMotion: 'reduce' });
+
+test('hero', async ({ page }) => {
+  await page.goto('/empezar');
+  await expect(page).toHaveScreenshot('00-hero.png');
+});
+
+test('paso 1 — rubro', async ({ page }) => {
+  await irAlPaso(page, 1);
+  await expect(wizard(page)).toHaveScreenshot('01-rubro.png');
+});
+
+test('paso 2 — objetivos', async ({ page }) => {
+  await irAlPaso(page, 2);
+  await wizard(page)
+    .locator('label', { hasText: /recibir turnos/i })
+    .click();
+  await expect(wizard(page)).toHaveScreenshot('02-objetivos.png');
+});
+
+test('paso 3 — datos', async ({ page }) => {
+  await irAlPaso(page, 3);
+  await completarDatos(page, 'Peluquería Luna');
+  await expect(wizard(page)).toHaveScreenshot('03-datos.png');
+});
+
+test('paso 3 — errores', async ({ page }) => {
+  await irAlPaso(page, 3);
+  await wizard(page).getByRole('button', { name: 'Enviar' }).click();
+  await expect(wizard(page).locator('[aria-invalid="true"]').first()).toBeVisible();
+  await expect(wizard(page)).toHaveScreenshot('03b-errores.png');
+});
+
+test('paso 4 — confirmación', async ({ page }) => {
+  await irAlPaso(page, 3);
+  await completarDatos(page, negocioUnico('visual'));
+  await wizard(page).getByRole('button', { name: 'Enviar' }).click();
+  await expect(wizard(page).getByRole('heading', { name: /¡Listo/ })).toBeVisible();
+  await expect(wizard(page)).toHaveScreenshot('04-listo.png');
+});
+
+test('secciones informativas', async ({ page }) => {
+  await page.goto('/empezar');
+  const secciones = page.locator('main > section');
+  await expect(secciones.nth(2)).toHaveScreenshot('05-como-funciona.png');
+  await expect(secciones.nth(3)).toHaveScreenshot('06-que-incluye.png');
+  await expect(secciones.nth(4)).toHaveScreenshot('07-faq.png');
+});

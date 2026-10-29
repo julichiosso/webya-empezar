@@ -56,13 +56,19 @@ export function Wizard() {
     if (hidratado) guardarEstado(state, window.sessionStorage);
   }, [state, hidratado]);
 
-  // Foco y scroll al cambiar de paso. Solo si la persona navegó: al cargar o recargar no se roba el foco.
+  // Scroll al cambiar de paso. Solo si la persona navegó: al cargar o recargar no se mueve nada.
   useEffect(() => {
     if (!interactuo) return;
     const el = raiz.current;
     if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ block: 'start' });
-    if (state.paso !== 3) titulo.current?.focus({ preventScroll: true });
   }, [state.paso, interactuo]);
+
+  // El foco se mueve al título del paso nuevo cuando el anterior terminó de salir: con
+  // AnimatePresence mode="wait" el paso nuevo recién se monta ahí (antes el ref aún no existe).
+  // En el paso 3 el foco lo toma el primer campo (autofocus).
+  const enfocarTitulo = useCallback(() => {
+    if (state.paso !== 3) titulo.current?.focus({ preventScroll: true });
+  }, [state.paso]);
 
   const irA = useCallback((paso: Paso) => {
     setErrorPaso(null);
@@ -148,7 +154,12 @@ export function Wizard() {
             <ProgressBar step={paso} total={TOTAL_PASOS} label="Progreso del formulario" />
           </div>
 
-          <AnimatePresence mode="wait" initial={false} custom={state.direccion}>
+          <AnimatePresence
+            mode="wait"
+            initial={false}
+            custom={state.direccion}
+            onExitComplete={interactuo ? enfocarTitulo : undefined}
+          >
             <m.div
               key={paso}
               custom={state.direccion}

@@ -58,3 +58,12 @@ Los tres deben terminar sin errores. Antes de la entrega final, además: `pnpm b
 ## G. Reporte final (formato)
 
 1. Qué se hizo. 2. Resultado de lint / typecheck / tests / build (con números). 3. Lighthouse móvil, peso JS, CLS/LCP/INP. 4. Capturas. 5. **No verificado / pendiente** (honesto). 6. `TODO:` que debe completar el dueño.
+
+## H. Lecciones de E2E (no repetir)
+
+- **Foco al cambiar de paso:** con `AnimatePresence mode="wait"` el paso nuevo se monta recién al terminar la salida: el foco al título se mueve en `onExitComplete`, no en un `useEffect` (el ref aún no existe). Lo cubre `e2e/teclado.spec.ts`.
+- **Foco al primer error:** React Hook Form sigue el orden de _registro_, no el visual. Se enfoca a mano (`ORDEN_CAMPOS` en `StepDatos`).
+- **axe y animaciones:** `motion` anima `opacity` aun con reduced-motion; auditar contraste a mitad de un fade da falsos positivos. `auditar()` espera a que no haya animaciones corriendo.
+- **Tests de selección:** hacer click en la `<label>` (como un usuario). `check({ force: true })` sobre un input `sr-only` de 1px es flaky si el chip aún se mueve.
+- **E2E de producción** necesita `IP_HASH_SALT` (env.ts falla al arrancar sin ella; es a propósito). El servidor de E2E usa `.data/e2e-leads.json` y `RATE_LIMIT_MAX=100`.
+- **Capturas:** son por plataforma (`-win32.png`). En Linux/CI hay que regenerarlas con `pnpm test:e2e visual --update-snapshots` y revisarlas a ojo.

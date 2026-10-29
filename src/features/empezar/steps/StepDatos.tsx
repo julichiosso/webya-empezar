@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useRef, useState, type ChangeEvent, type Ref } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldErrors } from 'react-hook-form';
 import { Button, ButtonLink, type ButtonStatus } from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Field';
 import { formatPhoneInput } from '@/lib/phone';
@@ -21,6 +21,15 @@ interface StepDatosProps {
   onEnviar: (datos: DatosForm, honeypot: string) => Promise<EnvioResultado>;
   onEnviado: () => void;
 }
+
+/** Orden visual de los campos: el foco va al primero con error. */
+const ORDEN_CAMPOS: (keyof DatosForm)[] = [
+  'nombreNegocio',
+  'nombre',
+  'whatsapp',
+  'email',
+  'mensaje',
+];
 
 const MENSAJES_ERROR = {
   limite:
@@ -44,12 +53,16 @@ export function StepDatos({
     handleSubmit,
     watch,
     setError,
+    setFocus,
     formState: { errors, touchedFields },
   } = useForm<DatosForm>({
     resolver: zodResolver(datosFormSchema),
     defaultValues: inicial,
     // Valida al salir del campo; después revalida mientras corrige. Nunca mientras escribe por primera vez.
     mode: 'onTouched',
+    // El foco al primer error se maneja a mano (ver onInvalido): RHF sigue el orden de registro,
+    // no el orden visual de los campos.
+    shouldFocusError: false,
   });
   const [status, setStatus] = useState<ButtonStatus>('idle');
   const [errorGlobal, setErrorGlobal] = useState<string | null>(null);
@@ -74,6 +87,11 @@ export function StepDatos({
     void whatsappReg.onChange(e);
   };
 
+  const onInvalido = (errs: FieldErrors<DatosForm>) => {
+    const primero = ORDEN_CAMPOS.find((campo) => errs[campo]);
+    if (primero) setFocus(primero);
+  };
+
   const enviar = handleSubmit(async (datos) => {
     setErrorGlobal(null);
     setStatus('loading');
@@ -89,7 +107,7 @@ export function StepDatos({
     for (const [campo, mensaje] of Object.entries(resultado.campos ?? {})) {
       if (campo in datosFormSchema.shape) setError(campo as keyof DatosForm, { message: mensaje });
     }
-  });
+  }, onInvalido);
 
   return (
     <form noValidate onSubmit={enviar}>
