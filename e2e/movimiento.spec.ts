@@ -91,11 +91,31 @@ test.describe('movimiento normal', () => {
     await expect(pista).toBeHidden({ timeout: 8000 });
   });
 
-  test('la pista no aparece si ya se activaron módulos antes de recargar', async ({ page }) => {
+  test('recargar sin avanzar en el wizard reinicia el hero (todo apagado) y la pista vuelve', async ({
+    page,
+  }) => {
     await page.goto('/empezar');
     await hero(page)
       .getByRole('button', { name: /pagos online/i })
       .click();
+    await page.reload();
+    await hero(page).scrollIntoViewIfNeeded();
+    await expect(hero(page).getByRole('button', { name: /pagos online/i })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    await expect(hero(page).getByText('Tocá para activar')).toBeVisible();
+  });
+
+  test('con progreso en el wizard, recargar conserva los módulos y no muestra la pista', async ({
+    page,
+  }) => {
+    await page.goto('/empezar');
+    await hero(page)
+      .getByRole('button', { name: /pagos online/i })
+      .click();
+    await abrirWizard(page);
+    await tocar(page, /comercio/i);
     await page.reload();
     await hero(page).scrollIntoViewIfNeeded();
     await expect(hero(page).getByRole('button', { name: /pagos online/i })).toHaveAttribute(

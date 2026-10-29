@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from 'react';
 import type { ModuloId } from '@/config/modulos';
 import { alternarModulo, modulosSeleccionados, sanearManual, type ModulosManual } from './modulos';
+import { hayProgresoGuardado } from './state';
 
 /**
  * Store mínimo compartido entre el mockup del hero y el wizard (viven en árboles distintos).
@@ -22,13 +23,29 @@ const VACIO: ModulosSnapshot = { manual: {}, rubro: null };
 let snapshot: ModulosSnapshot | undefined;
 const oyentes = new Set<() => void>();
 
-function leer(): ModulosSnapshot {
+type Storage3 = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+
+/**
+ * Lee las decisiones manuales guardadas. Solo se restauran si el wizard tiene progreso (rubro
+ * elegido o más allá del paso 1): una recarga sin progreso arranca con todo apagado, así el
+ * primer vistazo al hero siempre invita a tocar. Sin progreso, además, se borra lo guardado.
+ */
+export function leerManualGuardado(storage: Storage3): ModulosManual {
   try {
-    const raw = window.sessionStorage.getItem(MODULOS_STORAGE_KEY);
-    return { manual: raw ? sanearManual(JSON.parse(raw)) : {}, rubro: null };
+    const raw = storage.getItem(MODULOS_STORAGE_KEY);
+    if (!raw) return {};
+    if (!hayProgresoGuardado(storage)) {
+      storage.removeItem(MODULOS_STORAGE_KEY);
+      return {};
+    }
+    return sanearManual(JSON.parse(raw));
   } catch {
-    return { manual: {}, rubro: null };
+    return {};
   }
+}
+
+function leer(): ModulosSnapshot {
+  return { manual: leerManualGuardado(window.sessionStorage), rubro: null };
 }
 
 function guardar(manual: ModulosManual) {

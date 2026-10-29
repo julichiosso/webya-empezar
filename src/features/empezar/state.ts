@@ -108,6 +108,12 @@ export function errorParaAvanzar(
   return cantidadModulos === 0 ? 'Activá al menos un módulo para seguir.' : null;
 }
 
+/** ¿Hay algo avanzado en el wizard guardado (rubro elegido o más allá del paso 1)? */
+export function hayProgresoGuardado(storage: StorageLike): boolean {
+  const estado = leerEstadoGuardado(storage);
+  return estado !== null && (estado.rubro !== null || estado.paso > 1);
+}
+
 /** Nombre del rubro para mostrar y para el mensaje de WhatsApp (si es "Otro", lo que escribió). */
 export function nombreRubroVisible(state: Pick<WizardState, 'rubro' | 'rubroOtro'>): string {
   if (state.rubro === RUBRO_OTRO_ID) return state.rubroOtro.trim() || 'Otro';

@@ -1,7 +1,9 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { STORAGE_KEY } from './state';
 import {
   alternarModuloStore,
+  leerManualGuardado,
   MODULOS_STORAGE_KEY,
   publicarRubro,
   reiniciarModulos,
@@ -59,5 +61,44 @@ describe('store de módulos (hero ↔ wizard)', () => {
     const { result } = renderHook(() => useModulos());
     expect(result.current.seleccionados).toEqual([]);
     expect(window.sessionStorage.getItem(MODULOS_STORAGE_KEY)).toBeNull();
+  });
+});
+
+describe('leerManualGuardado: el hero arranca apagado salvo que haya progreso', () => {
+  const guardarWizard = (estado: object) =>
+    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+  const guardarManual = () =>
+    window.sessionStorage.setItem(
+      MODULOS_STORAGE_KEY,
+      JSON.stringify({ turnos: true, pagos: true }),
+    );
+
+  it('sin wizard guardado: descarta lo guardado y lo borra', () => {
+    guardarManual();
+    expect(leerManualGuardado(window.sessionStorage)).toEqual({});
+    expect(window.sessionStorage.getItem(MODULOS_STORAGE_KEY)).toBeNull();
+  });
+
+  it('wizard en el paso 1 sin rubro: no hay progreso, se descarta', () => {
+    guardarWizard({ paso: 1, rubro: null });
+    guardarManual();
+    expect(leerManualGuardado(window.sessionStorage)).toEqual({});
+  });
+
+  it('con rubro elegido: se restaura', () => {
+    guardarWizard({ paso: 1, rubro: 'comercio' });
+    guardarManual();
+    expect(leerManualGuardado(window.sessionStorage)).toEqual({ turnos: true, pagos: true });
+  });
+
+  it('con el wizard más allá del paso 1: se restaura', () => {
+    guardarWizard({ paso: 2, rubro: 'comercio', objetivos: [] });
+    guardarManual();
+    expect(leerManualGuardado(window.sessionStorage)).toEqual({ turnos: true, pagos: true });
+  });
+
+  it('con storage corrupto no rompe y devuelve vacío', () => {
+    window.sessionStorage.setItem(MODULOS_STORAGE_KEY, '{no es json');
+    expect(leerManualGuardado(window.sessionStorage)).toEqual({});
   });
 });
