@@ -1,7 +1,7 @@
 # Plan — Sprint "Base de marca y frontend"
 
-Estado: **aprobado con condiciones (2026-10-29)**. La sección 6 ("Todo lo digital") se agregó después y espera tu
-revisión antes de la Ola 2. Baseline medido en [auditoria-baseline.md](auditoria-baseline.md), skills en
+Estado: **aprobado con condiciones (2026-10-29)**. Sección 6 ("Todo lo digital") aprobada; Ola 1 terminada, Ola 2
+en curso. Baseline medido en [auditoria-baseline.md](auditoria-baseline.md), skills en
 [auditoria-skills.md](auditoria-skills.md).
 
 ## 0. Punto de partida (lo que cambia respecto del brief)
@@ -189,9 +189,16 @@ la vista), no el contenido: **sin cifras, pruebas gratis ni prueba social.**
 6. **Completar**: todo opcional salvo el nombre del negocio (también nombre, mail y mensaje). Actualiza el mismo
    lead y lo pasa a `nuevo`.
 
-> **A confirmar:** leo "primer paso con solo WhatsApp" como *el primer dato que se pide*. Primero se elige qué se
-> necesita (sin datos personales) y después viene el WhatsApp. Si lo querés literalmente como pantalla 1, se cambia
-> el orden; el contrato del backend no cambia.
+> **Confirmado por el usuario (2026-10-29):** necesidad → rubro → módulos → WhatsApp → completar. El rubro va
+> antes del WhatsApp porque la base lo exige para completar el lead.
+
+**Respuestas del usuario a la Ola 1 (2026-10-29):**
+- Webpack en producción: aceptado. El primer deploy va sin caché y primero en preview (README).
+- "Te respondemos en menos de 24 hs" pasa a `TODO:` en sus 5 lugares, y mientras tanto se usa "Te escribimos por
+  WhatsApp".
+- Estados de los módulos: queda la propuesta. Pero `turnos`, `catalogo`, `formularios`, `clientes`,
+  `notificaciones` y `pagos` llevan un `TODO:` visible hasta que el usuario los confirme. En `pagos` se aclara
+  que el cobro de la demo es simulado.
 
 ### Backend (Ola 1, yo)
 - **Migración nueva** `20261030120000_leads_parcial_necesidades.sql`. No se toca ninguna de las anteriores.

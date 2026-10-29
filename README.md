@@ -216,7 +216,12 @@ gastar el presupuesto de JS.
    efímero): solo se acepta `supabase`.
 5. Dominio: apuntar `webya.ar` al proyecto y verificar `https://webya.ar/empezar`,
    `/robots.txt`, `/sitemap.xml` y la imagen de `/empezar/opengraph-image`.
-6. El rate limit de ráfagas (`RATE_LIMIT_BURST_PER_MINUTE`) es **en memoria por instancia**: en
+6. **Build con webpack** (`pnpm build` = `next build --webpack`, ver `docs/adr/0001-csp-fija-con-sri.md`): el
+   **primer deploy después de ese cambio va sin caché de build** (Vercel → Redeploy → destildar "Use existing
+   Build Cache"), y se prueba **primero en un deploy de preview** (rama distinta de `main`) antes de producción:
+   revisar `/empezar`, `/demo/gastronomia`, que la consola no muestre errores de CSP y que los scripts lleven
+   `integrity`. Los restos de un build de Turbopack en la caché hacen fallar webpack (`WasmHash.update`).
+7. El rate limit de ráfagas (`RATE_LIMIT_BURST_PER_MINUTE`) es **en memoria por instancia**: en
    serverless se reparte entre instancias. El límite fuerte es el de `RATE_LIMIT_MAX`, que cuenta
    en la base.
 
