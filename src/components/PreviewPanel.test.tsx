@@ -5,7 +5,7 @@ import { ModuloArte } from './mini-web/ModuloArte';
 import { PreviewPanel } from './PreviewPanel';
 
 describe('PreviewPanel', () => {
-  it('dibuja siempre los 7 módulos (altura estable) y enciende solo los activos', () => {
+  it('dibuja siempre todos los módulos (altura estable) y enciende solo los activos', () => {
     render(
       <PreviewPanel
         rubroNombre="Comercio y tienda"

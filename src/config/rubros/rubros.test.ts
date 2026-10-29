@@ -79,7 +79,7 @@ describe('helpers de rubros', () => {
 
   it('getModulosDeRubro devuelve nombre y descripción de cada módulo', () => {
     const modulos = getModulosDeRubro('gastronomia');
-    expect(modulos.map((m) => m.id)).toEqual(['carta_qr', 'turnos', 'pagos', 'notificaciones']);
+    expect(modulos.map((m) => m.id)).toEqual(['carta_qr', 'pedidos', 'pagos', 'notificaciones']);
     expect(modulos[0]?.nombre).toBe(MODULOS.carta_qr.nombre);
     expect(getModulosDeRubro('inexistente')).toEqual([]);
   });

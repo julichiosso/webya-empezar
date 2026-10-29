@@ -55,11 +55,20 @@ recibido ──▶ en_preparacion ──▶ listo ──▶ entregado
 - La demo usa `TENANT_DEMO = 'demo'`.
 - Escritura real: **solo desde el servidor**, después de `armarPedido`. RLS activada, sin acceso para `anon`/`authenticated`.
 
+## 4b. Base de datos (`supabase/migrations/*_pedidos.sql`)
+
+- Tablas: `tenants` (con `ultimo_numero_pedido`), `locales`, `menu_categorias`, `menu_productos`, `menu_modificadores` (un grupo por fila, opciones en `jsonb`), `pedidos`, `pedido_items` (nombre y precio congelados), `pedido_eventos`.
+- Todas con `tenant_id` (salvo `tenants`), RLS habilitada y **forzada**, política **restrictiva** `using (false)` para `anon`/`authenticated` y `revoke all`. El acceso real por tenant (panel con login) se agrega en una migración NUEVA.
+- Dinero `bigint` en centavos; `check (total = subtotal + propina + envio)`; coherencia de modalidad (mesa ⇒ mesa, delivery ⇒ dirección, envío solo en delivery).
+- `siguiente_numero_pedido(tenant)`: `update … returning` con bloqueo de fila → número único y sin saltos por tenant (`unique (tenant_id, numero)`). Solo `service_role` puede ejecutarla.
+- Trigger `pedidos_estado_valido` + `pedido_transicion_valida()`: la base rechaza transiciones que no estén en `TRANSICIONES`.
+- `tests/security/pedidos-rls.test.ts` verifica todo esto contra el dominio (estados, modalidades, pagos, propinas y transiciones deben coincidir).
+
 ## 5. Agregar un estado, modalidad o medio de pago
 
 1. Sumarlo a la constante en `types.ts` (`ESTADOS_PEDIDO`, `MODALIDADES`, `MEDIOS_PAGO`).
 2. Estados: transiciones en `TRANSICIONES`, etiquetas en `ETIQUETA_ESTADO`, lista `VALIDAS` del test.
-3. Migración NUEVA que actualice los `check` de la base (nunca editar una migración aplicada).
+3. Migración NUEVA que actualice los `check` y, si es un estado, `pedido_transicion_valida` (nunca editar una migración aplicada). `pedidos-rls.test.ts` falla hasta que coincidan.
 4. `pnpm test`: los tests de estados, schemas, repositorio y config de la demo cubren el resto.
 
 ## 6. Qué NO hacer

@@ -81,15 +81,22 @@ tests/security/        verificación de que `leads` no es legible con la clave p
 ### Datos y multi-tenant
 
 Tabla `leads` (ver migraciones): `id`, `created_at`, `nombre`, `email`, `whatsapp` (E.164),
-`nombre_negocio`, `rubro`, `rubro_otro`, **`modulos`**, `objetivos`, `mensaje`, `origen`, `utm_*`,
-`estado`, `ip_hash`, `user_agent`. RLS activa **sin políticas** y permisos revocados a
+`nombre_negocio`, `rubro`, `rubro_otro`, **`modulos`**, `objetivos`, `mensaje`, **`origen`** (lista
+cerrada: `instagram`, `demo_gastronomia`), **`demo`** (`{ paleta, cocina }` si vino de la demo),
+`utm_*`, `estado`, `ip_hash`, `user_agent`. RLS activa **sin políticas** y permisos revocados a
 `anon`/`authenticated`: solo el servidor (service role) inserta y lee. La IP nunca se guarda en claro.
 
-`tenant_id` **no está implementado**; los lugares donde entraría están marcados con
-`TODO(multi-tenant)` en la migración y en `server/repositories/types.ts`.
+Leads: `tenant_id` todavía no aplica (los leads son de WebYa); queda marcado con
+`TODO(multi-tenant)`. El módulo Pedidos sí es multi-tenant desde el arranque: tablas `tenants`,
+`locales`, `menu_categorias`, `menu_productos`, `menu_modificadores`, `pedidos`, `pedido_items` y
+`pedido_eventos`, todas con `tenant_id`, RLS forzada, una política **restrictiva** que niega todo a
+`anon`/`authenticated` y permisos revocados. Dinero en `bigint` (centavos), número de pedido único
+por tenant (`siguiente_numero_pedido`) y la máquina de estados también en la base (trigger).
 
-Aplicar migraciones: `supabase db push` (o pegar los `.sql` de `supabase/migrations/` en orden en el
-SQL Editor del proyecto).
+Aplicar migraciones: `supabase db push` (o pegar los `.sql` de `supabase/migrations/` **en orden**
+en el SQL Editor del proyecto). Orden actual: `create_leads` → `leads_modulos` → `pedidos` →
+`leads_demo_origen`. Conviene aplicar `leads_demo_origen` **antes** de desplegar: si el código
+llega primero, los leads de la demo se guardan igual pero sin `demo` (queda un aviso en el log).
 
 ### Módulos y selección
 

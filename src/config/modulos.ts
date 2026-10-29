@@ -25,6 +25,10 @@ export const MODULOS = {
     nombre: 'Formularios',
     descripcion: 'Consultas, presupuestos o inscripciones que te llegan prolijas y completas.',
   },
+  pedidos: {
+    nombre: 'Pedidos online',
+    descripcion: 'Tus clientes piden desde el celular y vos los ves llegar, en orden.',
+  },
   pagos: {
     nombre: 'Pagos online',
     descripcion: 'Cobrá señas, cuotas o ventas sin coordinar transferencias a mano.',

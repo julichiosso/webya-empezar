@@ -115,6 +115,41 @@ export function ModuloArte({ id, activo, className }: ModuloArteProps) {
         </>
       )}
 
+      {id === 'pedidos' && (
+        // Tres comandas en fila (nuevo → preparando → listo): la primera, encendida.
+        <>
+          {[0, 1, 2].map((i) => (
+            <g key={i}>
+              <rect
+                x={4 + i * 52}
+                y="4"
+                width="48"
+                height="56"
+                rx="6"
+                className={i === 0 ? suave : 'fill-line'}
+              />
+              <rect
+                x={10 + i * 52}
+                y="12"
+                width="20"
+                height="6"
+                rx="3"
+                className={i === 0 ? acento : base}
+              />
+              <rect x={10 + i * 52} y="26" width="36" height="4" rx="2" className={base} />
+              <rect x={10 + i * 52} y="34" width="28" height="4" rx="2" className={base} />
+              <rect
+                x={10 + i * 52}
+                y="46"
+                width="36"
+                height="8"
+                rx="4"
+                className={i === 0 ? acento : base}
+              />
+            </g>
+          ))}
+        </>
+      )}
       {id === 'notificaciones' && (
         <>
           <rect x="4" y="6" width="120" height="22" rx="11" className={suave} />

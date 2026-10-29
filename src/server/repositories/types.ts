@@ -21,6 +21,8 @@ export interface LeadRow {
   objetivos: string[];
   mensaje: string | null;
   origen: string;
+  /** Lo que armó en una demo ({ paleta, cocina }), si vino de ahí. */
+  demo?: { paleta: string; cocina: string } | null;
   utm_source: string | null;
   utm_medium: string | null;
   utm_campaign: string | null;

@@ -3,8 +3,8 @@ import { MODULO_IDS, getModulo } from '@/config/modulos';
 
 /**
  * Los módulos que WebYa puede armar, en lenguaje no técnico (sale de config/modulos.ts).
- * Un "tablero de piezas": un solo panel dividido por líneas finas (filas en mobile, 3 columnas en
- * escritorio), cada ícono en su hueco punteado. Con 7 módulos, el último ocupa la fila completa.
+ * Un "tablero de piezas": un solo panel dividido por líneas finas (filas en mobile, 4 columnas en
+ * escritorio), cada ícono en su hueco punteado. Con 8 módulos, dos filas de 4 sin huecos.
  */
 export function QueIncluye() {
   return (
@@ -16,13 +16,13 @@ export function QueIncluye() {
         Cada módulo es una pieza: sumá solo las que tu negocio usa.
       </p>
       {/* En escritorio, el gap de 1px deja ver el fondo bg-line: son las divisiones del tablero. */}
-      <ul className="mt-8 overflow-hidden rounded-panel border border-line bg-surface shadow-raised lg:mt-12 lg:grid lg:grid-cols-3 lg:gap-px lg:bg-line">
+      <ul className="mt-8 overflow-hidden rounded-panel border border-line bg-surface shadow-raised lg:mt-12 lg:grid lg:grid-cols-4 lg:gap-px lg:bg-line">
         {MODULO_IDS.map((id) => {
           const mod = getModulo(id);
           return (
             <li
               key={id}
-              className="flex gap-4 border-t border-line bg-surface p-6 first:border-t-0 lg:flex-col lg:border-t-0 lg:p-8 lg:last:col-span-3 lg:last:flex-row lg:last:items-center"
+              className="flex gap-4 border-t border-line bg-surface p-6 first:border-t-0 lg:flex-col lg:border-t-0 lg:p-8"
             >
               <span
                 aria-hidden="true"

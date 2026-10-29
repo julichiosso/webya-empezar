@@ -35,9 +35,18 @@ describe('migración de leads (verificación estática, corre siempre)', () => {
     }
   });
 
-  it('activa Row Level Security y no define ninguna política', () => {
+  it('activa Row Level Security y no define ninguna política sobre leads', () => {
     expect(sql).toContain('alter table public.leads enable row level security');
-    expect(sql).not.toMatch(/create\s+policy/);
+    expect(sql).not.toMatch(/create\s+policy[^;]*\bon\s+public\.leads\b/);
+  });
+
+  it('en ninguna tabla hay políticas que abran acceso: solo restrictivas que niegan', () => {
+    const politicas = sql.match(/create\s+policy[^;']*/g) ?? [];
+    for (const p of politicas) {
+      expect(p, p).toMatch(/as\s+restrictive/);
+      expect(p, p).toMatch(/using\s*\(\s*false\s*\)/);
+    }
+    expect(sql).not.toMatch(/using\s*\(\s*true\s*\)/);
   });
 
   it('quita todos los permisos a anon y authenticated', () => {

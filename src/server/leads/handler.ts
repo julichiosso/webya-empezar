@@ -142,6 +142,8 @@ export async function handleCreateLead(request: Request, deps: HandlerDeps): Pro
       mensaje: nullSiVacio(d.mensaje),
       // Lista cerrada (validada por el schema); sin origen, el repositorio pone el de siempre.
       origen: d.origen,
+      // Solo si vino de una demo: así los leads comunes no dependen de la columna nueva.
+      ...(d.demo ? { demo: d.demo } : {}),
       utm_source: nullSiVacio(d.utm_source),
       utm_medium: nullSiVacio(d.utm_medium),
       utm_campaign: nullSiVacio(d.utm_campaign),

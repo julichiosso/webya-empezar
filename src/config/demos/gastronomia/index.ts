@@ -30,8 +30,7 @@ export const TENANT_DEMO = 'demo';
 export const LOCAL_DEMO = 'demo-local';
 
 /** Rubro y módulos con los que el CTA "Quiero esto para mi local" abre el wizard. */
-// TODO(etapa g): sumar 'pedidos' cuando el módulo exista en config/modulos.ts.
-export const MODULOS_DEMO: readonly ModuloId[] = ['carta_qr', 'pagos', 'notificaciones'];
+export const MODULOS_DEMO: readonly ModuloId[] = ['carta_qr', 'pedidos', 'pagos', 'notificaciones'];
 
 /** Cartel permanente: la demo nunca cobra ni envía nada. */
 export const AVISO_DEMO = 'Demo con datos de ejemplo. No se cobra ni se envía nada.';

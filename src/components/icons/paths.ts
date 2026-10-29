@@ -52,6 +52,8 @@ export const MODULO_ICONS = {
     'M20 20v.01',
   ],
   formularios: ['M6 3.5h8.5L18 7v13.5H6Z', 'M14 3.5V7.5h4', 'M9 12h6', 'M9 16h6'],
+  // Comanda: ticket con borde inferior dentado.
+  pedidos: ['M6 3.5h12v17l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5-2 1.5Z', 'M9 8h6', 'M9 11.5h6', 'M9 15h3'],
   pagos: [rect(3, 6, 18, 12, 2), 'M3 10h18', 'M7 14.5h3'],
   clientes: [
     circle(9, 8, 3),

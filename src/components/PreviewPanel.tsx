@@ -14,7 +14,7 @@ interface PreviewPanelProps {
 
 /**
  * Vista previa en vivo del negocio (panel derecho del wizard en escritorio). Siempre dibuja los
- * 7 módulos, encendidos o apagados: la altura no cambia al elegir (sin layout shift). Es la misma
+ * módulos del catálogo, encendidos o apagados: la altura no cambia al elegir (sin layout shift). Es la misma
  * mini web del hero, pero de solo lectura y decorativa: lo que importa ya está en los controles.
  */
 export function PreviewPanel({ rubroNombre, rubroIcono, activos }: PreviewPanelProps) {

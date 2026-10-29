@@ -101,6 +101,7 @@ describe('POST /api/leads — envío válido', () => {
     };
     expect((await handleCreateLead(peticion(desdeDemo), deps)).status).toBe(201);
     expect(repo.leads[0]?.origen).toBe('demo_gastronomia');
+    expect(repo.leads[0]?.demo).toEqual({ paleta: 'pileta', cocina: 'parrilla' });
     expect((await handleCreateLead(peticion(valido), deps)).status).toBe(201);
     expect(repo.leads[1]?.origen).toBe('instagram');
   });

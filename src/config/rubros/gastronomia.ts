@@ -12,7 +12,7 @@ export const rubro: Rubro = {
     { id: 'cobrar_online', etiqueta: 'Cobrar online' },
     { id: 'que_me_contacten', etiqueta: 'Que me contacten fácil' },
   ],
-  modulosSugeridos: ['carta_qr', 'turnos', 'pagos', 'notificaciones'],
+  modulosSugeridos: ['carta_qr', 'pedidos', 'pagos', 'notificaciones'],
   ejemploResultado:
-    'Una carta digital con código QR para tus mesas, reservas online y aviso apenas entra un pedido.',
+    'Una carta digital con código QR para tus mesas, pedidos online y aviso apenas entra uno.',
 };

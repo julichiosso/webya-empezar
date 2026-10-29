@@ -130,10 +130,10 @@ test.describe('escritorio (lg y más)', () => {
     await expect(panel.locator('li[data-on="true"]')).toHaveCount(4);
   });
 
-  test('"Cómo funciona" y "Qué podés activar" en 3 columnas; FAQ en 2', async ({ page }) => {
+  test('"Cómo funciona" y "Qué podés activar" en 3 y 4 columnas; FAQ en 2', async ({ page }) => {
     await page.goto('/empezar');
     expect(await columnas(page, 'section[aria-labelledby="como-title"] li')).toBe(3);
-    expect(await columnas(page, 'section[aria-labelledby="incluye-title"] li')).toBe(3);
+    expect(await columnas(page, 'section[aria-labelledby="incluye-title"] li')).toBe(4);
     expect(await columnas(page, 'section[aria-labelledby="faq-title"] details')).toBe(2);
   });
 
