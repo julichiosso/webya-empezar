@@ -1,16 +1,17 @@
 import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { BASE, LOGO_RELLENO_ORIGINAL } from '@/config/marca/colores';
+import { mezclar } from '@/lib/color';
 
 export const alt = 'WebYa: creá tu negocio online. Elegí tu rubro. Activá lo que necesitás.';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-// Mismos tokens que globals.css (acá no hay CSS: el PNG se genera en el build).
-const BG = '#0b0b0c';
-const FG = '#ffffff';
-const MUTED = '#a1a1a6';
-const LINE = 'rgba(255,255,255,0.2)';
+// Acá no hay CSS (el PNG se genera en el build): los colores salen de la config de marca.
+const { bg: BG, fg: FG, muted: MUTED } = BASE;
+// Borde de las pastillas: blanco al 20 % sobre el fondo, ya mezclado (opaco: Satori no necesita alfa).
+const LINE = mezclar(FG, BG, 0.2);
 
 const MODULOS = ['Turnos', 'Tienda y catálogo', 'Carta con QR', 'Pagos online'];
 
@@ -22,7 +23,7 @@ export default async function Image() {
     readFile(join(process.cwd(), 'public/webya-logo.svg'), 'utf8'),
   ]);
   // El logo es negro: se pasa a blanco y se embebe como data URI (sin pedir nada por red).
-  const logo = `data:image/svg+xml;base64,${Buffer.from(logoSvg.replaceAll('#000000', FG)).toString('base64')}`;
+  const logo = `data:image/svg+xml;base64,${Buffer.from(logoSvg.replaceAll(LOGO_RELLENO_ORIGINAL, FG)).toString('base64')}`;
 
   return new ImageResponse(
     <div

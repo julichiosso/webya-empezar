@@ -2,7 +2,7 @@ import type { ModuloId } from '@/config/modulos';
 
 interface ModuloArteProps {
   id: ModuloId;
-  /** Encendido: los acentos pasan a verde menta. Apagado: todo en gris de línea. */
+  /** Encendido: los acentos pasan al color de acento. Apagado: todo en gris de línea. */
   activo: boolean;
   className?: string;
 }

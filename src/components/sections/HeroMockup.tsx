@@ -75,7 +75,7 @@ export function HeroMockup() {
 
   return (
     <div className="relative isolate mx-auto w-full max-w-sm lg:max-w-none">
-      {/* Resplandor menta muy sutil (solo escritorio): degradado estático, solo cambia la opacity. */}
+      {/* Resplandor del acento muy sutil (solo escritorio): degradado estático, solo cambia la opacity. */}
       <div
         aria-hidden="true"
         className="hero-glow pointer-events-none absolute -inset-16 -z-10 hidden lg:block"

@@ -62,8 +62,12 @@ export default defineConfig({
       // Muchos tests envían desde la misma IP: el límite real se prueba en los tests de la API.
       RATE_LIMIT_MAX: '100',
       RATE_LIMIT_BURST_PER_MINUTE: '5000',
-      // Se inlinea en el build: sin número el botón de WhatsApp quedaría deshabilitado.
+      // Las NEXT_PUBLIC_* se inlinean en el build: se fijan acá para que E2E y capturas no dependan
+      // del .env local de quien corre los tests. Sin número, el botón de WhatsApp quedaría deshabilitado.
       NEXT_PUBLIC_WHATSAPP_NUMBER: '5491100000000',
+      NEXT_PUBLIC_SITE_URL: 'https://webya.ar',
+      NEXT_PUBLIC_CONTACT_EMAIL: 'contacto@example.com',
+      NEXT_PUBLIC_INSTAGRAM_URL: 'https://instagram.com/webya.dev',
     },
   },
 });

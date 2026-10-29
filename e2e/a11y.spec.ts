@@ -71,6 +71,12 @@ test('confirmación sin violaciones', async ({ page }) => {
   await auditar(page);
 });
 
+test('/marca (3 paletas aplicadas) sin violaciones', async ({ page }) => {
+  await page.goto('/marca');
+  await expect(page.getByRole('heading', { name: 'Paletas de marca' })).toBeVisible();
+  await auditar(page);
+});
+
 test('lo clickeable mide al menos 48px de alto', async ({ page }) => {
   await page.goto('/empezar');
   await abrirWizard(page);

@@ -45,6 +45,14 @@ test('no hay scroll horizontal, ni con el wizard abierto', async ({ page }) => {
   expect(await sobra()).toBeLessThanOrEqual(0);
 });
 
+test('/marca sin scroll horizontal (tablas de contraste incluidas)', async ({ page }) => {
+  await page.goto('/marca');
+  const sobra = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(sobra).toBeLessThanOrEqual(0);
+});
+
 test.describe('escritorio (lg y más)', () => {
   test.beforeEach(({ page }) => {
     test.skip(!esLg(page), 'solo escritorio');

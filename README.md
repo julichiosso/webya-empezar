@@ -165,22 +165,26 @@ gastar el presupuesto de JS.
 
 ## Sistema de diseño y animación
 
-Fuente de verdad: [`webya-design-system`](.claude/skills/webya-design-system/SKILL.md). Resumen.
+Fuente de verdad: [`webya-design-system`](.claude/skills/webya-design-system/SKILL.md) (implementación)
+y [`webya-brand`](.claude/skills/webya-brand/SKILL.md) (concepto "Encastre", paleta, voz, logo e
+ilustración). Las tres paletas candidatas, con su contraste medido, se comparan en `/marca`
+(no indexada). Resumen.
 
 ### Tokens
 
 Definidos en `src/app/globals.css` (variables CSS expuestas a Tailwind con `@theme inline`); nunca
 valores sueltos en componentes. Oscuro por defecto; el claro se activa con `<html data-theme="light">`.
 
-| Grupo      | Utilidades                                                                           | Notas                                                                     |
-| ---------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| Fondo      | `bg-bg`, `bg-surface`, `bg-surface-2`                                                | Página, tarjetas, inputs                                                  |
-| Línea      | `border-line`, `border-line-strong`                                                  | Bordes de 1 px de baja opacidad                                           |
-| Texto      | `text-fg`, `text-muted`, `text-subtle`                                               | Todos AA                                                                  |
-| Acento     | `bg-accent`, `text-accent`, `text-accent-fg`, `bg-accent-soft`                       | **Un solo acento (verde menta, TODO: confirmar)**. Solo CTA, foco y éxito |
-| Error      | `text-danger`                                                                        |                                                                           |
-| Tipografía | `text-display`, `text-title`, `text-heading`, `text-lead`, `text-body`, `text-small` | Outfit vía `next/font`; números con `.tabular`                            |
-| Forma      | `rounded-control` (12) < `rounded-card` (16) < `rounded-panel` (24)                  | Grilla de 8 px; táctil mínimo `min-h-tap` (48 px)                         |
+| Grupo      | Utilidades                                                                           | Notas                                                                   |
+| ---------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| Fondo      | `bg-bg`, `bg-surface`, `bg-surface-2`                                                | Página, tarjetas, inputs                                                |
+| Línea      | `border-line`, `border-line-strong`                                                  | Bordes de 1 px de baja opacidad                                         |
+| Texto      | `text-fg`, `text-muted`, `text-subtle`                                               | Todos AA                                                                |
+| Acento     | `bg-accent`, `text-accent`, `text-accent-fg`, `bg-accent-soft`                       | **Un solo acento: Brasa `#ff5b24`**. Solo CTA, foco, selección          |
+| Papel      | `bg-paper`, `text-paper-fg`, `text-paper-muted`, `text-accent-ink`                   | Crema `#f4ede1` para comandas y tickets; acento tinta para texto encima |
+| Error      | `text-danger`                                                                        | Rosa frío, distinto del acento                                          |
+| Tipografía | `text-display`, `text-title`, `text-heading`, `text-lead`, `text-body`, `text-small` | Outfit vía `next/font`; números con `.tabular`                          |
+| Forma      | `rounded-control` (12) < `rounded-card` (16) < `rounded-panel` (24)                  | Grilla de 8 px; táctil mínimo `min-h-tap` (48 px)                       |
 
 ### Presupuesto de animación (obligatorio)
 
@@ -233,7 +237,7 @@ Checklist previo a cada entrega: [`webya-qa-checklist`](.claude/skills/webya-qa-
 
 ## Pendientes (`TODO:`)
 
-- Confirmar el verde menta como acento.
+- Elegir paleta en `/marca` (si no, queda Brasa).
 - Número de WhatsApp y mail de contacto (variables `NEXT_PUBLIC_*`).
 - Política de privacidad (link bajo el formulario).
 - Precios, plazos de entrega y soporte de dominio propio (FAQ y confirmación).

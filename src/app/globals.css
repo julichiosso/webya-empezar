@@ -19,11 +19,21 @@
   --muted: #a1a1a6;
   --subtle: #8a8a90;
 
-  /* TODO: confirmar el verde menta definitivo. Es el ÚNICO color de acento: CTA, foco y éxito. */
-  --accent: #34e5a1;
-  --accent-fg: #04140d;
-  --accent-soft: rgb(52 229 161 / 0.12);
-  --danger: #ff7a7a;
+  /* Acento "Brasa": el ÚNICO color de acento. CTA, foco, selección y la pieza que encaja.
+     Los valores se repiten en src/config/marca/colores.ts (OG, /marca); un test verifica que coincidan. */
+  --accent: #ff5b24;
+  --accent-fg: #0b0b0c;
+  /* Acento para TEXTO sobre papel crema: Brasa pura no llega a AA ahí (2,66:1). */
+  --accent-ink: #b83a0e;
+  --accent-soft: rgb(255 91 36 / 0.14);
+  /* Error en rosa frío: no se confunde con Brasa (y siempre va con texto, nunca solo color). */
+  --danger: #ff6b8a;
+
+  /* Papel crema: comandas, tickets y tarjetas de pedido sobre la base negra. */
+  --paper: #f4ede1;
+  --paper-fg: #0b0b0c;
+  --paper-muted: #5e574f;
+  --paper-line: rgb(11 11 12 / 0.14);
 
   /* Movimiento (ver webya-design-system: solo transform y opacity). Van en :root para poder
      usarlos en CSS crudo; Tailwind descarta las variables de @theme que no usa. */
@@ -51,10 +61,11 @@
   --muted: #55555a;
   --subtle: #6b6b71;
 
-  --accent: #0a7a52;
+  --accent: #b83a0e;
   --accent-fg: #ffffff;
-  --accent-soft: rgb(10 122 82 / 0.1);
-  --danger: #c43232;
+  --accent-ink: #b83a0e;
+  --accent-soft: rgb(184 58 14 / 0.1);
+  --danger: #b4233f;
 
   --noise-opacity: 0.06;
 }
@@ -71,7 +82,12 @@
   --color-accent: var(--accent);
   --color-accent-fg: var(--accent-fg);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
   --color-danger: var(--danger);
+  --color-paper: var(--paper);
+  --color-paper-fg: var(--paper-fg);
+  --color-paper-muted: var(--paper-muted);
+  --color-paper-line: var(--paper-line);
 
   --font-sans: var(--font-outfit), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
@@ -166,6 +182,10 @@
     outline: 2px solid var(--accent);
     outline-offset: 3px;
     border-radius: 4px;
+  }
+  /* Sobre papel crema el acento puro no llega a 3:1: el foco usa la versión tinta. */
+  .papel :focus-visible {
+    outline-color: var(--accent-ink);
   }
 
   /* El logo es un SVG negro: en oscuro se invierte a blanco. */
@@ -267,7 +287,25 @@
   }
 }
 
-/* Resplandor menta detrás del mockup: degradado radial estático; solo cambia su opacity. */
+/*
+ * Encastre: muesca semicircular arriba al centro, como un ticket colgado del riel de la cocina o
+ * una pieza que espera la que encaja. Es una máscara estática (no se anima).
+ */
+.encastre {
+  --muesca: 0.75rem;
+  -webkit-mask: radial-gradient(
+    circle at 50% 0,
+    transparent var(--muesca),
+    black calc(var(--muesca) + 0.5px)
+  );
+  mask: radial-gradient(
+    circle at 50% 0,
+    transparent var(--muesca),
+    black calc(var(--muesca) + 0.5px)
+  );
+}
+
+/* Resplandor del acento detrás del mockup: degradado radial estático; solo cambia su opacity. */
 .hero-glow {
   background: radial-gradient(closest-side, var(--accent-soft), transparent);
   transition: opacity var(--duration-slow) var(--ease-out);

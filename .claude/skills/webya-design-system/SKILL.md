@@ -5,22 +5,25 @@ description: Fuente de verdad visual de WebYa (/empezar). Usala SIEMPRE antes de
 
 # WebYa — Sistema de diseño
 
-Dirección: **fintech-grade**. Confianza, claridad, precisión, cero fricción. Blanco y negro de marca + **un solo acento (verde menta)**. Cada espaciado y transición debe verse intencional, no de plantilla. Complementa a la skill `frontend-design` (plugin): gastá el riesgo visual en **un solo lugar** (el hero que se arma por bloques) y mantené el resto sobrio.
+Dirección: **fintech-grade** con personalidad. Confianza, claridad, precisión, cero fricción. Negro base + papel crema + **un solo acento (Brasa)**. Cada espaciado y transición debe verse intencional, no de plantilla. El concepto ("Encastre"), la voz y el uso del color están en la skill **`webya-brand`**: leela antes de diseñar. Gastá el riesgo visual en pocos momentos memorables y mantené el resto sobrio.
 
 ## 1. Tokens (viven en `src/app/globals.css`; nunca valores sueltos)
 
-| Grupo      | Token (utilidad Tailwind)                                      | Dark (default)               | Uso                                         |
-| ---------- | -------------------------------------------------------------- | ---------------------------- | ------------------------------------------- |
-| Fondo      | `bg-bg`                                                        | `#0b0b0c`                    | Fondo de página                             |
-| Superficie | `bg-surface`, `bg-surface-2`                                   | `#131316`, `#1a1a1e`         | Tarjetas, paneles, inputs                   |
-| Línea      | `border-line`, `border-line-strong`                            | blanco 10% / 20%             | Bordes de 1px                               |
-| Texto      | `text-fg`, `text-muted`, `text-subtle`                         | `#fff`, `#a1a1a6`, `#8a8a90` | Principal, secundario, terciario (todos AA) |
-| Acento     | `bg-accent`, `text-accent`, `text-accent-fg`, `bg-accent-soft` | `#34e5a1` (TODO confirmar)   | **Solo** CTA, foco, éxito                   |
-| Error      | `text-danger`                                                  | `#ff7a7a`                    | Errores de validación                       |
+| Grupo        | Token (utilidad Tailwind)                                            | Dark (default)                     | Uso                                                                  |
+| ------------ | -------------------------------------------------------------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| Fondo        | `bg-bg`                                                              | `#0b0b0c`                          | Fondo de página                                                      |
+| Superficie   | `bg-surface`, `bg-surface-2`                                         | `#131316`, `#1a1a1e`               | Tarjetas, paneles, inputs                                            |
+| Línea        | `border-line`, `border-line-strong`                                  | blanco 10% / 20%                   | Bordes de 1px                                                        |
+| Texto        | `text-fg`, `text-muted`, `text-subtle`                               | `#fff`, `#a1a1a6`, `#8a8a90`       | Principal, secundario, terciario (todos AA)                          |
+| Acento       | `bg-accent`, `text-accent`, `text-accent-fg`, `bg-accent-soft`       | `#ff5b24` (Brasa), texto `#0b0b0c` | **Solo** CTA, foco, selección, pieza encajada                        |
+| Acento tinta | `text-accent-ink`                                                    | `#b83a0e`                          | Texto/foco de acento **sobre papel crema**                           |
+| Papel        | `bg-paper`, `text-paper-fg`, `text-paper-muted`, `border-paper-line` | `#f4ede1`, `#0b0b0c`, `#5e574f`    | Comandas, tickets, tarjetas de pedido (contenedor con clase `papel`) |
+| Error        | `text-danger`                                                        | `#ff6b8a`                          | Errores de validación (rosa frío ≠ Brasa)                            |
 
 - Modo claro: `<html data-theme="light">`. Los tokens se redefinen solos; no escribas `dark:`.
-- El acento NO se usa en títulos, bordes decorativos ni fondos grandes. Si dudás, no lo uses.
-- Prohibido `#hex`, `rgb()` o `px` sueltos en componentes. Si falta un valor, agregá un token.
+- El acento NO se usa en títulos, bordes decorativos ni fondos grandes. Si dudás, no lo uses. Sobre Brasa el texto va **negro** (`text-accent-fg`): el blanco no llega a AA.
+- Prohibido `#hex`, `rgb()` o `px` sueltos en componentes. Si falta un valor, agregá un token. Los valores viven en `globals.css` y se repiten en `src/config/marca/colores.ts` solo para lo que no lee CSS; `marca.test.ts` falla si aparecen hex sueltos, restos del acento anterior o una combinación debajo de AA.
+- Una paleta distinta en un contenedor (demos personalizadas, `/marca`): redefinir las variables con `variablesDePaleta()`; nunca colores en línea en los componentes.
 
 ### Tipografía (Outfit, `next/font`)
 
