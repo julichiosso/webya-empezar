@@ -3,8 +3,8 @@ import { MODULO_IDS, getModulo } from '@/config/modulos';
 
 /**
  * Los módulos que WebYa puede armar, en lenguaje no técnico (sale de config/modulos.ts).
- * Mobile: un panel con filas. Escritorio: grilla de 3 columnas; con 7 módulos, el último ocupa
- * el ancho completo para no dejar un hueco.
+ * Un "tablero de piezas": un solo panel dividido por líneas finas (filas en mobile, 3 columnas en
+ * escritorio), cada ícono en su hueco punteado. Con 7 módulos, el último ocupa la fila completa.
  */
 export function QueIncluye() {
   return (
@@ -13,18 +13,22 @@ export function QueIncluye() {
         Qué podés activar
       </h2>
       <p className="mt-4 max-w-md text-lead text-muted lg:max-w-none">
-        Activás solo lo que tu negocio usa.
+        Cada módulo es una pieza: sumá solo las que tu negocio usa.
       </p>
-      <ul className="mt-8 overflow-hidden rounded-panel border border-line bg-surface shadow-raised lg:mt-12 lg:grid lg:grid-cols-3 lg:gap-4 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:shadow-none">
+      {/* En escritorio, el gap de 1px deja ver el fondo bg-line: son las divisiones del tablero. */}
+      <ul className="mt-8 overflow-hidden rounded-panel border border-line bg-surface shadow-raised lg:mt-12 lg:grid lg:grid-cols-3 lg:gap-px lg:bg-line">
         {MODULO_IDS.map((id) => {
           const mod = getModulo(id);
           return (
             <li
               key={id}
-              className="flex gap-4 border-t border-line p-6 first:border-t-0 lg:flex-col lg:rounded-card lg:border lg:bg-surface lg:shadow-raised lg:first:border-t lg:last:col-span-3 lg:last:flex-row lg:last:items-center"
+              className="flex gap-4 border-t border-line bg-surface p-6 first:border-t-0 lg:flex-col lg:border-t-0 lg:p-8 lg:last:col-span-3 lg:last:flex-row lg:last:items-center"
             >
-              <span className="mt-0.5 shrink-0 text-fg lg:mt-0">
-                <Icon name={id} size={28} />
+              <span
+                aria-hidden="true"
+                className="flex size-12 shrink-0 items-center justify-center rounded-control border border-dashed border-line-strong text-fg"
+              >
+                <Icon name={id} size={24} />
               </span>
               <div>
                 <h3 className="font-semibold">{mod.nombre}</h3>

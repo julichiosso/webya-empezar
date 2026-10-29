@@ -30,7 +30,7 @@ export function Hero() {
           </span>
         </h1>
         <p className="mt-6 max-w-md text-lead text-muted lg:mt-8">
-          Turnos, tienda, carta, pagos. Solo lo que tu negocio necesita.
+          Turnos, tienda, carta, pagos: sumá solo las piezas que tu negocio necesita.
         </p>
         <ButtonLink href="#wizard" className="mt-8 lg:mt-10">
           Empezar a crear

@@ -29,7 +29,7 @@ test('recorrido completo hasta la confirmación y el lead queda guardado con mó
 
   await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
   expect(respuestas).toEqual([201]);
-  const resumen = wizard(page).getByRole('list', { name: /lo que vamos a armar/i });
+  const resumen = wizard(page).getByRole('list', { name: /las piezas de tu negocio/i });
   await expect(resumen).toContainText('Turnos y reservas');
   await expect(resumen).toContainText('Tienda y catálogo');
   const wa = wizard(page).getByRole('link', { name: /hablar por whatsapp/i });

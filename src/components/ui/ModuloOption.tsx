@@ -1,5 +1,6 @@
 import type { ModuloId } from '@/config/modulos';
 import { Icon } from '../icons/Icon';
+import { Encaje } from './Encaje';
 
 interface ModuloOptionProps {
   id: ModuloId;
@@ -45,13 +46,8 @@ export function ModuloOption({
             </span>
           )}
         </span>
-        {/* El hueco del check está siempre reservado: la fila no cambia de tamaño al elegirse. */}
-        <span
-          aria-hidden="true"
-          className={`flex size-6 shrink-0 items-center justify-center rounded-full transition-[transform,opacity] duration-200 ${checked ? 'scale-100 bg-accent text-accent-fg opacity-100' : 'scale-75 border border-line-strong opacity-70'}`}
-        >
-          {checked && <Icon name="check" size={16} draw active />}
-        </span>
+        {/* El hueco está siempre: la fila no cambia de tamaño cuando la pieza encaja. */}
+        <Encaje on={checked} />
       </span>
     </label>
   );

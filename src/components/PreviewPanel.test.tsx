@@ -21,11 +21,23 @@ describe('PreviewPanel', () => {
     expect(within(panel).getByText('2 módulos')).toBeInTheDocument();
   });
 
-  it('sin rubro ni módulos muestra el estado vacío', () => {
+  it('sin rubro ni módulos muestra el estado vacío: huecos punteados esperando sus piezas', () => {
     render(<PreviewPanel activos={[]} />);
     const panel = screen.getByTestId('negocio-preview-panel');
     expect(within(panel).getByText('Tu negocio')).toBeInTheDocument();
-    expect(within(panel).getByText('Sin módulos todavía')).toBeInTheDocument();
+    expect(within(panel).getByText('Acá encajan tus módulos')).toBeInTheDocument();
+    const items = within(panel).getAllByRole('listitem', { hidden: true });
+    expect(items.every((li) => li.className.includes('border-dashed'))).toBe(true);
+  });
+
+  it('un módulo encendido deja de ser hueco', () => {
+    render(<PreviewPanel activos={['pagos']} />);
+    const items = within(screen.getByTestId('negocio-preview-panel')).getAllByRole('listitem', {
+      hidden: true,
+    });
+    const pagos = items.find((li) => li.getAttribute('data-on') === 'true');
+    expect(pagos?.className).not.toContain('border-dashed');
+    expect(pagos?.className).toContain('border-accent');
   });
 
   it('es decorativa: está oculta a lectores de pantalla', () => {

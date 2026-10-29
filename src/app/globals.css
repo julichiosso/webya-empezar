@@ -188,14 +188,6 @@
     outline-color: var(--accent-ink);
   }
 
-  /* El logo es un SVG negro: en oscuro se invierte a blanco. */
-  .logo {
-    filter: invert(1);
-  }
-  :root[data-theme='light'] .logo {
-    filter: none;
-  }
-
   /* Cifras alineadas en cualquier lugar donde haya números. */
   .tabular {
     font-variant-numeric: tabular-nums;
@@ -237,13 +229,45 @@
 }
 
 /*
- * Hero: las piezas de la web encajan una sola vez al cargar. El mockup tiene botones, así que
- * nada desaparece ni se mueve en loop. Solo transform/opacity.
+ * Lenguaje de movimiento "Encastre" (skill webya-brand): la pieza llega, se pasa apenas y asienta.
+ * Siempre una sola vez y solo transform/opacity.
  */
+
+/* Logo: cada letra entra como una pieza (alternando arriba/abajo) y asienta, una vez al cargar. */
+@keyframes logo-encaje {
+  from {
+    opacity: 0;
+    transform: translateY(var(--desde));
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(calc(var(--desde) * -0.06));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.logo-armado .logo-pieza {
+  --desde: -45%;
+  transform-box: fill-box;
+  animation: logo-encaje var(--duration-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+.logo-armado .logo-pieza:nth-child(even) {
+  --desde: 45%;
+}
+
+/* Hero: las piezas de la web encajan una sola vez al cargar (con un leve rebote al asentar). El
+   mockup tiene botones, así que nada desaparece ni se mueve en loop. */
 @keyframes hero-assemble {
   from {
     opacity: 0;
     transform: translateY(14px) scale(0.96);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.005);
   }
   to {
     opacity: 1;
@@ -255,15 +279,46 @@
   animation-delay: calc(var(--i) * 90ms);
 }
 
-/* Activar un módulo: un "pop" breve (transform) y el check que entra (transform + opacity). */
-@keyframes pop {
-  40% {
-    transform: scale(1.04);
+/* Activar un módulo: "clic", la tarjeta baja apenas a su lugar y rebota mínimo (transform). */
+@keyframes clic {
+  0% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(1px);
+  }
+  100% {
+    transform: none;
   }
 }
 .tile[aria-pressed='true'],
 .pop-on[data-on='true'] {
-  animation: pop var(--duration-base) var(--ease-out);
+  animation: clic var(--duration-base) var(--ease-out);
+}
+
+/* La pieza que encaja en el hueco punteado (componente Encaje): cae desde arriba y asienta. */
+@keyframes encajar {
+  from {
+    opacity: 0;
+    transform: translateY(-60%) scale(1.1);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(4%) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.encaje-pieza {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.encaje[data-on='true'] .encaje-pieza {
+  opacity: 1;
+  transform: none;
+  animation: encajar var(--duration-base) var(--ease-out);
 }
 /* Arte de cada módulo (mini web): se "enciende" con opacity + transform. */
 .arte {
@@ -309,18 +364,6 @@
 .hero-glow {
   background: radial-gradient(closest-side, var(--accent-soft), transparent);
   transition: opacity var(--duration-slow) var(--ease-out);
-}
-
-.tile-check {
-  opacity: 0;
-  transform: scale(0.6);
-  transition:
-    opacity var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
-}
-.tile[aria-pressed='true'] .tile-check {
-  opacity: 1;
-  transform: none;
 }
 
 /* Entrada suave de un texto que cambia (solo opacity). */
@@ -372,19 +415,21 @@
     scroll-behavior: auto;
   }
   .hero-piece,
-  .reveal {
+  .reveal,
+  .logo-armado .logo-pieza {
     animation: none !important;
     opacity: 1;
     transform: none;
   }
-  /* Activar un módulo, la pista y el cambio de texto: el estado cambia al instante, sin movimiento. */
+  /* Activar un módulo, encajar la pieza, la pista y el cambio de texto: el estado cambia al
+     instante, sin movimiento. */
   .tile,
   .pop-on,
+  .encaje-pieza,
   .hint-in,
   .fade-in {
     animation: none !important;
   }
-  .tile-check,
   .arte,
   .hero-glow {
     transition: none;

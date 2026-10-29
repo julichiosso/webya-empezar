@@ -25,7 +25,11 @@ export function NegocioPreview({ rubroNombre, rubroIcono, activos }: NegocioPrev
       className="rounded-card border border-line bg-surface-2 p-4"
     >
       <div className="flex items-center gap-4">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-control border border-line bg-surface">
+        <span
+          className={`flex size-12 shrink-0 items-center justify-center rounded-control border bg-surface ${
+            rubroNombre ? 'border-line' : 'border-dashed border-line-strong'
+          }`}
+        >
           <Icon name={rubroNombre ? icono : 'mas'} size={24} />
         </span>
         <div className="min-w-0 flex-1">
@@ -42,8 +46,11 @@ export function NegocioPreview({ rubroNombre, rubroIcono, activos }: NegocioPrev
             <li
               key={id}
               data-on={activo}
+              // Apagado = hueco punteado; encendido = la pieza encajada en Brasa.
               className={`pop-on inline-flex items-center gap-2 rounded-full border px-4 py-2 text-small font-medium ${
-                activo ? 'border-accent bg-accent-soft text-fg' : 'border-line text-subtle'
+                activo
+                  ? 'border-accent bg-accent-soft text-fg'
+                  : 'border-dashed border-line-strong text-subtle'
               }`}
             >
               <Icon name={id} size={16} />

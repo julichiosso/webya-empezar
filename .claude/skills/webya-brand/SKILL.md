@@ -17,14 +17,15 @@ Es lo que hace el producto: la persona activa módulos (carta, pedidos, turnos, 
 
 Dónde se ve (y solo ahí: el riesgo visual se gasta en pocos momentos):
 
-| Lugar          | Cómo                                                                                                          |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| Logo           | El wordmark **actual** (5 trazos) entra en piezas y "asienta" en su lugar, **una vez**. Sin isotipo nuevo.    |
-| Movimiento     | "Snap": la pieza llega, se pasa apenas (≈ 2 %) y asienta. Solo `transform`/`opacity`, 280 ms, `--ease-out`.   |
-| Estados vacíos | Un hueco con contorno punteado con la forma de lo que falta + una frase: "Acá encaja tu primer pedido".       |
-| Papel (crema)  | Comandas, tickets y tarjetas de pedido van en `bg-paper` con la muesca `.encastre` (ticket colgado del riel). |
-| Selección      | El check es el "clic": entra con escala + opacidad, una vez.                                                  |
-| Copy           | "Encajá lo que te falta", "Le faltaba esto", "Sumá una pieza". Con medida: no en cada título.                 |
+| Lugar          | Cómo                                                                                                                          |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Logo           | El wordmark **actual** (5 trazos) entra en piezas y "asienta" en su lugar, **una vez** (`<Logo armar />`). Sin isotipo nuevo. |
+| Movimiento     | "Snap": la pieza llega, se pasa apenas (≈ 2 %) y asienta. Solo `transform`/`opacity`, 280 ms, `--ease-out`.                   |
+| Estados vacíos | Un hueco con contorno punteado con la forma de lo que falta + una frase: "Acá encaja tu primer pedido".                       |
+| Papel (crema)  | Comandas, tickets y tarjetas de pedido van en `bg-paper` con la muesca `.encastre` (ticket colgado del riel).                 |
+| Selección      | Hueco punteado → la pieza Brasa con check cae y asienta (componente `Encaje`). Es el "clic", una vez.                         |
+| Composición    | Riel punteado que enhebra pasos y tablero de piezas en un panel, en vez de tarjetas iguales sueltas.                          |
+| Copy           | "Encajá lo que te falta", "Le faltaba esto", "Sumá una pieza". Con medida: no en cada título.                                 |
 
 ## 2. Paleta
 

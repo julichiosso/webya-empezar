@@ -291,7 +291,7 @@ describe('Wizard — envío y confirmación', () => {
       utm_medium: 'bio',
     });
 
-    const modulos = screen.getByRole('list', { name: /lo que vamos a armar/i });
+    const modulos = screen.getByRole('list', { name: /las piezas de tu negocio/i });
     expect(modulos).toHaveTextContent('Turnos y reservas');
     expect(screen.getByText(/menos de 24 hs para ponerlo online/i)).toBeInTheDocument();
     // Aviso honesto: la entrega la hacemos nosotros, no hay plataforma de autoservicio.

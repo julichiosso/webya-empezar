@@ -27,7 +27,11 @@ export function PreviewPanel({ rubroNombre, rubroIcono, activos }: PreviewPanelP
       className="rounded-panel border border-line-strong bg-surface p-4 shadow-raised"
     >
       <div className="flex items-center gap-4 rounded-control bg-surface-2 p-4">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-control border border-line bg-surface">
+        <span
+          className={`flex size-12 shrink-0 items-center justify-center rounded-control border bg-surface ${
+            rubroNombre ? 'border-line' : 'border-dashed border-line-strong'
+          }`}
+        >
           <Icon name={icono} size={24} />
         </span>
         <div className="min-w-0 flex-1">
@@ -36,7 +40,7 @@ export function PreviewPanel({ rubroNombre, rubroIcono, activos }: PreviewPanelP
           </p>
           <p className="tabular text-small text-muted">
             {cantidad === 0
-              ? 'Sin módulos todavía'
+              ? 'Acá encajan tus módulos'
               : `${cantidad} ${cantidad === 1 ? 'módulo' : 'módulos'}`}
           </p>
         </div>
@@ -49,8 +53,9 @@ export function PreviewPanel({ rubroNombre, rubroIcono, activos }: PreviewPanelP
             <li
               key={id}
               data-on={activo}
+              // Apagado = hueco punteado esperando su pieza; encendido = la pieza encajada en Brasa.
               className={`pop-on rounded-card border p-4 ${
-                activo ? 'border-accent bg-accent-soft' : 'border-line'
+                activo ? 'border-accent bg-accent-soft' : 'border-dashed border-line-strong'
               }`}
             >
               <p

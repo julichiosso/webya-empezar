@@ -74,14 +74,14 @@ export function StepListo({
       </h2>
       <p className="mt-2 text-lead text-muted">
         Gracias, {primerNombre}. Para <strong className="font-semibold text-fg">{rubro}</strong>,
-        esto es lo que activaste:
+        estas son las piezas que activaste:
       </p>
 
       <m.ul
         variants={lista}
         initial="oculto"
         animate="visible"
-        aria-label="Lo que vamos a armar para tu negocio"
+        aria-label="Las piezas de tu negocio"
         className="mt-6 flex flex-col gap-3"
       >
         {modulos.map((mod) => (

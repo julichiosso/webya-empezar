@@ -20,6 +20,13 @@ test.describe('prefers-reduced-motion: reduce', () => {
       await expect(el).toHaveCSS('animation-name', 'none');
       await expect(el).toHaveCSS('opacity', '1');
     }
+    // El logo aparece entero y quieto: las 5 letras visibles, sin animación.
+    const letras = page.locator('header .logo-pieza');
+    await expect(letras).toHaveCount(5);
+    for (const el of await letras.all()) {
+      await expect(el).toHaveCSS('animation-name', 'none');
+      await expect(el).toHaveCSS('opacity', '1');
+    }
   });
 
   test('activar un módulo cambia el estado al instante, sin animación, y la pista se ve igual', async ({
@@ -36,7 +43,8 @@ test.describe('prefers-reduced-motion: reduce', () => {
     await tarjeta.click();
     await expect(tarjeta).toHaveAttribute('aria-pressed', 'true');
     await expect(tarjeta).toHaveCSS('animation-name', 'none');
-    await expect(tarjeta.locator('.tile-check')).toHaveCSS('opacity', '1');
+    await expect(tarjeta.locator('.encaje-pieza')).toHaveCSS('opacity', '1');
+    await expect(tarjeta.locator('.encaje-pieza')).toHaveCSS('animation-name', 'none');
     await expect(pista).toBeHidden();
   });
 
@@ -63,6 +71,33 @@ test.describe('movimiento normal', () => {
     }
     await page.waitForTimeout(1500);
     await expect(hero(page).getByRole('button').first()).toHaveCSS('opacity', '1');
+  });
+
+  test('el logo se arma una sola vez y queda quieto', async ({ page }) => {
+    await page.goto('/empezar');
+    const letras = page.locator('header .logo-pieza');
+    await expect(letras).toHaveCount(5);
+    await expect(letras.first()).toHaveCSS('animation-name', 'logo-encaje');
+    await expect(letras.first()).toHaveCSS('animation-iteration-count', '1');
+    // Terminado el armado no queda nada corriendo en el logo.
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll('header .logo-pieza')].every((el) =>
+        el.getAnimations().every((a) => a.playState === 'finished'),
+      ),
+    );
+    for (const el of await letras.all()) await expect(el).toHaveCSS('opacity', '1');
+  });
+
+  test('activar un módulo encaja la pieza en el hueco (y el hueco está antes de activar)', async ({
+    page,
+  }) => {
+    await page.goto('/empezar');
+    const tarjeta = hero(page).getByRole('button', { name: /pagos online/i });
+    const pieza = tarjeta.locator('.encaje-pieza');
+    await expect(pieza).toHaveCSS('opacity', '0');
+    await tarjeta.click();
+    await expect(pieza).toHaveCSS('animation-name', 'encajar');
+    await expect(pieza).toHaveCSS('opacity', '1');
   });
 
   test('la pista aparece al entrar el mockup en pantalla, se oculta al primer toque y no vuelve', async ({
@@ -152,10 +187,17 @@ test.describe('movimiento normal', () => {
     await hero(page).scrollIntoViewIfNeeded();
     await expect(hero(page).getByText('Tocá para activar')).toBeVisible();
     const conPista = await recoger(['.hero-piece', '.reveal', '.hint-in']);
+    await page.reload();
+    const logo = await recoger(['header .logo-pieza']);
     await hero(page)
       .getByRole('button', { name: /carta con qr/i })
       .click();
-    const conTarjeta = await recoger(['.tile[aria-pressed="true"]']);
+    const conTarjeta = await recoger([
+      '.tile[aria-pressed="true"]',
+      '.tile[aria-pressed="true"] .encaje-pieza',
+    ]);
+    expect(logo.length).toBeGreaterThan(0);
+    for (const p of logo) expect(['opacity', 'transform']).toContain(p);
 
     expect(conPista.length).toBeGreaterThan(0);
     expect(conTarjeta.length).toBeGreaterThan(0);

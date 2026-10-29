@@ -10,6 +10,7 @@ import {
 import { track } from '@/lib/analytics';
 import { Icon } from '../icons/Icon';
 import { ModuloArte } from '../mini-web/ModuloArte';
+import { Encaje } from '../ui/Encaje';
 
 /** Los cuatro módulos que se ofrecen en el hero. El resto se elige en el paso 2 del wizard. */
 const TILES: readonly ModuloId[] = ['turnos', 'catalogo', 'carta_qr', 'pagos'];
@@ -140,12 +141,7 @@ export function HeroMockup() {
                   <span aria-hidden="true" className="hidden lg:block">
                     <ModuloArte id={id} activo={activo} />
                   </span>
-                  <span
-                    aria-hidden="true"
-                    className="tile-check absolute top-3 right-3 flex size-6 items-center justify-center rounded-full bg-accent text-accent-fg"
-                  >
-                    <Icon name="check" size={16} />
-                  </span>
+                  <Encaje on={activo} className="absolute top-3 right-3" />
                 </button>
               </li>
             );

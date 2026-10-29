@@ -68,7 +68,14 @@ Cada componente interactivo implementa **default, hover, focus-visible, active, 
 8. Duraciones: instantáneo 100ms, rápido 160ms, base 280ms, lento 520ms. Curva `--ease-out`. Resortes (`spring`) solo para selección de tarjetas.
 9. Si el “wow” compromete performance o accesibilidad, **gana la performance**: simplificar y avisar.
 
-Momentos diseñados (el resto del sitio queda quieto): hero que se arma **una sola vez** y cuyas tarjetas de módulo se activan al tocarlas (pop + check; nunca en loop: tienen botones); transición entre pasos (desplazamiento + fade); selección de tarjeta con spring y check dibujado; chips del paso 2 en cascada; botón de envío → check; confirmación que ensambla los módulos; revelado de secciones al scroll (un único `Reveal` sobrio, sin parallax, no en cada elemento).
+Momentos diseñados (el resto del sitio queda quieto), todos en el lenguaje "Encastre" (la pieza llega, se pasa apenas y asienta; ver `webya-brand`):
+
+- **Logo que se arma** (`<Logo armar />`, solo en el header de `/empezar`): las 5 letras del wordmark entran alternando arriba/abajo y asientan, **una vez**. Es SVG inline de servidor (`components/logo-trazos.ts`, generado desde `public/webya-logo.svg`): cero JS.
+- **Hero que se arma una sola vez** (`.hero-piece`, con un leve rebote al asentar). Sus tarjetas se activan al tocarlas con un "clic" (`@keyframes clic`: baja apenas a su lugar) y nunca en loop: tienen botones.
+- **La pieza que encaja** (`components/ui/Encaje.tsx`): hueco punteado → pieza Brasa con check que cae y asienta (`@keyframes encajar`). Es el único indicador de selección: tarjetas del hero, rubros (radio), módulos (checkbox) y chips. No dupliques checks a mano.
+- **Estados vacíos = huecos punteados** (`border-dashed border-line-strong`) con la forma de lo que falta, más una frase ("Acá encajan tus módulos"). Lo encendido deja de ser hueco: borde y fondo de acento.
+- **Riel punteado** que enhebra pasos ("Cómo funciona") y **tablero de piezas** (un panel con divisiones de 1 px, gap sobre `bg-line`) en vez de tarjetas iguales sueltas.
+- Transición entre pasos (desplazamiento + fade); chips del paso 2 en cascada; botón de envío → check; confirmación que ensambla los módulos; revelado de secciones al scroll (un único `.reveal` sobrio, sin parallax).
 
 ### Cómo crear una animación nueva
 
@@ -82,7 +89,8 @@ Momentos diseñados (el resto del sitio queda quieto): hero que se arma **una so
 ### Elementos interactivos que se animan (hero y selecciones)
 
 - Si se puede tocar, es un `<button aria-pressed>` (activar/desactivar) o un `<input>` nativo (checkbox/radio dentro de `<label>`). Nunca un `<div onClick>` ni un SVG con `role="button"`.
-- Un elemento interactivo **nunca desaparece ni se mueve en loop**. Animá la entrada una vez y el cambio de estado (pop de `transform`, check con `opacity`/`transform`).
+- Un elemento interactivo **nunca desaparece ni se mueve en loop**. Animá la entrada una vez y el cambio de estado ("clic" de `transform` y la pieza de `Encaje` con `opacity`/`transform`).
+- Nunca pongas `mask` sobre algo enfocable: la máscara también recorta el anillo de foco. La muesca `.encastre` va solo en superficies no interactivas (papel, comandas).
 - El estado activo se distingue por borde + fondo + check (forma), no solo por color ni atenuando el texto (el contraste AA se mide con la opacidad real).
 - Una pista efímera ("Tocá para activar") es texto, vive en una región `aria-live="polite"` con altura reservada y se desmonta con un timer. Con reduced-motion se muestra igual, sin movimiento.
 - El estado compartido entre árboles (hero ↔ wizard) vive en `features/empezar/modulos-store.ts`: se guarda **solo lo decidido a mano**; lo demás se deriva del rubro. Así no hay módulos "fantasma" al cambiar de rubro.
