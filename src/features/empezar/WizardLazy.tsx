@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
+import { WIZARD } from '@/content/empezar/wizard';
 
 /**
  * El wizard arrastra motion + react-hook-form + zod (~70 KB gzip) y está bajo el primer viewport.
@@ -18,11 +19,11 @@ function WizardEsqueleto() {
   return (
     <section
       id="wizard"
-      aria-label="Creá tu negocio"
+      aria-label={WIZARD.ariaSeccion}
       aria-busy="true"
       className="min-h-[48rem] scroll-mt-4 rounded-panel border border-line bg-surface/70 p-4 shadow-raised sm:p-8 lg:min-h-[44rem]"
     >
-      <p className="text-small text-muted">Cargando…</p>
+      <p className="text-small text-muted">{WIZARD.cargando}</p>
     </section>
   );
 }

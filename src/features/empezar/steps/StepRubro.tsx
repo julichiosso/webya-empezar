@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/Field';
 import { SelectCard } from '@/components/ui/SelectCard';
 import type { ModuloId } from '@/content/modulos';
 import { RUBRO_DEMO } from '@/content/demos/gastronomia/types';
+import { PASO_RUBRO } from '@/content/empezar/pasos';
 import { getRubro, RUBRO_OTRO_ID, RUBROS } from '@/content/rubros';
 import { StepHeader } from './StepHeader';
 
@@ -55,13 +56,13 @@ export function StepRubro({
       onKeyDown={onKeyDown}
     >
       <StepHeader
-        title="¿Qué vas a crear?"
-        subtitle="Elegí el rubro que más se parezca a tu negocio y mirá cómo se va armando."
+        title={PASO_RUBRO.titulo}
+        subtitle={PASO_RUBRO.bajada}
         headingRef={headingRef}
       />
 
       <fieldset>
-        <legend className="sr-only">Rubro de tu negocio</legend>
+        <legend className="sr-only">{PASO_RUBRO.leyendaRubros}</legend>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           {RUBROS.map((r) => (
             <SelectCard
@@ -90,14 +91,14 @@ export function StepRubro({
           className="mt-2"
         >
           <Input
-            label="¿A qué se dedica tu negocio?"
+            label={PASO_RUBRO.rubroOtro.etiqueta}
             name="rubroOtro"
             value={rubroOtro}
             onChange={(e) => onRubroOtro(e.target.value)}
             maxLength={80}
             autoComplete="off"
             autoFocus
-            placeholder="Ej: floristería, veterinaria…"
+            placeholder={PASO_RUBRO.rubroOtro.placeholder}
           />
         </m.div>
       )}
@@ -113,10 +114,8 @@ export function StepRubro({
           className="mt-4 flex min-h-tap items-center justify-between gap-4 rounded-card border border-accent bg-accent-soft p-4"
         >
           <span>
-            <span className="block font-semibold">Mirá cómo quedaría</span>
-            <span className="block text-small text-muted">
-              Probá la demo: la carta con QR y los pedidos, del lado del cliente y del dueño.
-            </span>
+            <span className="block font-semibold">{PASO_RUBRO.demo.titulo}</span>
+            <span className="block text-small text-muted">{PASO_RUBRO.demo.bajada}</span>
           </span>
           <Icon name="arrowRight" size={20} />
         </a>
@@ -138,7 +137,7 @@ export function StepRubro({
       </div>
 
       <Button type="submit" fullWidth className="mt-6">
-        Siguiente
+        {PASO_RUBRO.siguiente}
       </Button>
     </form>
   );

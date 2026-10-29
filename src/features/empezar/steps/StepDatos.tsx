@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type ChangeEvent, type Ref } from 'react';
 import { useForm, type FieldErrors } from 'react-hook-form';
 import { Button, ButtonLink, type ButtonStatus } from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Field';
+import { PASO_DATOS } from '@/content/empezar/pasos';
 import { formatPhoneInput } from '@/lib/phone';
 import { datosFormSchema, LIMITES, type DatosForm } from '@/domain/leads/lead';
 import type { EnvioResultado } from '../api';
@@ -31,13 +32,11 @@ const ORDEN_CAMPOS: (keyof DatosForm)[] = [
   'mensaje',
 ];
 
-const MENSAJES_ERROR = {
-  limite:
-    'Enviaste varios formularios seguidos. Esperá unos minutos y probá de nuevo, o escribinos por WhatsApp.',
-  servidor: 'No pudimos guardar tus datos. Probá de nuevo en un momento.',
-  red: 'Parece que no hay conexión. Revisá tu internet y probá de nuevo.',
-  validacion: 'Revisá los campos marcados y probá de nuevo.',
-} as const;
+/** Un mensaje por cada causa de error del envío. */
+const MENSAJES_ERROR: Record<Extract<EnvioResultado, { ok: false }>['causa'], string> =
+  PASO_DATOS.erroresEnvio;
+
+const { campos: CAMPOS } = PASO_DATOS;
 
 export function StepDatos({
   inicial,
@@ -112,14 +111,14 @@ export function StepDatos({
   return (
     <form noValidate onSubmit={enviar} className="lg:max-w-xl">
       <StepHeader
-        title="Contanos de tu negocio"
-        subtitle="Con esto armamos tu negocio y te escribimos para ponerlo online."
+        title={PASO_DATOS.titulo}
+        subtitle={PASO_DATOS.bajada}
         headingRef={headingRef}
       />
 
       <div className="flex flex-col gap-5">
         <Input
-          label="Nombre de tu negocio"
+          label={CAMPOS.nombreNegocio.etiqueta}
           autoComplete="organization"
           autoCapitalize="words"
           autoFocus={enfocarPrimero}
@@ -130,7 +129,7 @@ export function StepDatos({
           {...register('nombreNegocio')}
         />
         <Input
-          label="Tu nombre"
+          label={CAMPOS.nombre.etiqueta}
           autoComplete="name"
           autoCapitalize="words"
           enterKeyHint="next"
@@ -140,13 +139,13 @@ export function StepDatos({
           {...register('nombre')}
         />
         <Input
-          label="Tu WhatsApp"
+          label={CAMPOS.whatsapp.etiqueta}
           type="tel"
           inputMode="tel"
           autoComplete="tel"
           enterKeyHint="next"
-          placeholder="11 2345 6789"
-          hint="Te escribimos por acá. No hace falta el 15 ni el +54."
+          placeholder={CAMPOS.whatsapp.placeholder}
+          hint={CAMPOS.whatsapp.ayuda}
           maxLength={20}
           error={errors.whatsapp?.message}
           valid={ok('whatsapp')}
@@ -154,7 +153,7 @@ export function StepDatos({
           onChange={onWhatsappChange}
         />
         <Input
-          label="Email"
+          label={CAMPOS.email.etiqueta}
           type="email"
           inputMode="email"
           autoComplete="email"
@@ -168,7 +167,7 @@ export function StepDatos({
           {...register('email')}
         />
         <Textarea
-          label="¿Algo más que quieras contarnos?"
+          label={CAMPOS.mensaje.etiqueta}
           optional
           rows={3}
           maxLength={LIMITES.mensaje}
@@ -180,7 +179,7 @@ export function StepDatos({
         {/* Honeypot: invisible y fuera del orden de tabulación. Si se completa, es un bot. */}
         <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
           <label>
-            No completes este campo
+            {PASO_DATOS.honeypot}
             <input ref={honeypot} type="text" name="website" tabIndex={-1} autoComplete="off" />
           </label>
         </div>
@@ -198,7 +197,7 @@ export function StepDatos({
                 variant="secondary"
                 className="mt-3"
               >
-                Escribinos por WhatsApp
+                {PASO_DATOS.whatsappRespaldo}
               </ButtonLink>
             )}
           </div>
@@ -206,12 +205,12 @@ export function StepDatos({
       </div>
 
       <Button type="submit" fullWidth status={status} className="mt-6">
-        {status === 'loading' ? 'Enviando…' : 'Enviar'}
+        {status === 'loading' ? PASO_DATOS.enviando : PASO_DATOS.enviar}
       </Button>
 
       <p className="mt-4 text-small text-subtle">
-        Usamos tus datos solo para contactarte por tu proyecto y no los compartimos con nadie.{' '}
-        <span className="text-muted">TODO: enlazar la política de privacidad.</span>
+        {PASO_DATOS.privacidad}{' '}
+        <span className="text-muted">{PASO_DATOS.todoPrivacidad}</span>
       </p>
     </form>
   );

@@ -5,6 +5,7 @@ import type { KeyboardEvent, Ref } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { ModuloOption } from '@/components/ui/ModuloOption';
+import { PASO_MODULOS } from '@/content/empezar/pasos';
 import { getModulo, MODULO_IDS, type ModuloId } from '@/content/modulos';
 import { getRubro } from '@/content/rubros';
 import { esSugerido } from '../modulos';
@@ -66,8 +67,8 @@ export function StepModulos({
       onKeyDown={onKeyDown}
     >
       <StepHeader
-        title="¿Qué querés activar?"
-        subtitle="Activá solo lo que tu negocio necesita. Lo que sugerimos para tu rubro ya viene marcado."
+        title={PASO_MODULOS.titulo}
+        subtitle={PASO_MODULOS.bajada}
         headingRef={headingRef}
       />
 
@@ -78,7 +79,7 @@ export function StepModulos({
       )}
 
       <fieldset>
-        <legend className="sr-only">Módulos para tu negocio</legend>
+        <legend className="sr-only">{PASO_MODULOS.leyendaModulos}</legend>
         <m.ul
           key={`modulos-${rubro}`}
           variants={lista}
@@ -105,15 +106,14 @@ export function StepModulos({
       </fieldset>
 
       <p aria-live="polite" className="tabular mt-4 min-h-6 text-small text-muted">
-        {sinModulos
-          ? 'Activá al menos un módulo para seguir.'
-          : `Activaste ${modulos.length} ${modulos.length === 1 ? 'módulo' : 'módulos'}.`}
+        {sinModulos ? PASO_MODULOS.sinModulos : PASO_MODULOS.activaste(modulos.length)}
       </p>
 
       {opciones.length > 0 && (
         <fieldset className="mt-8">
           <legend className="text-heading font-semibold">
-            ¿Para qué lo querés? <span className="font-normal text-muted">(opcional)</span>
+            {PASO_MODULOS.objetivos.leyenda}{' '}
+            <span className="font-normal text-muted">{PASO_MODULOS.objetivos.opcional}</span>
           </legend>
           <m.ul
             key={`objetivos-${rubro}`}
@@ -139,7 +139,7 @@ export function StepModulos({
       <div aria-live="polite">{error && <p className="text-small text-danger">{error}</p>}</div>
 
       <Button type="submit" fullWidth className="mt-6" disabled={sinModulos}>
-        Siguiente
+        {PASO_MODULOS.siguiente}
       </Button>
     </form>
   );

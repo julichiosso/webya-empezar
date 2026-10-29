@@ -1,6 +1,7 @@
 import { PALETAS_DEMO } from '@/content/demos/gastronomia/paletas';
 import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { esOrigen, type Origen } from '@/config/origenes';
+import { WIZARD } from '@/content/empezar/wizard';
 import { getRubro, RUBRO_OTRO_ID } from '@/content/rubros';
 import type { DatosForm } from '@/domain/leads/lead';
 
@@ -114,13 +115,13 @@ export function errorParaAvanzar(
   cantidadModulos: number,
 ): string | null {
   if (desde === 1) {
-    if (!state.rubro) return 'Elegí el rubro que más se parezca a tu negocio.';
+    if (!state.rubro) return WIZARD.errores.sinRubro;
     if (state.rubro === RUBRO_OTRO_ID && state.rubroOtro.trim().length < 2) {
-      return 'Contanos a qué se dedica tu negocio.';
+      return WIZARD.errores.sinRubroOtro;
     }
     return null;
   }
-  return cantidadModulos === 0 ? 'Activá al menos un módulo para seguir.' : null;
+  return cantidadModulos === 0 ? WIZARD.errores.sinModulos : null;
 }
 
 /** ¿Hay algo avanzado en el wizard guardado (rubro elegido o más allá del paso 1)? */
@@ -131,7 +132,7 @@ export function hayProgresoGuardado(storage: StorageLike): boolean {
 
 /** Nombre del rubro para mostrar y para el mensaje de WhatsApp (si es "Otro", lo que escribió). */
 export function nombreRubroVisible(state: Pick<WizardState, 'rubro' | 'rubroOtro'>): string {
-  if (state.rubro === RUBRO_OTRO_ID) return state.rubroOtro.trim() || 'Otro';
+  if (state.rubro === RUBRO_OTRO_ID) return state.rubroOtro.trim() || WIZARD.rubroOtroSinTexto;
   return getRubro(state.rubro)?.nombre ?? '';
 }
 

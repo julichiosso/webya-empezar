@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { getPaletaDemo } from '@/content/demos/gastronomia/paletas';
 import { NOMBRES_COCINA, type CocinaId } from '@/content/demos/gastronomia/types';
+import { WIZARD } from '@/content/empezar/wizard';
+import { MICROCOPY } from '@/content/microcopy';
 import { getModulo, type ModuloId } from '@/content/modulos';
 import { getRubro, RUBRO_OTRO_ID } from '@/content/rubros';
 import { track } from '@/lib/analytics';
@@ -124,7 +126,10 @@ export function Wizard() {
 
   // Si vino de la demo, se lo decimos: así entiende por qué ya hay cosas elegidas.
   const avisoDemo = state.demo
-    ? `Trajimos lo que armaste en la demo: ${NOMBRES_COCINA[state.demo.cocina as CocinaId]}, paleta ${getPaletaDemo(state.demo.paleta).nombre}.`
+    ? WIZARD.avisoDemo(
+        NOMBRES_COCINA[state.demo.cocina as CocinaId],
+        getPaletaDemo(state.demo.paleta).nombre,
+      )
     : undefined;
 
   const onCambioDatos = useCallback((datos: DatosForm) => dispatch({ tipo: 'datos', datos }), []);
@@ -139,7 +144,7 @@ export function Wizard() {
     if (modulos.length === 0) {
       // No debería pasar (el paso 2 lo exige); si el estado quedó inconsistente, se vuelve a ese paso.
       irA(2);
-      setErrorPaso('Activá al menos un módulo para seguir.');
+      setErrorPaso(WIZARD.errores.sinModulos);
       return { ok: false, causa: 'validacion' } as const;
     }
     const payload: LeadPayloadInput = {
@@ -179,7 +184,7 @@ export function Wizard() {
         <section
           id="wizard"
           ref={raiz}
-          aria-label="Creá tu negocio"
+          aria-label={WIZARD.ariaSeccion}
           className="scroll-mt-4 rounded-panel border border-line bg-surface/70 p-4 shadow-raised sm:p-8 lg:p-10"
         >
           {/* Escritorio: pasos a la izquierda, vista previa sticky a la derecha. Mobile: una columna. */}
@@ -196,13 +201,13 @@ export function Wizard() {
                     tabIndex={paso === 1 || paso === 4 ? -1 : undefined}
                   >
                     <Icon name="arrowLeft" size={20} />
-                    Atrás
+                    {WIZARD.atras}
                   </Button>
                   <p className="tabular text-small text-muted">
-                    Paso {paso} de {TOTAL_PASOS}
+                    {MICROCOPY.pasoDeTotal(paso, TOTAL_PASOS)}
                   </p>
                 </div>
-                <ProgressBar step={paso} total={TOTAL_PASOS} label="Progreso del formulario" />
+                <ProgressBar step={paso} total={TOTAL_PASOS} label={WIZARD.ariaProgreso} />
               </div>
 
               <AnimatePresence
