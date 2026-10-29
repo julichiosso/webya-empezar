@@ -90,6 +90,37 @@ describe('POST /api/leads — envío válido', () => {
     expect(JSON.stringify(lead)).not.toContain(IP);
   });
 
+  it('guarda el origen de la lista cerrada; sin origen, el de siempre', async () => {
+    const desdeDemo = {
+      ...valido,
+      rubro: 'gastronomia',
+      objetivos: [],
+      modulos: ['carta_qr'],
+      origen: 'demo_gastronomia',
+      demo: { paleta: 'pileta', cocina: 'parrilla' },
+    };
+    expect((await handleCreateLead(peticion(desdeDemo), deps)).status).toBe(201);
+    expect(repo.leads[0]?.origen).toBe('demo_gastronomia');
+    expect((await handleCreateLead(peticion(valido), deps)).status).toBe(201);
+    expect(repo.leads[1]?.origen).toBe('instagram');
+  });
+
+  it('rechaza un origen fuera de la lista o una demo inventada', async () => {
+    const r1 = await handleCreateLead(peticion({ ...valido, origen: 'facebook' }), deps);
+    expect(r1.status).toBe(400);
+    const r2 = await handleCreateLead(
+      peticion({ ...valido, demo: { paleta: 'arcoiris', cocina: 'parrilla' } }),
+      deps,
+    );
+    expect(r2.status).toBe(400);
+    const r3 = await handleCreateLead(
+      peticion({ ...valido, demo: { paleta: 'brasa', cocina: 'cafe', extra: 'x' } }),
+      deps,
+    );
+    expect(r3.status).toBe(400);
+    expect(repo.leads).toHaveLength(0);
+  });
+
   it('guarda el lead aunque no haya objetivos (son opcionales)', async () => {
     const res = await handleCreateLead(peticion({ ...valido, objetivos: [] }), deps);
     expect(res.status).toBe(201);

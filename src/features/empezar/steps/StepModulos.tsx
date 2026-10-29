@@ -20,6 +20,8 @@ interface StepModulosProps {
   onToggleModulo: (id: ModuloId) => void;
   onToggleObjetivo: (id: string) => void;
   onContinuar: () => void;
+  /** Aviso opcional arriba de los módulos (p. ej. "Trajimos lo que armaste en la demo…"). */
+  aviso?: string;
 }
 
 // Cascada de los elementos: solo opacity + translateY.
@@ -41,6 +43,7 @@ export function StepModulos({
   onToggleModulo,
   onToggleObjetivo,
   onContinuar,
+  aviso,
 }: StepModulosProps) {
   const opciones = getRubro(rubro)?.objetivos ?? [];
   const sinModulos = modulos.length === 0;
@@ -67,6 +70,12 @@ export function StepModulos({
         subtitle="Activá solo lo que tu negocio necesita. Lo que sugerimos para tu rubro ya viene marcado."
         headingRef={headingRef}
       />
+
+      {aviso && (
+        <p className="-mt-2 mb-6 rounded-control border border-line bg-surface p-4 text-small text-muted">
+          {aviso}
+        </p>
+      )}
 
       <fieldset>
         <legend className="sr-only">Módulos para tu negocio</legend>

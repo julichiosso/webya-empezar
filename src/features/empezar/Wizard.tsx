@@ -7,6 +7,8 @@ import { Icon } from '@/components/icons/Icon';
 import { PreviewPanel } from '@/components/PreviewPanel';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { getPaletaDemo } from '@/config/demos/gastronomia/paletas';
+import { NOMBRES_COCINA, type CocinaId } from '@/config/demos/gastronomia/types';
 import { getModulo, type ModuloId } from '@/config/modulos';
 import { getRubro, RUBRO_OTRO_ID } from '@/config/rubros';
 import { track } from '@/lib/analytics';
@@ -120,6 +122,11 @@ export function Wizard() {
     state.datos.nombreNegocio,
   ]);
 
+  // Si vino de la demo, se lo decimos: así entiende por qué ya hay cosas elegidas.
+  const avisoDemo = state.demo
+    ? `Trajimos lo que armaste en la demo: ${NOMBRES_COCINA[state.demo.cocina as CocinaId]}, paleta ${getPaletaDemo(state.demo.paleta).nombre}.`
+    : undefined;
+
   const onCambioDatos = useCallback((datos: DatosForm) => dispatch({ tipo: 'datos', datos }), []);
 
   const onToggleModulo = (id: ModuloId) => {
@@ -143,6 +150,9 @@ export function Wizard() {
       objetivos: state.objetivos,
       website: honeypot,
       ...utm.current,
+      // Si vino de una demo: de dónde y lo que armó ahí (los dos, de listas cerradas).
+      ...(state.origen ? { origen: state.origen } : {}),
+      ...(state.demo ? { demo: state.demo } : {}),
     };
     const resultado = await enviarLead(payload);
     if (resultado.ok) {
@@ -242,6 +252,7 @@ export function Wizard() {
                         dispatch({ tipo: 'toggleObjetivo', id });
                       }}
                       onContinuar={() => avanzar(2)}
+                      aviso={avisoDemo}
                     />
                   )}
                   {paso === 3 && (

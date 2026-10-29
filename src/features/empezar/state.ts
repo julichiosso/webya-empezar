@@ -1,5 +1,14 @@
+import { PALETAS_DEMO } from '@/config/demos/gastronomia/paletas';
+import { COCINA_IDS } from '@/config/demos/gastronomia/types';
+import { esOrigen, type Origen } from '@/config/origenes';
 import { getRubro, RUBRO_OTRO_ID } from '@/config/rubros';
 import type { DatosForm } from '@/lib/validation/lead';
+
+/** Lo que la persona armó en una demo (paleta y tipo de cocina), si vino de ahí. */
+export interface DesdeDemo {
+  paleta: string;
+  cocina: string;
+}
 
 export const TOTAL_PASOS = 4;
 export type Paso = 1 | 2 | 3 | 4;
@@ -18,6 +27,10 @@ export interface WizardState {
   hidratado: boolean;
   /** La persona ya navegó el flujo: recién ahí se mueve el foco al cambiar de paso. No se guarda. */
   interactuo: boolean;
+  /** De dónde viene (lista cerrada). null = el de siempre (Instagram). */
+  origen: Origen | null;
+  /** Personalización traída de la demo, si vino de ahí. */
+  demo: DesdeDemo | null;
 }
 
 export const DATOS_VACIOS: DatosForm = {
@@ -38,6 +51,8 @@ export const ESTADO_INICIAL: WizardState = {
   enviado: false,
   hidratado: false,
   interactuo: false,
+  origen: null,
+  demo: null,
 };
 
 export type Accion =
@@ -133,6 +148,8 @@ export function guardarEstado(state: WizardState, storage: StorageLike): void {
       objetivos: state.objetivos,
       datos: state.datos,
       enviado: state.enviado,
+      origen: state.origen,
+      demo: state.demo,
     };
     storage.setItem(STORAGE_KEY, JSON.stringify(persistible));
   } catch {
@@ -149,6 +166,15 @@ export function borrarEstado(storage: StorageLike): void {
 }
 
 const str = (v: unknown, max: number) => (typeof v === 'string' ? v.slice(0, max) : '');
+
+/** Solo paletas y cocinas que existen en la demo; cualquier otra cosa se descarta. */
+export function sanearDemo(v: unknown): DesdeDemo | null {
+  if (!v || typeof v !== 'object') return null;
+  const { paleta, cocina } = v as Record<string, unknown>;
+  const paletaOk = PALETAS_DEMO.some((p) => p.id === paleta);
+  const cocinaOk = (COCINA_IDS as readonly unknown[]).includes(cocina);
+  return paletaOk && cocinaOk ? { paleta: paleta as string, cocina: cocina as string } : null;
+}
 
 /** Lee y SANEA lo guardado: nunca se confía en lo que haya en storage. */
 export function leerEstadoGuardado(storage: StorageLike): WizardState | null {
@@ -183,6 +209,8 @@ export function leerEstadoGuardado(storage: StorageLike): WizardState | null {
       enviado,
       hidratado: false,
       interactuo: false,
+      origen: esOrigen(d.origen) ? d.origen : null,
+      demo: sanearDemo(d.demo),
     };
   } catch {
     return null;

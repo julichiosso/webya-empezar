@@ -2,7 +2,9 @@
 
 import { useSyncExternalStore } from 'react';
 import {
+  COCINA_IDS,
   COCINA_POR_DEFECTO,
+  PALETAS_DEMO,
   getCocina,
   LOCAL_DEMO,
   PALETA_DEMO_POR_DEFECTO,
@@ -212,6 +214,40 @@ export function cancelarPedido(id: string, ahora: Date = new Date()) {
 /** El cliente cierra el seguimiento y vuelve a la carta (el pedido sigue existiendo para el dueño). */
 export function cerrarSeguimiento() {
   publicar({ ...estado, seguimientoId: null });
+}
+
+// --- Personalización ----------------------------------------------------------------------------
+
+export const LARGO_NOMBRE_LOCAL = 40;
+
+export interface Personalizacion {
+  nombreLocal?: string | null;
+  paletaId?: string;
+  cocinaId?: CocinaId;
+}
+
+/**
+ * Cambia nombre, paleta o tipo de cocina. Valores desconocidos se ignoran. Cambiar de cocina vacía
+ * el carrito (los platos de otra carta no existen en esta); los pedidos ya hechos quedan.
+ */
+export function personalizar(cambios: Personalizacion) {
+  const siguiente = { ...estado };
+  if (cambios.nombreLocal !== undefined) {
+    const n = (cambios.nombreLocal ?? '').slice(0, LARGO_NOMBRE_LOCAL);
+    siguiente.nombreLocal = n.trim() ? n : null;
+  }
+  if (cambios.paletaId && PALETAS_DEMO.some((p) => p.id === cambios.paletaId)) {
+    siguiente.paletaId = cambios.paletaId;
+  }
+  if (
+    cambios.cocinaId &&
+    COCINA_IDS.includes(cambios.cocinaId) &&
+    cambios.cocinaId !== estado.cocinaId
+  ) {
+    siguiente.cocinaId = cambios.cocinaId;
+    siguiente.carrito = CARRITO_VACIO;
+  }
+  publicar(siguiente);
 }
 
 /** Borra pedidos y carrito (mantiene la personalización: nombre, paleta y cocina). */

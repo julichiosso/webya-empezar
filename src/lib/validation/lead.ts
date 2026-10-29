@@ -1,5 +1,8 @@
 import { z } from 'zod';
+import { PALETAS_DEMO } from '@/config/demos/gastronomia/paletas';
+import { COCINA_IDS } from '@/config/demos/gastronomia/types';
 import { MODULO_IDS } from '@/config/modulos';
+import { ORIGENES } from '@/config/origenes';
 import { esObjetivoDeRubro, getRubro, RUBRO_OTRO_ID } from '@/config/rubros';
 import { parsePhoneAR } from '../phone';
 
@@ -52,6 +55,14 @@ export type DatosForm = z.infer<typeof datosFormSchema>;
 
 const utmField = z.string().trim().max(LIMITES.utm).optional();
 
+/** La personalización de la demo solo vale con una paleta y una cocina que existen. */
+function sanearDemoLead(demo: { paleta: string; cocina: string }): boolean {
+  return (
+    PALETAS_DEMO.some((p) => p.id === demo.paleta) &&
+    (COCINA_IDS as readonly string[]).includes(demo.cocina)
+  );
+}
+
 /**
  * Payload completo que recibe POST /api/leads. El servidor sanitiza el texto ANTES de validar
  * (ver lib/sanitize.ts) y nunca confía en lo que mande el cliente.
@@ -68,6 +79,13 @@ export const leadPayloadSchema = z
       .max(LIMITES.modulos),
     // Opcionales: ayudan a entender para qué lo quiere.
     objetivos: z.array(z.string().trim().min(1).max(60)).max(LIMITES.objetivos),
+    // De dónde viene: SOLO valores de la lista cerrada (nunca texto libre).
+    origen: z.enum(ORIGENES).optional(),
+    // Lo que armó en una demo (paleta y cocina): ids conocidos, tamaño acotado.
+    demo: z
+      .object({ paleta: z.string().max(20), cocina: z.string().max(20) })
+      .strict()
+      .optional(),
     // Honeypot: los humanos no lo ven ni lo completan. La ruta lo revisa antes de validar.
     website: z.string().max(200).optional(),
     utm_source: utmField,
@@ -98,6 +116,9 @@ export const leadPayloadSchema = z
         });
       }
     });
+    if (lead.demo && !sanearDemoLead(lead.demo)) {
+      ctx.addIssue({ code: 'custom', path: ['demo'], message: 'Esa personalización no existe.' });
+    }
     if (new Set(lead.objetivos).size !== lead.objetivos.length) {
       ctx.addIssue({ code: 'custom', path: ['objetivos'], message: 'Hay objetivos repetidos.' });
     }

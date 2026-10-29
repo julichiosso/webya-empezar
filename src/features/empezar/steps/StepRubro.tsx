@@ -2,12 +2,14 @@
 
 import * as m from 'motion/react-m';
 import type { KeyboardEvent, Ref } from 'react';
+import { Icon } from '@/components/icons/Icon';
 import type { IconName } from '@/components/icons/paths';
 import { NegocioPreview } from '@/components/NegocioPreview';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Field';
 import { SelectCard } from '@/components/ui/SelectCard';
 import type { ModuloId } from '@/config/modulos';
+import { RUBRO_DEMO } from '@/config/demos/gastronomia/types';
 import { getRubro, RUBRO_OTRO_ID, RUBROS } from '@/config/rubros';
 import { StepHeader } from './StepHeader';
 
@@ -103,6 +105,22 @@ export function StepRubro({
       <div aria-live="polite" className="mt-2">
         {error && <p className="text-small text-danger">{error}</p>}
       </div>
+
+      {/* Gastronomía tiene demo: entrada clara para ver cómo quedaría antes de seguir. */}
+      {rubro === RUBRO_DEMO && (
+        <a
+          href="/demo/gastronomia"
+          className="mt-4 flex min-h-tap items-center justify-between gap-4 rounded-card border border-accent bg-accent-soft p-4"
+        >
+          <span>
+            <span className="block font-semibold">Mirá cómo quedaría</span>
+            <span className="block text-small text-muted">
+              Probá la demo: la carta con QR y los pedidos, del lado del cliente y del dueño.
+            </span>
+          </span>
+          <Icon name="arrowRight" size={20} />
+        </a>
+      )}
 
       {/* En escritorio la vista previa vive en el panel derecho del wizard. */}
       <div className="mt-6 lg:hidden">

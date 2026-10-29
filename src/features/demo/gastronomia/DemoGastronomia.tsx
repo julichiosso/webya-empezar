@@ -5,10 +5,14 @@ import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import { flushSync } from 'react-dom';
 import { AVISO_DEMO, getPaletaDemo, RUBRO_DEMO } from '@/config/demos/gastronomia';
 import { variablesDePaleta } from '@/config/marca/colores';
+import { buttonClasses } from '@/components/ui/Button';
+import { prepararWizardDesdeDemo, URL_WIZARD_DESDE_DEMO } from '@/features/empezar/desde-demo';
 import { track } from '@/lib/analytics';
 import { DemoCliente } from './cliente/DemoCliente';
+import { datosParaWizard, personalizacionDeUrl } from './compartir';
+import { Personalizar } from './Personalizar';
 import { iniciarSincronizacion } from './sincronizacion';
-import { getEstadoDemo, useDemo } from './store';
+import { getEstadoDemo, personalizar, useDemo } from './store';
 
 const cargarPanel = () => import('./duenio/PanelDuenio').then((m) => m.PanelDuenio);
 
@@ -43,8 +47,12 @@ export function DemoGastronomia({ encabezado }: DemoGastronomiaProps) {
   const [escritorio, setEscritorio] = useState(false);
 
   useEffect(() => {
+    const apagar = iniciarSincronizacion();
+    // Si vino por el QR o por WhatsApp, la personalización de la URL gana sobre lo guardado.
+    const desdeUrl = personalizacionDeUrl(window.location.search);
+    if (Object.keys(desdeUrl).length > 0) personalizar(desdeUrl);
     track('demo_view', { demo: RUBRO_DEMO, cocina: getEstadoDemo().cocinaId });
-    return iniciarSincronizacion();
+    return apagar;
   }, []);
 
   // ¿Se ven las dos caras a la vez? (lg). Decide si el panel se monta de entrada.
@@ -87,17 +95,20 @@ export function DemoGastronomia({ encabezado }: DemoGastronomiaProps) {
       style={variablesDePaleta(getPaletaDemo(paletaId)) as CSSProperties}
       className="pb-24 lg:pb-0"
     >
-      {/* Cartel permanente: siempre fijo arriba, en celular y en escritorio. */}
-      <p
-        role="note"
-        // Alto fijo para dos renglones en celulares angostos: la barra de categorías se apoya debajo (top-14).
-        className="sticky top-0 z-30 flex h-14 items-center justify-center bg-surface-2 px-4 text-center text-small leading-tight font-medium text-fg lg:h-10"
-      >
-        {AVISO_DEMO}
-      </p>
+      {/* Barra fija arriba (celular y escritorio): el aviso de demo siempre; en escritorio, también
+          el CTA. Alto fijo: en celular entran dos renglones y la barra de categorías se apoya debajo (top-14). */}
+      <div className="sticky top-0 z-30 flex h-14 items-center justify-center gap-4 bg-surface-2 px-4 lg:justify-between lg:px-8">
+        <p role="note" className="text-center text-small leading-tight font-medium text-fg">
+          {AVISO_DEMO}
+        </p>
+        <CtaQuiero origen="barra" className="hidden lg:inline-flex" />
+      </div>
 
       <div className="mx-auto w-full max-w-[90rem] lg:px-8 lg:pb-16">
-        <div className="px-4 pt-6 pb-8 lg:px-0 lg:pt-10">{encabezado}</div>
+        <div className="px-4 pt-6 pb-6 lg:px-0 lg:pt-10">{encabezado}</div>
+        <div className="px-4 pb-6 lg:px-0 lg:pb-8">
+          <Personalizar />
+        </div>
         <div className="lg:grid lg:grid-cols-[25rem_minmax(0,1fr)] lg:items-start lg:gap-12">
           <div id="vista-cliente" className={vista === 'cliente' ? '' : 'max-lg:hidden'}>
             <DemoCliente />
@@ -108,34 +119,70 @@ export function DemoGastronomia({ encabezado }: DemoGastronomiaProps) {
         </div>
       </div>
 
-      {/* Selector flotante (solo celular y tablet): una cara a la vez. */}
-      <div
-        role="group"
-        aria-label="Qué querés ver"
-        className="fixed inset-x-0 bottom-4 z-30 mx-auto flex w-fit gap-1 rounded-full border border-line-strong bg-surface-2 p-1 shadow-raised lg:hidden"
-      >
-        <BotonVista
-          activa={vista === 'cliente'}
-          onClick={() => cambiarVista('cliente')}
-          controla="vista-cliente"
+      {/* Abajo, flotante (solo celular y tablet): qué cara ver y el CTA. */}
+      <div className="fixed inset-x-4 bottom-4 z-30 flex items-center justify-between gap-2 lg:hidden">
+        <div
+          role="group"
+          aria-label="Qué querés ver"
+          className="flex gap-1 rounded-full border border-line-strong bg-surface-2 p-1 shadow-raised"
         >
-          Ver como cliente
-        </BotonVista>
-        <BotonVista
-          activa={vista === 'duenio'}
-          onClick={() => cambiarVista('duenio')}
-          controla="vista-duenio"
-        >
-          Ver como dueño
-          {nuevos > 0 && (
-            <span className="tabular flex size-6 items-center justify-center rounded-full bg-accent text-small text-accent-fg">
-              {nuevos}
-              <span className="sr-only"> {nuevos === 1 ? 'pedido nuevo' : 'pedidos nuevos'}</span>
-            </span>
-          )}
-        </BotonVista>
+          <BotonVista
+            activa={vista === 'cliente'}
+            onClick={() => cambiarVista('cliente')}
+            controla="vista-cliente"
+          >
+            <span className="sr-only">Ver como </span>Cliente
+          </BotonVista>
+          <BotonVista
+            activa={vista === 'duenio'}
+            onClick={() => cambiarVista('duenio')}
+            controla="vista-duenio"
+          >
+            <span className="sr-only">Ver como </span>Dueño
+            {nuevos > 0 && (
+              <span className="tabular flex size-6 items-center justify-center rounded-full bg-accent text-small text-accent-fg">
+                {nuevos}
+                <span className="sr-only"> {nuevos === 1 ? 'pedido nuevo' : 'pedidos nuevos'}</span>
+              </span>
+            )}
+          </BotonVista>
+        </div>
+        <CtaQuiero origen="flotante" corto className="shadow-raised" />
       </div>
     </div>
+  );
+}
+
+/**
+ * "Quiero esto para mi local": deja el wizard listo (rubro, módulos, nombre, origen y lo armado en
+ * la demo) y va a /empezar. Es un link de verdad: sin JavaScript igual lleva al wizard.
+ */
+function CtaQuiero({
+  origen,
+  corto = false,
+  className,
+}: {
+  origen: string;
+  corto?: boolean;
+  className?: string;
+}) {
+  return (
+    <a
+      href={URL_WIZARD_DESDE_DEMO}
+      onClick={() => {
+        track('demo_cta_click', { demo: RUBRO_DEMO, origen });
+        try {
+          prepararWizardDesdeDemo(datosParaWizard(getEstadoDemo()), window.sessionStorage);
+        } catch {
+          // sin sessionStorage el link igual abre el wizard, sin precargar
+        }
+      }}
+      // El nombre accesible contiene el texto visible (WCAG 2.5.3).
+      aria-label={corto ? 'Lo quiero para mi local' : undefined}
+      className={`${buttonClasses('primary', false, 'compacto')} ${className ?? ''}`}
+    >
+      {corto ? 'Lo quiero' : 'Quiero esto para mi local'}
+    </a>
   );
 }
 

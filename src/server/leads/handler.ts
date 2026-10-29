@@ -140,6 +140,8 @@ export async function handleCreateLead(request: Request, deps: HandlerDeps): Pro
       modulos: d.modulos,
       objetivos: d.objetivos,
       mensaje: nullSiVacio(d.mensaje),
+      // Lista cerrada (validada por el schema); sin origen, el repositorio pone el de siempre.
+      origen: d.origen,
       utm_source: nullSiVacio(d.utm_source),
       utm_medium: nullSiVacio(d.utm_medium),
       utm_campaign: nullSiVacio(d.utm_campaign),
