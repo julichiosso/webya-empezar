@@ -6,6 +6,7 @@ import { buttonClasses } from '@/components/ui/Button';
 import { Encaje } from '@/components/ui/Encaje';
 import { Hoja } from '@/components/ui/Hoja';
 import { getCocina } from '@/content/demos/gastronomia';
+import { PANEL } from '@/content/demos/gastronomia/ui/panel';
 import { formatearPesos } from '@/domain/pedidos/dinero';
 import { ETIQUETA_ESTADO } from '@/domain/pedidos/estados';
 import type { Modalidad, Pedido } from '@/domain/pedidos/types';
@@ -24,10 +25,10 @@ import { useAhora } from './useAhora';
 
 type Filtro = 'todas' | Modalidad;
 const FILTROS: { id: Filtro; nombre: string }[] = [
-  { id: 'todas', nombre: 'Todos' },
-  { id: 'mesa', nombre: 'Mesa' },
-  { id: 'retiro', nombre: 'Retiro' },
-  { id: 'delivery', nombre: 'Delivery' },
+  { id: 'todas', nombre: PANEL.filtros.todas },
+  { id: 'mesa', nombre: PANEL.filtros.mesa },
+  { id: 'retiro', nombre: PANEL.filtros.retiro },
+  { id: 'delivery', nombre: PANEL.filtros.delivery },
 ];
 
 /**
@@ -55,10 +56,12 @@ export function PanelDuenio() {
       const antes = vistos.current.get(p.id);
       const ultimo = p.eventos.at(-1);
       if (antes === undefined && esReciente(p.creadoEn, t)) {
-        mensajes.push(`Entró el pedido #${p.numero}: ${detalleModalidad(p)}.`);
+        mensajes.push(PANEL.anuncio.nuevo(p.numero, detalleModalidad(p)));
         hayNuevo = true;
       } else if (antes !== undefined && antes !== p.estado && ultimo && esReciente(ultimo.en, t)) {
-        mensajes.push(`Pedido #${p.numero}: ${ETIQUETA_ESTADO[p.estado].duenio.toLowerCase()}.`);
+        mensajes.push(
+          PANEL.anuncio.estado(p.numero, ETIQUETA_ESTADO[p.estado].duenio.toLowerCase()),
+        );
       }
       vistos.current.set(p.id, p.estado);
     }
@@ -86,9 +89,9 @@ export function PanelDuenio() {
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-small text-muted">Panel del dueño</p>
+          <p className="text-small text-muted">{PANEL.eyebrow}</p>
           <h2 id="panel-titulo" className="text-heading font-semibold">
-            Pedidos de {nombre}
+            {PANEL.titulo(nombre)}
           </h2>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -98,7 +101,7 @@ export function PanelDuenio() {
             className={buttonClasses('secondary', false, 'compacto')}
           >
             <Icon name="mas" size={18} />
-            Simular un pedido
+            {PANEL.simular}
           </button>
           <button
             type="button"
@@ -108,7 +111,7 @@ export function PanelDuenio() {
           >
             {/* Nombre fijo; el estado lo dicen aria-pressed y la pieza (apagado por defecto). */}
             <Encaje on={sonido} size="sm" />
-            Sonido al entrar un pedido
+            {PANEL.sonido}
           </button>
         </div>
       </div>
@@ -119,15 +122,15 @@ export function PanelDuenio() {
       </p>
 
       <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Dato titulo="Pedidos" valor={String(resumen.pedidos)} />
-        <Dato titulo="En curso" valor={String(resumen.enCurso)} />
-        <Dato titulo="Entregados" valor={String(resumen.entregados)} />
-        <Dato titulo="Ventas" valor={formatearPesos(resumen.ventas)} />
+        <Dato titulo={PANEL.resumen.pedidos} valor={String(resumen.pedidos)} />
+        <Dato titulo={PANEL.resumen.enCurso} valor={String(resumen.enCurso)} />
+        <Dato titulo={PANEL.resumen.entregados} valor={String(resumen.entregados)} />
+        <Dato titulo={PANEL.resumen.ventas} valor={formatearPesos(resumen.ventas)} />
       </dl>
-      <p className="-mt-4 text-small text-muted">Calculado con los pedidos de esta demo.</p>
+      <p className="-mt-4 text-small text-muted">{PANEL.resumen.nota}</p>
 
       <fieldset>
-        <legend className="sr-only">Filtrar por cómo se recibe</legend>
+        <legend className="sr-only">{PANEL.filtros.leyenda}</legend>
         <div className="flex flex-wrap gap-2">
           {FILTROS.map((f) => (
             <label key={f.id} className="cursor-pointer">
@@ -149,11 +152,8 @@ export function PanelDuenio() {
       {pedidos.length === 0 ? (
         // Estado vacío del concepto Encastre: el hueco donde va a caer la primera pieza.
         <div className="flex flex-col items-center gap-4 rounded-card border-2 border-dashed border-line-strong px-4 py-12 text-center">
-          <p className="font-semibold">Acá encaja tu primer pedido.</p>
-          <p className="max-w-sm text-muted">
-            Hacé uno desde la carta o tocá “Simular un pedido”. Todavía no entró nada, pero ya va a
-            picar.
-          </p>
+          <p className="font-semibold">{PANEL.vacio.titulo}</p>
+          <p className="max-w-sm text-muted">{PANEL.vacio.bajada}</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -180,7 +180,7 @@ export function PanelDuenio() {
                 </h3>
                 {lista.length === 0 ? (
                   <p className="rounded-card border border-dashed border-line px-4 py-6 text-center text-small text-muted">
-                    Nada por acá.
+                    {PANEL.columnaVacia}
                   </p>
                 ) : (
                   lista.map((p) => (
@@ -199,14 +199,14 @@ export function PanelDuenio() {
           onClick={reiniciarDemo}
           className="self-start rounded-control text-small text-muted underline-offset-4 hover:text-fg hover:underline"
         >
-          <span className="flex min-h-tap items-center">Borrar los pedidos de la demo</span>
+          <span className="flex min-h-tap items-center">{PANEL.borrar}</span>
         </button>
       )}
 
       <Hoja
         abierta={comanda !== null}
         onCerrar={() => setComanda(null)}
-        titulo={comanda ? `Comanda #${comanda.numero}` : ''}
+        titulo={comanda ? PANEL.tituloComanda(comanda.numero) : ''}
       >
         {comanda && <Comanda pedido={comanda} nombreLocal={nombre} />}
       </Hoja>

@@ -1,3 +1,4 @@
+import { PANEL } from '@/content/demos/gastronomia/ui/panel';
 import { sumar, type Centavos } from '@/domain/pedidos/dinero';
 import { esFinal } from '@/domain/pedidos/estados';
 import type { EstadoPedido, Pedido } from '@/domain/pedidos/types';
@@ -6,7 +7,8 @@ import type { EstadoPedido, Pedido } from '@/domain/pedidos/types';
 export function transcurrido(desdeIso: string, ahora: number): string {
   const segundos = Math.max(0, Math.floor((ahora - Date.parse(desdeIso)) / 1000));
   const min = Math.floor(segundos / 60);
-  if (min >= 60) return `${Math.floor(min / 60)} h ${String(min % 60).padStart(2, '0')} min`;
+  if (min >= 60)
+    return PANEL.horasYMinutos(Math.floor(min / 60), String(min % 60).padStart(2, '0'));
   return `${String(min).padStart(2, '0')}:${String(segundos % 60).padStart(2, '0')}`;
 }
 
@@ -40,10 +42,10 @@ export function resumenDelDia(pedidos: readonly Pedido[]): ResumenDia {
 /** Columnas del tablero del dueño, en orden. Los terminados (entregados y cancelados) van juntos. */
 export const COLUMNAS: readonly { id: string; titulo: string; estados: readonly EstadoPedido[] }[] =
   [
-    { id: 'nuevos', titulo: 'Nuevos', estados: ['recibido'] },
-    { id: 'preparando', titulo: 'Preparando', estados: ['en_preparacion'] },
-    { id: 'listos', titulo: 'Listos', estados: ['listo'] },
-    { id: 'terminados', titulo: 'Entregados', estados: ['entregado', 'cancelado'] },
+    { id: 'nuevos', titulo: PANEL.columnas.nuevos, estados: ['recibido'] },
+    { id: 'preparando', titulo: PANEL.columnas.preparando, estados: ['en_preparacion'] },
+    { id: 'listos', titulo: PANEL.columnas.listos, estados: ['listo'] },
+    { id: 'terminados', titulo: PANEL.columnas.terminados, estados: ['entregado', 'cancelado'] },
   ];
 
 /** Cuántos terminados se muestran (los más recientes): el tablero no crece sin límite. */
@@ -59,6 +61,6 @@ export function esReciente(iso: string, ahora: number, ventanaMs = 10_000): bool
 
 /** Cómo lo recibe, en corto: "Mesa 4", "Retira", "Delivery". */
 export function detalleModalidad(p: Pick<Pedido, 'modalidad' | 'mesa'>): string {
-  if (p.modalidad === 'mesa') return `Mesa ${p.mesa ?? ''}`.trim();
-  return p.modalidad === 'retiro' ? 'Retira' : 'Delivery';
+  if (p.modalidad === 'mesa') return PANEL.modalidad.mesa(p.mesa ?? '').trim();
+  return p.modalidad === 'retiro' ? PANEL.modalidad.retiro : PANEL.modalidad.delivery;
 }
