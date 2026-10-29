@@ -110,7 +110,7 @@ export function StepDatos({
   }, onInvalido);
 
   return (
-    <form noValidate onSubmit={enviar}>
+    <form noValidate onSubmit={enviar} className="lg:max-w-xl">
       <StepHeader
         title="Contanos de tu negocio"
         subtitle="Con esto armamos tu negocio y te escribimos para ponerlo online."

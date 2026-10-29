@@ -17,6 +17,15 @@ const dispositivos = {
   desktop: devices['Desktop Chrome'],
 };
 
+/**
+ * Escritorios grandes: solo corren lo que depende del layout (capturas, layout, accesibilidad y
+ * consola). El resto de los specs (flujos, teclado, SEO, rendimiento) ya cubre el viewport 'desktop'.
+ */
+const escritoriosGrandes = {
+  'desktop-1440': { width: 1440, height: 900 },
+  'desktop-1920': { width: 1920, height: 1080 },
+};
+
 export default defineConfig({
   testDir: './e2e',
   globalSetup: './e2e/global-setup.ts',
@@ -29,10 +38,17 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}`,
     trace: 'on-first-retry',
   },
-  projects: Object.entries(dispositivos).map(([name, device]) => ({
-    name,
-    use: { ...device, browserName: 'chromium' as const },
-  })),
+  projects: [
+    ...Object.entries(dispositivos).map(([name, device]) => ({
+      name,
+      use: { ...device, browserName: 'chromium' as const },
+    })),
+    ...Object.entries(escritoriosGrandes).map(([name, viewport]) => ({
+      name,
+      testMatch: /(visual|layout|a11y|consola).spec.ts/,
+      use: { ...devices['Desktop Chrome'], viewport, browserName: 'chromium' as const },
+    })),
+  ],
   webServer: {
     command: `pnpm build && pnpm start -p ${PORT}`,
     url: `http://localhost:${PORT}/empezar`,

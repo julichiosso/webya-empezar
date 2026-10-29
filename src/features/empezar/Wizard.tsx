@@ -4,6 +4,7 @@ import { AnimatePresence, domAnimation, LazyMotion, MotionConfig } from 'motion/
 import * as m from 'motion/react-m';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Icon } from '@/components/icons/Icon';
+import { PreviewPanel } from '@/components/PreviewPanel';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { getModulo, type ModuloId } from '@/config/modulos';
@@ -169,104 +170,119 @@ export function Wizard() {
           id="wizard"
           ref={raiz}
           aria-label="Creá tu negocio"
-          className="scroll-mt-4 rounded-panel border border-line bg-surface/70 p-4 shadow-raised sm:p-8"
+          className="scroll-mt-4 rounded-panel border border-line bg-surface/70 p-4 shadow-raised sm:p-8 lg:p-10"
         >
-          <div className="mb-6">
-            <div className="mb-4 flex min-h-tap items-center justify-between">
-              {/* El botón ocupa siempre su lugar (invisible en el paso 1 y 4): la barra no se mueve. */}
-              <Button
-                variant="ghost"
-                onClick={() => irA((paso - 1) as Paso)}
-                className={`-ml-3 ${paso === 1 || paso === 4 ? 'invisible' : ''}`}
-                aria-hidden={paso === 1 || paso === 4 || undefined}
-                tabIndex={paso === 1 || paso === 4 ? -1 : undefined}
-              >
-                <Icon name="arrowLeft" size={20} />
-                Atrás
-              </Button>
-              <p className="tabular text-small text-muted">
-                Paso {paso} de {TOTAL_PASOS}
-              </p>
-            </div>
-            <ProgressBar step={paso} total={TOTAL_PASOS} label="Progreso del formulario" />
-          </div>
+          {/* Escritorio: pasos a la izquierda, vista previa sticky a la derecha. Mobile: una columna. */}
+          <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-12 xl:grid-cols-[minmax(0,1fr)_26rem]">
+            <div>
+              <div className="mb-6">
+                <div className="mb-4 flex min-h-tap items-center justify-between">
+                  {/* El botón ocupa siempre su lugar (invisible en el paso 1 y 4): la barra no se mueve. */}
+                  <Button
+                    variant="ghost"
+                    onClick={() => irA((paso - 1) as Paso)}
+                    className={`-ml-3 ${paso === 1 || paso === 4 ? 'invisible' : ''}`}
+                    aria-hidden={paso === 1 || paso === 4 || undefined}
+                    tabIndex={paso === 1 || paso === 4 ? -1 : undefined}
+                  >
+                    <Icon name="arrowLeft" size={20} />
+                    Atrás
+                  </Button>
+                  <p className="tabular text-small text-muted">
+                    Paso {paso} de {TOTAL_PASOS}
+                  </p>
+                </div>
+                <ProgressBar step={paso} total={TOTAL_PASOS} label="Progreso del formulario" />
+              </div>
 
-          <AnimatePresence
-            mode="wait"
-            initial={false}
-            custom={state.direccion}
-            onExitComplete={interactuo ? enfocarTitulo : undefined}
-          >
-            <m.div
-              key={paso}
-              custom={state.direccion}
-              variants={variantes}
-              initial="entrar"
-              animate="centro"
-              exit="salir"
-              transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {paso === 1 && (
-                <StepRubro
-                  rubro={state.rubro}
-                  rubroOtro={state.rubroOtro}
-                  modulos={modulos}
-                  error={errorPaso}
-                  headingRef={titulo}
-                  onElegir={(id) => {
-                    setErrorPaso(null);
-                    dispatch({ tipo: 'elegirRubro', id });
-                    track('rubro_seleccionado', { rubro: id });
-                  }}
-                  onRubroOtro={(texto) => {
-                    setErrorPaso(null);
-                    dispatch({ tipo: 'rubroOtro', texto });
-                  }}
-                  onContinuar={() => avanzar(1)}
+              <AnimatePresence
+                mode="wait"
+                initial={false}
+                custom={state.direccion}
+                onExitComplete={interactuo ? enfocarTitulo : undefined}
+              >
+                <m.div
+                  key={paso}
+                  custom={state.direccion}
+                  variants={variantes}
+                  initial="entrar"
+                  animate="centro"
+                  exit="salir"
+                  transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {paso === 1 && (
+                    <StepRubro
+                      rubro={state.rubro}
+                      rubroOtro={state.rubroOtro}
+                      modulos={modulos}
+                      error={errorPaso}
+                      headingRef={titulo}
+                      onElegir={(id) => {
+                        setErrorPaso(null);
+                        dispatch({ tipo: 'elegirRubro', id });
+                        track('rubro_seleccionado', { rubro: id });
+                      }}
+                      onRubroOtro={(texto) => {
+                        setErrorPaso(null);
+                        dispatch({ tipo: 'rubroOtro', texto });
+                      }}
+                      onContinuar={() => avanzar(1)}
+                    />
+                  )}
+                  {paso === 2 && (
+                    <StepModulos
+                      rubro={state.rubro}
+                      modulos={modulos}
+                      objetivos={state.objetivos}
+                      error={errorPaso}
+                      headingRef={titulo}
+                      onToggleModulo={onToggleModulo}
+                      onToggleObjetivo={(id) => {
+                        setErrorPaso(null);
+                        dispatch({ tipo: 'toggleObjetivo', id });
+                      }}
+                      onContinuar={() => avanzar(2)}
+                    />
+                  )}
+                  {paso === 3 && (
+                    <StepDatos
+                      inicial={state.datos}
+                      headingRef={titulo}
+                      enfocarPrimero={interactuo}
+                      whatsappFallback={whatsappLink}
+                      onCambio={onCambioDatos}
+                      onEnviar={onEnviar}
+                      onEnviado={() => {
+                        track('paso_completado', { paso: 3, nombre: 'datos' });
+                        dispatch({ tipo: 'enviado' });
+                        irA(4);
+                      }}
+                    />
+                  )}
+                  {paso === 4 && state.rubro && (
+                    <StepListo
+                      nombre={state.datos.nombre}
+                      rubro={rubroVisible}
+                      modulos={modulos}
+                      whatsappLink={whatsappLink}
+                      headingRef={titulo}
+                      onReiniciar={reiniciar}
+                    />
+                  )}
+                </m.div>
+              </AnimatePresence>
+            </div>
+
+            <aside aria-hidden="true" className="hidden lg:block">
+              <div className="sticky top-8">
+                <PreviewPanel
+                  rubroNombre={rubro ? rubroVisible : undefined}
+                  rubroIcono={rubro?.icono}
+                  activos={modulos}
                 />
-              )}
-              {paso === 2 && (
-                <StepModulos
-                  rubro={state.rubro}
-                  modulos={modulos}
-                  objetivos={state.objetivos}
-                  error={errorPaso}
-                  headingRef={titulo}
-                  onToggleModulo={onToggleModulo}
-                  onToggleObjetivo={(id) => {
-                    setErrorPaso(null);
-                    dispatch({ tipo: 'toggleObjetivo', id });
-                  }}
-                  onContinuar={() => avanzar(2)}
-                />
-              )}
-              {paso === 3 && (
-                <StepDatos
-                  inicial={state.datos}
-                  headingRef={titulo}
-                  enfocarPrimero={interactuo}
-                  whatsappFallback={whatsappLink}
-                  onCambio={onCambioDatos}
-                  onEnviar={onEnviar}
-                  onEnviado={() => {
-                    track('paso_completado', { paso: 3, nombre: 'datos' });
-                    dispatch({ tipo: 'enviado' });
-                    irA(4);
-                  }}
-                />
-              )}
-              {paso === 4 && state.rubro && (
-                <StepListo
-                  nombre={state.datos.nombre}
-                  rubro={rubroVisible}
-                  modulos={modulos}
-                  whatsappLink={whatsappLink}
-                  headingRef={titulo}
-                  onReiniciar={reiniciar}
-                />
-              )}
-            </m.div>
-          </AnimatePresence>
+              </div>
+            </aside>
+          </div>
         </section>
       </MotionConfig>
     </LazyMotion>

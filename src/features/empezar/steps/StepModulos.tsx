@@ -75,7 +75,7 @@ export function StepModulos({
           variants={lista}
           initial="oculto"
           animate="visible"
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-3 lg:grid lg:grid-cols-2"
         >
           {MODULO_IDS.map((id) => {
             const mod = getModulo(id);

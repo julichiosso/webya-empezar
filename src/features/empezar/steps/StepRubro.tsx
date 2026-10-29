@@ -60,7 +60,7 @@ export function StepRubro({
 
       <fieldset>
         <legend className="sr-only">Rubro de tu negocio</legend>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           {RUBROS.map((r) => (
             <SelectCard
               key={r.id}
@@ -104,7 +104,8 @@ export function StepRubro({
         {error && <p className="text-small text-danger">{error}</p>}
       </div>
 
-      <div className="mt-6">
+      {/* En escritorio la vista previa vive en el panel derecho del wizard. */}
+      <div className="mt-6 lg:hidden">
         <NegocioPreview
           rubroNombre={
             elegido

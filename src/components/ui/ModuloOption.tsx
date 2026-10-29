@@ -21,7 +21,7 @@ export function ModuloOption({
   onToggle,
 }: ModuloOptionProps) {
   return (
-    <label className="group block cursor-pointer">
+    <label className="group block h-full cursor-pointer">
       <input
         type="checkbox"
         value={id}
@@ -31,7 +31,7 @@ export function ModuloOption({
       />
       <span
         data-on={checked}
-        className="pop-on flex items-start gap-4 rounded-card border border-line bg-surface p-4 transition-[transform] duration-100 group-hover:border-line-strong group-active:scale-[0.98] peer-checked:border-accent peer-checked:bg-accent-soft peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
+        className="pop-on flex h-full items-start gap-4 rounded-card border border-line bg-surface p-4 transition-[transform] duration-100 group-hover:border-line-strong group-active:scale-[0.98] peer-checked:border-accent peer-checked:bg-accent-soft peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
       >
         <span className={`mt-0.5 shrink-0 ${checked ? 'text-accent' : 'text-fg'}`}>
           <Icon name={id} size={28} draw active={checked} />

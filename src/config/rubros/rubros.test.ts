@@ -92,6 +92,13 @@ describe('helpers de rubros', () => {
 });
 
 describe('catálogo de módulos', () => {
+  it('cada descripción es una sola frase (se muestra en tarjetas cortas)', () => {
+    for (const [id, mod] of Object.entries(MODULOS)) {
+      expect(mod.descripcion, id).not.toMatch(/[.!?]s+S/);
+      expect(mod.nombre.length, id).toBeLessThanOrEqual(24);
+    }
+  });
+
   it.each(MODULO_IDS)('%s tiene nombre y descripción', (id) => {
     expect(MODULOS[id].nombre.length).toBeGreaterThan(0);
     expect(MODULOS[id].descripcion.length).toBeGreaterThan(0);

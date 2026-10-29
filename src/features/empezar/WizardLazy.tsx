@@ -20,7 +20,7 @@ function WizardEsqueleto() {
       id="wizard"
       aria-label="Creá tu negocio"
       aria-busy="true"
-      className="min-h-[48rem] scroll-mt-4 rounded-panel border border-line bg-surface/70 p-4 shadow-raised sm:p-8"
+      className="min-h-[48rem] scroll-mt-4 rounded-panel border border-line bg-surface/70 p-4 shadow-raised sm:p-8 lg:min-h-[44rem]"
     >
       <p className="text-small text-muted">Cargando…</p>
     </section>
