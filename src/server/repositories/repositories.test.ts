@@ -1,11 +1,18 @@
 // @vitest-environment node
+import { randomUUID } from 'node:crypto';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { FileLeadRepository } from './file';
 import { MemoryLeadRepository } from './memory';
-import type { LeadRepository, NuevoLead } from './types';
+import {
+  TTL_TOKEN_MS,
+  type DatosCompletar,
+  type LeadRepository,
+  type NuevoLead,
+  type NuevoLeadParcial,
+} from './types';
 
 const base: NuevoLead = {
   nombre: 'Ana',
@@ -66,7 +73,100 @@ describe.each(implementaciones)('LeadRepository (%s)', (_nombre, crear) => {
   });
 });
 
+const parcial: NuevoLeadParcial = {
+  whatsapp: '+5491123456789',
+  necesidades: ['vender'],
+  necesidad_libre: 'Controlar el stock',
+  rubro: 'comercio',
+  rubro_otro: null,
+  modulos: [],
+  objetivos: [],
+  utm_source: null,
+  utm_medium: null,
+  utm_campaign: null,
+  ip_hash: 'hash-a',
+  user_agent: null,
+  token_hash: 'f'.repeat(64),
+};
+
+const datos: DatosCompletar = {
+  nombre_negocio: 'Luna',
+  nombre: null,
+  email: 'ana@luna.com',
+  mensaje: null,
+};
+
+describe.each(implementaciones)('LeadRepository parcial (%s)', (_nombre, crear) => {
+  const T0 = new Date('2026-10-30T12:00:00Z');
+  const despues = (ms: number) => new Date(T0.getTime() + ms);
+
+  it('crea el parcial con estado "parcial" y lo cuenta en el rate limit', async () => {
+    const repo = crear(() => T0);
+    const { id } = await repo.crearParcial(parcial);
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(await repo.contarRecientesPorIp('hash-a', despues(-1000))).toBe(1);
+  });
+
+  it('completa con el hash correcto y dentro del plazo, una sola vez', async () => {
+    const repo = crear(() => T0);
+    const { id } = await repo.crearParcial(parcial);
+    expect(await repo.completar(id, 'e'.repeat(64), datos, despues(1000))).toBe('no_encontrado');
+    expect(await repo.completar(id, parcial.token_hash, datos, despues(1000))).toBe('ok');
+    expect(await repo.completar(id, parcial.token_hash, datos, despues(2000))).toBe(
+      'no_encontrado',
+    );
+  });
+
+  it('no completa vencido, con otro id, sin rubro ni un lead que no es parcial', async () => {
+    const repo = crear(() => T0);
+    const { id } = await repo.crearParcial(parcial);
+    expect(await repo.completar(id, parcial.token_hash, datos, despues(TTL_TOKEN_MS + 1))).toBe(
+      'no_encontrado',
+    );
+    expect(await repo.completar(randomUUID(), parcial.token_hash, datos, despues(1000))).toBe(
+      'no_encontrado',
+    );
+    const sinRubro = await repo.crearParcial({ ...parcial, rubro: null });
+    expect(await repo.completar(sinRubro.id, parcial.token_hash, datos, despues(1000))).toBe(
+      'no_encontrado',
+    );
+    const completo = await repo.crear(base);
+    expect(await repo.completar(completo.id, parcial.token_hash, datos, despues(1000))).toBe(
+      'no_encontrado',
+    );
+  });
+});
+
 describe('FileLeadRepository', () => {
+  it('guarda el parcial y lo completa en el JSON', async () => {
+    const ruta = join(dir, 'leads.json');
+    const t0 = new Date('2026-10-30T12:00:00Z');
+    const repo = new FileLeadRepository(relative(process.cwd(), ruta), () => t0);
+    const { id } = await repo.crearParcial(parcial);
+    let guardado = JSON.parse(await readFile(ruta, 'utf8')) as Record<string, unknown>[];
+    expect(guardado[0]).toMatchObject({
+      id,
+      estado: 'parcial',
+      nombre: null,
+      nombre_negocio: null,
+      necesidades: ['vender'],
+      necesidad_libre: 'Controlar el stock',
+      token_hash: parcial.token_hash,
+      completado_at: null,
+    });
+    const fin = new Date('2026-10-30T13:00:00Z');
+    expect(await repo.completar(id, parcial.token_hash, datos, fin)).toBe('ok');
+    guardado = JSON.parse(await readFile(ruta, 'utf8')) as Record<string, unknown>[];
+    expect(guardado[0]).toMatchObject({
+      estado: 'nuevo',
+      nombre_negocio: 'Luna',
+      email: 'ana@luna.com',
+      token_hash: null,
+      completado_at: fin.toISOString(),
+      necesidades: ['vender'],
+    });
+  });
+
   it('persiste en un JSON legible con todos los campos', async () => {
     const ruta = join(dir, 'datos', 'leads.json');
     const repo = new FileLeadRepository(relative(process.cwd(), ruta));

@@ -1,7 +1,17 @@
 import { randomUUID } from 'node:crypto';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { aFila, type LeadRepository, type LeadRow, type NuevoLead } from './types';
+import {
+  aFila,
+  aFilaParcial,
+  completarFila,
+  type DatosCompletar,
+  type LeadRepository,
+  type LeadRow,
+  type NuevoLead,
+  type NuevoLeadParcial,
+  type ResultadoCompletar,
+} from './types';
 
 // Una cola de escrituras por archivo: evita que dos requests simultáneos se pisen.
 const colas = new Map<string, Promise<unknown>>();
@@ -40,17 +50,45 @@ export class FileLeadRepository implements LeadRepository {
     return siguiente;
   }
 
-  crear(lead: NuevoLead): Promise<{ id: string }> {
+  /** Escritura atómica: archivo temporal + rename, para no dejar un JSON a medias. */
+  private async escribir(filas: LeadRow[]): Promise<void> {
+    await mkdir(dirname(this.ruta), { recursive: true });
+    const temporal = `${this.ruta}.${process.pid}.tmp`;
+    await writeFile(temporal, JSON.stringify(filas, null, 2), 'utf8');
+    await rename(temporal, this.ruta);
+  }
+
+  private agregar(fila: LeadRow): Promise<{ id: string }> {
     return this.encolar(async () => {
       const filas = await this.leer();
-      const fila = aFila(lead, randomUUID(), this.ahora());
       filas.push(fila);
-      await mkdir(dirname(this.ruta), { recursive: true });
-      // Escritura atómica: archivo temporal + rename, para no dejar un JSON a medias.
-      const temporal = `${this.ruta}.${process.pid}.tmp`;
-      await writeFile(temporal, JSON.stringify(filas, null, 2), 'utf8');
-      await rename(temporal, this.ruta);
+      await this.escribir(filas);
       return { id: fila.id };
+    });
+  }
+
+  crear(lead: NuevoLead): Promise<{ id: string }> {
+    return this.agregar(aFila(lead, randomUUID(), this.ahora()));
+  }
+
+  crearParcial(lead: NuevoLeadParcial): Promise<{ id: string }> {
+    return this.agregar(aFilaParcial(lead, randomUUID(), this.ahora()));
+  }
+
+  completar(
+    id: string,
+    tokenHash: string,
+    datos: DatosCompletar,
+    ahora: Date,
+  ): Promise<ResultadoCompletar> {
+    return this.encolar(async () => {
+      const filas = await this.leer();
+      const i = filas.findIndex((l) => l.id === id);
+      const completa = i === -1 ? null : completarFila(filas[i]!, tokenHash, datos, ahora);
+      if (!completa) return 'no_encontrado';
+      filas[i] = completa;
+      await this.escribir(filas);
+      return 'ok';
     });
   }
 

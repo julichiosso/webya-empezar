@@ -38,12 +38,18 @@ function peticion(body: unknown, headers: Record<string, string> = {}) {
 }
 
 let repo: MemoryLeadRepository;
-let notifier: NotificationService & { nuevoLead: ReturnType<typeof vi.fn> };
+let notifier: NotificationService & {
+  nuevoLead: ReturnType<typeof vi.fn>;
+  nuevoLeadParcial: ReturnType<typeof vi.fn>;
+};
 let deps: HandlerDeps;
 
 beforeEach(() => {
   repo = new MemoryLeadRepository();
-  notifier = { nuevoLead: vi.fn().mockResolvedValue(undefined) };
+  notifier = {
+    nuevoLead: vi.fn().mockResolvedValue(undefined),
+    nuevoLeadParcial: vi.fn().mockResolvedValue(undefined),
+  };
   deps = {
     repo,
     notifier,
@@ -284,9 +290,24 @@ describe('POST /api/leads — rate limit', () => {
   });
 });
 
+/** Métodos que un test no usa: si se llaman, el test se entera. */
+const repoNoUsado: LeadRepository = {
+  crear: async () => {
+    throw new Error('no usado');
+  },
+  crearParcial: async () => {
+    throw new Error('no usado');
+  },
+  completar: async () => {
+    throw new Error('no usado');
+  },
+  contarRecientesPorIp: async () => 0,
+};
+
 describe('POST /api/leads — falla del repositorio', () => {
   it('responde 500 genérico, sin exponer el error interno', async () => {
     const roto: LeadRepository = {
+      ...repoNoUsado,
       contarRecientesPorIp: async () => 0,
       crear: async () => {
         throw new Error('connection to db.supabase.co:5432 refused (password=hunter2)');
@@ -302,6 +323,7 @@ describe('POST /api/leads — falla del repositorio', () => {
 
   it('también es 500 genérico si falla la consulta del rate limit', async () => {
     const roto: LeadRepository = {
+      ...repoNoUsado,
       contarRecientesPorIp: async () => {
         throw new Error('boom interno');
       },
