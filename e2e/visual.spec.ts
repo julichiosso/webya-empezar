@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import {
   abrirWizard,
   completarDatos,
@@ -71,4 +71,62 @@ test('secciones informativas', async ({ page }) => {
   await expect(seccion('como-title')).toHaveScreenshot('05-como-funciona.png');
   await expect(seccion('incluye-title')).toHaveScreenshot('06-que-incluye.png');
   await expect(seccion('faq-title')).toHaveScreenshot('07-faq.png');
+});
+
+// --- Demo de Gastronomía y video explicativo ---------------------------------------------------
+
+const esEscritorio = (ancho: number | undefined) => (ancho ?? 0) >= 1024;
+
+async function demoLista(page: Page) {
+  await page.goto('/demo/gastronomia');
+  await page.waitForFunction(() => {
+    const b = document.querySelector('[data-testid="demo-cliente"] button');
+    return !!b && Object.keys(b).some((k) => k.startsWith('__react'));
+  });
+}
+
+test('demo — carta', async ({ page }) => {
+  await demoLista(page);
+  await expect(page.getByTestId('demo-cliente')).toHaveScreenshot('10-demo-carta.png');
+});
+
+test('demo — detalle de un plato', async ({ page }) => {
+  await demoLista(page);
+  await page
+    .getByTestId('demo-cliente')
+    .getByRole('button', { name: /^muzzarella/i })
+    .click();
+  await expect(page.getByRole('dialog', { name: 'Muzzarella' })).toHaveScreenshot(
+    '11-demo-plato.png',
+  );
+});
+
+test('demo — panel del dueño con pedidos', async ({ page, viewport }) => {
+  await demoLista(page);
+  if (!esEscritorio(viewport?.width)) {
+    await page
+      .getByRole('group', { name: 'Qué querés ver' })
+      .getByRole('button', { name: /dueño/i })
+      .click();
+  }
+  const panel = page.getByTestId('panel-duenio');
+  await panel.getByRole('button', { name: 'Simular un pedido' }).click();
+  await panel.getByRole('button', { name: 'Simular un pedido' }).click();
+  await panel.getByRole('button', { name: 'Empezar a preparar el pedido #1' }).click();
+  // Los contadores cambian cada segundo: se tapan para que la captura sea estable.
+  await expect(panel).toHaveScreenshot('12-demo-panel.png', {
+    mask: [panel.locator('header .tabular')],
+  });
+});
+
+test('video explicativo — última escena', async ({ page }) => {
+  await page.goto('/empezar');
+  await page.getByRole('button', { name: /mirá cómo funciona/i }).click();
+  const video = page.getByRole('dialog', { name: 'Cómo funciona WebYa' });
+  await video.getByRole('button', { name: 'Pausar' }).click();
+  await video.getByRole('button', { name: /^Capítulo 9:/ }).click();
+  await video.getByRole('button', { name: 'Pausar' }).click();
+  await expect(video).toHaveScreenshot('13-video-cta.png', {
+    mask: [video.locator('.mg-progreso')],
+  });
 });

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import { DemoGastronomia } from '@/features/demo/gastronomia/DemoGastronomia';
+import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
 
 const TITULO = 'Demo para gastronomía';
 const DESCRIPCION =
@@ -40,6 +41,7 @@ export default function DemoGastronomiaPage() {
             <p className="mt-2 max-w-xl text-lead text-muted">
               Pedí algo como si fueras un cliente: elegí un plato, armalo a tu gusto y confirmá.
             </p>
+            <BotonExplicativo origen="demo" className="mt-4" />
           </>
         }
       />

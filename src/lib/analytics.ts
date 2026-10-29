@@ -22,6 +22,11 @@ export interface EventosAnalitica {
   demo_cta_click: { demo: string; origen: string };
   demo_qr_celular: { demo: string };
   demo_whatsapp_click: { demo: string };
+  // Video explicativo ("Mirá cómo funciona").
+  explicativo_abierto: { origen: string };
+  explicativo_capitulo: { capitulo: string };
+  explicativo_completo: { origen: string };
+  explicativo_cta: { destino: 'demo' | 'wizard' };
 }
 
 export type NombreEvento = keyof EventosAnalitica;

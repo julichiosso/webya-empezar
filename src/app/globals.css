@@ -401,6 +401,122 @@
   animation: pedido-encaja var(--duration-base) var(--ease-out);
 }
 
+/*
+ * Video explicativo (motion graphics, features/explicativo/escenas.tsx). Lenguaje Encastre: todo
+ * entra una vez por escena, solo transform/opacity. `--d` = demora de cada pieza.
+ */
+.mg {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-duration: var(--duration-slow);
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes mg-entra {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@keyframes mg-encaja {
+  from {
+    opacity: 0;
+    transform: translateY(-60px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes mg-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes mg-desliza {
+  from {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+}
+@keyframes mg-sale {
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+/* Un pedido que pasa de columna en columna (290 = separación entre columnas del tablero). */
+@keyframes mg-recorre {
+  0%,
+  25% {
+    transform: none;
+  }
+  40%,
+  65% {
+    transform: translateX(290px);
+  }
+  80%,
+  100% {
+    transform: translateX(580px);
+  }
+}
+@keyframes mg-pulso {
+  50% {
+    transform: scale(0.94);
+  }
+}
+.mg-entra {
+  animation-name: mg-entra;
+}
+.mg-encaja {
+  animation-name: mg-encaja;
+}
+.mg-pop {
+  animation-name: mg-pop;
+}
+.mg-desliza {
+  animation-name: mg-desliza;
+}
+.mg-sale {
+  animation-name: mg-sale;
+}
+.mg-recorre {
+  animation-name: mg-recorre;
+  animation-duration: 4200ms;
+  animation-timing-function: var(--ease-in-out);
+}
+.mg-pulso {
+  animation-name: mg-pulso;
+  animation-duration: var(--duration-base);
+}
+/* Barra de progreso de la escena: crece con scaleX durante lo que dura la narración. */
+@keyframes mg-progreso {
+  from {
+    transform: scaleX(0);
+  }
+}
+.mg-progreso {
+  transform-origin: left;
+  animation: mg-progreso var(--dur, 5000ms) linear both;
+}
+.mg-progreso[data-pausa='true'] {
+  animation-play-state: paused;
+}
+
 /* Cambio entre "Ver como cliente / Ver como dueño" (View Transitions, solo opacity por defecto). */
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -505,8 +621,18 @@
   .fade-in,
   .hoja,
   .hoja-fondo,
-  .pedido-entra {
+  .pedido-entra,
+  .mg-progreso {
     animation: none !important;
+  }
+  /* Video: cada escena aparece completa y quieta (en su estado final), sin movimiento. */
+  .mg {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  .mg-sale {
+    opacity: 0;
   }
   ::view-transition-group(*),
   ::view-transition-old(*),

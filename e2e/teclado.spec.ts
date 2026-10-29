@@ -20,9 +20,11 @@ test('el mockup del hero se opera solo con teclado y llega al wizard', async ({ 
   const hero = page.getByRole('group', { name: /armá tu negocio/i });
   const turnos = hero.getByRole('button', { name: /turnos y reservas/i });
 
-  // Tab: CTA "Empezar a crear" → las cuatro tarjetas, en orden.
+  // Tab: CTA "Empezar a crear" → "Mirá cómo funciona" (video) → las cuatro tarjetas, en orden.
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Empezar a crear' })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: /mirá cómo funciona/i })).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(turnos).toBeFocused();
 

@@ -1,3 +1,4 @@
+import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
 import { Icon } from '../icons/Icon';
 import { ButtonLink } from '../ui/Button';
 import { HeroMockup } from './HeroMockup';
@@ -32,10 +33,14 @@ export function Hero() {
         <p className="mt-6 max-w-md text-lead text-muted lg:mt-8">
           Turnos, tienda, carta, pagos: sumá solo las piezas que tu negocio necesita.
         </p>
-        <ButtonLink href="#wizard" className="mt-8 lg:mt-10">
-          Empezar a crear
-          <Icon name="arrowDown" size={20} />
-        </ButtonLink>
+        <div className="mt-8 flex flex-wrap gap-3 lg:mt-10">
+          <ButtonLink href="#wizard">
+            Empezar a crear
+            <Icon name="arrowDown" size={20} />
+          </ButtonLink>
+          {/* Video explicativo con voz: se descarga recién al tocarlo. */}
+          <BotonExplicativo origen="empezar" />
+        </div>
         <ul className="mt-10 hidden flex-col gap-4 lg:flex">
           {SENALES.map((s) => (
             <li key={s} className="flex items-center gap-3 text-body text-muted">

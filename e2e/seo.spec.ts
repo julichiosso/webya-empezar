@@ -66,6 +66,7 @@ test('robots.txt y sitemap.xml', async ({ request }) => {
 
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://webya.ar/empezar</loc>');
+  expect(sitemap).toContain('<loc>https://webya.ar/demo/gastronomia</loc>');
 });
 
 test('/marca es interna: noindex y fuera del sitemap', async ({ page, request }) => {

@@ -75,6 +75,7 @@ Momentos diseñados (el resto del sitio queda quieto), todos en el lenguaje "Enc
 - **La pieza que encaja** (`components/ui/Encaje.tsx`): hueco punteado → pieza Brasa con check que cae y asienta (`@keyframes encajar`). Es el único indicador de selección: tarjetas del hero, rubros (radio), módulos (checkbox) y chips. No dupliques checks a mano.
 - **Estados vacíos = huecos punteados** (`border-dashed border-line-strong`) con la forma de lo que falta, más una frase ("Acá encajan tus módulos"). Lo encendido deja de ser hueco: borde y fondo de acento.
 - **Riel punteado** que enhebra pasos ("Cómo funciona") y **tablero de piezas** (un panel con divisiones de 1 px, gap sobre `bg-line`) en vez de tarjetas iguales sueltas.
+- **Video explicativo** (`features/explicativo`): motion graphics en SVG, clases `.mg-entra/encaja/pop/desliza/sale/recorre/pulso` con `--d` (demora). Posición en un `<g transform>` exterior y animación en uno interior (si no, el transform CSS pisa la posición). Una vez por escena (se remonta con `key`), quieto con reduced-motion, y se descarga recién al tocar "Mirá cómo funciona".
 - Transición entre pasos (desplazamiento + fade); chips del paso 2 en cascada; botón de envío → check; confirmación que ensambla los módulos; revelado de secciones al scroll (un único `.reveal` sobrio, sin parallax).
 
 ### Cómo crear una animación nueva

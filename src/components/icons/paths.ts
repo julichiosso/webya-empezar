@@ -90,6 +90,15 @@ export const UI_ICONS = {
   billete: [rect(3, 6.5, 18, 11, 2), circle(12, 12, 2.5), 'M6.5 9.5v.01', 'M17.5 14.5v.01'],
   reloj: [circle(12, 12, 8.5), 'M12 7.5V12l3 2'],
   impresora: [rect(4, 9, 16, 8, 1.5), 'M7 9V4h10v5', 'M7 14h10v6H7Z'],
+  // Video explicativo.
+  play: ['M8 5.5v13l10.5-6.5Z'],
+  pausa: ['M8.5 5.5v13', 'M15.5 5.5v13'],
+  volumen: [
+    'M4 9.5h3.5L12 6v12l-4.5-3.5H4Z',
+    'M15.5 9a4 4 0 0 1 0 6',
+    'M18 6.5a7.5 7.5 0 0 1 0 11',
+  ],
+  silencio: ['M4 9.5h3.5L12 6v12l-4.5-3.5H4Z', 'M16 9.5l5 5', 'M21 9.5l-5 5'],
 } as const;
 
 export const ICONS = { ...RUBRO_ICONS, ...MODULO_ICONS, ...UI_ICONS } as const;

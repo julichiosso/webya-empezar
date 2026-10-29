@@ -9,6 +9,12 @@ negocio necesita (turnos, tienda y catálogo, carta con QR, pagos…) y deja sus
 una plataforma de autoservicio**: el armado y la entrega los hacemos nosotros, y la pantalla final
 lo dice así (ver [reglas de copy](#reglas-de-copy)).
 
+| Ruta                | Qué es                                                                                                          |
+| ------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `/empezar`          | Landing + wizard de 4 pasos que guarda el lead. Botón **"Mirá cómo funciona"** (video).                         |
+| `/demo/gastronomia` | Demo interactiva: la carta del cliente y el panel del dueño, sincronizados, personalizable y con CTA al wizard. |
+| `/marca`            | Interna (noindex): comparación de paletas con su contraste medido.                                              |
+
 ## Stack
 
 Next.js 16 (App Router, Turbopack) · TypeScript estricto · Tailwind CSS 4 · React Hook Form + Zod ·
@@ -119,6 +125,34 @@ Los datos de ejemplo de la demo (tres cocinas con carta, precios de ejemplo, mod
 pedidos simulados, y las 6 paletas curadas) viven en `src/config/demos/gastronomia/`; los tests
 validan cada carta y que cada pedido de ejemplo pase la misma validación que uno real.
 
+### Demo de Gastronomía (`/demo/gastronomia`)
+
+Las dos caras del negocio con datos de ejemplo: **cliente** (carta con QR, detalle con
+modificadores, carrito en hoja inferior, checkout con retiro/mesa/delivery y pago en efectivo o
+"Mercado Pago (simulado)", seguimiento en vivo) y **dueño** (tablero Nuevo → Preparando → Listo →
+Entregado, comanda imprimible, filtro, sonido opcional y resumen calculado solo con los pedidos de
+la demo). Escritorio: pantalla dividida; celular: selector "Cliente / Dueño". Se sincroniza entre
+pestañas (localStorage + BroadcastChannel). "Personalizá tu demo" cambia nombre, paleta (6 curadas)
+y tipo de cocina; el QR y el link de WhatsApp la reproducen. "Quiero esto para mi local" abre el
+wizard en el paso 2 con todo precargado y el lead se guarda con `origen = demo_gastronomia`.
+Procedimiento para sumar otra demo: skill [`webya-demo-builder`](.claude/skills/webya-demo-builder/SKILL.md).
+
+### Video explicativo ("Mirá cómo funciona")
+
+Un video hecho con **motion graphics propios** (SVG animado en el lenguaje Encastre, 9 escenas en
+`src/features/explicativo/escenas.tsx`) y **narrado con la voz en español del dispositivo** (Web
+Speech API: cero descargas de audio). El guion vive en `src/config/explicativo.ts` (frases cortas,
+voseo, sin promesas falsas; un test lo verifica). Subtítulos siempre visibles; si no hay voz en
+español o se apaga, avanza con tiempos estimados. Capítulos, pausa, teclado (← →), Escape, se pausa
+con la pestaña oculta y con `prefers-reduced-motion` las escenas aparecen quietas. Se descarga
+recién al tocar el botón (no suma al JS inicial de `/empezar`).
+
+- La voz depende del dispositivo (en Windows suele ser español de España; en iPhone/Android, latina).
+  Para una locución profesional: grabar un audio por escena y reproducirlo en lugar de la síntesis
+  (el motor ya avanza por el evento de fin de cada frase).
+- `CASO_REAL` (config) permite mostrar un sistema real ya entregado. **Está apagado**: completarlo
+  solo con permiso escrito del negocio.
+
 ## Cómo agregar un rubro
 
 Un archivo, sin tocar componentes. Procedimiento completo en la skill
@@ -146,8 +180,10 @@ Un aviso que falla **no** hace fallar el envío del lead.
 ## Analítica
 
 Capa abstracta en `src/lib/analytics.ts`: `track(evento, props)`. Eventos: `empezar_view`,
-`rubro_seleccionado`, `modulo_alternado`, `paso_completado`, `lead_enviado`, `whatsapp_click`. No hay
-proveedor conectado. Para enchufar uno, registrar un _sink_ una vez en el cliente (por ejemplo en un
+`rubro_seleccionado`, `modulo_alternado`, `paso_completado`, `lead_enviado`, `whatsapp_click`; de la
+demo, `demo_view`, `demo_personalizada`, `demo_pedido_creado`, `demo_estado_avanzado`,
+`demo_cta_click`, `demo_qr_celular`, `demo_whatsapp_click`; del video, `explicativo_abierto`,
+`explicativo_capitulo`, `explicativo_completo`, `explicativo_cta`. No hay proveedor conectado. Para enchufar uno, registrar un _sink_ una vez en el cliente (por ejemplo en un
 componente `'use client'` montado en `layout.tsx`):
 
 ```tsx
@@ -217,7 +253,7 @@ valores sueltos en componentes. Oscuro por defecto; el claro se activa con `<htm
 5. `prefers-reduced-motion`: versión estática equivalente, sin perder información (hay una regla global
    en CSS y `MotionConfig reducedMotion="user"` en el wizard).
 6. `motion` con `LazyMotion` + `domAnimation` y componentes `m.*`; Lottie solo si SVG no alcanza.
-7. JS inicial de la ruta **< 150 KB gzip** y CLS **< 0,05** (los verifica `e2e/rendimiento.spec.ts`).
+7. JS inicial de `/empezar` **< 150 KB gzip** (la demo, < 220 KB) y CLS **< 0,05** (los verifica `e2e/rendimiento.spec.ts`).
 8. Duraciones: 100 / 160 / 280 / 520 ms con `--ease-out`; resortes solo para selección de tarjetas.
 9. Si el "wow" compromete performance o accesibilidad, **gana la performance**.
 
@@ -245,8 +281,12 @@ métricas (`TODO:` en el código). Detalle en la skill de diseño, sección 5b.
 - **E2E (Playwright, 5 viewports: iPhone SE, iPhone 15, Pixel 7, tablet, desktop):** recorrido completo y
   verificación del lead guardado, hero → wizard, teclado completo, `prefers-reduced-motion`, axe
   (WCAG 2.2 AA), objetivos táctiles ≥ 48 px, SEO, presupuestos de rendimiento y capturas por paso.
-- **Seguridad:** `tests/security/leads-rls.test.ts` verifica estáticamente la migración (RLS sin
-  políticas, permisos revocados). La verificación **real** con la clave `anon` corre solo si se definen
+- **Demo y video:** dominio de pedidos (todas las transiciones, dinero, validación, multi-tenant),
+  carrito, sincronización entre pestañas, cliente ↔ dueño, personalización, CTA hasta el lead,
+  reproductor del video y su guion; E2E en los 5 viewports + 1440/1920 con capturas.
+- **Seguridad:** `tests/security/leads-rls.test.ts` y `pedidos-rls.test.ts` verifican estáticamente
+  las migraciones (RLS, solo políticas restrictivas que niegan, permisos revocados, dinero en
+  `bigint`, máquina de estados igual a la del dominio). La verificación **real** con la clave `anon` corre solo si se definen
   `SUPABASE_TEST_*` (proyecto de prueba); sin ellas se omite.
 - Las capturas visuales son por plataforma (`-win32.png`): en Linux/CI regenerarlas con
   `pnpm test:e2e visual --update-snapshots` y revisarlas a ojo.
@@ -263,4 +303,9 @@ Checklist previo a cada entrega: [`webya-qa-checklist`](.claude/skills/webya-qa-
 - Precios, plazos de entrega y soporte de dominio propio (FAQ y confirmación).
 - Qué se ofrece exactamente en "Crecé" (clientes, métricas) antes de prometerlo.
 - Conectar notificaciones de lead nuevo y un proveedor de analítica.
-- Probar en dispositivos reales (iOS/Android) y en el navegador de Instagram.
+- Probar en dispositivos reales (iOS/Android) y en el navegador de Instagram (incluida la voz del video).
+- Aplicar en Supabase las migraciones `pedidos` y `leads_demo_origen`.
+- Pagos online reales (Mercado Pago), auth y panel real, editor por bloques y dominios propios: hoja
+  de ruta (la demo los simula y lo dice).
+- `CASO_REAL` del video: solo con permiso del negocio.
+- Locución profesional del video (opcional: hoy usa la voz del dispositivo).
