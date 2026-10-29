@@ -1,6 +1,7 @@
 # Plan — Sprint "Base de marca y frontend"
 
-Estado: **propuesta, esperando OK**. Baseline medido en [auditoria-baseline.md](auditoria-baseline.md), skills en
+Estado: **aprobado con condiciones (2026-10-29)**. La sección 6 ("Todo lo digital") se agregó después y espera tu
+revisión antes de la Ola 2. Baseline medido en [auditoria-baseline.md](auditoria-baseline.md), skills en
 [auditoria-skills.md](auditoria-skills.md).
 
 ## 0. Punto de partida (lo que cambia respecto del brief)
@@ -34,11 +35,12 @@ src/
                (<dialog> nativo), Sheet (sobre Dialog), Tabs, Accordion (<details>), Encaje, Steps, Spinner
     patterns/  WizardShell, PreviewNegocio (fusiona NegocioPreview + PreviewPanel), MiniWeb, SectionHeader, EmptyState
     marketing/ Nav, Hero, Rail, Tablero, VitrinaDemo, Confianza, Faq, CtaFinal, StickyCta, Footer
-  content/     TODO el copy (es-AR), tipado: types.ts, empezar.ts, faq.ts, modulos.ts, rubros/*.ts, microcopy.ts,
-               seo.ts, instagram.ts, hero-variantes.ts, demos/gastronomia/*, explicativo.ts
+  content/     TODO el copy (es-AR), tipado: types.ts, empezar.ts, faq.ts, necesidades.ts,
+               modulos/<id>.ts (catálogo, un archivo por módulo), rubros/<id>.ts (plantillas), microcopy.ts, seo.ts,
+               instagram.ts, hero-variantes.ts, demos/gastronomia/*, explicativo.ts
   features/    empezar, explicativo, demo/gastronomia (cablean UI + content; sin copy propio)
-  domain/      pedidos, leads (la validación del lead sale de lib/ y corta el ciclo)
-  config/      ids y estructura sin copy: rubros (ids, módulos sugeridos, ícono), origenes, módulos
+  domain/      pedidos, leads (validación del lead: recibe los catálogos por parámetro, no depende de content)
+  config/      constantes sin copy: orígenes, límites, estados de módulo
   server/ lib/
   app/         /empezar, /marca, /sistema (nueva, noindex), /demo/gastronomia
 docs/          auditoria-*, plan-sprint, adr/, copy-guia.md, contribuir.md, reporte-sprint.md
@@ -47,7 +49,9 @@ docs/          auditoria-*, plan-sprint, adr/, copy-guia.md, contribuir.md, repo
 
 **Capas** (solo se importa hacia abajo):
 `app > features > marketing > patterns > ui > content > brand > domain > config > lib`
-(`server` es aparte: puede usar `content/domain/config/lib`, nunca UI).
+(`server` es aparte: puede usar `content/domain/config/lib`, nunca UI). `server` y `features` arman el esquema del
+lead pasándole a `domain/leads` los ids de `content` (inyección). Así `domain` queda abajo y se corta el ciclo
+`lib ↔ config`.
 La regla se impone dos veces: `no-restricted-imports` de ESLint por carpeta y un test de arquitectura (Vitest) que
 recorre los imports con el compilador de TypeScript. El mismo test falla si hay texto JSX o atributos de texto
 (`aria-label`, `placeholder`, `title`, `alt`) literales en `components/` o `features/`, o hex/`rgb()` fuera de
@@ -129,7 +133,14 @@ dueño, me lo pide. Ningún push.
 | cro | coreyhaines31/marketingskills @ `e88ace7` | Instalar (sin testimonios ni sellos: manda `webya-brand`) |
 | webapp-testing, web-design-guidelines, seo-audit, seo, core-web-vitals, accessibility, security-guidance, claude-security | — | Descartadas (duplican lo que hay, ejecutan comandos o bajan reglas de la red sin versión) |
 
-Ninguna trae scripts ejecutables; son 222 KB de Markdown. Asignación mínima por agente:
+Ninguna trae scripts ejecutables; son 222 KB de Markdown. **Condición aprobada:** `frontend-design` y
+`vercel-react-best-practices` solo las reciben `ui-componentes` y `paginas`.
+
+**Condiciones aprobadas (2026-10-29):**
+- Los textos de la demo, Pedidos y el video pasan a `src/content` sin cambios, y sus tests pasan sin tocar
+  expectativas.
+- CSP fija con integridad (SRI), documentada en `docs/adr/`.
+- `inlineCss` se saca si el JS inicial supera 150 KB o si el LCP no mejora. Asignación mínima por agente:
 [auditoria-skills.md](auditoria-skills.md#asignación-mínima-de-skills-por-subagente).
 
 ## 5. Riesgos
@@ -145,3 +156,84 @@ Ninguna trae scripts ejecutables; son 222 KB de Markdown. Asignación mínima po
    E2E.
 5. **Copy:** sin precios, plazos ni clientes reales; muchos `TODO:` visibles a propósito (por ejemplo, la política
    de privacidad).
+
+## 6. Estrategia de producto "Todo lo digital" (agregada; forma parte de este sprint)
+
+WebYa es el lugar donde un negocio de Argentina consigue lo digital que necesita: tienda, turnos, pedidos, carta,
+pagos, sistemas, automatizaciones. De Tiendanube y Shopify se toma la forma (una promesa, un paso, el producto real a
+la vista), no el contenido: **sin cifras, pruebas gratis ni prueba social.**
+
+### Modelo en 3 capas (se refleja en código, copy y UI)
+| Capa | Qué es | Dónde vive |
+|---|---|---|
+| 1. Plantillas por rubro | El rubro sugiere necesidades y módulos | `content/rubros/<id>.ts` |
+| 2. Módulos activables | Catálogo extensible, cada módulo con su estado honesto | `content/modulos/<id>.ts` |
+| 3. A medida | Pedido libre que atiende el equipo | `necesidad_libre` en el lead + vista SQL que la agrupa |
+
+**Agregar un módulo = un archivo** `content/modulos/<id>.ts` con `nombre`, `beneficio`, `rubrosSugeridos`,
+`necesidades` y `estado`, más una línea en el índice.
+- Estados posibles: `disponible`, `en_demo`, `proximamente`, `a_medida`.
+- Un test falla si falta un campo o si un rubro sugiere un módulo que no existe.
+- La UI muestra el estado tal cual: `proximamente` no se puede tildar como si existiera, y `a_medida` lleva al
+  camino libre.
+
+### Flujo nuevo del wizard (contratos en la Ola 1, UI en la Ola 3)
+1. **"¿Qué necesitás?"**: vender, recibir turnos, mostrar la carta, cobrar, organizar clientes u otra cosa.
+   - Se pueden marcar varias.
+   - Las etiquetas viven en `content/necesidades.ts`; los ids y la relación con los módulos, en el catálogo.
+2. **"Otra cosa / a medida"**: campo de texto de hasta 500 caracteres, saneado como el resto.
+3. **Rubro**: ajusta las sugerencias. "Otro" sigue existiendo.
+4. **Módulos sugeridos**, con su estado y la vista previa en vivo.
+5. **Solo WhatsApp**: es el primer dato que se pide. Al enviarlo **se guarda el lead parcial**
+   (`estado = 'parcial'`), aunque la persona abandone.
+6. **Completar**: todo opcional salvo el nombre del negocio (también nombre, mail y mensaje). Actualiza el mismo
+   lead y lo pasa a `nuevo`.
+
+> **A confirmar:** leo "primer paso con solo WhatsApp" como *el primer dato que se pide*. Primero se elige qué se
+> necesita (sin datos personales) y después viene el WhatsApp. Si lo querés literalmente como pantalla 1, se cambia
+> el orden; el contrato del backend no cambia.
+
+### Backend (Ola 1, yo)
+- **Migración nueva** `20261030120000_leads_parcial_necesidades.sql`. No se toca ninguna de las anteriores.
+  - Columnas nuevas: `necesidades text[]` (ids validados, máximo 8), `necesidad_libre text` (≤ 500),
+    `token_hash text` y `completado_at timestamptz`.
+  - `nombre`, `nombre_negocio` y `rubro` pueden quedar en null **solo** si `estado = 'parcial'` (con un check).
+    Completo: el nombre del negocio es obligatorio y el de la persona, opcional.
+  - Vista `leads_a_medida_resumen`: agrupa los textos libres por tema (stock, facturación, delivery…) y por rubro,
+    con cantidad y ejemplos, para decidir qué módulo construir.
+  - La vista es `security_invoker` y sin acceso para anon/authenticated: se consulta desde el panel de Supabase,
+    nunca desde la web pública.
+- **API:**
+  - `POST /api/leads` acepta el lead parcial (WhatsApp + necesidades + texto libre) y devuelve `{ id, token }`.
+  - `PATCH /api/leads/[id]` completa el lead con ese token. Se guarda solo el hash del token, que dura poco.
+  - Los dos endpoints llevan el mismo rate limit, honeypot y validación.
+- **Tests:**
+  - Unitarios del esquema y de la API: parcial → completo, token inválido, texto libre largo o con HTML.
+  - Seguridad de la vista.
+  - Un E2E que confirma que el lead parcial queda guardado aunque la persona abandone.
+
+### Copy (Ola 2, `copy-conversion`)
+- Titulares por beneficio y una sola promesa, con la salvedad honesta: nunca "tenemos todo" sin "o lo armamos a
+  medida".
+- La objeción "¿Y si lo que necesito no está?" se responde de frente: con sección propia y en el FAQ.
+- Etiqueta y descripción de cada necesidad y de cada estado de módulo.
+- Microcopy del paso de WhatsApp: qué pasa después y que el resto es opcional.
+
+### Páginas (Ola 3, `paginas`)
+- Nav mínima con un solo CTA.
+- Hero con el producto a la vista: el mockup interactivo hoy (cero ilustración vacía) y el enlace a la demo real.
+- Catálogo con los estados y la sección "¿Y si no está?".
+- Wizard según el flujo de arriba.
+
+### Estados iniciales de los módulos (propuesta: **los confirmás vos**, no los invento)
+| Módulo | Propuesta | Por qué |
+|---|---|---|
+| `pedidos`, `carta_qr` | `en_demo` | Tienen demo funcionando en `/demo/gastronomia` |
+| `turnos`, `catalogo`, `formularios`, `clientes`, `notificaciones` | `disponible` | TODO: confirmar que hoy los entregás |
+| `pagos` | `disponible` | En la demo el cobro es simulado. TODO: confirmar el medio de cobro real |
+| Sistemas y automatizaciones | `a_medida` | Entran por el camino libre |
+
+### Presupuesto
+- El paso "¿Qué necesitás?" son chips, sin JS nuevo; el lead parcial es un `fetch` más.
+- Se mantienen JS inicial ≤ 150 KB, CLS < 0.05 y AA completo.
+- Metas explícitas de `qa-rendimiento`: LCP < 1763 ms (CPU ×4 + Slow 4G) e INP al elegir rubro < 100 ms.
