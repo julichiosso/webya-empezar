@@ -76,4 +76,4 @@ recibido ──▶ en_preparacion ──▶ listo ──▶ entregado
 - Calcular dinero con `*`, `/` o `+` sueltos, o con `toFixed`.
 - Confiar en un precio, total o número de pedido que venga del navegador.
 - Cambiar `estado` de un pedido a mano (`{ ...p, estado }`): siempre `transicionar`.
-- Datos de ejemplo dentro de componentes: van en `src/config/demos/<rubro>/`.
+- Datos de ejemplo dentro de componentes: van en `src/content/demos/<rubro>/`.

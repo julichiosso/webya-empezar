@@ -5,11 +5,11 @@ description: Procedimiento exacto para agregar un rubro nuevo a WebYa /empezar (
 
 # Agregar un rubro nuevo
 
-**Regla de oro:** agregar un rubro = crear **un archivo** en `src/config/rubros/` (más su línea de registro en `index.ts`, paso 3). No se toca ningún componente, schema ni test genérico. Si algo te obliga a tocar un componente, es un bug de arquitectura: arreglalo en el componente, no hagas excepciones.
+**Regla de oro:** agregar un rubro = crear **un archivo** en `src/content/rubros/` (más su línea de registro en `index.ts`, paso 3). No se toca ningún componente, schema ni test genérico. Si algo te obliga a tocar un componente, es un bug de arquitectura: arreglalo en el componente, no hagas excepciones.
 
 ## Pasos
 
-1. **Crear** `src/config/rubros/<id>.ts` (id en `snake_case` minúsculas, sin tildes, estable: se guarda en la base).
+1. **Crear** `src/content/rubros/<id>.ts` (id en `snake_case` minúsculas, sin tildes, estable: se guarda en la base).
 
    ```ts
    import type { Rubro } from './types';
@@ -31,14 +31,14 @@ description: Procedimiento exacto para agregar un rubro nuevo a WebYa /empezar (
    ```
 
    - `objetivos[].id` en `snake_case`; la etiqueta en voseo rioplatense, empezando con verbo cuando sea posible.
-   - `modulosSugeridos` solo puede usar ids de `MODULOS` (`turnos`, `catalogo`, `carta_qr`, `formularios`, `pagos`, `clientes`, `notificaciones`). Si hace falta un módulo nuevo, se agrega **una vez** en `src/config/modulos.ts` con nombre y explicación no técnica (y su ícono en `components/icons/paths.ts`). Los `modulosSugeridos` son los que llegan **pre-marcados** en el paso 2; la persona puede apagarlos o sumar otros, y lo que decida a mano nunca se pisa al cambiar de rubro. El id `catalogo` se muestra como "Tienda y catálogo".
+   - `modulosSugeridos` solo puede usar ids de `MODULOS` (`turnos`, `catalogo`, `carta_qr`, `formularios`, `pedidos`, `pagos`, `clientes`, `notificaciones`). Si hace falta un módulo nuevo, se agrega **una vez** en `src/content/modulos.ts` con nombre, beneficio y estado (y su ícono en `src/brand/ilustracion/iconos/paths.ts`). Los `modulosSugeridos` son los que llegan **pre-marcados** en el paso 2; la persona puede apagarlos o sumar otros, y lo que decida a mano nunca se pisa al cambiar de rubro. El id `catalogo` se muestra como "Tienda y catálogo".
    - `ejemploResultado`: máximo ~160 caracteres, describe qué se arma, sin prometer plazos ni precios.
 
-2. **Ícono.** Elegí uno ya existente de `src/components/icons/rubros/` si sirve. Si no, creá un SVG nuevo con la grilla del sistema (24×24, trazo 1.5, `currentColor`, redondeado) siguiendo `webya-design-system`, y registralo en el mapa de íconos. El campo `icono` es la clave de ese mapa.
+2. **Ícono.** Elegí uno ya existente de `RUBRO_ICONS` en `src/brand/ilustracion/iconos/paths.ts` si sirve (lo valida `icons.test.ts`). Si no, creá un SVG nuevo con la grilla del sistema (24×24, trazo 1.5, `currentColor`, redondeado) siguiendo `webya-design-system`, y registralo en el mapa de íconos. El campo `icono` es la clave de ese mapa.
 
-3. **Registrar:** agregá el `import` y la entrada en `src/config/rubros/index.ts`. (El orden del array define el orden en la grilla; “Otro” siempre va último.)
+3. **Registrar:** agregá el `import` y la entrada en `src/content/rubros/index.ts`. (El orden del array define el orden en la grilla; “Otro” siempre va último.)
 
-4. **Tests:** no escribas tests nuevos por rubro. Los tests genéricos de `src/config/rubros/rubros.test.ts` validan solos que cada rubro: tenga ids únicos y en snake_case, módulos válidos, al menos 2 objetivos, textos dentro de los límites y sin promesas de precios o plazos. Cuando exista el registro de íconos (etapa de UI), otro test genérico verifica que `icono` exista en él. Corré:
+4. **Tests:** no escribas tests nuevos por rubro. Los tests genéricos de `src/content/rubros/rubros.test.ts` validan solos que cada rubro: tenga ids únicos y en snake_case, módulos válidos, al menos 2 objetivos, textos dentro de los límites y sin promesas de precios o plazos. Cuando exista el registro de íconos (etapa de UI), otro test genérico verifica que `icono` exista en él. Corré:
 
    ```bash
    pnpm test src/config

@@ -7,7 +7,13 @@ description: Fuente de verdad visual de WebYa (/empezar). Usala SIEMPRE antes de
 
 Dirección: **fintech-grade** con personalidad. Confianza, claridad, precisión, cero fricción. Negro base + papel crema + **un solo acento (Brasa)**. Cada espaciado y transición debe verse intencional, no de plantilla. El concepto ("Encastre"), la voz y el uso del color están en la skill **`webya-brand`**: leela antes de diseñar. Gastá el riesgo visual en pocos momentos memorables y mantené el resto sobrio.
 
-## 1. Tokens (viven en `src/app/globals.css`; nunca valores sueltos)
+## 1. Tokens (3 capas en `src/brand/tokens`; nunca valores sueltos)
+
+Capas: **primitivos** (`primitivos.ts`: `--brasa-500`, `--negro-950`… nombre de material, nunca de uso) →
+**semánticos** (`semanticos.ts`: `--bg`, `--accent`… lo que usa la UI, un juego por tema: oscuro, claro y
+`.papel`) → **de componente** (`componentes.ts`: `--boton-primario-fondo`, `--control-borde`… apuntan a un
+semántico). El CSS (`src/brand/tokens/tokens.css`) **se genera**: se edita el TS y se corre `pnpm tokens`;
+`pnpm test` falla si quedó desactualizado. Los componentes usan semánticos o de componente, nunca primitivos.
 
 | Grupo        | Token (utilidad Tailwind)                                            | Dark (default)                     | Uso                                                                  |
 | ------------ | -------------------------------------------------------------------- | ---------------------------------- | -------------------------------------------------------------------- |
@@ -22,7 +28,7 @@ Dirección: **fintech-grade** con personalidad. Confianza, claridad, precisión,
 
 - Modo claro: `<html data-theme="light">`. Los tokens se redefinen solos; no escribas `dark:`.
 - El acento NO se usa en títulos, bordes decorativos ni fondos grandes. Si dudás, no lo uses. Sobre Brasa el texto va **negro** (`text-accent-fg`): el blanco no llega a AA.
-- Prohibido `#hex`, `rgb()` o `px` sueltos en componentes. Si falta un valor, agregá un token. Los valores viven en `globals.css` y se repiten en `src/config/marca/colores.ts` solo para lo que no lee CSS; `marca.test.ts` falla si aparecen hex sueltos, restos del acento anterior o una combinación debajo de AA.
+- Prohibido `#hex`, `rgb()` o `px` sueltos en componentes. Si falta un valor, agregá un token. Los valores viven en `src/brand/tokens/primitivos.ts`; `colores.ts` expone la vista plana (hex resueltos) para lo que no lee CSS (OG, themeColor, /marca); `marca.test.ts` falla si aparecen hex sueltos, restos del acento anterior o una combinación debajo de AA.
 - Una paleta distinta en un contenedor (demos personalizadas, `/marca`): redefinir las variables con `variablesDePaleta()`; nunca colores en línea en los componentes.
 
 ### Tipografía (Outfit, `next/font`)

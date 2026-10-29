@@ -10,7 +10,7 @@ Referencia viva: `/demo/gastronomia`. Una demo tiene que lograr que el dueño ve
 ## 1. Estructura (copiá la de gastronomía)
 
 ```
-src/config/demos/<rubro>/        ← TODOS los datos de ejemplo (nunca en componentes)
+src/content/demos/<rubro>/       ← TODOS los datos de ejemplo y el copy de la demo (nunca en componentes)
   types.ts      ids livianos (COCINA_IDS / variantes, RUBRO_DEMO, nombres) — sin cartas
   paletas.ts    6 paletas curadas (ColoresPaleta) con AA verificado por test
   cocinas/*.ts  una variante por archivo: carta, precios (pesos()), modificadores, pedidos de ejemplo
@@ -67,7 +67,7 @@ Los ids que necesita `/empezar` (paletas, variantes, rubro) se importan de `type
 
 ## 8. Checklist de una demo nueva
 
-- [ ] Datos en `config/demos/<rubro>/` con tests (ids únicos, precios en centavos, ejemplos que pasan la validación real, paletas AA).
+- [ ] Datos en `content/demos/<rubro>/` con tests (ids únicos, precios en centavos, ejemplos que pasan la validación real, paletas AA).
 - [ ] Cliente → dueño → cliente probado en componentes y E2E (escritorio, celular y dos pestañas).
 - [ ] Personalización por UI y por URL; CTA hasta el lead con `origen` correcto.
 - [ ] axe sin violaciones, teclado, reduced motion, 48 px, sin scroll horizontal.

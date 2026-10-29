@@ -38,7 +38,7 @@ Dónde se ve (y solo ahí: el riesgo visual se gasta en pocos momentos):
 | Negro base     | `bg-bg`                     | `#0b0b0c` | Fondo de página (tema oscuro por defecto).                                    |
 | Error          | `text-danger`               | `#ff6b8a` | Rosa frío para no confundirse con Brasa. Siempre con texto, nunca solo color. |
 
-- Valores en `src/app/globals.css` (UI) y `src/config/marca/colores.ts` (OG, `themeColor`, `/marca`). `src/config/marca/marca.test.ts` verifica que coincidan, que **cada combinación pase AA** y que no haya hex sueltos ni restos del acento anterior.
+- Valores en `src/brand/tokens/primitivos.ts` → `semanticos.ts` → `componentes.ts`; el CSS se genera (`pnpm tokens`) y `colores.ts` da la vista plana para OG, `themeColor` y `/marca`. `src/brand/tokens/marca.test.ts` verifica que el CSS resuelva a esos colores, que **cada combinación pase AA** y que no haya hex sueltos ni restos del acento anterior.
 - `/marca` (noindex) compara Brasa con Mostaza y Frambuesa sobre el hero y una tarjeta de pedido, con el contraste medido.
 - Un contenedor puede cambiar de paleta redefiniendo las variables (`variablesDePaleta()`); así funciona la personalización de las demos.
 - Contenido sobre papel: el contenedor lleva la clase `papel` (el foco pasa a `--accent-ink`).
@@ -67,7 +67,7 @@ Rioplatense, directa, cálida, con humor liviano. Hablamos como alguien del barr
 
 ## 5. Ilustración propia (SVG inline)
 
-- Íconos: grilla 24×24, trazo 1,5, sin relleno, extremos redondos (ver `components/icons/paths.ts`).
+- Íconos: grilla 24×24, trazo 1,5, sin relleno, extremos redondos (ver `src/brand/ilustracion/iconos/paths.ts`).
 - Ilustraciones (platos, rubros, estados vacíos): grilla 96×96, **trazo 2**, extremos redondos, como máximo dos tonos planos (`currentColor` + acento). Sin degradés, sin sombras, sin texto adentro.
 - Decorativas → `aria-hidden="true"`. Si comunican → `role="img"` + `<title>`.
 
