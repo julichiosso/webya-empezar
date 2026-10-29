@@ -65,7 +65,7 @@ Cada componente interactivo implementa **default, hover, focus-visible, active, 
 8. Duraciones: instantáneo 100ms, rápido 160ms, base 280ms, lento 520ms. Curva `--ease-out`. Resortes (`spring`) solo para selección de tarjetas.
 9. Si el “wow” compromete performance o accesibilidad, **gana la performance**: simplificar y avisar.
 
-Momentos diseñados (el resto del sitio queda quieto): hero que ensambla módulos; transición entre pasos (desplazamiento + fade); selección de tarjeta con spring y check dibujado; chips del paso 2 en cascada; botón de envío → check; confirmación que ensambla los módulos; revelado de secciones al scroll (un único `Reveal` sobrio, sin parallax, no en cada elemento).
+Momentos diseñados (el resto del sitio queda quieto): hero que se arma **una sola vez** y cuyas tarjetas de módulo se activan al tocarlas (pop + check; nunca en loop: tienen botones); transición entre pasos (desplazamiento + fade); selección de tarjeta con spring y check dibujado; chips del paso 2 en cascada; botón de envío → check; confirmación que ensambla los módulos; revelado de secciones al scroll (un único `Reveal` sobrio, sin parallax, no en cada elemento).
 
 ### Cómo crear una animación nueva
 
@@ -76,6 +76,14 @@ Momentos diseñados (el resto del sitio queda quieto): hero que ensambla módulo
 5. Si corre en loop: pausala fuera de pantalla y con pestaña oculta.
 6. Medí: CPU ×4, CLS y peso JS (ver `webya-qa-checklist`).
 
+### Elementos interactivos que se animan (hero y selecciones)
+
+- Si se puede tocar, es un `<button aria-pressed>` (activar/desactivar) o un `<input>` nativo (checkbox/radio dentro de `<label>`). Nunca un `<div onClick>` ni un SVG con `role="button"`.
+- Un elemento interactivo **nunca desaparece ni se mueve en loop**. Animá la entrada una vez y el cambio de estado (pop de `transform`, check con `opacity`/`transform`).
+- El estado activo se distingue por borde + fondo + check (forma), no solo por color ni atenuando el texto (el contraste AA se mide con la opacidad real).
+- Una pista efímera ("Tocá para activar") es texto, vive en una región `aria-live="polite"` con altura reservada y se desmonta con un timer. Con reduced-motion se muestra igual, sin movimiento.
+- El estado compartido entre árboles (hero ↔ wizard) vive en `features/empezar/modulos-store.ts`: se guarda **solo lo decidido a mano**; lo demás se deriva del rubro. Así no hay módulos "fantasma" al cambiar de rubro.
+
 ## 5. Qué NO hacer
 
 - Sellos de seguridad, logos de clientes, testimonios, métricas o precios inventados. Usá `TODO:` visible.
@@ -85,7 +93,21 @@ Momentos diseñados (el resto del sitio queda quieto): hero que ensambla módulo
 - Quitar el foco, bloquear el zoom, ocultar errores solo con color.
 - Copy en español neutro: usamos voseo rioplatense (“contanos”, “armá”, “creá”). Botones con verbo concreto (“Empezar”, “Hablar por WhatsApp”).
 
+## 5b. Copy y posicionamiento ("Creá vos")
+
+Recorrido de marca: **Creá** (armás lo que necesitás) → **Digitalizá** (queda online) → **Crecé** (clientes y métricas). Slogan: "Creá. Digitalizá. Crecé." Tagline: "Tu negocio. Nuestra tecnología."
+
+- **Voseo rioplatense** siempre: creá, activá, armá, elegí, contanos, tocá. Nunca "crea", "elige", "tú".
+- **Verbos de acción** en botones y títulos: "Empezar a crear", "Activá solo lo que necesitás", "Hablar por WhatsApp". Un solo verbo por botón; sin "Click aquí" ni flechas decorativas.
+- **No decir "contanos y te armamos" como promesa central**: el usuario es quien crea; nosotros ejecutamos. Sí se puede pedir datos ("Contanos de tu negocio").
+- **Cero promesas que el producto no cumple.** Hoy NO existe una plataforma de autoservicio: el armado y la entrega los hacemos nosotros, con una persona. Se dice así ("Lo armamos nosotros", "Te escribimos en menos de 24 hs para ponerlo online"). Prohibido: "tu negocio ya está online", "listo en minutos", "publicá ahora", métricas o paneles que no existen.
+- **Sin inventar** precios, plazos de entrega, testimonios, métricas, clientes ni sellos. Lo único comprometido es el primer contacto (< 24 hs). Todo lo demás: `TODO:` en el código y, en pantalla, "te armamos un presupuesto sin compromiso".
+- Nombre de módulos: lenguaje no técnico y siempre el del catálogo (`config/modulos.ts`): "Tienda y catálogo", no "Catálogo" ni "E-commerce".
+- Errores amables y específicos ("Revisá el número: tiene que ser de Argentina, por ejemplo 11 2345 6789"); nunca culpar al usuario ni mostrar mensajes técnicos.
+- Al cambiar el copy: actualizá `config/faq.ts`, metadata/OG, tests (unit, componente y E2E) y las capturas visuales.
+
 ## 6. Checklist rápido al terminar una pieza de UI
 
 - [ ] Sin valores sueltos (todo token). [ ] Pasos pares de 8px. [ ] Touch ≥ 48px. [ ] Estados completos.
 - [ ] Contraste AA en dark y light. [ ] Foco visible. [ ] Reduced motion resuelto. [ ] Sin layout shift.
+- [ ] Copy en voseo, con verbo de acción y sin promesas que el producto no cumple (sección 5b).

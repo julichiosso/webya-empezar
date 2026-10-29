@@ -11,7 +11,8 @@ export interface EventosAnalitica {
   empezar_view: Record<string, never>;
   rubro_seleccionado: { rubro: string };
   paso_completado: { paso: number; nombre: string };
-  lead_enviado: { rubro: string; objetivos: number };
+  lead_enviado: { rubro: string; modulos: number; objetivos: number };
+  modulo_alternado: { modulo: string; activo: boolean; origen: 'hero' | 'wizard' };
   whatsapp_click: { origen: 'confirmacion' | 'flotante' };
 }
 

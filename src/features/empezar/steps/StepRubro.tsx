@@ -3,15 +3,19 @@
 import * as m from 'motion/react-m';
 import type { KeyboardEvent, Ref } from 'react';
 import type { IconName } from '@/components/icons/paths';
+import { NegocioPreview } from '@/components/NegocioPreview';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Field';
 import { SelectCard } from '@/components/ui/SelectCard';
+import type { ModuloId } from '@/config/modulos';
 import { getRubro, RUBRO_OTRO_ID, RUBROS } from '@/config/rubros';
 import { StepHeader } from './StepHeader';
 
 interface StepRubroProps {
   rubro: string | null;
   rubroOtro: string;
+  /** Módulos activos, para la vista previa en vivo. */
+  modulos: readonly ModuloId[];
   error: string | null;
   headingRef: Ref<HTMLHeadingElement>;
   onElegir: (id: string) => void;
@@ -22,6 +26,7 @@ interface StepRubroProps {
 export function StepRubro({
   rubro,
   rubroOtro,
+  modulos,
   error,
   headingRef,
   onElegir,
@@ -48,8 +53,8 @@ export function StepRubro({
       onKeyDown={onKeyDown}
     >
       <StepHeader
-        title="¿Qué rubro sos?"
-        subtitle="Elegí el que más se parezca a tu negocio."
+        title="¿Qué vas a crear?"
+        subtitle="Elegí el rubro que más se parezca a tu negocio y mirá cómo se va armando."
         headingRef={headingRef}
       />
 
@@ -99,8 +104,22 @@ export function StepRubro({
         {error && <p className="text-small text-danger">{error}</p>}
       </div>
 
+      <div className="mt-6">
+        <NegocioPreview
+          rubroNombre={
+            elegido
+              ? rubro === RUBRO_OTRO_ID && rubroOtro.trim()
+                ? rubroOtro.trim()
+                : elegido.nombre
+              : undefined
+          }
+          rubroIcono={elegido?.icono}
+          activos={modulos}
+        />
+      </div>
+
       <Button type="submit" fullWidth className="mt-6">
-        Continuar
+        Siguiente
       </Button>
     </form>
   );

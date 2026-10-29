@@ -4,14 +4,14 @@ import * as m from 'motion/react-m';
 import type { Ref } from 'react';
 import { Icon } from '@/components/icons/Icon';
 import { ButtonLink, Button } from '@/components/ui/Button';
-import { getModulosDeRubro } from '@/config/rubros';
+import { getModulo, type ModuloId } from '@/config/modulos';
 import { track } from '@/lib/analytics';
 
 interface StepListoProps {
   nombre: string;
   rubro: string;
-  /** Id del rubro elegido: de ahí salen los módulos sugeridos (config). */
-  rubroId: string;
+  /** Módulos que activó la persona (no los sugeridos en bruto: lo que quedó elegido). */
+  modulos: readonly ModuloId[];
   whatsappLink: string | null;
   headingRef: Ref<HTMLHeadingElement>;
   onReiniciar: () => void;
@@ -35,12 +35,12 @@ const pieza = {
 export function StepListo({
   nombre,
   rubro,
-  rubroId,
+  modulos: ids,
   whatsappLink,
   headingRef,
   onReiniciar,
 }: StepListoProps) {
-  const modulos = getModulosDeRubro(rubroId);
+  const modulos = ids.map((id) => getModulo(id));
   const primerNombre = nombre.split(' ')[0] ?? nombre;
 
   return (
@@ -70,11 +70,11 @@ export function StepListo({
         tabIndex={-1}
         className="text-title font-semibold text-balance outline-none focus-visible:outline-none"
       >
-        ¡Listo, {primerNombre}!
+        Tu negocio está listo para armarse
       </h2>
       <p className="mt-2 text-lead text-muted">
-        Recibimos tus datos. Para <strong className="font-semibold text-fg">{rubro}</strong>, te
-        vamos a armar:
+        Gracias, {primerNombre}. Para <strong className="font-semibold text-fg">{rubro}</strong>,
+        esto es lo que activaste:
       </p>
 
       <m.ul
@@ -101,6 +101,13 @@ export function StepListo({
         ))}
       </m.ul>
 
+      {/* Aviso honesto: hoy la entrega es manual, la hacemos nosotros.
+          TODO: definir plazos de entrega y precios; no se prometen hasta tenerlos. */}
+      <p className="mt-6 rounded-control border border-line bg-surface p-4 text-small text-muted">
+        Lo armamos nosotros: no tenés que configurar nada. Cuando lo tengamos listo, lo ponemos
+        online juntos.
+      </p>
+
       <div className="mt-8">
         {whatsappLink ? (
           <ButtonLink
@@ -120,7 +127,7 @@ export function StepListo({
           </Button>
         )}
         <p className="tabular mt-4 text-center text-small text-muted">
-          Te escribimos en menos de 24 hs.
+          Te escribimos en menos de 24 hs para ponerlo online.
         </p>
         {!whatsappLink && process.env.NODE_ENV !== 'production' && (
           <p className="mt-2 text-center text-small text-subtle">

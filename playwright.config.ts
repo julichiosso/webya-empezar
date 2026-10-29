@@ -45,6 +45,7 @@ export default defineConfig({
       LEADS_FILE_PATH: E2E_LEADS_FILE,
       // Muchos tests envían desde la misma IP: el límite real se prueba en los tests de la API.
       RATE_LIMIT_MAX: '100',
+      RATE_LIMIT_BURST_PER_MINUTE: '5000',
       // Se inlinea en el build: sin número el botón de WhatsApp quedaría deshabilitado.
       NEXT_PUBLIC_WHATSAPP_NUMBER: '5491100000000',
     },

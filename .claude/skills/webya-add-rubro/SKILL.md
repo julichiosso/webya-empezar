@@ -31,7 +31,7 @@ description: Procedimiento exacto para agregar un rubro nuevo a WebYa /empezar (
    ```
 
    - `objetivos[].id` en `snake_case`; la etiqueta en voseo rioplatense, empezando con verbo cuando sea posible.
-   - `modulosSugeridos` solo puede usar ids de `MODULOS` (`turnos`, `catalogo`, `carta_qr`, `formularios`, `pagos`, `clientes`, `notificaciones`). Si hace falta un módulo nuevo, se agrega **una vez** en `src/config/modulos.ts` con nombre y explicación no técnica.
+   - `modulosSugeridos` solo puede usar ids de `MODULOS` (`turnos`, `catalogo`, `carta_qr`, `formularios`, `pagos`, `clientes`, `notificaciones`). Si hace falta un módulo nuevo, se agrega **una vez** en `src/config/modulos.ts` con nombre y explicación no técnica (y su ícono en `components/icons/paths.ts`). Los `modulosSugeridos` son los que llegan **pre-marcados** en el paso 2; la persona puede apagarlos o sumar otros, y lo que decida a mano nunca se pisa al cambiar de rubro. El id `catalogo` se muestra como "Tienda y catálogo".
    - `ejemploResultado`: máximo ~160 caracteres, describe qué se arma, sin prometer plazos ni precios.
 
 2. **Ícono.** Elegí uno ya existente de `src/components/icons/rubros/` si sirve. Si no, creá un SVG nuevo con la grilla del sistema (24×24, trazo 1.5, `currentColor`, redondeado) siguiendo `webya-design-system`, y registralo en el mapa de íconos. El campo `icono` es la clave de ese mapa.

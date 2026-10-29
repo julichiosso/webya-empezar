@@ -3,6 +3,9 @@ export interface DatosWhatsApp {
   nombreNegocio: string;
   /** Nombre visible del rubro (si eligió "Otro", lo que escribió). */
   rubro: string;
+  /** Nombres de los módulos que activó. */
+  modulos: readonly string[];
+  /** Opcionales: lo que quiere lograr. */
   objetivos: readonly string[];
   /** WhatsApp del lead, ya formateado para mostrar. */
   whatsapp?: string;
@@ -12,6 +15,7 @@ export interface DatosWhatsApp {
 export function buildWhatsAppMessage(d: DatosWhatsApp): string {
   const lineas = [
     `¡Hola WebYa! Soy ${d.nombre}, de ${d.nombreNegocio} (${d.rubro}).`,
+    d.modulos.length > 0 ? `Quiero activar: ${d.modulos.join(', ')}.` : '',
     d.objetivos.length > 0 ? `Quiero lograr: ${d.objetivos.join(', ')}.` : '',
     'Acabo de completar el formulario en webya.ar/empezar. ¿Hablamos?',
   ];

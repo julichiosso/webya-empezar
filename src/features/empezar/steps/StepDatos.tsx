@@ -113,7 +113,7 @@ export function StepDatos({
     <form noValidate onSubmit={enviar}>
       <StepHeader
         title="Contanos de tu negocio"
-        subtitle="Con esto te armamos una propuesta a medida."
+        subtitle="Con esto armamos tu negocio y te escribimos para ponerlo online."
         headingRef={headingRef}
       />
 

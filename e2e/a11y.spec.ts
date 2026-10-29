@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { completarDatos, irAlPaso, negocioUnico, wizard } from './helpers';
+import { completarDatos, irAlPaso, negocioUnico, TITULO_FINAL, wizard } from './helpers';
 
 // Sin animaciones: axe calcula el contraste sobre el estado final, no a mitad de un fade.
 test.use({ reducedMotion: 'reduce' });
@@ -24,6 +24,18 @@ test('página completa sin violaciones WCAG AA', async ({ page }) => {
   await auditar(page);
 });
 
+test('hero con módulos activados (y la pista visible) sin violaciones', async ({ page }) => {
+  await page.goto('/empezar');
+  const hero = page.getByRole('group', { name: /armá tu negocio/i });
+  await hero.getByRole('button', { name: /turnos y reservas/i }).click();
+  await hero.getByRole('button', { name: /pagos online/i }).click();
+  await expect(hero.getByRole('button', { name: /turnos y reservas/i })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await auditar(page);
+});
+
 test('paso 2 sin violaciones', async ({ page }) => {
   await irAlPaso(page, 2);
   await auditar(page);
@@ -40,7 +52,7 @@ test('confirmación sin violaciones', async ({ page }) => {
   await irAlPaso(page, 3);
   await completarDatos(page, negocioUnico('a11y'));
   await wizard(page).getByRole('button', { name: 'Enviar' }).click();
-  await expect(wizard(page).getByRole('heading', { name: /¡Listo/ })).toBeVisible();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
   await auditar(page);
 });
 

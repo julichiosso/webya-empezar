@@ -89,8 +89,15 @@ export function reducer(state: WizardState, accion: Accion): WizardState {
   }
 }
 
-/** Mensaje amable si todavía no se puede avanzar desde ese paso; null si se puede. */
-export function errorParaAvanzar(state: WizardState, desde: 1 | 2): string | null {
+/**
+ * Mensaje amable si todavía no se puede avanzar desde ese paso; null si se puede.
+ * `cantidadModulos`: módulos activos (viven en modulos-store, no en este estado).
+ */
+export function errorParaAvanzar(
+  state: WizardState,
+  desde: 1 | 2,
+  cantidadModulos: number,
+): string | null {
   if (desde === 1) {
     if (!state.rubro) return 'Elegí el rubro que más se parezca a tu negocio.';
     if (state.rubro === RUBRO_OTRO_ID && state.rubroOtro.trim().length < 2) {
@@ -98,7 +105,7 @@ export function errorParaAvanzar(state: WizardState, desde: 1 | 2): string | nul
     }
     return null;
   }
-  return state.objetivos.length === 0 ? 'Elegí al menos una cosa que quieras lograr.' : null;
+  return cantidadModulos === 0 ? 'Activá al menos un módulo para seguir.' : null;
 }
 
 /** Nombre del rubro para mostrar y para el mensaje de WhatsApp (si es "Otro", lo que escribió). */
@@ -152,7 +159,6 @@ export function leerEstadoGuardado(storage: StorageLike): WizardState | null {
     const enviado = d.enviado === true && rubro !== null;
     let paso = [1, 2, 3, 4].includes(d.paso as number) ? (d.paso as Paso) : 1;
     if (!rubro) paso = 1;
-    else if (paso > 2 && objetivos.length === 0) paso = 2;
     if (enviado) paso = 4;
     else if (paso === 4) paso = 3;
     return {

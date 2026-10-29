@@ -5,14 +5,16 @@ const datos = {
   nombre: 'Ana',
   nombreNegocio: 'Peluquería Luna',
   rubro: 'Peluquería y estética',
+  modulos: ['Turnos y reservas', 'Tienda y catálogo'],
   objetivos: ['Recibir turnos online', 'Mostrar mis trabajos'],
 };
 
 describe('buildWhatsAppMessage', () => {
-  it('incluye nombre, negocio, rubro y objetivos', () => {
+  it('incluye nombre, negocio, rubro, módulos y objetivos', () => {
     const msg = buildWhatsAppMessage(datos);
     expect(msg).toContain('Soy Ana, de Peluquería Luna (Peluquería y estética)');
-    expect(msg).toContain('Recibir turnos online, Mostrar mis trabajos');
+    expect(msg).toContain('Quiero activar: Turnos y reservas, Tienda y catálogo.');
+    expect(msg).toContain('Quiero lograr: Recibir turnos online, Mostrar mis trabajos.');
   });
 
   it('omite la línea de objetivos si no hay', () => {

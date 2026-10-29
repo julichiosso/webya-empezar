@@ -11,6 +11,7 @@ export interface LeadGuardado {
   nombre_negocio: string;
   rubro: string;
   rubro_otro: string | null;
+  modulos: string[];
   objetivos: string[];
   mensaje: string | null;
   origen: string;
@@ -39,24 +40,34 @@ export function negocioUnico(project: string) {
 
 export const wizard = (page: Page) => page.locator('#wizard');
 
+/** Un usuario toca la etiqueta (el input nativo es sr-only): Playwright espera a que deje de moverse. */
+export const tocar = (page: Page, texto: RegExp) =>
+  wizard(page).locator('label', { hasText: texto }).click();
+
+export const TITULO_PASO_1 = '¿Qué vas a crear?';
+export const TITULO_PASO_2 = '¿Qué querés activar?';
+export const TITULO_PASO_3 = 'Contanos de tu negocio';
+export const TITULO_FINAL = 'Tu negocio está listo para armarse';
+
+/** Módulos que sugiere el rubro peluquería (ya vienen marcados en el paso 2). */
+export const MODULOS_PELUQUERIA = ['turnos', 'catalogo', 'pagos', 'clientes', 'notificaciones'];
+
+/**
+ * Lleva el wizard hasta el paso pedido con peluquería y los objetivos "Recibir turnos online"
+ * y "Mostrar mis trabajos". Los módulos de peluquería ya vienen sugeridos y marcados.
+ */
 export async function irAlPaso(page: Page, paso: 1 | 2 | 3, query = '') {
   await page.goto(`/empezar${query}`);
-  await expect(wizard(page).getByRole('heading', { name: '¿Qué rubro sos?' })).toBeVisible();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_1 })).toBeVisible();
   if (paso === 1) return;
-  await wizard(page)
-    .locator('label', { hasText: /peluquería/i })
-    .click();
-  await wizard(page).getByRole('button', { name: 'Continuar' }).click();
-  await expect(wizard(page).getByRole('heading', { name: '¿Qué querés lograr?' })).toBeVisible();
+  await tocar(page, /peluquería/i);
+  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
   if (paso === 2) return;
-  await wizard(page)
-    .locator('label', { hasText: /recibir turnos/i })
-    .click();
-  await wizard(page)
-    .locator('label', { hasText: /mostrar mis trabajos/i })
-    .click();
-  await wizard(page).getByRole('button', { name: 'Continuar' }).click();
-  await expect(wizard(page).getByRole('heading', { name: 'Contanos de tu negocio' })).toBeVisible();
+  await tocar(page, /recibir turnos online/i);
+  await tocar(page, /mostrar mis trabajos/i);
+  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_3 })).toBeVisible();
 }
 
 export async function completarDatos(page: Page, negocio: string) {

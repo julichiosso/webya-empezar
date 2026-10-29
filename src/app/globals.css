@@ -205,33 +205,65 @@
 }
 
 /*
- * Hero: las piezas de la web encajan una a una y el ciclo se repite. Solo transform/opacity.
- * HeroArt.tsx pone data-playing="false" fuera de pantalla o con la pestaña oculta.
+ * Hero: las piezas de la web encajan una sola vez al cargar. El mockup tiene botones, así que
+ * nada desaparece ni se mueve en loop. Solo transform/opacity.
  */
 @keyframes hero-assemble {
-  0% {
+  from {
     opacity: 0;
     transform: translateY(14px) scale(0.96);
   }
-  10%,
-  84% {
+  to {
     opacity: 1;
     transform: none;
   }
-  94%,
-  100% {
-    opacity: 0;
-    transform: translateY(-6px) scale(0.98);
-  }
 }
 .hero-piece {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: hero-assemble 9s var(--ease-out) infinite both;
-  animation-delay: calc(var(--i) * 140ms);
+  animation: hero-assemble var(--duration-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i) * 90ms);
 }
-.hero-art[data-playing='false'] .hero-piece {
-  animation-play-state: paused;
+
+/* Activar un módulo: un "pop" breve (transform) y el check que entra (transform + opacity). */
+@keyframes pop {
+  40% {
+    transform: scale(1.04);
+  }
+}
+.tile[aria-pressed='true'],
+.pop-on[data-on='true'] {
+  animation: pop var(--duration-base) var(--ease-out);
+}
+.tile-check {
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+.tile[aria-pressed='true'] .tile-check {
+  opacity: 1;
+  transform: none;
+}
+
+/* Entrada suave de un texto que cambia (solo opacity). */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+.fade-in {
+  animation: fade-in var(--duration-base) var(--ease-out);
+}
+
+/* Pista breve del hero: aparece y la desmonta un timer del componente. */
+@keyframes hint-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+.hint-in {
+  animation: hint-in var(--duration-fast) var(--ease-out);
 }
 
 /*
@@ -266,6 +298,16 @@
     animation: none !important;
     opacity: 1;
     transform: none;
+  }
+  /* Activar un módulo, la pista y el cambio de texto: el estado cambia al instante, sin movimiento. */
+  .tile,
+  .pop-on,
+  .hint-in,
+  .fade-in {
+    animation: none !important;
+  }
+  .tile-check {
+    transition: none;
   }
   *,
   *::before,

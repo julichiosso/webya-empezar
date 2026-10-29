@@ -1,16 +1,19 @@
+// Recorrido de marca: Creá → Digitalizá → Crecé.
+// TODO: confirmar qué se ofrece en "Crecé" (clientes, métricas) antes de prometer más que esto.
 const PASOS = [
   {
-    titulo: 'Contanos qué hacés',
-    texto: 'Elegís tu rubro y lo que querés lograr. Son cuatro pasos y se hacen desde el celular.',
-  },
-  {
-    titulo: 'Te armamos la propuesta',
+    nombre: 'Creá',
     texto:
-      'Con lo que nos contás, preparamos lo que tu negocio necesita y te escribimos por WhatsApp.',
+      'Elegí tu rubro y activá los módulos que tu negocio necesita. Son cuatro pasos y se hacen desde el celular.',
   },
   {
-    titulo: 'Lo ponemos en marcha',
-    texto: 'Lo revisamos juntos, ajustamos lo que haga falta y lo dejamos funcionando.',
+    nombre: 'Digitalizá',
+    texto: 'Armamos lo que elegiste y lo ponemos online con vos. No tenés que configurar nada.',
+  },
+  {
+    nombre: 'Crecé',
+    texto:
+      'Tus clientes te encuentran y te contactan. Después vemos juntos qué sumar para seguir creciendo.',
   },
 ] as const;
 
@@ -22,7 +25,7 @@ export function ComoFunciona() {
       </h2>
       <ol className="mt-8 flex flex-col">
         {PASOS.map((p, i) => (
-          <li key={p.titulo} className="flex gap-4 border-t border-line py-6 first:border-t-0">
+          <li key={p.nombre} className="flex gap-4 border-t border-line py-6 first:border-t-0">
             <span
               aria-hidden="true"
               className="tabular flex size-10 shrink-0 items-center justify-center rounded-full border border-line-strong text-body font-semibold"
@@ -30,7 +33,7 @@ export function ComoFunciona() {
               {i + 1}
             </span>
             <div>
-              <h3 className="text-heading font-semibold">{p.titulo}</h3>
+              <h3 className="text-heading font-semibold">{p.nombre}</h3>
               <p className="mt-2 text-muted">{p.texto}</p>
             </div>
           </li>

@@ -6,10 +6,10 @@ export function QueIncluye() {
   return (
     <section aria-labelledby="incluye-title" className="reveal pt-24">
       <h2 id="incluye-title" className="text-title font-semibold text-balance">
-        Qué podemos armar
+        Qué podés activar
       </h2>
       <p className="mt-4 max-w-md text-lead text-muted">
-        No todos los negocios necesitan lo mismo. Armamos solo lo que el tuyo usa.
+        No todos los negocios necesitan lo mismo. Activás solo lo que el tuyo usa.
       </p>
       <ul className="mt-8 overflow-hidden rounded-panel border border-line bg-surface shadow-raised">
         {MODULO_IDS.map((id) => {

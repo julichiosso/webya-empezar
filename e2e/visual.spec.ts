@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { completarDatos, irAlPaso, negocioUnico, wizard } from './helpers';
+import { completarDatos, irAlPaso, negocioUnico, TITULO_FINAL, tocar, wizard } from './helpers';
 
 // Capturas de referencia por paso y por viewport. Sin animaciones para que sean deterministas.
 // Se generan con `pnpm test:e2e visual --update-snapshots` y se revisan a ojo antes de commitear.
@@ -10,17 +10,26 @@ test('hero', async ({ page }) => {
   await expect(page).toHaveScreenshot('00-hero.png');
 });
 
-test('paso 1 — rubro', async ({ page }) => {
+test('hero con módulos activados', async ({ page }) => {
+  await page.goto('/empezar');
+  const hero = page.getByRole('group', { name: /armá tu negocio/i });
+  await hero.getByRole('button', { name: /turnos y reservas/i }).click();
+  await hero.getByRole('button', { name: /pagos online/i }).click();
+  // Pasada la pista, queda el resumen "2 módulos activados".
+  await expect(hero.getByText('2 módulos activados')).toBeVisible({ timeout: 6000 });
+  await expect(hero).toHaveScreenshot('00b-hero-activo.png');
+});
+
+test('paso 1 — qué vas a crear (con vista previa)', async ({ page }) => {
   await irAlPaso(page, 1);
+  await tocar(page, /comercio/i);
   await expect(wizard(page)).toHaveScreenshot('01-rubro.png');
 });
 
-test('paso 2 — objetivos', async ({ page }) => {
+test('paso 2 — qué querés activar', async ({ page }) => {
   await irAlPaso(page, 2);
-  await wizard(page)
-    .locator('label', { hasText: /recibir turnos/i })
-    .click();
-  await expect(wizard(page)).toHaveScreenshot('02-objetivos.png');
+  await tocar(page, /recibir turnos online/i);
+  await expect(wizard(page)).toHaveScreenshot('02-modulos.png');
 });
 
 test('paso 3 — datos', async ({ page }) => {
@@ -40,7 +49,7 @@ test('paso 4 — confirmación', async ({ page }) => {
   await irAlPaso(page, 3);
   await completarDatos(page, negocioUnico('visual'));
   await wizard(page).getByRole('button', { name: 'Enviar' }).click();
-  await expect(wizard(page).getByRole('heading', { name: /¡Listo/ })).toBeVisible();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
   await expect(wizard(page)).toHaveScreenshot('04-listo.png');
 });
 
