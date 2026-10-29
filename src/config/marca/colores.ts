@@ -17,6 +17,7 @@ export const BASE = {
   muted: '#a1a1a6',
   subtle: '#8a8a90',
   paper: '#f4ede1',
+  paper2: '#fbf8f2',
   paperFg: '#0b0b0c',
   paperMuted: '#5e574f',
 } as const;
@@ -129,6 +130,13 @@ export function combinaciones(p: ColoresPaleta): Combinacion[] {
     { nombre: 'Secundario sobre selección', texto: BASE.muted, fondo: seleccion, minimo: AA_TEXTO },
     { nombre: 'Acento sobre papel', texto: p.accentInk, fondo: BASE.paper, minimo: AA_TEXTO },
     { nombre: 'Foco sobre papel', texto: p.accentInk, fondo: BASE.paper, minimo: AA_GRANDE },
+    {
+      nombre: 'Acento sobre tarjeta de papel',
+      texto: p.accentInk,
+      fondo: BASE.paper2,
+      minimo: AA_TEXTO,
+    },
+    // El botón de acento sobre papel se reconoce por su texto (que sí pasa AA); su borde no se exige.
     { nombre: 'Error sobre fondo', texto: p.danger, fondo: BASE.bg, minimo: AA_TEXTO },
     { nombre: 'Error sobre tarjeta', texto: p.danger, fondo: BASE.surface2, minimo: AA_TEXTO },
   ];
@@ -144,6 +152,12 @@ export const COMBINACIONES_BASE: Combinacion[] = [
     nombre: 'Secundario sobre papel',
     texto: BASE.paperMuted,
     fondo: BASE.paper,
+    minimo: AA_TEXTO,
+  },
+  {
+    nombre: 'Secundario sobre tarjeta de papel',
+    texto: BASE.paperMuted,
+    fondo: BASE.paper2,
     minimo: AA_TEXTO,
   },
   {

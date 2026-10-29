@@ -26,6 +26,25 @@ export class PedidoNoEncontradoError extends Error {
   }
 }
 
+/**
+ * Pedido nuevo a partir de un borrador ya validado: estado `recibido`, evento inicial y el número
+ * que corresponda. Única forma de "nacer" de un pedido (repositorio y demo usan esta función).
+ */
+export function pedidoDesdeBorrador(
+  borrador: BorradorPedido,
+  datos: { id: string; numero: number; ahora: Date },
+): Pedido {
+  const en = datos.ahora.toISOString();
+  return {
+    ...structuredClone(borrador),
+    id: datos.id,
+    numero: datos.numero,
+    estado: 'recibido',
+    eventos: [{ estado: 'recibido', en }],
+    creadoEn: en,
+  };
+}
+
 interface OpcionesMemoria {
   ahora?: () => Date;
   nuevoId?: () => string;
@@ -56,15 +75,7 @@ export function crearPedidoRepositoryMemoria(opciones: OpcionesMemoria = {}): Pe
     async crear(borrador) {
       const numero = (contadores.get(borrador.tenantId) ?? 0) + 1;
       contadores.set(borrador.tenantId, numero);
-      const en = ahora().toISOString();
-      const pedido: Pedido = {
-        ...copia(borrador as Pedido),
-        id: nuevoId(),
-        numero,
-        estado: 'recibido',
-        eventos: [{ estado: 'recibido', en }],
-        creadoEn: en,
-      };
+      const pedido = pedidoDesdeBorrador(borrador, { id: nuevoId(), numero, ahora: ahora() });
       pedidos.set(pedido.id, pedido);
       return copia(pedido);
     },

@@ -72,6 +72,22 @@ export const UI_ICONS = {
     'M5 4.5h14a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 4v-4H5A1.5 1.5 0 0 1 3.5 15V6A1.5 1.5 0 0 1 5 4.5Z',
   ],
   mail: [rect(3, 5.5, 18, 13, 2), 'M3.5 7.5 12 13.5l8.5-6'],
+  // Demo de pedidos.
+  buscar: [circle(10.5, 10.5, 6), 'M15 15l5 5'],
+  menos: ['M5 12h14'],
+  cerrar: ['M6 6l12 12', 'M18 6 6 18'],
+  bolsa: ['M5 8h14l-1.2 12h-11.6Z', 'M9 8V6.5a3 3 0 0 1 6 0V8'],
+  moto: [
+    circle(6, 17, 2.5),
+    circle(18, 17, 2.5),
+    'M8.5 17h7',
+    'M15 17l-2.5-7H9',
+    'M12.5 10h3l2.5 7',
+  ],
+  mesa: ['M4 9h16', 'M7 9v10', 'M17 9v10', 'M6 5h12'],
+  billete: [rect(3, 6.5, 18, 11, 2), circle(12, 12, 2.5), 'M6.5 9.5v.01', 'M17.5 14.5v.01'],
+  reloj: [circle(12, 12, 8.5), 'M12 7.5V12l3 2'],
+  impresora: [rect(4, 9, 16, 8, 1.5), 'M7 9V4h10v5', 'M7 14h10v6H7Z'],
 } as const;
 
 export const ICONS = { ...RUBRO_ICONS, ...MODULO_ICONS, ...UI_ICONS } as const;

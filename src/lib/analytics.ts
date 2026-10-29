@@ -14,6 +14,14 @@ export interface EventosAnalitica {
   lead_enviado: { rubro: string; modulos: number; objetivos: number };
   modulo_alternado: { modulo: string; activo: boolean; origen: 'hero' | 'wizard' };
   whatsapp_click: { origen: 'confirmacion' | 'flotante' };
+  // Demos de rubro (/demo/<rubro>). `demo` es el rubro (p. ej. 'gastronomia').
+  demo_view: { demo: string; cocina: string };
+  demo_personalizada: { demo: string; campo: 'nombre' | 'paleta' | 'cocina'; valor: string };
+  demo_pedido_creado: { demo: string; modalidad: string; items: number; medioPago: string };
+  demo_estado_avanzado: { demo: string; estado: string };
+  demo_cta_click: { demo: string; origen: string };
+  demo_qr_celular: { demo: string };
+  demo_whatsapp_click: { demo: string };
 }
 
 export type NombreEvento = keyof EventosAnalitica;

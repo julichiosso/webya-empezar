@@ -31,6 +31,8 @@
 
   /* Papel crema: comandas, tickets y tarjetas de pedido sobre la base negra. */
   --paper: #f4ede1;
+  /* Tarjeta sobre papel (platos de la carta): apenas más clara que el crema. */
+  --paper-2: #fbf8f2;
   --paper-fg: #0b0b0c;
   --paper-muted: #5e574f;
   --paper-line: rgb(11 11 12 / 0.14);
@@ -85,6 +87,7 @@
   --color-accent-ink: var(--accent-ink);
   --color-danger: var(--danger);
   --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
   --color-paper-fg: var(--paper-fg);
   --color-paper-muted: var(--paper-muted);
   --color-paper-line: var(--paper-line);
@@ -182,6 +185,19 @@
     outline: 2px solid var(--accent);
     outline-offset: 3px;
     border-radius: 4px;
+  }
+  /* Papel crema como tema con scope: dentro de `.papel` los tokens base pasan a su versión clara,
+     así los componentes compartidos (Encaje, líneas, textos) se ven bien sin variantes nuevas. */
+  .papel {
+    --bg: var(--paper);
+    --surface: var(--paper-2);
+    --surface-2: var(--paper-2);
+    --fg: var(--paper-fg);
+    --muted: var(--paper-muted);
+    --subtle: var(--paper-muted);
+    --line: var(--paper-line);
+    --line-strong: rgb(11 11 12 / 0.32);
+    color-scheme: light;
   }
   /* Sobre papel crema el acento puro no llega a 3:1: el foco usa la versión tinta. */
   .papel :focus-visible {
@@ -366,6 +382,20 @@
   transition: opacity var(--duration-slow) var(--ease-out);
 }
 
+/* Hoja inferior: sube desde abajo y el fondo se oscurece (transform/opacity, una vez). */
+@keyframes hoja-sube {
+  from {
+    transform: translateY(100%);
+  }
+}
+.hoja {
+  animation: hoja-sube var(--duration-base) var(--ease-out);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.hoja-fondo {
+  animation: fade-in var(--duration-base) var(--ease-out);
+}
+
 /* Entrada suave de un texto que cambia (solo opacity). */
 @keyframes fade-in {
   from {
@@ -427,7 +457,9 @@
   .pop-on,
   .encaje-pieza,
   .hint-in,
-  .fade-in {
+  .fade-in,
+  .hoja,
+  .hoja-fondo {
     animation: none !important;
   }
   .arte,

@@ -63,6 +63,7 @@ describe('globals.css coincide con la config de marca', () => {
     expect(valor(root, '--muted')).toBe(BASE.muted);
     expect(valor(root, '--subtle')).toBe(BASE.subtle);
     expect(valor(root, '--paper')).toBe(BASE.paper);
+    expect(valor(root, '--paper-2')).toBe(BASE.paper2);
     expect(valor(root, '--paper-fg')).toBe(BASE.paperFg);
     expect(valor(root, '--paper-muted')).toBe(BASE.paperMuted);
     expect(valor(root, '--accent')).toBe(brasa.accent);
