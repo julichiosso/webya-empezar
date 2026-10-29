@@ -1,10 +1,19 @@
 import { PALETAS_DEMO } from '@/content/demos/gastronomia/paletas';
 import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { MODULO_IDS } from '@/content/modulos';
+import { NECESIDAD_IDS, NECESIDAD_OTRA_ID } from '@/content/necesidades';
 import { esObjetivoDeRubro, RUBRO_IDS, RUBRO_OTRO_ID } from '@/content/rubros';
 import { crearEsquemasLead, type CatalogoLead, type MensajesLead } from '@/domain/leads/lead';
 
-export type { DatosForm, LeadPayload, LeadPayloadInput } from '@/domain/leads/lead';
+export type {
+  CompletarLead,
+  CompletarLeadInput,
+  DatosForm,
+  LeadParcial,
+  LeadParcialInput,
+  LeadPayload,
+  LeadPayloadInput,
+} from '@/domain/leads/lead';
 
 /** Mensajes de validación del lead: lo que ve la persona al lado de cada campo. */
 export const MENSAJES_LEAD: MensajesLead = {
@@ -25,6 +34,11 @@ export const MENSAJES_LEAD: MensajesLead = {
   demoInexistente: 'Esa personalización no existe.',
   objetivosRepetidos: 'Hay objetivos repetidos.',
   objetivoDeOtroRubro: 'Ese objetivo no corresponde al rubro.',
+  necesidadesRepetidas: 'Hay opciones repetidas.',
+  necesidadInexistente: 'Esa opción no existe.',
+  necesidadLibreVacia: 'Contanos qué necesitás, aunque sea en pocas palabras.',
+  necesidadLibreCorta: 'Contanos un poco más de lo que necesitás.',
+  tokenInvalido: 'El enlace para completar tus datos no es válido.',
 };
 
 /** Respuestas de la API de leads (errores generales, no de un campo). */
@@ -35,6 +49,12 @@ export const MENSAJES_API_LEAD = {
   VALIDATION_ERROR: 'Revisá los datos del formulario.',
   RATE_LIMITED: 'Recibimos muchos envíos desde tu conexión. Probá de nuevo en unos minutos.',
   INTERNAL_ERROR: 'No pudimos guardar tus datos. Probá de nuevo en un momento.',
+  /**
+   * PATCH con id o token que no coinciden, o ya vencido o usado. Es el mismo mensaje para todos los
+   * casos: no le da pistas a quien prueba ids.
+   */
+  NOT_FOUND:
+    'No encontramos tu consulta o el enlace ya venció. Tu WhatsApp nos llegó igual: te escribimos.',
   /** El schema ya validó el teléfono: esto solo aparece si algo se desincroniza. */
   WHATSAPP_INVALIDO: 'Número inválido.',
 } as const;
@@ -45,6 +65,8 @@ export const CATALOGO_LEAD: CatalogoLead = {
   rubroOtroId: RUBRO_OTRO_ID,
   esObjetivoDeRubro,
   moduloIds: MODULO_IDS,
+  necesidadIds: NECESIDAD_IDS,
+  necesidadOtraId: NECESIDAD_OTRA_ID,
   paletaDemoIds: PALETAS_DEMO.map((p) => p.id),
   cocinaDemoIds: COCINA_IDS,
 };
@@ -52,4 +74,11 @@ export const CATALOGO_LEAD: CatalogoLead = {
 /** Esquemas del lead, armados con los catálogos y el copy de WebYa. */
 export const ESQUEMAS_LEAD = crearEsquemasLead(CATALOGO_LEAD, MENSAJES_LEAD);
 
-export const { LIMITES, datosFormShape, datosFormSchema, leadPayloadSchema } = ESQUEMAS_LEAD;
+export const {
+  LIMITES,
+  datosFormShape,
+  datosFormSchema,
+  leadPayloadSchema,
+  leadParcialSchema,
+  completarLeadSchema,
+} = ESQUEMAS_LEAD;

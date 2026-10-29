@@ -7,6 +7,8 @@ const catalogo: CatalogoLead = {
   rubroOtroId: 'otro',
   esObjetivoDeRubro: (rubro, objetivo) => rubro === 'kiosco' && objetivo === 'vender',
   moduloIds: ['caja'],
+  necesidadIds: ['vender', 'nada_mas'],
+  necesidadOtraId: 'nada_mas',
   paletaDemoIds: ['gris'],
   cocinaDemoIds: ['sushi'],
 };
@@ -15,7 +17,7 @@ const mensajes = new Proxy({} as MensajesLead, {
   get: (_t, clave) => (clave === 'hastaCaracteres' ? (n: number) => `max:${n}` : String(clave)),
 });
 
-const { leadPayloadSchema, LIMITES } = crearEsquemasLead(catalogo, mensajes);
+const { leadPayloadSchema, leadParcialSchema, LIMITES } = crearEsquemasLead(catalogo, mensajes);
 
 const valido = {
   nombreNegocio: 'Kiosco Sol',
@@ -46,5 +48,13 @@ describe('crearEsquemasLead (catálogo inyectado)', () => {
     const r = leadPayloadSchema.safeParse({ ...valido, rubro: 'nada' });
     expect(r.error?.issues.map((i) => i.message)).toEqual(['rubroInexistente']);
     expect(LIMITES.modulos).toBe(1);
+  });
+
+  it('el lead parcial valida necesidades y la que abre el texto libre contra el catálogo', () => {
+    const base = { whatsapp: '11 2345 6789' };
+    expect(leadParcialSchema.safeParse({ ...base, necesidades: ['vender'] }).success).toBe(true);
+    expect(leadParcialSchema.safeParse({ ...base, necesidades: ['turnos'] }).success).toBe(false);
+    const sinTexto = leadParcialSchema.safeParse({ ...base, necesidades: ['nada_mas'] });
+    expect(sinTexto.error?.issues.map((i) => i.message)).toEqual(['necesidadLibreVacia']);
   });
 });

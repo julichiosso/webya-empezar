@@ -6,8 +6,16 @@ export type LeadNotificacion = Pick<
   'id' | 'nombre' | 'nombre_negocio' | 'rubro' | 'rubro_otro' | 'modulos' | 'objetivos' | 'whatsapp'
 >;
 
+/** Lead parcial: el WhatsApp, lo que necesita (y el texto libre) y lo que haya elegido. */
+export type LeadParcialNotificacion = Pick<
+  LeadRow,
+  'id' | 'whatsapp' | 'necesidades' | 'necesidad_libre' | 'rubro' | 'rubro_otro' | 'modulos'
+>;
+
 export interface NotificationService {
   nuevoLead(lead: LeadNotificacion): Promise<void>;
+  /** Alguien dejó solo su WhatsApp: conviene escribirle rápido, aunque no complete el resto. */
+  nuevoLeadParcial(lead: LeadParcialNotificacion): Promise<void>;
 }
 
 /**
@@ -26,6 +34,15 @@ export class ConsoleNotificationService implements NotificationService {
     console.warn(
       `[leads] nuevo lead ${lead.id}: ${lead.nombre_negocio} (${lead.rubro_otro ?? lead.rubro}), ` +
         `módulos: ${lead.modulos.join(', ')}`,
+    );
+  }
+
+  async nuevoLeadParcial(lead: LeadParcialNotificacion): Promise<void> {
+    // Ni el teléfono ni el texto libre van al log: solo si hay texto.
+    console.warn(
+      `[leads] nuevo lead parcial ${lead.id} (${lead.rubro_otro ?? lead.rubro ?? 'sin rubro'}), ` +
+        `necesidades: ${lead.necesidades.join(', ') || '-'}` +
+        (lead.necesidad_libre ? ', con pedido a medida' : ''),
     );
   }
 }

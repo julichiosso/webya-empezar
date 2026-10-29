@@ -16,6 +16,9 @@ export interface CatalogoLead {
   /** ¿Es este objetivo uno de los que ofrece ese rubro? */
   esObjetivoDeRubro: (rubroId: string, objetivoId: string) => boolean;
   moduloIds: readonly string[];
+  /** Necesidades del paso "¿Qué necesitás?" y la que abre el texto libre ("otra"). */
+  necesidadIds: readonly string[];
+  necesidadOtraId: string;
   /** Paletas y cocinas de la demo de Gastronomía que existen. */
   paletaDemoIds: readonly string[];
   cocinaDemoIds: readonly string[];
@@ -39,6 +42,13 @@ export interface MensajesLead {
   demoInexistente: string;
   objetivosRepetidos: string;
   objetivoDeOtroRubro: string;
+  necesidadesRepetidas: string;
+  necesidadInexistente: string;
+  /** Marcó "Otra cosa" pero no escribió qué necesita. */
+  necesidadLibreVacia: string;
+  /** Escribió algo, pero demasiado corto para entenderlo. */
+  necesidadLibreCorta: string;
+  tokenInvalido: string;
 }
 
 /** Límites que no dependen del catálogo (se aplican igual en cliente y servidor). */
@@ -51,7 +61,36 @@ export const LIMITES_BASE = {
   objetivos: 8,
   utm: 100,
   userAgent: 400,
+  /** Lead parcial: necesidades marcadas, texto libre "a medida" y módulos (igual que la base). */
+  necesidades: 8,
+  necesidadLibreMin: 3,
+  necesidadLibre: 500,
+  modulosParcial: 16,
 } as const;
+
+/** Token para completar un lead parcial: 32 bytes en base64url, sin relleno. */
+export const TOKEN_LEAD_REGEX = /^[A-Za-z0-9_-]{43}$/;
+
+type Ctx = z.RefinementCtx;
+
+/** Ids sin repetir y todos del catálogo. Los mensajes y la ruta son los de cada campo. */
+function revisarIds(
+  ctx: Ctx,
+  campo: string,
+  lista: readonly string[],
+  validos: readonly string[],
+  repetidos: string,
+  inexistente: string,
+) {
+  if (new Set(lista).size !== lista.length) {
+    ctx.addIssue({ code: 'custom', path: [campo], message: repetidos });
+  }
+  lista.forEach((id, i) => {
+    if (!validos.includes(id)) {
+      ctx.addIssue({ code: 'custom', path: [campo, i], message: inexistente });
+    }
+  });
+}
 
 export function crearEsquemasLead(catalogo: CatalogoLead, mensajes: MensajesLead) {
   const LIMITES = { ...LIMITES_BASE, modulos: catalogo.moduloIds.length } as const;
@@ -129,39 +168,138 @@ export function crearEsquemasLead(catalogo: CatalogoLead, mensajes: MensajesLead
       if (lead.rubro === catalogo.rubroOtroId && (lead.rubroOtro ?? '').length < 2) {
         ctx.addIssue({ code: 'custom', path: ['rubroOtro'], message: mensajes.rubroOtroVacio });
       }
-      if (new Set(lead.modulos).size !== lead.modulos.length) {
-        ctx.addIssue({ code: 'custom', path: ['modulos'], message: mensajes.modulosRepetidos });
-      }
-      lead.modulos.forEach((id, i) => {
-        if (!catalogo.moduloIds.includes(id)) {
-          ctx.addIssue({
-            code: 'custom',
-            path: ['modulos', i],
-            message: mensajes.moduloInexistente,
-          });
-        }
-      });
-      if (lead.demo && !demoValida(lead.demo)) {
-        ctx.addIssue({ code: 'custom', path: ['demo'], message: mensajes.demoInexistente });
-      }
-      if (new Set(lead.objetivos).size !== lead.objetivos.length) {
-        ctx.addIssue({ code: 'custom', path: ['objetivos'], message: mensajes.objetivosRepetidos });
-      }
-      lead.objetivos.forEach((o, i) => {
-        if (!catalogo.esObjetivoDeRubro(lead.rubro, o)) {
-          ctx.addIssue({
-            code: 'custom',
-            path: ['objetivos', i],
-            message: mensajes.objetivoDeOtroRubro,
-          });
-        }
-      });
+      revisarModulosDemoYObjetivos(ctx, lead, lead.rubro);
     });
 
-  return { LIMITES, datosFormShape, datosFormSchema, leadPayloadSchema };
+  /** Módulos, demo y objetivos: mismas reglas en el lead completo y en el parcial. */
+  function revisarModulosDemoYObjetivos(
+    ctx: Ctx,
+    lead: { modulos: string[]; objetivos: string[]; demo?: { paleta: string; cocina: string } },
+    rubro: string | undefined,
+  ) {
+    revisarIds(
+      ctx,
+      'modulos',
+      lead.modulos,
+      catalogo.moduloIds,
+      mensajes.modulosRepetidos,
+      mensajes.moduloInexistente,
+    );
+    if (lead.demo && !demoValida(lead.demo)) {
+      ctx.addIssue({ code: 'custom', path: ['demo'], message: mensajes.demoInexistente });
+    }
+    if (new Set(lead.objetivos).size !== lead.objetivos.length) {
+      ctx.addIssue({ code: 'custom', path: ['objetivos'], message: mensajes.objetivosRepetidos });
+    }
+    lead.objetivos.forEach((o, i) => {
+      if (!rubro || !catalogo.esObjetivoDeRubro(rubro, o)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['objetivos', i],
+          message: mensajes.objetivoDeOtroRubro,
+        });
+      }
+    });
+  }
+
+  const listaDeIds = (max: number) => z.array(z.string().trim().min(1).max(60)).max(max);
+
+  /**
+   * Lead parcial ("solo WhatsApp primero"): lo único obligatorio es el WhatsApp. Se guarda apenas
+   * lo deja, con lo que haya elegido antes (necesidades, texto libre, rubro y módulos). El servidor
+   * sanitiza antes de validar (necesidadLibre como texto multilínea).
+   */
+  const leadParcialSchema = z
+    .object({
+      whatsapp: datosFormShape.whatsapp,
+      necesidades: listaDeIds(LIMITES.necesidades).default([]),
+      // "Otra cosa / a medida": pedido libre. Vacío equivale a no haberlo escrito.
+      necesidadLibre: z
+        .string()
+        .trim()
+        .max(LIMITES.necesidadLibre, mensajes.hastaCaracteres(LIMITES.necesidadLibre))
+        .optional(),
+      rubro: z.string().trim().max(60).optional(),
+      rubroOtro: z.string().trim().max(LIMITES.rubroOtro).optional(),
+      modulos: listaDeIds(LIMITES.modulosParcial).default([]),
+      objetivos: listaDeIds(LIMITES.objetivos).default([]),
+      origen: z.enum(ORIGENES).optional(),
+      demo: z
+        .object({ paleta: z.string().max(20), cocina: z.string().max(20) })
+        .strict()
+        .optional(),
+      website: z.string().max(200).optional(),
+      utm_source: utmField,
+      utm_medium: utmField,
+      utm_campaign: utmField,
+    })
+    .superRefine((lead, ctx) => {
+      revisarIds(
+        ctx,
+        'necesidades',
+        lead.necesidades,
+        catalogo.necesidadIds,
+        mensajes.necesidadesRepetidas,
+        mensajes.necesidadInexistente,
+      );
+      const libre = lead.necesidadLibre ?? '';
+      if (lead.necesidades.includes(catalogo.necesidadOtraId) && libre === '') {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['necesidadLibre'],
+          message: mensajes.necesidadLibreVacia,
+        });
+      } else if (libre !== '' && libre.length < LIMITES.necesidadLibreMin) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['necesidadLibre'],
+          message: mensajes.necesidadLibreCorta,
+        });
+      }
+      const rubro = lead.rubro || undefined;
+      if (rubro && !catalogo.rubroIds.includes(rubro)) {
+        ctx.addIssue({ code: 'custom', path: ['rubro'], message: mensajes.rubroInexistente });
+        return;
+      }
+      if (rubro === catalogo.rubroOtroId && (lead.rubroOtro ?? '').length < 2) {
+        ctx.addIssue({ code: 'custom', path: ['rubroOtro'], message: mensajes.rubroOtroVacio });
+      }
+      revisarModulosDemoYObjetivos(ctx, lead, rubro);
+    });
+
+  /**
+   * PATCH /api/leads/[id]: completa el lead parcial con el token que devolvió el POST. Solo el
+   * nombre del negocio es obligatorio; el nombre de la persona, el mail y el mensaje son opcionales.
+   */
+  const completarLeadSchema = z.object({
+    token: z.string().regex(TOKEN_LEAD_REGEX, mensajes.tokenInvalido),
+    nombreNegocio: datosFormShape.nombreNegocio,
+    nombre: z
+      .string()
+      .trim()
+      .max(LIMITES.nombre, mensajes.hastaCaracteres(LIMITES.nombre))
+      .refine((v) => v === '' || v.length >= 2, mensajes.nombreCorto)
+      .optional(),
+    email: datosFormShape.email.optional(),
+    mensaje: datosFormShape.mensaje.optional(),
+    website: z.string().max(200).optional(),
+  });
+
+  return {
+    LIMITES,
+    datosFormShape,
+    datosFormSchema,
+    leadPayloadSchema,
+    leadParcialSchema,
+    completarLeadSchema,
+  };
 }
 
 export type EsquemasLead = ReturnType<typeof crearEsquemasLead>;
 export type DatosForm = z.infer<EsquemasLead['datosFormSchema']>;
 export type LeadPayload = z.infer<EsquemasLead['leadPayloadSchema']>;
 export type LeadPayloadInput = z.input<EsquemasLead['leadPayloadSchema']>;
+export type LeadParcial = z.infer<EsquemasLead['leadParcialSchema']>;
+export type LeadParcialInput = z.input<EsquemasLead['leadParcialSchema']>;
+export type CompletarLead = z.infer<EsquemasLead['completarLeadSchema']>;
+export type CompletarLeadInput = z.input<EsquemasLead['completarLeadSchema']>;
