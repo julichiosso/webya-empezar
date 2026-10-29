@@ -6,9 +6,9 @@ const SALT = 'una-sal-bastante-larga-123';
 const KEY = 'x'.repeat(40);
 
 describe('loadEnv', () => {
-  it('en desarrollo funciona sin nada: repositorio en archivo y sal de desarrollo', () => {
+  it('en desarrollo funciona sin nada: repositorio en memoria y sal de desarrollo', () => {
     const env = loadEnv({ NODE_ENV: 'development' });
-    expect(env.LEAD_REPOSITORY).toBe('file');
+    expect(env.LEAD_REPOSITORY).toBe('memory');
     expect(env.IP_HASH_SALT.length).toBeGreaterThanOrEqual(16);
     expect(env.RATE_LIMIT_MAX).toBe(5);
     expect(env.RATE_LIMIT_WINDOW_SECONDS).toBe(600);
@@ -17,7 +17,40 @@ describe('loadEnv', () => {
 
   it('trata las variables vacías como no definidas', () => {
     const env = loadEnv({ NODE_ENV: 'development', SUPABASE_URL: '', LEAD_REPOSITORY: '' });
-    expect(env.LEAD_REPOSITORY).toBe('file');
+    expect(env.LEAD_REPOSITORY).toBe('memory');
+  });
+
+  describe('pnpm dev nunca escribe en Supabase real sin confirmación', () => {
+    const real = { SUPABASE_URL: 'https://abc.supabase.co', SUPABASE_SERVICE_ROLE_KEY: KEY };
+
+    it('con credenciales en el .env pero sin LEAD_REPOSITORY, usa memoria', () => {
+      expect(loadEnv({ NODE_ENV: 'development', ...real }).LEAD_REPOSITORY).toBe('memory');
+      expect(loadEnv({ NODE_ENV: 'test', ...real }).LEAD_REPOSITORY).toBe('memory');
+    });
+
+    it('falla si el .env pide supabase en desarrollo o tests', () => {
+      for (const NODE_ENV of ['development', 'test']) {
+        expect(() => loadEnv({ NODE_ENV, ...real, LEAD_REPOSITORY: 'supabase' })).toThrow(
+          /ALLOW_SUPABASE_IN_DEV=1/,
+        );
+      }
+    });
+
+    it('solo acepta la confirmación explícita "1"', () => {
+      const pedido = { NODE_ENV: 'development', ...real, LEAD_REPOSITORY: 'supabase' };
+      expect(() => loadEnv({ ...pedido, ALLOW_SUPABASE_IN_DEV: 'true' })).toThrow(EnvError);
+      expect(loadEnv({ ...pedido, ALLOW_SUPABASE_IN_DEV: '1' }).LEAD_REPOSITORY).toBe('supabase');
+    });
+
+    it('en producción sigue usando supabase sin confirmación', () => {
+      const env = loadEnv({
+        NODE_ENV: 'production',
+        IP_HASH_SALT: SALT,
+        ...real,
+        LEAD_REPOSITORY: 'supabase',
+      });
+      expect(env.LEAD_REPOSITORY).toBe('supabase');
+    });
   });
 
   it('usa supabase por defecto si hay credenciales', () => {

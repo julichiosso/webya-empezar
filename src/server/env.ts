@@ -56,10 +56,20 @@ export function loadEnv(source: Record<string, string | undefined> = process.env
   const desplegado = Boolean(source.VERCEL); // corriendo en Vercel, no en `next start` local
 
   const tieneSupabase = Boolean(e.SUPABASE_URL && e.SUPABASE_SERVICE_ROLE_KEY);
-  const repositorio = e.LEAD_REPOSITORY ?? (tieneSupabase ? 'supabase' : 'file');
+  // Fuera de producción (pnpm dev, tests) se usa memoria aunque haya credenciales en el .env:
+  // probar el formulario nunca tiene que escribir en la base real por accidente.
+  const repositorio =
+    e.LEAD_REPOSITORY ??
+    (produccion && tieneSupabase ? 'supabase' : produccion ? 'file' : 'memory');
 
   if (repositorio === 'supabase' && !tieneSupabase) {
     problemas.push('LEAD_REPOSITORY=supabase requiere SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY');
+  }
+  if (repositorio === 'supabase' && !produccion && source.ALLOW_SUPABASE_IN_DEV !== '1') {
+    problemas.push(
+      `LEAD_REPOSITORY=supabase en ${e.NODE_ENV} escribiría en la base real: sacalo del .env ` +
+        '(se usa memoria) o confirmalo con ALLOW_SUPABASE_IN_DEV=1',
+    );
   }
   if (produccion && !e.IP_HASH_SALT) {
     problemas.push('IP_HASH_SALT es obligatoria en producción (para hashear la IP)');
