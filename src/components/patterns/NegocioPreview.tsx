@@ -1,3 +1,4 @@
+import { PREVIEW } from '@/content/empezar/preview';
 import { getModulo, MODULO_IDS, type ModuloId } from '@/content/modulos';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { isIconName } from '@/brand/ilustracion/iconos/paths';
@@ -34,7 +35,7 @@ export function NegocioPreview({ rubroNombre, rubroIcono, activos }: NegocioPrev
         </span>
         <div className="min-w-0 flex-1">
           <p key={rubroNombre ?? 'sin-rubro'} className="fade-in truncate text-body font-semibold">
-            {rubroNombre ?? 'Tu negocio'}
+            {rubroNombre ?? PREVIEW.sinRubro}
           </p>
           <span className="mt-2 block h-2 w-24 rounded-full bg-line-strong" />
         </div>

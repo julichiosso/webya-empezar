@@ -4,6 +4,7 @@ import * as m from 'motion/react-m';
 import type { Ref } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { ButtonLink, Button } from '@/components/ui/Button';
+import { PASO_LISTO } from '@/content/empezar/pasos';
 import { getModulo, type ModuloId } from '@/content/modulos';
 import { track } from '@/lib/analytics';
 
@@ -70,18 +71,21 @@ export function StepListo({
         tabIndex={-1}
         className="text-title font-semibold text-balance outline-none focus-visible:outline-none"
       >
-        Tu negocio está listo para armarse
+        {PASO_LISTO.titulo}
       </h2>
       <p className="mt-2 text-lead text-muted">
-        Gracias, {primerNombre}. Para <strong className="font-semibold text-fg">{rubro}</strong>,
-        estas son las piezas que activaste:
+        {PASO_LISTO.gracias.antes}
+        {primerNombre}
+        {PASO_LISTO.gracias.trasNombre}
+        <strong className="font-semibold text-fg">{rubro}</strong>
+        {PASO_LISTO.gracias.trasRubro}
       </p>
 
       <m.ul
         variants={lista}
         initial="oculto"
         animate="visible"
-        aria-label="Las piezas de tu negocio"
+        aria-label={PASO_LISTO.ariaPiezas}
         className="mt-6 flex flex-col gap-3"
       >
         {modulos.map((mod) => (
@@ -101,11 +105,9 @@ export function StepListo({
         ))}
       </m.ul>
 
-      {/* Aviso honesto: hoy la entrega es manual, la hacemos nosotros.
-          TODO: definir plazos de entrega y precios; no se prometen hasta tenerlos. */}
+      {/* Aviso honesto: hoy la entrega es manual, la hacemos nosotros (ver content/empezar/pasos). */}
       <p className="mt-6 rounded-control border border-line bg-surface p-4 text-small text-muted">
-        Lo armamos nosotros: no tenés que configurar nada. Cuando lo tengamos listo, lo ponemos
-        online juntos.
+        {PASO_LISTO.avisoEntrega}
       </p>
 
       <div className="mt-8">
@@ -118,27 +120,23 @@ export function StepListo({
             onClick={() => track('whatsapp_click', { origen: 'confirmacion' })}
           >
             <Icon name="chat" size={20} />
-            Hablar por WhatsApp
+            {PASO_LISTO.whatsapp}
           </ButtonLink>
         ) : (
           // Sin número configurado (NEXT_PUBLIC_WHATSAPP_NUMBER) no hay a dónde abrir el chat.
           <Button fullWidth disabled>
-            Hablar por WhatsApp
+            {PASO_LISTO.whatsapp}
           </Button>
         )}
-        <p className="tabular mt-4 text-center text-small text-muted">
-          Te escribimos en menos de 24 hs para ponerlo online.
-        </p>
+        <p className="tabular mt-4 text-center text-small text-muted">{PASO_LISTO.contacto}</p>
         {!whatsappLink && process.env.NODE_ENV !== 'production' && (
-          <p className="mt-2 text-center text-small text-subtle">
-            TODO: configurar NEXT_PUBLIC_WHATSAPP_NUMBER en .env.local.
-          </p>
+          <p className="mt-2 text-center text-small text-subtle">{PASO_LISTO.todoWhatsapp}</p>
         )}
       </div>
 
       <div className="mt-6 text-center">
         <Button variant="ghost" onClick={onReiniciar}>
-          Cargar otro negocio
+          {PASO_LISTO.reiniciar}
         </Button>
       </div>
     </div>

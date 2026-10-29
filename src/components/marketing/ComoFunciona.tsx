@@ -1,13 +1,7 @@
-// Recorrido de marca: Creá → Digitalizá → Crecé. Una sola frase por paso.
-// TODO: confirmar qué se ofrece en "Crecé" (clientes, métricas) antes de prometer más que esto.
-const PASOS = [
-  { nombre: 'Creá', texto: 'Elegí tu rubro y activá los módulos que necesitás.' },
-  { nombre: 'Digitalizá', texto: 'Armamos lo que elegiste y lo ponemos online con vos.' },
-  {
-    nombre: 'Crecé',
-    texto: 'Tus clientes te encuentran y te contactan, y vemos juntos qué sumar.',
-  },
-] as const;
+import { COMO_FUNCIONA } from '@/content/empezar/como-funciona';
+
+// Recorrido de marca: Creá → Digitalizá → Crecé (el texto vive en content/empezar/como-funciona).
+const PASOS = COMO_FUNCIONA.pasos;
 
 /**
  * Los pasos van enhebrados en un riel punteado (concepto Encastre: piezas que se conectan), no en
@@ -17,7 +11,7 @@ export function ComoFunciona() {
   return (
     <section aria-labelledby="como-title" className="reveal pt-24 lg:pt-32">
       <h2 id="como-title" className="text-title font-semibold text-balance">
-        Cómo funciona
+        {COMO_FUNCIONA.titulo}
       </h2>
       <ol className="mt-8 grid lg:mt-12 lg:grid-cols-3 lg:gap-8">
         {PASOS.map((p, i) => (

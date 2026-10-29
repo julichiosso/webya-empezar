@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { HERO_MOCKUP } from '@/content/empezar/hero';
 import { getModulo, type ModuloId } from '@/content/modulos';
 import {
   alternarModuloStore,
@@ -69,8 +70,7 @@ export function HeroMockup() {
   };
 
   const cantidad = seleccionados.length;
-  const resumen =
-    cantidad === 0 ? '' : `${cantidad} ${cantidad === 1 ? 'módulo activado' : 'módulos activados'}`;
+  const resumen = cantidad === 0 ? '' : HERO_MOCKUP.activados(cantidad);
   // Cuantos más módulos, más se nota el resplandor (de 0,35 a 1).
   const brillo = Math.min(1, 0.35 + cantidad * 0.2);
 
@@ -86,7 +86,7 @@ export function HeroMockup() {
       <div
         ref={grupo}
         role="group"
-        aria-label="Armá tu negocio: activá los módulos que necesitás"
+        aria-label={HERO_MOCKUP.ariaGrupo}
         className="rounded-panel border border-line-strong bg-surface p-4 shadow-raised lg:p-6"
       >
         {/* Barra del navegador de la mini web: decorativa. En escritorio muestra un acceso por módulo activo. */}
@@ -151,7 +151,7 @@ export function HeroMockup() {
         {/* Reserva su altura (sin layout shift) y avisa los cambios a lectores de pantalla. */}
         <p aria-live="polite" className="tabular mt-3 min-h-6 text-center text-small text-muted">
           {pista ? (
-            <span className="hint-in inline-block text-fg">Tocá para activar</span>
+            <span className="hint-in inline-block text-fg">{HERO_MOCKUP.pista}</span>
           ) : (
             resumen
           )}

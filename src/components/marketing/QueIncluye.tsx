@@ -1,4 +1,5 @@
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import { QUE_INCLUYE } from '@/content/empezar/que-incluye';
 import { MODULO_IDS, getModulo } from '@/content/modulos';
 
 /**
@@ -10,11 +11,9 @@ export function QueIncluye() {
   return (
     <section aria-labelledby="incluye-title" className="reveal pt-24 lg:pt-32">
       <h2 id="incluye-title" className="text-title font-semibold text-balance">
-        Qué podés activar
+        {QUE_INCLUYE.titulo}
       </h2>
-      <p className="mt-4 max-w-md text-lead text-muted lg:max-w-none">
-        Cada módulo es una pieza: sumá solo las que tu negocio usa.
-      </p>
+      <p className="mt-4 max-w-md text-lead text-muted lg:max-w-none">{QUE_INCLUYE.bajada}</p>
       {/* En escritorio, el gap de 1px deja ver el fondo bg-line: son las divisiones del tablero. */}
       <ul className="mt-8 overflow-hidden rounded-panel border border-line bg-surface shadow-raised lg:mt-12 lg:grid lg:grid-cols-4 lg:gap-px lg:bg-line">
         {MODULO_IDS.map((id) => {

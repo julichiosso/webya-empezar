@@ -1,6 +1,7 @@
 'use client';
 
 import * as m from 'motion/react-m';
+import { MICROCOPY } from '@/content/microcopy';
 
 interface ProgressBarProps {
   step: number;
@@ -17,7 +18,7 @@ export function ProgressBar({ step, total, label }: ProgressBarProps) {
       aria-valuemin={1}
       aria-valuemax={total}
       aria-valuenow={step}
-      aria-valuetext={`Paso ${step} de ${total}`}
+      aria-valuetext={MICROCOPY.pasoDeTotal(step, total)}
       className="h-1 overflow-hidden rounded-full bg-line"
     >
       <m.div

@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, type ReactNode, type RefObject } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import { MICROCOPY } from '@/content/microcopy';
 
 interface HojaProps {
   abierta: boolean;
@@ -139,7 +140,7 @@ export function Hoja({ abierta, onCerrar, titulo, children, pie, fondo }: HojaPr
             <button
               type="button"
               onClick={() => cerrar.current()}
-              aria-label="Cerrar"
+              aria-label={MICROCOPY.cerrar}
               className="-mr-2 flex size-12 items-center justify-center rounded-full text-paper-fg hover:bg-paper-line"
             >
               <Icon name="cerrar" size={22} />
