@@ -1,17 +1,8 @@
 import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { ButtonLink } from '@/components/ui/Button';
+import { HERO } from '@/content/empezar/hero';
 import { HeroMockup } from './HeroMockup';
-
-/**
- * Señales de confianza del hero (solo escritorio). Son promesas que ya cumplimos, sin sellos,
- * métricas ni testimonios.
- */
-const SENALES = [
-  'Sin saber de tecnología',
-  'Armado para tu rubro',
-  'Te respondemos en menos de 24 hs',
-];
 
 /**
  * Hero de /empezar: promesa ("Creá"), CTA que baja al wizard y el mockup donde se activan módulos.
@@ -25,24 +16,23 @@ export function Hero() {
     >
       <div>
         <h1 id="hero-title" className="text-display font-semibold text-balance lg:text-hero">
-          Creá tu negocio online.
+          {HERO.titulo}
           <span className="block text-muted lg:mt-3 lg:text-hero-sub lg:font-medium">
-            Elegí tu rubro. Activá lo que necesitás.
+            {HERO.subtitulo}
           </span>
         </h1>
-        <p className="mt-6 max-w-md text-lead text-muted lg:mt-8">
-          Turnos, tienda, carta, pagos: sumá solo las piezas que tu negocio necesita.
-        </p>
+        <p className="mt-6 max-w-md text-lead text-muted lg:mt-8">{HERO.bajada}</p>
         <div className="mt-8 flex flex-wrap gap-3 lg:mt-10">
           <ButtonLink href="#wizard">
-            Empezar a crear
+            {HERO.cta}
             <Icon name="arrowDown" size={20} />
           </ButtonLink>
           {/* Video explicativo con voz: se descarga recién al tocarlo. */}
           <BotonExplicativo origen="empezar" />
         </div>
         <ul className="mt-10 hidden flex-col gap-4 lg:flex">
-          {SENALES.map((s) => (
+          {/* Señales de confianza: promesas que ya cumplimos (solo escritorio). */}
+          {HERO.senales.map((s) => (
             <li key={s} className="flex items-center gap-3 text-body text-muted">
               <span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-line-strong text-fg">
                 <Icon name="check" size={14} />

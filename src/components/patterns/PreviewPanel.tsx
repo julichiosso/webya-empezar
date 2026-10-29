@@ -1,3 +1,4 @@
+import { PREVIEW } from '@/content/empezar/preview';
 import { getModulo, MODULO_IDS, type ModuloId } from '@/content/modulos';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { isIconName } from '@/brand/ilustracion/iconos/paths';
@@ -36,12 +37,10 @@ export function PreviewPanel({ rubroNombre, rubroIcono, activos }: PreviewPanelP
         </span>
         <div className="min-w-0 flex-1">
           <p key={rubroNombre ?? 'sin-rubro'} className="fade-in truncate text-body font-semibold">
-            {rubroNombre ?? 'Tu negocio'}
+            {rubroNombre ?? PREVIEW.sinRubro}
           </p>
           <p className="tabular text-small text-muted">
-            {cantidad === 0
-              ? 'Acá encajan tus módulos'
-              : `${cantidad} ${cantidad === 1 ? 'módulo' : 'módulos'}`}
+            {cantidad === 0 ? PREVIEW.sinModulos : PREVIEW.cantidadModulos(cantidad)}
           </p>
         </div>
       </div>

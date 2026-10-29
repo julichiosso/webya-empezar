@@ -1,3 +1,4 @@
+import { FAQ_SECCION } from '@/content/empezar/faq-seccion';
 import { FAQ, type Pregunta } from '@/content/faq';
 
 function Item({ item }: { item: Pregunta }) {
@@ -28,7 +29,7 @@ export function Faq() {
   return (
     <section aria-labelledby="faq-title" className="reveal pt-24 lg:pt-32">
       <h2 id="faq-title" className="text-title font-semibold text-balance">
-        Preguntas frecuentes
+        {FAQ_SECCION.titulo}
       </h2>
       <div className="mt-8 lg:mt-12 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-16">
         {columnas.map((items, i) => (

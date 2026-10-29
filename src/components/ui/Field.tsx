@@ -1,5 +1,6 @@
 import { useId, type InputHTMLAttributes, type Ref, type TextareaHTMLAttributes } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import { MICROCOPY } from '@/content/microcopy';
 
 interface FieldProps {
   label: string;
@@ -32,7 +33,7 @@ function Shell({
         className="mb-2 flex items-baseline justify-between gap-4 text-small font-medium"
       >
         <span>{label}</span>
-        {optional && <span className="font-normal text-subtle">Opcional</span>}
+        {optional && <span className="font-normal text-subtle">{MICROCOPY.opcional}</span>}
       </label>
       {children}
       {hint && (
@@ -83,7 +84,7 @@ export function Input({
         />
         {valid && !error && (
           <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-accent">
-            <Icon name="check" size={20} draw active title="Válido" />
+            <Icon name="check" size={20} draw active title={MICROCOPY.valido} />
           </span>
         )}
       </div>

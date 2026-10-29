@@ -1,5 +1,6 @@
 import type { ModuloId } from '@/content/modulos';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import { MICROCOPY } from '@/content/microcopy';
 import { Encaje } from './Encaje';
 
 interface ModuloOptionProps {
@@ -42,7 +43,7 @@ export function ModuloOption({
           <span className="mt-1 block text-small text-muted">{descripcion}</span>
           {sugerido && (
             <span className="mt-2 block text-small font-medium text-fg">
-              Sugerido para tu rubro
+              {MICROCOPY.sugeridoParaTuRubro}
             </span>
           )}
         </span>
