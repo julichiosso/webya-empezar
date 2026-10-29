@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { tocar, wizard } from './helpers';
+import { abrirWizard, tocar, wizard } from './helpers';
 
 const hero = (page: Page) => page.getByRole('group', { name: /armá tu negocio/i });
 
@@ -38,6 +38,7 @@ test.describe('prefers-reduced-motion: reduce', () => {
 
   test('el wizard sigue funcionando', async ({ page }) => {
     await page.goto('/empezar');
+    await abrirWizard(page);
     await tocar(page, /gastronomía/i);
     await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
     await expect(wizard(page).getByRole('heading', { name: '¿Qué querés activar?' })).toBeVisible();

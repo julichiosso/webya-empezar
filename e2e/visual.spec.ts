@@ -1,5 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { completarDatos, irAlPaso, negocioUnico, TITULO_FINAL, tocar, wizard } from './helpers';
+import {
+  abrirWizard,
+  completarDatos,
+  irAlPaso,
+  negocioUnico,
+  TITULO_FINAL,
+  tocar,
+  wizard,
+} from './helpers';
 
 // Capturas de referencia por paso y por viewport. Sin animaciones para que sean deterministas.
 // Se generan con `pnpm test:e2e visual --update-snapshots` y se revisan a ojo antes de commitear.
@@ -55,8 +63,10 @@ test('paso 4 — confirmación', async ({ page }) => {
 
 test('secciones informativas', async ({ page }) => {
   await page.goto('/empezar');
-  const secciones = page.locator('main > section');
-  await expect(secciones.nth(2)).toHaveScreenshot('05-como-funciona.png');
-  await expect(secciones.nth(3)).toHaveScreenshot('06-que-incluye.png');
-  await expect(secciones.nth(4)).toHaveScreenshot('07-faq.png');
+  // Con el wizard ya cargado (layout definitivo): el esqueleto mide distinto y movería las secciones.
+  await abrirWizard(page);
+  const seccion = (id: string) => page.locator(`section[aria-labelledby="${id}"]`);
+  await expect(seccion('como-title')).toHaveScreenshot('05-como-funciona.png');
+  await expect(seccion('incluye-title')).toHaveScreenshot('06-que-incluye.png');
+  await expect(seccion('faq-title')).toHaveScreenshot('07-faq.png');
 });

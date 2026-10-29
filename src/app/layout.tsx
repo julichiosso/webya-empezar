@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Outfit } from 'next/font/google';
+import { siteConfig } from '@/lib/site-config';
 import './globals.css';
 
 const outfit = Outfit({
@@ -8,12 +9,13 @@ const outfit = Outfit({
   display: 'swap',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://webya.ar';
-
-// La metadata completa (Open Graph, canonical, robots) se define en la etapa de SEO.
+// Metadata base del sitio. Cada página completa lo suyo (título, canonical, Open Graph).
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: 'WebYa',
+  metadataBase: new URL(siteConfig.url),
+  applicationName: 'WebYa',
+  title: { default: 'WebYa', template: '%s | WebYa' },
+  robots: { index: true, follow: true },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {

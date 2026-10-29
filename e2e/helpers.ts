@@ -40,6 +40,16 @@ export function negocioUnico(project: string) {
 
 export const wizard = (page: Page) => page.locator('#wizard');
 
+/**
+ * El wizard se descarga al primer gesto o al entrar en pantalla (ver WizardLazy). En un celular
+ * queda bajo el primer viewport: se baja hasta él, como haría una persona, y se espera a que cargue.
+ */
+export async function abrirWizard(page: Page) {
+  // En la página (no con scrollIntoViewIfNeeded): el esqueleto se reemplaza por el wizard real mientras se baja.
+  await page.evaluate(() => document.querySelector('#wizard')?.scrollIntoView());
+  await expect(wizard(page).getByRole('heading').first()).toBeVisible();
+}
+
 /** Un usuario toca la etiqueta (el input nativo es sr-only): Playwright espera a que deje de moverse. */
 export const tocar = (page: Page, texto: RegExp) =>
   wizard(page).locator('label', { hasText: texto }).click();
@@ -58,6 +68,7 @@ export const MODULOS_PELUQUERIA = ['turnos', 'catalogo', 'pagos', 'clientes', 'n
  */
 export async function irAlPaso(page: Page, paso: 1 | 2 | 3, query = '') {
   await page.goto(`/empezar${query}`);
+  await abrirWizard(page);
   await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_1 })).toBeVisible();
   if (paso === 1) return;
   await tocar(page, /peluquería/i);

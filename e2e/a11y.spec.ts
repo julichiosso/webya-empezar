@@ -1,6 +1,13 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { completarDatos, irAlPaso, negocioUnico, TITULO_FINAL, wizard } from './helpers';
+import {
+  abrirWizard,
+  completarDatos,
+  irAlPaso,
+  negocioUnico,
+  TITULO_FINAL,
+  wizard,
+} from './helpers';
 
 // Sin animaciones: axe calcula el contraste sobre el estado final, no a mitad de un fade.
 test.use({ reducedMotion: 'reduce' });
@@ -21,6 +28,7 @@ async function auditar(page: Page) {
 
 test('página completa sin violaciones WCAG AA', async ({ page }) => {
   await page.goto('/empezar');
+  await abrirWizard(page);
   await auditar(page);
 });
 
@@ -58,6 +66,7 @@ test('confirmación sin violaciones', async ({ page }) => {
 
 test('lo clickeable mide al menos 48px de alto', async ({ page }) => {
   await page.goto('/empezar');
+  await abrirWizard(page);
   const chicos = await page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>('main button, main a[href], summary')]
       .filter((el) => el.offsetParent !== null && !el.classList.contains('invisible'))

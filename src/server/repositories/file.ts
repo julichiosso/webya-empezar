@@ -17,7 +17,8 @@ export class FileLeadRepository implements LeadRepository {
     ruta: string,
     private readonly ahora: () => Date = () => new Date(),
   ) {
-    this.ruta = resolve(process.cwd(), ruta);
+    // Solo desarrollo/E2E (env.ts lo rechaza en Vercel): que Turbopack no trace todo el proyecto.
+    this.ruta = resolve(/* turbopackIgnore: true */ process.cwd(), ruta);
   }
 
   async leer(): Promise<LeadRow[]> {

@@ -67,3 +67,11 @@ Los tres deben terminar sin errores. Antes de la entrega final, además: `pnpm b
 - **Tests de selección:** hacer click en la `<label>` (como un usuario). `check({ force: true })` sobre un input `sr-only` de 1px es flaky si el chip aún se mueve.
 - **E2E de producción** necesita `IP_HASH_SALT` (env.ts falla al arrancar sin ella; es a propósito). El servidor de E2E usa `.data/e2e-leads.json` y `RATE_LIMIT_MAX=100`.
 - **Capturas:** son por plataforma (`-win32.png`). En Linux/CI hay que regenerarlas con `pnpm test:e2e visual --update-snapshots` y revisarlas a ojo.
+
+## I. Rendimiento medido (cómo se midió y qué recordar)
+
+- **Presupuesto de JS:** mide lo que baja un navegador moderno: el script `polyfill-nomodule` (`noModule`) **no cuenta**. `e2e/rendimiento.spec.ts` lo verifica (< 150 KB gzip iniciales, CLS < 0,05). Hoy: ~144 KB iniciales; el framework (React + runtime de Next) ya pesa ~135 KB, así que el margen es chico.
+- **Wizard diferido:** `WizardLazy` lo descarga al primer gesto o al entrar en pantalla (~81 KB gzip: motion + RHF + zod). No uses un margen de IntersectionObserver grande: en celular el wizard queda pegado al primer viewport y se descargaría igual. Los tests lo abren con `abrirWizard(page)`; no uses `scrollIntoViewIfNeeded` sobre `#wizard` (el esqueleto se reemplaza mientras se baja).
+- **Lighthouse real:** con `next build && next start` (nunca en dev), móvil, CPU ×4 y Fast 4G, con las herramientas de Chrome DevTools. La herramienta de Lighthouse excluye la categoría Performance: para Performance se usa una traza (LCP, CLS) y un toque real (INP).
+- **Dependencias grandes:** antes de agregar una librería al cliente, medila (rolldown/esbuild + gzip). Referencias: react-dom 66 KB, motion 33 KB, zod 22 KB (zod/mini ~5 KB), react-hook-form 12 KB.
+- **Build sin advertencias:** `next build` no debe mostrar warnings de Turbopack (p. ej. acceso dinámico al filesystem que traza todo el proyecto: se resuelve con `/* turbopackIgnore: true */`).

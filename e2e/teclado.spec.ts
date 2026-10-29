@@ -6,6 +6,7 @@ import {
   TITULO_PASO_1,
   TITULO_PASO_2,
   TITULO_PASO_3,
+  abrirWizard,
   wizard,
 } from './helpers';
 
@@ -39,6 +40,7 @@ test('el mockup del hero se opera solo con teclado y llega al wizard', async ({ 
 test('el flujo completo se puede hacer solo con teclado', async ({ page }) => {
   const negocio = negocioUnico('teclado');
   await page.goto('/empezar');
+  await abrirWizard(page);
   const w = wizard(page);
   await expect(w.getByRole('heading', { name: TITULO_PASO_1 })).toBeVisible();
 

@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import {
+  abrirWizard,
   completarDatos,
   irAlPaso,
   leerLeads,
@@ -102,6 +103,7 @@ test('recargar en el medio del flujo conserva lo elegido, también en el hero', 
   await tocar(page, /carta con qr/i);
   await tocar(page, /recibir turnos online/i);
   await page.reload();
+  await abrirWizard(page);
   await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
   await expect(
     wizard(page).getByRole('checkbox', { name: /recibir turnos online/i }),
