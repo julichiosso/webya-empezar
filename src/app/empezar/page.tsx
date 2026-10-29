@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Logo } from '@/components/Logo';
+import { SplashLogo } from '@/components/SplashLogo';
 import { ComoFunciona } from '@/components/sections/ComoFunciona';
+import { Confianza, VitrinaDemo } from '@/components/sections/Confianza';
 import { Faq } from '@/components/sections/Faq';
 import { Footer } from '@/components/sections/Footer';
 import { Hero } from '@/components/sections/Hero';
@@ -42,6 +44,7 @@ const faqJsonLd = {
 export default function EmpezarPage() {
   return (
     <>
+      <SplashLogo />
       <script
         type="application/ld+json"
         // Se escapa "<" para que ningún texto pueda cerrar la etiqueta <script>.
@@ -53,8 +56,10 @@ export default function EmpezarPage() {
       <main className="mx-auto w-full max-w-xl px-4 pb-24 lg:max-w-page lg:px-8 lg:pb-32">
         <Hero />
         <WizardLazy />
+        <VitrinaDemo />
         <ComoFunciona />
         <QueIncluye />
+        <Confianza />
         <Faq />
       </main>
       <Footer />

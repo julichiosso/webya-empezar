@@ -274,6 +274,38 @@
   --desde: 45%;
 }
 
+/* Entrada en celular (SplashLogo): el logo se escribe (trazo), se rellena y la cortina se va. */
+@keyframes splash-escribe {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes splash-relleno {
+  to {
+    fill-opacity: 1;
+  }
+}
+@keyframes splash-sale {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+.splash {
+  animation: splash-sale 450ms var(--ease-out) 2000ms both;
+}
+.splash-trazo {
+  stroke: currentColor;
+  stroke-width: 7;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  fill: currentColor;
+  fill-opacity: 0;
+  animation:
+    splash-escribe 1100ms var(--ease-in-out) calc(var(--i) * 110ms) forwards,
+    splash-relleno 450ms var(--ease-out) 1450ms forwards;
+}
+
 /* Hero: las piezas de la web encajan una sola vez al cargar (con un leve rebote al asentar). El
    mockup tiene botones, así que nada desaparece ni se mueve en loop. */
 @keyframes hero-assemble {
@@ -624,6 +656,10 @@
   .pedido-entra,
   .mg-progreso {
     animation: none !important;
+  }
+  /* Sin entrada animada: la página aparece directo. */
+  .splash {
+    display: none !important;
   }
   /* Video: cada escena aparece completa y quieta (en su estado final), sin movimiento. */
   .mg {
