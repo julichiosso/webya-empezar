@@ -36,6 +36,8 @@ const config: NextConfig = {
   experimental: {
     // Hash de cada chunk JS en el atributo `integrity`: el navegador rechaza un archivo alterado.
     sri: { algorithm: 'sha256' },
+    // El CSS (Tailwind, chico) viaja dentro del HTML: saca la hoja bloqueante del camino crítico.
+    inlineCss: true,
   },
   async redirects() {
     // La raíz todavía no tiene contenido propio: el link de la bio apunta a /empezar.
