@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const alt = 'WebYa: creá tu negocio online. Elegí tu rubro y armalo ahora.';
+export const alt = 'WebYa: creá tu negocio online. Elegí tu rubro. Activá lo que necesitás.';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -56,7 +56,7 @@ export default async function Image() {
             color: MUTED,
           }}
         >
-          Elegí tu rubro y armalo ahora.
+          Elegí tu rubro. Activá lo que necesitás.
         </div>
       </div>
 

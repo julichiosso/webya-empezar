@@ -92,6 +92,18 @@
   --text-small: 0.875rem;
   --text-small--line-height: 1.45;
 
+  /* Hero de escritorio: título y línea gris caben cada uno en UNA línea en la columna izquierda
+     (≈ 500-600 px). Se mide con e2e/layout.spec.ts; si se cambia el copy, volver a verificar. */
+  --text-hero: clamp(2.25rem, 0.2rem + 3.4vw, 3rem);
+  --text-hero--line-height: 1.05;
+  --text-hero--letter-spacing: -0.04em;
+  --text-hero-sub: clamp(1.125rem, 0.3rem + 1.9vw, 1.625rem);
+  --text-hero-sub--line-height: 1.2;
+  --text-hero-sub--letter-spacing: -0.02em;
+
+  /* Ancho máximo de la página en escritorio. */
+  --container-page: 75rem;
+
   /* Radios: escalonados por jerarquía (controles < tarjetas < paneles). */
   --radius-control: 0.75rem;
   --radius-card: 1rem;
@@ -233,6 +245,34 @@
 .pop-on[data-on='true'] {
   animation: pop var(--duration-base) var(--ease-out);
 }
+/* Arte de cada módulo (mini web): se "enciende" con opacity + transform. */
+.arte {
+  opacity: 0.5;
+  transform: translateY(6px);
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+[aria-pressed='true'] .arte,
+[data-on='true'] .arte {
+  opacity: 1;
+  transform: none;
+}
+
+/* Panel de vista previa del wizard: en pantallas bajas (notebooks de ~720 px) no entra con los
+   dibujos; se muestran solo los nombres para que el panel sticky quepa completo. */
+@media (max-height: 820px) {
+  .panel-arte {
+    display: none;
+  }
+}
+
+/* Resplandor menta detrás del mockup: degradado radial estático; solo cambia su opacity. */
+.hero-glow {
+  background: radial-gradient(closest-side, var(--accent-soft), transparent);
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
+
 .tile-check {
   opacity: 0;
   transform: scale(0.6);
@@ -306,7 +346,9 @@
   .fade-in {
     animation: none !important;
   }
-  .tile-check {
+  .tile-check,
+  .arte,
+  .hero-glow {
     transition: none;
   }
   *,

@@ -47,10 +47,10 @@ export default function EmpezarPage() {
         // Se escapa "<" para que ningún texto pueda cerrar la etiqueta <script>.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }}
       />
-      <header className="mx-auto flex w-full max-w-xl items-center px-4 pt-6">
+      <header className="mx-auto flex w-full max-w-xl items-center px-4 pt-6 lg:max-w-page lg:px-8 lg:pt-8">
         <Logo />
       </header>
-      <main className="mx-auto w-full max-w-xl px-4 pb-24">
+      <main className="mx-auto w-full max-w-xl px-4 pb-24 lg:max-w-page lg:px-8 lg:pb-32">
         <Hero />
         <WizardLazy />
         <ComoFunciona />
