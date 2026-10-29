@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
 import { ESCENAS_EXPLICATIVO } from '@/content/explicativo';
+import { BOTON_EXPLICATIVO } from '@/content/explicativo/reproductor';
 import { duracionTotalMs, etiquetaDuracion } from './narracion';
 import type { OrigenExplicativo } from './Reproductor';
 
@@ -35,7 +36,7 @@ export function BotonExplicativo({
         className={`${buttonClasses('secondary')} ${className ?? ''}`.trim()}
       >
         <Icon name="play" size={20} />
-        Mirá cómo funciona
+        {BOTON_EXPLICATIVO.texto}
         <span className="tabular text-small font-normal text-muted">{DURACION}</span>
       </button>
       {abierto && <Reproductor origen={origen} onCerrar={cerrar} />}

@@ -10,6 +10,7 @@ import {
   PALETAS_DEMO,
   RUBRO_DEMO,
 } from '@/content/demos/gastronomia';
+import { PERSONALIZAR } from '@/content/demos/gastronomia/ui/personalizar';
 import { track } from '@/lib/analytics';
 import { CodigoQR } from './CodigoQR';
 import { linkWhatsAppDemo, urlCompartible } from './compartir';
@@ -39,13 +40,13 @@ export function Personalizar() {
 
   return (
     <section
-      aria-label="Personalizá tu demo"
+      aria-label={PERSONALIZAR.titulo}
       className="rounded-panel border border-line bg-surface p-4 lg:p-6"
     >
       <h2 className="text-heading font-semibold">
         {/* En celular el título abre y cierra los campos; en escritorio están siempre a la vista
             (ahí no hay botón: un aria-expanded falso confundiría a los lectores de pantalla). */}
-        <span className="hidden lg:block">Personalizá tu demo</span>
+        <span className="hidden lg:block">{PERSONALIZAR.titulo}</span>
         <button
           type="button"
           aria-expanded={abierto}
@@ -53,7 +54,7 @@ export function Personalizar() {
           onClick={() => setAbierto(!abierto)}
           className="flex min-h-tap w-full items-center justify-between gap-4 text-left lg:hidden"
         >
-          Personalizá tu demo
+          {PERSONALIZAR.titulo}
           <Icon
             name="arrowDown"
             size={20}
@@ -67,7 +68,7 @@ export function Personalizar() {
         className={`${abierto ? 'grid' : 'hidden'} mt-4 gap-6 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)_auto] lg:items-start lg:gap-8`}
       >
         <label className="block">
-          <span className="font-semibold">Nombre de tu local</span>
+          <span className="font-semibold">{PERSONALIZAR.nombreLocal}</span>
           <input
             value={nombreLocal ?? ''}
             onChange={(e) => personalizar({ nombreLocal: e.target.value })}
@@ -83,7 +84,7 @@ export function Personalizar() {
         </label>
 
         <fieldset>
-          <legend className="font-semibold">Paleta</legend>
+          <legend className="font-semibold">{PERSONALIZAR.paleta}</legend>
           <div className="mt-2 flex flex-wrap gap-2">
             {PALETAS_DEMO.map((p) => (
               <label key={p.id} className="cursor-pointer">
@@ -112,7 +113,7 @@ export function Personalizar() {
         </fieldset>
 
         <fieldset>
-          <legend className="font-semibold">Tipo de cocina</legend>
+          <legend className="font-semibold">{PERSONALIZAR.cocina}</legend>
           <div className="mt-2 flex flex-wrap gap-2">
             {COCINA_IDS.map((id) => (
               <label key={id} className="cursor-pointer">
@@ -148,13 +149,13 @@ export function Personalizar() {
             className={buttonClasses('secondary', false, 'compacto')}
           >
             <Icon name="carta_qr" size={18} />
-            Probalo en tu celular
+            {PERSONALIZAR.qr.boton}
           </button>
           {qr && origen && (
             <div className="mt-4 flex items-center gap-4">
               <CodigoQR url={url} />
               <p className="max-w-56 text-small text-muted">
-                Escanealo con la cámara: se abre esta demo, con {nombreVisible} y tu paleta.
+                {PERSONALIZAR.qr.ayuda(nombreVisible)}
               </p>
             </div>
           )}
@@ -167,7 +168,7 @@ export function Personalizar() {
           className={buttonClasses('secondary', false, 'compacto')}
         >
           <Icon name="chat" size={18} />
-          Mandame esta demo por WhatsApp
+          {PERSONALIZAR.whatsapp}
         </a>
       </div>
     </section>

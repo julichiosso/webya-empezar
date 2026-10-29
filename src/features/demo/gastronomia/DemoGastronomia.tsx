@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import { flushSync } from 'react-dom';
 import { AVISO_DEMO, getPaletaDemo, RUBRO_DEMO } from '@/content/demos/gastronomia';
+import { DEMO } from '@/content/demos/gastronomia/ui/demo';
 import { variablesDePaleta } from '@/brand/tokens/colores';
 import { buttonClasses } from '@/components/ui/Button';
 import { prepararWizardDesdeDemo, URL_WIZARD_DESDE_DEMO } from '@/features/empezar/desde-demo';
@@ -24,7 +25,7 @@ const PanelDuenio = dynamic(cargarPanel, {
       aria-busy="true"
       className="min-h-[28rem] rounded-panel border border-line bg-surface-2 p-6 text-small text-muted"
     >
-      Cargando el panel…
+      {DEMO.cargandoPanel}
     </div>
   ),
 });
@@ -123,7 +124,7 @@ export function DemoGastronomia({ encabezado }: DemoGastronomiaProps) {
       <div className="fixed inset-x-4 bottom-4 z-30 flex items-center justify-between gap-2 lg:hidden">
         <div
           role="group"
-          aria-label="Qué querés ver"
+          aria-label={DEMO.vistas.aria}
           className="flex gap-1 rounded-full border border-line-strong bg-surface-2 p-1 shadow-raised"
         >
           <BotonVista
@@ -131,18 +132,20 @@ export function DemoGastronomia({ encabezado }: DemoGastronomiaProps) {
             onClick={() => cambiarVista('cliente')}
             controla="vista-cliente"
           >
-            <span className="sr-only">Ver como </span>Cliente
+            <span className="sr-only">{DEMO.vistas.prefijo}</span>
+            {DEMO.vistas.cliente}
           </BotonVista>
           <BotonVista
             activa={vista === 'duenio'}
             onClick={() => cambiarVista('duenio')}
             controla="vista-duenio"
           >
-            <span className="sr-only">Ver como </span>Dueño
+            <span className="sr-only">{DEMO.vistas.prefijo}</span>
+            {DEMO.vistas.duenio}
             {nuevos > 0 && (
               <span className="tabular flex size-6 items-center justify-center rounded-full bg-accent text-small text-accent-fg">
                 {nuevos}
-                <span className="sr-only"> {nuevos === 1 ? 'pedido nuevo' : 'pedidos nuevos'}</span>
+                <span className="sr-only"> {DEMO.vistas.pedidosNuevos(nuevos)}</span>
               </span>
             )}
           </BotonVista>
@@ -178,10 +181,10 @@ function CtaQuiero({
         }
       }}
       // El nombre accesible contiene el texto visible (WCAG 2.5.3).
-      aria-label={corto ? 'Lo quiero para mi local' : undefined}
+      aria-label={corto ? DEMO.cta.ariaCorto : undefined}
       className={`${buttonClasses('primary', false, 'compacto')} ${className ?? ''}`}
     >
-      {corto ? 'Lo quiero' : 'Quiero esto para mi local'}
+      {corto ? DEMO.cta.corto : DEMO.cta.texto}
     </a>
   );
 }

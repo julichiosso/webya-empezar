@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Logo } from '@/brand/logo/Logo';
 import { DemoGastronomia } from '@/features/demo/gastronomia/DemoGastronomia';
+import { PAGINA_DEMO } from '@/content/demos/gastronomia/ui/pagina';
 import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
 
-const TITULO = 'Demo para gastronomía';
-const DESCRIPCION =
-  'Mirá cómo quedaría tu local: carta con QR, pedidos y seguimiento en vivo, con datos de ejemplo.';
+const TITULO = PAGINA_DEMO.titulo;
+const DESCRIPCION = PAGINA_DEMO.descripcion;
 
 export const metadata: Metadata = {
   title: TITULO,
@@ -15,9 +15,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_AR',
-    siteName: 'WebYa',
+    siteName: PAGINA_DEMO.og.sitio,
     url: '/demo/gastronomia',
-    title: `${TITULO} | WebYa`,
+    title: PAGINA_DEMO.og.titulo(TITULO),
     description: DESCRIPCION,
   },
 };
@@ -30,17 +30,15 @@ export default function DemoGastronomiaPage() {
           <>
             <Link
               href="/empezar"
-              aria-label="WebYa: volver al inicio"
+              aria-label={PAGINA_DEMO.ariaLogo}
               className="inline-flex min-h-tap items-center"
             >
               <Logo />
             </Link>
             <h1 className="mt-6 text-title font-semibold text-balance">
-              Así se vería tu local con WebYa
+              {PAGINA_DEMO.encabezado.titulo}
             </h1>
-            <p className="mt-2 max-w-xl text-lead text-muted">
-              Pedí algo como si fueras un cliente: elegí un plato, armalo a tu gusto y confirmá.
-            </p>
+            <p className="mt-2 max-w-xl text-lead text-muted">{PAGINA_DEMO.encabezado.bajada}</p>
             <BotonExplicativo origen="demo" className="mt-4" />
           </>
         }

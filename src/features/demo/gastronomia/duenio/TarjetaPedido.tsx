@@ -2,6 +2,7 @@
 
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
+import { TARJETA_PEDIDO } from '@/content/demos/gastronomia/ui/panel';
 import { formatearPesos } from '@/domain/pedidos/dinero';
 import { ETIQUETA_ESTADO, puedeTransicionar } from '@/domain/pedidos/estados';
 import type { Pedido } from '@/domain/pedidos/types';
@@ -43,18 +44,14 @@ export function TarjetaPedido({ pedido, ahora, onComanda }: TarjetaPedidoProps) 
           <span className="text-small text-muted">
             {ETIQUETA_ESTADO[pedido.estado].duenio}
             {pedido.estado === 'entregado' && (
-              <span className="tabular">
-                {minutosTotales(pedido) < 1
-                  ? ' en menos de 1 min'
-                  : ` en ${minutosTotales(pedido)} min`}
-              </span>
+              <span className="tabular">{TARJETA_PEDIDO.entregadoEn(minutosTotales(pedido))}</span>
             )}
           </span>
         ) : (
           <span className="tabular flex items-center gap-1 text-small text-muted">
             <Icon name="reloj" size={16} />
             <span>
-              <span className="sr-only">Hace </span>
+              <span className="sr-only">{TARJETA_PEDIDO.hace}</span>
               {transcurrido(pedido.creadoEn, ahora)}
             </span>
           </span>
@@ -75,11 +72,11 @@ export function TarjetaPedido({ pedido, ahora, onComanda }: TarjetaPedidoProps) 
             )}
           </li>
         ))}
-        {extra > 0 && <li className="text-muted">y {extra} más</li>}
+        {extra > 0 && <li className="text-muted">{TARJETA_PEDIDO.yMas(extra)}</li>}
       </ul>
 
       <p className="tabular flex justify-between border-t border-line pt-2 font-semibold">
-        <span>Total</span>
+        <span>{TARJETA_PEDIDO.total}</span>
         <span>{formatearPesos(pedido.totales.total)}</span>
       </p>
 
@@ -88,7 +85,7 @@ export function TarjetaPedido({ pedido, ahora, onComanda }: TarjetaPedidoProps) 
           type="button"
           onClick={() => avanzarPedido(pedido.id)}
           className={buttonClasses('primary', true, 'compacto')}
-          aria-label={`${accion} el pedido #${pedido.numero}`}
+          aria-label={TARJETA_PEDIDO.ariaAccion(accion, pedido.numero)}
         >
           {accion}
         </button>
@@ -97,20 +94,20 @@ export function TarjetaPedido({ pedido, ahora, onComanda }: TarjetaPedidoProps) 
         <button
           type="button"
           onClick={() => onComanda(pedido)}
-          aria-label={`Ver la comanda del pedido #${pedido.numero}`}
+          aria-label={TARJETA_PEDIDO.ariaComanda(pedido.numero)}
           className="-ml-2 flex min-h-tap items-center gap-2 rounded-control px-2 text-small text-muted hover:text-fg"
         >
           <Icon name="impresora" size={18} />
-          Comanda
+          {TARJETA_PEDIDO.comanda}
         </button>
         {puedeTransicionar(pedido.estado, 'cancelado') && (
           <button
             type="button"
             onClick={() => cancelarPedido(pedido.id)}
-            aria-label={`Cancelar el pedido #${pedido.numero}`}
+            aria-label={TARJETA_PEDIDO.ariaCancelar(pedido.numero)}
             className="-mr-2 min-h-tap rounded-control px-2 text-small text-muted hover:text-fg"
           >
-            Cancelar
+            {TARJETA_PEDIDO.cancelar}
           </button>
         )}
       </div>

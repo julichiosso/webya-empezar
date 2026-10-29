@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { Hoja } from '@/components/ui/Hoja';
 import { getCocina } from '@/content/demos/gastronomia';
+import { CARRITO } from '@/content/demos/gastronomia/ui/carrito';
 import { formatearPesos } from '@/domain/pedidos/dinero';
 import type { Producto } from '@/domain/pedidos/types';
 import { cantidadTotal, totalesCarrito } from '../carrito';
@@ -69,7 +70,7 @@ export function DemoCliente() {
                       <span className="tabular flex size-7 items-center justify-center rounded-full bg-accent-fg text-small text-accent">
                         {cantidad}
                       </span>
-                      Ver mi pedido
+                      {CARRITO.verPedido}
                     </span>
                     <span className="tabular">{formatearPesos(subtotal)}</span>
                   </button>
@@ -100,7 +101,7 @@ export function DemoCliente() {
         <Hoja
           abierta={carritoAbierto}
           onCerrar={() => setCarritoAbierto(false)}
-          titulo={paso === 'resumen' ? 'Tu pedido' : '¿Cómo lo querés?'}
+          titulo={paso === 'resumen' ? CARRITO.titulo.resumen : CARRITO.titulo.datos}
           fondo={pantalla}
         >
           <CarritoHoja

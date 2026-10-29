@@ -5,6 +5,7 @@ import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import type { IconName } from '@/brand/ilustracion/iconos/paths';
 import { buttonClasses } from '@/components/ui/Button';
 import type { CocinaDemo } from '@/content/demos/gastronomia';
+import { CARRITO } from '@/content/demos/gastronomia/ui/carrito';
 import { formatearPesos, sumar } from '@/domain/pedidos/dinero';
 import { LIMITES_PEDIDO } from '@/domain/pedidos/schemas';
 import { PROPINAS } from '@/domain/pedidos/totales';
@@ -22,19 +23,14 @@ interface CarritoHojaProps {
 }
 
 const MODALIDADES: { id: Modalidad; nombre: string; icono: IconName }[] = [
-  { id: 'mesa', nombre: 'En la mesa', icono: 'mesa' },
-  { id: 'retiro', nombre: 'Paso a buscar', icono: 'bolsa' },
-  { id: 'delivery', nombre: 'Delivery', icono: 'moto' },
+  { id: 'mesa', nombre: CARRITO.modalidad.opciones.mesa, icono: 'mesa' },
+  { id: 'retiro', nombre: CARRITO.modalidad.opciones.retiro, icono: 'bolsa' },
+  { id: 'delivery', nombre: CARRITO.modalidad.opciones.delivery, icono: 'moto' },
 ];
 
 const MEDIOS: { id: MedioPago; nombre: string; detalle: string; icono: IconName }[] = [
-  { id: 'efectivo', nombre: 'Efectivo', detalle: 'Pagás al recibirlo.', icono: 'billete' },
-  {
-    id: 'mercado_pago',
-    nombre: 'Mercado Pago (simulado)',
-    detalle: 'En la demo no se cobra nada.',
-    icono: 'pagos',
-  },
+  { id: 'efectivo', ...CARRITO.pago.medios.efectivo, icono: 'billete' },
+  { id: 'mercado_pago', ...CARRITO.pago.medios.mercado_pago, icono: 'pagos' },
 ];
 
 const campo =
@@ -82,8 +78,8 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
           aria-hidden="true"
           className="size-20 rounded-full border-2 border-dashed border-line-strong"
         />
-        <p className="font-semibold">Tu pedido quedó vacío.</p>
-        <p className="text-paper-muted">Acá encaja lo que elijas de la carta.</p>
+        <p className="font-semibold">{CARRITO.vacio.titulo}</p>
+        <p className="text-paper-muted">{CARRITO.vacio.bajada}</p>
       </div>
     );
   }
@@ -118,7 +114,7 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
         </ul>
 
         <fieldset>
-          <legend className="font-semibold">¿Querés dejar propina?</legend>
+          <legend className="font-semibold">{CARRITO.propina.titulo}</legend>
           <div className="mt-2 flex gap-2">
             {PROPINAS.map((p) => (
               <label key={p} className="flex-1 cursor-pointer">
@@ -130,7 +126,7 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
                   className="peer sr-only"
                 />
                 <span className="tabular flex min-h-tap items-center justify-center rounded-control border border-paper-line bg-paper-2 font-medium peer-checked:border-accent-ink peer-checked:bg-accent peer-checked:text-accent-fg peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent-ink">
-                  {p === 0 ? 'Sin propina' : `${p} %`}
+                  {p === 0 ? CARRITO.propina.sin : CARRITO.propina.porcentaje(p)}
                 </span>
               </label>
             ))}
@@ -140,8 +136,8 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
         {/* Todavía no se eligió cómo lo recibe: el envío se suma en el paso siguiente. */}
         <Totales
           filas={[
-            ['Subtotal', totales.subtotal],
-            ['Propina', totales.propina],
+            [CARRITO.filas.subtotal, totales.subtotal],
+            [CARRITO.filas.propina, totales.propina],
           ]}
           total={sumar(totales.subtotal, totales.propina)}
         />
@@ -153,7 +149,7 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
             disabled={lineas.length === 0}
             className={buttonClasses('primary', true)}
           >
-            Seguir
+            {CARRITO.seguir}
           </button>
         </div>
       </div>
@@ -170,7 +166,7 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
       className="flex flex-col gap-6"
     >
       <fieldset>
-        <legend className="font-semibold">¿Cómo lo recibís?</legend>
+        <legend className="font-semibold">{CARRITO.modalidad.titulo}</legend>
         <div className="mt-2 grid grid-cols-3 gap-2">
           {MODALIDADES.map((m) => (
             <Opcion
@@ -188,7 +184,7 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
 
       {modalidad === 'mesa' && (
         <label className="block">
-          <span className="font-semibold">Número de mesa</span>
+          <span className="font-semibold">{CARRITO.mesa}</span>
           <input
             value={mesa}
             onChange={(e) => setMesa(e.target.value.slice(0, LIMITES_PEDIDO.mesa))}
@@ -199,20 +195,20 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
       )}
       {modalidad === 'delivery' && (
         <label className="block">
-          <span className="font-semibold">¿A dónde te lo llevamos?</span>
+          <span className="font-semibold">{CARRITO.direccion.titulo}</span>
           <input
             value={direccion}
             onChange={(e) => setDireccion(e.target.value.slice(0, LIMITES_PEDIDO.direccion))}
             autoComplete="street-address"
-            placeholder="Calle, número y piso"
+            placeholder={CARRITO.direccion.placeholder}
             className={campo}
           />
         </label>
       )}
 
       <label className="block">
-        <span className="font-semibold">Tu nombre</span>
-        <span className="block text-small text-paper-muted">Para llamarte cuando esté listo.</span>
+        <span className="font-semibold">{CARRITO.nombre.titulo}</span>
+        <span className="block text-small text-paper-muted">{CARRITO.nombre.ayuda}</span>
         <input
           value={nombre}
           onChange={(e) => setNombre(e.target.value.slice(0, LIMITES_PEDIDO.nombre))}
@@ -222,7 +218,7 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
       </label>
 
       <fieldset>
-        <legend className="font-semibold">¿Cómo pagás?</legend>
+        <legend className="font-semibold">{CARRITO.pago.titulo}</legend>
         <div className="mt-2 flex flex-col gap-2">
           {MEDIOS.map((m) => (
             <Opcion
@@ -244,9 +240,9 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
 
       <Totales
         filas={[
-          ['Subtotal', totales.subtotal],
-          ['Propina', totales.propina],
-          ...(modalidad === 'delivery' ? ([['Envío', totales.envio]] as const) : []),
+          [CARRITO.filas.subtotal, totales.subtotal],
+          [CARRITO.filas.propina, totales.propina],
+          ...(modalidad === 'delivery' ? ([[CARRITO.filas.envio, totales.envio]] as const) : []),
         ]}
         total={totales.total}
       />
@@ -267,10 +263,10 @@ export function CarritoHoja({ cocina, carrito, paso, onPaso, onConfirmado }: Car
           onClick={() => onPaso('resumen')}
           className="min-h-tap rounded-control px-4 font-semibold text-paper-fg"
         >
-          Volver
+          {CARRITO.volver}
         </button>
         <button type="submit" className={`${buttonClasses()} flex-1`}>
-          Confirmar <span className="tabular">{formatearPesos(totales.total)}</span>
+          {CARRITO.confirmar} <span className="tabular">{formatearPesos(totales.total)}</span>
         </button>
       </div>
     </form>
@@ -329,7 +325,7 @@ function Totales({
         </div>
       ))}
       <div className="flex justify-between text-heading font-semibold">
-        <dt>Total</dt>
+        <dt>{CARRITO.filas.total}</dt>
         <dd>{formatearPesos(total)}</dd>
       </div>
     </dl>

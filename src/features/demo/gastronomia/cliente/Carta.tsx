@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type RefObjec
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { Ilustracion } from '@/brand/ilustracion/dibujos/Ilustracion';
 import type { CocinaDemo } from '@/content/demos/gastronomia';
+import { CARTA } from '@/content/demos/gastronomia/ui/carta';
 import { esIlustracion } from '@/brand/ilustracion/dibujos/ids';
 import { formatearPesos } from '@/domain/pedidos/dinero';
 import type { Producto } from '@/domain/pedidos/types';
@@ -75,7 +76,7 @@ export function Carta({ cocina, nombreLocal, scroller, onAbrirPlato }: CartaProp
           style={pieza(0)}
         >
           <Icon name="carta_qr" size={18} />
-          Escaneaste el QR de la mesa 4
+          {CARTA.escaneaste}
         </p>
         <h2
           key={nombreLocal}
@@ -89,12 +90,12 @@ export function Carta({ cocina, nombreLocal, scroller, onAbrirPlato }: CartaProp
           style={pieza(2)}
         >
           <Icon name="buscar" size={20} className="shrink-0 text-paper-muted" />
-          <span className="sr-only">Buscar en la carta</span>
+          <span className="sr-only">{CARTA.buscar.etiqueta}</span>
           <input
             type="search"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            placeholder="¿Qué tenés ganas de comer?"
+            placeholder={CARTA.buscar.placeholder}
             className="min-h-tap w-full bg-transparent text-body text-paper-fg outline-none placeholder:text-paper-muted"
           />
         </label>
@@ -102,7 +103,7 @@ export function Carta({ cocina, nombreLocal, scroller, onAbrirPlato }: CartaProp
 
       {categorias.length > 0 && (
         <nav
-          aria-label="Categorías de la carta"
+          aria-label={CARTA.ariaCategorias}
           // En celular queda debajo del aviso de demo (h-14); en escritorio, arriba del celular.
           className="sticky top-14 z-10 border-b border-paper-line bg-paper lg:top-0"
         >
@@ -125,7 +126,7 @@ export function Carta({ cocina, nombreLocal, scroller, onAbrirPlato }: CartaProp
 
       {categorias.length === 0 ? (
         <p role="status" className="px-4 py-12 text-center text-paper-muted">
-          No encontramos “{busqueda}”. Probá con otra palabra.
+          {CARTA.sinResultados(busqueda)}
         </p>
       ) : (
         <div className="flex flex-col gap-8 px-4 pt-6 pb-28">
@@ -178,7 +179,7 @@ export function Carta({ cocina, nombreLocal, scroller, onAbrirPlato }: CartaProp
               </ul>
             </section>
           ))}
-          <p className="text-center text-small text-paper-muted">Carta y precios de ejemplo.</p>
+          <p className="text-center text-small text-paper-muted">{CARTA.pie}</p>
         </div>
       )}
     </div>

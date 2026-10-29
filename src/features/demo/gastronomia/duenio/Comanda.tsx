@@ -2,6 +2,7 @@
 
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
+import { COMANDA } from '@/content/demos/gastronomia/ui/panel';
 import type { Pedido } from '@/domain/pedidos/types';
 import { detalleModalidad } from './calculos';
 
@@ -38,7 +39,7 @@ export function Comanda({ pedido, nombreLocal }: { pedido: Pedido; nombreLocal: 
           ))}
         </ul>
         <p className="mt-4 border-t border-dashed border-line-strong pt-2 text-center text-small text-paper-muted">
-          Comanda de ejemplo
+          {COMANDA.pie}
         </p>
       </div>
       <button
@@ -47,7 +48,7 @@ export function Comanda({ pedido, nombreLocal }: { pedido: Pedido; nombreLocal: 
         className={buttonClasses('primary', true)}
       >
         <Icon name="impresora" size={20} />
-        Imprimir
+        {COMANDA.imprimir}
       </button>
     </div>
   );
