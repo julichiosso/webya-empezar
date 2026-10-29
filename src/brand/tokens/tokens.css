@@ -1,0 +1,180 @@
+/* GENERADO desde src/brand/tokens (primitivos → semánticos → componente). No editar a mano: `pnpm tokens`. */
+
+:root {
+  color-scheme: dark;
+
+  /* Capa 1: primitivos */
+  --negro-850: #1a1a1e;
+  --negro-900: #131316;
+  --negro-950: #0b0b0c;
+  --negro-1000: #000000;
+  --gris-400: #a1a1a6;
+  --gris-500: #8a8a90;
+  --gris-600: #6b6b71;
+  --gris-700: #55555a;
+  --blanco-0: #ffffff;
+  --blanco-50: #fafafa;
+  --blanco-100: #f2f2f3;
+  --crema-50: #fbf8f2;
+  --crema-100: #f4ede1;
+  --crema-700: #5e574f;
+  --brasa-500: #ff5b24;
+  --brasa-700: #b83a0e;
+  --rosa-400: #ff6b8a;
+  --rosa-700: #b4233f;
+  --espacio-1x: 0.5rem;
+  --espacio-2x: 1rem;
+  --espacio-3x: 1.5rem;
+  --espacio-4x: 2rem;
+  --espacio-6x: 3rem;
+  --espacio-8x: 4rem;
+  --espacio-12x: 6rem;
+  --espacio-16x: 8rem;
+
+  /* Capa 2: semánticos (tema oscuro, por defecto) */
+  --bg: var(--negro-950);
+  --surface: var(--negro-900);
+  --surface-2: var(--negro-850);
+  --line: rgb(255 255 255 / 0.1);
+  --line-strong: rgb(255 255 255 / 0.2);
+  --fg: var(--blanco-0);
+  --muted: var(--gris-400);
+  --subtle: var(--gris-500);
+  --accent: var(--brasa-500);
+  --accent-fg: var(--negro-950);
+  --accent-ink: var(--brasa-700);
+  --accent-soft: rgb(255 91 36 / 0.14);
+  --danger: var(--rosa-400);
+  --paper: var(--crema-100);
+  --paper-2: var(--crema-50);
+  --paper-fg: var(--negro-950);
+  --paper-muted: var(--crema-700);
+  --paper-line: rgb(11 11 12 / 0.14);
+
+  /* Movimiento. En :root para usarlos en CSS crudo (Tailwind descarta los de @theme sin uso). */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-instant: 100ms;
+  --duration-fast: 160ms;
+  --duration-base: 280ms;
+  --duration-slow: 520ms;
+
+  /* Capa 3: componente */
+  --boton-primario-fondo: var(--accent);
+  --boton-primario-texto: var(--accent-fg);
+  --boton-secundario-borde: var(--line-strong);
+  --boton-secundario-texto: var(--fg);
+  --tarjeta-fondo: var(--surface);
+  --tarjeta-borde: var(--line);
+  --panel-fondo: var(--surface);
+  --panel-borde: var(--line);
+  --control-fondo: var(--surface);
+  --control-borde: var(--line-strong);
+  --control-texto: var(--fg);
+  --control-ayuda: var(--muted);
+  --control-error: var(--danger);
+  --seleccion-fondo: var(--accent-soft);
+  --seleccion-borde: var(--accent);
+  --foco: var(--accent);
+  --hueco-borde: var(--line-strong);
+  --pieza-encajada: var(--accent);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: var(--blanco-50);
+  --surface: var(--blanco-0);
+  --surface-2: var(--blanco-100);
+  --line: rgb(0 0 0 / 0.1);
+  --line-strong: rgb(0 0 0 / 0.2);
+  --fg: var(--negro-950);
+  --muted: var(--gris-700);
+  --subtle: var(--gris-600);
+  --accent: var(--brasa-700);
+  --accent-fg: var(--blanco-0);
+  --accent-ink: var(--brasa-700);
+  --accent-soft: rgb(184 58 14 / 0.1);
+  --danger: var(--rosa-700);
+}
+
+.papel {
+  color-scheme: light;
+  --bg: var(--paper);
+  --surface: var(--paper-2);
+  --surface-2: var(--paper-2);
+  --fg: var(--paper-fg);
+  --muted: var(--paper-muted);
+  --subtle: var(--paper-muted);
+  --line: var(--paper-line);
+  --line-strong: rgb(11 11 12 / 0.32);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-fg: var(--paper-fg);
+  --color-paper-muted: var(--paper-muted);
+  --color-paper-line: var(--paper-line);
+  --color-boton-primario-fondo: var(--boton-primario-fondo);
+  --color-boton-primario-texto: var(--boton-primario-texto);
+  --color-boton-secundario-borde: var(--boton-secundario-borde);
+  --color-boton-secundario-texto: var(--boton-secundario-texto);
+  --color-tarjeta-fondo: var(--tarjeta-fondo);
+  --color-tarjeta-borde: var(--tarjeta-borde);
+  --color-panel-fondo: var(--panel-fondo);
+  --color-panel-borde: var(--panel-borde);
+  --color-control-fondo: var(--control-fondo);
+  --color-control-borde: var(--control-borde);
+  --color-control-texto: var(--control-texto);
+  --color-control-ayuda: var(--control-ayuda);
+  --color-control-error: var(--control-error);
+  --color-seleccion-fondo: var(--seleccion-fondo);
+  --color-seleccion-borde: var(--seleccion-borde);
+  --color-foco: var(--foco);
+  --color-hueco-borde: var(--hueco-borde);
+  --color-pieza-encajada: var(--pieza-encajada);
+
+  --font-sans: var(--font-outfit), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --text-display: clamp(2.5rem, 1.7rem + 4.2vw, 4.75rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.045em;
+  --text-title: clamp(1.75rem, 1.35rem + 2vw, 2.75rem);
+  --text-title--line-height: 1.05;
+  --text-title--letter-spacing: -0.035em;
+  --text-heading: 1.375rem;
+  --text-heading--line-height: 1.2;
+  --text-heading--letter-spacing: -0.02em;
+  --text-lead: 1.1875rem;
+  --text-lead--line-height: 1.5;
+  --text-body: 1rem;
+  --text-body--line-height: 1.55;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.45;
+  --text-hero: clamp(2.25rem, 0.2rem + 3.4vw, 3rem);
+  --text-hero--line-height: 1.05;
+  --text-hero--letter-spacing: -0.04em;
+  --text-hero-sub: clamp(1.125rem, 0.3rem + 1.9vw, 1.625rem);
+  --text-hero-sub--line-height: 1.2;
+  --text-hero-sub--letter-spacing: -0.02em;
+
+  --container-page: 75rem;
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+  --radius-panel: 1.5rem;
+  --shadow-raised: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 8px 24px -12px rgb(0 0 0 / 0.5);
+  /* Altura mínima táctil (WCAG 2.5.8 pide 24 px; nosotros, 48 px). */
+  --spacing-tap: 3rem;
+}

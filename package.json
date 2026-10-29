@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "tokens": "vitest run src/brand/tokens/tokens.css.test.ts -u"
   },
   "dependencies": {
     "@hookform/resolvers": "^6.0.2",

@@ -1,32 +1,34 @@
 import { AA_GRANDE, AA_TEXTO, conAlfa, mezclar } from '@/lib/color';
+import { ALFA, COLOR } from './primitivos';
+import { TEMA_CLARO as CLARO, TEMA_OSCURO as OSCURO } from './semanticos';
 
 /**
  * Colores de marca de WebYa (concepto "Encastre", ver .claude/skills/webya-brand).
  *
- * La fuente de verdad para la UI son los tokens de src/app/globals.css. Este archivo repite los
- * valores para lo que no puede leer CSS (imagen Open Graph, themeColor del navegador) y para
- * comparar paletas en /marca. src/brand/tokens/marca.test.ts verifica que coincidan con el CSS.
+ * Vista "plana" (hex resueltos) de los tokens de primitivos.ts y semanticos.ts, para lo que no puede leer
+ * CSS (imagen Open Graph, themeColor del navegador) y para comparar paletas en /marca. No repite valores:
+ * los toma de las capas; tokens.css se genera de las mismas capas (ver css.ts).
  */
 
 /** Base oscura (default) y "papel" crema: comandas, tickets y tarjetas de pedido. */
 export const BASE = {
-  bg: '#0b0b0c',
-  surface: '#131316',
-  surface2: '#1a1a1e',
-  fg: '#ffffff',
-  muted: '#a1a1a6',
-  subtle: '#8a8a90',
-  paper: '#f4ede1',
-  paper2: '#fbf8f2',
-  paperFg: '#0b0b0c',
-  paperMuted: '#5e574f',
+  bg: OSCURO.bg.valor,
+  surface: OSCURO.surface.valor,
+  surface2: OSCURO['surface-2'].valor,
+  fg: OSCURO.fg.valor,
+  muted: OSCURO.muted.valor,
+  subtle: OSCURO.subtle.valor,
+  paper: OSCURO.paper.valor,
+  paper2: OSCURO['paper-2'].valor,
+  paperFg: OSCURO['paper-fg'].valor,
+  paperMuted: OSCURO['paper-muted'].valor,
 } as const;
 
 /** Relleno del SVG original del logo (public/webya-logo.svg). Se reemplaza para pintarlo en otro color. */
-export const LOGO_RELLENO_ORIGINAL = '#000000';
+export const LOGO_RELLENO_ORIGINAL = COLOR.negro[1000];
 
 /** Opacidad del fondo de selección (`--accent-soft`) sobre el fondo de página. */
-export const ALFA_SELECCION = 0.14;
+export const ALFA_SELECCION = ALFA.seleccion;
 
 export type PaletaId = 'brasa' | 'mostaza' | 'frambuesa';
 
@@ -54,10 +56,10 @@ export const PALETAS_MARCA: readonly PaletaMarca[] = [
     id: 'brasa',
     nombre: 'Brasa',
     idea: 'Calor de cocina y de mostrador: lo que encaja se enciende.',
-    accent: '#ff5b24',
-    accentFg: '#0b0b0c',
-    accentInk: '#b83a0e',
-    danger: '#ff6b8a',
+    accent: OSCURO.accent.valor,
+    accentFg: OSCURO['accent-fg'].valor,
+    accentInk: OSCURO['accent-ink'].valor,
+    danger: OSCURO.danger.valor,
   },
   {
     id: 'mostaza',
@@ -90,14 +92,14 @@ export function getPaletaMarca(id: PaletaId): PaletaMarca {
 
 /** Tema claro (`<html data-theme="light">`): el acento se oscurece para llegar a AA sobre blanco. */
 export const TEMA_CLARO = {
-  bg: '#fafafa',
-  surface: '#ffffff',
-  fg: '#0b0b0c',
-  muted: '#55555a',
-  subtle: '#6b6b71',
-  accent: '#b83a0e',
-  accentFg: '#ffffff',
-  danger: '#b4233f',
+  bg: CLARO.bg.valor,
+  surface: CLARO.surface.valor,
+  fg: CLARO.fg.valor,
+  muted: CLARO.muted.valor,
+  subtle: CLARO.subtle.valor,
+  accent: CLARO.accent.valor,
+  accentFg: CLARO['accent-fg'].valor,
+  danger: CLARO.danger.valor,
 } as const;
 
 /** Variables CSS que redefine una paleta (para aplicarla en un contenedor con scope). */

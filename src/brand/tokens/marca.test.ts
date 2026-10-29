@@ -14,16 +14,25 @@ import {
 } from './colores';
 
 const raiz = process.cwd();
-const css = readFileSync(resolve(raiz, 'src/app/globals.css'), 'utf8');
+// Los tokens se generan en tokens.css (3 capas): se verifica el valor FINAL que pinta el navegador.
+const css = readFileSync(resolve(raiz, 'src/brand/tokens/tokens.css'), 'utf8');
 
-/** Bloque de declaraciones de un selector de globals.css (`:root {` … `}`). */
+/** Bloque de declaraciones de un selector de tokens.css (`:root {` … `}`). */
 function bloque(selector: string): string {
   const inicio = css.indexOf(`${selector} {`);
   expect(inicio, selector).toBeGreaterThanOrEqual(0);
   return css.slice(inicio, css.indexOf('}', inicio));
 }
-const valor = (decl: string, token: string) =>
+const declarado = (decl: string, token: string) =>
   new RegExp(`${token}:\\s*([^;]+);`).exec(decl)?.[1]?.trim().toLowerCase();
+/** Valor del token siguiendo las referencias var() hasta el primitivo (que vive en :root). */
+function valor(decl: string, token: string): string | undefined {
+  let v = declarado(decl, token);
+  for (let i = 0; v?.startsWith('var(') && i < 5; i++) {
+    v = declarado(bloque(':root'), /var\((--[^)]+)\)/.exec(v)?.[1] ?? '');
+  }
+  return v;
+}
 
 function archivos(dir: string): string[] {
   return readdirSync(dir).flatMap((n) => {
@@ -53,7 +62,7 @@ describe('paletas de marca: contraste AA medido', () => {
   });
 });
 
-describe('globals.css coincide con la config de marca', () => {
+describe('tokens.css resuelve a los colores de la marca', () => {
   const brasa = getPaletaMarca('brasa');
 
   it('tema oscuro (default)', () => {
