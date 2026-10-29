@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Logo } from '@/components/Logo';
+import { Logo } from '@/brand/logo/Logo';
 import { DemoGastronomia } from '@/features/demo/gastronomia/DemoGastronomia';
 import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
 

@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import { Logo } from '@/components/Logo';
-import { SplashLogo } from '@/components/SplashLogo';
-import { ComoFunciona } from '@/components/sections/ComoFunciona';
-import { Confianza, VitrinaDemo } from '@/components/sections/Confianza';
-import { Faq } from '@/components/sections/Faq';
-import { Footer } from '@/components/sections/Footer';
-import { Hero } from '@/components/sections/Hero';
-import { QueIncluye } from '@/components/sections/QueIncluye';
-import { FAQ } from '@/config/faq';
+import { Logo } from '@/brand/logo/Logo';
+import { SplashLogo } from '@/brand/logo/SplashLogo';
+import { ComoFunciona } from '@/components/marketing/ComoFunciona';
+import { Confianza, VitrinaDemo } from '@/components/marketing/Confianza';
+import { Faq } from '@/components/marketing/Faq';
+import { Footer } from '@/components/marketing/Footer';
+import { Hero } from '@/components/marketing/Hero';
+import { QueIncluye } from '@/components/marketing/QueIncluye';
+import { FAQ } from '@/content/faq';
 import { WizardLazy } from '@/features/empezar/WizardLazy';
 
 const TITULO = 'Creá tu negocio online';

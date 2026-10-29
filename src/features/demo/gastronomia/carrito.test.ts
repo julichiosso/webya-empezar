@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { COCINAS } from '@/config/demos/gastronomia';
+import { COCINAS } from '@/content/demos/gastronomia';
 import { pesos } from '@/domain/pedidos/dinero';
 import {
   agregar,

@@ -2,9 +2,9 @@
 
 import dynamic from 'next/dynamic';
 import { useCallback, useState } from 'react';
-import { Icon } from '@/components/icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
-import { ESCENAS_EXPLICATIVO } from '@/config/explicativo';
+import { ESCENAS_EXPLICATIVO } from '@/content/explicativo';
 import { duracionTotalMs, etiquetaDuracion } from './narracion';
 import type { OrigenExplicativo } from './Reproductor';
 

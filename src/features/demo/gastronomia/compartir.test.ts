@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { COCINAS, MODULOS_DEMO, NOMBRES_COCINA } from '@/config/demos/gastronomia';
+import { COCINAS, MODULOS_DEMO, NOMBRES_COCINA } from '@/content/demos/gastronomia';
 import {
   datosParaWizard,
   linkWhatsAppDemo,

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { Hoja } from '@/components/ui/Hoja';
-import { getCocina } from '@/config/demos/gastronomia';
+import { getCocina } from '@/content/demos/gastronomia';
 import { formatearPesos } from '@/domain/pedidos/dinero';
 import type { Producto } from '@/domain/pedidos/types';
 import { cantidadTotal, totalesCarrito } from '../carrito';

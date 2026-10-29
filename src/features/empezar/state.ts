@@ -1,8 +1,8 @@
-import { PALETAS_DEMO } from '@/config/demos/gastronomia/paletas';
-import { COCINA_IDS } from '@/config/demos/gastronomia/types';
+import { PALETAS_DEMO } from '@/content/demos/gastronomia/paletas';
+import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { esOrigen, type Origen } from '@/config/origenes';
-import { getRubro, RUBRO_OTRO_ID } from '@/config/rubros';
-import type { DatosForm } from '@/lib/validation/lead';
+import { getRubro, RUBRO_OTRO_ID } from '@/content/rubros';
+import type { DatosForm } from '@/domain/leads/lead';
 
 /** Lo que la persona armó en una demo (paleta y tipo de cocina), si vino de ahí. */
 export interface DesdeDemo {

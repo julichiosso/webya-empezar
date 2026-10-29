@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
 import { formatearPesos } from '@/domain/pedidos/dinero';
 import { ETIQUETA_ESTADO, puedeTransicionar } from '@/domain/pedidos/estados';

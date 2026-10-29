@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Icon } from '@/components/icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
 import { Encaje } from '@/components/ui/Encaje';
 import { Hoja } from '@/components/ui/Hoja';
-import { getCocina } from '@/config/demos/gastronomia';
+import { getCocina } from '@/content/demos/gastronomia';
 import { formatearPesos } from '@/domain/pedidos/dinero';
 import { ETIQUETA_ESTADO } from '@/domain/pedidos/estados';
 import type { Modalidad, Pedido } from '@/domain/pedidos/types';

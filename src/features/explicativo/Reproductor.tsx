@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { Icon } from '@/components/icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
-import { ESCENAS_EXPLICATIVO } from '@/config/explicativo';
+import { ESCENAS_EXPLICATIVO } from '@/content/explicativo';
 import { track } from '@/lib/analytics';
 import { Escena } from './escenas';
 import { duracionEstimadaMs, elegirVoz, PAUSA_ENTRE_ESCENAS_MS } from './narracion';

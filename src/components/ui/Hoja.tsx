@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef, type ReactNode, type RefObject } from 'react';
-import { Icon } from '../icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 
 interface HojaProps {
   abierta: boolean;

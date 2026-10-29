@@ -1,5 +1,5 @@
-import { Icon } from '../icons/Icon';
-import type { IconName } from '../icons/paths';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import type { IconName } from '@/brand/ilustracion/iconos/paths';
 import { Encaje } from './Encaje';
 
 interface SelectCardProps {

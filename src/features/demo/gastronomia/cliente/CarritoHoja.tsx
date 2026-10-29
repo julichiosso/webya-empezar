@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import { Icon } from '@/components/icons/Icon';
-import type { IconName } from '@/components/icons/paths';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import type { IconName } from '@/brand/ilustracion/iconos/paths';
 import { buttonClasses } from '@/components/ui/Button';
-import type { CocinaDemo } from '@/config/demos/gastronomia';
+import type { CocinaDemo } from '@/content/demos/gastronomia';
 import { formatearPesos, sumar } from '@/domain/pedidos/dinero';
 import { LIMITES_PEDIDO } from '@/domain/pedidos/schemas';
 import { PROPINAS } from '@/domain/pedidos/totales';

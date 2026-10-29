@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
 import type { Pedido } from '@/domain/pedidos/types';
 import { detalleModalidad } from './calculos';

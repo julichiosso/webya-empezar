@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useId, useState, type CSSProperties } from 'react';
-import { Icon } from '@/components/icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
 import {
   COCINA_IDS,
@@ -9,7 +9,7 @@ import {
   getCocina,
   PALETAS_DEMO,
   RUBRO_DEMO,
-} from '@/config/demos/gastronomia';
+} from '@/content/demos/gastronomia';
 import { track } from '@/lib/analytics';
 import { CodigoQR } from './CodigoQR';
 import { linkWhatsAppDemo, urlCompartible } from './compartir';

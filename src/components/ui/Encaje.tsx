@@ -1,4 +1,4 @@
-import { Icon } from '../icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 
 interface EncajeProps {
   /** Pieza puesta: Brasa con check. Sin poner: queda el hueco punteado esperándola. */

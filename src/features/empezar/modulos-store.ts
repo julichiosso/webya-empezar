@@ -1,7 +1,7 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import type { ModuloId } from '@/config/modulos';
+import type { ModuloId } from '@/content/modulos';
 import { alternarModulo, modulosSeleccionados, sanearManual, type ModulosManual } from './modulos';
 import { hayProgresoGuardado } from './state';
 

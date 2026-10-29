@@ -3,8 +3,8 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import { flushSync } from 'react-dom';
-import { AVISO_DEMO, getPaletaDemo, RUBRO_DEMO } from '@/config/demos/gastronomia';
-import { variablesDePaleta } from '@/config/marca/colores';
+import { AVISO_DEMO, getPaletaDemo, RUBRO_DEMO } from '@/content/demos/gastronomia';
+import { variablesDePaleta } from '@/brand/tokens/colores';
 import { buttonClasses } from '@/components/ui/Button';
 import { prepararWizardDesdeDemo, URL_WIZARD_DESDE_DEMO } from '@/features/empezar/desde-demo';
 import { track } from '@/lib/analytics';

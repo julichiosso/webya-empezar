@@ -1,5 +1,5 @@
-import type { ModuloId } from '@/config/modulos';
-import { Icon } from '../icons/Icon';
+import type { ModuloId } from '@/content/modulos';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { Encaje } from './Encaje';
 
 interface ModuloOptionProps {

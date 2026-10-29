@@ -2,15 +2,15 @@
 
 import * as m from 'motion/react-m';
 import type { KeyboardEvent, Ref } from 'react';
-import { Icon } from '@/components/icons/Icon';
-import type { IconName } from '@/components/icons/paths';
-import { NegocioPreview } from '@/components/NegocioPreview';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import type { IconName } from '@/brand/ilustracion/iconos/paths';
+import { NegocioPreview } from '@/components/patterns/NegocioPreview';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Field';
 import { SelectCard } from '@/components/ui/SelectCard';
-import type { ModuloId } from '@/config/modulos';
-import { RUBRO_DEMO } from '@/config/demos/gastronomia/types';
-import { getRubro, RUBRO_OTRO_ID, RUBROS } from '@/config/rubros';
+import type { ModuloId } from '@/content/modulos';
+import { RUBRO_DEMO } from '@/content/demos/gastronomia/types';
+import { getRubro, RUBRO_OTRO_ID, RUBROS } from '@/content/rubros';
 import { StepHeader } from './StepHeader';
 
 interface StepRubroProps {

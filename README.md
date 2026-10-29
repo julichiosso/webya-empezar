@@ -107,7 +107,7 @@ llega primero, los leads de la demo se guardan igual pero sin `demo` (queda un a
 
 ### Módulos y selección
 
-Los módulos viven en `src/config/modulos.ts` (nombre y explicación no técnica). El **estado de
+Los módulos viven en `src/content/modulos.ts` (nombre y explicación no técnica). El **estado de
 módulos se comparte entre el hero y el wizard** (`features/empezar/modulos-store.ts`) y guarda **solo
 lo que la persona decidió a mano**; lo demás se deriva de los módulos sugeridos del rubro
 (`modulosSeleccionados`). Por eso al cambiar de rubro no quedan módulos "fantasma" y lo elegido a
@@ -123,7 +123,7 @@ exactamente este código. Reglas completas en la skill
 [`webya-pedidos-module`](.claude/skills/webya-pedidos-module/SKILL.md).
 
 Los datos de ejemplo de la demo (tres cocinas con carta, precios de ejemplo, modificadores y
-pedidos simulados, y las 6 paletas curadas) viven en `src/config/demos/gastronomia/`; los tests
+pedidos simulados, y las 6 paletas curadas) viven en `src/content/demos/gastronomia/`; los tests
 validan cada carta y que cada pedido de ejemplo pase la misma validación que uno real.
 
 ### Demo de Gastronomía (`/demo/gastronomia`)
@@ -142,7 +142,7 @@ Procedimiento para sumar otra demo: skill [`webya-demo-builder`](.claude/skills/
 
 Un video hecho con **motion graphics propios** (SVG animado en el lenguaje Encastre, 9 escenas en
 `src/features/explicativo/escenas.tsx`) y **narrado con la voz en español del dispositivo** (Web
-Speech API: cero descargas de audio). El guion vive en `src/config/explicativo.ts` (frases cortas,
+Speech API: cero descargas de audio). El guion vive en `src/content/explicativo.ts` (frases cortas,
 voseo, sin promesas falsas; un test lo verifica). Subtítulos siempre visibles; si no hay voz en
 español o se apaga, avanza con tiempos estimados. Capítulos, pausa, teclado (← →), Escape, se pausa
 con la pestaña oculta y con `prefers-reduced-motion` las escenas aparecen quietas. Se descarga
@@ -159,10 +159,10 @@ recién al tocar el botón (no suma al JS inicial de `/empezar`).
 Un archivo, sin tocar componentes. Procedimiento completo en la skill
 [`webya-add-rubro`](.claude/skills/webya-add-rubro/SKILL.md). En corto:
 
-1. Crear `src/config/rubros/mi-rubro.ts` exportando un `Rubro` (`id`, `nombre`, `icono`,
+1. Crear `src/content/rubros/mi-rubro.ts` exportando un `Rubro` (`id`, `nombre`, `icono`,
    `descripcionCorta`, `objetivos`, `modulosSugeridos`, `ejemploResultado`).
-2. Si usa un ícono nuevo, agregarlo a `src/components/icons/paths.ts`.
-3. Sumarlo (un `import` y una entrada) en `src/config/rubros/index.ts`. "Otro" va siempre último.
+2. Si usa un ícono nuevo, agregarlo a `src/brand/ilustracion/iconos/paths.ts`.
+3. Sumarlo (un `import` y una entrada) en `src/content/rubros/index.ts`. "Otro" va siempre último.
 4. `pnpm test`: los tests de config validan **todos** los rubros automáticamente.
 
 ## Cómo conectar notificaciones

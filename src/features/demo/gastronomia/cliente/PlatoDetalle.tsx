@@ -1,9 +1,9 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Ilustracion } from '@/components/ilustraciones/Ilustracion';
+import { Ilustracion } from '@/brand/ilustracion/dibujos/Ilustracion';
 import { buttonClasses } from '@/components/ui/Button';
-import { esIlustracion } from '@/config/demos/ilustraciones';
+import { esIlustracion } from '@/brand/ilustracion/dibujos/ids';
 import { formatearPesos, multiplicar, sumar } from '@/domain/pedidos/dinero';
 import { LIMITES_PEDIDO, type LineaEntrada } from '@/domain/pedidos/schemas';
 import type { GrupoModificador, Producto } from '@/domain/pedidos/types';

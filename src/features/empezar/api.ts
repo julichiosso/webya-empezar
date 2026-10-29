@@ -1,4 +1,4 @@
-import type { LeadPayloadInput } from '@/lib/validation/lead';
+import type { LeadPayloadInput } from '@/domain/leads/lead';
 
 export type EnvioResultado =
   | { ok: true }

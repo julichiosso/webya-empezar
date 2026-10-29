@@ -2,9 +2,9 @@
 
 import * as m from 'motion/react-m';
 import type { Ref } from 'react';
-import { Icon } from '@/components/icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { ButtonLink, Button } from '@/components/ui/Button';
-import { getModulo, type ModuloId } from '@/config/modulos';
+import { getModulo, type ModuloId } from '@/content/modulos';
 import { track } from '@/lib/analytics';
 
 interface StepListoProps {

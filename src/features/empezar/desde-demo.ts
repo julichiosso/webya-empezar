@@ -1,6 +1,6 @@
-import type { ModuloId } from '@/config/modulos';
+import type { ModuloId } from '@/content/modulos';
 import type { Origen } from '@/config/origenes';
-import { getRubro } from '@/config/rubros';
+import { getRubro } from '@/content/rubros';
 import type { ModulosManual } from './modulos';
 import { MODULOS_STORAGE_KEY } from './modulos-store';
 import { DATOS_VACIOS, ESTADO_INICIAL, guardarEstado, type DesdeDemo } from './state';

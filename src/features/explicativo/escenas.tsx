@@ -1,9 +1,9 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { Ilustracion } from '@/components/ilustraciones/Ilustracion';
-import { ICONS, type IconName } from '@/components/icons/paths';
-import { LOGO_TRAZOS } from '@/components/logo-trazos';
-import { PALETAS_DEMO } from '@/config/demos/gastronomia/paletas';
-import type { EscenaId } from '@/config/explicativo';
+import { Ilustracion } from '@/brand/ilustracion/dibujos/Ilustracion';
+import { ICONS, type IconName } from '@/brand/ilustracion/iconos/paths';
+import { LOGO_TRAZOS } from '@/brand/logo/trazos';
+import { PALETAS_DEMO } from '@/content/demos/gastronomia/paletas';
+import type { EscenaId } from '@/content/explicativo';
 
 /**
  * Escenas del video explicativo (motion graphics). SVG propio en un lienzo de 1000×640, con los

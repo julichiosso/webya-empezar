@@ -11,7 +11,7 @@ import {
   RUBRO_DEMO,
   TENANT_DEMO,
   type CocinaId,
-} from '@/config/demos/gastronomia';
+} from '@/content/demos/gastronomia';
 import { avanzar, esFinal, transicionar } from '@/domain/pedidos/estados';
 import { pedidoDesdeBorrador } from '@/domain/pedidos/repository';
 import { armarPedido, type EntradaPedido, type LineaEntrada } from '@/domain/pedidos/schemas';

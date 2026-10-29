@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CASO_REAL, ESCENAS_EXPLICATIVO } from '@/config/explicativo';
+import { CASO_REAL, ESCENAS_EXPLICATIVO } from '@/content/explicativo';
 import { duracionEstimadaMs, duracionTotalMs, elegirVoz, etiquetaDuracion } from './narracion';
 
 const voz = (lang: string, name = lang, localService = false) => ({ lang, name, localService });

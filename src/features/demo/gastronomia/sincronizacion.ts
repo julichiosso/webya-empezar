@@ -1,4 +1,4 @@
-import { COCINA_IDS, PALETAS_DEMO, type CocinaId } from '@/config/demos/gastronomia';
+import { COCINA_IDS, PALETAS_DEMO, type CocinaId } from '@/content/demos/gastronomia';
 import { esCentavos } from '@/domain/pedidos/dinero';
 import { ESTADOS_PEDIDO, MEDIOS_PAGO, MODALIDADES, type Pedido } from '@/domain/pedidos/types';
 import { claveLinea, type Carrito } from './carrito';

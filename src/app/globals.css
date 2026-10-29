@@ -20,7 +20,7 @@
   --subtle: #8a8a90;
 
   /* Acento "Brasa": el ÚNICO color de acento. CTA, foco, selección y la pieza que encaja.
-     Los valores se repiten en src/config/marca/colores.ts (OG, /marca); un test verifica que coincidan. */
+     Los valores se repiten en src/brand/tokens/colores.ts (OG, /marca); un test verifica que coincidan. */
   --accent: #ff5b24;
   --accent-fg: #0b0b0c;
   /* Acento para TEXTO sobre papel crema: Brasa pura no llega a AA ahí (2,66:1). */

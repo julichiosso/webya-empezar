@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getRubro } from '@/config/rubros';
+import { getRubro } from '@/content/rubros';
 import {
   alternarModulo,
   esSugerido,

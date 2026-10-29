@@ -1,5 +1,5 @@
 import { useId, type InputHTMLAttributes, type Ref, type TextareaHTMLAttributes } from 'react';
-import { Icon } from '../icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 
 interface FieldProps {
   label: string;

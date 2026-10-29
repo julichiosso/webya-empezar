@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type RefObject } from 'react';
-import { Icon } from '@/components/icons/Icon';
-import { Ilustracion } from '@/components/ilustraciones/Ilustracion';
-import type { CocinaDemo } from '@/config/demos/gastronomia';
-import { esIlustracion } from '@/config/demos/ilustraciones';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import { Ilustracion } from '@/brand/ilustracion/dibujos/Ilustracion';
+import type { CocinaDemo } from '@/content/demos/gastronomia';
+import { esIlustracion } from '@/brand/ilustracion/dibujos/ids';
 import { formatearPesos } from '@/domain/pedidos/dinero';
 import type { Producto } from '@/domain/pedidos/types';
 

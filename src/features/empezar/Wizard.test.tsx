@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { HeroMockup } from '@/components/sections/HeroMockup';
+import { HeroMockup } from '@/components/marketing/HeroMockup';
 import { registerSink } from '@/lib/analytics';
 import { reiniciarModulos } from './modulos-store';
 import { Wizard } from './Wizard';

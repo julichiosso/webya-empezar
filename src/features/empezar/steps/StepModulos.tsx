@@ -5,8 +5,8 @@ import type { KeyboardEvent, Ref } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { ModuloOption } from '@/components/ui/ModuloOption';
-import { getModulo, MODULO_IDS, type ModuloId } from '@/config/modulos';
-import { getRubro } from '@/config/rubros';
+import { getModulo, MODULO_IDS, type ModuloId } from '@/content/modulos';
+import { getRubro } from '@/content/rubros';
 import { esSugerido } from '../modulos';
 import { StepHeader } from './StepHeader';
 

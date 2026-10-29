@@ -6,7 +6,7 @@ import { useForm, type FieldErrors } from 'react-hook-form';
 import { Button, ButtonLink, type ButtonStatus } from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Field';
 import { formatPhoneInput } from '@/lib/phone';
-import { datosFormSchema, LIMITES, type DatosForm } from '@/lib/validation/lead';
+import { datosFormSchema, LIMITES, type DatosForm } from '@/domain/leads/lead';
 import type { EnvioResultado } from '../api';
 import { StepHeader } from './StepHeader';
 

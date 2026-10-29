@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { RUBRO_OTRO_ID } from '@/config/rubros';
+import { RUBRO_OTRO_ID } from '@/content/rubros';
 import { parsePhoneAR } from '@/lib/phone';
 import { sanitizeLine, sanitizeRecord } from '@/lib/sanitize';
-import { LIMITES, leadPayloadSchema } from '@/lib/validation/lead';
+import { LIMITES, leadPayloadSchema } from '@/domain/leads/lead';
 import type { ServerEnv } from '../env';
 import { getClientIp, hashIp } from '../ip';
 import type { NotificationService } from '../notifications';

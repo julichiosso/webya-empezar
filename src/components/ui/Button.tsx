@@ -1,5 +1,5 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
-import { Icon } from '../icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 
 type Variant = 'primary' | 'secondary' | 'ghost';
 export type ButtonStatus = 'idle' | 'loading' | 'success';

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
-import { Icon } from '@/components/icons/Icon';
-import { Logo } from '@/components/Logo';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import { Logo } from '@/brand/logo/Logo';
 import { buttonClasses } from '@/components/ui/Button';
 import {
   type Combinacion,
@@ -11,7 +11,7 @@ import {
   PALETAS_MARCA,
   type PaletaMarca,
   variablesDePaleta,
-} from '@/config/marca/colores';
+} from '@/brand/tokens/colores';
 import { formatearPesos, pesos } from '@/domain/pedidos/dinero';
 import { contraste } from '@/lib/color';
 

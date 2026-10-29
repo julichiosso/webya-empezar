@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Outfit } from 'next/font/google';
-import { BASE } from '@/config/marca/colores';
+import { BASE } from '@/brand/tokens/colores';
 import { siteConfig } from '@/lib/site-config';
 import './globals.css';
 

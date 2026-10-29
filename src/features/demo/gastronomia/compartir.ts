@@ -4,7 +4,7 @@ import {
   PALETAS_DEMO,
   RUBRO_DEMO,
   type CocinaId,
-} from '@/config/demos/gastronomia';
+} from '@/content/demos/gastronomia';
 import { ORIGEN_DEMO_GASTRONOMIA } from '@/config/origenes';
 import type { DatosDesdeDemo } from '@/features/empezar/desde-demo';
 import { LARGO_NOMBRE_LOCAL, type EstadoDemo, type Personalizacion } from './store';

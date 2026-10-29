@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ESCENAS_EXPLICATIVO } from '@/config/explicativo';
+import { ESCENAS_EXPLICATIVO } from '@/content/explicativo';
 import { duracionEstimadaMs, PAUSA_ENTRE_ESCENAS_MS } from './narracion';
 import { Reproductor } from './Reproductor';
 

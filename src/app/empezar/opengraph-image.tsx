@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { BASE, LOGO_RELLENO_ORIGINAL } from '@/config/marca/colores';
+import { BASE, LOGO_RELLENO_ORIGINAL } from '@/brand/tokens/colores';
 import { mezclar } from '@/lib/color';
 
 export const alt = 'WebYa: creá tu negocio online. Elegí tu rubro. Activá lo que necesitás.';

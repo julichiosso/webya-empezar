@@ -1,4 +1,4 @@
-import { Icon } from '@/components/icons/Icon';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 
 interface CantidadProps {
   valor: number;

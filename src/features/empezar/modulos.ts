@@ -1,5 +1,5 @@
-import { MODULO_IDS, type ModuloId } from '@/config/modulos';
-import { getRubro } from '@/config/rubros';
+import { MODULO_IDS, type ModuloId } from '@/content/modulos';
+import { getRubro } from '@/content/rubros';
 
 /**
  * Lo que la persona decidió A MANO sobre cada módulo: `true` = lo activó, `false` = lo apagó.
