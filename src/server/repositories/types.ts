@@ -15,6 +15,9 @@ export interface LeadRow {
   nombre_negocio: string;
   rubro: string;
   rubro_otro: string | null;
+  /** Ids de módulos activados (config/modulos.ts). Mínimo 1 para leads nuevos. */
+  modulos: string[];
+  /** Opcionales: pueden venir vacíos. */
   objetivos: string[];
   mensaje: string | null;
   origen: string;

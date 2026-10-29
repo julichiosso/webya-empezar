@@ -16,6 +16,7 @@ const valido = {
   email: 'ana@luna.com',
   mensaje: 'Quiero turnos online',
   rubro: 'peluqueria_estetica',
+  modulos: ['turnos', 'catalogo'],
   objetivos: ['recibir_turnos', 'mostrar_trabajos'],
   website: '',
   utm_source: 'instagram',
@@ -70,6 +71,7 @@ describe('POST /api/leads — envío válido', () => {
       mensaje: 'Quiero turnos online',
       rubro: 'peluqueria_estetica',
       rubro_otro: null,
+      modulos: ['turnos', 'catalogo'],
       objetivos: ['recibir_turnos', 'mostrar_trabajos'],
       origen: 'instagram',
       estado: 'nuevo',
@@ -86,6 +88,12 @@ describe('POST /api/leads — envío válido', () => {
     const lead = repo.leads[0]!;
     expect(lead.ip_hash).toMatch(/^[0-9a-f]{64}$/);
     expect(JSON.stringify(lead)).not.toContain(IP);
+  });
+
+  it('guarda el lead aunque no haya objetivos (son opcionales)', async () => {
+    const res = await handleCreateLead(peticion({ ...valido, objetivos: [] }), deps);
+    expect(res.status).toBe(201);
+    expect(repo.leads[0]?.objetivos).toEqual([]);
   });
 
   it('guarda null en lo opcional vacío y rubro_otro cuando el rubro es "otro"', async () => {
@@ -155,7 +163,8 @@ describe('POST /api/leads — campos inválidos', () => {
     ['email mal formado', { email: 'ana@' }, 'email'],
     ['mensaje demasiado largo', { mensaje: 'x'.repeat(1001) }, 'mensaje'],
     ['rubro inexistente', { rubro: 'astronauta' }, 'rubro'],
-    ['sin objetivos', { objetivos: [] }, 'objetivos'],
+    ['sin módulos', { modulos: [] }, 'modulos'],
+    ['módulo inexistente', { modulos: ['hackeo'] }, 'modulos'],
     ['objetivo de otro rubro', { objetivos: ['cobrar_cuotas'] }, 'objetivos'],
     ['"otro" sin descripción', { rubro: 'otro', objetivos: ['que_me_contacten'] }, 'rubroOtro'],
   ])('rechaza con 400: %s', async (_caso, cambio, campo) => {

@@ -4,18 +4,15 @@ import { getNotificationService } from '@/server/notifications';
 import { crearBurstLimiter } from '@/server/rate-limit';
 import { getLeadRepository } from '@/server/repositories';
 
-// Ráfagas en memoria por instancia: máx. 20 intentos por minuto y por IP (hasheada).
-const burst = crearBurstLimiter(20, 60_000);
+// Ráfagas en memoria por instancia, por IP (hasheada). Se crea al primer request, con el valor del env.
+let burst: ReturnType<typeof crearBurstLimiter> | undefined;
 
 export async function POST(request: Request) {
   let deps: HandlerDeps;
   try {
-    deps = {
-      repo: getLeadRepository(),
-      notifier: getNotificationService(),
-      env: getEnv(),
-      burst,
-    };
+    const env = getEnv();
+    burst ??= crearBurstLimiter(env.RATE_LIMIT_BURST_PER_MINUTE, 60_000);
+    deps = { repo: getLeadRepository(), notifier: getNotificationService(), env, burst };
   } catch (e) {
     // Configuración inválida (instrumentation.ts debería haberlo frenado al arrancar).
     console.error('[leads] configuración inválida', e instanceof Error ? e.message : 'error');

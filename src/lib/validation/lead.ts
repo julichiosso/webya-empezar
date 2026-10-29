@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MODULO_IDS } from '@/config/modulos';
 import { esObjetivoDeRubro, getRubro, RUBRO_OTRO_ID } from '@/config/rubros';
 import { parsePhoneAR } from '../phone';
 
@@ -10,6 +11,7 @@ export const LIMITES = {
   email: 254,
   mensaje: 1000,
   objetivos: 8,
+  modulos: MODULO_IDS.length,
   utm: 100,
   userAgent: 400,
 } as const;
@@ -59,10 +61,13 @@ export const leadPayloadSchema = z
     ...datosFormShape,
     rubro: z.string().trim().min(1, 'Elegí un rubro.'),
     rubroOtro: z.string().trim().max(LIMITES.rubroOtro).optional(),
-    objetivos: z
+    // Módulos que activó la persona: es la selección principal (mínimo 1).
+    modulos: z
       .array(z.string().trim().min(1).max(60))
-      .min(1, 'Elegí al menos un objetivo.')
-      .max(LIMITES.objetivos),
+      .min(1, 'Activá al menos un módulo.')
+      .max(LIMITES.modulos),
+    // Opcionales: ayudan a entender para qué lo quiere.
+    objetivos: z.array(z.string().trim().min(1).max(60)).max(LIMITES.objetivos),
     // Honeypot: los humanos no lo ven ni lo completan. La ruta lo revisa antes de validar.
     website: z.string().max(200).optional(),
     utm_source: utmField,
@@ -81,6 +86,18 @@ export const leadPayloadSchema = z
         message: 'Contanos a qué se dedica tu negocio.',
       });
     }
+    if (new Set(lead.modulos).size !== lead.modulos.length) {
+      ctx.addIssue({ code: 'custom', path: ['modulos'], message: 'Hay módulos repetidos.' });
+    }
+    lead.modulos.forEach((id, i) => {
+      if (!(MODULO_IDS as readonly string[]).includes(id)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['modulos', i],
+          message: 'Ese módulo no existe.',
+        });
+      }
+    });
     if (new Set(lead.objetivos).size !== lead.objetivos.length) {
       ctx.addIssue({ code: 'custom', path: ['objetivos'], message: 'Hay objetivos repetidos.' });
     }

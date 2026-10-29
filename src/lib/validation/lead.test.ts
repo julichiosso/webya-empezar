@@ -10,6 +10,7 @@ const valido = {
   email: '',
   mensaje: '',
   rubro: 'peluqueria_estetica',
+  modulos: ['turnos', 'catalogo'],
   objetivos: ['recibir_turnos'],
 };
 
@@ -71,7 +72,6 @@ describe('leadPayloadSchema', () => {
     expect(leadPayloadSchema.safeParse({ ...valido, objetivos: ['cobrar_cuotas'] }).success).toBe(
       false,
     );
-    expect(leadPayloadSchema.safeParse({ ...valido, objetivos: [] }).success).toBe(false);
     expect(
       leadPayloadSchema.safeParse({ ...valido, objetivos: ['recibir_turnos', 'recibir_turnos'] })
         .success,
@@ -82,6 +82,19 @@ describe('leadPayloadSchema', () => {
     const otro = { ...valido, rubro: 'otro', objetivos: ['que_me_contacten'] };
     expect(leadPayloadSchema.safeParse(otro).success).toBe(false);
     expect(leadPayloadSchema.safeParse({ ...otro, rubroOtro: 'Floristería' }).success).toBe(true);
+  });
+
+  it('exige al menos un módulo y que sean del catálogo, sin repetir', () => {
+    expect(leadPayloadSchema.safeParse({ ...valido, modulos: [] }).success).toBe(false);
+    expect(leadPayloadSchema.safeParse({ ...valido, modulos: ['hackeo'] }).success).toBe(false);
+    expect(leadPayloadSchema.safeParse({ ...valido, modulos: ['turnos', 'turnos'] }).success).toBe(
+      false,
+    );
+    expect(leadPayloadSchema.safeParse({ ...valido, modulos: ['catalogo'] }).success).toBe(true);
+  });
+
+  it('los objetivos son opcionales (pueden venir vacíos)', () => {
+    expect(leadPayloadSchema.safeParse({ ...valido, objetivos: [] }).success).toBe(true);
   });
 
   it('limita la cantidad de objetivos', () => {

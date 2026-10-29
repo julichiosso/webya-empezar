@@ -14,7 +14,7 @@ export const MODULOS = {
     descripcion: 'Tus clientes eligen día y horario solos, y vos ves la agenda ordenada.',
   },
   catalogo: {
-    nombre: 'Catálogo',
+    nombre: 'Tienda y catálogo',
     descripcion: 'Tus productos o servicios con fotos y precios, siempre actualizados.',
   },
   carta_qr: {

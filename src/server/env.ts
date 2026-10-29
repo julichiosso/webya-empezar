@@ -18,6 +18,7 @@ const envSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: opcional(z.string().min(20)),
   IP_HASH_SALT: opcional(z.string().min(16, 'IP_HASH_SALT debe tener al menos 16 caracteres')),
   RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(100).default(5),
+  RATE_LIMIT_BURST_PER_MINUTE: z.coerce.number().int().min(1).max(10_000).default(20),
   RATE_LIMIT_WINDOW_SECONDS: z.coerce.number().int().min(10).max(86_400).default(600),
 });
 
@@ -29,6 +30,8 @@ export interface ServerEnv {
   SUPABASE_SERVICE_ROLE_KEY?: string;
   IP_HASH_SALT: string;
   RATE_LIMIT_MAX: number;
+  /** Intentos (válidos o no) por minuto y por IP, en memoria por instancia. */
+  RATE_LIMIT_BURST_PER_MINUTE: number;
   RATE_LIMIT_WINDOW_SECONDS: number;
 }
 
@@ -76,6 +79,7 @@ export function loadEnv(source: Record<string, string | undefined> = process.env
     SUPABASE_SERVICE_ROLE_KEY: e.SUPABASE_SERVICE_ROLE_KEY,
     IP_HASH_SALT: e.IP_HASH_SALT ?? DEV_SALT,
     RATE_LIMIT_MAX: e.RATE_LIMIT_MAX,
+    RATE_LIMIT_BURST_PER_MINUTE: e.RATE_LIMIT_BURST_PER_MINUTE,
     RATE_LIMIT_WINDOW_SECONDS: e.RATE_LIMIT_WINDOW_SECONDS,
   };
 }

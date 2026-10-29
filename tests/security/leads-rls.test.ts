@@ -1,14 +1,17 @@
 // @vitest-environment node
 import { createClient } from '@supabase/supabase-js';
 import { randomUUID } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const migracion = readFileSync(
-  resolve(process.cwd(), 'supabase/migrations/20261028000000_create_leads.sql'),
-  'utf8',
-);
+// Todas las migraciones, en orden: una migración posterior no puede reabrir la tabla.
+const dirMigraciones = resolve(process.cwd(), 'supabase/migrations');
+const migracion = readdirSync(dirMigraciones)
+  .filter((f) => f.endsWith('.sql'))
+  .sort()
+  .map((f) => readFileSync(resolve(dirMigraciones, f), 'utf8'))
+  .join('\n');
 // Sin comentarios: así las advertencias escritas en el SQL no cuentan como código.
 const sql = migracion.replace(/--.*$/gm, '').toLowerCase();
 
@@ -22,6 +25,7 @@ describe('migración de leads (verificación estática, corre siempre)', () => {
       'id uuid primary key default gen_random_uuid()',
       'created_at timestamptz',
       'objetivos      text[]'.replace(/\s+/g, ' '),
+      'add column modulos text[] not null',
       "estado text not null default 'nuevo'",
       "origen text not null default 'instagram'",
       'ip_hash text not null',
@@ -67,6 +71,7 @@ describe.skipIf(!hayCredenciales)(
         nombre_negocio: marca,
         rubro: 'otro',
         rubro_otro: 'prueba',
+        modulos: ['formularios'],
         objetivos: ['que_me_contacten'],
         ip_hash: 'rls-probe',
       });
@@ -88,6 +93,7 @@ describe.skipIf(!hayCredenciales)(
         whatsapp: '+5491123456789',
         nombre_negocio: 'Intruso SA',
         rubro: 'otro',
+        modulos: ['x'],
         objetivos: ['x'],
         ip_hash: 'intruso',
       });

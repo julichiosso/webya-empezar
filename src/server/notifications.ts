@@ -3,7 +3,7 @@ import type { LeadRow } from './repositories/types';
 /** Lo mínimo para avisar de un lead nuevo. */
 export type LeadNotificacion = Pick<
   LeadRow,
-  'id' | 'nombre' | 'nombre_negocio' | 'rubro' | 'rubro_otro' | 'objetivos' | 'whatsapp'
+  'id' | 'nombre' | 'nombre_negocio' | 'rubro' | 'rubro_otro' | 'modulos' | 'objetivos' | 'whatsapp'
 >;
 
 export interface NotificationService {
@@ -25,7 +25,7 @@ export class ConsoleNotificationService implements NotificationService {
   async nuevoLead(lead: LeadNotificacion): Promise<void> {
     console.warn(
       `[leads] nuevo lead ${lead.id}: ${lead.nombre_negocio} (${lead.rubro_otro ?? lead.rubro}), ` +
-        `${lead.objetivos.length} objetivo(s)`,
+        `módulos: ${lead.modulos.join(', ')}`,
     );
   }
 }

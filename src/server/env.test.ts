@@ -12,6 +12,7 @@ describe('loadEnv', () => {
     expect(env.IP_HASH_SALT.length).toBeGreaterThanOrEqual(16);
     expect(env.RATE_LIMIT_MAX).toBe(5);
     expect(env.RATE_LIMIT_WINDOW_SECONDS).toBe(600);
+    expect(env.RATE_LIMIT_BURST_PER_MINUTE).toBe(20);
   });
 
   it('trata las variables vacías como no definidas', () => {

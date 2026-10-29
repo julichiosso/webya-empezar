@@ -14,6 +14,7 @@ const base: NuevoLead = {
   nombre_negocio: 'Luna',
   rubro: 'comercio',
   rubro_otro: null,
+  modulos: ['catalogo'],
   objetivos: ['vender_online'],
   mensaje: null,
   utm_source: null,

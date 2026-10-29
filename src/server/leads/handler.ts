@@ -137,6 +137,7 @@ export async function handleCreateLead(request: Request, deps: HandlerDeps): Pro
       nombre_negocio: d.nombreNegocio,
       rubro: d.rubro,
       rubro_otro: d.rubro === RUBRO_OTRO_ID ? nullSiVacio(d.rubroOtro) : null,
+      modulos: d.modulos,
       objetivos: d.objetivos,
       mensaje: nullSiVacio(d.mensaje),
       utm_source: nullSiVacio(d.utm_source),
