@@ -107,8 +107,9 @@ export function Seguimiento({ pedido, onOtroPedido }: SeguimientoProps) {
       </div>
 
       <p className="text-small text-paper-muted">
-        Es una demo: este pedido no llega a ninguna cocina. Del otro lado lo recibe el panel del
-        dueño.
+        Es una demo: este pedido no llega a ninguna cocina. Lo recibe el panel del dueño:{' '}
+        <span className="lg:hidden">tocá “Ver como dueño” abajo para avanzarlo.</span>
+        <span className="max-lg:hidden">avanzalo desde el panel de al lado.</span>
       </p>
 
       <button type="button" onClick={onOtroPedido} className={buttonClasses('primary', true)}>

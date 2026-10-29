@@ -58,8 +58,8 @@ export function DemoCliente() {
                 onAbrirPlato={setPlato}
               />
               {cantidad > 0 && (
-                // Barra del pedido: fija abajo del celular (o de la pantalla en mobile).
-                <div className="sticky bottom-0 z-10 px-4 pb-4">
+                // Barra del pedido: fija abajo (en celular, por encima del selector Cliente/Dueño).
+                <div className="sticky bottom-20 z-10 px-4 pb-4 lg:bottom-0">
                   <button
                     type="button"
                     onClick={abrirCarrito}

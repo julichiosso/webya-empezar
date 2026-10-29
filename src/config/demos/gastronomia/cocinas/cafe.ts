@@ -162,7 +162,7 @@ export const cafeteria: CocinaDemo = {
     {
       modalidad: 'mesa',
       mesa: '2',
-      cliente: { nombre: 'Mesa 2' },
+      cliente: { nombre: 'Rocío' },
       medioPago: 'efectivo',
       propinaPorcentaje: 10,
       items: [

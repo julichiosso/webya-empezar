@@ -6,7 +6,14 @@ export type ButtonStatus = 'idle' | 'loading' | 'success';
 
 // Sin transiciones de color: solo transform/opacity (presupuesto de animación). El hover cambia al instante.
 const base =
-  'relative inline-flex min-h-tap select-none items-center justify-center gap-2 rounded-control px-6 text-body font-semibold leading-none transition-[transform,opacity] duration-100 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 aria-disabled:pointer-events-none aria-disabled:opacity-45';
+  'relative inline-flex min-h-tap select-none items-center justify-center gap-2 rounded-control font-semibold leading-none transition-[transform,opacity] duration-100 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 aria-disabled:pointer-events-none aria-disabled:opacity-45';
+
+/** `compacto`: texto chico y menos aire a los costados (tarjetas angostas). El alto táctil no cambia. */
+type Tamanio = 'normal' | 'compacto';
+const tamanios: Record<Tamanio, string> = {
+  normal: 'px-6 text-body',
+  compacto: 'px-4 text-small',
+};
 
 const variants: Record<Variant, string> = {
   primary: 'bg-accent text-accent-fg hover:opacity-90',
@@ -14,8 +21,12 @@ const variants: Record<Variant, string> = {
   ghost: 'px-3 text-muted hover:text-fg',
 };
 
-export function buttonClasses(variant: Variant = 'primary', fullWidth = false) {
-  return `${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''}`.trim();
+export function buttonClasses(
+  variant: Variant = 'primary',
+  fullWidth = false,
+  tamanio: Tamanio = 'normal',
+) {
+  return `${base} ${tamanios[tamanio]} ${variants[variant]} ${fullWidth ? 'w-full' : ''}`.trim();
 }
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

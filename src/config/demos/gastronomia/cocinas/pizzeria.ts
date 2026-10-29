@@ -181,7 +181,7 @@ export const pizzeria: CocinaDemo = {
     {
       modalidad: 'mesa',
       mesa: '7',
-      cliente: { nombre: 'Mesa 7' },
+      cliente: { nombre: 'Mati' },
       medioPago: 'efectivo',
       propinaPorcentaje: 15,
       items: [

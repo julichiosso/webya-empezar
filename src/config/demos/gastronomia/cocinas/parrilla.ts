@@ -232,7 +232,7 @@ export const parrilla: CocinaDemo = {
     {
       modalidad: 'mesa',
       mesa: '4',
-      cliente: { nombre: 'Mesa 4' },
+      cliente: { nombre: 'Flor' },
       medioPago: 'efectivo',
       propinaPorcentaje: 10,
       items: [

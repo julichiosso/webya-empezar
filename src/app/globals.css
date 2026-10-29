@@ -382,6 +382,51 @@
   transition: opacity var(--duration-slow) var(--ease-out);
 }
 
+/* Pedido que llega al tablero (o cambia de columna): cae en su lugar y asienta, una vez. */
+@keyframes pedido-encaja {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.pedido-entra {
+  animation: pedido-encaja var(--duration-base) var(--ease-out);
+}
+
+/* Cambio entre "Ver como cliente / Ver como dueño" (View Transitions, solo opacity por defecto). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-base);
+}
+
+/* Imprimir la comanda: solo sale el ticket, en blanco y negro y sin la muesca. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .comanda-imprimible,
+  .comanda-imprimible * {
+    visibility: visible;
+  }
+  .comanda-imprimible {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 80mm;
+    background: none;
+    color: black;
+    -webkit-mask: none;
+    mask: none;
+  }
+}
+
 /* Hoja inferior: sube desde abajo y el fondo se oscurece (transform/opacity, una vez). */
 @keyframes hoja-sube {
   from {
@@ -459,7 +504,13 @@
   .hint-in,
   .fade-in,
   .hoja,
-  .hoja-fondo {
+  .hoja-fondo,
+  .pedido-entra {
+    animation: none !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
     animation: none !important;
   }
   .arte,
