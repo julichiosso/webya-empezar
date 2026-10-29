@@ -99,6 +99,19 @@ lo que la persona decidió a mano**; lo demás se deriva de los módulos sugerid
 (`modulosSeleccionados`). Por eso al cambiar de rubro no quedan módulos "fantasma" y lo elegido a
 mano nunca se pisa. El paso 2 exige al menos un módulo; los objetivos son opcionales.
 
+### Módulo Pedidos (base)
+
+Dominio en `src/domain/pedidos/`, sin React: carta, pedido, **dinero en centavos enteros**,
+máquina de estados explícita (`recibido → en_preparacion → listo → entregado`, más `cancelado`),
+validación contra la carta (el cliente nunca manda precios) y `PedidoRepository` multi-tenant con
+número de pedido incremental por tenant (implementación en memoria). La demo de Gastronomía usa
+exactamente este código. Reglas completas en la skill
+[`webya-pedidos-module`](.claude/skills/webya-pedidos-module/SKILL.md).
+
+Los datos de ejemplo de la demo (tres cocinas con carta, precios de ejemplo, modificadores y
+pedidos simulados, y las 6 paletas curadas) viven en `src/config/demos/gastronomia/`; los tests
+validan cada carta y que cada pedido de ejemplo pase la misma validación que uno real.
+
 ## Cómo agregar un rubro
 
 Un archivo, sin tocar componentes. Procedimiento completo en la skill

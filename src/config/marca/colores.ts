@@ -29,11 +29,9 @@ export const ALFA_SELECCION = 0.14;
 
 export type PaletaId = 'brasa' | 'mostaza' | 'frambuesa';
 
-export interface PaletaMarca {
-  id: PaletaId;
+/** Los colores que redefine una paleta en un contenedor (marca o demo personalizada). */
+export interface ColoresPaleta {
   nombre: string;
-  /** Una frase: qué transmite. Se muestra en /marca. */
-  idea: string;
   /** Relleno de CTA, foco, selección y la pieza que encaja. */
   accent: string;
   /** Texto sobre el acento (botones). */
@@ -42,6 +40,12 @@ export interface PaletaMarca {
   accentInk: string;
   /** Errores: tono distinto del acento para no confundirlos (y siempre con texto). */
   danger: string;
+}
+
+export interface PaletaMarca extends ColoresPaleta {
+  id: PaletaId;
+  /** Una frase: qué transmite. Se muestra en /marca. */
+  idea: string;
 }
 
 export const PALETAS_MARCA: readonly PaletaMarca[] = [
@@ -96,7 +100,7 @@ export const TEMA_CLARO = {
 } as const;
 
 /** Variables CSS que redefine una paleta (para aplicarla en un contenedor con scope). */
-export function variablesDePaleta(p: PaletaMarca): Record<string, string> {
+export function variablesDePaleta(p: ColoresPaleta): Record<string, string> {
   return {
     '--accent': p.accent,
     '--accent-fg': p.accentFg,
@@ -115,7 +119,7 @@ export interface Combinacion {
 }
 
 /** Todas las combinaciones de color que usa la UI con una paleta. Cada una tiene que pasar AA. */
-export function combinaciones(p: PaletaMarca): Combinacion[] {
+export function combinaciones(p: ColoresPaleta): Combinacion[] {
   const seleccion = mezclar(p.accent, BASE.bg, ALFA_SELECCION);
   return [
     { nombre: 'Acento sobre fondo', texto: p.accent, fondo: BASE.bg, minimo: AA_TEXTO },

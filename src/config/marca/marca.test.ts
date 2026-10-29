@@ -102,8 +102,10 @@ describe('sin restos ni colores sueltos', () => {
       (f) =>
         /\.tsx?$/.test(f) &&
         !/\.test\.tsx?$/.test(f) &&
-        // Únicos lugares con valores de color: la config de marca y la utilidad que los calcula.
+        // Únicos lugares con valores de color: la config (marca y paletas curadas de las demos,
+        // todas con contraste verificado) y la utilidad que los calcula.
         !f.includes(join('config', 'marca')) &&
+        !f.includes(join('config', 'demos')) &&
         !f.endsWith(join('lib', 'color.ts')),
     );
     const suelto = /['"`(\s]#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})['"`;)\s]|\b(?:rgba?|hsla?)\(/i;
