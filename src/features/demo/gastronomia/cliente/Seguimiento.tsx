@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { buttonClasses } from '@/components/ui/Button';
 import { Encaje } from '@/components/ui/Encaje';
+import { SEGUIMIENTO } from '@/content/demos/gastronomia/ui/seguimiento';
 import { formatearPesos } from '@/domain/pedidos/dinero';
 import { ETIQUETA_ESTADO, PASOS_SEGUIMIENTO } from '@/domain/pedidos/estados';
 import type { Pedido } from '@/domain/pedidos/types';
@@ -11,19 +12,19 @@ import type { Pedido } from '@/domain/pedidos/types';
 export function mensajeCliente(p: Pick<Pedido, 'estado' | 'modalidad'>): string {
   switch (p.estado) {
     case 'recibido':
-      return 'El local recibió tu pedido.';
+      return SEGUIMIENTO.mensajes.recibido;
     case 'en_preparacion':
-      return 'Lo están preparando.';
+      return SEGUIMIENTO.mensajes.en_preparacion;
     case 'listo':
       return p.modalidad === 'mesa'
-        ? 'Está listo: ya te lo llevan a la mesa.'
+        ? SEGUIMIENTO.mensajes.listo.mesa
         : p.modalidad === 'retiro'
-          ? 'Está listo: pasá a buscarlo.'
-          : 'Está listo: sale para tu casa.';
+          ? SEGUIMIENTO.mensajes.listo.retiro
+          : SEGUIMIENTO.mensajes.listo.delivery;
     case 'entregado':
-      return '¡Que lo disfrutes!';
+      return SEGUIMIENTO.mensajes.entregado;
     case 'cancelado':
-      return 'El local canceló el pedido.';
+      return SEGUIMIENTO.mensajes.cancelado;
   }
 }
 
@@ -45,10 +46,10 @@ export function Seguimiento({ pedido, onOtroPedido }: SeguimientoProps) {
   const actual = PASOS_SEGUIMIENTO.indexOf(pedido.estado);
   const detalle =
     pedido.modalidad === 'mesa'
-      ? `Mesa ${pedido.mesa}`
+      ? SEGUIMIENTO.detalle.mesa(pedido.mesa)
       : pedido.modalidad === 'delivery'
-        ? `Delivery a ${pedido.direccion}`
-        : 'Para retirar';
+        ? SEGUIMIENTO.detalle.delivery(pedido.direccion)
+        : SEGUIMIENTO.detalle.retiro;
 
   return (
     <section aria-labelledby="seguimiento-titulo" className="flex flex-col gap-6 px-4 pt-6 pb-8">
@@ -62,7 +63,7 @@ export function Seguimiento({ pedido, onOtroPedido }: SeguimientoProps) {
           tabIndex={-1}
           className="tabular mt-1 text-title font-semibold outline-none"
         >
-          Pedido #{pedido.numero}
+          {SEGUIMIENTO.titulo(pedido.numero)}
         </h3>
         <p aria-live="polite" className="mt-2 text-lead font-medium">
           {mensajeCliente(pedido)}
@@ -80,7 +81,7 @@ export function Seguimiento({ pedido, onOtroPedido }: SeguimientoProps) {
               <Encaje on={i <= actual} />
               {ETIQUETA_ESTADO[estado].cliente}
               <span className="sr-only">
-                {i < actual ? ' (hecho)' : i === actual ? ' (ahora)' : ''}
+                {i < actual ? SEGUIMIENTO.paso.hecho : i === actual ? SEGUIMIENTO.paso.ahora : ''}
               </span>
             </li>
           ))}
@@ -101,19 +102,18 @@ export function Seguimiento({ pedido, onOtroPedido }: SeguimientoProps) {
           ))}
         </ul>
         <p className="tabular mt-2 flex justify-between border-t border-paper-line pt-2 font-semibold">
-          <span>Total</span>
+          <span>{SEGUIMIENTO.total}</span>
           <span>{formatearPesos(pedido.totales.total)}</span>
         </p>
       </div>
 
       <p className="text-small text-paper-muted">
-        Es una demo: este pedido no llega a ninguna cocina. Lo recibe el panel del dueño:{' '}
-        <span className="lg:hidden">tocá “Ver como dueño” abajo para avanzarlo.</span>
-        <span className="max-lg:hidden">avanzalo desde el panel de al lado.</span>
+        {SEGUIMIENTO.aviso.intro} <span className="lg:hidden">{SEGUIMIENTO.aviso.celular}</span>
+        <span className="max-lg:hidden">{SEGUIMIENTO.aviso.escritorio}</span>
       </p>
 
       <button type="button" onClick={onOtroPedido} className={buttonClasses('primary', true)}>
-        Hacer otro pedido
+        {SEGUIMIENTO.otroPedido}
       </button>
     </section>
   );

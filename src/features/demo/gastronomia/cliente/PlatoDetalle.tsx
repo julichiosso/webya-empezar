@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { Ilustracion } from '@/brand/ilustracion/dibujos/Ilustracion';
 import { buttonClasses } from '@/components/ui/Button';
+import { PLATO } from '@/content/demos/gastronomia/ui/carta';
 import { esIlustracion } from '@/brand/ilustracion/dibujos/ids';
 import { formatearPesos, multiplicar, sumar } from '@/domain/pedidos/dinero';
 import { LIMITES_PEDIDO, type LineaEntrada } from '@/domain/pedidos/schemas';
@@ -19,7 +20,7 @@ interface PlatoDetalleProps {
 type Eleccion = Record<string, string[]>;
 
 const masPrecio = (centavos: number) =>
-  centavos > 0 ? `+ ${formatearPesos(centavos)}` : 'Sin cargo';
+  centavos > 0 ? PLATO.masPrecio(formatearPesos(centavos)) : PLATO.sinCargo;
 
 /**
  * Detalle de un plato: modificadores, nota y cantidad. Va adentro de la Hoja. Valida lo mismo que
@@ -92,7 +93,7 @@ export function PlatoDetalle({ producto, onAgregar }: PlatoDetalleProps) {
         const idError = `${producto.id}-${g.id}-error`;
         const opciones =
           g.tipo === 'unico' && !g.obligatorio
-            ? [{ id: '', nombre: 'Ninguno', precio: 0 }, ...g.opciones]
+            ? [{ id: '', nombre: PLATO.ninguno, precio: 0 }, ...g.opciones]
             : g.opciones;
         return (
           <fieldset
@@ -106,16 +107,16 @@ export function PlatoDetalle({ producto, onAgregar }: PlatoDetalleProps) {
               {g.nombre}
               <span className="text-small font-normal text-paper-muted">
                 {g.obligatorio
-                  ? 'Elegí una'
+                  ? PLATO.grupo.obligatorio
                   : g.tipo === 'unico'
-                    ? 'Opcional'
-                    : 'Podés elegir varias'}
+                    ? PLATO.grupo.opcional
+                    : PLATO.grupo.varias}
               </span>
             </legend>
             <div aria-live="polite">
               {falta && (
                 <p id={idError} className="mt-1 text-small font-semibold text-accent-ink">
-                  Falta elegir {g.nombre.toLowerCase()}.
+                  {PLATO.grupo.falta(g.nombre.toLowerCase())}
                 </p>
               )}
             </div>
@@ -149,15 +150,15 @@ export function PlatoDetalle({ producto, onAgregar }: PlatoDetalleProps) {
       })}
 
       <label className="block">
-        <span className="font-semibold">¿Algo para la cocina?</span>
+        <span className="font-semibold">{PLATO.nota.titulo}</span>
         <span className="block text-small text-paper-muted">
-          Opcional, hasta {LIMITES_PEDIDO.nota} letras.
+          {PLATO.nota.ayuda(LIMITES_PEDIDO.nota)}
         </span>
         <textarea
           value={nota}
           onChange={(e) => setNota(e.target.value.slice(0, LIMITES_PEDIDO.nota))}
           rows={2}
-          placeholder="Por ejemplo: sin sal, bien cocido"
+          placeholder={PLATO.nota.placeholder}
           className="mt-2 w-full rounded-control border border-paper-line bg-paper-2 p-4 text-body text-paper-fg placeholder:text-paper-muted"
         />
       </label>
@@ -175,7 +176,7 @@ export function PlatoDetalle({ producto, onAgregar }: PlatoDetalleProps) {
           onClick={agregarAlPedido}
           className={`${buttonClasses()} min-w-0 flex-1 whitespace-nowrap`}
         >
-          Agregar <span className="tabular">{formatearPesos(total)}</span>
+          {PLATO.agregar} <span className="tabular">{formatearPesos(total)}</span>
         </button>
       </div>
     </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { COMPARTIR } from '@/content/demos/gastronomia/ui/compartir';
 
 /**
  * Código QR que abre la demo (con la personalización actual) en el celular. La librería (uqr, ~8 KB)
@@ -36,7 +37,7 @@ export function CodigoQR({ url }: { url: string }) {
     <svg
       viewBox={`0 0 ${codigo.lado} ${codigo.lado}`}
       role="img"
-      aria-label="Código QR para abrir esta demo en tu celular"
+      aria-label={COMPARTIR.ariaQr}
       shapeRendering="crispEdges"
       className="size-48 rounded-card bg-paper-2 text-paper-fg"
     >

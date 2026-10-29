@@ -5,6 +5,7 @@ import {
   RUBRO_DEMO,
   type CocinaId,
 } from '@/content/demos/gastronomia';
+import { COMPARTIR } from '@/content/demos/gastronomia/ui/compartir';
 import { ORIGEN_DEMO_GASTRONOMIA } from '@/config/origenes';
 import type { DatosDesdeDemo } from '@/features/empezar/desde-demo';
 import { LARGO_NOMBRE_LOCAL, type EstadoDemo, type Personalizacion } from './store';
@@ -39,7 +40,7 @@ export function urlCompartible(
 
 /** "Mandame esta demo por WhatsApp": sin número, así la persona elige a quién (o a sí misma). */
 export function linkWhatsAppDemo(url: string, nombreLocal: string): string {
-  const texto = `Mirá cómo quedaría ${nombreLocal} con WebYa (demo con datos de ejemplo): ${url}`;
+  const texto = COMPARTIR.mensajeWhatsApp(nombreLocal, url);
   return `https://wa.me/?text=${encodeURIComponent(texto)}`;
 }
 
