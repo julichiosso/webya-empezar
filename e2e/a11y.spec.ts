@@ -32,7 +32,14 @@ test('página completa sin violaciones WCAG AA', async ({ page }) => {
   await auditar(page);
 });
 
-test('hero con módulos activados (y la pista visible) sin violaciones', async ({ page }) => {
+test('hero con la pista visible sin violaciones', async ({ page }) => {
+  await page.goto('/empezar');
+  await page.getByRole('group', { name: /armá tu negocio/i }).scrollIntoViewIfNeeded();
+  await expect(page.getByText('Tocá para activar')).toBeVisible();
+  await auditar(page);
+});
+
+test('hero con módulos activados sin violaciones', async ({ page }) => {
   await page.goto('/empezar');
   const hero = page.getByRole('group', { name: /armá tu negocio/i });
   await hero.getByRole('button', { name: /turnos y reservas/i }).click();

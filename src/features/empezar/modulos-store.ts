@@ -64,6 +64,11 @@ export function alternarModuloStore(id: ModuloId): boolean {
   return manual[id] === true;
 }
 
+/** ¿La persona ya activó o apagó algún módulo a mano? (en este tab, incluso antes de recargar) */
+export function hayDecisionesManuales(): boolean {
+  return Object.keys(getSnapshot().manual).length > 0;
+}
+
 /** El wizard publica el rubro elegido. No toca las decisiones manuales. */
 export function publicarRubro(rubro: string | null) {
   const actual = getSnapshot();

@@ -26,14 +26,18 @@ test.describe('prefers-reduced-motion: reduce', () => {
     page,
   }) => {
     await page.goto('/empezar');
+    await hero(page).scrollIntoViewIfNeeded();
+    // La pista es texto: se muestra sin movimiento al entrar el mockup y se oculta al primer toque.
+    const pista = hero(page).getByText('Tocá para activar');
+    await expect(pista).toBeVisible();
+    await expect(pista).toHaveCSS('animation-name', 'none');
+
     const tarjeta = hero(page).getByRole('button', { name: /turnos y reservas/i });
     await tarjeta.click();
     await expect(tarjeta).toHaveAttribute('aria-pressed', 'true');
     await expect(tarjeta).toHaveCSS('animation-name', 'none');
     await expect(tarjeta.locator('.tile-check')).toHaveCSS('opacity', '1');
-    // La pista es texto: se muestra (sin movimiento) y se va sola.
-    await expect(hero(page).getByText('Tocá para activar')).toBeVisible();
-    await expect(hero(page).getByText('Tocá para activar')).toBeHidden({ timeout: 6000 });
+    await expect(pista).toBeHidden();
   });
 
   test('el wizard sigue funcionando', async ({ page }) => {
@@ -61,45 +65,80 @@ test.describe('movimiento normal', () => {
     await expect(hero(page).getByRole('button').first()).toHaveCSS('opacity', '1');
   });
 
-  test('la pista "Tocá para activar" aparece al primer toque, se va sola y no vuelve', async ({
+  test('la pista aparece al entrar el mockup en pantalla, se oculta al primer toque y no vuelve', async ({
     page,
   }) => {
     await page.goto('/empezar');
+    await hero(page).scrollIntoViewIfNeeded();
     const pista = hero(page).getByText('Tocá para activar');
-    await expect(pista).toBeHidden();
+    await expect(pista).toBeVisible();
+
     await hero(page)
       .getByRole('button', { name: /turnos y reservas/i })
       .click();
-    await expect(pista).toBeVisible();
-    await expect(pista).toBeHidden({ timeout: 6000 });
+    await expect(pista).toBeHidden();
     await hero(page)
       .getByRole('button', { name: /pagos online/i })
       .click();
     await expect(pista).toBeHidden();
   });
 
-  test('solo se animan transform y opacity (hero, revelado y activar módulo)', async ({ page }) => {
+  test('si nadie toca nada, la pista se va sola', async ({ page }) => {
+    await page.goto('/empezar');
+    await hero(page).scrollIntoViewIfNeeded();
+    const pista = hero(page).getByText('Tocá para activar');
+    await expect(pista).toBeVisible();
+    await expect(pista).toBeHidden({ timeout: 8000 });
+  });
+
+  test('la pista no aparece si ya se activaron módulos antes de recargar', async ({ page }) => {
     await page.goto('/empezar');
     await hero(page)
-      .getByRole('button', { name: /carta con qr/i })
+      .getByRole('button', { name: /pagos online/i })
       .click();
-    const propiedades = await page.evaluate(() => {
-      const nombres = new Set<string>();
-      for (const sel of ['.hero-piece', '.reveal', '.tile[aria-pressed="true"]', '.hint-in']) {
-        const el = document.querySelector(sel);
-        if (!el) continue;
-        for (const a of el.getAnimations()) {
-          const efecto = a.effect as KeyframeEffect | null;
-          for (const kf of efecto?.getKeyframes() ?? []) {
-            for (const k of Object.keys(kf)) {
-              if (!['offset', 'easing', 'composite', 'computedOffset'].includes(k)) nombres.add(k);
+    await page.reload();
+    await hero(page).scrollIntoViewIfNeeded();
+    await expect(hero(page).getByRole('button', { name: /pagos online/i })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await expect(hero(page).getByText('Tocá para activar')).toBeHidden();
+  });
+
+  test('solo se animan transform y opacity (hero, revelado, pista y activar módulo)', async ({
+    page,
+  }) => {
+    const recoger = (selectores: string[]) =>
+      page.evaluate((sels) => {
+        const nombres = new Set<string>();
+        for (const sel of sels) {
+          const el = document.querySelector(sel);
+          if (!el) continue;
+          for (const a of el.getAnimations()) {
+            const efecto = a.effect as KeyframeEffect | null;
+            for (const kf of efecto?.getKeyframes() ?? []) {
+              for (const k of Object.keys(kf)) {
+                if (!['offset', 'easing', 'composite', 'computedOffset'].includes(k)) {
+                  nombres.add(k);
+                }
+              }
             }
           }
         }
-      }
-      return [...nombres];
-    });
-    expect(propiedades.length).toBeGreaterThan(0);
-    for (const p of propiedades) expect(['opacity', 'transform']).toContain(p);
+        return [...nombres];
+      }, selectores);
+
+    await page.goto('/empezar');
+    await hero(page).scrollIntoViewIfNeeded();
+    await expect(hero(page).getByText('Tocá para activar')).toBeVisible();
+    const conPista = await recoger(['.hero-piece', '.reveal', '.hint-in']);
+    await hero(page)
+      .getByRole('button', { name: /carta con qr/i })
+      .click();
+    const conTarjeta = await recoger(['.tile[aria-pressed="true"]']);
+
+    expect(conPista.length).toBeGreaterThan(0);
+    expect(conTarjeta.length).toBeGreaterThan(0);
+    for (const p of [...conPista, ...conTarjeta]) expect(['opacity', 'transform']).toContain(p);
   });
 });

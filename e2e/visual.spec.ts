@@ -15,6 +15,8 @@ test.use({ reducedMotion: 'reduce' });
 
 test('hero', async ({ page }) => {
   await page.goto('/empezar');
+  // La pista "Tocá para activar" se va sola a los 4 s: se espera para capturar un estado estable.
+  await expect(page.getByText('Tocá para activar')).toBeHidden({ timeout: 10_000 });
   await expect(page).toHaveScreenshot('00-hero.png');
 });
 
