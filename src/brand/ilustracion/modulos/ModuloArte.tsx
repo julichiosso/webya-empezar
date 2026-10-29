@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- deuda registrada en tests/arquitectura/excepciones.ts
 import type { ModuloId } from '@/content/modulos';
 
 interface ModuloArteProps {

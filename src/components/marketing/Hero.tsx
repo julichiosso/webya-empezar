@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- deuda registrada en tests/arquitectura/excepciones.ts
 import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { ButtonLink } from '@/components/ui/Button';

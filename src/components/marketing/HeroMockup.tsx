@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { HERO_MOCKUP } from '@/content/empezar/hero';
 import { getModulo, type ModuloId } from '@/content/modulos';
+// eslint-disable-next-line no-restricted-imports -- deuda registrada en tests/arquitectura/excepciones.ts
 import {
   alternarModuloStore,
   hayDecisionesManuales,
