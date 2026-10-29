@@ -4,6 +4,7 @@ import { ICONS, type IconName } from '@/brand/ilustracion/iconos/paths';
 import { LOGO_TRAZOS } from '@/brand/logo/trazos';
 import { PALETAS_DEMO } from '@/content/demos/gastronomia/paletas';
 import type { EscenaId } from '@/content/explicativo';
+import { TEXTOS_ESCENAS } from '@/content/explicativo/escenas';
 
 /**
  * Escenas del video explicativo (motion graphics). SVG propio en un lienzo de 1000×640, con los
@@ -158,13 +159,7 @@ function Burbuja({
 // --- Escenas ----------------------------------------------------------------------------------
 
 function Problema() {
-  const mensajes: [string, boolean][] = [
-    ['¿Siguen abiertos?', false],
-    ['Dos muzzas, porfa', false],
-    ['¿A qué hora paso?', false],
-    ['Mandame la carta', false],
-    ['¿Me anotaste?', false],
-  ];
+  const mensajes: [string, boolean][] = TEXTOS_ESCENAS.problema.mensajes.map((t) => [t, false]);
   return (
     <>
       <Telefono x={230} y={50}>
@@ -201,10 +196,10 @@ function Problema() {
 }
 
 const PIEZAS: { icono: IconName; nombre: string }[] = [
-  { icono: 'carta_qr', nombre: 'Carta' },
-  { icono: 'pedidos', nombre: 'Pedidos' },
-  { icono: 'pagos', nombre: 'Pagos' },
-  { icono: 'notificaciones', nombre: 'Avisos' },
+  { icono: 'carta_qr', nombre: TEXTOS_ESCENAS.encastre.piezas.carta },
+  { icono: 'pedidos', nombre: TEXTOS_ESCENAS.encastre.piezas.pedidos },
+  { icono: 'pagos', nombre: TEXTOS_ESCENAS.encastre.piezas.pagos },
+  { icono: 'notificaciones', nombre: TEXTOS_ESCENAS.encastre.piezas.avisos },
 ];
 
 function Encastre() {
@@ -220,7 +215,7 @@ function Encastre() {
         />
         <IconoSvg nombre="cubiertos" x={22} y={14} escala={1.5} />
         <Texto x={66} y={41} tam={22}>
-          Gastronomía
+          {TEXTOS_ESCENAS.encastre.rubro}
         </Texto>
       </P>
       <Telefono x={420} y={50}>
@@ -290,11 +285,9 @@ function QrFalso() {
 }
 
 function Carta() {
-  const platos: { ilus: 'pizza' | 'empanada' | 'faina'; nombre: string; precio: string }[] = [
-    { ilus: 'pizza', nombre: 'Muzzarella', precio: '$ 13.500' },
-    { ilus: 'empanada', nombre: 'Empanada', precio: '$ 1.900' },
-    { ilus: 'faina', nombre: 'Fainá', precio: '$ 1.800' },
-  ];
+  const platos: { ilus: 'pizza' | 'empanada' | 'faina'; nombre: string; precio: string }[] = (
+    ['pizza', 'empanada', 'faina'] as const
+  ).map((ilus) => ({ ilus, ...TEXTOS_ESCENAS.carta.platos[ilus] }));
   return (
     <>
       <P en={[120, 230]} anim="pop" d={100}>
@@ -319,7 +312,7 @@ function Carta() {
       <Telefono x={500} y={50} papel>
         <P en={[28, 70]} anim="entra" d={900}>
           <Texto x={0} y={30} tam={30} peso={700} clase="fill-paper-fg">
-            Tu pizzería
+            {TEXTOS_ESCENAS.carta.local}
           </Texto>
           <rect
             y="52"
@@ -353,7 +346,7 @@ function Pedido() {
   return (
     <>
       <Telefono x={230} y={50} papel>
-        {['Retiro', 'En el local', 'Envío'].map((m, i) => (
+        {TEXTOS_ESCENAS.pedido.modalidades.map((m, i) => (
           <P key={m} en={[28, 90 + i * 72]} anim="pop" d={200 + i * 250}>
             <rect
               width="204"
@@ -372,7 +365,7 @@ function Pedido() {
         <P en={[28, 440]} anim="pulso" d={1500}>
           <rect width="204" height="60" rx="16" className="fill-accent" />
           <Texto x={102} y={38} tam={22} ancla="middle" clase="fill-accent-fg">
-            Confirmar
+            {TEXTOS_ESCENAS.pedido.confirmar}
           </Texto>
         </P>
       </Telefono>
@@ -380,7 +373,7 @@ function Pedido() {
         <g className="mg mg-desliza" style={{ '--d': '2100ms' } as CSSProperties}>
           <rect width="240" height="320" rx="16" className="fill-paper" />
           <Texto x={120} y={84} tam={56} peso={700} ancla="middle" clase="fill-paper-fg">
-            #24
+            {TEXTOS_ESCENAS.pedido.numero}
           </Texto>
           {[0, 1, 2].map((i) => (
             <rect
@@ -411,7 +404,7 @@ function Pedido() {
 }
 
 function Panel() {
-  const columnas = ['Nuevo', 'Preparando', 'Listo'];
+  const columnas = TEXTOS_ESCENAS.panel.columnas;
   return (
     <>
       {columnas.map((c, i) => (
@@ -432,16 +425,16 @@ function Panel() {
       ))}
       {/* Pedidos que ya estaban: quietos en sus columnas. */}
       <P en={[402, 260]} anim="entra" d={500}>
-        <TarjetaMg numero="#21" />
+        <TarjetaMg numero={TEXTOS_ESCENAS.panel.numeros.preparando} />
       </P>
       <P en={[692, 120]} anim="entra" d={600}>
-        <TarjetaMg numero="#20" />
+        <TarjetaMg numero={TEXTOS_ESCENAS.panel.numeros.listo} />
       </P>
       {/* El pedido nuevo cae en "Nuevo" y recorre las columnas. */}
       <g transform="translate(112 120)">
         <g className="mg mg-encaja" style={{ '--d': '700ms' } as CSSProperties}>
           <g className="mg mg-recorre" style={{ '--d': '1500ms' } as CSSProperties}>
-            <TarjetaMg numero="#24" nuevo />
+            <TarjetaMg numero={TEXTOS_ESCENAS.panel.numeros.nuevo} nuevo />
           </g>
         </g>
       </g>
@@ -476,13 +469,13 @@ function TarjetaMg({ numero, nuevo = false }: { numero: string; nuevo?: boolean 
 }
 
 function Seguimiento() {
-  const pasos = ['Recibido', 'En preparación', 'Listo', 'Entregado'];
+  const pasos = TEXTOS_ESCENAS.seguimiento.pasos;
   return (
     <>
       <Telefono x={230} y={50} papel>
         <P en={[28, 80]} anim="entra" d={0}>
           <Texto x={0} y={36} tam={34} peso={700} clase="fill-paper-fg">
-            Pedido #24
+            {TEXTOS_ESCENAS.seguimiento.titulo}
           </Texto>
         </P>
         {pasos.map((p, i) => (
@@ -512,7 +505,7 @@ function Seguimiento() {
       <g transform="translate(600 230)">
         <g className="mg mg-entra" style={{ '--d': '200ms' } as CSSProperties}>
           <g className="mg mg-sale" style={{ '--d': '2600ms' } as CSSProperties}>
-            <Burbuja x={0} y={0} ancho={220} texto="¿Falta mucho?" />
+            <Burbuja x={0} y={0} ancho={220} texto={TEXTOS_ESCENAS.seguimiento.burbuja} />
             <path d="M-6 22h232" className="stroke-danger" strokeWidth="5" strokeLinecap="round" />
           </g>
         </g>
@@ -539,7 +532,7 @@ function Marca() {
               style={{ fill: p.accent } as CSSProperties}
             />
             <Texto x={36} y={112} tam={30} peso={700} clase="fill-bg">
-              Tu local
+              {TEXTOS_ESCENAS.marca.local}
             </Texto>
             {[0, 1, 2].map((j) => (
               <g key={j} transform={`translate(20 ${190 + j * 100})`}>
@@ -602,7 +595,7 @@ function Nosotros() {
       <P en={[740, 170]} anim="pop" d={2600}>
         <rect x="-90" y="-30" width="180" height="60" rx="30" className="fill-accent" />
         <Texto x={0} y={9} tam={24} ancla="middle" clase="fill-accent-fg">
-          Online
+          {TEXTOS_ESCENAS.nosotros.online}
         </Texto>
       </P>
     </>
@@ -627,7 +620,7 @@ function Cta() {
       </g>
       <P en={[500, 420]} anim="entra" d={900}>
         <Texto x={0} y={0} tam={44} peso={700} ancla="middle">
-          Creá. Digitalizá. Crecé.
+          {TEXTOS_ESCENAS.cta.lema}
         </Texto>
       </P>
     </>

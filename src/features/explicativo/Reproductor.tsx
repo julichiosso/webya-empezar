@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { buttonClasses } from '@/components/ui/Button';
 import { ESCENAS_EXPLICATIVO } from '@/content/explicativo';
+import { REPRODUCTOR } from '@/content/explicativo/reproductor';
 import { track } from '@/lib/analytics';
 import { Escena } from './escenas';
 import { duracionEstimadaMs, elegirVoz, PAUSA_ENTRE_ESCENAS_MS } from './narracion';
@@ -145,12 +146,12 @@ export function Reproductor({ origen, onCerrar }: ReproductorProps) {
       <div className="flex h-full flex-col">
         <div className="flex items-center justify-between gap-4 px-4 pt-4 lg:px-6">
           <h2 id="explicativo-titulo" className="text-heading font-semibold">
-            Cómo funciona WebYa
+            {REPRODUCTOR.titulo}
           </h2>
           <button
             type="button"
             onClick={cerrar}
-            aria-label="Cerrar el video"
+            aria-label={REPRODUCTOR.ariaCerrar}
             className="-mr-2 flex size-12 items-center justify-center rounded-full hover:bg-surface-2"
           >
             <Icon name="cerrar" size={22} />
@@ -183,7 +184,7 @@ export function Reproductor({ origen, onCerrar }: ReproductorProps) {
                   }}
                   className={buttonClasses('secondary')}
                 >
-                  Probar la demo
+                  {REPRODUCTOR.probarDemo}
                 </button>
               ) : (
                 <a
@@ -191,7 +192,7 @@ export function Reproductor({ origen, onCerrar }: ReproductorProps) {
                   onClick={() => track('explicativo_cta', { destino: 'demo' })}
                   className={buttonClasses('secondary')}
                 >
-                  Probar la demo
+                  {REPRODUCTOR.probarDemo}
                 </a>
               )}
               <a
@@ -203,25 +204,23 @@ export function Reproductor({ origen, onCerrar }: ReproductorProps) {
                 }}
                 className={buttonClasses('primary')}
               >
-                Quiero el mío
+                {REPRODUCTOR.quieroElMio}
               </a>
             </div>
           )}
 
           {sinVozEnEspanol && voz && (
-            <p className="text-center text-small text-muted">
-              Tu dispositivo no tiene voz en español: seguilo con los subtítulos.
-            </p>
+            <p className="text-center text-small text-muted">{REPRODUCTOR.sinVozEnEspanol}</p>
           )}
 
           {/* Capítulos: también son la barra de progreso. */}
-          <ol className="flex gap-1" aria-label="Capítulos">
+          <ol className="flex gap-1" aria-label={REPRODUCTOR.ariaCapitulos}>
             {ESCENAS_EXPLICATIVO.map((e, i) => (
               <li key={e.id} className="flex-1">
                 <button
                   type="button"
                   onClick={() => irA(i)}
-                  aria-label={`Capítulo ${i + 1}: ${e.capitulo}`}
+                  aria-label={REPRODUCTOR.ariaCapitulo(i + 1, e.capitulo)}
                   aria-current={i === indice ? 'step' : undefined}
                   className="flex h-12 w-full items-center"
                 >
@@ -249,21 +248,27 @@ export function Reproductor({ origen, onCerrar }: ReproductorProps) {
             </p>
             <div className="flex items-center gap-1">
               <BotonControl
-                etiqueta="Capítulo anterior"
+                etiqueta={REPRODUCTOR.anterior}
                 onClick={() => irA(indice - 1)}
                 disabled={indice === 0}
               >
                 <Icon name="arrowLeft" size={20} />
               </BotonControl>
               <BotonControl
-                etiqueta={terminado ? 'Ver de nuevo' : reproduciendo ? 'Pausar' : 'Reproducir'}
+                etiqueta={
+                  terminado
+                    ? REPRODUCTOR.verDeNuevo
+                    : reproduciendo
+                      ? REPRODUCTOR.pausar
+                      : REPRODUCTOR.reproducir
+                }
                 onClick={alternarReproduccion}
                 principal
               >
                 <Icon name={reproduciendo ? 'pausa' : 'play'} size={22} />
               </BotonControl>
               <BotonControl
-                etiqueta="Capítulo siguiente"
+                etiqueta={REPRODUCTOR.siguiente}
                 onClick={() => irA(indice + 1)}
                 disabled={indice === TOTAL - 1}
               >
@@ -280,7 +285,7 @@ export function Reproductor({ origen, onCerrar }: ReproductorProps) {
                   className="flex min-h-tap items-center gap-2 rounded-full px-4 text-small font-semibold text-muted aria-pressed:text-fg"
                 >
                   <Icon name={voz ? 'volumen' : 'silencio'} size={20} />
-                  Voz
+                  {REPRODUCTOR.voz}
                 </button>
               )}
             </div>
