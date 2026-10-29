@@ -1,4 +1,4 @@
-import type { LeadPayloadInput } from '@/domain/leads/lead';
+import type { LeadPayloadInput } from '@/content/leads';
 
 export type EnvioResultado =
   | { ok: true }

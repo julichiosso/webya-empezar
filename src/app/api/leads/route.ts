@@ -1,3 +1,4 @@
+import { MENSAJES_API_LEAD } from '@/content/leads';
 import { getEnv } from '@/server/env';
 import { handleCreateLead, type HandlerDeps } from '@/server/leads/handler';
 import { getNotificationService } from '@/server/notifications';
@@ -17,12 +18,7 @@ export async function POST(request: Request) {
     // Configuración inválida (instrumentation.ts debería haberlo frenado al arrancar).
     console.error('[leads] configuración inválida', e instanceof Error ? e.message : 'error');
     return Response.json(
-      {
-        error: {
-          code: 'INTERNAL_ERROR',
-          message: 'No pudimos guardar tus datos. Probá de nuevo en un momento.',
-        },
-      },
+      { error: { code: 'INTERNAL_ERROR', message: MENSAJES_API_LEAD.INTERNAL_ERROR } },
       { status: 500, headers: { 'Cache-Control': 'no-store' } },
     );
   }

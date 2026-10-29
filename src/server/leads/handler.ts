@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { RUBRO_OTRO_ID } from '@/content/rubros';
 import { parsePhoneAR } from '@/lib/phone';
 import { sanitizeLine, sanitizeRecord } from '@/lib/sanitize';
-import { LIMITES, leadPayloadSchema } from '@/domain/leads/lead';
+import { LIMITES, leadPayloadSchema, MENSAJES_API_LEAD } from '@/content/leads';
 import type { ServerEnv } from '../env';
 import { getClientIp, hashIp } from '../ip';
 import type { NotificationService } from '../notifications';
@@ -28,14 +28,7 @@ type CodigoError =
   | 'RATE_LIMITED'
   | 'INTERNAL_ERROR';
 
-const MENSAJES: Record<CodigoError, string> = {
-  UNSUPPORTED_MEDIA_TYPE: 'El formato de la solicitud no es válido.',
-  PAYLOAD_TOO_LARGE: 'La solicitud es demasiado grande.',
-  INVALID_JSON: 'No pudimos leer los datos enviados.',
-  VALIDATION_ERROR: 'Revisá los datos del formulario.',
-  RATE_LIMITED: 'Recibimos muchos envíos desde tu conexión. Probá de nuevo en unos minutos.',
-  INTERNAL_ERROR: 'No pudimos guardar tus datos. Probá de nuevo en un momento.',
-};
+const MENSAJES: Record<CodigoError, string> = MENSAJES_API_LEAD;
 
 const SIN_CACHE = { 'Cache-Control': 'no-store' };
 
@@ -128,7 +121,9 @@ export async function handleCreateLead(request: Request, deps: HandlerDeps): Pro
     // El schema ya garantizó que el teléfono es válido: acá solo se normaliza a E.164.
     const telefono = parsePhoneAR(d.whatsapp);
     if (!telefono.ok)
-      return error(400, 'VALIDATION_ERROR', { fields: { whatsapp: 'Número inválido.' } });
+      return error(400, 'VALIDATION_ERROR', {
+        fields: { whatsapp: MENSAJES_API_LEAD.WHATSAPP_INVALIDO },
+      });
 
     const lead: NuevoLead = {
       nombre: d.nombre,

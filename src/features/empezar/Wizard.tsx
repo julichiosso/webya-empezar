@@ -16,7 +16,7 @@ import { getRubro, RUBRO_OTRO_ID } from '@/content/rubros';
 import { track } from '@/lib/analytics';
 import { siteConfig } from '@/lib/site-config';
 import { captureUtm, type Utm } from '@/lib/utm';
-import type { DatosForm, LeadPayloadInput } from '@/domain/leads/lead';
+import type { DatosForm, LeadPayloadInput } from '@/content/leads';
 import { buildWhatsAppLink, buildWhatsAppMessage } from '@/lib/whatsapp';
 import { enviarLead } from './api';
 import { modulosSeleccionados } from './modulos';

@@ -7,7 +7,7 @@ import { Button, ButtonLink, type ButtonStatus } from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Field';
 import { PASO_DATOS } from '@/content/empezar/pasos';
 import { formatPhoneInput } from '@/lib/phone';
-import { datosFormSchema, LIMITES, type DatosForm } from '@/domain/leads/lead';
+import { datosFormSchema, LIMITES, type DatosForm } from '@/content/leads';
 import type { EnvioResultado } from '../api';
 import { StepHeader } from './StepHeader';
 

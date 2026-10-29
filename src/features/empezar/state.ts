@@ -3,7 +3,7 @@ import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { esOrigen, type Origen } from '@/config/origenes';
 import { WIZARD } from '@/content/empezar/wizard';
 import { getRubro, RUBRO_OTRO_ID } from '@/content/rubros';
-import type { DatosForm } from '@/domain/leads/lead';
+import type { DatosForm } from '@/content/leads';
 
 /** Lo que la persona armó en una demo (paleta y tipo de cocina), si vino de ahí. */
 export interface DesdeDemo {
