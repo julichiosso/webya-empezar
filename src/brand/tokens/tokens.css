@@ -58,6 +58,9 @@
   --duration-fast: 160ms;
   --duration-base: 280ms;
   --duration-slow: 520ms;
+  --escala-toque: 0.98;
+  --escala-sobrepaso: 1.02;
+  --paso-pieza: 70ms;
 
   /* Capa 3: componente */
   --boton-primario-fondo: var(--accent);
