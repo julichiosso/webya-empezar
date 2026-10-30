@@ -95,6 +95,19 @@ describe('variantes del logo (geometría para favicon, app icons y export)', () 
     expect(c.ancho * s!).toBeCloseTo(32 * TEJA.ocupacion, 1);
   });
 
+  it('src/app/icon.svg es la teja compacta generada (si falla: node scripts/exportar-marca.mjs)', () => {
+    const icono = readFileSync(resolve(process.cwd(), 'src/app/icon.svg'), 'utf8').trim();
+    expect(icono).toBe(
+      svgTejaCompacta(w, {
+        lado: 32,
+        fondo: COLOR.negro[950],
+        tinta: COLOR.blanco[0],
+        radio: 32 * TEJA.radioRelativo,
+        ocupacion: TEJA.ocupacion,
+      }),
+    );
+  });
+
   it('la zona de respeto es media altura de la "x"', () => {
     expect(zonaDeRespeto(w)).toBe(cajaDe(w.d).alto / 2);
   });
