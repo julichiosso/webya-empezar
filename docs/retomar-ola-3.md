@@ -21,8 +21,17 @@ Rama `feat/ola-3`, base `6aef6e7`. Sin push. Cada paso se integra a `main` local
   nuevo en `layout.spec`: oscuro por defecto → claro → se recuerda al recargar.
   (b fue `075d889`.)
 
+  (c fue `c50d3f0`.)
+
 ## Falta
 
+- **d) entero, sin empezar** (lo frenó el coordinador). Contrato del servidor ya visto: `POST /api/leads`
+  con `parcial: true` responde 201 `{ ok, id, token }`; `PATCH /api/leads/[id]` con
+  `{ token, nombreNegocio, nombre?, email?, mensaje? }` responde 200, y 404 genérico si venció o no coincide.
+  Riesgo principal: `desde-demo.ts` hoy deja el wizard en el paso 2 (módulos). Con el orden nuevo
+  (necesidad → rubro → módulos) pasa a ser el paso 3, y eso choca con los E2E de la demo, que no pueden
+  cambiar de expectativas. También hay que reescribir `Wizard.test.tsx`, `e2e/helpers.ts`, `flujo`,
+  `teclado`, `layout` y `lead-parcial`.
 - d) Wizard nuevo (solo si a–c cierran limpios).
 - El CTA de "¿Y si no está?" baja a `#wizard`; marcar "Otra cosa" de entrada depende del paso de
   necesidades (d).
