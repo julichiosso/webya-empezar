@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "tokens": "vitest run src/brand/tokens/tokens.css.test.ts -u"
+    "tokens": "vitest run src/brand/tokens/tokens.css.test.ts -u",
+    "marca:exportar": "node scripts/exportar-marca.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^6.0.2",
