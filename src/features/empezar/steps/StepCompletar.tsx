@@ -171,7 +171,15 @@ export function StepCompletar({
       <Button type="submit" fullWidth status={status} className="mt-6">
         {status === 'loading' ? TXT.enviando : TXT.enviar}
       </Button>
-      <Button variant="ghost" fullWidth className="mt-2" onClick={onOmitir}>
+      {/* Sin robar el foco al apretar: si no, el campo vacío valida al salir, aparece su error,
+          el botón baja antes de soltar y el toque se pierde. */}
+      <Button
+        variant="ghost"
+        fullWidth
+        className="mt-2"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={onOmitir}
+      >
         {TXT.omitir}
       </Button>
     </form>

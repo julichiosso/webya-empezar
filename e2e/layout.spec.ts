@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { FOOTER } from '../src/content/empezar/footer';
 import { HERO } from '../src/content/empezar/hero';
-import { abrirWizard, tocar, wizard } from './helpers';
+import { abrirWizard, pasarNecesidad, tocar, TITULO_PASO_1, wizard } from './helpers';
 
 // Layout responsive. Los chequeos de escritorio (lg ≥ 1024 px) se saltean en celular y tablet.
 const ANCHO_LG = 1024;
@@ -126,13 +126,12 @@ test.describe('escritorio (lg y más)', () => {
     await abrirWizard(page);
     const panel = page.getByTestId('negocio-preview-panel');
     await expect(panel).toBeVisible();
-    const paso = (await wizard(page)
-      .getByRole('heading', { name: '¿Qué vas a crear?' })
-      .boundingBox())!;
+    const paso = (await wizard(page).getByRole('heading', { name: TITULO_PASO_1 }).boundingBox())!;
     const prev = (await panel.boundingBox())!;
     expect(paso.x + paso.width).toBeLessThan(prev.x);
 
     // Sticky: con el wizard parcialmente scrolleado, el panel sigue a la vista.
+    await pasarNecesidad(page);
     await tocar(page, /comercio/i);
     await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
     await expect(wizard(page).getByRole('heading', { name: '¿Qué querés activar?' })).toBeVisible();
@@ -150,6 +149,7 @@ test.describe('escritorio (lg y más)', () => {
     await abrirWizard(page);
     const panel = page.getByTestId('negocio-preview-panel');
     await expect(panel).toContainText('Tu negocio');
+    await pasarNecesidad(page);
     await tocar(page, /comercio/i);
     await expect(panel).toContainText('Comercio y tienda');
     await expect(panel.locator('li[data-on="true"]')).toHaveCount(4);
@@ -183,9 +183,12 @@ test.describe('debajo de lg (celular y tablet)', () => {
     test.skip(esLg(page), 'solo debajo de lg');
   });
 
-  test('una columna: sin panel lateral, la vista previa va dentro del paso 1', async ({ page }) => {
+  test('una columna: sin panel lateral, la vista previa va dentro del paso de rubro', async ({
+    page,
+  }) => {
     await page.goto('/empezar');
     await abrirWizard(page);
+    await pasarNecesidad(page);
     await expect(page.getByTestId('negocio-preview-panel')).toBeHidden();
     await expect(page.getByTestId('negocio-preview')).toBeVisible();
     const h1 = (await page.locator('h1').boundingBox())!;

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { abrirWizard, tocar, wizard } from './helpers';
+import { abrirWizard, pasarNecesidad, tocar, wizard } from './helpers';
 
 /** Junta errores y advertencias de la consola (incluye los de hidratación) y excepciones de la página. */
 function vigilarConsola(page: Page) {
@@ -21,6 +21,7 @@ test('sin errores ni advertencias de consola al cargar, abrir el wizard e intera
     .getByRole('button', { name: /turnos y reservas/i })
     .click();
   await abrirWizard(page);
+  await pasarNecesidad(page);
   await tocar(page, /gastronomía/i);
   await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
   await expect(wizard(page).getByRole('heading', { name: '¿Qué querés activar?' })).toBeVisible();
@@ -33,14 +34,17 @@ test('hidratar con estado guardado en sessionStorage no genera diferencias servi
   const problemas = vigilarConsola(page);
   await page.addInitScript(() => {
     sessionStorage.setItem(
-      'webya:empezar:v1',
+      'webya:empezar:v2',
       JSON.stringify({
-        paso: 2,
+        paso: 3,
+        necesidades: ['cobrar'],
+        necesidadLibre: '',
         rubro: 'comercio',
         rubroOtro: '',
         objetivos: [],
         datos: { nombreNegocio: '', nombre: '', whatsapp: '', email: '', mensaje: '' },
-        enviado: false,
+        lead: null,
+        confirmacion: null,
       }),
     );
     sessionStorage.setItem('webya:empezar:modulos:v1', JSON.stringify({ carta_qr: true }));
