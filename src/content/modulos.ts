@@ -90,3 +90,22 @@ export const MODULO_IDS = Object.keys(MODULOS) as ModuloId[];
 export function getModulo(id: ModuloId): Modulo & { id: ModuloId } {
   return { id, ...MODULOS[id] };
 }
+
+/** Una aclaración pendiente y los módulos que la comparten. */
+export interface NotaPendiente {
+  nota: string;
+  nombres: string[];
+}
+
+/**
+ * Agrupa las `notaEstado` por texto: el mismo TODO se muestra una vez, con los módulos a los que
+ * aplica, en vez de repetirse en cada tarjeta. Orden del catálogo.
+ */
+export function notasPendientes(ids: readonly ModuloId[] = MODULO_IDS): NotaPendiente[] {
+  const porNota = new Map<string, string[]>();
+  for (const id of ids) {
+    const { notaEstado, nombre } = getModulo(id);
+    if (notaEstado) porNota.set(notaEstado, [...(porNota.get(notaEstado) ?? []), nombre]);
+  }
+  return [...porNota].map(([nota, nombres]) => ({ nota, nombres }));
+}

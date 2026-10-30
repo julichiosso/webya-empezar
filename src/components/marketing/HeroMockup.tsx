@@ -99,7 +99,8 @@ export function HeroMockup({
         className="rounded-panel border border-line-strong bg-surface p-4 shadow-raised lg:p-6"
       >
         {/* Barra del navegador de la mini web: decorativa. En escritorio muestra un acceso por módulo activo. */}
-        <div aria-hidden="true" className="hero-piece" style={pieza(0)}>
+        {/* Barra y portada de la mini web: decorativas, solo desde lg (en celular van directo las tarjetas). */}
+        <div aria-hidden="true" className="hero-piece hidden lg:block" style={pieza(0)}>
           <div className="flex h-8 items-center justify-between rounded-control bg-surface-2 px-4 lg:h-10">
             <span className="h-2 w-14 rounded-full bg-fg" />
             <span className="hidden gap-4 lg:flex">
@@ -118,7 +119,11 @@ export function HeroMockup({
             </span>
           </div>
         </div>
-        <div aria-hidden="true" className="hero-piece mt-3 lg:mt-4" style={pieza(1)}>
+        <div
+          aria-hidden="true"
+          className="hero-piece mt-3 hidden lg:mt-4 lg:block"
+          style={pieza(1)}
+        >
           <div className="flex items-center justify-between gap-6 rounded-card bg-surface-2 p-4 lg:p-6">
             <div className="min-w-0 flex-1">
               <span className="block h-3 w-3/4 rounded-full bg-fg lg:h-4" />
@@ -129,7 +134,7 @@ export function HeroMockup({
           </div>
         </div>
 
-        <ul className="mt-3 grid grid-cols-2 gap-3 lg:mt-4 lg:gap-4">
+        <ul className="grid grid-cols-2 gap-3 lg:mt-4 lg:gap-4">
           {TILES.map((id, i) => {
             const activo = seleccionados.includes(id);
             return (

@@ -1,4 +1,5 @@
 import type { MensajesLead } from '@/domain/leads/lead';
+import { WIZARD } from '@/content/empezar/wizard';
 
 /*
  * Aparte de content/leads.ts (que arma los esquemas con zod) para que el estado del wizard use los
@@ -26,7 +27,7 @@ export const MENSAJES_LEAD: MensajesLead = {
   objetivoDeOtroRubro: 'Ese objetivo no corresponde al rubro.',
   necesidadesRepetidas: 'Hay opciones repetidas.',
   necesidadInexistente: 'Esa opción no existe.',
-  necesidadLibreVacia: 'Contanos qué necesitás, aunque sea en pocas palabras.',
-  necesidadLibreCorta: 'Contanos un poco más de lo que necesitás.',
+  necesidadLibreVacia: WIZARD.errores.necesidadLibreVacia,
+  necesidadLibreCorta: WIZARD.errores.necesidadLibreCorta,
   tokenInvalido: 'El enlace para completar tus datos no es válido.',
 };

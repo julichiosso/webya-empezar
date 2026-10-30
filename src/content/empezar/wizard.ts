@@ -18,5 +18,8 @@ export const WIZARD = {
     sinModulos: 'Activá al menos un módulo para seguir.',
     /** Flujo nuevo, paso 1: no marcó ninguna necesidad. */
     sinNecesidad: 'Marcá al menos una opción, o elegí "Otra cosa" y contanos.',
+    /** Marcó "Otra cosa" sin escribir nada, o algo demasiado corto (también los usa la API). */
+    necesidadLibreVacia: 'Contanos qué necesitás, aunque sea en pocas palabras.',
+    necesidadLibreCorta: 'Contanos un poco más de lo que necesitás.',
   },
 } as const;

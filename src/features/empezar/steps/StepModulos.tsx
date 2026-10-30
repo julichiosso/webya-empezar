@@ -3,12 +3,13 @@
 import * as m from 'motion/react-m';
 import type { KeyboardEvent, Ref } from 'react';
 import { Button } from '@/components/ui/Button';
+import { NotasPendientes } from '@/components/patterns/NotasPendientes';
 import { Chip } from '@/components/ui/Chip';
 import { ModuloOption } from '@/components/ui/ModuloOption';
 import { PASO_MODULOS } from '@/content/empezar/pasos';
 import { FLUJO } from '@/content/empezar/wizard-flujo';
 import { MICROCOPY } from '@/content/microcopy';
-import { getModulo, MODULO_IDS, type ModuloId } from '@/content/modulos';
+import { getModulo, MODULO_IDS, notasPendientes, type ModuloId } from '@/content/modulos';
 import { getRubro } from '@/content/rubros';
 import { esSugerido, sugeridosPorNecesidad } from '../modulos';
 import { StepHeader } from './StepHeader';
@@ -43,12 +44,8 @@ const item = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
-/** El estado honesto en palabras, con su aclaración pendiente (TODO visible) si la tiene. */
-function textoEstado(id: ModuloId) {
-  const mod = getModulo(id);
-  const etiqueta = TXT.estados[mod.estado].etiqueta;
-  return mod.notaEstado ? `${etiqueta} · ${mod.notaEstado}` : etiqueta;
-}
+/** El estado honesto en palabras. Sus aclaraciones pendientes (TODO) van una vez, debajo de la lista. */
+const textoEstado = (id: ModuloId) => TXT.estados[getModulo(id).estado].etiqueta;
 
 export function StepModulos({
   rubro,
@@ -129,6 +126,7 @@ export function StepModulos({
           })}
         </m.ul>
       </fieldset>
+      <NotasPendientes notas={notasPendientes()} className="mt-4" />
 
       <p aria-live="polite" className="tabular mt-4 min-h-6 text-small text-muted">
         {!sinModulos

@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { FOOTER } from '../src/content/empezar/footer';
+import { STICKY_CTA } from '../src/content/empezar/cta-final';
 import { HERO } from '../src/content/empezar/hero';
 import { abrirWizard, pasarNecesidad, tocar, TITULO_PASO_1, wizard } from './helpers';
 
@@ -181,6 +182,23 @@ test.describe('escritorio (lg y más)', () => {
 test.describe('debajo de lg (celular y tablet)', () => {
   test.beforeEach(({ page }) => {
     test.skip(esLg(page), 'solo debajo de lg');
+  });
+
+  test('la barra fija aparece pasando el hero y se va en el wizard', async ({ page }) => {
+    await page.goto('/empezar');
+    const barra = page.getByRole('region', { name: STICKY_CTA.aria });
+    await expect(barra).toHaveAttribute('data-visible', 'false');
+    // Entre secciones (sin hero, wizard, cierre ni pie a la vista): aparece.
+    await page.locator('section[aria-labelledby="incluye-title"]').scrollIntoViewIfNeeded();
+    await page.mouse.wheel(0, 200);
+    await expect(barra).toHaveAttribute('data-visible', 'true');
+    await expect(barra.getByRole('link', { name: STICKY_CTA.cta })).toHaveAttribute(
+      'href',
+      '#wizard',
+    );
+    // En el wizard ya hay a dónde tocar: se esconde.
+    await abrirWizard(page);
+    await expect(barra).toHaveAttribute('data-visible', 'false');
   });
 
   test('una columna: sin panel lateral, la vista previa va dentro del paso de rubro', async ({
