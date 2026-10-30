@@ -1,5 +1,6 @@
 import { expect, test, type Response } from '@playwright/test';
 import { gzipSync } from 'node:zlib';
+import { FUENTE_PRECARGADA } from '../src/brand/tipografia/fuente';
 import { TITULO_PASO_1, wizard } from './helpers';
 
 // Presupuestos de la ruta. Se prueba una vez (desktop) con un viewport de celular fijo.
@@ -75,4 +76,19 @@ test('CLS menor a 0,05 recorriendo toda la página y pasando por el wizard', asy
   const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls);
   testInfo.annotations.push({ type: 'medición', description: `CLS: ${cls.toFixed(4)}` });
   expect(cls).toBeLessThan(PRESUPUESTO_CLS);
+});
+
+test('la fuente se precarga y el preload apunta al archivo que usa el @font-face', async ({
+  page,
+  request,
+}) => {
+  await page.goto('/empezar');
+  const preload = page.locator('link[rel="preload"][as="font"]');
+  await expect(preload).toHaveCount(1);
+  const href = await preload.getAttribute('href');
+  expect(href).toBe(FUENTE_PRECARGADA);
+  // Si Google cambia el archivo, cambia su nombre: el preload quedaría apuntando a nada.
+  const html = await (await request.get('/empezar')).text();
+  expect(html).toContain(`src:url(${FUENTE_PRECARGADA})`);
+  expect((await request.get(FUENTE_PRECARGADA)).status()).toBe(200);
 });

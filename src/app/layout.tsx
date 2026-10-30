@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { Outfit } from 'next/font/google';
+import { preload } from 'react-dom';
 import { ScriptTema } from '@/brand/tema/ScriptTema';
+import { FUENTE_PRECARGADA } from '@/brand/tipografia/fuente';
 import { BASE } from '@/brand/tokens/colores';
 import { SEO_SITIO } from '@/content/seo';
 import { siteConfig } from '@/lib/site-config';
@@ -28,6 +30,8 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Una sola etiqueta <link rel=preload> en el <head> (ver brand/tipografia/fuente.ts).
+  preload(FUENTE_PRECARGADA, { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
   return (
     // suppressHydrationWarning: ScriptTema puede poner data-theme en <html> antes de hidratar.
     <html lang="es-AR" className={outfit.variable} suppressHydrationWarning>
