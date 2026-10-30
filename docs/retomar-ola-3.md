@@ -1,54 +1,38 @@
-# Retomar Ola 3 (paginas)
+# Retomar Ola 3
 
-Rama `feat/ola-3`, base `6aef6e7`. Sin push. Cada paso se integra a `main` local solo por fast-forward.
+`main` local = `30e08b7`, 76 commits adelante de `origin/main` (`f02db48`). **Sin push a main.** La única rama
+subida es `sprint/base-marca` (`0a3b4ff`, preview de Vercel detrás de su login).
 
-## Hecho
+## Hecho (todo en `main` local)
 
-- **a) Copy nuevo en /empezar** (`7d5a53a`). Hero, FAQ (8), SEO/OG ya leían de `src/content`; se sumó al
-  footer "Probar la demo", "Escribinos por WhatsApp" (solo si hay número), aviso de pestaña nueva y el TODO
-  de privacidad. E2E `layout`, `flujo` y `seo` leen los textos de `src/content`.
-- **b) Nav, "¿Y si no está?" y TODO visibles.** `components/marketing/Nav.tsx` (saltar al contenido, logo
-  enlazado, un solo CTA), `AMedida.tsx` (después de "Qué podés activar"), enlace a la demo en el hero.
-  TODO visibles: `HERO.todoPlazo` (escritorio, debajo de las señales), `CONFIANZA.compromisos[].todo`,
-  `PASO_LISTO.todoPlazo`, `Pregunta.todo` (fuera del JSON-LD) y estado + `notaEstado` en "Qué podés activar"
-  (la nota lleva `data-todo`). Deuda de capas saldada: Hero recibe `mockup` y `accion` por props;
-  HeroMockup recibe el estado por props y lo conecta `features/empezar/HeroMockupConectado.tsx`. Se borraron
-  esas 2 entradas de `tests/arquitectura/excepciones.ts` y sus `eslint-disable`. E2E `teclado` sigue el
-  orden de foco nuevo; `layout`/`flujo` buscan el CTA dentro de `main` (ahora hay dos "Empezar a crear").
+- **a, b, c** (copy, nav, "¿Y si no está?", TODO visibles, tema): `7d5a53a`, `075d889`, `c50d3f0`.
+- **Calidad** (`636ea4c`): CLS 0 en el hero (la fila reserva el alto del mockup y el texto va arriba con margen
+  fijo) y `content-visibility:auto` bajo el pliegue (`.reveal` y `.diferido` en el pie): primer layout de ~150 a
+  ~80 ms con CPU x4.
+- **Leads** (`ad15880`): fuera de Vercel nunca se elige Supabase por defecto (un `next start` local usaba la
+  base real). Pedirlo exige `ALLOW_SUPABASE_IN_DEV=1`.
+- **Tema** (`baad34e`): etiqueta fija "Modo claro" desde content; el claro solo aplica en `/empezar`.
+- **Capturas** regeneradas y revisadas (`138d6e2`, `d067bf3`, `f18f790`).
+- **d) Wizard nuevo** (merge `30e08b7`): necesidad (con "Otra cosa", 500) → rubro → módulos con estado y TODO →
+  solo WhatsApp (POST parcial, guarda el lead) → completar (PATCH, solo el nombre del negocio) u "Ahora no" →
+  confirmación completa o parcial. Desde la demo: entra en módulos (paso 3 de 4) y manda un formulario completo
+  (los E2E de la demo no cambiaron de expectativas; solo el de "elegir Gastronomía" pasa antes el paso 1).
+  El traspaso demo → wizard vive en `domain/traspaso/demo-wizard.ts`: **cero excepciones de capas**.
 
-- **c) Tema.** `<ScriptTema />` en el `<head>` de `src/app/layout.tsx`, `suppressHydrationWarning` en
-  `<html>` e `InterruptorTema` en el footer (la nav queda con un solo CTA). El oscuro sigue de default. E2E
-  nuevo en `layout.spec`: oscuro por defecto → claro → se recuerda al recargar.
-  (b fue `075d889`.)
-
-  (c fue `c50d3f0`.)
+Verificado en `30e08b7`: lint 0, typecheck 0, Vitest 876 ✓, E2E 469 ✓ / 0 ✗ / 100 omitidas (las omitidas son
+tests de un solo proyecto o solo celular/escritorio). JS inicial `/empezar` 146,8 KB, demo 183,4 KB.
 
 ## Falta
 
-- **d) entero, sin empezar** (lo frenó el coordinador). Contrato del servidor ya visto: `POST /api/leads`
-  con `parcial: true` responde 201 `{ ok, id, token }`; `PATCH /api/leads/[id]` con
-  `{ token, nombreNegocio, nombre?, email?, mensaje? }` responde 200, y 404 genérico si venció o no coincide.
-  Riesgo principal: `desde-demo.ts` hoy deja el wizard en el paso 2 (módulos). Con el orden nuevo
-  (necesidad → rubro → módulos) pasa a ser el paso 3, y eso choca con los E2E de la demo, que no pueden
-  cambiar de expectativas. También hay que reescribir `Wizard.test.tsx`, `e2e/helpers.ts`, `flujo`,
-  `teclado`, `layout` y `lead-parcial`.
-- d) Wizard nuevo (solo si a–c cierran limpios).
-- El CTA de "¿Y si no está?" baja a `#wizard`; marcar "Otra cosa" de entrada depende del paso de
-  necesidades (d).
+- **Fase 3**: `qa-rendimiento` y `seguridad-revisor` (máximo 2 a la vez) y `docs/estado-final.md`.
+- El peor frame de la entrada sigue en ~200 ms con CPU x4: es la evaluación del runtime de Next con webpack
+  (chunk `322`). Partir chunks lo subía a 155 KB y no mejoraba: descartado.
 
-## Deudas y riesgos
+## Riesgos
 
-- Sigue la excepción `features/demo/gastronomia/* -> features/empezar/desde-demo`: moverla implica sacar la
-  persistencia del wizard (`state.ts`) a una capa común; no se tocó para no cambiar la demo.
-- El título "Todo lo digital para tu negocio." no entra en una línea en la columna del hero a 1280 px con
-  el token `hero` (`src/brand/tokens/primitivos.ts`, dueño `marca-sistema`). El E2E ahora acepta el título
-  en 2 líneas y exige la línea gris en una. Si se quiere una línea, achicar el token o ensanchar la columna.
-- No se corrieron `a11y`, `movimiento`, `rendimiento` ni `consola` (no se tocaron): la nav y la sección nueva
-  no pasaron por axe en E2E. Tampoco se midió el JS inicial.
-- El interruptor usa `FOOTER.tema.aClaro` ("Pasar a modo claro") como nombre fijo con `aria-pressed`;
-  el contrato de `InterruptorTema` pide un nombre fijo del estado activo ("Tema claro"). Pedido a
-  `copy-conversion`: una etiqueta fija tipo "Modo claro".
-- El script de tema está en el layout raíz: si alguien eligió claro en /empezar, `/demo/gastronomia` y
-  `/marca` también se ven en claro fuera de los contenedores con paleta propia. No se revisó a ojo.
-- No se corrió `consola.spec` (errores de hidratación) en este paso.
-- Capturas visuales desactualizadas (esperado, no se regeneraron).
+- **Nunca** levantar `next start` a mano para E2E: Playwright levanta el suyo con `LEAD_REPOSITORY=file`.
+- Posibles leads de prueba en la Supabase real del 2026-10-30 ("Peluquería desktop/tablet/pixel-7/hero-…",
+  "Ana Pérez"): los tiene que revisar el usuario.
+- Migración `20261030120000_leads_parcial_necesidades.sql` sin aplicar en Supabase: sin ella el wizard nuevo
+  falla en producción al guardar el WhatsApp.
+- `Wizard.test.tsx` puede pasar los 5 s con la máquina cargada (pasa sola).
