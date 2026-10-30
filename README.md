@@ -54,17 +54,17 @@ La primera vez de E2E: `npx playwright install chromium`.
 
 Documentadas una por una en [`.env.example`](.env.example). Resumen:
 
-| Variable                                      | Dónde    | Para qué                                                                                         |
-| --------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------ |
-| `NEXT_PUBLIC_SITE_URL`                        | público  | Dominio canónico (canonical, Open Graph, sitemap). Default `https://webya.ar`                    |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER`                 | público  | **TODO:** número del negocio (`5491123456789`). Sin él, el botón de WhatsApp queda deshabilitado |
-| `NEXT_PUBLIC_CONTACT_EMAIL`                   | público  | **TODO:** mail del footer                                                                        |
-| `NEXT_PUBLIC_INSTAGRAM_URL`                   | público  | Perfil de Instagram                                                                              |
+| Variable                                      | Dónde    | Para qué                                                                                                         |
+| --------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                        | público  | Dominio canónico (canonical, Open Graph, sitemap). Default `https://webya.ar`                                    |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER`                 | público  | **TODO:** número del negocio (`5491123456789`). Sin él, el botón de WhatsApp queda deshabilitado                 |
+| `NEXT_PUBLIC_CONTACT_EMAIL`                   | público  | **TODO:** mail del footer                                                                                        |
+| `NEXT_PUBLIC_INSTAGRAM_URL`                   | público  | Perfil de Instagram                                                                                              |
 | `LEAD_REPOSITORY`                             | servidor | `memory` (dev/tests, por defecto) · `file` · `supabase` (Vercel; fuera de Vercel pide `ALLOW_SUPABASE_IN_DEV=1`) |
-| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`   | servidor | Credenciales. La service role **nunca** con prefijo `NEXT_PUBLIC_`                               |
-| `IP_HASH_SALT`                                | servidor | Sal para hashear la IP. **Obligatoria en producción**                                            |
-| `RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_SECONDS` | servidor | Envíos por IP en la ventana (default 5 cada 600 s)                                               |
-| `RATE_LIMIT_BURST_PER_MINUTE`                 | servidor | Intentos por minuto por IP, en memoria (default 20)                                              |
+| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`   | servidor | Credenciales. La service role **nunca** con prefijo `NEXT_PUBLIC_`                                               |
+| `IP_HASH_SALT`                                | servidor | Sal para hashear la IP. **Obligatoria en producción**                                                            |
+| `RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_SECONDS` | servidor | Envíos por IP en la ventana (default 5 cada 600 s)                                                               |
+| `RATE_LIMIT_BURST_PER_MINUTE`                 | servidor | Intentos por minuto por IP, en memoria (default 20)                                                              |
 
 Las variables del servidor se validan **al arrancar** (`src/instrumentation.ts` + `src/server/env.ts`):
 si falta algo crítico en producción, el proceso no levanta, en vez de perder leads en silencio.
