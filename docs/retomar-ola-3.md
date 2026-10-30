@@ -1,6 +1,6 @@
 # Retomar Ola 3
 
-`main` local = `30e08b7`, 76 commits adelante de `origin/main` (`f02db48`). **Sin push a main.** La única rama
+`main` local = ver git log (Fase 3 cerrada), más de 80 commits adelante de `origin/main` (`f02db48`). **Sin push a main.** La única rama
 subida es `sprint/base-marca` (`0a3b4ff`, preview de Vercel detrás de su login).
 
 ## Hecho (todo en `main` local)
@@ -24,9 +24,8 @@ tests de un solo proyecto o solo celular/escritorio). JS inicial `/empezar` 146,
 
 ## Falta
 
-- **Fase 3**: `qa-rendimiento` y `seguridad-revisor` (máximo 2 a la vez) y `docs/estado-final.md`.
-- El peor frame de la entrada sigue en ~200 ms con CPU x4: es la evaluación del runtime de Next con webpack
-  (chunk `322`). Partir chunks lo subía a 155 KB y no mejoraba: descartado.
+Nada del sprint. Fase 3 cerrada: ver docs/estado-final.md (números, fallas conocidas y lo que le toca al usuario).
+Pendiente solo con OK del usuario: push de main.
 
 ## Riesgos
 
