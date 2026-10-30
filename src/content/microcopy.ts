@@ -13,4 +13,13 @@ export const MICROCOPY = {
   sugeridoParaTuRubro: 'Sugerido para tu rubro',
   /** Progreso de un flujo por pasos (barra y texto). */
   pasoDeTotal: (paso: number, total: number) => `Paso ${paso} de ${total}`,
+  /** Mientras algo se descarga o se guarda (con spinner). */
+  cargando: 'Cargando…',
+  /** Botón para reintentar después de un error. */
+  reintentar: 'Probar de nuevo',
+  /** Botón de copiar un enlace y su confirmación (se anuncia). */
+  copiar: 'Copiar enlace',
+  copiado: 'Enlace copiado',
+  /** Pegado al texto de un enlace que se abre en otra pestaña (para lectores de pantalla). */
+  otraPestana: ' (se abre en otra pestaña)',
 } as const;

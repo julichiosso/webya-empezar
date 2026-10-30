@@ -25,29 +25,4 @@ export const EXCEPCIONES_CIFRAS: { prefijo: string; motivo: string }[] = [
     prefijo: 'explicativo/escenas.ts.TEXTOS_ESCENAS.carta',
     motivo: 'Datos de ejemplo (demo): no son promesas.',
   },
-  {
-    prefijo: 'empezar/hero.ts.HERO.senales',
-    motivo:
-      'Ola 2, copy-conversion: "menos de 24 hs" es un plazo; confirmarlo con el usuario o pasarlo a TODO:.',
-  },
-  {
-    prefijo: 'empezar/confianza.ts.CONFIANZA.compromisos',
-    motivo:
-      'Ola 2, copy-conversion: "menos de 24 hs" es un plazo; confirmarlo con el usuario o pasarlo a TODO:.',
-  },
-  {
-    prefijo: 'empezar/pasos.ts.PASO_LISTO.contacto',
-    motivo:
-      'Ola 2, copy-conversion: "menos de 24 hs" es un plazo; confirmarlo con el usuario o pasarlo a TODO:.',
-  },
-  {
-    prefijo: 'faq.ts.FAQ',
-    motivo:
-      'Ola 2, copy-conversion: "menos de 24 hs" es un plazo; confirmarlo con el usuario o pasarlo a TODO:.',
-  },
-  {
-    prefijo: 'marca.ts.MARCA.heroMuestra',
-    motivo:
-      'Ola 2, copy-conversion: "menos de 24 hs" es un plazo; confirmarlo con el usuario o pasarlo a TODO:.',
-  },
 ];

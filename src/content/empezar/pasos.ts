@@ -1,8 +1,16 @@
-/** Los cuatro pasos del wizard de /empezar: rubro, módulos, datos y confirmación. */
+import { PENDIENTES } from '@/content/pendientes';
+
+/**
+ * Los cuatro pasos del wizard actual de /empezar: rubro, módulos, datos y confirmación.
+ * El flujo nuevo (necesidad → rubro → módulos → WhatsApp → completar) está en content/empezar/wizard-flujo.ts
+ * y reutiliza de acá lo que no cambia. Lo marcado `@deprecated` deja de usarse cuando la Ola 3 lo cablee.
+ */
 
 /** Paso 1: elegir el rubro. Los rubros (nombre, descripción) viven en content/rubros. */
 export const PASO_RUBRO = {
+  /** @deprecated En el flujo nuevo el rubro es el paso 2: usar FLUJO.rubro.titulo. */
   titulo: '¿Qué vas a crear?',
+  /** @deprecated Usar FLUJO.rubro.bajada. */
   bajada: 'Elegí el rubro que más se parezca a tu negocio y mirá cómo se va armando.',
   leyendaRubros: 'Rubro de tu negocio',
   rubroOtro: {
@@ -23,7 +31,10 @@ export const PASO_MODULOS = {
   bajada:
     'Activá solo lo que tu negocio necesita. Lo que sugerimos para tu rubro ya viene marcado.',
   leyendaModulos: 'Módulos para tu negocio',
-  /** Estado debajo de la lista (se anuncia a lectores de pantalla). */
+  /**
+   * Estado debajo de la lista (se anuncia a lectores de pantalla).
+   * @deprecated En el flujo nuevo los módulos son opcionales: usar FLUJO.modulos.sinModulos.
+   */
   sinModulos: 'Activá al menos un módulo para seguir.',
   activaste: (cantidad: number) =>
     `Activaste ${cantidad} ${cantidad === 1 ? 'módulo' : 'módulos'}.`,
@@ -35,9 +46,14 @@ export const PASO_MODULOS = {
   siguiente: 'Siguiente',
 } as const;
 
-/** Paso 3: datos de contacto. */
+/**
+ * Paso 3: datos de contacto. En el flujo nuevo se parte en dos (FLUJO.whatsapp y FLUJO.completar), que
+ * reutilizan los campos, la privacidad y los errores de envío de acá.
+ */
 export const PASO_DATOS = {
+  /** @deprecated Usar FLUJO.whatsapp.titulo y FLUJO.completar.titulo. */
   titulo: 'Contanos de tu negocio',
+  /** @deprecated Usar FLUJO.whatsapp.bajada y FLUJO.completar.bajada. */
   bajada: 'Con esto armamos tu negocio y te escribimos para ponerlo online.',
   campos: {
     nombreNegocio: { etiqueta: 'Nombre de tu negocio' },
@@ -67,7 +83,7 @@ export const PASO_DATOS = {
   privacidad:
     'Usamos tus datos solo para contactarte por tu proyecto y no los compartimos con nadie.',
   /** Visible hasta que exista la política de privacidad. */
-  todoPrivacidad: 'TODO: enlazar la política de privacidad.',
+  todoPrivacidad: PENDIENTES.privacidad,
 } as const;
 
 /** Paso 4: confirmación. */
@@ -85,7 +101,9 @@ export const PASO_LISTO = {
   avisoEntrega:
     'Lo armamos nosotros: no tenés que configurar nada. Cuando lo tengamos listo, lo ponemos online juntos.',
   whatsapp: 'Hablar por WhatsApp',
-  contacto: 'Te escribimos en menos de 24 hs para ponerlo online.',
+  contacto: 'Te escribimos por WhatsApp para ponerlo online.',
+  /** Visible debajo de `contacto` hasta que el usuario confirme el plazo de respuesta. */
+  todoPlazo: PENDIENTES.plazoRespuesta,
   /** Visible solo fuera de producción, mientras falte el número. */
   todoWhatsapp: 'TODO: configurar NEXT_PUBLIC_WHATSAPP_NUMBER en .env.local.',
   reiniciar: 'Cargar otro negocio',

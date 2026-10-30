@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ESTADOS_MODULO } from '@/config/modulos';
-import { MODULO_IDS, MODULOS } from './modulos';
+import { ESTADOS_MODULO_TEXTO } from './estados-modulo';
+import { getModulo, MODULO_IDS, MODULOS } from './modulos';
 import { getNecesidad, NECESIDAD_IDS, NECESIDAD_OTRA_ID, NECESIDADES } from './necesidades';
 import { RUBROS } from './rubros';
 
@@ -59,6 +60,23 @@ describe('estado y necesidades de cada módulo', () => {
         expect(getNecesidad(n)?.modulosSugeridos, `${id} → ${n}`).toContain(id);
       }
     }
+  });
+
+  it('cada estado tiene etiqueta y explicación', () => {
+    for (const e of ESTADOS_MODULO) {
+      expect(ESTADOS_MODULO_TEXTO[e].etiqueta.length).toBeGreaterThan(0);
+      expect(ESTADOS_MODULO_TEXTO[e].explicacion.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('los módulos "disponible" sin confirmar llevan su TODO visible y pagos aclara la demo', () => {
+    const sinConfirmar = ['turnos', 'catalogo', 'formularios', 'clientes', 'notificaciones', 'pagos'];
+    for (const id of MODULO_IDS) {
+      const m = getModulo(id);
+      if (sinConfirmar.includes(id)) expect(m.notaEstado, id).toMatch(/TODO: confirmar/);
+      else expect(m.notaEstado, id).toBeUndefined();
+    }
+    expect(getModulo('pagos').notaEstado).toMatch(/cobro es simulado/);
   });
 
   it('cada rubro sugiere módulos que existen', () => {

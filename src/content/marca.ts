@@ -1,3 +1,6 @@
+import { HERO } from '@/content/empezar/hero';
+import { PENDIENTES } from '@/content/pendientes';
+
 /**
  * /marca: página interna para comparar las paletas de marca (no se indexa). Los nombres e ideas de
  * cada paleta y de cada combinación de contraste viven en brand/tokens/colores.
@@ -26,10 +29,12 @@ export const MARCA = {
   /** El hero de /empezar en miniatura, con la paleta aplicada. */
   heroMuestra: {
     etiqueta: 'Hero',
-    titulo: 'Creá tu negocio online.',
-    subtitulo: 'Elegí tu rubro. Activá lo que necesitás.',
-    cta: 'Empezar a crear',
-    acento: 'Te respondemos en menos de 24 hs',
+    titulo: HERO.titulo,
+    subtitulo: HERO.subtitulo,
+    cta: HERO.cta,
+    acento: 'Te escribimos por WhatsApp',
+    /** Mismo pendiente que el hero real. */
+    todoPlazo: PENDIENTES.plazoRespuesta,
     piezas: { cartaQr: 'Carta con QR', pagos: 'Pagos online' },
     /** Estado de cada pieza para lectores de pantalla (va pegado al nombre). */
     activado: ' (activado)',

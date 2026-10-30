@@ -14,6 +14,9 @@ export const WIZARD = {
   errores: {
     sinRubro: 'Elegí el rubro que más se parezca a tu negocio.',
     sinRubroOtro: 'Contanos a qué se dedica tu negocio.',
+    /** @deprecated En el flujo nuevo los módulos son opcionales (ver FLUJO.modulos.sinModulos). */
     sinModulos: 'Activá al menos un módulo para seguir.',
+    /** Flujo nuevo, paso 1: no marcó ninguna necesidad. */
+    sinNecesidad: 'Marcá al menos una opción, o elegí "Otra cosa" y contanos.',
   },
 } as const;
