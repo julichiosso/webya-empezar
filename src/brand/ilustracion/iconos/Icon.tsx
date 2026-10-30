@@ -1,3 +1,4 @@
+import { GRILLA_ICONO, TRAZO } from '../grilla';
 import { ICONS, type IconName } from './paths';
 
 interface IconProps {
@@ -9,13 +10,16 @@ interface IconProps {
   draw?: boolean;
   /** Dispara el dibujado (p. ej. cuando la tarjeta queda seleccionada). */
   active?: boolean;
-  /** Si comunica algo por sí solo; si no, es decorativo y se oculta a lectores de pantalla. */
+  /**
+   * Si comunica algo por sí solo (el texto viene de `src/content`); si no, es decorativo y se oculta
+   * a lectores de pantalla.
+   */
   title?: string;
 }
 
 export function Icon({
   name,
-  size = 24,
+  size = GRILLA_ICONO.lado,
   className,
   draw = false,
   active = false,
@@ -23,14 +27,11 @@ export function Icon({
 }: IconProps) {
   return (
     <svg
-      viewBox="0 0 24 24"
+      viewBox={GRILLA_ICONO.viewBox}
       width={size}
       height={size}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      {...TRAZO}
+      strokeWidth={GRILLA_ICONO.trazo}
       className={`${draw ? 'ic-draw' : ''} ${className ?? ''}`.trim()}
       data-active={active ? 'true' : undefined}
       role={title ? 'img' : undefined}
@@ -38,6 +39,7 @@ export function Icon({
       aria-label={title}
       focusable="false"
     >
+      {title ? <title>{title}</title> : null}
       {ICONS[name].map((d) => (
         <path key={d} d={d} pathLength={1} className="ic-path" />
       ))}
