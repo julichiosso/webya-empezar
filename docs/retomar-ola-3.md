@@ -16,9 +16,13 @@ Rama `feat/ola-3`, base `6aef6e7`. Sin push. Cada paso se integra a `main` local
   esas 2 entradas de `tests/arquitectura/excepciones.ts` y sus `eslint-disable`. E2E `teclado` sigue el
   orden de foco nuevo; `layout`/`flujo` buscan el CTA dentro de `main` (ahora hay dos "Empezar a crear").
 
+- **c) Tema.** `<ScriptTema />` en el `<head>` de `src/app/layout.tsx`, `suppressHydrationWarning` en
+  `<html>` e `InterruptorTema` en el footer (la nav queda con un solo CTA). El oscuro sigue de default. E2E
+  nuevo en `layout.spec`: oscuro por defecto → claro → se recuerda al recargar.
+  (b fue `075d889`.)
+
 ## Falta
 
-- c) Tema (ScriptTema, suppressHydrationWarning, InterruptorTema).
 - d) Wizard nuevo (solo si a–c cierran limpios).
 - El CTA de "¿Y si no está?" baja a `#wizard`; marcar "Otra cosa" de entrada depende del paso de
   necesidades (d).
@@ -32,4 +36,10 @@ Rama `feat/ola-3`, base `6aef6e7`. Sin push. Cada paso se integra a `main` local
   en 2 líneas y exige la línea gris en una. Si se quiere una línea, achicar el token o ensanchar la columna.
 - No se corrieron `a11y`, `movimiento`, `rendimiento` ni `consola` (no se tocaron): la nav y la sección nueva
   no pasaron por axe en E2E. Tampoco se midió el JS inicial.
+- El interruptor usa `FOOTER.tema.aClaro` ("Pasar a modo claro") como nombre fijo con `aria-pressed`;
+  el contrato de `InterruptorTema` pide un nombre fijo del estado activo ("Tema claro"). Pedido a
+  `copy-conversion`: una etiqueta fija tipo "Modo claro".
+- El script de tema está en el layout raíz: si alguien eligió claro en /empezar, `/demo/gastronomia` y
+  `/marca` también se ven en claro fuera de los contenedores con paleta propia. No se revisó a ojo.
+- No se corrió `consola.spec` (errores de hidratación) en este paso.
 - Capturas visuales desactualizadas (esperado, no se regeneraron).

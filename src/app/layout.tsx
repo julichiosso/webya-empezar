@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Outfit } from 'next/font/google';
+import { ScriptTema } from '@/brand/tema/ScriptTema';
 import { BASE } from '@/brand/tokens/colores';
 import { SEO_SITIO } from '@/content/seo';
 import { siteConfig } from '@/lib/site-config';
@@ -28,7 +29,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-AR" className={outfit.variable}>
+    // suppressHydrationWarning: ScriptTema puede poner data-theme en <html> antes de hidratar.
+    <html lang="es-AR" className={outfit.variable} suppressHydrationWarning>
+      <head>
+        {/* Arriba de todo: aplica el tema guardado antes del primer pintado (el oscuro es el default). */}
+        <ScriptTema />
+      </head>
       <body>{children}</body>
     </html>
   );

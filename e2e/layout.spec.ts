@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { FOOTER } from '../src/content/empezar/footer';
 import { HERO } from '../src/content/empezar/hero';
 import { abrirWizard, tocar, wizard } from './helpers';
 
@@ -52,6 +53,24 @@ test('/marca sin scroll horizontal (tablas de contraste incluidas)', async ({ pa
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(sobra).toBeLessThanOrEqual(0);
+});
+
+test('tema: oscuro por defecto, el interruptor del pie pasa a claro y se recuerda al recargar', async ({
+  page,
+}) => {
+  await page.goto('/empezar');
+  const html = page.locator('html');
+  await expect(html).not.toHaveAttribute('data-theme', 'light');
+  const interruptor = page
+    .getByRole('contentinfo')
+    .getByRole('button', { name: FOOTER.tema.aClaro });
+  await expect(interruptor).toHaveAttribute('aria-pressed', 'false');
+  await interruptor.click();
+  await expect(html).toHaveAttribute('data-theme', 'light');
+  await page.reload();
+  // El script en línea lo aplica antes de hidratar: el atributo ya está y el botón queda presionado.
+  await expect(html).toHaveAttribute('data-theme', 'light');
+  await expect(interruptor).toHaveAttribute('aria-pressed', 'true');
 });
 
 test.describe('escritorio (lg y más)', () => {

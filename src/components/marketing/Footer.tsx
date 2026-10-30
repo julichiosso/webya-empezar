@@ -1,5 +1,6 @@
 import { siteConfig } from '@/lib/site-config';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import { InterruptorTema } from '@/brand/tema/InterruptorTema';
 import { FOOTER } from '@/content/empezar/footer';
 import { MENSAJE_WHATSAPP } from '@/content/whatsapp';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
@@ -68,6 +69,8 @@ export function Footer() {
           </li>
         </ul>
       </div>
+      {/* Interruptor discreto de tema (el oscuro es el default); en el pie para no sumar nada a la nav. */}
+      <InterruptorTema etiqueta={FOOTER.tema.aClaro} className="mt-8" />
       <p className="mt-8 text-small text-subtle">{FOOTER.todoPrivacidad}</p>
       <p className="tabular mt-2 text-small text-subtle">
         {FOOTER.copyright(new Date().getFullYear())}
