@@ -1,7 +1,7 @@
 import type { ModuloId } from '@/content/modulos';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { MICROCOPY } from '@/content/microcopy';
-import { Encaje } from './Encaje';
+import { Eleccion } from './Eleccion';
 
 interface ModuloOptionProps {
   id: ModuloId;
@@ -13,7 +13,7 @@ interface ModuloOptionProps {
   onToggle: (id: ModuloId) => void;
 }
 
-/** Módulo activable. Checkbox nativo: rol, teclado (Espacio) y estado accesible sin ARIA extra. */
+/** Módulo activable (checkbox con forma de fila). Envoltorio de `Eleccion` con la API de siempre. */
 export function ModuloOption({
   id,
   nombre,
@@ -23,33 +23,16 @@ export function ModuloOption({
   onToggle,
 }: ModuloOptionProps) {
   return (
-    <label className="group block h-full cursor-pointer">
-      <input
-        type="checkbox"
-        value={id}
-        checked={checked}
-        onChange={() => onToggle(id)}
-        className="peer sr-only"
-      />
-      <span
-        data-on={checked}
-        className="pop-on flex h-full items-start gap-4 rounded-card border border-line bg-surface p-4 transition-[transform] duration-100 group-hover:border-line-strong group-active:scale-[0.98] peer-checked:border-accent peer-checked:bg-accent-soft peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
-      >
-        <span className={`mt-0.5 shrink-0 ${checked ? 'text-accent' : 'text-fg'}`}>
-          <Icon name={id} size={28} draw active={checked} />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block font-semibold">{nombre}</span>
-          <span className="mt-1 block text-small text-muted">{descripcion}</span>
-          {sugerido && (
-            <span className="mt-2 block text-small font-medium text-fg">
-              {MICROCOPY.sugeridoParaTuRubro}
-            </span>
-          )}
-        </span>
-        {/* El hueco está siempre: la fila no cambia de tamaño cuando la pieza encaja. */}
-        <Encaje on={checked} />
-      </span>
-    </label>
+    <Eleccion
+      tipo="multiple"
+      forma="fila"
+      value={id}
+      checked={checked}
+      onCambio={() => onToggle(id)}
+      etiqueta={nombre}
+      descripcion={descripcion}
+      insignia={sugerido ? MICROCOPY.sugeridoParaTuRubro : undefined}
+      icono={<Icon name={id} size={28} draw active={checked} />}
+    />
   );
 }
