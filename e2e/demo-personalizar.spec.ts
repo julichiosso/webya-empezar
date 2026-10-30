@@ -8,6 +8,7 @@ import {
   TITULO_FINAL,
   wizard,
   abrirWizard,
+  pasarNecesidad,
 } from './helpers';
 
 // Demo de Gastronomía: personalización, compartir y el CTA hasta el lead.
@@ -107,6 +108,8 @@ test('"Quiero esto para mi local" abre el wizard precargado y el lead se guarda 
 test('en /empezar, elegir Gastronomía muestra la entrada a la demo', async ({ page }) => {
   await page.goto('/empezar');
   await abrirWizard(page);
+  // El rubro es el paso 2 del flujo nuevo: primero se pasa el de "¿Qué necesitás?".
+  await pasarNecesidad(page);
   await tocar(page, /gastronomía/i);
   const entrada = wizard(page).getByRole('link', { name: /mirá cómo quedaría/i });
   await expect(entrada).toBeVisible();

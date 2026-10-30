@@ -1,49 +1,55 @@
-import type { ModuloId } from '@/content/modulos';
-import type { Origen } from '@/config/origenes';
+import { esOrigen } from '@/config/origenes';
+import { MODULO_IDS, type ModuloId } from '@/content/modulos';
 import { getRubro } from '@/content/rubros';
-import type { ModulosManual } from './modulos';
-import { MODULOS_STORAGE_KEY } from './modulos-store';
-import { DATOS_VACIOS, ESTADO_INICIAL, guardarEstado, type DesdeDemo } from './state';
+import { LIMITES_BASE } from '@/domain/leads/limites';
+import { tomarTraspasoDemo } from '@/domain/traspaso/demo-wizard';
+import { MODULOS_STORAGE_KEY, type ModulosManual } from './modulos';
+import { DATOS_VACIOS, ESTADO_INICIAL, guardarEstado, sanearDemo } from './state';
 
 type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 
-export interface DatosDesdeDemo {
-  origen: Origen;
-  rubro: string;
-  /** Módulos que trae la demo: quedan activados a mano; el resto de los sugeridos, apagados. */
-  modulos: readonly ModuloId[];
-  nombreNegocio: string;
-  demo: DesdeDemo;
-}
-
-/** Adónde lleva el CTA de la demo: el wizard, que se descarga solo porque la URL apunta a #wizard. */
-export const URL_WIZARD_DESDE_DEMO = '/empezar#wizard';
-
 /**
- * Deja el wizard listo para seguir desde la demo: paso 2 con el rubro elegido, los módulos de la
- * demo activados y el nombre del local cargado. Usa la MISMA persistencia que el wizard
- * (sessionStorage), que al leer vuelve a sanear todo. Pisa un progreso anterior a propósito:
- * la persona tocó "Quiero esto para mi local".
+ * Si la demo dejó un traspaso (domain/traspaso/demo-wizard), lo toma y deja el wizard listo para
+ * seguir desde ahí: paso 3 (módulos), con el rubro de la demo, sus módulos activados y el nombre
+ * del local cargado. Todo se sanea contra los catálogos; lo que no valida se descarta y el wizard
+ * arranca normal. Pisa un progreso anterior a propósito: la persona tocó "Quiero esto para mi local".
+ * Lo llaman el store de módulos y el wizard al arrancar (el que llegue primero; después no hay nada).
  */
-export function prepararWizardDesdeDemo(datos: DatosDesdeDemo, storage: StorageLike): void {
+export function aplicarTraspasoDemo(storage: StorageLike): boolean {
+  const t = tomarTraspasoDemo(storage);
+  if (!t || typeof t !== 'object') return false;
+  const d = t as Record<string, unknown>;
+  const rubro = typeof d.rubro === 'string' ? getRubro(d.rubro) : undefined;
+  if (!rubro || !esOrigen(d.origen)) return false;
+  const modulos = Array.isArray(d.modulos)
+    ? MODULO_IDS.filter((id) => (d.modulos as unknown[]).includes(id))
+    : [];
+
   guardarEstado(
     {
       ...ESTADO_INICIAL,
-      paso: 2,
-      rubro: datos.rubro,
-      datos: { ...DATOS_VACIOS, nombreNegocio: datos.nombreNegocio.slice(0, 100) },
-      origen: datos.origen,
-      demo: datos.demo,
+      paso: 3,
+      rubro: rubro.id,
+      datos: {
+        ...DATOS_VACIOS,
+        nombreNegocio:
+          typeof d.nombreNegocio === 'string'
+            ? d.nombreNegocio.slice(0, LIMITES_BASE.nombreNegocio)
+            : '',
+      },
+      origen: d.origen,
+      demo: sanearDemo(d.demo),
     },
     storage,
   );
   // Decisiones manuales: lo de la demo, prendido; lo sugerido por el rubro que no está, apagado.
   const manual: ModulosManual = {};
-  for (const id of getRubro(datos.rubro)?.modulosSugeridos ?? []) manual[id] = false;
-  for (const id of datos.modulos) manual[id] = true;
+  for (const id of rubro.modulosSugeridos as readonly ModuloId[]) manual[id] = false;
+  for (const id of modulos) manual[id] = true;
   try {
     storage.setItem(MODULOS_STORAGE_KEY, JSON.stringify(manual));
   } catch {
     // sin sessionStorage el wizard igual abre, con lo sugerido por el rubro
   }
+  return true;
 }

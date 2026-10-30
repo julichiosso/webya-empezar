@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import {
   abrirWizard,
-  completarDatos,
+  completarNegocio,
   irAlPaso,
   negocioUnico,
   TITULO_FINAL,
@@ -30,35 +30,44 @@ test('hero con módulos activados', async ({ page }) => {
   await expect(hero).toHaveScreenshot('00b-hero-activo.png');
 });
 
-test('paso 1 — qué vas a crear (con vista previa)', async ({ page }) => {
-  await irAlPaso(page, 1);
-  await tocar(page, /comercio/i);
-  await expect(wizard(page)).toHaveScreenshot('01-rubro.png');
+test('paso 1 — qué necesitás, con "Otra cosa" abierta', async ({ page }) => {
+  await irAlPaso(page, 'necesidad');
+  await tocar(page, /^Cobrar/);
+  await tocar(page, /^Otra cosa/);
+  await wizard(page)
+    .getByLabel(/contanos qué necesitás/i)
+    .fill('Controlar el stock de mis dos locales');
+  await expect(wizard(page)).toHaveScreenshot('01-necesidad.png');
 });
 
-test('paso 2 — qué querés activar', async ({ page }) => {
-  await irAlPaso(page, 2);
+test('paso 2 — rubro (con vista previa)', async ({ page }) => {
+  await irAlPaso(page, 'rubro');
+  await tocar(page, /comercio/i);
+  await expect(wizard(page)).toHaveScreenshot('01b-rubro.png');
+});
+
+test('paso 3 — qué querés activar (con estados)', async ({ page }) => {
+  await irAlPaso(page, 'modulos');
   await tocar(page, /recibir turnos online/i);
   await expect(wizard(page)).toHaveScreenshot('02-modulos.png');
 });
 
-test('paso 3 — datos', async ({ page }) => {
-  await irAlPaso(page, 3);
-  await completarDatos(page, 'Peluquería Luna');
-  await expect(wizard(page)).toHaveScreenshot('03-datos.png');
+test('paso 4 — solo WhatsApp', async ({ page }) => {
+  await irAlPaso(page, 'whatsapp');
+  await wizard(page).getByLabel('Tu WhatsApp').fill('1123456789');
+  await expect(wizard(page)).toHaveScreenshot('03-whatsapp.png');
 });
 
-test('paso 3 — errores', async ({ page }) => {
-  await irAlPaso(page, 3);
-  await wizard(page).getByRole('button', { name: 'Enviar' }).click();
+test('paso 5 — completar, con errores', async ({ page }) => {
+  await irAlPaso(page, 'completar');
+  await wizard(page).getByRole('button', { name: 'Enviar mis datos' }).click();
   await expect(wizard(page).locator('[aria-invalid="true"]').first()).toBeVisible();
   await expect(wizard(page)).toHaveScreenshot('03b-errores.png');
 });
 
-test('paso 4 — confirmación', async ({ page }) => {
-  await irAlPaso(page, 3);
-  await completarDatos(page, negocioUnico('visual'));
-  await wizard(page).getByRole('button', { name: 'Enviar' }).click();
+test('confirmación', async ({ page }) => {
+  await irAlPaso(page, 'completar');
+  await completarNegocio(page, negocioUnico('visual'));
   await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
   await expect(wizard(page)).toHaveScreenshot('04-listo.png');
 });
@@ -67,10 +76,19 @@ test('secciones informativas', async ({ page }) => {
   await page.goto('/empezar');
   // Con el wizard ya cargado (layout definitivo): el esqueleto mide distinto y movería las secciones.
   await abrirWizard(page);
-  const seccion = (id: string) => page.locator(`section[aria-labelledby="${id}"]`);
-  await expect(seccion('como-title')).toHaveScreenshot('05-como-funciona.png');
-  await expect(seccion('incluye-title')).toHaveScreenshot('06-que-incluye.png');
-  await expect(seccion('faq-title')).toHaveScreenshot('07-faq.png');
+  // Las secciones bajo el pliegue llevan content-visibility:auto: se maquetan recién cerca de la
+  // pantalla. Se llevan a la vista y se esperan dos cuadros para capturar el alto real, no el reservado.
+  const seccion = async (id: string) => {
+    const s = page.locator(`section[aria-labelledby="${id}"]`);
+    await s.scrollIntoViewIfNeeded();
+    await page.evaluate(
+      () => new Promise((listo) => requestAnimationFrame(() => requestAnimationFrame(listo))),
+    );
+    return s;
+  };
+  await expect(await seccion('como-title')).toHaveScreenshot('05-como-funciona.png');
+  await expect(await seccion('incluye-title')).toHaveScreenshot('06-que-incluye.png');
+  await expect(await seccion('faq-title')).toHaveScreenshot('07-faq.png');
 });
 
 // --- Demo de Gastronomía y video explicativo ---------------------------------------------------

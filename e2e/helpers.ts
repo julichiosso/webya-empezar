@@ -54,38 +54,72 @@ export async function abrirWizard(page: Page) {
 export const tocar = (page: Page, texto: RegExp) =>
   wizard(page).locator('label', { hasText: texto }).click();
 
-export const TITULO_PASO_1 = '¿Qué vas a crear?';
+/** Paso 1 del flujo nuevo. */
+export const TITULO_PASO_1 = '¿Qué necesitás?';
+export const TITULO_RUBRO = '¿A qué se dedica tu negocio?';
+/** Módulos: también es donde entra quien viene de la demo. */
 export const TITULO_PASO_2 = '¿Qué querés activar?';
+/** Formulario completo de un solo envío (solo quien viene de la demo). */
 export const TITULO_PASO_3 = 'Contanos de tu negocio';
+export const TITULO_WHATSAPP = '¿A qué WhatsApp te escribimos?';
+export const TITULO_COMPLETAR = 'Contanos un poco más';
 export const TITULO_FINAL = 'Tu negocio está listo para armarse';
+export const TITULO_FINAL_PARCIAL = 'Ya tenemos tu WhatsApp';
 
-/** Módulos que sugiere el rubro peluquería (ya vienen marcados en el paso 2). */
+/** Módulos que sugiere el rubro peluquería (ya vienen marcados en el paso de módulos). */
 export const MODULOS_PELUQUERIA = ['turnos', 'catalogo', 'pagos', 'clientes', 'notificaciones'];
 
+const siguiente = (page: Page) => wizard(page).getByRole('button', { name: 'Siguiente' }).click();
+
 /**
- * Lleva el wizard hasta el paso pedido con peluquería y los objetivos "Recibir turnos online"
- * y "Mostrar mis trabajos". Los módulos de peluquería ya vienen sugeridos y marcados.
+ * Paso 1: marca una necesidad y sigue hasta el rubro. Por defecto "Cobrar": solo sugiere Pagos,
+ * que peluquería y comercio ya sugieren, así no cambia qué módulos quedan marcados.
  */
-export async function irAlPaso(page: Page, paso: 1 | 2 | 3, query = '') {
+export async function pasarNecesidad(page: Page, necesidad = /^Cobrar/) {
+  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_1 })).toBeVisible();
+  await tocar(page, necesidad);
+  await siguiente(page);
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
+}
+
+export type Destino = 'necesidad' | 'rubro' | 'modulos' | 'whatsapp' | 'completar';
+
+/**
+ * Lleva el wizard hasta el paso pedido con "Cobrar", peluquería y los objetivos "Recibir turnos
+ * online" y "Mostrar mis trabajos". Los módulos de peluquería ya vienen sugeridos y marcados.
+ */
+export async function irAlPaso(page: Page, destino: Destino, query = '') {
   await page.goto(`/empezar${query}`);
   await abrirWizard(page);
   await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_1 })).toBeVisible();
-  if (paso === 1) return;
+  if (destino === 'necesidad') return;
+  await pasarNecesidad(page);
+  if (destino === 'rubro') return;
   await tocar(page, /peluquería/i);
-  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
+  await siguiente(page);
   await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
-  if (paso === 2) return;
+  if (destino === 'modulos') return;
   await tocar(page, /recibir turnos online/i);
   await tocar(page, /mostrar mis trabajos/i);
-  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_3 })).toBeVisible();
+  await siguiente(page);
+  await expect(wizard(page).getByRole('heading', { name: TITULO_WHATSAPP })).toBeVisible();
+  if (destino === 'whatsapp') return;
+  await guardarWhatsapp(page);
 }
 
-export async function completarDatos(page: Page, negocio: string) {
+/** Paso 4: deja el WhatsApp (se guarda el lead parcial) y llega a "completar". */
+export async function guardarWhatsapp(page: Page) {
+  await wizard(page).getByLabel('Tu WhatsApp').fill('1123456789');
+  await wizard(page).getByRole('button', { name: 'Guardar y seguir' }).click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_COMPLETAR })).toBeVisible();
+}
+
+/** Paso 5: completa los datos (solo el nombre del negocio es obligatorio) y envía. */
+export async function completarNegocio(page: Page, negocio: string) {
   const w = wizard(page);
   await w.getByLabel('Nombre de tu negocio').fill(negocio);
-  await w.getByLabel('Tu nombre').fill('Ana Pérez');
-  await w.getByLabel('Tu WhatsApp').fill('1123456789');
-  await w.getByLabel(/Email/).fill('ana@luna.com');
+  await w.getByLabel(/Tu nombre/).fill('Ana Pérez');
+  await w.getByLabel(/Tu mail/).fill('ana@luna.com');
   await w.getByLabel(/algo más/i).fill('Quiero turnos online');
+  await w.getByRole('button', { name: 'Enviar mis datos' }).click();
 }

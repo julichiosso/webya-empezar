@@ -123,6 +123,10 @@ export const FLUJO = {
       texto: 'Te escribimos por ahí para conocer tu negocio y armarlo con vos.',
       todoPlazo: PENDIENTES.plazoRespuesta,
     },
+    /** Completó sin dejar su nombre (es opcional): el saludo arranca por el rubro. */
+    graciasSinNombre: { antes: 'Para ', trasRubro: PASO_LISTO.gracias.trasRubro },
+    /** No activó ningún módulo (en el lead parcial son opcionales). */
+    sinPiezas: 'Todavía no elegiste piezas: las vemos juntos por WhatsApp.',
     /** Se suma a cualquiera de las dos si marcó "Otra cosa". */
     aMedida: 'Leemos lo que nos contaste y te decimos si se puede armar a medida.',
   },

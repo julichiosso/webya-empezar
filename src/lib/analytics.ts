@@ -12,6 +12,9 @@ export interface EventosAnalitica {
   rubro_seleccionado: { rubro: string };
   paso_completado: { paso: number; nombre: string };
   lead_enviado: { rubro: string; modulos: number; objetivos: number };
+  // Flujo en dos tiempos: primero solo el WhatsApp (lead parcial), después completar u omitir.
+  lead_parcial: { rubro: string; modulos: number; necesidades: number };
+  lead_completado: { completo: boolean };
   modulo_alternado: { modulo: string; activo: boolean; origen: 'hero' | 'wizard' };
   whatsapp_click: { origen: 'confirmacion' | 'flotante' };
   // Demos de rubro (/demo/<rubro>). `demo` es el rubro (p. ej. 'gastronomia').

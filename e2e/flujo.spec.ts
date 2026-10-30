@@ -3,34 +3,40 @@ import { HERO } from '../src/content/empezar/hero';
 import { PASO_LISTO } from '../src/content/empezar/pasos';
 import {
   abrirWizard,
-  completarDatos,
+  completarNegocio,
+  guardarWhatsapp,
   irAlPaso,
   leerLeads,
   MODULOS_PELUQUERIA,
   negocioUnico,
+  pasarNecesidad,
   TITULO_FINAL,
+  TITULO_FINAL_PARCIAL,
   TITULO_PASO_2,
-  TITULO_PASO_3,
+  TITULO_WHATSAPP,
   tocar,
   wizard,
 } from './helpers';
 
-test('recorrido completo hasta la confirmación y el lead queda guardado con módulos y UTM', async ({
+test('recorrido completo: el WhatsApp guarda el lead parcial y completar lo pasa a nuevo', async ({
   page,
 }, testInfo) => {
   const negocio = negocioUnico(testInfo.project.name);
-  const respuestas: number[] = [];
+  const respuestas: string[] = [];
   page.on('response', (r) => {
-    if (r.url().endsWith('/api/leads')) respuestas.push(r.status());
+    if (r.url().includes('/api/leads')) respuestas.push(`${r.request().method()} ${r.status()}`);
   });
 
-  await irAlPaso(page, 3, '?utm_source=instagram&utm_medium=bio&utm_campaign=lanzamiento');
-
-  await completarDatos(page, negocio);
-  await wizard(page).getByRole('button', { name: 'Enviar' }).click();
+  await irAlPaso(
+    page,
+    'completar',
+    '?utm_source=instagram&utm_medium=bio&utm_campaign=lanzamiento',
+  );
+  expect(respuestas).toEqual(['POST 201']);
+  await completarNegocio(page, negocio);
 
   await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
-  expect(respuestas).toEqual([201]);
+  expect(respuestas).toEqual(['POST 201', 'PATCH 200']);
   const resumen = wizard(page).getByRole('list', { name: /las piezas de tu negocio/i });
   await expect(resumen).toContainText('Turnos y reservas');
   await expect(resumen).toContainText('Tienda y catálogo');
@@ -61,6 +67,33 @@ test('recorrido completo hasta la confirmación y el lead queda guardado con mó
   expect(lead?.user_agent).toBeTruthy();
 });
 
+test('"Otra cosa" y "Ahora no": queda el lead parcial con el pedido a medida', async ({ page }) => {
+  const pedido = `Controlar el stock de mis dos locales ${Date.now()}`;
+  await page.goto('/empezar');
+  await abrirWizard(page);
+  await tocar(page, /^Otra cosa/);
+  await wizard(page)
+    .getByLabel(/contanos qué necesitás/i)
+    .fill(pedido);
+  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
+  await tocar(page, /comercio/i);
+  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
+  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_WHATSAPP })).toBeVisible();
+  await guardarWhatsapp(page);
+  await wizard(page)
+    .getByRole('button', { name: /ahora no/i })
+    .click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL_PARCIAL })).toBeVisible();
+  await expect(wizard(page).getByText(/leemos lo que nos contaste/i)).toBeVisible();
+
+  const lead = (await leerLeads()).find(
+    (l) => (l as unknown as { necesidad_libre: string | null }).necesidad_libre === pedido,
+  );
+  expect(lead).toMatchObject({ estado: 'parcial', rubro: 'comercio', whatsapp: '+5491123456789' });
+});
+
 test('lo que se activa en el hero llega al wizard y se guarda en el lead', async ({
   page,
 }, testInfo) => {
@@ -78,6 +111,7 @@ test('lo que se activa en el hero llega al wizard y se guarda en el lead', async
 
   // CTA → wizard. Comercio no sugiere Carta con QR: tiene que venir marcada por el hero.
   await page.getByRole('main').getByRole('link', { name: HERO.cta }).click();
+  await pasarNecesidad(page);
   await tocar(page, /comercio/i);
   await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
   await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
@@ -89,9 +123,9 @@ test('lo que se activa en el hero llega al wizard y se guarda en el lead', async
   ).not.toBeChecked();
 
   await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_3 })).toBeVisible();
-  await completarDatos(page, negocio);
-  await wizard(page).getByRole('button', { name: 'Enviar' }).click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_WHATSAPP })).toBeVisible();
+  await guardarWhatsapp(page);
+  await completarNegocio(page, negocio);
   await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
 
   const lead = (await leerLeads()).find((l) => l.nombre_negocio === negocio);
@@ -101,7 +135,7 @@ test('lo que se activa en el hero llega al wizard y se guarda en el lead', async
 });
 
 test('recargar en el medio del flujo conserva lo elegido, también en el hero', async ({ page }) => {
-  await irAlPaso(page, 2);
+  await irAlPaso(page, 'modulos');
   await tocar(page, /carta con qr/i);
   await tocar(page, /recibir turnos online/i);
   await page.reload();

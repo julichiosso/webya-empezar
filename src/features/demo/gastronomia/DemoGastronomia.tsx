@@ -7,7 +7,7 @@ import { AVISO_DEMO, getPaletaDemo, RUBRO_DEMO } from '@/content/demos/gastronom
 import { DEMO } from '@/content/demos/gastronomia/ui/demo';
 import { variablesDePaleta } from '@/brand/tokens/colores';
 import { buttonClasses } from '@/components/ui/Button';
-import { prepararWizardDesdeDemo, URL_WIZARD_DESDE_DEMO } from '@/features/empezar/desde-demo';
+import { dejarTraspasoDemo, URL_WIZARD_DESDE_DEMO } from '@/domain/traspaso/demo-wizard';
 import { track } from '@/lib/analytics';
 import { DemoCliente } from './cliente/DemoCliente';
 import { datosParaWizard, personalizacionDeUrl } from './compartir';
@@ -175,7 +175,7 @@ function CtaQuiero({
       onClick={() => {
         track('demo_cta_click', { demo: RUBRO_DEMO, origen });
         try {
-          prepararWizardDesdeDemo(datosParaWizard(getEstadoDemo()), window.sessionStorage);
+          dejarTraspasoDemo(datosParaWizard(getEstadoDemo()), window.sessionStorage);
         } catch {
           // sin sessionStorage el link igual abre el wizard, sin precargar
         }

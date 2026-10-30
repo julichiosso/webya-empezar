@@ -2,10 +2,11 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import {
   abrirWizard,
-  completarDatos,
+  completarNegocio,
   irAlPaso,
   negocioUnico,
   TITULO_FINAL,
+  tocar,
   wizard,
 } from './helpers';
 
@@ -51,22 +52,36 @@ test('hero con módulos activados sin violaciones', async ({ page }) => {
   await auditar(page);
 });
 
-test('paso 2 sin violaciones', async ({ page }) => {
-  await irAlPaso(page, 2);
+test('paso 1 con "Otra cosa" abierta y su error sin violaciones', async ({ page }) => {
+  await irAlPaso(page, 'necesidad');
+  await tocar(page, /^Otra cosa/);
+  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
+  await expect(wizard(page).getByText(/aunque sea en pocas palabras/i)).toBeVisible();
   await auditar(page);
 });
 
-test('paso 3 con errores visibles sin violaciones', async ({ page }) => {
-  await irAlPaso(page, 3);
-  await wizard(page).getByRole('button', { name: 'Enviar' }).click();
+test('módulos (con su estado) sin violaciones', async ({ page }) => {
+  await irAlPaso(page, 'modulos');
+  await auditar(page);
+});
+
+test('WhatsApp con error visible sin violaciones', async ({ page }) => {
+  await irAlPaso(page, 'whatsapp');
+  await wizard(page).getByRole('button', { name: 'Guardar y seguir' }).click();
+  await expect(wizard(page).locator('[aria-invalid="true"]').first()).toBeVisible();
+  await auditar(page);
+});
+
+test('completar con errores visibles sin violaciones', async ({ page }) => {
+  await irAlPaso(page, 'completar');
+  await wizard(page).getByRole('button', { name: 'Enviar mis datos' }).click();
   await expect(wizard(page).locator('[aria-invalid="true"]').first()).toBeVisible();
   await auditar(page);
 });
 
 test('confirmación sin violaciones', async ({ page }) => {
-  await irAlPaso(page, 3);
-  await completarDatos(page, negocioUnico('a11y'));
-  await wizard(page).getByRole('button', { name: 'Enviar' }).click();
+  await irAlPaso(page, 'completar');
+  await completarNegocio(page, negocioUnico('a11y'));
   await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
   await auditar(page);
 });

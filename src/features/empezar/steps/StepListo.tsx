@@ -5,6 +5,7 @@ import type { Ref } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { ButtonLink, Button } from '@/components/ui/Button';
 import { PASO_LISTO } from '@/content/empezar/pasos';
+import { FLUJO } from '@/content/empezar/wizard-flujo';
 import { getModulo, type ModuloId } from '@/content/modulos';
 import { track } from '@/lib/analytics';
 
@@ -14,6 +15,10 @@ interface StepListoProps {
   /** Módulos que activó la persona (no los sugeridos en bruto: lo que quedó elegido). */
   modulos: readonly ModuloId[];
   whatsappLink: string | null;
+  /** completo: mandó sus datos; parcial: dejó solo el WhatsApp (omitió el último paso). */
+  variante: 'completo' | 'parcial';
+  /** Marcó "Otra cosa": se le dice que leemos lo que contó. */
+  aMedida: boolean;
   headingRef: Ref<HTMLHeadingElement>;
   onReiniciar: () => void;
 }
@@ -38,9 +43,13 @@ export function StepListo({
   rubro,
   modulos: ids,
   whatsappLink,
+  variante,
+  aMedida,
   headingRef,
   onReiniciar,
 }: StepListoProps) {
+  const parcial = variante === 'parcial';
+  const { confirmacion: CONF } = FLUJO;
   const modulos = ids.map((id) => getModulo(id));
   const primerNombre = nombre.split(' ')[0] ?? nombre;
 
@@ -71,39 +80,59 @@ export function StepListo({
         tabIndex={-1}
         className="text-title font-semibold text-balance outline-none focus-visible:outline-none"
       >
-        {PASO_LISTO.titulo}
+        {parcial ? CONF.parcial.titulo : PASO_LISTO.titulo}
       </h2>
-      <p className="mt-2 text-lead text-muted">
-        {PASO_LISTO.gracias.antes}
-        {primerNombre}
-        {PASO_LISTO.gracias.trasNombre}
-        <strong className="font-semibold text-fg">{rubro}</strong>
-        {PASO_LISTO.gracias.trasRubro}
-      </p>
+      {parcial ? (
+        <p className="mt-2 text-lead text-muted">{CONF.parcial.texto}</p>
+      ) : modulos.length === 0 ? (
+        <p className="mt-2 text-lead text-muted">{CONF.sinPiezas}</p>
+      ) : primerNombre ? (
+        <p className="mt-2 text-lead text-muted">
+          {PASO_LISTO.gracias.antes}
+          {primerNombre}
+          {PASO_LISTO.gracias.trasNombre}
+          <strong className="font-semibold text-fg">{rubro}</strong>
+          {PASO_LISTO.gracias.trasRubro}
+        </p>
+      ) : (
+        <p className="mt-2 text-lead text-muted">
+          {CONF.graciasSinNombre.antes}
+          <strong className="font-semibold text-fg">{rubro}</strong>
+          {CONF.graciasSinNombre.trasRubro}
+        </p>
+      )}
 
-      <m.ul
-        variants={lista}
-        initial="oculto"
-        animate="visible"
-        aria-label={PASO_LISTO.ariaPiezas}
-        className="mt-6 flex flex-col gap-3"
-      >
-        {modulos.map((mod) => (
-          <m.li
-            key={mod.id}
-            variants={pieza}
-            className="flex items-start gap-4 rounded-card border border-line bg-surface p-4 shadow-raised"
-          >
-            <span className="mt-0.5 text-accent">
-              <Icon name={mod.id} size={28} draw active />
-            </span>
-            <span>
-              <span className="block font-semibold">{mod.nombre}</span>
-              <span className="mt-1 block text-small text-muted">{mod.descripcion}</span>
-            </span>
-          </m.li>
-        ))}
-      </m.ul>
+      {aMedida && (
+        <p className="mt-4 rounded-control border border-line bg-surface p-4 text-small text-muted">
+          {CONF.aMedida}
+        </p>
+      )}
+
+      {modulos.length > 0 && (
+        <m.ul
+          variants={lista}
+          initial="oculto"
+          animate="visible"
+          aria-label={PASO_LISTO.ariaPiezas}
+          className="mt-6 flex flex-col gap-3"
+        >
+          {modulos.map((mod) => (
+            <m.li
+              key={mod.id}
+              variants={pieza}
+              className="flex items-start gap-4 rounded-card border border-line bg-surface p-4 shadow-raised"
+            >
+              <span className="mt-0.5 text-accent">
+                <Icon name={mod.id} size={28} draw active />
+              </span>
+              <span>
+                <span className="block font-semibold">{mod.nombre}</span>
+                <span className="mt-1 block text-small text-muted">{mod.descripcion}</span>
+              </span>
+            </m.li>
+          ))}
+        </m.ul>
+      )}
 
       {/* Aviso honesto: hoy la entrega es manual, la hacemos nosotros (ver content/empezar/pasos). */}
       <p className="mt-6 rounded-control border border-line bg-surface p-4 text-small text-muted">

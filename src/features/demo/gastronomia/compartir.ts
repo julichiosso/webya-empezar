@@ -7,7 +7,7 @@ import {
 } from '@/content/demos/gastronomia';
 import { COMPARTIR } from '@/content/demos/gastronomia/ui/compartir';
 import { ORIGEN_DEMO_GASTRONOMIA } from '@/config/origenes';
-import type { DatosDesdeDemo } from '@/features/empezar/desde-demo';
+import type { TraspasoDemo } from '@/domain/traspaso/demo-wizard';
 import { LARGO_NOMBRE_LOCAL, type EstadoDemo, type Personalizacion } from './store';
 
 /**
@@ -47,7 +47,7 @@ export function linkWhatsAppDemo(url: string, nombreLocal: string): string {
 /** Lo que la demo le pasa al wizard al tocar "Quiero esto para mi local". */
 export function datosParaWizard(
   e: Pick<EstadoDemo, 'nombreLocal' | 'paletaId' | 'cocinaId'>,
-): DatosDesdeDemo {
+): TraspasoDemo {
   return {
     origen: ORIGEN_DEMO_GASTRONOMIA,
     rubro: RUBRO_DEMO,
