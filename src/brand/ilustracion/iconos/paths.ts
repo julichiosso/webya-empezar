@@ -1,41 +1,66 @@
+import type { NecesidadId } from '@/config/necesidades';
+import { circulo as circle, circuloPunteado, conMuesca, rectangulo as rect } from '../grilla';
+
 /**
- * Set de íconos propio de WebYa. Reglas (ver .claude/skills/webya-design-system):
- * grilla 24×24, trazo 1.5, sin relleno, extremos y uniones redondeados, todo como <path>
- * para que el "dibujado" con stroke-dashoffset funcione igual en cada ícono.
+ * Set de íconos propio de WebYa. Reglas en `../grilla.ts` y `../LEEME.md`: grilla 24×24, zona viva
+ * [2, 22], trazo 1.5, sin relleno, extremos y uniones redondeados, todo como <path> para que el
+ * "dibujado" con stroke-dashoffset funcione igual en cada ícono. Brand define los nombres;
+ * `content` elige cuál usa cada rubro, módulo o necesidad.
  */
-
-const circle = (cx: number, cy: number, r: number) =>
-  `M${cx - r} ${cy}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`;
-
-const rect = (x: number, y: number, w: number, h: number, r: number) =>
-  `M${x + r} ${y}h${w - 2 * r}a${r} ${r} 0 0 1 ${r} ${r}v${h - 2 * r}a${r} ${r} 0 0 1 ${-r} ${r}` +
-  `h${-(w - 2 * r)}a${r} ${r} 0 0 1 ${-r} ${-r}v${-(h - 2 * r)}a${r} ${r} 0 0 1 ${r} ${-r}Z`;
 
 /** Íconos de rubros (la clave es el campo `icono` de cada rubro). */
 export const RUBRO_ICONS = {
-  tijera: [circle(6, 6, 2.5), circle(6, 18, 2.5), 'M7.8 7.8 20 19', 'M7.8 16.2 20 5'],
+  // Tijera abierta: dos ojos y dos hojas que se cruzan en el eje (12.2, 12).
+  tijera: [circle(6, 7, 2.5), circle(6, 17, 2.5), 'M8 8.5 19.5 18', 'M8 15.5 19.5 6'],
+  // Tenedor de tres dientes y cuchillo.
   cubiertos: [
-    'M5 3v5a2 2 0 0 0 4 0V3',
-    'M7 10.5V21',
-    'M17 21V3c-2.5 1.5-3.5 4-3.5 7.5 0 1.5 1 2.5 3.5 2.5',
+    'M5.5 3v5a2.5 2.5 0 0 0 5 0V3',
+    'M8 3v5',
+    'M8 10.5V21',
+    'M17.5 21V3c-2.5 1.5-3.5 4-3.5 7.5 0 1.5 1 2.5 3.5 2.5',
   ],
-  tienda: ['M4.5 8h15l-1 12h-13Z', 'M8.5 8V7a3.5 3.5 0 0 1 7 0v1'],
+  // Local a la calle: toldo con festón, vidriera y puerta.
+  tienda: [
+    'M3 9.5 4.5 4h15L21 9.5a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z',
+    'M4.5 12v8h15v-8',
+    'M10 20v-4h4v4',
+  ],
   portafolio: [
     rect(3, 7, 18, 13, 2),
     'M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7',
     'M3 13h18',
   ],
-  pesa: ['M6.5 6.5v11', 'M17.5 6.5v11', 'M3.5 9.5v5', 'M20.5 9.5v5', 'M6.5 12h11'],
+  // Mancuerna: dos discos redondeados, topes y barra.
+  pesa: [
+    rect(4.5, 7, 3, 10, 1.5),
+    rect(16.5, 7, 3, 10, 1.5),
+    'M2.5 10v4',
+    'M21.5 10v4',
+    'M7.5 12h9',
+  ],
   // Llave inglesa: un solo trazo continuo (cabeza abierta + mango).
   llave: [
     'M14.5 4.5a4.5 4.5 0 0 0-5.2 5.8L4 15.6a1.9 1.9 0 0 0 2.7 2.7l5.3-5.3a4.5 4.5 0 0 0 5.8-5.2l-2.7 2.7-2.5-.7-.7-2.5 2.6-2.8Z',
   ],
   mas: ['M12 5v14', 'M5 12h14'],
+  // Encastre: el hueco punteado que espera una pieza (para "Otro rubro" u "Otra cosa").
+  hueco: [...circuloPunteado(12, 12, 8.5), 'M12 8.5v7', 'M8.5 12h7'],
 } as const;
 
-/** Íconos de módulos (clave = id del módulo en config/modulos.ts). */
+/** Íconos de módulos (clave = id del módulo en content/modulos.ts). */
 export const MODULO_ICONS = {
-  turnos: [rect(3.5, 5, 17, 15.5, 2), 'M3.5 10h17', 'M8 3v4', 'M16 3v4'],
+  // Calendario con los días marcados como puntos.
+  turnos: [
+    rect(3.5, 5, 17, 15, 2),
+    'M3.5 9.5h17',
+    'M8 3v4',
+    'M16 3v4',
+    'M8 13.5v.01',
+    'M12 13.5v.01',
+    'M16 13.5v.01',
+    'M8 17v.01',
+    'M12 17v.01',
+  ],
   catalogo: [
     rect(4, 4, 7, 7, 1.5),
     rect(13, 4, 7, 7, 1.5),
@@ -52,8 +77,13 @@ export const MODULO_ICONS = {
     'M20 20v.01',
   ],
   formularios: ['M6 3.5h8.5L18 7v13.5H6Z', 'M14 3.5V7.5h4', 'M9 12h6', 'M9 16h6'],
-  // Comanda: ticket con borde inferior dentado.
-  pedidos: ['M6 3.5h12v17l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5-2 1.5Z', 'M9 8h6', 'M9 11.5h6', 'M9 15h3'],
+  // Comanda colgada del riel: la muesca arriba y el borde de abajo dentado.
+  pedidos: [
+    'M6 3.5h4.5a1.5 1.5 0 0 0 3 0H18v17l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5-2 1.5Z',
+    'M9 9h6',
+    'M9 12.5h6',
+    'M9 16h3',
+  ],
   pagos: [rect(3, 6, 18, 12, 2), 'M3 10h18', 'M7 14.5h3'],
   clientes: [
     circle(9, 8, 3),
@@ -61,8 +91,57 @@ export const MODULO_ICONS = {
     'M16 5.3a3 3 0 0 1 0 5.4',
     'M17.5 14.5a5.5 5.5 0 0 1 3 5',
   ],
-  notificaciones: ['M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15Z', 'M10 21a2 2 0 0 0 4 0'],
+  notificaciones: ['M6 15.5V10a6 6 0 0 1 12 0v5.5l1.5 2h-15Z', 'M10 20a2 2 0 0 0 4 0'],
 } as const;
+
+/**
+ * Íconos de necesidades (paso "¿Qué necesitás?"): hablan del resultado, no de la herramienta, así
+ * que no repiten el ícono del módulo que la resuelve.
+ */
+export const NECESIDAD_ICONS = {
+  // Vender: etiqueta de precio con su ojal.
+  etiqueta: [
+    'M3.5 11.6V4.5a1 1 0 0 1 1-1h7.1a1 1 0 0 1 .7.3l8.2 8.2a1.5 1.5 0 0 1 0 2.1l-6.5 6.5a1.5 1.5 0 0 1-2.1 0L3.8 12.3a1 1 0 0 1-.3-.7Z',
+    circle(8, 8, 1.5),
+  ],
+  // Recibir turnos: el calendario con un turno tomado.
+  agenda: [rect(3.5, 5, 17, 15, 2), 'M3.5 9.5h17', 'M8 3v4', 'M16 3v4', 'M9 14.5l2 2 4-4'],
+  // Mostrar la carta: carta abierta, dos hojas con renglones.
+  menu: [
+    'M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5',
+    'M12 6.5c2-1.5 5-2 8.5-1.5v13c-3.5-.5-6.5 0-8.5 1.5',
+    'M12 6.5v13',
+    'M6 9h3',
+    'M6 12h3',
+    'M15 9h3',
+    'M15 12h3',
+  ],
+  // Cobrar: una moneda con el signo peso.
+  moneda: [
+    circle(12, 12, 8.5),
+    'M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2c-1 0-2-.5-2.5-1.5',
+    'M12 6.5V8',
+    'M12 16v1.5',
+  ],
+  // Organizar clientes: la ficha de un cliente.
+  fichero: [
+    rect(3, 5, 18, 14, 2),
+    circle(8.5, 10.5, 2),
+    'M5.5 16a3 3 0 0 1 6 0',
+    'M14 10h4',
+    'M14 13.5h4',
+  ],
+} as const;
+
+/** Qué ícono acompaña a cada necesidad (sugerencia de brand; `content` puede elegir otro). */
+export const ICONO_DE_NECESIDAD = {
+  vender: 'etiqueta',
+  turnos: 'agenda',
+  carta: 'menu',
+  cobrar: 'moneda',
+  clientes: 'fichero',
+  otra: 'hueco',
+} as const satisfies Record<NecesidadId, keyof typeof NECESIDAD_ICONS | 'hueco'>;
 
 /** Íconos de interfaz. */
 export const UI_ICONS = {
@@ -90,6 +169,8 @@ export const UI_ICONS = {
   billete: [rect(3, 6.5, 18, 11, 2), circle(12, 12, 2.5), 'M6.5 9.5v.01', 'M17.5 14.5v.01'],
   reloj: [circle(12, 12, 8.5), 'M12 7.5V12l3 2'],
   impresora: [rect(4, 9, 16, 8, 1.5), 'M7 9V4h10v5', 'M7 14h10v6H7Z'],
+  // Ticket suelto con la muesca (comprobante, papel).
+  ticket: [conMuesca(5.5, 3.5, 13, 17, 1.5, 1.5), 'M9 10h6', 'M9 13.5h6', 'M9 17h3'],
   // Video explicativo.
   play: ['M8 5.5v13l10.5-6.5Z'],
   pausa: ['M8.5 5.5v13', 'M15.5 5.5v13'],
@@ -101,7 +182,12 @@ export const UI_ICONS = {
   silencio: ['M4 9.5h3.5L12 6v12l-4.5-3.5H4Z', 'M16 9.5l5 5', 'M21 9.5l-5 5'],
 } as const;
 
-export const ICONS = { ...RUBRO_ICONS, ...MODULO_ICONS, ...UI_ICONS } as const;
+export const ICONS = {
+  ...RUBRO_ICONS,
+  ...MODULO_ICONS,
+  ...NECESIDAD_ICONS,
+  ...UI_ICONS,
+} as const;
 
 export type IconName = keyof typeof ICONS;
 

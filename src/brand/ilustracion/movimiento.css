@@ -1,0 +1,85 @@
+/*
+ * Movimiento del sistema de ilustración (lenguaje Encastre: la pieza llega, se pasa apenas y asienta).
+ * Solo transform y opacity. Lo importan Cargando.tsx y dibujos/estados.tsx, así que solo baja en las
+ * rutas que los usan. Las distancias están en unidades de la grilla del SVG (en un <svg> con viewBox,
+ * 1px de transform = 1 unidad de la grilla, no un píxel de pantalla).
+ */
+
+/* Spinner (grilla 24): la pieza recorre el hueco de a cuartos y en cada uno "hace clic". */
+@keyframes ilus-giro {
+  0% {
+    transform: rotate(0deg);
+  }
+  18% {
+    transform: rotate(92deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  43% {
+    transform: rotate(182deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  68% {
+    transform: rotate(272deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  93% {
+    transform: rotate(362deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.ilus-giro {
+  transform-box: view-box;
+  transform-origin: center;
+  animation: ilus-giro 1200ms var(--ease-out) infinite;
+}
+
+/* Dibujo "cargando" (grilla 96): tres piezas caen en sus huecos una tras otra y se renuevan. */
+@keyframes ilus-cae {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  14% {
+    opacity: 1;
+    transform: translateY(1px);
+  }
+  20% {
+    transform: translateY(0);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  82%,
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+.ilus-cae {
+  opacity: 0;
+  animation: ilus-cae 1600ms var(--ease-out) infinite both;
+}
+
+/* Movimiento reducido: versión quieta equivalente. El spinner queda con la pieza en su lugar y el
+   dibujo muestra la primera pieza encajada y los otros dos huecos. */
+@media (prefers-reduced-motion: reduce) {
+  .ilus-giro {
+    animation: none;
+  }
+  .ilus-cae {
+    animation: none;
+    opacity: 0;
+  }
+  .ilus-cae[data-quieta='true'] {
+    opacity: 1;
+  }
+}
