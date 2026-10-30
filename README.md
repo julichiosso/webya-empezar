@@ -34,8 +34,8 @@ pnpm dev                     # http://localhost:3000  (la raíz redirige a /empe
 ```
 
 En desarrollo los leads van a **memoria** por defecto, aunque el `.env` tenga credenciales de Supabase: probar el
-formulario nunca escribe en la base real. `LEAD_REPOSITORY=supabase` en desarrollo hace fallar el arranque salvo que
-lo confirmes con `ALLOW_SUPABASE_IN_DEV=1`. Para inspeccionar leads locales: `LEAD_REPOSITORY=file` (`.data/leads.json`).
+formulario nunca escribe en la base real. Un `next start` local (fuera de Vercel) usa **archivo** por defecto.
+`LEAD_REPOSITORY=supabase` fuera de Vercel hace fallar el arranque salvo que lo confirmes con `ALLOW_SUPABASE_IN_DEV=1`. Para inspeccionar leads locales: `LEAD_REPOSITORY=file` (`.data/leads.json`).
 
 | Script           | Qué hace                                                    |
 | ---------------- | ----------------------------------------------------------- |
@@ -60,7 +60,7 @@ Documentadas una por una en [`.env.example`](.env.example). Resumen:
 | `NEXT_PUBLIC_WHATSAPP_NUMBER`                 | público  | **TODO:** número del negocio (`5491123456789`). Sin él, el botón de WhatsApp queda deshabilitado |
 | `NEXT_PUBLIC_CONTACT_EMAIL`                   | público  | **TODO:** mail del footer                                                                        |
 | `NEXT_PUBLIC_INSTAGRAM_URL`                   | público  | Perfil de Instagram                                                                              |
-| `LEAD_REPOSITORY`                             | servidor | `memory` (dev/tests, por defecto) · `file` · `supabase` (producción; en dev pide `ALLOW_SUPABASE_IN_DEV=1`) |
+| `LEAD_REPOSITORY`                             | servidor | `memory` (dev/tests, por defecto) · `file` · `supabase` (Vercel; fuera de Vercel pide `ALLOW_SUPABASE_IN_DEV=1`) |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`   | servidor | Credenciales. La service role **nunca** con prefijo `NEXT_PUBLIC_`                               |
 | `IP_HASH_SALT`                                | servidor | Sal para hashear la IP. **Obligatoria en producción**                                            |
 | `RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_SECONDS` | servidor | Envíos por IP en la ventana (default 5 cada 600 s)                                               |

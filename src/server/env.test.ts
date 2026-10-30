@@ -42,20 +42,38 @@ describe('loadEnv', () => {
       expect(loadEnv({ ...pedido, ALLOW_SUPABASE_IN_DEV: '1' }).LEAD_REPOSITORY).toBe('supabase');
     });
 
-    it('en producción sigue usando supabase sin confirmación', () => {
+    it('en Vercel sigue usando supabase sin confirmación', () => {
       const env = loadEnv({
         NODE_ENV: 'production',
+        VERCEL: '1',
         IP_HASH_SALT: SALT,
         ...real,
         LEAD_REPOSITORY: 'supabase',
       });
       expect(env.LEAD_REPOSITORY).toBe('supabase');
     });
+
+    it('`next start` local con credenciales en el .env usa archivo, no la base real', () => {
+      const env = loadEnv({ NODE_ENV: 'production', IP_HASH_SALT: SALT, ...real });
+      expect(env.LEAD_REPOSITORY).toBe('file');
+    });
+
+    it('`next start` local que pide supabase falla sin la confirmación', () => {
+      const pedido = {
+        NODE_ENV: 'production',
+        IP_HASH_SALT: SALT,
+        ...real,
+        LEAD_REPOSITORY: 'supabase',
+      };
+      expect(() => loadEnv(pedido)).toThrow(/ALLOW_SUPABASE_IN_DEV=1/);
+      expect(loadEnv({ ...pedido, ALLOW_SUPABASE_IN_DEV: '1' }).LEAD_REPOSITORY).toBe('supabase');
+    });
   });
 
-  it('usa supabase por defecto si hay credenciales', () => {
+  it('en Vercel usa supabase por defecto si hay credenciales', () => {
     const env = loadEnv({
       NODE_ENV: 'production',
+      VERCEL: '1',
       IP_HASH_SALT: SALT,
       SUPABASE_URL: 'https://abc.supabase.co',
       SUPABASE_SERVICE_ROLE_KEY: KEY,
