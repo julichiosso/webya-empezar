@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { CURVA, DURACION, ESCALA, PASO } from '../tokens/primitivos';
+import { TOQUE_CLASE, TOQUE_CLASE_GRUPO } from './toque';
 
 /**
  * Presets de movimiento de WebYa: lenguaje "Encastre" (la pieza llega, se pasa apenas y asienta).
@@ -64,11 +65,9 @@ export const CURVAS_CSS = {
 export const TOQUE = {
   escala: Number(ESCALA.toque),
   /** Control que se toca directamente (`<button>`, `<a>`). */
-  clase:
-    'transition-transform duration-(--duration-instant) ease-(--ease-out) active:scale-(--escala-toque)',
+  clase: TOQUE_CLASE,
   /** Contenido de un `<label class="group">` con el input oculto (chips, tarjetas elegibles). */
-  claseGrupo:
-    'transition-transform duration-(--duration-instant) ease-(--ease-out) group-active:scale-(--escala-toque)',
+  claseGrupo: TOQUE_CLASE_GRUPO,
   /** Para componentes `m.*` de motion. */
   whileTap: { scale: Number(ESCALA.toque) },
 } as const;
