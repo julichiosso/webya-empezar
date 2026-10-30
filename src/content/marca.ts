@@ -1,3 +1,4 @@
+import { HERO } from '@/content/empezar/hero';
 import { PENDIENTES } from '@/content/pendientes';
 
 /**
@@ -28,9 +29,9 @@ export const MARCA = {
   /** El hero de /empezar en miniatura, con la paleta aplicada. */
   heroMuestra: {
     etiqueta: 'Hero',
-    titulo: 'Creá tu negocio online.',
-    subtitulo: 'Elegí tu rubro. Activá lo que necesitás.',
-    cta: 'Empezar a crear',
+    titulo: HERO.titulo,
+    subtitulo: HERO.subtitulo,
+    cta: HERO.cta,
     acento: 'Te escribimos por WhatsApp',
     /** Mismo pendiente que el hero real. */
     todoPlazo: PENDIENTES.plazoRespuesta,

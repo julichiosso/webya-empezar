@@ -12,18 +12,19 @@ export const SEO_SITIO = {
   tituloConMarca: (titulo: string) => `${titulo} | WebYa`,
 } as const;
 
-/** /empezar (metadata y opengraph-image). */
+/** /empezar (metadata y opengraph-image). Mismo mensaje que el hero, para que el clic no sorprenda. */
 export const SEO_EMPEZAR = {
-  titulo: 'Creá tu negocio online',
+  titulo: 'Todo lo digital para tu negocio',
+  /** Hasta ~155 caracteres: lo que Google muestra sin cortar. */
   descripcion:
-    'Elegí tu rubro y activá solo lo que tu negocio necesita: turnos, tienda, carta con QR, pagos. Lo armamos con vos.',
+    'Tienda, turnos, carta con QR, pedidos y pagos para tu negocio. Activá solo lo que usás; si no está, lo armamos a medida con vos.',
   /** Imagen para compartir (se genera en el build). */
   og: {
-    alt: 'WebYa: creá tu negocio online. Elegí tu rubro. Activá lo que necesitás.',
-    titulo: 'Creá tu negocio online.',
-    subtitulo: 'Elegí tu rubro. Activá lo que necesitás.',
-    /** Pastillas de abajo: módulos de ejemplo. */
-    modulos: ['Turnos', 'Tienda y catálogo', 'Carta con QR', 'Pagos online'],
+    alt: 'WebYa: todo lo digital para tu negocio. Y si no está, lo armamos a medida.',
+    titulo: 'Todo lo digital para tu negocio.',
+    subtitulo: 'Y si no está, lo armamos a medida.',
+    /** Pastillas de abajo: módulos de ejemplo y el camino a medida. */
+    modulos: ['Turnos', 'Tienda y catálogo', 'Carta con QR', 'A medida'],
   },
 } as const;
 
