@@ -1,11 +1,13 @@
 import type { EstadoModulo } from '@/config/modulos';
 import type { NecesidadId } from '@/config/necesidades';
+import { PENDIENTES } from '@/content/pendientes';
 
 export type { EstadoModulo } from '@/config/modulos';
 
 /**
  * Catálogo de módulos que WebYa puede armar. Los rubros sugieren módulos por id.
  * Agregar un módulo nuevo = una entrada acá (nombre y explicación en lenguaje no técnico).
+ * La etiqueta y la explicación de cada estado viven en content/estados-modulo.ts.
  */
 export interface Modulo {
   nombre: string;
@@ -13,23 +15,30 @@ export interface Modulo {
   descripcion: string;
   /** Estado honesto: la UI lo muestra tal cual (ver config/modulos.ts). */
   estado: EstadoModulo;
+  /**
+   * Aclaración visible junto al estado, cuando hace falta: lo que todavía no está confirmado (con
+   * "TODO:") o un límite de la demo. Se muestra tal cual, al lado de la etiqueta del estado.
+   */
+  notaEstado?: string;
   /** Necesidades del paso "¿Qué necesitás?" que resuelve (coincide con content/necesidades.ts). */
   necesidades: readonly NecesidadId[];
 }
 
-// TODO: confirmar con el usuario los estados (propuesta de docs/plan-sprint.md §6): pedidos y
-// carta_qr tienen demo funcionando; el resto queda "disponible" hasta que confirme que hoy se entregan.
+// Estados confirmados por el usuario (2026-10-29, docs/plan-sprint.md §6): pedidos y carta_qr tienen demo
+// funcionando; el resto queda "disponible" con su TODO visible hasta que confirme que hoy se entrega.
 export const MODULOS = {
   turnos: {
     nombre: 'Turnos y reservas',
     descripcion: 'Tus clientes eligen día y horario solos, y vos ves la agenda ordenada.',
     estado: 'disponible',
+    notaEstado: PENDIENTES.moduloSinConfirmar,
     necesidades: ['turnos'],
   },
   catalogo: {
     nombre: 'Tienda y catálogo',
     descripcion: 'Tus productos o servicios con fotos y precios, siempre actualizados.',
     estado: 'disponible',
+    notaEstado: PENDIENTES.moduloSinConfirmar,
     necesidades: ['vender'],
   },
   carta_qr: {
@@ -42,6 +51,7 @@ export const MODULOS = {
     nombre: 'Formularios',
     descripcion: 'Consultas, presupuestos o inscripciones que te llegan prolijas y completas.',
     estado: 'disponible',
+    notaEstado: PENDIENTES.moduloSinConfirmar,
     necesidades: ['clientes'],
   },
   pedidos: {
@@ -53,20 +63,22 @@ export const MODULOS = {
   pagos: {
     nombre: 'Pagos online',
     descripcion: 'Cobrá señas, cuotas o ventas sin coordinar transferencias a mano.',
-    // TODO: confirmar con el usuario el medio de cobro real (en la demo el cobro es simulado).
     estado: 'disponible',
+    notaEstado: `En la demo el cobro es simulado. ${PENDIENTES.moduloSinConfirmar} Falta definir el medio de cobro real.`,
     necesidades: ['vender', 'cobrar'],
   },
   clientes: {
     nombre: 'Base de clientes',
     descripcion: 'Un lugar con todos tus clientes y su historial, en vez de mil chats.',
     estado: 'disponible',
+    notaEstado: PENDIENTES.moduloSinConfirmar,
     necesidades: ['clientes'],
   },
   notificaciones: {
     nombre: 'Avisos automáticos',
     descripcion: 'Te avisamos cuando entra algo nuevo y recordamos citas a tus clientes.',
     estado: 'disponible',
+    notaEstado: PENDIENTES.moduloSinConfirmar,
     necesidades: ['turnos', 'clientes'],
   },
 } as const satisfies Record<string, Modulo>;
