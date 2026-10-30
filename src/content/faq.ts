@@ -57,7 +57,6 @@ export const FAQ: readonly Pregunta[] = [
   {
     pregunta: '¿Ya puedo armarlo por mi cuenta?',
     // TODO: cuando exista la plataforma de autoservicio, actualizar esta respuesta.
-    respuesta:
-      'Todavía no. Elegís lo que necesitás acá y lo armamos nosotros, con vos.',
+    respuesta: 'Todavía no. Elegís lo que necesitás acá y lo armamos nosotros, con vos.',
   },
 ];

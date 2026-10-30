@@ -9,7 +9,13 @@ const palabras = (t: string) => t.trim().split(/\s+/).length;
 
 describe('copy del wizard nuevo', () => {
   it('tiene los 5 pasos en el orden confirmado', () => {
-    expect(FLUJO.nombresPasos).toEqual(['Qué necesitás', 'Rubro', 'Módulos', 'WhatsApp', 'Tus datos']);
+    expect(FLUJO.nombresPasos).toEqual([
+      'Qué necesitás',
+      'Rubro',
+      'Módulos',
+      'WhatsApp',
+      'Tus datos',
+    ]);
   });
 
   it('los titulares de los pasos y de las secciones nuevas tienen hasta 8 palabras', () => {

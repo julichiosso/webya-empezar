@@ -48,8 +48,7 @@ export const HERO_VARIANTES: readonly VarianteHero[] = [
     formula: 'Pregunta de objeción',
     titulo: '¿No sabés de tecnología? Mejor.',
     subtitulo: 'Vos contás tu negocio, nosotros lo armamos.',
-    bajada:
-      'Tienda, turnos, carta, pedidos, pagos… y si lo tuyo no está, lo armamos a medida.',
+    bajada: 'Tienda, turnos, carta, pedidos, pagos… y si lo tuyo no está, lo armamos a medida.',
     cta: 'Empezar a crear',
     razonamiento:
       'Ataca la objeción más común del dueño de un local y suena a persona, no a empresa. Funciona mejor con tráfico de Instagram, que llega sin saber qué es WebYa pero con esa duda. Riesgo: el titular no dice qué se obtiene; todo el peso cae en la bajada, que en celular queda debajo del mockup.',

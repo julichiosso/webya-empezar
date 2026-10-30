@@ -30,7 +30,8 @@ function saludo(d: DatosMensajeLead): string {
 
 export const MENSAJE_WHATSAPP = {
   /** CTA de contacto general (footer, nav, páginas de error): sin datos del lead. */
-  contacto: 'Hola, WebYa. Vi la página y quiero armar lo digital de mi negocio. Les cuento qué necesito:',
+  contacto:
+    'Hola, WebYa. Vi la página y quiero armar lo digital de mi negocio. Les cuento qué necesito:',
   /** Desde la sección "¿Y si lo que necesito no está?". */
   aMedida:
     'Hola, WebYa. Necesito algo que no vi en la lista y quiero saber si lo pueden armar a medida. Es esto:',
