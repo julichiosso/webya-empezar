@@ -1,10 +1,4 @@
-import type {
-  AnchorHTMLAttributes,
-  ButtonHTMLAttributes,
-  MouseEvent,
-  ReactNode,
-  Ref,
-} from 'react';
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, MouseEvent, ReactNode, Ref } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import type { ContratoBoton } from './contratos';
 import { cn, TOQUE } from './clases';
@@ -197,9 +191,6 @@ export function ButtonLink({
 }: ButtonLinkProps) {
   const v = variante ?? (variant ? DE_ANTES[variant] : 'primario');
   return (
-    <a
-      className={cn(buttonClasses(v, anchoCompleto ?? fullWidth, tamanio), className)}
-      {...rest}
-    />
+    <a className={cn(buttonClasses(v, anchoCompleto ?? fullWidth, tamanio), className)} {...rest} />
   );
 }

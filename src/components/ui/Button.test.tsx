@@ -23,7 +23,9 @@ describe('Button — estados', () => {
       unmount();
     }
     render(<Button variante="icono" etiquetaAccesible="Cerrar" />);
-    expect(screen.getByRole('button', { name: 'Cerrar' }).className).toContain('hover:bg-surface-2');
+    expect(screen.getByRole('button', { name: 'Cerrar' }).className).toContain(
+      'hover:bg-surface-2',
+    );
   });
 
   it('focus: se alcanza con Tab y no apaga el anillo de foco global', async () => {
