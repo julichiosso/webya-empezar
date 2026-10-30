@@ -1,4 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
+import { HERO } from '../src/content/empezar/hero';
+import { SEO_EMPEZAR, SEO_SITIO } from '../src/content/seo';
+
+const TITULO = SEO_SITIO.tituloConMarca(SEO_EMPEZAR.titulo);
 
 // El SEO no depende del viewport: se prueba una vez, en desktop.
 test.beforeEach(({ viewport }, testInfo) => {
@@ -9,10 +13,10 @@ const meta = (page: Page, selector: string) => page.locator(`head ${selector}`).
 
 test('metadata: título, descripción, canonical y robots', async ({ page }) => {
   await page.goto('/empezar');
-  await expect(page).toHaveTitle('Creá tu negocio online | WebYa');
+  await expect(page).toHaveTitle(TITULO);
   await expect(meta(page, 'meta[name="description"]')).toHaveAttribute(
     'content',
-    /Elegí tu rubro y activá solo lo que tu negocio necesita/,
+    SEO_EMPEZAR.descripcion,
   );
   await expect(meta(page, 'link[rel="canonical"]')).toHaveAttribute(
     'href',
@@ -24,10 +28,7 @@ test('metadata: título, descripción, canonical y robots', async ({ page }) => 
 
 test('Open Graph y Twitter con imagen', async ({ page, request }) => {
   await page.goto('/empezar');
-  await expect(meta(page, 'meta[property="og:title"]')).toHaveAttribute(
-    'content',
-    'Creá tu negocio online | WebYa',
-  );
+  await expect(meta(page, 'meta[property="og:title"]')).toHaveAttribute('content', TITULO);
   await expect(meta(page, 'meta[property="og:url"]')).toHaveAttribute(
     'content',
     'https://webya.ar/empezar',
@@ -41,7 +42,7 @@ test('Open Graph y Twitter con imagen', async ({ page, request }) => {
   await expect(meta(page, 'meta[property="og:image:height"]')).toHaveAttribute('content', '630');
   await expect(meta(page, 'meta[property="og:image:alt"]')).toHaveAttribute(
     'content',
-    /creá tu negocio online/i,
+    SEO_EMPEZAR.og.alt,
   );
 
   // La imagen existe y es un PNG real (se pide a la ruta local: el host del og:image es el de producción).
@@ -94,7 +95,7 @@ test('JSON-LD del FAQ es válido y coincide con lo que se ve', async ({ page }) 
 test('encabezados: un solo h1 y jerarquía sin saltos', async ({ page }) => {
   await page.goto('/empezar');
   await expect(page.locator('h1')).toHaveCount(1);
-  await expect(page.locator('h1')).toContainText('Creá tu negocio online.');
+  await expect(page.locator('h1')).toContainText(HERO.titulo);
   const niveles = await page.evaluate(() =>
     [...document.querySelectorAll('h1,h2,h3')].map((h) => Number(h.tagName[1])),
   );

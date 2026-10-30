@@ -1,9 +1,12 @@
 import { siteConfig } from '@/lib/site-config';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { FOOTER } from '@/content/empezar/footer';
+import { MENSAJE_WHATSAPP } from '@/content/whatsapp';
+import { buildWhatsAppLink } from '@/lib/whatsapp';
 
 export function Footer() {
-  const { contactEmail, instagramUrl } = siteConfig;
+  const { contactEmail, instagramUrl, whatsappNumber } = siteConfig;
+  const whatsapp = buildWhatsAppLink(whatsappNumber, MENSAJE_WHATSAPP.contacto);
   return (
     <footer className="mx-auto w-full max-w-xl border-t border-line px-4 py-12 lg:max-w-page lg:px-8 lg:py-16">
       <div className="lg:flex lg:items-start lg:justify-between lg:gap-12">
@@ -11,7 +14,31 @@ export function Footer() {
           <p className="text-heading font-semibold">{FOOTER.lema}</p>
           <p className="mt-1 text-muted">{FOOTER.bajada}</p>
         </div>
-        <ul className="mt-8 flex flex-col gap-1 lg:mt-0 lg:items-end">
+        <ul
+          aria-label={FOOTER.enlaces.aria}
+          className="mt-8 flex flex-col gap-1 lg:mt-0 lg:items-end"
+        >
+          <li>
+            <a
+              href="/demo/gastronomia"
+              className="-mx-2 inline-flex min-h-tap items-center px-2 text-muted hover:text-fg"
+            >
+              {FOOTER.enlaces.demo}
+            </a>
+          </li>
+          {whatsapp && (
+            <li>
+              <a
+                href={whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="-mx-2 inline-flex min-h-tap items-center px-2 text-muted hover:text-fg"
+              >
+                {FOOTER.enlaces.whatsapp}
+                <span className="sr-only">{FOOTER.enlaces.externo}</span>
+              </a>
+            </li>
+          )}
           <li>
             {contactEmail ? (
               <a
@@ -36,11 +63,13 @@ export function Footer() {
               className="-mx-2 inline-flex min-h-tap items-center px-2 text-muted hover:text-fg"
             >
               {FOOTER.instagram}
+              <span className="sr-only">{FOOTER.enlaces.externo}</span>
             </a>
           </li>
         </ul>
       </div>
-      <p className="tabular mt-8 text-small text-subtle">
+      <p className="mt-8 text-small text-subtle">{FOOTER.todoPrivacidad}</p>
+      <p className="tabular mt-2 text-small text-subtle">
         {FOOTER.copyright(new Date().getFullYear())}
       </p>
     </footer>

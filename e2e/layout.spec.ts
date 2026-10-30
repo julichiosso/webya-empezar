@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { HERO } from '../src/content/empezar/hero';
 import { abrirWizard, tocar, wizard } from './helpers';
 
 // Layout responsive. Los chequeos de escritorio (lg ≥ 1024 px) se saltean en celular y tablet.
@@ -75,21 +76,20 @@ test.describe('escritorio (lg y más)', () => {
     expect(cta.y + cta.height).toBeLessThanOrEqual(page.viewportSize()!.height);
   });
 
-  test('título y línea gris: una línea cada uno (2 en total) y copy nuevo', async ({ page }) => {
+  test('título en hasta 2 líneas, línea gris en una y copy nuevo', async ({ page }) => {
     await page.goto('/empezar');
-    await expect(page.locator('h1')).toContainText('Creá tu negocio online.');
-    await expect(page.locator('h1')).toContainText('Elegí tu rubro. Activá lo que necesitás.');
-    expect(await lineas(page, 'h1')).toBeLessThanOrEqual(2);
+    await expect(page.locator('h1')).toContainText(HERO.titulo);
+    await expect(page.locator('h1')).toContainText(HERO.subtitulo);
+    // "Todo lo digital para tu negocio." no entra en una línea de la columna del hero con el token
+    // `hero` actual: el título puede ir en 2 líneas (text-balance) y la línea gris sigue en una.
+    expect(await lineas(page, 'h1 > span')).toBe(1);
+    expect(await lineas(page, 'h1')).toBeLessThanOrEqual(3);
   });
 
   test('3 señales de confianza, sin sellos ni métricas inventadas', async ({ page }) => {
     await page.goto('/empezar');
     const hero = page.locator('section[aria-labelledby="hero-title"]');
-    for (const s of [
-      'Sin saber de tecnología',
-      'Armado para tu rubro',
-      'Te respondemos en menos de 24 hs',
-    ]) {
+    for (const s of HERO.senales) {
       await expect(hero.getByText(s)).toBeVisible();
     }
   });

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { PASO_LISTO } from '../src/content/empezar/pasos';
 import {
   abrirWizard,
   completarDatos,
@@ -34,7 +35,7 @@ test('recorrido completo hasta la confirmación y el lead queda guardado con mó
   await expect(resumen).toContainText('Tienda y catálogo');
   const wa = wizard(page).getByRole('link', { name: /hablar por whatsapp/i });
   await expect(wa).toHaveAttribute('href', /^https:\/\/wa\.me\/5491100000000\?text=/);
-  await expect(wizard(page).getByText(/menos de 24 hs para ponerlo online/i)).toBeVisible();
+  await expect(wizard(page).getByText(PASO_LISTO.contacto)).toBeVisible();
   await expect(wizard(page).getByText(/lo armamos nosotros/i)).toBeVisible();
 
   const lead = (await leerLeads()).find((l) => l.nombre_negocio === negocio);
