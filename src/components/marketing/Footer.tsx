@@ -9,7 +9,7 @@ export function Footer() {
   const { contactEmail, instagramUrl, whatsappNumber } = siteConfig;
   const whatsapp = buildWhatsAppLink(whatsappNumber, MENSAJE_WHATSAPP.contacto);
   return (
-    <footer className="mx-auto w-full max-w-xl border-t border-line px-4 py-12 lg:max-w-page lg:px-8 lg:py-16">
+    <footer className="diferido mx-auto w-full max-w-xl border-t border-line px-4 py-12 lg:max-w-page lg:px-8 lg:py-16">
       <div className="lg:flex lg:items-start lg:justify-between lg:gap-12">
         <div>
           <p className="text-heading font-semibold">{FOOTER.lema}</p>
@@ -70,7 +70,7 @@ export function Footer() {
         </ul>
       </div>
       {/* Interruptor discreto de tema (el oscuro es el default); en el pie para no sumar nada a la nav. */}
-      <InterruptorTema etiqueta={FOOTER.tema.aClaro} className="mt-8" />
+      <InterruptorTema etiqueta={FOOTER.tema.etiqueta} className="mt-8" />
       <p className="mt-8 text-small text-subtle">{FOOTER.todoPrivacidad}</p>
       <p className="tabular mt-2 text-small text-subtle">
         {FOOTER.copyright(new Date().getFullYear())}

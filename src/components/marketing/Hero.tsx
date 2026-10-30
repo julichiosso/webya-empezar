@@ -17,11 +17,15 @@ interface HeroProps {
  */
 export function Hero({ mockup, accion }: HeroProps) {
   return (
+    // Sin CLS con red lenta: el HTML llega en tandas y el texto se pinta antes que el mockup. Centrado
+    // en la fila, el texto saltaba cuando crecía la fila (llegaba el mockup) o la columna (llegaba su
+    // final). Por eso la fila reserva el alto del mockup (694 px, fijo desde lg) y el texto va arriba
+    // con un margen fijo que imita el centrado (~550 px de texto): ninguno depende del otro.
     <section
       aria-labelledby="hero-title"
-      className="grid gap-12 pt-10 pb-12 sm:pt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-16 lg:pt-24 lg:pb-24"
+      className="grid gap-12 pt-10 pb-12 sm:pt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:grid-rows-[minmax(43.375rem,auto)] lg:items-start lg:gap-16 lg:pt-24 lg:pb-24"
     >
-      <div>
+      <div className="lg:pt-18">
         <h1 id="hero-title" className="text-display font-semibold text-balance lg:text-hero">
           {HERO.titulo}
           <span className="block text-muted lg:mt-3 lg:text-hero-sub lg:font-medium">

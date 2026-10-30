@@ -483,6 +483,17 @@
 }
 
 /*
+ * Las secciones con revelado (y el pie, `.diferido`) son las de abajo del pliegue: el navegador no
+ * las maqueta hasta que se acercan a la pantalla. Baja el primer layout de /empezar de ~150 a ~80 ms
+ * con CPU x4 (el frame más largo de la entrada). `auto` recuerda el alto real: sin saltos al volver.
+ */
+.reveal,
+.diferido {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 50rem;
+}
+
+/*
  * Revelado de secciones al hacer scroll, sin JavaScript: animación ligada al scroll del navegador.
  * Si no hay soporte (animation-timeline), la sección simplemente se ve. Una sola vez, sin parallax.
  */
