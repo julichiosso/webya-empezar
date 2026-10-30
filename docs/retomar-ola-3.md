@@ -24,19 +24,19 @@ tests de un solo proyecto o solo celular/escritorio). JS inicial `/empezar` 146,
 
 ## Falta (pedido del 2026-10-30: cerrar lo pausado y dejar solo main)
 
-Hecho en esta tanda (en  local, ): rediseño en celular (hero, catálogo y módulos con los TODO
+Hecho en esta tanda (en `main` local, `b52e64d`): rediseño en celular (hero, catálogo y módulos con los TODO
 agrupados), CTA fijo en celular, CTA final, "qué pasa después", 404 y error, y la rama de copy (bio + 5 captions
-de Instagram en  y  completa). E2E verde, JS /empezar 148,6 KB.
+de Instagram en `src/content/instagram.ts` y `docs/copy-guia.md` completa). E2E verde, JS /empezar 148,6 KB.
 
 1. **marca-sistema, a medias** (se cortó por el límite de uso): worktree
-    (rama ). Falta terminar /sistema,
-   BRAND.md y  (avatar + 5 destacadas). Retomarlo con SendMessage al mismo agente o
-   relanzar marca-sistema sobre esa rama. Después: mergear a main con lint, typecheck, Vitest y E2E en verde.
+   `.claude/worktrees/agent-a120580390f3d567b` (rama `worktree-agent-a120580390f3d567b`). Falta terminar /sistema,
+   `BRAND.md` y `scripts/exportar-marca.mjs` (avatar + 5 destacadas). Retomarlo con el mismo agente o relanzar
+   marca-sistema sobre esa rama. Después: mergear a main con lint, typecheck, Vitest y E2E en verde.
 2. **ui-componentes**: Pestañas, Pasos y EstadoVacío (docs/plan-sprint.md, Ola 2). Sin empezar.
 3. **Push de main** (el usuario lo pidió: "subí todo a main, que quede solo esa rama"). ANTES: aplicar la migración
-    en Supabase, o el paso de WhatsApp falla en producción.
-4. **Limpieza** (después del push): borrar ramas locales mergeadas (, , ),
-   los worktrees de  y la rama remota .
+   `20261030120000_leads_parcial_necesidades.sql` en Supabase, o el paso de WhatsApp falla en producción.
+4. **Limpieza** (después del push): borrar ramas locales mergeadas (`feat/*`, `sprint/*`, `worktree-agent-*`),
+   los worktrees de `.claude/worktrees/` y la rama remota `sprint/base-marca`.
 
 ## Riesgos
 
