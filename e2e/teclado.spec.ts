@@ -33,7 +33,9 @@ test('el mockup del hero se opera solo con teclado y llega al wizard', async ({ 
   await page.keyboard.press('Tab');
   await expect(page.getByRole('navigation').getByRole('link', { name: NAV.cta })).toBeFocused();
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('main').getByRole('link', { name: HERO.cta })).toBeFocused();
+  await expect(
+    page.locator('section[aria-labelledby="hero-title"]').getByRole('link', { name: HERO.cta }),
+  ).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('button', { name: /mirá cómo funciona/i })).toBeFocused();
   await page.keyboard.press('Tab');

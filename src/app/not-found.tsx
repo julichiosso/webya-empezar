@@ -5,7 +5,8 @@ import { ESTADOS_PAGINA } from '@/content/estados-pagina';
 
 const { noEncontrada: TXT } = ESTADOS_PAGINA;
 
-export const metadata: Metadata = { title: TXT.titulo, robots: { index: false } };
+// Next agrega solo el noindex a la 404.
+export const metadata: Metadata = { title: TXT.titulo };
 
 /** 404 de todo el sitio: la pieza que no encaja (humor liviano, una salida clara). */
 export default function NoEncontrada() {

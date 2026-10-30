@@ -111,7 +111,7 @@ test('una URL que no existe responde 404 con la página propia y noindex', async
   await expect(
     page.getByRole('heading', { level: 1, name: ESTADOS_PAGINA.noEncontrada.titulo }),
   ).toBeVisible();
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(1);
   await expect(page.getByRole('link', { name: ESTADOS_PAGINA.noEncontrada.cta })).toHaveAttribute(
     'href',
     '/empezar',

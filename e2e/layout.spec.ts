@@ -98,7 +98,10 @@ test.describe('escritorio (lg y más)', () => {
     const main = (await page.locator('main').boundingBox())!;
     expect(main.width).toBeLessThanOrEqual(1200);
     // El mockup y el CTA entran en el primer viewport.
-    const cta = (await page.getByRole('main').getByRole('link', { name: HERO.cta }).boundingBox())!;
+    const cta = (await page
+      .locator('section[aria-labelledby="hero-title"]')
+      .getByRole('link', { name: HERO.cta })
+      .boundingBox())!;
     expect(cta.y + cta.height).toBeLessThanOrEqual(page.viewportSize()!.height);
   });
 
@@ -159,7 +162,7 @@ test.describe('escritorio (lg y más)', () => {
   test('"Cómo funciona" y "Qué podés activar" en 3 y 4 columnas; FAQ en 2', async ({ page }) => {
     await page.goto('/empezar');
     expect(await columnas(page, 'section[aria-labelledby="como-title"] li')).toBe(3);
-    expect(await columnas(page, 'section[aria-labelledby="incluye-title"] li')).toBe(4);
+    expect(await columnas(page, 'section[aria-labelledby="incluye-title"] > ul > li')).toBe(4);
     expect(await columnas(page, 'section[aria-labelledby="faq-title"] details')).toBe(2);
   });
 
