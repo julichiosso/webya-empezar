@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test';
+import { HERO } from '../src/content/empezar/hero';
+import { NAV } from '../src/content/empezar/nav';
 import {
   leerLeads,
   negocioUnico,
@@ -20,11 +22,20 @@ test('el mockup del hero se opera solo con teclado y llega al wizard', async ({ 
   const hero = page.getByRole('group', { name: /armá tu negocio/i });
   const turnos = hero.getByRole('button', { name: /turnos y reservas/i });
 
-  // Tab: CTA "Empezar a crear" → "Mirá cómo funciona" (video) → las cuatro tarjetas, en orden.
+  // Tab: "Saltar al contenido" → logo → CTA de la nav → CTA del hero → "Mirá cómo funciona" (video)
+  // → enlace a la demo → las cuatro tarjetas, en orden.
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'Empezar a crear' })).toBeFocused();
+  await expect(page.getByRole('link', { name: NAV.saltar })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: NAV.inicio })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('navigation').getByRole('link', { name: NAV.cta })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('main').getByRole('link', { name: HERO.cta })).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('button', { name: /mirá cómo funciona/i })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: HERO.enlaceDemo })).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(turnos).toBeFocused();
 

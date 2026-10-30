@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { alternarModuloStore, reiniciarModulos } from '@/features/empezar/modulos-store';
 import { registerSink } from '@/lib/analytics';
-import { HeroMockup } from './HeroMockup';
+import { HeroMockupConectado as HeroMockup } from '@/features/empezar/HeroMockupConectado';
 
 // jsdom no trae IntersectionObserver: uno falso, que el test dispara a mano.
 type Oyente = IntersectionObserverCallback;

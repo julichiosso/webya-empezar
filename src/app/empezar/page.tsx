@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
-import { Logo } from '@/brand/logo/Logo';
 import { SplashLogo } from '@/brand/logo/SplashLogo';
+import { AMedida } from '@/components/marketing/AMedida';
+import { ID_CONTENIDO, Nav } from '@/components/marketing/Nav';
+import { HeroMockupConectado } from '@/features/empezar/HeroMockupConectado';
+import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
 import { ComoFunciona } from '@/components/marketing/ComoFunciona';
 import { Confianza, VitrinaDemo } from '@/components/marketing/Confianza';
 import { Faq } from '@/components/marketing/Faq';
@@ -50,15 +53,17 @@ export default function EmpezarPage() {
         // Se escapa "<" para que ningún texto pueda cerrar la etiqueta <script>.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }}
       />
-      <header className="mx-auto flex w-full max-w-xl items-center px-4 pt-6 lg:max-w-page lg:px-8 lg:pt-8">
-        <Logo armar />
-      </header>
-      <main className="mx-auto w-full max-w-xl px-4 pb-24 lg:max-w-page lg:px-8 lg:pb-32">
-        <Hero />
+      <Nav />
+      <main
+        id={ID_CONTENIDO}
+        className="mx-auto w-full max-w-xl px-4 pb-24 lg:max-w-page lg:px-8 lg:pb-32"
+      >
+        <Hero mockup={<HeroMockupConectado />} accion={<BotonExplicativo origen="empezar" />} />
         <WizardLazy />
         <VitrinaDemo />
         <ComoFunciona />
         <QueIncluye />
+        <AMedida />
         <Confianza />
         <Faq />
       </main>

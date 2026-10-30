@@ -129,6 +129,7 @@ export function StepListo({
           </Button>
         )}
         <p className="tabular mt-4 text-center text-small text-muted">{PASO_LISTO.contacto}</p>
+        <p className="mt-2 text-center text-small text-subtle">{PASO_LISTO.todoPlazo}</p>
         {!whatsappLink && process.env.NODE_ENV !== 'production' && (
           <p className="mt-2 text-center text-small text-subtle">{PASO_LISTO.todoWhatsapp}</p>
         )}

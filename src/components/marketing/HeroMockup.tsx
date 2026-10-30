@@ -3,12 +3,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { HERO_MOCKUP } from '@/content/empezar/hero';
 import { getModulo, type ModuloId } from '@/content/modulos';
-// eslint-disable-next-line no-restricted-imports -- deuda registrada en tests/arquitectura/excepciones.ts
-import {
-  alternarModuloStore,
-  hayDecisionesManuales,
-  useModulos,
-} from '@/features/empezar/modulos-store';
 import { track } from '@/lib/analytics';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { ModuloArte } from '@/brand/ilustracion/modulos/ModuloArte';
@@ -29,10 +23,23 @@ const pieza = (i: number) => ({ '--i': i }) as CSSProperties;
  * Mockup interactivo del hero: una mini web de negocio que se arma según los módulos activos.
  * Cada tarjeta es un <button aria-pressed> (teclado y lectores de pantalla gratis); el dibujo
  * de adentro y la barra de navegación son decorativos. Lo que se activa acá llega
- * pre-seleccionado al wizard (ver modulos-store). Solo anima transform/opacity.
+ * pre-seleccionado al wizard: el estado entra por props (lo conecta features/empezar/HeroMockupConectado).
+ * Solo anima transform/opacity.
  */
-export function HeroMockup() {
-  const { seleccionados } = useModulos();
+export interface HeroMockupProps {
+  /** Módulos activos (lo decidido a mano más lo sugerido por el rubro). */
+  seleccionados: readonly ModuloId[];
+  /** Activa o apaga un módulo; devuelve si quedó activo. */
+  alternarModulo: (id: ModuloId) => boolean;
+  /** ¿Ya hubo decisiones a mano? Si las hay, la pista no aparece. */
+  hayDecisionesManuales: () => boolean;
+}
+
+export function HeroMockup({
+  seleccionados,
+  alternarModulo,
+  hayDecisionesManuales,
+}: HeroMockupProps) {
   const [pista, setPista] = useState(false);
   const grupo = useRef<HTMLDivElement>(null);
   /** La pista se muestra una sola vez: ya salió, o la persona ya tocó una tarjeta. */
@@ -59,10 +66,11 @@ export function HeroMockup() {
       io.disconnect();
       clearTimeout(timer.current);
     };
-  }, []);
+    // hayDecisionesManuales es estable (una función de módulo): el efecto corre una vez.
+  }, [hayDecisionesManuales]);
 
   const alternar = (id: ModuloId) => {
-    const activo = alternarModuloStore(id);
+    const activo = alternarModulo(id);
     track('modulo_alternado', { modulo: id, activo, origen: 'hero' });
     // Al primer toque la pista deja de tener sentido: se oculta y no vuelve.
     pistaUsada.current = true;

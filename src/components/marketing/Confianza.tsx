@@ -63,6 +63,7 @@ export function Confianza() {
             <div>
               <h3 className="font-semibold">{c.titulo}</h3>
               <p className="mt-1 text-muted">{c.texto}</p>
+              {c.todo && <p className="mt-2 text-small text-subtle">{c.todo}</p>}
             </div>
           </li>
         ))}

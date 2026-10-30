@@ -1,5 +1,6 @@
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { QUE_INCLUYE } from '@/content/empezar/que-incluye';
+import { ESTADO_MODULO_UI, ESTADOS_MODULO_TEXTO } from '@/content/estados-modulo';
 import { MODULO_IDS, getModulo } from '@/content/modulos';
 
 /**
@@ -30,8 +31,24 @@ export function QueIncluye() {
                 <Icon name={id} size={24} />
               </span>
               <div>
-                <h3 className="font-semibold">{mod.nombre}</h3>
+                <h3 className="font-semibold">
+                  {mod.nombre}
+                  <span className="sr-only">
+                    {ESTADO_MODULO_UI.accesible(ESTADOS_MODULO_TEXTO[mod.estado].etiqueta)}
+                  </span>
+                </h3>
                 <p className="mt-1 text-small text-muted">{mod.descripcion}</p>
+                {/* Estado honesto, tal cual, con su aclaración pendiente si la tiene. */}
+                <p aria-hidden="true" className="mt-2">
+                  <span className="inline-flex rounded-full border border-line-strong px-2 text-small leading-6 text-fg">
+                    {ESTADOS_MODULO_TEXTO[mod.estado].etiqueta}
+                  </span>
+                </p>
+                {mod.notaEstado && (
+                  <p data-todo className="mt-2 text-small text-subtle">
+                    {mod.notaEstado}
+                  </p>
+                )}
               </div>
             </li>
           );

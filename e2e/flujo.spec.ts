@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { HERO } from '../src/content/empezar/hero';
 import { PASO_LISTO } from '../src/content/empezar/pasos';
 import {
   abrirWizard,
@@ -76,7 +77,7 @@ test('lo que se activa en el hero llega al wizard y se guarda en el lead', async
   );
 
   // CTA → wizard. Comercio no sugiere Carta con QR: tiene que venir marcada por el hero.
-  await page.getByRole('link', { name: 'Empezar a crear' }).click();
+  await page.getByRole('main').getByRole('link', { name: HERO.cta }).click();
   await tocar(page, /comercio/i);
   await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
   await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();

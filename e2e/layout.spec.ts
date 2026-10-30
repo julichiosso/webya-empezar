@@ -72,7 +72,7 @@ test.describe('escritorio (lg y más)', () => {
     const main = (await page.locator('main').boundingBox())!;
     expect(main.width).toBeLessThanOrEqual(1200);
     // El mockup y el CTA entran en el primer viewport.
-    const cta = (await page.getByRole('link', { name: 'Empezar a crear' }).boundingBox())!;
+    const cta = (await page.getByRole('main').getByRole('link', { name: HERO.cta }).boundingBox())!;
     expect(cta.y + cta.height).toBeLessThanOrEqual(page.viewportSize()!.height);
   });
 
@@ -144,11 +144,11 @@ test.describe('escritorio (lg y más)', () => {
     }
     const textos = await page
       .locator(
-        'section[aria-labelledby="como-title"] li p, section[aria-labelledby="incluye-title"] li p, section[aria-labelledby="incluye-title"] > p',
+        'section[aria-labelledby="como-title"] li p, section[aria-labelledby="incluye-title"] li p:not([data-todo]), section[aria-labelledby="incluye-title"] > p',
       )
       .allTextContents();
     expect(textos.length).toBeGreaterThanOrEqual(10);
-    // Una sola frase: ningún punto/!/? seguido de otra palabra.
+    // Una sola frase: ningún punto/!/? seguido de otra palabra. Los TODO visibles (data-todo) no cuentan.
     for (const t of textos) expect(t, t).not.toMatch(/[.!?]\s+\S/);
   });
 });

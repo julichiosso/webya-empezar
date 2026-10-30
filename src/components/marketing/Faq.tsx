@@ -15,6 +15,8 @@ function Item({ item }: { item: Pregunta }) {
         </span>
       </summary>
       <p className="pb-6 text-muted">{item.respuesta}</p>
+      {/* Pendiente visible (fuera del JSON-LD, que solo lleva la respuesta). */}
+      {item.todo && <p className="-mt-4 pb-6 text-small text-subtle">{item.todo}</p>}
     </details>
   );
 }
