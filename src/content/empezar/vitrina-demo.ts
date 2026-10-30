@@ -4,6 +4,8 @@ export const VITRINA_DEMO = {
   titulo: 'Mirá tu local funcionando',
   bajada: 'Pedí como cliente desde el celular y miralo llegar al panel del dueño, en tiempo real.',
   cta: 'Probar la demo',
+  /** Debajo del CTA: la demo dice que es una demo. */
+  aviso: 'Con datos de ejemplo: no se cobra ni se envía nada.',
   /** Mini comanda decorativa: lo que ve el dueño cuando entra un pedido (datos de ejemplo). */
   comanda: {
     numero: '#24',

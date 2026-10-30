@@ -26,7 +26,8 @@ export const CONFIANZA: {
     {
       icono: 'carta_qr',
       titulo: 'Probás antes de decidir',
-      texto: 'La demo es real y la usás sin registrarte: pedí como cliente y miralo como dueño.',
+      texto:
+        'La demo funciona de verdad y la usás sin registrarte: pedí como cliente y miralo como dueño.',
     },
     {
       icono: 'catalogo',

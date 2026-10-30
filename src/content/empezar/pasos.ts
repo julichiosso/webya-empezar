@@ -83,7 +83,7 @@ export const PASO_DATOS = {
   privacidad:
     'Usamos tus datos solo para contactarte por tu proyecto y no los compartimos con nadie.',
   /** Visible hasta que exista la política de privacidad. */
-  todoPrivacidad: 'TODO: enlazar la política de privacidad.',
+  todoPrivacidad: PENDIENTES.privacidad,
 } as const;
 
 /** Paso 4: confirmación. */
