@@ -5,6 +5,9 @@ import { ID_CONTENIDO, Nav } from '@/components/marketing/Nav';
 import { HeroMockupConectado } from '@/features/empezar/HeroMockupConectado';
 import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
 import { ComoFunciona } from '@/components/marketing/ComoFunciona';
+import { ComoTrabajamos } from '@/components/marketing/ComoTrabajamos';
+import { CtaFinal } from '@/components/marketing/CtaFinal';
+import { StickyCta } from '@/components/marketing/StickyCta';
 import { Confianza, VitrinaDemo } from '@/components/marketing/Confianza';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
@@ -65,9 +68,12 @@ export default function EmpezarPage() {
         <QueIncluye />
         <AMedida />
         <Confianza />
+        <ComoTrabajamos />
         <Faq />
+        <CtaFinal />
       </main>
       <Footer />
+      <StickyCta />
     </>
   );
 }

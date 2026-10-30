@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { HERO } from '../src/content/empezar/hero';
+import { ESTADOS_PAGINA } from '../src/content/estados-pagina';
 import { SEO_EMPEZAR, SEO_SITIO } from '../src/content/seo';
 
 const TITULO = SEO_SITIO.tituloConMarca(SEO_EMPEZAR.titulo);
@@ -102,4 +103,17 @@ test('encabezados: un solo h1 y jerarquía sin saltos', async ({ page }) => {
   for (let i = 1; i < niveles.length; i++) {
     expect((niveles[i] ?? 0) - (niveles[i - 1] ?? 0)).toBeLessThanOrEqual(1);
   }
+});
+
+test('una URL que no existe responde 404 con la página propia y noindex', async ({ page }) => {
+  const res = await page.goto('/no-existe-esta-pagina');
+  expect(res?.status()).toBe(404);
+  await expect(
+    page.getByRole('heading', { level: 1, name: ESTADOS_PAGINA.noEncontrada.titulo }),
+  ).toBeVisible();
+  await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(1);
+  await expect(page.getByRole('link', { name: ESTADOS_PAGINA.noEncontrada.cta })).toHaveAttribute(
+    'href',
+    '/empezar',
+  );
 });

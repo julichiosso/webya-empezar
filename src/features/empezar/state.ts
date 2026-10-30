@@ -3,7 +3,6 @@ import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { esOrigen, type Origen } from '@/config/origenes';
 import { WIZARD } from '@/content/empezar/wizard';
 import type { DatosForm } from '@/content/leads';
-import { MENSAJES_LEAD } from '@/content/leads-mensajes';
 import { getNecesidad, NECESIDAD_OTRA_ID } from '@/content/necesidades';
 import { getRubro, RUBRO_OTRO_ID } from '@/content/rubros';
 // Sin zod: este módulo viaja en el JS inicial (el store de módulos del hero lo usa).
@@ -173,8 +172,8 @@ export function errorParaAvanzar(
     if (state.necesidades.length === 0) return WIZARD.errores.sinNecesidad;
     if (marcoOtraCosa(state)) {
       const libre = state.necesidadLibre.trim();
-      if (libre === '') return MENSAJES_LEAD.necesidadLibreVacia;
-      if (libre.length < LIMITES.necesidadLibreMin) return MENSAJES_LEAD.necesidadLibreCorta;
+      if (libre === '') return WIZARD.errores.necesidadLibreVacia;
+      if (libre.length < LIMITES.necesidadLibreMin) return WIZARD.errores.necesidadLibreCorta;
     }
     return null;
   }

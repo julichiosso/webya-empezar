@@ -17,7 +17,10 @@ export const A_MEDIDA = {
   /** Cómo sigue un pedido a medida. Lo que se compromete es la conversación y el presupuesto, no el resultado. */
   pasos: [
     { titulo: 'Nos contás', texto: 'Lo escribís en el formulario, en el paso "Otra cosa".' },
-    { titulo: 'Lo vemos con vos', texto: 'Te escribimos por WhatsApp para entender bien qué necesitás.' },
+    {
+      titulo: 'Lo vemos con vos',
+      texto: 'Te escribimos por WhatsApp para entender bien qué necesitás.',
+    },
     {
       titulo: 'Te decimos si se puede',
       texto: 'Y si se puede, te armamos un presupuesto sin compromiso.',

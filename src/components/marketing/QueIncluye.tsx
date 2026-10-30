@@ -1,12 +1,14 @@
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import { NotasPendientes } from '@/components/patterns/NotasPendientes';
 import { QUE_INCLUYE } from '@/content/empezar/que-incluye';
 import { ESTADO_MODULO_UI, ESTADOS_MODULO_TEXTO } from '@/content/estados-modulo';
-import { MODULO_IDS, getModulo } from '@/content/modulos';
+import { MODULO_IDS, getModulo, notasPendientes } from '@/content/modulos';
 
 /**
- * Los módulos que WebYa puede armar, en lenguaje no técnico (sale de config/modulos.ts).
- * Un "tablero de piezas": un solo panel dividido por líneas finas (filas en mobile, 4 columnas en
- * escritorio), cada ícono en su hueco punteado. Con 8 módulos, dos filas de 4 sin huecos.
+ * Los módulos que WebYa puede armar, en lenguaje no técnico (sale de content/modulos.ts).
+ * Un "tablero de piezas": un solo panel dividido por líneas finas. En celular, filas compactas
+ * (ícono, nombre con su estado al lado y una frase); en escritorio, 4 columnas. Lo que falta
+ * confirmar (TODO) va una sola vez, agrupado, debajo del tablero.
  */
 export function QueIncluye() {
   return (
@@ -19,41 +21,39 @@ export function QueIncluye() {
       <ul className="mt-8 overflow-hidden rounded-panel border border-line bg-surface shadow-raised lg:mt-12 lg:grid lg:grid-cols-4 lg:gap-px lg:bg-line">
         {MODULO_IDS.map((id) => {
           const mod = getModulo(id);
+          const estado = ESTADOS_MODULO_TEXTO[mod.estado].etiqueta;
           return (
             <li
               key={id}
-              className="flex gap-4 border-t border-line bg-surface p-6 first:border-t-0 lg:flex-col lg:border-t-0 lg:p-8"
+              className="flex gap-4 border-t border-line bg-surface px-4 py-4 first:border-t-0 lg:flex-col lg:border-t-0 lg:p-8"
             >
               <span
                 aria-hidden="true"
-                className="flex size-12 shrink-0 items-center justify-center rounded-control border border-dashed border-line-strong text-fg"
+                className="flex size-10 shrink-0 items-center justify-center rounded-control border border-dashed border-line-strong text-fg lg:size-12"
               >
-                <Icon name={id} size={24} />
+                <Icon name={id} size={22} />
               </span>
-              <div>
-                <h3 className="font-semibold">
-                  {mod.nombre}
-                  <span className="sr-only">
-                    {ESTADO_MODULO_UI.accesible(ESTADOS_MODULO_TEXTO[mod.estado].etiqueta)}
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 lg:block">
+                  <h3 className="font-semibold">
+                    {mod.nombre}
+                    <span className="sr-only">{ESTADO_MODULO_UI.accesible(estado)}</span>
+                  </h3>
+                  {/* Estado honesto, tal cual. */}
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex shrink-0 rounded-full border border-line-strong px-2 text-small leading-6 text-fg lg:mt-2"
+                  >
+                    {estado}
                   </span>
-                </h3>
-                <p className="mt-1 text-small text-muted">{mod.descripcion}</p>
-                {/* Estado honesto, tal cual, con su aclaración pendiente si la tiene. */}
-                <p aria-hidden="true" className="mt-2">
-                  <span className="inline-flex rounded-full border border-line-strong px-2 text-small leading-6 text-fg">
-                    {ESTADOS_MODULO_TEXTO[mod.estado].etiqueta}
-                  </span>
-                </p>
-                {mod.notaEstado && (
-                  <p data-todo className="mt-2 text-small text-subtle">
-                    {mod.notaEstado}
-                  </p>
-                )}
+                </div>
+                <p className="mt-1 text-small text-muted lg:mt-2">{mod.descripcion}</p>
               </div>
             </li>
           );
         })}
       </ul>
+      <NotasPendientes notas={notasPendientes()} className="mt-4" />
     </section>
   );
 }

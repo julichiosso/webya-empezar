@@ -110,7 +110,10 @@ test('lo que se activa en el hero llega al wizard y se guarda en el lead', async
   );
 
   // CTA → wizard. Comercio no sugiere Carta con QR: tiene que venir marcada por el hero.
-  await page.getByRole('main').getByRole('link', { name: HERO.cta }).click();
+  await page
+    .locator('section[aria-labelledby="hero-title"]')
+    .getByRole('link', { name: HERO.cta })
+    .click();
   await pasarNecesidad(page);
   await tocar(page, /comercio/i);
   await wizard(page).getByRole('button', { name: 'Siguiente' }).click();

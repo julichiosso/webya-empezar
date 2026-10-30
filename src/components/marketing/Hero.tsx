@@ -28,12 +28,14 @@ export function Hero({ mockup, accion }: HeroProps) {
       <div className="lg:pt-18">
         <h1 id="hero-title" className="text-display font-semibold text-balance lg:text-hero">
           {HERO.titulo}
-          <span className="block text-muted lg:mt-3 lg:text-hero-sub lg:font-medium">
+          {/* En celular la salvedad va un escalón más chica: el título entra en 2 líneas y la promesa manda. */}
+          <span className="mt-2 block text-title font-medium text-muted lg:mt-3 lg:text-hero-sub">
             {HERO.subtitulo}
           </span>
         </h1>
         <p className="mt-6 max-w-md text-lead text-muted lg:mt-8">{HERO.bajada}</p>
-        <div className="mt-8 flex flex-wrap gap-3 lg:mt-10">
+        {/* En celular, los dos botones apilados y del mismo ancho (grid estira cada uno); desde sm, en fila. */}
+        <div className="mt-8 grid gap-3 sm:flex sm:flex-wrap lg:mt-10">
           <ButtonLink href="#wizard">
             {HERO.cta}
             <Icon name="arrowDown" size={20} />
@@ -42,7 +44,7 @@ export function Hero({ mockup, accion }: HeroProps) {
         </div>
         <a
           href="/demo/gastronomia"
-          className="-mx-2 mt-2 inline-flex min-h-tap items-center px-2 text-body text-muted underline underline-offset-4 hover:text-fg"
+          className="-mx-2 mt-3 inline-flex min-h-tap items-center px-2 text-body text-muted underline underline-offset-4 hover:text-fg"
         >
           {HERO.enlaceDemo}
         </a>

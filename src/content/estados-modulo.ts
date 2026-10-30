@@ -39,6 +39,10 @@ export const ESTADO_MODULO_UI = {
   noSeActiva: 'Todavía no se puede activar. Si lo necesitás, contanoslo en "Otra cosa".',
   /** Acción de un módulo `a_medida`: lleva al texto libre. */
   irAMedida: 'Contanos qué necesitás',
+  /** Nota pendiente agrupada: "Turnos y reservas, Formularios: TODO: confirmar…". */
+  notaAgrupada: (nombres: readonly string[], nota: string) => `${nombres.join(', ')}: ${nota}`,
+  /** Título del bloque de pendientes debajo de un catálogo de módulos. */
+  pendientes: 'Pendiente de confirmar',
   /** Enlace junto a un módulo `en_demo`. */
   verDemo: 'Probalo en la demo',
 } as const;
