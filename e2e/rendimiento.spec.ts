@@ -1,6 +1,6 @@
 import { expect, test, type Response } from '@playwright/test';
 import { gzipSync } from 'node:zlib';
-import { wizard } from './helpers';
+import { TITULO_PASO_1, wizard } from './helpers';
 
 // Presupuestos de la ruta. Se prueba una vez (desktop) con un viewport de celular fijo.
 test.use({ viewport: { width: 390, height: 700 }, hasTouch: true, isMobile: true });
@@ -40,7 +40,7 @@ test('JS inicial bajo presupuesto y wizard diferido hasta el primer gesto', asyn
 
   // Primer gesto: baja hacia el wizard y carga.
   await page.mouse.wheel(0, 300);
-  await expect(wizard(page).getByRole('heading', { name: '¿Qué vas a crear?' })).toBeVisible();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_1 })).toBeVisible();
   expect(scripts.length).toBeGreaterThan(antes);
   const totalKb = await gzipKb(scripts);
   testInfo.annotations.push({

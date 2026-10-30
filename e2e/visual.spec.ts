@@ -76,10 +76,19 @@ test('secciones informativas', async ({ page }) => {
   await page.goto('/empezar');
   // Con el wizard ya cargado (layout definitivo): el esqueleto mide distinto y movería las secciones.
   await abrirWizard(page);
-  const seccion = (id: string) => page.locator(`section[aria-labelledby="${id}"]`);
-  await expect(seccion('como-title')).toHaveScreenshot('05-como-funciona.png');
-  await expect(seccion('incluye-title')).toHaveScreenshot('06-que-incluye.png');
-  await expect(seccion('faq-title')).toHaveScreenshot('07-faq.png');
+  // Las secciones bajo el pliegue llevan content-visibility:auto: se maquetan recién cerca de la
+  // pantalla. Se llevan a la vista y se esperan dos cuadros para capturar el alto real, no el reservado.
+  const seccion = async (id: string) => {
+    const s = page.locator(`section[aria-labelledby="${id}"]`);
+    await s.scrollIntoViewIfNeeded();
+    await page.evaluate(
+      () => new Promise((listo) => requestAnimationFrame(() => requestAnimationFrame(listo))),
+    );
+    return s;
+  };
+  await expect(await seccion('como-title')).toHaveScreenshot('05-como-funciona.png');
+  await expect(await seccion('incluye-title')).toHaveScreenshot('06-que-incluye.png');
+  await expect(await seccion('faq-title')).toHaveScreenshot('07-faq.png');
 });
 
 // --- Demo de Gastronomía y video explicativo ---------------------------------------------------
