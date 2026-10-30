@@ -37,6 +37,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 type CodigoError =
   | 'UNSUPPORTED_MEDIA_TYPE'
+  | 'FORBIDDEN'
   | 'PAYLOAD_TOO_LARGE'
   | 'INVALID_JSON'
   | 'VALIDATION_ERROR'
@@ -80,8 +81,14 @@ function camposConError(issues: readonly z.core.$ZodIssue[]): Record<string, str
 async function leerCuerpo(
   request: Request,
 ): Promise<{ cuerpo: Record<string, unknown> } | { falla: Response }> {
-  if (!request.headers.get('content-type')?.toLowerCase().includes('application/json')) {
-    return { falla: error(415, 'UNSUPPORTED_MEDIA_TYPE') };
+  // Tipo exacto: "text/plain; x=application/json" es un pedido "simple" (sin preflight) y dejaba que
+  // cualquier página creara leads desde el navegador de sus visitantes.
+  const tipo = request.headers.get('content-type')?.split(';')[0]?.trim().toLowerCase();
+  if (tipo !== 'application/json') return { falla: error(415, 'UNSUPPORTED_MEDIA_TYPE') };
+  // Los navegadores marcan el origen del pedido: el formulario siempre es same-origin. Sin el
+  // header (curl, tests de la API, navegadores viejos) se sigue validando como siempre.
+  if (request.headers.get('sec-fetch-site') === 'cross-site') {
+    return { falla: error(403, 'FORBIDDEN') };
   }
   const declarado = Number(request.headers.get('content-length') ?? 0);
   if (declarado > MAX_BODY_BYTES) return { falla: error(413, 'PAYLOAD_TOO_LARGE') };

@@ -223,6 +223,21 @@ describe('POST /api/leads — campos inválidos', () => {
     ).toBe(415);
   });
 
+  it('no se puede disparar desde otro sitio: tipo exacto y Sec-Fetch-Site', async () => {
+    // "text/plain; x=application/json" es un pedido simple (sin preflight): antes pasaba el chequeo.
+    const disfrazado = peticion(valido, { 'content-type': 'text/plain; x=application/json' });
+    expect((await handleCreateLead(disfrazado, deps)).status).toBe(415);
+    const ajeno = peticion(valido, { 'sec-fetch-site': 'cross-site' });
+    expect((await handleCreateLead(ajeno, deps)).status).toBe(403);
+    expect(repo.leads).toHaveLength(0);
+    // El formulario propio (same-origin) y el tipo con charset siguen funcionando.
+    const propio = peticion(valido, {
+      'content-type': 'application/json; charset=utf-8',
+      'sec-fetch-site': 'same-origin',
+    });
+    expect((await handleCreateLead(propio, deps)).status).toBe(201);
+  });
+
   it('rechaza cuerpos demasiado grandes con 413', async () => {
     const res = await handleCreateLead(peticion({ ...valido, mensaje: 'x'.repeat(40_000) }), deps);
     expect(res.status).toBe(413);

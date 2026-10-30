@@ -32,15 +32,15 @@ export interface NotificationService {
 export class ConsoleNotificationService implements NotificationService {
   async nuevoLead(lead: LeadNotificacion): Promise<void> {
     console.warn(
-      `[leads] nuevo lead ${lead.id}: ${lead.nombre_negocio} (${lead.rubro_otro ?? lead.rubro}), ` +
-        `módulos: ${lead.modulos.join(', ')}`,
+      // Sin texto libre de la persona (nombre del negocio, rubro escrito): solo ids del catálogo.
+      `[leads] nuevo lead ${lead.id} (${lead.rubro}), ` + `módulos: ${lead.modulos.join(', ')}`,
     );
   }
 
   async nuevoLeadParcial(lead: LeadParcialNotificacion): Promise<void> {
-    // Ni el teléfono ni el texto libre van al log: solo si hay texto.
+    // Ni el teléfono ni el texto libre van al log: solo si hay pedido a medida.
     console.warn(
-      `[leads] nuevo lead parcial ${lead.id} (${lead.rubro_otro ?? lead.rubro ?? 'sin rubro'}), ` +
+      `[leads] nuevo lead parcial ${lead.id} (${lead.rubro ?? 'sin rubro'}), ` +
         `necesidades: ${lead.necesidades.join(', ') || '-'}` +
         (lead.necesidad_libre ? ', con pedido a medida' : ''),
     );

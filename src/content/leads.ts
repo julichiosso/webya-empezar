@@ -21,6 +21,8 @@ export { MENSAJES_LEAD } from './leads-mensajes';
 /** Respuestas de la API de leads (errores generales, no de un campo). */
 export const MENSAJES_API_LEAD = {
   UNSUPPORTED_MEDIA_TYPE: 'El formato de la solicitud no es válido.',
+  /** Pedido armado desde otro sitio (Sec-Fetch-Site: cross-site): el formulario es siempre del mismo sitio. */
+  FORBIDDEN: 'Esta solicitud no se puede hacer desde otro sitio.',
   PAYLOAD_TOO_LARGE: 'La solicitud es demasiado grande.',
   INVALID_JSON: 'No pudimos leer los datos enviados.',
   VALIDATION_ERROR: 'Revisá los datos del formulario.',
