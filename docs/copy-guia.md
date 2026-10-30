@@ -23,14 +23,14 @@ parrilla, no a un programador. Alguien del barrio que sabe de tecnología, no un
 - **Sin tics de IA:** nada de "no es X, es Y", listas de negaciones, "¿El resultado? …", rayas en textos cortos
   ni signos de exclamación.
 
-| Sí | No |
-|---|---|
-| "Que tus clientes reserven solos." | "Módulo de gestión de turnos." |
-| "Te lo armamos con vos." | "Solución integral end-to-end." |
-| "Pedí como cliente y miralo llegar." | "Experiencia omnicanal." |
-| "Te escribimos por WhatsApp." + `PENDIENTES.plazoRespuesta` | "Te respondemos en menos de 24 hs." (sin confirmar) |
-| "Depende de lo que actives: te armamos un presupuesto sin compromiso." | "Desde $X por mes." |
-| "Acá encaja tu primer pedido." | "No hay datos para mostrar." |
+| Sí                                                                     | No                                                  |
+| ---------------------------------------------------------------------- | --------------------------------------------------- |
+| "Que tus clientes reserven solos."                                     | "Módulo de gestión de turnos."                      |
+| "Te lo armamos con vos."                                               | "Solución integral end-to-end."                     |
+| "Pedí como cliente y miralo llegar."                                   | "Experiencia omnicanal."                            |
+| "Te escribimos por WhatsApp." + `PENDIENTES.plazoRespuesta`            | "Te respondemos en menos de 24 hs." (sin confirmar) |
+| "Depende de lo que actives: te armamos un presupuesto sin compromiso." | "Desde $X por mes."                                 |
+| "Acá encaja tu primer pedido."                                         | "No hay datos para mostrar."                        |
 
 ## 2. Formato
 
@@ -40,12 +40,12 @@ parrilla, no a un programador. Alguien del barrio que sabe de tecnología, no un
 
 ## 3. Fórmulas de titular (una por pantalla)
 
-| Fórmula | Ejemplo |
-|---|---|
-| Resultado + para quién | "Tu peluquería con turnos que se reservan solos" |
-| Acción + objeto + facilidad | "Armá tu negocio online, pieza por pieza" |
-| Dolor resuelto | "Basta de anotar pedidos en un papel" |
-| Pregunta de objeción | "¿No sabés de tecnología? Mejor: lo armamos con vos" |
+| Fórmula                     | Ejemplo                                              |
+| --------------------------- | ---------------------------------------------------- |
+| Resultado + para quién      | "Tu peluquería con turnos que se reservan solos"     |
+| Acción + objeto + facilidad | "Armá tu negocio online, pieza por pieza"            |
+| Dolor resuelto              | "Basta de anotar pedidos en un papel"                |
+| Pregunta de objeción        | "¿No sabés de tecnología? Mejor: lo armamos con vos" |
 
 Para A/B: 3 variantes razonadas en `src/content/empezar/hero-variantes.ts`; se publica una (un test verifica
 que `hero.ts` coincida con la marcada).
@@ -54,14 +54,14 @@ que `hero.ts` coincida con la marcada).
 
 De frente, en el FAQ (`src/content/faq.ts`) y donde aparezcan.
 
-| Objeción | Respuesta |
-|---|---|
-| "No sé de tecnología" | Lo armamos con vos; vos nos contás tu negocio. |
-| "¿Cuánto cuesta?" | Presupuesto sin compromiso según lo que actives. `PENDIENTES.precios` |
-| "¿Y si no me gusta?" | Probás la demo antes; ajustamos con vos antes de publicar. |
-| "¿Puedo usar mi dominio?" | `PENDIENTES.dominio` hasta que se confirme. |
-| "¿Cuánto tardan?" | Depende de lo que actives; te lo decimos en el presupuesto. `PENDIENTES.plazoEntrega` |
-| "¿Qué pasa con mis datos?" | Solo para contactarte, no se comparten. `PENDIENTES.privacidad` |
+| Objeción                         | Respuesta                                                                                  |
+| -------------------------------- | ------------------------------------------------------------------------------------------ |
+| "No sé de tecnología"            | Lo armamos con vos; vos nos contás tu negocio.                                             |
+| "¿Cuánto cuesta?"                | Presupuesto sin compromiso según lo que actives. `PENDIENTES.precios`                      |
+| "¿Y si no me gusta?"             | Probás la demo antes; ajustamos con vos antes de publicar.                                 |
+| "¿Puedo usar mi dominio?"        | `PENDIENTES.dominio` hasta que se confirme.                                                |
+| "¿Cuánto tardan?"                | Depende de lo que actives; te lo decimos en el presupuesto. `PENDIENTES.plazoEntrega`      |
+| "¿Qué pasa con mis datos?"       | Solo para contactarte, no se comparten. `PENDIENTES.privacidad`                            |
 | "¿Y si lo que necesito no está?" | Contanos qué necesitás: lo armamos a medida. Sección propia (`empezar/a-medida.ts`) y FAQ. |
 
 ## 5. Reglas anti-promesa
@@ -86,24 +86,24 @@ medida: "Tienda, turnos, carta con QR, pedidos y pagos… y si lo tuyo no está,
 
 ## 7. Dónde vive cada texto (`src/content`)
 
-| Archivo | Qué tiene |
-|---|---|
-| `empezar/hero.ts`, `hero-variantes.ts` | Hero de /empezar y sus 3 variantes razonadas |
-| `empezar/nav.ts`, `footer.ts`, `cta-final.ts` | Navegación, pie y cierre de /empezar |
-| `empezar/que-incluye.ts`, `como-funciona.ts`, `como-trabajamos.ts`, `confianza.ts`, `a-medida.ts`, `vitrina-demo.ts`, `preview.ts`, `faq-seccion.ts` | Secciones de /empezar |
-| `empezar/wizard.ts`, `wizard-flujo.ts`, `pasos.ts` | Wizard (necesidad, rubro, módulos, WhatsApp, completar) |
-| `necesidades.ts`, `modulos.ts`, `estados-modulo.ts` | Necesidades, catálogo de módulos y la etiqueta de cada estado |
-| `rubros/*` | Un archivo por rubro: titular, dolor, resultado y módulos sugeridos |
-| `faq.ts` | Preguntas frecuentes (también alimenta el JSON-LD) |
-| `leads.ts`, `leads-mensajes.ts` | Errores y confirmaciones del formulario y la API de leads |
-| `whatsapp.ts` | Mensajes precargados de WhatsApp |
-| `seo.ts` | Títulos, descripciones y la imagen para compartir |
-| `estados-pagina.ts`, `microcopy.ts` | 404, error, carga y palabras genéricas de los componentes base |
-| `demos/gastronomia/**` | Datos de ejemplo y textos de la demo |
-| `explicativo/**` | Guion, escenas y reproductor del video "Mirá cómo funciona" |
-| `marca.ts` | Página interna /marca |
-| `instagram.ts` | Bio y captions de Instagram (no lo usa ningún componente) |
-| `pendientes.ts` | Todo lo que falta definir, con su `TODO:` |
+| Archivo                                                                                                                                              | Qué tiene                                                           |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `empezar/hero.ts`, `hero-variantes.ts`                                                                                                               | Hero de /empezar y sus 3 variantes razonadas                        |
+| `empezar/nav.ts`, `footer.ts`, `cta-final.ts`                                                                                                        | Navegación, pie y cierre de /empezar                                |
+| `empezar/que-incluye.ts`, `como-funciona.ts`, `como-trabajamos.ts`, `confianza.ts`, `a-medida.ts`, `vitrina-demo.ts`, `preview.ts`, `faq-seccion.ts` | Secciones de /empezar                                               |
+| `empezar/wizard.ts`, `wizard-flujo.ts`, `pasos.ts`                                                                                                   | Wizard (necesidad, rubro, módulos, WhatsApp, completar)             |
+| `necesidades.ts`, `modulos.ts`, `estados-modulo.ts`                                                                                                  | Necesidades, catálogo de módulos y la etiqueta de cada estado       |
+| `rubros/*`                                                                                                                                           | Un archivo por rubro: titular, dolor, resultado y módulos sugeridos |
+| `faq.ts`                                                                                                                                             | Preguntas frecuentes (también alimenta el JSON-LD)                  |
+| `leads.ts`, `leads-mensajes.ts`                                                                                                                      | Errores y confirmaciones del formulario y la API de leads           |
+| `whatsapp.ts`                                                                                                                                        | Mensajes precargados de WhatsApp                                    |
+| `seo.ts`                                                                                                                                             | Títulos, descripciones y la imagen para compartir                   |
+| `estados-pagina.ts`, `microcopy.ts`                                                                                                                  | 404, error, carga y palabras genéricas de los componentes base      |
+| `demos/gastronomia/**`                                                                                                                               | Datos de ejemplo y textos de la demo                                |
+| `explicativo/**`                                                                                                                                     | Guion, escenas y reproductor del video "Mirá cómo funciona"         |
+| `marca.ts`                                                                                                                                           | Página interna /marca                                               |
+| `instagram.ts`                                                                                                                                       | Bio y captions de Instagram (no lo usa ningún componente)           |
+| `pendientes.ts`                                                                                                                                      | Todo lo que falta definir, con su `TODO:`                           |
 
 ## 8. Instagram
 
