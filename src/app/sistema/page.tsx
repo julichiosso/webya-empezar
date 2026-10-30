@@ -27,7 +27,7 @@ import {
   TEMA_PAPEL,
   LINEA_FUERTE_PAPEL,
 } from '@/brand/tokens/semanticos';
-import { buttonClasses } from '@/components/ui/Button';
+import { buttonClasses } from '@/components/ui/boton-clases';
 import { SISTEMA } from '@/content/sistema';
 import { Snap } from './Snap';
 import { Vitrina } from './Vitrina';
