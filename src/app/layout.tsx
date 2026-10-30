@@ -30,8 +30,12 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Una sola etiqueta <link rel=preload> en el <head> (ver brand/tipografia/fuente.ts).
-  preload(FUENTE_PRECARGADA, { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
+  // Una sola etiqueta <link rel=preload> en el <head> (ver brand/tipografia/fuente.ts). Solo en el
+  // build de producción (webpack): en `next dev` Turbopack nombra distinto el archivo (daría 404)
+  // y ya inyecta su propio preload.
+  if (process.env.NODE_ENV === 'production') {
+    preload(FUENTE_PRECARGADA, { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
+  }
   return (
     // suppressHydrationWarning: ScriptTema puede poner data-theme en <html> antes de hidratar.
     <html lang="es-AR" className={outfit.variable} suppressHydrationWarning>
