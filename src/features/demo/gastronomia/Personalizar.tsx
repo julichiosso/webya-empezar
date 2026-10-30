@@ -70,6 +70,7 @@ export function Personalizar() {
         <label className="block">
           <span className="font-semibold">{PERSONALIZAR.nombreLocal}</span>
           <input
+            name="nombreLocal"
             value={nombreLocal ?? ''}
             onChange={(e) => personalizar({ nombreLocal: e.target.value })}
             onBlur={() =>

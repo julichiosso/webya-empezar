@@ -93,6 +93,7 @@ export function Carta({ cocina, nombreLocal, scroller, onAbrirPlato }: CartaProp
           <span className="sr-only">{CARTA.buscar.etiqueta}</span>
           <input
             type="search"
+            name="buscar"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder={CARTA.buscar.placeholder}

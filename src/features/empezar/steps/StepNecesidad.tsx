@@ -1,7 +1,7 @@
 'use client';
 
 import * as m from 'motion/react-m';
-import type { KeyboardEvent, Ref } from 'react';
+import { useState, type KeyboardEvent, type Ref } from 'react';
 import { Button } from '@/components/ui/Button';
 import { CampoArea } from '@/components/ui/Campo';
 import { Eleccion, GrupoEleccion } from '@/components/ui/Eleccion';
@@ -22,6 +22,9 @@ interface StepNecesidadProps {
 
 const { necesidad: TXT, otra: OTRA } = FLUJO;
 
+/** Caracteres restantes en los que se avisa a lectores de pantalla (no en cada tecla). */
+const UMBRALES_AVISO = [50, 20, 10];
+
 /**
  * Paso 1: "¿Qué necesitás?". Chips de selección múltiple; "Otra cosa" abre el texto libre
  * (hasta 500 caracteres) para lo que no está en la lista y se arma a medida.
@@ -37,6 +40,14 @@ export function StepNecesidad({
 }: StepNecesidadProps) {
   const otra = necesidades.includes(NECESIDAD_OTRA_ID);
   const alLimite = necesidadLibre.length >= LIMITES.necesidadLibre;
+  // El contador visible se lee al entrar al campo; mientras escribe, se avisa solo al cruzar un umbral.
+  const [avisoRestantes, setAvisoRestantes] = useState('');
+  const escribir = (texto: string) => {
+    const restantes = LIMITES.necesidadLibre - texto.length;
+    if (UMBRALES_AVISO.includes(restantes)) setAvisoRestantes(OTRA.contadorAccesible(restantes));
+    else if (restantes > Math.max(...UMBRALES_AVISO)) setAvisoRestantes('');
+    onLibre(texto);
+  };
 
   // Enter sobre un chip avanza (los checkbox no envían el form por sí solos). En el texto libre, no.
   const onKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
@@ -96,7 +107,7 @@ export function StepNecesidad({
             placeholder={OTRA.placeholder}
             name="necesidadLibre"
             value={necesidadLibre}
-            onChange={(e) => onLibre(e.target.value)}
+            onChange={(e) => escribir(e.target.value)}
             maximo={LIMITES.necesidadLibre}
             etiquetaContador={(usados, max) => OTRA.contadorAccesible(max - usados)}
             rows={4}
@@ -105,6 +116,9 @@ export function StepNecesidad({
           />
           <p aria-live="polite" className="mt-2 text-small text-muted">
             {alLimite ? OTRA.alLimite : OTRA.queSigue}
+          </p>
+          <p aria-live="polite" className="sr-only">
+            {alLimite ? '' : avisoRestantes}
           </p>
         </m.div>
       )}
