@@ -1,21 +1,40 @@
-import { MODULO_IDS, type ModuloId } from '@/content/modulos';
+import { getModulo, MODULO_IDS, type ModuloId } from '@/content/modulos';
+import { getNecesidad } from '@/content/necesidades';
 import { getRubro } from '@/content/rubros';
+
+/** sessionStorage de las decisiones manuales sobre módulos (compartidas con el hero). */
+export const MODULOS_STORAGE_KEY = 'webya:empezar:modulos:v1';
 
 /**
  * Lo que la persona decidió A MANO sobre cada módulo: `true` = lo activó, `false` = lo apagó.
- * Un módulo sin entrada sigue la sugerencia del rubro. Guardar solo las decisiones manuales
- * (y derivar el resto) hace imposible que queden módulos "fantasma" al cambiar de rubro y
- * garantiza que lo elegido a mano nunca se pise.
+ * Un módulo sin entrada sigue la sugerencia (rubro + necesidades marcadas). Guardar solo las
+ * decisiones manuales (y derivar el resto) hace imposible que queden módulos "fantasma" al cambiar
+ * de rubro y garantiza que lo elegido a mano nunca se pise.
  */
 export type ModulosManual = Partial<Record<ModuloId, boolean>>;
 
-/** Módulos activos: la decisión manual manda; si no hay, la sugerencia del rubro. Orden del catálogo. */
+/** Lo que sugieren las necesidades marcadas en el paso 1. */
+export function sugeridosPorNecesidad(necesidades: readonly string[]): Set<ModuloId> {
+  return new Set(necesidades.flatMap((n) => getNecesidad(n)?.modulosSugeridos ?? []));
+}
+
+/**
+ * Módulos activos: la decisión manual manda; si no hay, la sugerencia del rubro o de las
+ * necesidades. Un módulo `proximamente` nunca queda activo (no se puede pedir como si existiera).
+ * Orden del catálogo.
+ */
 export function modulosSeleccionados(
   rubroId: string | null | undefined,
   manual: ModulosManual,
+  necesidades: readonly string[] = [],
 ): ModuloId[] {
-  const sugeridos = new Set<ModuloId>(getRubro(rubroId)?.modulosSugeridos ?? []);
-  return MODULO_IDS.filter((id) => manual[id] ?? sugeridos.has(id));
+  const sugeridos = new Set<ModuloId>([
+    ...(getRubro(rubroId)?.modulosSugeridos ?? []),
+    ...sugeridosPorNecesidad(necesidades),
+  ]);
+  return MODULO_IDS.filter(
+    (id) => getModulo(id).estado !== 'proximamente' && (manual[id] ?? sugeridos.has(id)),
+  );
 }
 
 /** Invierte el estado visible de un módulo y lo registra como decisión manual. */
@@ -23,8 +42,9 @@ export function alternarModulo(
   rubroId: string | null | undefined,
   manual: ModulosManual,
   id: ModuloId,
+  necesidades: readonly string[] = [],
 ): ModulosManual {
-  const activo = modulosSeleccionados(rubroId, manual).includes(id);
+  const activo = modulosSeleccionados(rubroId, manual, necesidades).includes(id);
   return { ...manual, [id]: !activo };
 }
 

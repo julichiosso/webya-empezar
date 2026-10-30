@@ -1,6 +1,5 @@
-import type { ModuloId } from '@/content/modulos';
+import type { EstadoModulo, ModuloId } from '@/content/modulos';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
-import { MICROCOPY } from '@/content/microcopy';
 import { Eleccion } from './Eleccion';
 
 interface ModuloOptionProps {
@@ -8,8 +7,12 @@ interface ModuloOptionProps {
   nombre: string;
   descripcion: string;
   checked: boolean;
-  /** El rubro elegido lo sugiere: se aclara para que se entienda por qué ya viene marcado. */
-  sugerido: boolean;
+  /** Por qué ya viene marcado ("Sugerido para tu rubro", "Va con lo que necesitás"), desde content. */
+  insignia?: string;
+  /** Estado honesto del módulo: `proximamente` lo deshabilita. */
+  estado?: EstadoModulo;
+  /** El estado dicho en palabras, con su aclaración pendiente si la tiene (desde content). */
+  textoEstado?: string;
   onToggle: (id: ModuloId) => void;
 }
 
@@ -19,7 +22,9 @@ export function ModuloOption({
   nombre,
   descripcion,
   checked,
-  sugerido,
+  insignia,
+  estado,
+  textoEstado,
   onToggle,
 }: ModuloOptionProps) {
   return (
@@ -31,7 +36,9 @@ export function ModuloOption({
       onCambio={() => onToggle(id)}
       etiqueta={nombre}
       descripcion={descripcion}
-      insignia={sugerido ? MICROCOPY.sugeridoParaTuRubro : undefined}
+      insignia={insignia}
+      estadoModulo={estado}
+      textoEstado={textoEstado}
       icono={<Icon name={id} size={28} draw active={checked} />}
     />
   );

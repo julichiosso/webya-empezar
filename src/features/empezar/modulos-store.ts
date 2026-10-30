@@ -2,23 +2,31 @@
 
 import { useSyncExternalStore } from 'react';
 import type { ModuloId } from '@/content/modulos';
-import { alternarModulo, modulosSeleccionados, sanearManual, type ModulosManual } from './modulos';
+import { aplicarTraspasoDemo } from './desde-demo';
+import {
+  alternarModulo,
+  modulosSeleccionados,
+  MODULOS_STORAGE_KEY,
+  sanearManual,
+  type ModulosManual,
+} from './modulos';
 import { hayProgresoGuardado } from './state';
 
 /**
  * Store mínimo compartido entre el mockup del hero y el wizard (viven en árboles distintos).
  * `manual` se persiste en sessionStorage; `rubro` lo publica el wizard (su estado vive allá) para
- * que el hero muestre lo mismo que el wizard: sugerencias del rubro + decisiones manuales.
+ * que el hero muestre lo mismo que el wizard: sugerencias (rubro y necesidades) + decisiones manuales.
  */
-export const MODULOS_STORAGE_KEY = 'webya:empezar:modulos:v1';
+export { MODULOS_STORAGE_KEY };
 
 export interface ModulosSnapshot {
   manual: ModulosManual;
   rubro: string | null;
+  necesidades: readonly string[];
 }
 
 /** Lo que ve el servidor (y la hidratación): nada elegido. */
-const VACIO: ModulosSnapshot = { manual: {}, rubro: null };
+const VACIO: ModulosSnapshot = { manual: {}, rubro: null, necesidades: [] };
 
 let snapshot: ModulosSnapshot | undefined;
 const oyentes = new Set<() => void>();
@@ -45,7 +53,9 @@ export function leerManualGuardado(storage: Storage3): ModulosManual {
 }
 
 function leer(): ModulosSnapshot {
-  return { manual: leerManualGuardado(window.sessionStorage), rubro: null };
+  // Si se llega desde una demo, su traspaso se aplica antes de leer (el hero lo ve igual que el wizard).
+  aplicarTraspasoDemo(window.sessionStorage);
+  return { manual: leerManualGuardado(window.sessionStorage), rubro: null, necesidades: [] };
 }
 
 function guardar(manual: ModulosManual) {
@@ -75,7 +85,7 @@ function subscribe(fn: () => void) {
 /** Activa o apaga un módulo (decisión manual). Devuelve si quedó activo. */
 export function alternarModuloStore(id: ModuloId): boolean {
   const actual = getSnapshot();
-  const manual = alternarModulo(actual.rubro, actual.manual, id);
+  const manual = alternarModulo(actual.rubro, actual.manual, id, actual.necesidades);
   guardar(manual);
   publicar({ ...actual, manual });
   return manual[id] === true;
@@ -92,6 +102,12 @@ export function publicarRubro(rubro: string | null) {
   if (actual.rubro !== rubro) publicar({ ...actual, rubro });
 }
 
+/** El wizard publica las necesidades marcadas (también sugieren módulos). */
+export function publicarNecesidades(necesidades: readonly string[]) {
+  const actual = getSnapshot();
+  if (actual.necesidades.join() !== necesidades.join()) publicar({ ...actual, necesidades });
+}
+
 /** Borra todo (al reiniciar el flujo). */
 export function reiniciarModulos() {
   try {
@@ -99,10 +115,15 @@ export function reiniciarModulos() {
   } catch {
     // ver arriba
   }
-  publicar({ manual: {}, rubro: null });
+  publicar({ manual: {}, rubro: null, necesidades: [] });
 }
 
 export function useModulos() {
-  const { manual, rubro } = useSyncExternalStore(subscribe, getSnapshot, () => VACIO);
-  return { manual, rubro, seleccionados: modulosSeleccionados(rubro, manual) };
+  const { manual, rubro, necesidades } = useSyncExternalStore(subscribe, getSnapshot, () => VACIO);
+  return {
+    manual,
+    rubro,
+    necesidades,
+    seleccionados: modulosSeleccionados(rubro, manual, necesidades),
+  };
 }

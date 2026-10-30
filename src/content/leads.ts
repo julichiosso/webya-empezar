@@ -3,7 +3,8 @@ import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { MODULO_IDS } from '@/content/modulos';
 import { NECESIDAD_IDS, NECESIDAD_OTRA_ID } from '@/content/necesidades';
 import { esObjetivoDeRubro, RUBRO_IDS, RUBRO_OTRO_ID } from '@/content/rubros';
-import { crearEsquemasLead, type CatalogoLead, type MensajesLead } from '@/domain/leads/lead';
+import { crearEsquemasLead, type CatalogoLead } from '@/domain/leads/lead';
+import { MENSAJES_LEAD } from './leads-mensajes';
 
 export type {
   CompletarLead,
@@ -15,31 +16,7 @@ export type {
   LeadPayloadInput,
 } from '@/domain/leads/lead';
 
-/** Mensajes de validación del lead: lo que ve la persona al lado de cada campo. */
-export const MENSAJES_LEAD: MensajesLead = {
-  hastaCaracteres: (max) => `Usá hasta ${max} caracteres.`,
-  nombreNegocioCorto: 'Contanos cómo se llama tu negocio.',
-  nombreCorto: 'Decinos tu nombre para saber a quién escribirle.',
-  whatsappVacio: 'Dejanos tu WhatsApp para poder escribirte.',
-  whatsappInvalido: 'Revisá el número: tiene que ser de Argentina, por ejemplo 11 2345 6789.',
-  emailLargo: 'Ese mail es demasiado largo.',
-  emailInvalido:
-    'Revisá el mail: tiene que verse así, nombre@dominio.com. Si no querés dejarlo, lo podés vaciar.',
-  rubroVacio: 'Elegí un rubro.',
-  rubroInexistente: 'Ese rubro no existe.',
-  rubroOtroVacio: 'Contanos a qué se dedica tu negocio.',
-  modulosVacio: 'Activá al menos un módulo.',
-  modulosRepetidos: 'Hay módulos repetidos.',
-  moduloInexistente: 'Ese módulo no existe.',
-  demoInexistente: 'Esa personalización no existe.',
-  objetivosRepetidos: 'Hay objetivos repetidos.',
-  objetivoDeOtroRubro: 'Ese objetivo no corresponde al rubro.',
-  necesidadesRepetidas: 'Hay opciones repetidas.',
-  necesidadInexistente: 'Esa opción no existe.',
-  necesidadLibreVacia: 'Contanos qué necesitás, aunque sea en pocas palabras.',
-  necesidadLibreCorta: 'Contanos un poco más de lo que necesitás.',
-  tokenInvalido: 'El enlace para completar tus datos no es válido.',
-};
+export { MENSAJES_LEAD } from './leads-mensajes';
 
 /** Respuestas de la API de leads (errores generales, no de un campo). */
 export const MENSAJES_API_LEAD = {

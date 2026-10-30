@@ -18,26 +18,45 @@ import { siteConfig } from '@/lib/site-config';
 import { captureUtm, type Utm } from '@/lib/utm';
 import type { DatosForm, LeadPayloadInput } from '@/content/leads';
 import { buildWhatsAppLink, buildWhatsAppMessage } from '@/lib/whatsapp';
-import { enviarLead } from './api';
+import { completarLead, crearLeadParcial, enviarLead, type EnvioResultado } from './api';
+import { aplicarTraspasoDemo } from './desde-demo';
 import { modulosSeleccionados } from './modulos';
-import { alternarModuloStore, publicarRubro, reiniciarModulos, useModulos } from './modulos-store';
+import {
+  alternarModuloStore,
+  publicarNecesidades,
+  publicarRubro,
+  reiniciarModulos,
+  useModulos,
+} from './modulos-store';
 import {
   borrarEstado,
   errorParaAvanzar,
+  esFlujoDemo,
   ESTADO_INICIAL,
   guardarEstado,
   leerEstadoGuardado,
+  marcoOtraCosa,
   nombreRubroVisible,
+  PASO_CONFIRMACION,
+  progreso,
   reducer,
-  TOTAL_PASOS,
   type Paso,
 } from './state';
+import { StepCompletar } from './steps/StepCompletar';
 import { StepDatos } from './steps/StepDatos';
 import { StepListo } from './steps/StepListo';
 import { StepModulos } from './steps/StepModulos';
+import { StepNecesidad } from './steps/StepNecesidad';
 import { StepRubro } from './steps/StepRubro';
+import { StepWhatsapp } from './steps/StepWhatsapp';
 
-const NOMBRES_PASO = ['rubro', 'modulos', 'datos', 'listo'] as const;
+const NOMBRES_PASO = ['necesidad', 'rubro', 'modulos', 'whatsapp', 'completar', 'listo'] as const;
+
+/** Pasos que enfocan su primer campo al llegar (el resto enfoca el título). */
+const PASOS_CON_CAMPO: readonly Paso[] = [4, 5];
+
+/** Deja ver el check del botón antes de pasar al paso siguiente. */
+const PAUSA_EXITO_MS = 700;
 
 const variantes = {
   entrar: (dir: number) => ({ opacity: 0, x: dir * 28 }),
@@ -45,6 +64,11 @@ const variantes = {
   salir: (dir: number) => ({ opacity: 0, x: dir * -28 }),
 };
 
+/**
+ * Wizard de /empezar: necesidad → rubro → módulos → solo WhatsApp (guarda el lead parcial) →
+ * completar → confirmación. Quien viene de una demo entra en módulos y manda todo en un solo
+ * formulario (ver state.ts).
+ */
 export function Wizard() {
   const [state, dispatch] = useReducer(reducer, ESTADO_INICIAL);
   const [errorPaso, setErrorPaso] = useState<string | null>(null);
@@ -52,13 +76,18 @@ export function Wizard() {
   const titulo = useRef<HTMLHeadingElement>(null);
   const utm = useRef<Utm>({});
   const { hidratado, interactuo } = state;
-  // Módulos: decisiones manuales (incluye lo que se activó en el hero) + sugerencias del rubro.
-  // Se derivan con el rubro del wizard (sin esperar al store) para que nunca haya un cuadro de desfase.
+  const demo = esFlujoDemo(state);
+  // Módulos: decisiones manuales (incluye lo que se activó en el hero) + sugerencias del rubro y de
+  // las necesidades. Se derivan con el estado del wizard (sin esperar al store): nunca hay desfase.
   const { manual } = useModulos();
-  const modulos = useMemo(() => modulosSeleccionados(state.rubro, manual), [state.rubro, manual]);
+  const modulos = useMemo(
+    () => modulosSeleccionados(state.rubro, manual, state.necesidades),
+    [state.rubro, manual, state.necesidades],
+  );
 
   // Hidratación desde sessionStorage (después del primer render, para no desalinear el HTML del servidor).
   useEffect(() => {
+    aplicarTraspasoDemo(window.sessionStorage);
     dispatch({ tipo: 'hidratar', estado: leerEstadoGuardado(window.sessionStorage) });
     utm.current = captureUtm(window.location.search, window.sessionStorage);
     track('empezar_view', {});
@@ -77,28 +106,30 @@ export function Wizard() {
 
   // El foco se mueve al título del paso nuevo cuando el anterior terminó de salir: con
   // AnimatePresence mode="wait" el paso nuevo recién se monta ahí (antes el ref aún no existe).
-  // En el paso 3 el foco lo toma el primer campo (autofocus).
+  // En los pasos con formulario el foco lo toma el primer campo (autofocus).
   const enfocarTitulo = useCallback(() => {
-    if (state.paso !== 3) titulo.current?.focus({ preventScroll: true });
+    if (!PASOS_CON_CAMPO.includes(state.paso)) titulo.current?.focus({ preventScroll: true });
   }, [state.paso]);
 
-  // El hero muestra lo mismo que el wizard: le publicamos el rubro elegido.
+  // El hero muestra lo mismo que el wizard: le publicamos el rubro y las necesidades.
   useEffect(() => publicarRubro(state.rubro), [state.rubro]);
+  useEffect(() => publicarNecesidades(state.necesidades), [state.necesidades]);
 
   const irA = useCallback((paso: Paso) => {
     setErrorPaso(null);
     dispatch({ tipo: 'irA', paso });
   }, []);
 
-  const avanzar = (desde: 1 | 2) => {
+  const avanzar = (desde: 1 | 2 | 3) => {
     const error = errorParaAvanzar(state, desde, modulos.length);
     if (error) return setErrorPaso(error);
-    track('paso_completado', { paso: desde, nombre: NOMBRES_PASO[desde - 1] ?? 'rubro' });
+    track('paso_completado', { paso: desde, nombre: NOMBRES_PASO[desde - 1] ?? 'necesidad' });
     irA((desde + 1) as Paso);
   };
 
   const rubro = getRubro(state.rubro);
   const rubroVisible = nombreRubroVisible(state);
+  const otraCosa = marcoOtraCosa(state);
 
   const whatsappLink = useMemo(() => {
     const nombresModulos = modulos.map((id) => getModulo(id).nombre);
@@ -132,7 +163,10 @@ export function Wizard() {
       )
     : undefined;
 
-  const onCambioDatos = useCallback((datos: DatosForm) => dispatch({ tipo: 'datos', datos }), []);
+  const onCambioDatos = useCallback(
+    (datos: Partial<DatosForm>) => dispatch({ tipo: 'datos', datos }),
+    [],
+  );
 
   const onToggleModulo = (id: ModuloId) => {
     setErrorPaso(null);
@@ -140,25 +174,47 @@ export function Wizard() {
     track('modulo_alternado', { modulo: id, activo, origen: 'wizard' });
   };
 
-  const onEnviar = async (datos: DatosForm, honeypot: string) => {
-    if (modulos.length === 0) {
-      // No debería pasar (el paso 2 lo exige); si el estado quedó inconsistente, se vuelve a ese paso.
-      irA(2);
-      setErrorPaso(WIZARD.errores.sinModulos);
-      return { ok: false, causa: 'validacion' } as const;
-    }
-    const payload: LeadPayloadInput = {
-      ...datos,
-      rubro: state.rubro ?? '',
-      rubroOtro: state.rubro === RUBRO_OTRO_ID ? state.rubroOtro : undefined,
-      modulos,
-      objetivos: state.objetivos,
+  /** Lo común a los dos envíos: rubro, módulos, objetivos, UTM y de dónde viene. */
+  const contexto = () => ({
+    rubro: state.rubro ?? '',
+    rubroOtro: state.rubro === RUBRO_OTRO_ID ? state.rubroOtro : undefined,
+    modulos,
+    objetivos: state.objetivos,
+    ...utm.current,
+    // Si vino de una demo: de dónde y lo que armó ahí (los dos, de listas cerradas).
+    ...(state.origen ? { origen: state.origen } : {}),
+    ...(state.demo ? { demo: state.demo } : {}),
+  });
+
+  /** Paso 4 (flujo de siempre): guarda el lead parcial con todo lo elegido hasta acá. */
+  const onGuardarWhatsapp = async (whatsapp: string, honeypot: string) => {
+    const resultado = await crearLeadParcial({
+      ...contexto(),
+      whatsapp,
+      necesidades: state.necesidades,
+      necesidadLibre: otraCosa ? state.necesidadLibre : undefined,
       website: honeypot,
-      ...utm.current,
-      // Si vino de una demo: de dónde y lo que armó ahí (los dos, de listas cerradas).
-      ...(state.origen ? { origen: state.origen } : {}),
-      ...(state.demo ? { demo: state.demo } : {}),
-    };
+    });
+    if (!resultado.ok) return resultado;
+    track('lead_parcial', {
+      rubro: state.rubro ?? '',
+      modulos: modulos.length,
+      necesidades: state.necesidades.length,
+    });
+    dispatch({ tipo: 'leadParcial', lead: { id: resultado.id, token: resultado.token }, whatsapp });
+    setTimeout(() => irA(5), PAUSA_EXITO_MS);
+    return { ok: true } as const;
+  };
+
+  /** Paso 4 desde la demo: el formulario completo, en un solo envío. */
+  const onEnviarCompleto = async (datos: DatosForm, honeypot: string): Promise<EnvioResultado> => {
+    if (modulos.length === 0) {
+      // No debería pasar (el paso de módulos lo exige); si el estado quedó inconsistente, se vuelve ahí.
+      irA(3);
+      setErrorPaso(WIZARD.errores.sinModulos);
+      return { ok: false, causa: 'validacion' };
+    }
+    const payload: LeadPayloadInput = { ...datos, ...contexto(), website: honeypot };
     const resultado = await enviarLead(payload);
     if (resultado.ok) {
       track('lead_enviado', {
@@ -170,6 +226,11 @@ export function Wizard() {
     return resultado;
   };
 
+  const terminar = (como: 'completo' | 'parcial') => {
+    dispatch({ tipo: 'confirmar', como });
+    irA(PASO_CONFIRMACION);
+  };
+
   const reiniciar = () => {
     borrarEstado(window.sessionStorage);
     reiniciarModulos();
@@ -177,6 +238,9 @@ export function Wizard() {
   };
 
   const { paso } = state;
+  // Atrás: no antes de donde arrancó (la demo entra en módulos) ni después de guardar el WhatsApp.
+  const sinAtras = paso === 1 || paso >= 5 || (demo && paso === 3);
+  const { paso: pasoVisible, total } = progreso(state);
 
   return (
     <LazyMotion features={domAnimation} strict>
@@ -192,22 +256,22 @@ export function Wizard() {
             <div>
               <div className="mb-6">
                 <div className="mb-4 flex min-h-tap items-center justify-between">
-                  {/* El botón ocupa siempre su lugar (invisible en el paso 1 y 4): la barra no se mueve. */}
+                  {/* El botón ocupa siempre su lugar (invisible si no hay atrás): la barra no se mueve. */}
                   <Button
                     variant="ghost"
                     onClick={() => irA((paso - 1) as Paso)}
-                    className={`-ml-3 ${paso === 1 || paso === 4 ? 'invisible' : ''}`}
-                    aria-hidden={paso === 1 || paso === 4 || undefined}
-                    tabIndex={paso === 1 || paso === 4 ? -1 : undefined}
+                    className={`-ml-3 ${sinAtras ? 'invisible' : ''}`}
+                    aria-hidden={sinAtras || undefined}
+                    tabIndex={sinAtras ? -1 : undefined}
                   >
                     <Icon name="arrowLeft" size={20} />
                     {WIZARD.atras}
                   </Button>
                   <p className="tabular text-small text-muted">
-                    {MICROCOPY.pasoDeTotal(paso, TOTAL_PASOS)}
+                    {MICROCOPY.pasoDeTotal(pasoVisible, total)}
                   </p>
                 </div>
-                <ProgressBar step={paso} total={TOTAL_PASOS} label={WIZARD.ariaProgreso} />
+                <ProgressBar step={pasoVisible} total={total} label={WIZARD.ariaProgreso} />
               </div>
 
               <AnimatePresence
@@ -226,6 +290,23 @@ export function Wizard() {
                   transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
                 >
                   {paso === 1 && (
+                    <StepNecesidad
+                      necesidades={state.necesidades}
+                      necesidadLibre={state.necesidadLibre}
+                      error={errorPaso}
+                      headingRef={titulo}
+                      onToggle={(id) => {
+                        setErrorPaso(null);
+                        dispatch({ tipo: 'toggleNecesidad', id });
+                      }}
+                      onLibre={(texto) => {
+                        setErrorPaso(null);
+                        dispatch({ tipo: 'necesidadLibre', texto });
+                      }}
+                      onContinuar={() => avanzar(1)}
+                    />
+                  )}
+                  {paso === 2 && (
                     <StepRubro
                       rubro={state.rubro}
                       rubroOtro={state.rubroOtro}
@@ -241,14 +322,16 @@ export function Wizard() {
                         setErrorPaso(null);
                         dispatch({ tipo: 'rubroOtro', texto });
                       }}
-                      onContinuar={() => avanzar(1)}
+                      onContinuar={() => avanzar(2)}
                     />
                   )}
-                  {paso === 2 && (
+                  {paso === 3 && (
                     <StepModulos
                       rubro={state.rubro}
+                      necesidades={state.necesidades}
                       modulos={modulos}
                       objetivos={state.objetivos}
+                      exigeModulo={demo}
                       error={errorPaso}
                       headingRef={titulo}
                       onToggleModulo={onToggleModulo}
@@ -256,31 +339,61 @@ export function Wizard() {
                         setErrorPaso(null);
                         dispatch({ tipo: 'toggleObjetivo', id });
                       }}
-                      onContinuar={() => avanzar(2)}
+                      onContinuar={() => avanzar(3)}
                       aviso={avisoDemo}
                     />
                   )}
-                  {paso === 3 && (
+                  {paso === 4 && demo && (
                     <StepDatos
                       inicial={state.datos}
                       headingRef={titulo}
                       enfocarPrimero={interactuo}
                       whatsappFallback={whatsappLink}
                       onCambio={onCambioDatos}
-                      onEnviar={onEnviar}
+                      onEnviar={onEnviarCompleto}
                       onEnviado={() => {
-                        track('paso_completado', { paso: 3, nombre: 'datos' });
-                        dispatch({ tipo: 'enviado' });
-                        irA(4);
+                        track('paso_completado', { paso: 4, nombre: 'datos' });
+                        terminar('completo');
                       }}
                     />
                   )}
-                  {paso === 4 && state.rubro && (
+                  {paso === 4 && !demo && (
+                    <StepWhatsapp
+                      inicial={state.datos.whatsapp}
+                      headingRef={titulo}
+                      enfocarPrimero={interactuo}
+                      whatsappFallback={whatsappLink}
+                      onEnviar={onGuardarWhatsapp}
+                    />
+                  )}
+                  {paso === 5 && state.lead && (
+                    <StepCompletar
+                      inicial={state.datos}
+                      headingRef={titulo}
+                      enfocarPrimero={interactuo}
+                      onCambio={onCambioDatos}
+                      onEnviar={async (datos, honeypot) => {
+                        const r = await completarLead(state.lead!, { ...datos, website: honeypot });
+                        if (r.ok) {
+                          track('lead_completado', { completo: true });
+                          setTimeout(() => terminar('completo'), PAUSA_EXITO_MS);
+                        }
+                        return r;
+                      }}
+                      onOmitir={() => {
+                        track('lead_completado', { completo: false });
+                        terminar('parcial');
+                      }}
+                    />
+                  )}
+                  {paso === PASO_CONFIRMACION && state.rubro && (
                     <StepListo
                       nombre={state.datos.nombre}
                       rubro={rubroVisible}
                       modulos={modulos}
                       whatsappLink={whatsappLink}
+                      variante={state.confirmacion ?? 'completo'}
+                      aMedida={otraCosa}
                       headingRef={titulo}
                       onReiniciar={reiniciar}
                     />

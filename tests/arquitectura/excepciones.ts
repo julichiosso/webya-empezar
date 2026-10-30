@@ -4,12 +4,7 @@
  */
 
 /** "origen -> destino" (rutas dentro de src/, sin extensión) → motivo y dueño. */
-export const EXCEPCIONES_CAPAS: Record<string, string> = {
-  'features/demo/gastronomia/compartir.ts -> features/empezar/desde-demo':
-    'Ola 3, paginas: el traspaso demo → wizard baja a una capa común',
-  'features/demo/gastronomia/DemoGastronomia.tsx -> features/empezar/desde-demo':
-    'Ola 3, paginas: el traspaso demo → wizard baja a una capa común',
-};
+export const EXCEPCIONES_CAPAS: Record<string, string> = {};
 
 /** Archivo (ruta dentro de src/) → motivo y dueño. */
 export const EXCEPCIONES_COPY: Record<string, string> = {};
