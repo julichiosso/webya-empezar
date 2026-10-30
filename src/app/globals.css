@@ -6,6 +6,7 @@
  * Modo oscuro por defecto. El claro se activa con <html data-theme="light">.
  */
 @import '../brand/tokens/tokens.css';
+@import '../brand/motion/motion.css';
 
 /* Efecto, no color: grano apenas perceptible (máscara de ruido fractal teñida con --fg). */
 :root {
