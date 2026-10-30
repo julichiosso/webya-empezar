@@ -92,6 +92,14 @@ test('/marca (3 paletas aplicadas) sin violaciones', async ({ page }) => {
   await auditar(page);
 });
 
+test('/sistema (tokens, componentes en sus estados e ilustraciones) sin violaciones', async ({
+  page,
+}) => {
+  await page.goto('/sistema');
+  await expect(page.getByRole('heading', { level: 1, name: 'Sistema de diseño' })).toBeVisible();
+  await auditar(page);
+});
+
 test('lo clickeable mide al menos 48px de alto', async ({ page }) => {
   await page.goto('/empezar');
   await abrirWizard(page);
