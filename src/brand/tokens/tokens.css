@@ -110,6 +110,29 @@
   --subtle: var(--paper-muted);
   --line: var(--paper-line);
   --line-strong: rgb(11 11 12 / 0.32);
+
+  /*
+   * Componente otra vez: un var() se resuelve donde se declara, así que los de :root quedarían
+   * con los semánticos del oscuro (p. ej. texto blanco del botón secundario sobre crema).
+   */
+  --boton-primario-fondo: var(--accent);
+  --boton-primario-texto: var(--accent-fg);
+  --boton-secundario-borde: var(--line-strong);
+  --boton-secundario-texto: var(--fg);
+  --tarjeta-fondo: var(--surface);
+  --tarjeta-borde: var(--line);
+  --panel-fondo: var(--surface);
+  --panel-borde: var(--line);
+  --control-fondo: var(--surface);
+  --control-borde: var(--line-strong);
+  --control-texto: var(--fg);
+  --control-ayuda: var(--muted);
+  --control-error: var(--danger);
+  --seleccion-fondo: var(--accent-soft);
+  --seleccion-borde: var(--accent);
+  --foco: var(--accent);
+  --hueco-borde: var(--line-strong);
+  --pieza-encajada: var(--accent);
 }
 
 @theme inline {
