@@ -6,7 +6,10 @@ import { InterruptorTema } from './InterruptorTema';
 import { CLAVE_TEMA, SCRIPT_TEMA } from './tema';
 
 const html = document.documentElement;
-const correrScript = () => new Function(SCRIPT_TEMA)();
+const correrScript = (ruta = '/empezar') => {
+  window.history.replaceState(null, '', ruta);
+  new Function(SCRIPT_TEMA)();
+};
 
 afterEach(() => {
   html.removeAttribute('data-theme');
@@ -33,7 +36,15 @@ describe('script inline del tema (sin destello)', () => {
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('bloqueado');
     });
-    expect(correrScript).not.toThrow();
+    expect(() => correrScript()).not.toThrow();
+  });
+
+  it('la demo y /marca quedan siempre en oscuro, aunque se haya elegido el claro', () => {
+    localStorage.setItem(CLAVE_TEMA, 'light');
+    for (const ruta of ['/demo/gastronomia', '/marca']) {
+      correrScript(ruta);
+      expect(html).not.toHaveAttribute('data-theme');
+    }
   });
 
   it('es mínimo: menos de 0,2 KB gzip', () => {

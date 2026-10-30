@@ -63,7 +63,7 @@ test('tema: oscuro por defecto, el interruptor del pie pasa a claro y se recuerd
   await expect(html).not.toHaveAttribute('data-theme', 'light');
   const interruptor = page
     .getByRole('contentinfo')
-    .getByRole('button', { name: FOOTER.tema.aClaro });
+    .getByRole('button', { name: FOOTER.tema.etiqueta });
   await expect(interruptor).toHaveAttribute('aria-pressed', 'false');
   await interruptor.click();
   await expect(html).toHaveAttribute('data-theme', 'light');
@@ -71,6 +71,12 @@ test('tema: oscuro por defecto, el interruptor del pie pasa a claro y se recuerd
   // El script en línea lo aplica antes de hidratar: el atributo ya está y el botón queda presionado.
   await expect(html).toHaveAttribute('data-theme', 'light');
   await expect(interruptor).toHaveAttribute('aria-pressed', 'true');
+
+  // El claro es solo de /empezar: la demo y /marca siguen en oscuro con el claro guardado.
+  for (const ruta of ['/demo/gastronomia', '/marca']) {
+    await page.goto(ruta);
+    await expect(html).not.toHaveAttribute('data-theme', 'light');
+  }
 });
 
 test.describe('escritorio (lg y más)', () => {

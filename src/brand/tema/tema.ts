@@ -14,11 +14,17 @@ export const TEMA_POR_DEFECTO: Tema = 'dark';
 export const CLAVE_TEMA = 'webya:tema';
 
 /**
- * Script inline, sin destello: aplica el tema guardado ANTES de pintar. Va lo más arriba posible
- * del documento (en <head> o primero en <body>). Si localStorage no está disponible (modo privado,
+ * Única ruta con tema elegible. La demo y /marca son siempre oscuras (la cara de la marca): el
+ * script vive en el layout raíz, así que filtra por ruta.
+ */
+export const RUTA_CON_TEMA = '/empezar';
+
+/**
+ * Script inline, sin destello: aplica el tema guardado ANTES de pintar, solo en /empezar. Va lo más
+ * arriba posible del documento (en <head>). Si localStorage no está disponible (modo privado,
  * cookies bloqueadas) no pasa nada: queda el oscuro.
  */
-export const SCRIPT_TEMA = `try{var t=localStorage.getItem('${CLAVE_TEMA}');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}`;
+export const SCRIPT_TEMA = `try{if(location.pathname.indexOf('${RUTA_CON_TEMA}')===0){var t=localStorage.getItem('${CLAVE_TEMA}');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}}catch(e){}`;
 
 export function esTema(valor: unknown): valor is Tema {
   return valor === 'dark' || valor === 'light';

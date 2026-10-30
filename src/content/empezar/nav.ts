@@ -9,9 +9,11 @@ export const NAV = {
   /** Enlace para saltar la navegación con el teclado (primer foco de la página). */
   saltar: 'Saltar al contenido',
   cta: HERO.cta,
-  /** Interruptor discreto de tema (docs/plan-sprint.md §3). Dice lo que va a pasar al tocarlo. */
+  /**
+   * Interruptor discreto de tema (docs/plan-sprint.md §3). Nombre fijo: nombra lo que queda activo
+   * cuando está presionado (aria-pressed dice si lo está), no la acción.
+   */
   tema: {
-    aClaro: 'Pasar a modo claro',
-    aOscuro: 'Pasar a modo oscuro',
+    etiqueta: 'Modo claro',
   },
 } as const;
