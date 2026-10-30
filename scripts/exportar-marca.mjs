@@ -16,6 +16,7 @@
  * nuevas. Node ≥ 22.18 (importa .ts con type stripping). Uso: `node scripts/exportar-marca.mjs`.
  */
 import { mkdir, writeFile } from 'node:fs/promises';
+import { registerHooks } from 'node:module';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
@@ -23,6 +24,30 @@ import { chromium } from '@playwright/test';
 const raiz = new URL('../', import.meta.url);
 const ruta = (rel) => fileURLToPath(new URL(rel, raiz));
 const importar = (rel) => import(new URL(rel, raiz).href);
+
+/*
+ * Las fuentes de src/ se importan como en el bundler: sin extensión (`'../grilla'`) y con el alias
+ * `@/` (→ src/). Node no resuelve ninguna de las dos: este hook prueba `.ts` y `/index.ts` (los
+ * imports `import type` se borran con el type stripping, así que casi nunca llega acá).
+ */
+registerHooks({
+  resolve(especificador, contexto, siguiente) {
+    const desdeSrc = especificador.startsWith('@/')
+      ? new URL(`src/${especificador.slice(2)}`, raiz).href
+      : null;
+    const base = desdeSrc ?? especificador;
+    const relativo = desdeSrc !== null || /^\.\.?\//.test(especificador);
+    if (!relativo || /\.[cm]?[jt]sx?$/.test(base)) return siguiente(especificador, contexto);
+    for (const sufijo of ['.ts', '/index.ts']) {
+      try {
+        return siguiente(base + sufijo, contexto);
+      } catch {
+        // probamos el próximo sufijo
+      }
+    }
+    return siguiente(especificador, contexto);
+  },
+});
 
 const { COLOR } = await importar('src/brand/tokens/primitivos.ts');
 const { LOGO_TRAZOS, LOGO_VIEWBOX } = await importar('src/brand/logo/trazos.ts');

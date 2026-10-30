@@ -78,6 +78,13 @@ test('/marca es interna: noindex y fuera del sitemap', async ({ page, request })
   expect(sitemap).not.toContain('/marca');
 });
 
+test('/sistema es interna: noindex y fuera del sitemap', async ({ page, request }) => {
+  await page.goto('/sistema');
+  await expect(meta(page, 'meta[name="robots"]')).toHaveAttribute('content', /noindex, nofollow/);
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+  expect(sitemap).not.toContain('/sistema');
+});
+
 test('JSON-LD del FAQ es válido y coincide con lo que se ve', async ({ page }) => {
   await page.goto('/empezar');
   const json = await page.locator('script[type="application/ld+json"]').first().textContent();
