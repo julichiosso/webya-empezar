@@ -1,4 +1,6 @@
 import { z } from 'zod';
+// Antes de construir los esquemas: sin eval (CSP). Ver lib/zod-sin-eval.ts.
+import '@/lib/zod-sin-eval';
 import { ORIGENES } from '@/config/origenes';
 import { parsePhoneAR } from '@/lib/phone';
 import { LIMITES_BASE, TOKEN_LEAD_REGEX } from './limites';

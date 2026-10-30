@@ -1,4 +1,6 @@
 import { z } from 'zod';
+// Antes de construir los esquemas: sin eval (CSP). Ver lib/zod-sin-eval.ts.
+import '@/lib/zod-sin-eval';
 import { sumar, type Centavos } from './dinero';
 import { calcularTotales, PROPINAS } from './totales';
 import { MEDIOS_PAGO, MODALIDADES, type BorradorPedido, type ItemPedido, type Menu } from './types';
