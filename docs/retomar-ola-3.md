@@ -22,10 +22,21 @@ subida es `sprint/base-marca` (`0a3b4ff`, preview de Vercel detrás de su login)
 Verificado en `30e08b7`: lint 0, typecheck 0, Vitest 876 ✓, E2E 469 ✓ / 0 ✗ / 100 omitidas (las omitidas son
 tests de un solo proyecto o solo celular/escritorio). JS inicial `/empezar` 146,8 KB, demo 183,4 KB.
 
-## Falta
+## Falta (pedido del 2026-10-30: cerrar lo pausado y dejar solo main)
 
-Nada del sprint. Fase 3 cerrada: ver docs/estado-final.md (números, fallas conocidas y lo que le toca al usuario).
-Pendiente solo con OK del usuario: push de main.
+Hecho en esta tanda (en  local, ): rediseño en celular (hero, catálogo y módulos con los TODO
+agrupados), CTA fijo en celular, CTA final, "qué pasa después", 404 y error, y la rama de copy (bio + 5 captions
+de Instagram en  y  completa). E2E verde, JS /empezar 148,6 KB.
+
+1. **marca-sistema, a medias** (se cortó por el límite de uso): worktree
+    (rama ). Falta terminar /sistema,
+   BRAND.md y  (avatar + 5 destacadas). Retomarlo con SendMessage al mismo agente o
+   relanzar marca-sistema sobre esa rama. Después: mergear a main con lint, typecheck, Vitest y E2E en verde.
+2. **ui-componentes**: Pestañas, Pasos y EstadoVacío (docs/plan-sprint.md, Ola 2). Sin empezar.
+3. **Push de main** (el usuario lo pidió: "subí todo a main, que quede solo esa rama"). ANTES: aplicar la migración
+    en Supabase, o el paso de WhatsApp falla en producción.
+4. **Limpieza** (después del push): borrar ramas locales mergeadas (, , ),
+   los worktrees de  y la rama remota .
 
 ## Riesgos
 
