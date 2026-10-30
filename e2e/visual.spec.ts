@@ -76,6 +76,11 @@ test('secciones informativas', async ({ page }) => {
   await page.goto('/empezar');
   // Con el wizard ya cargado (layout definitivo): el esqueleto mide distinto y movería las secciones.
   await abrirWizard(page);
+  // La barra fija del celular aparece o no según qué hay a la vista al capturar: no es parte de
+  // estas capturas (tiene su propio E2E en layout.spec).
+  await page.addStyleTag({
+    content: '[role="region"][data-visible] { display: none !important; }',
+  });
   // Las secciones bajo el pliegue llevan content-visibility:auto: se maquetan recién cerca de la
   // pantalla. Se llevan a la vista y se esperan dos cuadros para capturar el alto real, no el reservado.
   const seccion = async (id: string) => {
