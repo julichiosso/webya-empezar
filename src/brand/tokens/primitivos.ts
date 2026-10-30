@@ -47,6 +47,15 @@ export const ESPACIO = {
 
 export const DURACION = { 100: '100ms', 160: '160ms', 280: '280ms', 520: '520ms' } as const;
 
+/**
+ * Escalas del movimiento Encastre: UNA sola escala de toque para todo lo que se aprieta (antes
+ * había 0.96, 0.97, 0.98 y 0.99 sueltos) y el sobrepaso del snap (la pieza se pasa ~2 % y asienta).
+ */
+export const ESCALA = { toque: '0.98', sobrepaso: '1.02' } as const;
+
+/** Paso entre piezas que entran escalonadas (logo, chips, tablero): pieza(i) × paso. */
+export const PASO = { pieza: '70ms' } as const;
+
 export const CURVA = {
   salida: 'cubic-bezier(0.22, 1, 0.36, 1)',
   entradaSalida: 'cubic-bezier(0.65, 0, 0.35, 1)',

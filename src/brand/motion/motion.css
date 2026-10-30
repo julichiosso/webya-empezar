@@ -1,0 +1,82 @@
+/*
+ * Movimiento del sistema (lenguaje "Encastre"). Los valores son tokens de tokens.css
+ * (--duration-*, --ease-*, --escala-toque, --escala-sobrepaso, --paso-pieza); los presets de TS
+ * están en presets.ts. Solo transform/opacity, una vez, y todo quieto con prefers-reduced-motion.
+ * Excepción documentada: stroke-dashoffset del logo que se escribe (.logo-escrito), una sola vez.
+ *
+ * Se importa desde src/app/globals.css (pedido al integrador). Las animaciones que todavía viven en
+ * globals.css (logo-armado, splash, hero, clic, encajar…) se mudan acá en la Ola 3.
+ */
+
+/* Toque sin Tailwind (CSS crudo): la misma escala única que TOQUE.clase. */
+.toque {
+  transition: scale var(--duration-instant) var(--ease-out);
+}
+.toque:active {
+  scale: var(--escala-toque);
+}
+
+/* Snap: la pieza llega desde arriba, se pasa apenas (~2 %) y asienta. Una vez. */
+@keyframes encastre-snap {
+  from {
+    opacity: 0;
+    transform: translateY(var(--snap-desde, -0.75rem));
+  }
+  70% {
+    opacity: 1;
+    transform: scale(var(--escala-sobrepaso));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.snap {
+  animation: encastre-snap var(--duration-base) var(--ease-out) both;
+}
+
+/* Entrada escalonada: style={pieza(i)} pone --i; cada pieza espera i × --paso-pieza. */
+.pieza-escalonada {
+  animation-delay: calc(var(--i, 0) * var(--paso-pieza));
+}
+
+/* Logo que se escribe (<Logo escribir />): el trazo se dibuja y después se rellena, una vez. */
+@keyframes logo-escribe {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes logo-rellena {
+  to {
+    fill-opacity: 1;
+  }
+}
+.logo-escrito .logo-pieza {
+  stroke: currentColor;
+  stroke-width: 7;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  fill-opacity: 0;
+  animation:
+    logo-escribe 1100ms var(--ease-in-out) calc(var(--i) * 110ms) forwards,
+    logo-rellena var(--duration-slow) var(--ease-out) 1450ms forwards;
+}
+
+/* Equivalente estático: todo en su estado final, sin movimiento ni trazo. */
+@media (prefers-reduced-motion: reduce) {
+  .toque,
+  .toque:active {
+    transition: none;
+  }
+  .snap,
+  .pieza-escalonada {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  .logo-escrito .logo-pieza {
+    animation: none !important;
+    stroke: none;
+    fill-opacity: 1;
+  }
+}

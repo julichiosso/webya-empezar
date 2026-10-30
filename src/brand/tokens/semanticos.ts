@@ -1,5 +1,14 @@
 import { conAlfa } from '@/lib/color';
-import { ALFA, COLOR, CURVA, DURACION, RADIO, type Material } from './primitivos';
+import {
+  ALFA,
+  COLOR,
+  CURVA,
+  DURACION,
+  ESCALA,
+  PASO,
+  RADIO,
+  type Material,
+} from './primitivos';
 
 /**
  * Capa 2 de 3: SEMÁNTICOS. Nombran el USO ("fondo", "acento", "línea") y apuntan a un primitivo.
@@ -92,6 +101,9 @@ export const MOVIMIENTO = {
   'duration-fast': DURACION[160],
   'duration-base': DURACION[280],
   'duration-slow': DURACION[520],
+  'escala-toque': ESCALA.toque,
+  'escala-sobrepaso': ESCALA.sobrepaso,
+  'paso-pieza': PASO.pieza,
 } as const;
 
 /** Radios escalonados por jerarquía: controles < tarjetas < paneles. */
