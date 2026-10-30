@@ -5,8 +5,6 @@
 
 /** "origen -> destino" (rutas dentro de src/, sin extensión) → motivo y dueño. */
 export const EXCEPCIONES_CAPAS: Record<string, string> = {
-  'brand/ilustracion/modulos/ModuloArte.tsx -> content/modulos':
-    'Ola 2, ilustracion: el arte define sus ids y content los elige',
   'components/marketing/Hero.tsx -> features/explicativo/BotonExplicativo':
     'Ola 3, paginas: la página compone el botón (prop o slot)',
   'components/marketing/HeroMockup.tsx -> features/empezar/modulos-store':
