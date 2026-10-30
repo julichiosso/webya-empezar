@@ -16,8 +16,10 @@ const { error: TXT } = ESTADOS_PAGINA;
  */
 export default function ErrorDePagina({ error, retry }: { error: unknown; retry: () => void }) {
   useEffect(() => {
-    // Solo el tipo: el mensaje puede traer datos de la persona.
-    console.error('[pagina] error', error instanceof Error ? error.name : typeof error);
+    // En producción, solo el tipo: el mensaje puede traer datos de la persona. En desarrollo, el
+    // error entero (si no, no hay forma de saber qué rompió la página).
+    if (process.env.NODE_ENV !== 'production') console.error('[pagina] error', error);
+    else console.error('[pagina] error', error instanceof Error ? error.name : typeof error);
   }, [error]);
   const whatsapp = buildWhatsAppLink(siteConfig.whatsappNumber, MENSAJE_WHATSAPP.contacto);
 
