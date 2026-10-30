@@ -293,7 +293,7 @@ describe('Wizard — envío y confirmación', () => {
 
     const modulos = screen.getByRole('list', { name: /las piezas de tu negocio/i });
     expect(modulos).toHaveTextContent('Turnos y reservas');
-    expect(screen.getByText(/menos de 24 hs para ponerlo online/i)).toBeInTheDocument();
+    expect(screen.getByText('Te escribimos por WhatsApp para ponerlo online.')).toBeInTheDocument();
     // Aviso honesto: la entrega la hacemos nosotros, no hay plataforma de autoservicio.
     expect(screen.getByText(/lo armamos nosotros/i)).toBeInTheDocument();
     expect(eventos).toEqual(

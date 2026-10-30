@@ -1,3 +1,5 @@
+import { PENDIENTES } from '@/content/pendientes';
+
 /**
  * Preguntas frecuentes de /empezar. Texto plano (sin JSX) para poder reutilizarlo en el JSON-LD
  * de SEO. Regla: respuestas honestas; no se promete nada que el producto todavía no cumpla.
@@ -6,6 +8,11 @@
 export interface Pregunta {
   pregunta: string;
   respuesta: string;
+  /**
+   * Pendiente visible (empieza con "TODO:") que va debajo de la respuesta. No va al JSON-LD: es para
+   * que se vea en la página lo que falta definir.
+   */
+  todo?: string;
 }
 
 export const FAQ: readonly Pregunta[] = [
@@ -32,8 +39,8 @@ export const FAQ: readonly Pregunta[] = [
   },
   {
     pregunta: '¿En cuánto tiempo está?',
-    // TODO: definir plazos reales de entrega. Lo único comprometido hoy es el primer contacto.
     respuesta:
-      'Te escribimos en menos de 24 hs; el plazo de armado te lo damos cuando veamos tu caso.',
+      'Te escribimos por WhatsApp; el plazo de armado te lo damos cuando veamos tu caso.',
+    todo: `${PENDIENTES.plazoRespuesta} ${PENDIENTES.plazoEntrega}`,
   },
 ];

@@ -1,3 +1,5 @@
+import { PENDIENTES } from '@/content/pendientes';
+
 /** Los cuatro pasos del wizard de /empezar: rubro, módulos, datos y confirmación. */
 
 /** Paso 1: elegir el rubro. Los rubros (nombre, descripción) viven en content/rubros. */
@@ -85,7 +87,9 @@ export const PASO_LISTO = {
   avisoEntrega:
     'Lo armamos nosotros: no tenés que configurar nada. Cuando lo tengamos listo, lo ponemos online juntos.',
   whatsapp: 'Hablar por WhatsApp',
-  contacto: 'Te escribimos en menos de 24 hs para ponerlo online.',
+  contacto: 'Te escribimos por WhatsApp para ponerlo online.',
+  /** Visible debajo de `contacto` hasta que el usuario confirme el plazo de respuesta. */
+  todoPlazo: PENDIENTES.plazoRespuesta,
   /** Visible solo fuera de producción, mientras falte el número. */
   todoWhatsapp: 'TODO: configurar NEXT_PUBLIC_WHATSAPP_NUMBER en .env.local.',
   reiniciar: 'Cargar otro negocio',

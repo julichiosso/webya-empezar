@@ -1,3 +1,5 @@
+import { PENDIENTES } from '@/content/pendientes';
+
 /** Hero de /empezar: la promesa ("Creá"), el CTA que baja al wizard y las señales de confianza. */
 export const HERO = {
   titulo: 'Creá tu negocio online.',
@@ -9,7 +11,9 @@ export const HERO = {
    * Señales de confianza (solo escritorio). Son promesas que ya cumplimos, sin sellos, métricas
    * ni testimonios.
    */
-  senales: ['Sin saber de tecnología', 'Armado para tu rubro', 'Te respondemos en menos de 24 hs'],
+  senales: ['Sin saber de tecnología', 'Armado para tu rubro', 'Te escribimos por WhatsApp'],
+  /** Visible junto a las señales hasta que el usuario confirme el plazo de respuesta. */
+  todoPlazo: PENDIENTES.plazoRespuesta,
 } as const;
 
 /** Mockup interactivo del hero: la mini web que se arma tocando módulos. */

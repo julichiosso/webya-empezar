@@ -1,4 +1,5 @@
 import type { IconName } from '@/brand/ilustracion/iconos/paths';
+import { PENDIENTES } from '@/content/pendientes';
 
 /**
  * Marketing honesto: lo que genera confianza son compromisos que SÍ cumplimos (skill webya-brand:
@@ -6,14 +7,21 @@ import type { IconName } from '@/brand/ilustracion/iconos/paths';
  */
 export const CONFIANZA: {
   titulo: string;
-  compromisos: readonly { icono: IconName; titulo: string; texto: string }[];
+  compromisos: readonly {
+    icono: IconName;
+    titulo: string;
+    texto: string;
+    /** Pendiente visible (TODO:) que acompaña al compromiso. */
+    todo?: string;
+  }[];
 } = {
   titulo: 'Por qué confiar en WebYa',
   compromisos: [
     {
       icono: 'chat',
       titulo: 'Hablás con una persona',
-      texto: 'Te escribimos en menos de 24 hs, por WhatsApp, y armamos todo con vos.',
+      texto: 'Te escribimos por WhatsApp y armamos todo con vos.',
+      todo: PENDIENTES.plazoRespuesta,
     },
     {
       icono: 'carta_qr',
