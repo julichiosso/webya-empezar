@@ -100,9 +100,7 @@ export function StepCompletar({
     <form noValidate onSubmit={enviar} className="lg:max-w-xl">
       <StepHeader title={TXT.titulo} subtitle={TXT.bajada} headingRef={headingRef} />
 
-      <p className="-mt-2 mb-6 rounded-control border border-line bg-surface p-4 text-small text-muted">
-        {TXT.yaGuardado}
-      </p>
+      <p className="-mt-2 mb-6 text-small text-muted">{TXT.yaGuardado}</p>
 
       <div className="flex flex-col gap-5">
         <Input
@@ -162,7 +160,7 @@ export function StepCompletar({
 
       <div role="alert" className="mt-5 empty:hidden">
         {errorGlobal && (
-          <p className="rounded-control border border-danger/40 bg-danger/10 p-4 text-small text-fg">
+          <p className="rounded-control border border-line bg-surface p-4 text-small text-danger">
             {errorGlobal}
           </p>
         )}
