@@ -1,4 +1,4 @@
-import { PALETAS_DEMO } from '@/content/demos/gastronomia/paletas';
+import { esPaletaCurada } from '@/content/paletas';
 import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { esOrigen, type Origen } from '@/config/origenes';
 import { WIZARD } from '@/content/empezar/wizard';
@@ -222,7 +222,7 @@ const str = (v: unknown, max: number) => (typeof v === 'string' ? v.slice(0, max
 export function sanearDemo(v: unknown): DesdeDemo | null {
   if (!v || typeof v !== 'object') return null;
   const { paleta, cocina } = v as Record<string, unknown>;
-  const paletaOk = PALETAS_DEMO.some((p) => p.id === paleta);
+  const paletaOk = esPaletaCurada(paleta);
   const cocinaOk = (COCINA_IDS as readonly unknown[]).includes(cocina);
   return paletaOk && cocinaOk ? { paleta: paleta as string, cocina: cocina as string } : null;
 }
