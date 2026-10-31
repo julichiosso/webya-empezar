@@ -31,7 +31,8 @@ test('la CSP no bloquea nada al usar la página', async ({ page }) => {
     if (/Content Security Policy|Refused to/i.test(m.text())) violaciones.push(m.text());
   });
   await page.goto('/empezar');
-  await page.evaluate(() => document.querySelector('#wizard')?.scrollIntoView());
+  // Tocar un rubro descarga el wizard (y con él, zod y motion).
+  await page.locator('#wizard [data-rubro="comercio"]').click();
   await page.waitForLoadState('networkidle');
   await page.goto('/demo/gastronomia');
   await page.waitForLoadState('networkidle');

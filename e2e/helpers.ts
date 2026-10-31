@@ -5,10 +5,12 @@ import { E2E_LEADS_FILE } from '../playwright.config';
 
 export interface LeadGuardado {
   id: string;
-  nombre: string;
+  nombre: string | null;
   email: string | null;
   whatsapp: string;
   nombre_negocio: string;
+  ciudad?: string | null;
+  necesidad_libre?: string | null;
   rubro: string;
   rubro_otro: string | null;
   modulos: string[];
@@ -40,84 +42,65 @@ export function negocioUnico(project: string) {
 
 export const wizard = (page: Page) => page.locator('#wizard');
 
+/** Títulos de las pantallas del flujo (content/empezar/wizard-flujo.ts). */
+export const TITULO_RUBRO = '¿Qué negocio tenés?';
+export const TITULO_A_MEDIDA = 'Contanos qué necesitás';
+export const TITULO_NEGOCIO = 'Contanos de tu negocio';
+export const TITULO_RESULTADO = /^Así te queda/;
+export const TITULO_RESULTADO_A_MEDIDA = 'Lo armamos a medida';
+export const TITULO_COMPLETAR = 'Contanos un poco más';
+export const TITULO_GRACIAS = 'Listo, ya nos llegaron tus datos';
+
+/** Módulos que sugiere el rubro peluquería (los que van en el lead y en la vista previa). */
+export const MODULOS_PELUQUERIA = ['turnos', 'catalogo', 'pagos', 'clientes', 'notificaciones'];
+
 /**
- * El wizard se descarga al primer gesto o al entrar en pantalla (ver WizardLazy). En un celular
- * queda bajo el primer viewport: se baja hasta él, como haría una persona, y se espera a que cargue.
+ * La pantalla 1 llega en el HTML del servidor (arriba del pliegue): se espera a que se vea. El
+ * wizard se descarga al primer gesto; tocar una tarjeta antes también funciona (ver WizardLazy).
  */
 export async function abrirWizard(page: Page) {
-  // En la página (no con scrollIntoViewIfNeeded): el esqueleto se reemplaza por el wizard real mientras se baja.
-  await page.evaluate(() => document.querySelector('#wizard')?.scrollIntoView());
   await expect(wizard(page).getByRole('heading').first()).toBeVisible();
 }
 
-/** Un usuario toca la etiqueta (el input nativo es sr-only): Playwright espera a que deje de moverse. */
-export const tocar = (page: Page, texto: RegExp) =>
-  wizard(page).locator('label', { hasText: texto }).click();
-
-/** Paso 1 del flujo nuevo. */
-export const TITULO_PASO_1 = '¿Qué necesitás?';
-export const TITULO_RUBRO = '¿A qué se dedica tu negocio?';
-/** Módulos: también es donde entra quien viene de la demo. */
-export const TITULO_PASO_2 = '¿Qué querés activar?';
-/** Formulario completo de un solo envío (solo quien viene de la demo). */
-export const TITULO_PASO_3 = 'Contanos de tu negocio';
-export const TITULO_WHATSAPP = '¿A qué WhatsApp te escribimos?';
-export const TITULO_COMPLETAR = 'Contanos un poco más';
-export const TITULO_FINAL = 'Tu negocio está listo para armarse';
-export const TITULO_FINAL_PARCIAL = 'Ya tenemos tu WhatsApp';
-
-/** Módulos que sugiere el rubro peluquería (ya vienen marcados en el paso de módulos). */
-export const MODULOS_PELUQUERIA = ['turnos', 'catalogo', 'pagos', 'clientes', 'notificaciones'];
-
-const siguiente = (page: Page) => wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-
-/**
- * Paso 1: marca una necesidad y sigue hasta el rubro. Por defecto "Cobrar": solo sugiere Pagos,
- * que peluquería y comercio ya sugieren, así no cambia qué módulos quedan marcados.
- */
-export async function pasarNecesidad(page: Page, necesidad = /^Cobrar/) {
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_1 })).toBeVisible();
-  await tocar(page, necesidad);
-  await siguiente(page);
-  await expect(wizard(page).getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
+/** Pantalla 1: un toque en el rubro avanza solo. */
+export async function elegirRubro(page: Page, id = 'peluqueria_estetica') {
+  await wizard(page).locator(`[data-rubro="${id}"]`).click();
 }
 
-export type Destino = 'necesidad' | 'rubro' | 'modulos' | 'whatsapp' | 'completar';
+/** Pantalla 2: completa el formulario mínimo y lo envía (guarda el lead parcial). */
+export async function enviarNegocio(
+  page: Page,
+  { negocio = 'Luna Peluquería', ciudad = '', boton = /ver cómo me queda/i } = {},
+) {
+  const w = wizard(page);
+  await expect(w.getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
+  await w.getByLabel('Nombre de tu negocio').fill(negocio);
+  await w.getByLabel('Tu WhatsApp').fill('1123456789');
+  if (ciudad) await w.getByLabel(/Ciudad/).fill(ciudad);
+  await w.getByRole('button', { name: boton }).click();
+}
 
-/**
- * Lleva el wizard hasta el paso pedido con "Cobrar", peluquería y los objetivos "Recibir turnos
- * online" y "Mostrar mis trabajos". Los módulos de peluquería ya vienen sugeridos y marcados.
- */
-export async function irAlPaso(page: Page, destino: Destino, query = '') {
+export type Destino = 'rubro' | 'negocio' | 'resultado' | 'completar';
+
+/** Lleva el flujo hasta la pantalla pedida con peluquería y el negocio dado. */
+export async function irAlPaso(page: Page, destino: Destino, query = '', negocio?: string) {
   await page.goto(`/empezar${query}`);
   await abrirWizard(page);
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_1 })).toBeVisible();
-  if (destino === 'necesidad') return;
-  await pasarNecesidad(page);
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
   if (destino === 'rubro') return;
-  await tocar(page, /peluquería/i);
-  await siguiente(page);
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
-  if (destino === 'modulos') return;
-  await tocar(page, /recibir turnos online/i);
-  await tocar(page, /mostrar mis trabajos/i);
-  await siguiente(page);
-  await expect(wizard(page).getByRole('heading', { name: TITULO_WHATSAPP })).toBeVisible();
-  if (destino === 'whatsapp') return;
-  await guardarWhatsapp(page);
-}
-
-/** Paso 4: deja el WhatsApp (se guarda el lead parcial) y llega a "completar". */
-export async function guardarWhatsapp(page: Page) {
-  await wizard(page).getByLabel('Tu WhatsApp').fill('1123456789');
-  await wizard(page).getByRole('button', { name: 'Guardar y seguir' }).click();
+  await elegirRubro(page);
+  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
+  if (destino === 'negocio') return;
+  await enviarNegocio(page, negocio ? { negocio } : {});
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
+  if (destino === 'resultado') return;
+  await wizard(page).getByRole('button', { name: /dejar más datos/i }).click();
   await expect(wizard(page).getByRole('heading', { name: TITULO_COMPLETAR })).toBeVisible();
 }
 
-/** Paso 5: completa los datos (solo el nombre del negocio es obligatorio) y envía. */
-export async function completarNegocio(page: Page, negocio: string) {
+/** Completar: suma los datos opcionales y envía (el nombre del negocio ya viene cargado). */
+export async function completarDatos(page: Page) {
   const w = wizard(page);
-  await w.getByLabel('Nombre de tu negocio').fill(negocio);
   await w.getByLabel(/Tu nombre/).fill('Ana Pérez');
   await w.getByLabel(/Tu mail/).fill('ana@luna.com');
   await w.getByLabel(/algo más/i).fill('Quiero turnos online');

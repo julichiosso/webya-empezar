@@ -52,4 +52,16 @@ export const MENSAJE_WHATSAPP = {
     ]
       .filter(Boolean)
       .join('\n'),
+  /** CTA "Quiero esto para mi negocio" de la vista previa: rubro, nombre y módulos. */
+  quieroEsto: (d: DatosMensajeLead) =>
+    [
+      saludo(d),
+      d.necesidadLibre
+        ? `Necesito esto: ${conPunto(d.necesidadLibre)}`
+        : 'Vi cómo me quedaría en webya.ar/empezar y lo quiero para mi negocio.',
+      d.modulos?.length ? `Me interesa: ${d.modulos.join(', ')}.` : '',
+      '¿Hablamos?',
+    ]
+      .filter(Boolean)
+      .join('\n'),
 } as const;

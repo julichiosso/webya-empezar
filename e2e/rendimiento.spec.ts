@@ -1,7 +1,7 @@
 import { expect, test, type Response } from '@playwright/test';
 import { gzipSync } from 'node:zlib';
 import { FUENTE_PRECARGADA } from '../src/brand/tipografia/fuente';
-import { TITULO_PASO_1, wizard } from './helpers';
+import { TITULO_NEGOCIO, TITULO_RUBRO, wizard } from './helpers';
 
 // Presupuestos de la ruta. Se prueba una vez (desktop) con un viewport de celular fijo.
 test.use({ viewport: { width: 390, height: 700 }, hasTouch: true, isMobile: true });
@@ -35,13 +35,13 @@ test('JS inicial bajo presupuesto y wizard diferido hasta el primer gesto', asyn
   });
   expect(inicialKb).toBeLessThan(PRESUPUESTO_JS_INICIAL_KB);
 
-  // Sin gesto, el wizard no se descargó: sigue el esqueleto.
-  await expect(wizard(page)).toHaveAttribute('aria-busy', 'true');
+  // Sin gesto, la pantalla 1 ya está (HTML del servidor) pero el wizard no se descargó.
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
   const antes = scripts.length;
 
-  // Primer gesto: baja hacia el wizard y carga.
-  await page.mouse.wheel(0, 300);
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_1 })).toBeVisible();
+  // Primer gesto: tocar un rubro descarga el wizard y avanza.
+  await wizard(page).locator('[data-rubro="comercio"]').tap();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
   expect(scripts.length).toBeGreaterThan(antes);
   const totalKb = await gzipKb(scripts);
   testInfo.annotations.push({

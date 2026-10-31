@@ -1,15 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { abrirDemo, carta } from './demo-helpers';
-import {
-  leerLeads,
-  tocar,
-  TITULO_PASO_2,
-  TITULO_PASO_3,
-  TITULO_FINAL,
-  wizard,
-  abrirWizard,
-  pasarNecesidad,
-} from './helpers';
+import { leerLeads, TITULO_NEGOCIO, TITULO_RESULTADO, wizard } from './helpers';
 
 // Demo de Gastronomía: personalización, compartir y el CTA hasta el lead.
 const esEscritorio = (page: Page) => (page.viewportSize()?.width ?? 0) >= 1024;
@@ -76,25 +67,18 @@ test('"Quiero esto para mi local" abre el wizard precargado y el lead se guarda 
     .click();
 
   await expect(page).toHaveURL(/\/empezar#wizard$/);
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
-  await expect(
-    wizard(page).getByText(/Trajimos lo que armaste en la demo: Pizzería, paleta Ciruela/),
-  ).toBeVisible();
-  // Módulos de la demo activados; lo sugerido que no está (turnos), apagado.
-  for (const nombre of [/^carta con qr/i, /^pagos online/i, /^avisos automáticos/i]) {
-    await expect(wizard(page).getByRole('checkbox', { name: nombre })).toBeChecked();
-  }
-  await expect(
-    wizard(page).getByRole('checkbox', { name: /^turnos y reservas/i }),
-  ).not.toBeChecked();
-
-  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_3 })).toBeVisible();
+  // Entra directo en la pantalla 2 con el nombre del local cargado.
+  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
   await expect(wizard(page).getByLabel('Nombre de tu negocio')).toHaveValue(negocio);
-  await wizard(page).getByLabel('Tu nombre').fill('Ana Pérez');
   await wizard(page).getByLabel('Tu WhatsApp').fill('1123456789');
-  await wizard(page).getByRole('button', { name: 'Enviar' }).click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
+  await wizard(page)
+    .getByRole('button', { name: /ver cómo me queda/i })
+    .click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
+  // La vuelta a la demo lleva la paleta que eligió ahí.
+  await expect(
+    wizard(page).getByRole('link', { name: /probá la demo completa/i }),
+  ).toHaveAttribute('href', /paleta=ciruela/);
 
   await expect
     .poll(async () => (await leerLeads()).find((l) => l.nombre_negocio === negocio))
@@ -103,15 +87,4 @@ test('"Quiero esto para mi local" abre el wizard precargado y el lead se guarda 
       rubro: 'gastronomia',
       modulos: expect.arrayContaining(['carta_qr', 'pagos', 'notificaciones']),
     });
-});
-
-test('en /empezar, elegir Gastronomía muestra la entrada a la demo', async ({ page }) => {
-  await page.goto('/empezar');
-  await abrirWizard(page);
-  // El rubro es el paso 2 del flujo nuevo: primero se pasa el de "¿Qué necesitás?".
-  await pasarNecesidad(page);
-  await tocar(page, /gastronomía/i);
-  const entrada = wizard(page).getByRole('link', { name: /mirá cómo quedaría/i });
-  await expect(entrada).toBeVisible();
-  await expect(entrada).toHaveAttribute('href', '/demo/gastronomia');
 });

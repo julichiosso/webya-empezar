@@ -21,13 +21,3 @@ export const HERO = {
   /** Enlace secundario (no botón) a la demo real, debajo del CTA. */
   enlaceDemo: 'O mirá una demo funcionando',
 } as const;
-
-/** Mockup interactivo del hero: la mini web que se arma tocando módulos. */
-export const HERO_MOCKUP = {
-  ariaGrupo: 'Armá tu negocio: activá los módulos que necesitás',
-  /** Pista que aparece una vez si nadie tocó nada; se va sola. */
-  pista: 'Tocá para activar',
-  /** Resumen (y aviso a lectores de pantalla) cuando hay al menos un módulo activo. */
-  activados: (cantidad: number) =>
-    `${cantidad} ${cantidad === 1 ? 'módulo activado' : 'módulos activados'}`,
-} as const;

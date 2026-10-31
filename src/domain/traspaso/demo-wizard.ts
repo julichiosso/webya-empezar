@@ -43,3 +43,19 @@ export function tomarTraspasoDemo(storage: StorageLike): unknown {
     return null;
   }
 }
+
+/**
+ * El otro sentido: del wizard a la demo, con el nombre y la paleta ya cargados. Son los mismos
+ * parámetros que lee la demo (`?local=&paleta=`, ver features/demo/gastronomia/compartir.ts), que
+ * los valida contra su config.
+ */
+export const URL_DEMO_GASTRONOMIA = '/demo/gastronomia';
+
+export function urlDemoConDatos(datos: { local?: string; paleta?: string }): string {
+  const q = new URLSearchParams();
+  const local = datos.local?.trim();
+  if (local) q.set('local', local);
+  if (datos.paleta) q.set('paleta', datos.paleta);
+  const query = q.toString();
+  return query ? `${URL_DEMO_GASTRONOMIA}?${query}` : URL_DEMO_GASTRONOMIA;
+}

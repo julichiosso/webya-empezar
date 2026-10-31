@@ -154,7 +154,7 @@ export function StepCompletar({
         {/* Honeypot: invisible y fuera del orden de tabulación. Si se completa, es un bot. */}
         <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
           <label>
-            {FLUJO.whatsapp.honeypot}
+            {FLUJO.negocio.honeypot}
             <input ref={honeypot} type="text" name="website" tabIndex={-1} autoComplete="off" />
           </label>
         </div>

@@ -16,6 +16,8 @@ export interface Rubro {
   /** snake_case ASCII minúsculas, estable: se guarda en la base. */
   id: string;
   nombre: string;
+  /** Para la tarjeta de la pantalla 1 en celular, si `nombre` es largo (hasta 20 caracteres). */
+  nombreCorto?: string;
   /** Clave del ícono (`RUBRO_ICONS` en `src/brand/ilustracion/iconos/paths.ts`; lo valida icons.test.ts). */
   icono: string;
   descripcionCorta: string;
@@ -28,6 +30,7 @@ export interface Rubro {
 /** Límites de contenido (los valida `rubros.test.ts`). */
 export const LIMITES_RUBRO = {
   nombre: 40,
+  nombreCorto: 20,
   descripcionCorta: 80,
   ejemploResultado: 160,
   etiquetaObjetivo: 48,

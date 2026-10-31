@@ -3,6 +3,7 @@ import type { Rubro } from './types';
 export const rubro: Rubro = {
   id: 'profesionales',
   nombre: 'Abogados, contadores y profesionales',
+  nombreCorto: 'Profesionales',
   icono: 'portafolio',
   descripcionCorta: 'Estudios y consultorios que atienden por consulta o reunión.',
   objetivos: [

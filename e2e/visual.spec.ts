@@ -1,11 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
 import {
   abrirWizard,
-  completarNegocio,
+  completarDatos,
+  elegirRubro,
   irAlPaso,
   negocioUnico,
-  TITULO_FINAL,
-  tocar,
+  TITULO_A_MEDIDA,
+  TITULO_GRACIAS,
   wizard,
 } from './helpers';
 
@@ -13,63 +14,42 @@ import {
 // Se generan con `pnpm test:e2e visual --update-snapshots` y se revisan a ojo antes de commitear.
 test.use({ reducedMotion: 'reduce' });
 
-test('hero', async ({ page }) => {
+test('hero — pantalla 1 (¿qué negocio tenés?)', async ({ page }) => {
   await page.goto('/empezar');
-  // La pista "Tocá para activar" se va sola a los 4 s: se espera para capturar un estado estable.
-  await expect(page.getByText('Tocá para activar')).toBeHidden({ timeout: 10_000 });
+  await abrirWizard(page);
   await expect(page).toHaveScreenshot('00-hero.png');
 });
 
-test('hero con módulos activados', async ({ page }) => {
-  await page.goto('/empezar');
-  const hero = page.getByRole('group', { name: /armá tu negocio/i });
-  await hero.getByRole('button', { name: /turnos y reservas/i }).click();
-  await hero.getByRole('button', { name: /pagos online/i }).click();
-  // Pasada la pista, queda el resumen "2 módulos activados".
-  await expect(hero.getByText('2 módulos activados')).toBeVisible({ timeout: 6000 });
-  await expect(hero).toHaveScreenshot('00b-hero-activo.png');
-});
-
-test('paso 1 — qué necesitás, con "Otra cosa" abierta', async ({ page }) => {
-  await irAlPaso(page, 'necesidad');
-  await tocar(page, /^Cobrar/);
-  await tocar(page, /^Otra cosa/);
-  await wizard(page)
-    .getByLabel(/contanos qué necesitás/i)
-    .fill('Controlar el stock de mis dos locales');
-  await expect(wizard(page)).toHaveScreenshot('01-necesidad.png');
-});
-
-test('paso 2 — rubro (con vista previa)', async ({ page }) => {
+test('"Otro" — pedido a medida', async ({ page }) => {
   await irAlPaso(page, 'rubro');
-  await tocar(page, /comercio/i);
-  await expect(wizard(page)).toHaveScreenshot('01b-rubro.png');
+  await elegirRubro(page, 'otro');
+  await expect(wizard(page).getByRole('heading', { name: TITULO_A_MEDIDA })).toBeVisible();
+  await wizard(page)
+    .getByLabel(/qué necesita tu negocio/i)
+    .fill('Controlar el stock de mis dos locales');
+  await expect(wizard(page)).toHaveScreenshot('01-a-medida.png');
 });
 
-test('paso 3 — qué querés activar (con estados)', async ({ page }) => {
-  await irAlPaso(page, 'modulos');
-  await tocar(page, /recibir turnos online/i);
-  await expect(wizard(page)).toHaveScreenshot('02-modulos.png');
-});
-
-test('paso 4 — solo WhatsApp', async ({ page }) => {
-  await irAlPaso(page, 'whatsapp');
-  await wizard(page).getByLabel('Tu WhatsApp').fill('1123456789');
-  await expect(wizard(page)).toHaveScreenshot('03-whatsapp.png');
-});
-
-test('paso 5 — completar, con errores', async ({ page }) => {
-  await irAlPaso(page, 'completar');
-  await wizard(page).getByRole('button', { name: 'Enviar mis datos' }).click();
+test('pantalla 2 — formulario, con errores', async ({ page }) => {
+  await irAlPaso(page, 'negocio');
+  await wizard(page)
+    .getByRole('button', { name: /ver cómo me queda/i })
+    .click();
   await expect(wizard(page).locator('[aria-invalid="true"]').first()).toBeVisible();
-  await expect(wizard(page)).toHaveScreenshot('03b-errores.png');
+  await expect(wizard(page)).toHaveScreenshot('02-negocio-errores.png');
 });
 
-test('confirmación', async ({ page }) => {
-  await irAlPaso(page, 'completar');
-  await completarNegocio(page, negocioUnico('visual'));
-  await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
-  await expect(wizard(page)).toHaveScreenshot('04-listo.png');
+test('pantalla 3 — así te queda', async ({ page }) => {
+  await irAlPaso(page, 'resultado');
+  await expect(wizard(page)).toHaveScreenshot('03-resultado.png');
+});
+
+test('completar y gracias', async ({ page }) => {
+  await irAlPaso(page, 'completar', '', negocioUnico('visual'));
+  await expect(wizard(page)).toHaveScreenshot('04-completar.png');
+  await completarDatos(page);
+  await expect(wizard(page).getByRole('heading', { name: TITULO_GRACIAS })).toBeVisible();
+  await expect(wizard(page)).toHaveScreenshot('05-gracias.png');
 });
 
 test('secciones informativas', async ({ page }) => {
@@ -91,7 +71,6 @@ test('secciones informativas', async ({ page }) => {
     );
     return s;
   };
-  await expect(await seccion('como-title')).toHaveScreenshot('05-como-funciona.png');
   await expect(await seccion('incluye-title')).toHaveScreenshot('06-que-incluye.png');
   await expect(await seccion('faq-title')).toHaveScreenshot('07-faq.png');
 });

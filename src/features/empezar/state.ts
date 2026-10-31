@@ -3,10 +3,11 @@ import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { esOrigen, type Origen } from '@/config/origenes';
 import { WIZARD } from '@/content/empezar/wizard';
 import type { DatosForm } from '@/content/leads';
-import { getNecesidad, NECESIDAD_OTRA_ID } from '@/content/necesidades';
+import { getModulo, type ModuloId } from '@/content/modulos';
 import { getRubro, RUBRO_OTRO_ID } from '@/content/rubros';
-// Sin zod: este módulo viaja en el JS inicial (el store de módulos del hero lo usa).
+// Sin zod: el estado es lo primero que se descarga al tocar un rubro (zod viene con los formularios).
 import { LIMITES_BASE as LIMITES, TOKEN_LEAD_REGEX } from '@/domain/leads/limites';
+import { alternarModulo, modulosSeleccionados, sanearManual, type ModulosManual } from './modulos';
 
 /** Lo que la persona armó en una demo (paleta y tipo de cocina), si vino de ahí. */
 export interface DesdeDemo {
@@ -15,16 +16,16 @@ export interface DesdeDemo {
 }
 
 /**
- * Pasos del wizard (docs/plan-sprint.md §6):
- * 1 necesidad (con "Otra cosa") → 2 rubro → 3 módulos → 4 solo WhatsApp (guarda el lead parcial)
- * → 5 completar (solo el nombre del negocio es obligatorio) → 6 confirmación.
+ * Pantallas del flujo "tu negocio, armado en 60 segundos":
+ * rubro → (solo "Otro": aMedida, el pedido libre) → negocio (nombre, WhatsApp y ciudad: guarda el
+ * lead parcial) → resultado ("Así te queda", o "Lo armamos a medida") → completar (opcional) → listo.
  *
- * Quien viene de una demo ya eligió rubro y nombre del local: entra en 3 (módulos) y el 4 es el
- * formulario completo de un solo envío (no hay 5).
+ * Quien viene de una demo ya eligió rubro y nombre del local: entra en `negocio`, con el nombre
+ * cargado.
  */
-export type Paso = 1 | 2 | 3 | 4 | 5 | 6;
-export const PASO_CONFIRMACION: Paso = 6;
-export const STORAGE_KEY = 'webya:empezar:v2';
+export const PASOS = ['rubro', 'aMedida', 'negocio', 'resultado', 'completar', 'listo'] as const;
+export type Paso = (typeof PASOS)[number];
+export const STORAGE_KEY = 'webya:empezar:v3';
 
 /** El lead parcial ya guardado: con el token se completa después (PATCH /api/leads/[id]). */
 export interface LeadGuardado {
@@ -32,22 +33,24 @@ export interface LeadGuardado {
   token: string;
 }
 
-/** Cómo terminó: completo (mandó sus datos) o parcial (dejó solo el WhatsApp). */
-export type Confirmacion = 'completo' | 'parcial';
+/** Datos que se piden: los de la pantalla 2 (negocio, WhatsApp, ciudad) y los de completar. */
+export interface DatosFlujo extends DatosForm {
+  ciudad: string;
+}
 
 export interface WizardState {
   paso: Paso;
   /** 1 = avanzó, -1 = volvió. Solo orienta la animación; no se guarda. */
   direccion: 1 | -1;
-  necesidades: string[];
-  /** Texto de "Otra cosa / a medida" (se manda solo si "Otra cosa" está marcada). */
-  necesidadLibre: string;
   rubro: string | null;
-  rubroOtro: string;
-  objetivos: string[];
-  datos: DatosForm;
+  /** Pedido libre de "Otro / a medida" (hasta 500 caracteres). */
+  necesidadLibre: string;
+  /** Decisiones a mano sobre los módulos del rubro (en la vista previa). */
+  modulosManual: ModulosManual;
+  datos: DatosFlujo;
   lead: LeadGuardado | null;
-  confirmacion: Confirmacion | null;
+  /** Mandó los datos de "completar" (la pantalla final lo agradece). */
+  completo: boolean;
   /** Ya se leyó sessionStorage. Hasta entonces no se persiste nada (evita pisar lo guardado). No se guarda. */
   hidratado: boolean;
   /** La persona ya navegó el flujo: recién ahí se mueve el foco al cambiar de paso. No se guarda. */
@@ -58,25 +61,24 @@ export interface WizardState {
   demo: DesdeDemo | null;
 }
 
-export const DATOS_VACIOS: DatosForm = {
+export const DATOS_VACIOS: DatosFlujo = {
   nombreNegocio: '',
   nombre: '',
   whatsapp: '',
   email: '',
   mensaje: '',
+  ciudad: '',
 };
 
 export const ESTADO_INICIAL: WizardState = {
-  paso: 1,
+  paso: 'rubro',
   direccion: 1,
-  necesidades: [],
-  necesidadLibre: '',
   rubro: null,
-  rubroOtro: '',
-  objetivos: [],
+  necesidadLibre: '',
+  modulosManual: {},
   datos: DATOS_VACIOS,
   lead: null,
-  confirmacion: null,
+  completo: false,
   hidratado: false,
   interactuo: false,
   origen: null,
@@ -85,122 +87,101 @@ export const ESTADO_INICIAL: WizardState = {
 
 export type Accion =
   | { tipo: 'hidratar'; estado: WizardState | null }
-  | { tipo: 'toggleNecesidad'; id: string }
-  | { tipo: 'necesidadLibre'; texto: string }
   | { tipo: 'elegirRubro'; id: string }
-  | { tipo: 'rubroOtro'; texto: string }
-  | { tipo: 'toggleObjetivo'; id: string }
-  | { tipo: 'datos'; datos: Partial<DatosForm> }
-  | { tipo: 'leadParcial'; lead: LeadGuardado; whatsapp: string }
+  | { tipo: 'necesidadLibre'; texto: string }
+  | { tipo: 'alternarModulo'; id: ModuloId }
+  | { tipo: 'datos'; datos: Partial<DatosFlujo> }
+  | { tipo: 'leadParcial'; lead: LeadGuardado }
   | { tipo: 'irA'; paso: Paso }
-  | { tipo: 'confirmar'; como: Confirmacion }
+  | { tipo: 'completado' }
   | { tipo: 'reiniciar' };
 
-const alternar = (lista: string[], id: string) =>
-  lista.includes(id) ? lista.filter((x) => x !== id) : [...lista, id];
+const indice = (p: Paso) => PASOS.indexOf(p);
 
 export function reducer(state: WizardState, accion: Accion): WizardState {
   switch (accion.tipo) {
     case 'hidratar':
       return { ...(accion.estado ?? state), hidratado: true };
-    case 'toggleNecesidad':
-      return { ...state, necesidades: alternar(state.necesidades, accion.id) };
+    case 'elegirRubro':
+      // Cambiar de rubro descarta lo decidido a mano sobre los módulos del anterior.
+      return state.rubro === accion.id
+        ? state
+        : { ...state, rubro: accion.id, modulosManual: {} };
     case 'necesidadLibre':
       return { ...state, necesidadLibre: accion.texto };
-    case 'elegirRubro': {
-      if (state.rubro === accion.id) return state;
-      // Al cambiar de rubro se conservan solo los objetivos que el nuevo rubro también ofrece.
-      const validos = new Set(getRubro(accion.id)?.objetivos.map((o) => o.id));
+    case 'alternarModulo':
       return {
         ...state,
-        rubro: accion.id,
-        objetivos: state.objetivos.filter((o) => validos.has(o)),
+        modulosManual: alternarModulo(state.rubro, state.modulosManual, accion.id),
       };
-    }
-    case 'rubroOtro':
-      return { ...state, rubroOtro: accion.texto };
-    case 'toggleObjetivo':
-      return { ...state, objetivos: alternar(state.objetivos, accion.id) };
     case 'datos':
       return { ...state, datos: { ...state.datos, ...accion.datos } };
     case 'leadParcial':
-      return {
-        ...state,
-        lead: accion.lead,
-        datos: { ...state.datos, whatsapp: accion.whatsapp },
-      };
+      return { ...state, lead: accion.lead };
     case 'irA':
       return {
         ...state,
         paso: accion.paso,
-        direccion: accion.paso >= state.paso ? 1 : -1,
+        direccion: indice(accion.paso) >= indice(state.paso) ? 1 : -1,
         interactuo: true,
       };
-    case 'confirmar':
-      return { ...state, confirmacion: accion.como };
+    case 'completado':
+      return { ...state, completo: true };
     case 'reiniciar':
       return { ...ESTADO_INICIAL, direccion: -1, hidratado: true, interactuo: true };
   }
 }
 
-/** Vino de una demo: flujo corto (módulos → formulario completo → confirmación). */
-export const esFlujoDemo = (state: Pick<WizardState, 'origen'>) => state.origen !== null;
+/** Eligió "Otro": no hay vista previa, se arma a medida. */
+export const esAMedida = (state: Pick<WizardState, 'rubro'>) => state.rubro === RUBRO_OTRO_ID;
 
-/** Paso y total que se muestran ("Paso 3 de 5"). La confirmación cuenta como el último. */
-export function progreso(state: Pick<WizardState, 'paso' | 'origen'>): {
-  paso: number;
-  total: number;
-} {
-  const total = esFlujoDemo(state) ? 4 : 5;
-  return { paso: Math.min(state.paso, total), total };
+/** Módulos activos: los del rubro (sin los "próximamente") más lo decidido a mano. */
+export const modulosDe = (state: Pick<WizardState, 'rubro' | 'modulosManual'>): ModuloId[] =>
+  esAMedida(state) ? [] : modulosSeleccionados(state.rubro, state.modulosManual);
+
+/** Las 3 pantallas que se cuentan ("Paso 2 de 3"): el pedido a medida es parte de la primera. */
+export const TOTAL_PANTALLAS = 3;
+
+export function pantallaDe(paso: Paso): number {
+  if (paso === 'rubro' || paso === 'aMedida') return 1;
+  return paso === 'negocio' ? 2 : 3;
 }
 
-/** Marcó "Otra cosa": se manda el texto libre y la confirmación lo menciona. */
-export const marcoOtraCosa = (state: Pick<WizardState, 'necesidades'>) =>
-  state.necesidades.includes(NECESIDAD_OTRA_ID);
-
-/**
- * Mensaje amable si todavía no se puede avanzar desde ese paso; null si se puede.
- * `cantidadModulos`: módulos activos (viven en modulos-store, no en este estado).
- */
-export function errorParaAvanzar(
-  state: WizardState,
-  desde: 1 | 2 | 3,
-  cantidadModulos: number,
-): string | null {
-  if (desde === 1) {
-    if (state.necesidades.length === 0) return WIZARD.errores.sinNecesidad;
-    if (marcoOtraCosa(state)) {
-      const libre = state.necesidadLibre.trim();
-      if (libre === '') return WIZARD.errores.necesidadLibreVacia;
-      if (libre.length < LIMITES.necesidadLibreMin) return WIZARD.errores.necesidadLibreCorta;
-    }
-    return null;
+/** A qué pantalla se vuelve con "Atrás" (null = no hay atrás). */
+export function pasoAnterior(state: Pick<WizardState, 'paso' | 'rubro'>): Paso | null {
+  switch (state.paso) {
+    case 'aMedida':
+      return 'rubro';
+    case 'negocio':
+      return esAMedida(state) ? 'aMedida' : 'rubro';
+    case 'completar':
+      return 'resultado';
+    // Con el lead ya guardado no se vuelve al formulario: se completa o se sigue por WhatsApp.
+    default:
+      return null;
   }
-  if (desde === 2) {
-    if (!state.rubro) return WIZARD.errores.sinRubro;
-    if (state.rubro === RUBRO_OTRO_ID && state.rubroOtro.trim().length < 2) {
-      return WIZARD.errores.sinRubroOtro;
-    }
-    return null;
-  }
-  // Los módulos son opcionales en el lead parcial; el envío completo (desde la demo) pide uno.
-  return esFlujoDemo(state) && cantidadModulos === 0 ? WIZARD.errores.sinModulos : null;
 }
 
-/** ¿Hay algo avanzado en el wizard guardado? */
+/** Mensaje amable si todavía no se puede dejar el pedido a medida; null si se puede. */
+export function errorAMedida(texto: string): string | null {
+  const libre = texto.trim();
+  if (libre === '') return WIZARD.errores.necesidadLibreVacia;
+  return libre.length < LIMITES.necesidadLibreMin ? WIZARD.errores.necesidadLibreCorta : null;
+}
+
+/** ¿Hay algo avanzado en el flujo guardado? */
 export function hayProgresoGuardado(storage: StorageLike): boolean {
   const estado = leerEstadoGuardado(storage);
-  return (
-    estado !== null && (estado.rubro !== null || estado.paso > 1 || estado.necesidades.length > 0)
-  );
+  return estado !== null && (estado.rubro !== null || estado.paso !== 'rubro');
 }
 
-/** Nombre del rubro para mostrar y para el mensaje de WhatsApp (si es "Otro", lo que escribió). */
-export function nombreRubroVisible(state: Pick<WizardState, 'rubro' | 'rubroOtro'>): string {
-  if (state.rubro === RUBRO_OTRO_ID) return state.rubroOtro.trim() || WIZARD.rubroOtroSinTexto;
+/** Nombre del rubro para mostrar y para el mensaje de WhatsApp. */
+export function nombreRubroVisible(state: Pick<WizardState, 'rubro'>): string {
   return getRubro(state.rubro)?.nombre ?? '';
 }
+
+/** Nombres de los módulos activos (para el mensaje de WhatsApp). */
+export const nombresModulos = (ids: readonly ModuloId[]) => ids.map((id) => getModulo(id).nombre);
 
 // --- Persistencia (sessionStorage) -------------------------------------------------------------
 
@@ -210,16 +191,14 @@ export function guardarEstado(state: WizardState, storage: StorageLike): void {
   try {
     const persistible = {
       paso: state.paso,
-      necesidades: state.necesidades,
-      necesidadLibre: state.necesidadLibre,
       rubro: state.rubro,
-      rubroOtro: state.rubroOtro,
-      objetivos: state.objetivos,
+      necesidadLibre: state.necesidadLibre,
+      modulosManual: state.modulosManual,
       datos: state.datos,
       // El token vive en sessionStorage como el resto del flujo: se va al cerrar la pestaña y la
       // API lo acepta una sola vez y por 6 horas.
       lead: state.lead,
-      confirmacion: state.confirmacion,
+      completo: state.completo,
       origen: state.origen,
       demo: state.demo,
     };
@@ -261,19 +240,20 @@ function sanearLead(v: unknown): LeadGuardado | null {
 }
 
 /** El paso guardado, corregido para que nunca quede en uno al que no se pudo haber llegado. */
-function pasoCoherente(
-  d: Record<string, unknown>,
-  e: Pick<WizardState, 'necesidades' | 'rubro' | 'lead' | 'confirmacion' | 'origen'>,
+export function pasoCoherente(
+  paso: unknown,
+  e: Pick<WizardState, 'rubro' | 'necesidadLibre' | 'lead' | 'completo'>,
 ): Paso {
-  const demo = esFlujoDemo(e);
-  let paso = [1, 2, 3, 4, 5, 6].includes(d.paso as number) ? (d.paso as Paso) : 1;
-  if (e.confirmacion && e.rubro) return 6;
-  if (paso === 6) paso = demo ? 4 : e.lead ? 5 : 4;
-  if (demo && paso === 5) paso = 4;
-  if (!demo && paso === 5 && !e.lead) paso = 4;
-  if (paso >= 3 && !e.rubro) paso = 2;
-  if (paso >= 2 && !demo && e.necesidades.length === 0) paso = 1;
-  return paso;
+  const p: Paso = (PASOS as readonly unknown[]).includes(paso) ? (paso as Paso) : 'rubro';
+  if (!e.rubro) return 'rubro';
+  const aMedida = esAMedida(e);
+  if (p === 'aMedida') return aMedida ? 'aMedida' : 'negocio';
+  if (aMedida && p !== 'rubro' && errorAMedida(e.necesidadLibre)) return 'aMedida';
+  if (p === 'resultado' || p === 'completar' || p === 'listo') {
+    if (!e.lead) return 'negocio';
+    if (p === 'listo' && !e.completo) return 'resultado';
+  }
+  return p;
 }
 
 /** Lee y SANEA lo guardado: nunca se confía en lo que haya en storage. */
@@ -282,38 +262,31 @@ export function leerEstadoGuardado(storage: StorageLike): WizardState | null {
     const raw = storage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const d = JSON.parse(raw) as Record<string, unknown>;
+    if (!d || typeof d !== 'object') return null;
     const rubro = typeof d.rubro === 'string' && getRubro(d.rubro) ? d.rubro : null;
-    const validos = new Set(getRubro(rubro)?.objetivos.map((o) => o.id));
-    const objetivos = Array.isArray(d.objetivos)
-      ? d.objetivos.filter((o): o is string => typeof o === 'string' && validos.has(o))
-      : [];
-    const necesidades = Array.isArray(d.necesidades)
-      ? [...new Set(d.necesidades)].filter(
-          (n): n is string => typeof n === 'string' && getNecesidad(n) !== undefined,
-        )
-      : [];
     const datos = (d.datos ?? {}) as Record<string, unknown>;
     const lead = sanearLead(d.lead);
-    const confirmacion: Confirmacion | null =
-      d.confirmacion === 'completo' || d.confirmacion === 'parcial' ? d.confirmacion : null;
-    const origen = esOrigen(d.origen) ? d.origen : null;
-    const base = { necesidades, rubro, lead, confirmacion: rubro ? confirmacion : null, origen };
+    const necesidadLibre = str(d.necesidadLibre, LIMITES.necesidadLibre);
+    const completo = d.completo === true && lead !== null;
     return {
-      ...base,
-      paso: pasoCoherente(d, base),
+      paso: pasoCoherente(d.paso, { rubro, necesidadLibre, lead, completo }),
       direccion: 1,
-      necesidadLibre: str(d.necesidadLibre, LIMITES.necesidadLibre),
-      rubroOtro: str(d.rubroOtro, LIMITES.rubroOtro),
-      objetivos,
+      rubro,
+      necesidadLibre,
+      modulosManual: sanearManual(d.modulosManual),
       datos: {
         nombreNegocio: str(datos.nombreNegocio, LIMITES.nombreNegocio),
         nombre: str(datos.nombre, LIMITES.nombre),
         whatsapp: str(datos.whatsapp, 30),
         email: str(datos.email, LIMITES.email),
         mensaje: str(datos.mensaje, LIMITES.mensaje),
+        ciudad: str(datos.ciudad, LIMITES.ciudad),
       },
+      lead,
+      completo,
       hidratado: false,
       interactuo: false,
+      origen: esOrigen(d.origen) ? d.origen : null,
       demo: sanearDemo(d.demo),
     };
   } catch {

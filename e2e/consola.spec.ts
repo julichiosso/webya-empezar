@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { abrirWizard, pasarNecesidad, tocar, wizard } from './helpers';
+import { abrirWizard, elegirRubro, TITULO_NEGOCIO, TITULO_RUBRO, wizard } from './helpers';
 
 /** Junta errores y advertencias de la consola (incluye los de hidratación) y excepciones de la página. */
 function vigilarConsola(page: Page) {
@@ -11,20 +11,14 @@ function vigilarConsola(page: Page) {
   return problemas;
 }
 
-test('sin errores ni advertencias de consola al cargar, abrir el wizard e interactuar', async ({
+test('sin errores ni advertencias de consola al cargar, tocar un rubro y avanzar', async ({
   page,
 }) => {
   const problemas = vigilarConsola(page);
   await page.goto('/empezar', { waitUntil: 'networkidle' });
-  await page
-    .getByRole('group', { name: /armá tu negocio/i })
-    .getByRole('button', { name: /turnos y reservas/i })
-    .click();
   await abrirWizard(page);
-  await pasarNecesidad(page);
-  await tocar(page, /gastronomía/i);
-  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-  await expect(wizard(page).getByRole('heading', { name: '¿Qué querés activar?' })).toBeVisible();
+  await elegirRubro(page, 'gastronomia');
+  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
   expect(problemas).toEqual([]);
 });
 
@@ -34,35 +28,32 @@ test('hidratar con estado guardado en sessionStorage no genera diferencias servi
   const problemas = vigilarConsola(page);
   await page.addInitScript(() => {
     sessionStorage.setItem(
-      'webya:empezar:v2',
-      JSON.stringify({
-        paso: 3,
-        necesidades: ['cobrar'],
-        necesidadLibre: '',
-        rubro: 'comercio',
-        rubroOtro: '',
-        objetivos: [],
-        datos: { nombreNegocio: '', nombre: '', whatsapp: '', email: '', mensaje: '' },
-        lead: null,
-        confirmacion: null,
-      }),
+      'webya:empezar:v3',
+      JSON.stringify({ paso: 'negocio', rubro: 'comercio', datos: { nombreNegocio: 'Luna' } }),
     );
-    sessionStorage.setItem('webya:empezar:modulos:v1', JSON.stringify({ carta_qr: true }));
   });
   await page.goto('/empezar', { waitUntil: 'networkidle' });
-  await abrirWizard(page);
-  await expect(wizard(page).getByRole('heading', { name: '¿Qué querés activar?' })).toBeVisible();
-  await expect(
-    page
-      .getByRole('group', { name: /armá tu negocio/i })
-      .getByRole('button', { name: /carta con qr/i }),
-  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
+  await expect(wizard(page).getByLabel('Nombre de tu negocio')).toHaveValue('Luna');
   expect(problemas).toEqual([]);
 });
 
-test('en una sesión limpia el hero arranca con los 4 módulos apagados', async ({ page }) => {
-  await page.goto('/empezar', { waitUntil: 'networkidle' });
-  const botones = page.getByRole('group', { name: /armá tu negocio/i }).getByRole('button');
-  await expect(botones).toHaveCount(4);
-  for (const b of await botones.all()) await expect(b).toHaveAttribute('aria-pressed', 'false');
+test('tocar un rubro antes de que llegue el wizard igual avanza (sin perder el toque)', async ({
+  page,
+}) => {
+  const problemas = vigilarConsola(page);
+  // Lo que se pide después de cargar (el chunk del wizard) llega tarde: el toque pasa sobre el
+  // HTML del servidor.
+  let cargada = false;
+  page.on('load', () => (cargada = true));
+  await page.route(/_next\/static\/chunks\/.*\.js/, async (route) => {
+    if (cargada) await new Promise((r) => setTimeout(r, 800));
+    await route.continue();
+  });
+  await page.goto('/empezar', { waitUntil: 'load' });
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
+  await elegirRubro(page, 'comercio');
+  await expect(wizard(page).locator('[data-rubro="comercio"]')).toHaveAttribute('data-cargando');
+  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
+  expect(problemas).toEqual([]);
 });

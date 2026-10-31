@@ -41,6 +41,7 @@ describe('config de rubros', () => {
     it('respeta los límites de texto', () => {
       expect(rubro.nombre.length).toBeGreaterThan(0);
       expect(rubro.nombre.length).toBeLessThanOrEqual(LIMITES_RUBRO.nombre);
+      expect((rubro.nombreCorto ?? '').length).toBeLessThanOrEqual(LIMITES_RUBRO.nombreCorto);
       expect(rubro.descripcionCorta.length).toBeLessThanOrEqual(LIMITES_RUBRO.descripcionCorta);
       expect(rubro.ejemploResultado.length).toBeLessThanOrEqual(LIMITES_RUBRO.ejemploResultado);
       expect(rubro.icono).toMatch(ID_VALIDO);

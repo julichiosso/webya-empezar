@@ -8,6 +8,10 @@
 @import '../brand/tokens/tokens.css';
 @import '../brand/motion/motion.css';
 
+/* Escritorio bajo (notebooks de 720-800 px de alto): la pantalla 1 de /empezar se compacta para
+   entrar entera arriba del pliegue. Se usa como `lg:bajo:…`. */
+@custom-variant bajo (@media (max-height: 820px));
+
 /* Efecto, no color: grano apenas perceptible (máscara de ruido fractal teñida con --fg). */
 :root {
   --noise-opacity: 0.035;

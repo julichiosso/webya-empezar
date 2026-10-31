@@ -9,15 +9,15 @@ interface StepHeaderProps {
 
 export function StepHeader({ title, subtitle, headingRef }: StepHeaderProps) {
   return (
-    <header className="mb-6">
+    <header className="mb-4 sm:mb-6">
       <h2
         ref={headingRef}
         tabIndex={-1}
-        className="text-title font-semibold text-balance outline-none focus-visible:outline-none"
+        className="text-heading font-semibold text-balance outline-none focus-visible:outline-none sm:text-title"
       >
         {title}
       </h2>
-      {subtitle && <p className="mt-2 text-lead text-muted">{subtitle}</p>}
+      {subtitle && <p className="mt-1 text-body text-muted sm:mt-2 sm:text-lead">{subtitle}</p>}
     </header>
   );
 }

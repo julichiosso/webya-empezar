@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CLAVE_TRASPASO_DEMO, dejarTraspasoDemo } from '@/domain/traspaso/demo-wizard';
 import { aplicarTraspasoDemo } from './desde-demo';
-import { modulosSeleccionados } from './modulos';
-import { leerManualGuardado } from './modulos-store';
-import { leerEstadoGuardado, sanearDemo, STORAGE_KEY } from './state';
+import { leerEstadoGuardado, modulosDe, sanearDemo, STORAGE_KEY } from './state';
 
 function storage() {
   const datos = new Map<string, string>();
@@ -22,25 +20,21 @@ const TRASPASO = {
   demo: { paleta: 'pileta', cocina: 'parrilla' },
 } as const;
 
-describe('de la demo al wizard (traspaso por domain/traspaso)', () => {
-  it('deja el wizard en el paso 3 (módulos) con rubro, nombre, origen y lo armado en la demo', () => {
+describe('de la demo al flujo (traspaso por domain/traspaso)', () => {
+  it('deja el flujo en la pantalla 2 con rubro, nombre, origen y lo armado en la demo', () => {
     const s = storage();
     dejarTraspasoDemo(TRASPASO, s);
     expect(aplicarTraspasoDemo(s)).toBe(true);
     const e = leerEstadoGuardado(s);
     expect(e).toMatchObject({
-      paso: 3,
+      paso: 'negocio',
       rubro: 'gastronomia',
       origen: 'demo_gastronomia',
       demo: { paleta: 'pileta', cocina: 'parrilla' },
     });
     expect(e?.datos.nombreNegocio).toBe('Lo de Tito');
-
     // Los módulos activos son EXACTAMENTE los de la demo (lo sugerido que no está, apagado).
-    const manual = leerManualGuardado(s);
-    expect(modulosSeleccionados('gastronomia', manual).sort()).toEqual(
-      ['carta_qr', 'notificaciones', 'pagos'].sort(),
-    );
+    expect(modulosDe(e!).sort()).toEqual(['carta_qr', 'notificaciones', 'pagos'].sort());
   });
 
   it('se toma una sola vez: después no queda nada que aplicar', () => {
@@ -62,46 +56,20 @@ describe('de la demo al wizard (traspaso por domain/traspaso)', () => {
       JSON.stringify({ ...TRASPASO, modulos: ['carta_qr', 'virus'], demo: { paleta: 'x' } }),
     );
     expect(aplicarTraspasoDemo(s)).toBe(true);
-    expect(leerEstadoGuardado(s)?.demo).toBeNull();
-    expect(modulosSeleccionados('gastronomia', leerManualGuardado(s))).toEqual(['carta_qr']);
+    const e = leerEstadoGuardado(s)!;
+    expect(e.demo).toBeNull();
+    expect(modulosDe(e)).toEqual(['carta_qr']);
 
     s.setItem(CLAVE_TRASPASO_DEMO, '{roto');
     expect(aplicarTraspasoDemo(s)).toBe(false);
   });
 
-  it('al leer, sanea origen y demo: nada fuera de las listas cerradas', () => {
-    const s = storage();
-    s.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        paso: 3,
-        rubro: 'gastronomia',
-        origen: 'hackeado',
-        demo: { paleta: 'arcoiris', cocina: 'parrilla' },
-      }),
-    );
-    const e = leerEstadoGuardado(s);
-    expect(e?.origen).toBeNull();
-    expect(e?.demo).toBeNull();
-    // Sin origen es el flujo de siempre: sin necesidades marcadas vuelve al paso 1.
-    expect(e?.paso).toBe(1);
+  it('sanearDemo: solo paletas y cocinas de la demo', () => {
     expect(sanearDemo({ paleta: 'brasa', cocina: 'sushi' })).toBeNull();
     expect(sanearDemo('nada')).toBeNull();
     expect(sanearDemo({ paleta: 'brasa', cocina: 'cafe', extra: 1 })).toEqual({
       paleta: 'brasa',
       cocina: 'cafe',
     });
-  });
-
-  it('al leer, sanea el lead guardado: un token con otro formato se descarta', () => {
-    const s = storage();
-    const base = { paso: 5, necesidades: ['turnos'], rubro: 'comercio' };
-    s.setItem(STORAGE_KEY, JSON.stringify({ ...base, lead: { id: 'abc', token: 'corto' } }));
-    expect(leerEstadoGuardado(s)).toMatchObject({ lead: null, paso: 4 });
-    s.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ ...base, lead: { id: 'abc-123', token: 'a'.repeat(43) } }),
-    );
-    expect(leerEstadoGuardado(s)).toMatchObject({ paso: 5, lead: { id: 'abc-123' } });
   });
 });

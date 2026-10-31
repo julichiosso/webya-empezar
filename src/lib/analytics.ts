@@ -9,13 +9,18 @@
 
 export interface EventosAnalitica {
   empezar_view: Record<string, never>;
-  rubro_seleccionado: { rubro: string };
-  paso_completado: { paso: number; nombre: string };
-  lead_enviado: { rubro: string; modulos: number; objetivos: number };
-  // Flujo en dos tiempos: primero solo el WhatsApp (lead parcial), después completar u omitir.
-  lead_parcial: { rubro: string; modulos: number; necesidades: number };
+  // Flujo "tu negocio, armado en un minuto": rubro → formulario → vista previa → CTA.
+  rubro_elegido: { rubro: string };
+  /** Se guardó el lead parcial (pantalla 2). `orden`: el del experimento (config/experimentos). */
+  form_enviado: { rubro: string; ciudad: boolean; orden: string };
+  preview_visto: { rubro: string; paleta: string };
+  preview_toggle: { dispositivo: 'celular' | 'escritorio' };
+  demo_abierta: { rubro: string; paleta: string };
+  cta_click: { destino: 'whatsapp'; rubro: string; modulos: number };
+  /** Se fue (pestaña oculta o cerrada) sin llegar al CTA. Una vez por visita. */
+  abandono_paso: { paso: string };
   lead_completado: { completo: boolean };
-  modulo_alternado: { modulo: string; activo: boolean; origen: 'hero' | 'wizard' };
+  modulo_alternado: { modulo: string; activo: boolean; origen: 'preview' };
   whatsapp_click: { origen: 'confirmacion' | 'flotante' };
   // Demos de rubro (/demo/<rubro>). `demo` es el rubro (p. ej. 'gastronomia').
   demo_view: { demo: string; cocina: string };

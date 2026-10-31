@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import { SplashLogo } from '@/brand/logo/SplashLogo';
-import { AMedida } from '@/components/marketing/AMedida';
 import { ID_CONTENIDO, Nav } from '@/components/marketing/Nav';
-import { HeroMockupConectado } from '@/features/empezar/HeroMockupConectado';
+import { PreviewPanel } from '@/components/patterns/PreviewPanel';
+import { Marco } from '@/features/empezar/Marco';
+import { PantallaRubro } from '@/features/empezar/PantallaRubro';
 import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
-import { ComoFunciona } from '@/components/marketing/ComoFunciona';
 import { ComoTrabajamos } from '@/components/marketing/ComoTrabajamos';
 import { CtaFinal } from '@/components/marketing/CtaFinal';
 import { StickyCta } from '@/components/marketing/StickyCta';
-import { Confianza, VitrinaDemo } from '@/components/marketing/Confianza';
+import { Confianza } from '@/components/marketing/Confianza';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
 import { Hero } from '@/components/marketing/Hero';
@@ -61,12 +61,18 @@ export default function EmpezarPage() {
         id={ID_CONTENIDO}
         className="mx-auto w-full max-w-xl px-4 pb-24 lg:max-w-page lg:px-8 lg:pb-32"
       >
-        <Hero mockup={<HeroMockupConectado />} accion={<BotonExplicativo origen="empezar" />} />
-        <WizardLazy />
-        <VitrinaDemo />
-        <ComoFunciona />
+        <Hero>
+          {/* Pantalla 1 en el HTML del servidor: se ve y se toca antes de que llegue el wizard. */}
+          <WizardLazy>
+            <Marco pantalla={1} aside={<PreviewPanel activos={[]} />}>
+              <PantallaRubro animar />
+            </Marco>
+          </WizardLazy>
+          <div className="mt-6 flex justify-center">
+            <BotonExplicativo origen="empezar" />
+          </div>
+        </Hero>
         <QueIncluye />
-        <AMedida />
         <Confianza />
         <ComoTrabajamos />
         <Faq />

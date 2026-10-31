@@ -124,16 +124,32 @@ describe('SupabaseLeadRepository — lead parcial', () => {
     expect(insertados[0]).toEqual({ ...PARCIAL, estado: 'parcial' });
   });
 
-  it('crearParcial: si la columna ciudad todavía no existe, guarda sin ella', async () => {
-    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+  it('crearParcial: sin la columna ciudad guarda el lead completo (menos la ciudad) y lo avisa', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const { client, insertados } = clienteFalso([
       { error: { code: 'PGRST204', message: "Could not find the 'ciudad' column of 'leads'" } },
       { data: { id: 'p3' } },
     ]);
     const repo = new SupabaseLeadRepository('', '', client);
-    expect(await repo.crearParcial({ ...PARCIAL, ciudad: 'San Jorge' })).toEqual({ id: 'p3' });
+    const lead = { ...PARCIAL, nombre_negocio: 'Lo de Tito', ciudad: 'San Jorge' };
+    expect(await repo.crearParcial(lead)).toEqual({ id: 'p3' });
+    expect(insertados).toHaveLength(2);
     expect(insertados[0]).toMatchObject({ ciudad: 'San Jorge' });
-    expect(insertados[1]).not.toHaveProperty('ciudad');
+    // El reintento lleva TODO lo demás, tal cual: no se pierde ningún dato del lead.
+    const resto: Record<string, unknown> = { ...lead };
+    delete resto.ciudad;
+    expect(insertados[1]).toEqual({ ...resto, estado: 'parcial' });
+    // No es silencioso: queda el aviso de qué migración aplicar.
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('leads_ciudad'));
+  });
+
+  it('crearParcial: si falla por otra cosa con ciudad, no reintenta a ciegas: informa el error', async () => {
+    const { client, insertados } = clienteFalso([
+      { error: { code: '23514', message: 'violates check constraint "leads_ciudad_check"' } },
+    ]);
+    const repo = new SupabaseLeadRepository('', '', client);
+    await expect(repo.crearParcial({ ...PARCIAL, ciudad: 'x' })).rejects.toThrow('23514');
+    expect(insertados).toHaveLength(1);
   });
 
   it('crearParcial: sin la migración avisa qué aplicar y falla (no hay fallback)', async () => {

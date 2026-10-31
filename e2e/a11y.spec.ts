@@ -2,11 +2,11 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import {
   abrirWizard,
-  completarNegocio,
+  completarDatos,
+  elegirRubro,
   irAlPaso,
   negocioUnico,
-  TITULO_FINAL,
-  tocar,
+  TITULO_GRACIAS,
   wizard,
 } from './helpers';
 
@@ -33,56 +33,38 @@ test('página completa sin violaciones WCAG AA', async ({ page }) => {
   await auditar(page);
 });
 
-test('hero con la pista visible sin violaciones', async ({ page }) => {
-  await page.goto('/empezar');
-  await page.getByRole('group', { name: /armá tu negocio/i }).scrollIntoViewIfNeeded();
-  await expect(page.getByText('Tocá para activar')).toBeVisible();
-  await auditar(page);
-});
-
-test('hero con módulos activados sin violaciones', async ({ page }) => {
-  await page.goto('/empezar');
-  const hero = page.getByRole('group', { name: /armá tu negocio/i });
-  await hero.getByRole('button', { name: /turnos y reservas/i }).click();
-  await hero.getByRole('button', { name: /pagos online/i }).click();
-  await expect(hero.getByRole('button', { name: /turnos y reservas/i })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
-  await auditar(page);
-});
-
-test('paso 1 con "Otra cosa" abierta y su error sin violaciones', async ({ page }) => {
-  await irAlPaso(page, 'necesidad');
-  await tocar(page, /^Otra cosa/);
+test('"Otro" con el error del pedido a medida sin violaciones', async ({ page }) => {
+  await irAlPaso(page, 'rubro');
+  await elegirRubro(page, 'otro');
   await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
   await expect(wizard(page).getByText(/aunque sea en pocas palabras/i)).toBeVisible();
   await auditar(page);
 });
 
-test('módulos (con su estado) sin violaciones', async ({ page }) => {
-  await irAlPaso(page, 'modulos');
+test('formulario con errores visibles sin violaciones', async ({ page }) => {
+  await irAlPaso(page, 'negocio');
+  await wizard(page).getByRole('button', { name: /ver cómo me queda/i }).click();
+  await expect(wizard(page).locator('[aria-invalid="true"]').first()).toBeVisible();
   await auditar(page);
 });
 
-test('WhatsApp con error visible sin violaciones', async ({ page }) => {
-  await irAlPaso(page, 'whatsapp');
-  await wizard(page).getByRole('button', { name: 'Guardar y seguir' }).click();
-  await expect(wizard(page).locator('[aria-invalid="true"]').first()).toBeVisible();
+test('vista previa ("Así te queda") sin violaciones', async ({ page }) => {
+  await irAlPaso(page, 'resultado');
   await auditar(page);
 });
 
 test('completar con errores visibles sin violaciones', async ({ page }) => {
   await irAlPaso(page, 'completar');
+  await wizard(page).getByLabel('Nombre de tu negocio').fill('');
   await wizard(page).getByRole('button', { name: 'Enviar mis datos' }).click();
   await expect(wizard(page).locator('[aria-invalid="true"]').first()).toBeVisible();
   await auditar(page);
 });
 
-test('confirmación sin violaciones', async ({ page }) => {
-  await irAlPaso(page, 'completar');
-  await completarNegocio(page, negocioUnico('a11y'));
-  await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
+test('gracias sin violaciones', async ({ page }) => {
+  await irAlPaso(page, 'completar', '', negocioUnico('a11y'));
+  await completarDatos(page);
+  await expect(wizard(page).getByRole('heading', { name: TITULO_GRACIAS })).toBeVisible();
   await auditar(page);
 });
 

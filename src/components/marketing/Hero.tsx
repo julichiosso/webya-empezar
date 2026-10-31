@@ -1,68 +1,30 @@
 import type { ReactNode } from 'react';
-import { Icon } from '@/brand/ilustracion/iconos/Icon';
-import { ButtonLink } from '@/components/ui/Button';
 import { HERO } from '@/content/empezar/hero';
 
 interface HeroProps {
-  /** El mockup interactivo, ya conectado a su estado (lo compone la página). */
-  mockup: ReactNode;
-  /** Acción secundaria junto al CTA (el video explicativo): la compone la página. */
-  accion?: ReactNode;
+  /** El flujo (pantalla 1 arriba del pliegue): lo compone la página. */
+  children: ReactNode;
 }
 
 /**
- * Hero de /empezar: promesa con su salvedad, CTA que baja al wizard, el enlace a la demo real y el
- * mockup donde se activan módulos. Desde lg va en 2 columnas (texto a la izquierda, mockup a la
- * derecha); en mobile, una columna. No importa features: lo interactivo entra por props.
+ * Hero de /empezar: el titular y, enseguida, el flujo. La pantalla 1 ("¿Qué negocio tenés?")
+ * tiene que entrar arriba del pliegue también en un iPhone SE, así que el titular es corto y en
+ * celular va un escalón más chico. No importa features: el flujo entra por `children`.
  */
-export function Hero({ mockup, accion }: HeroProps) {
+export function Hero({ children }: HeroProps) {
   return (
-    // Sin CLS con red lenta: el HTML llega en tandas y el texto se pinta antes que el mockup. Centrado
-    // en la fila, el texto saltaba cuando crecía la fila (llegaba el mockup) o la columna (llegaba su
-    // final). Por eso la fila reserva el alto del mockup (694 px, fijo desde lg) y el texto va arriba
-    // con un margen fijo que imita el centrado (~550 px de texto): ninguno depende del otro.
-    <section
-      aria-labelledby="hero-title"
-      className="grid gap-12 pt-10 pb-12 sm:pt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:grid-rows-[minmax(43.375rem,auto)] lg:items-start lg:gap-16 lg:pt-24 lg:pb-24"
-    >
-      <div className="lg:pt-18">
-        <h1 id="hero-title" className="text-display font-semibold text-balance lg:text-hero">
-          {HERO.titulo}
-          {/* En celular la salvedad va un escalón más chica: el título entra en 2 líneas y la promesa manda. */}
-          <span className="mt-2 block text-title font-medium text-muted lg:mt-3 lg:text-hero-sub">
-            {HERO.subtitulo}
-          </span>
-        </h1>
-        <p className="mt-6 max-w-md text-lead text-muted lg:mt-8">{HERO.bajada}</p>
-        {/* En celular, los dos botones apilados y del mismo ancho (grid estira cada uno); desde sm, en fila. */}
-        <div className="mt-8 grid gap-3 sm:flex sm:flex-wrap lg:mt-10">
-          <ButtonLink href="#wizard">
-            {HERO.cta}
-            <Icon name="arrowDown" size={20} />
-          </ButtonLink>
-          {accion}
-        </div>
-        <a
-          href="/demo/gastronomia"
-          className="-mx-2 mt-3 inline-flex min-h-tap items-center px-2 text-body text-muted underline underline-offset-4 hover:text-fg"
-        >
-          {HERO.enlaceDemo}
-        </a>
-        <ul className="mt-8 hidden flex-col gap-4 lg:flex">
-          {/* Señales de confianza: promesas que ya cumplimos (solo escritorio). */}
-          {HERO.senales.map((s) => (
-            <li key={s} className="flex items-center gap-3 text-body text-muted">
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-line-strong text-fg">
-                <Icon name="check" size={14} />
-              </span>
-              {s}
-            </li>
-          ))}
-        </ul>
-        {/* Pendiente visible hasta que se confirme el plazo de respuesta (no se promete antes). */}
-        <p className="mt-4 hidden text-small text-subtle lg:block">{HERO.todoPlazo}</p>
-      </div>
-      {mockup}
+    <section aria-labelledby="hero-title" className="pt-3 pb-12 sm:pt-10 lg:pt-8 lg:pb-24 lg:bajo:pt-2">
+      {/* En celular el titular va chico: la pantalla 1 (la pregunta y los rubros) manda arriba del pliegue. */}
+      <h1
+        id="hero-title"
+        className="mb-3 text-body font-semibold text-balance sm:mb-8 sm:text-display lg:mb-6 lg:text-hero lg:bajo:mb-4"
+      >
+        {HERO.titulo}
+        <span className="block text-muted sm:text-title lg:mt-1 lg:text-hero-sub">
+          {HERO.subtitulo}
+        </span>
+      </h1>
+      {children}
     </section>
   );
 }

@@ -1,24 +1,23 @@
 import { expect, test } from '@playwright/test';
-import { HERO } from '../src/content/empezar/hero';
-import { PASO_LISTO } from '../src/content/empezar/pasos';
 import {
   abrirWizard,
-  completarNegocio,
-  guardarWhatsapp,
+  completarDatos,
+  elegirRubro,
+  enviarNegocio,
   irAlPaso,
   leerLeads,
   MODULOS_PELUQUERIA,
   negocioUnico,
-  pasarNecesidad,
-  TITULO_FINAL,
-  TITULO_FINAL_PARCIAL,
-  TITULO_PASO_2,
-  TITULO_WHATSAPP,
-  tocar,
+  TITULO_A_MEDIDA,
+  TITULO_GRACIAS,
+  TITULO_NEGOCIO,
+  TITULO_RESULTADO,
+  TITULO_RESULTADO_A_MEDIDA,
+  TITULO_RUBRO,
   wizard,
 } from './helpers';
 
-test('recorrido completo: el WhatsApp guarda el lead parcial y completar lo pasa a nuevo', async ({
+test('recorrido completo: rubro → formulario (lead parcial) → vista previa → CTA → completar', async ({
   page,
 }, testInfo) => {
   const negocio = negocioUnico(testInfo.project.name);
@@ -27,132 +26,99 @@ test('recorrido completo: el WhatsApp guarda el lead parcial y completar lo pasa
     if (r.url().includes('/api/leads')) respuestas.push(`${r.request().method()} ${r.status()}`);
   });
 
-  await irAlPaso(
-    page,
-    'completar',
-    '?utm_source=instagram&utm_medium=bio&utm_campaign=lanzamiento',
-  );
+  await page.goto('/empezar?utm_source=instagram&utm_medium=bio&utm_campaign=lanzamiento');
+  await abrirWizard(page);
+  await elegirRubro(page);
+  await enviarNegocio(page, { negocio, ciudad: 'San Jorge' });
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
   expect(respuestas).toEqual(['POST 201']);
-  await completarNegocio(page, negocio);
 
-  await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
-  expect(respuestas).toEqual(['POST 201', 'PATCH 200']);
-  const resumen = wizard(page).getByRole('list', { name: /las piezas de tu negocio/i });
-  await expect(resumen).toContainText('Turnos y reservas');
-  await expect(resumen).toContainText('Tienda y catálogo');
-  const wa = wizard(page).getByRole('link', { name: /hablar por whatsapp/i });
-  await expect(wa).toHaveAttribute('href', /^https:\/\/wa\.me\/5491100000000\?text=/);
-  await expect(wizard(page).getByText(PASO_LISTO.contacto)).toBeVisible();
-  await expect(wizard(page).getByText(/lo armamos nosotros/i)).toBeVisible();
-
-  const lead = (await leerLeads()).find((l) => l.nombre_negocio === negocio);
-  expect(lead).toBeDefined();
-  expect(lead).toMatchObject({
-    nombre: 'Ana Pérez',
-    email: 'ana@luna.com',
+  // El lead parcial ya quedó guardado con todo lo de la pantalla 2.
+  const parcial = (await leerLeads()).find((l) => l.nombre_negocio === negocio);
+  expect(parcial).toMatchObject({
+    estado: 'parcial',
     whatsapp: '+5491123456789',
     rubro: 'peluqueria_estetica',
-    rubro_otro: null,
+    ciudad: 'San Jorge',
     modulos: MODULOS_PELUQUERIA,
-    objetivos: ['recibir_turnos', 'mostrar_trabajos'],
-    mensaje: 'Quiero turnos online',
-    origen: 'instagram',
     utm_source: 'instagram',
     utm_medium: 'bio',
     utm_campaign: 'lanzamiento',
-    estado: 'nuevo',
   });
-  expect(lead?.ip_hash).toMatch(/^[0-9a-f]{32,}$/);
-  expect(lead?.ip_hash).not.toMatch(/127\.0\.0\.1|::1/);
-  expect(lead?.user_agent).toBeTruthy();
+  expect(parcial?.ip_hash).toMatch(/^[0-9a-f]{32,}$/);
+
+  // CTA único: WhatsApp con rubro, nombre y módulos.
+  const cta = wizard(page).getByRole('link', { name: /quiero esto para mi negocio/i });
+  await expect(cta).toHaveAttribute('href', /^https:\/\/wa\.me\/5491100000000\?text=/);
+  const texto = decodeURIComponent((await cta.getAttribute('href')) ?? '');
+  expect(texto).toContain(negocio);
+  expect(texto).toContain('Peluquería y estética');
+  expect(texto).toContain('Turnos y reservas');
+
+  // Secundario: completar con el token (PATCH) → gracias.
+  await wizard(page)
+    .getByRole('button', { name: /dejar más datos/i })
+    .click();
+  await completarDatos(page);
+  await expect(wizard(page).getByRole('heading', { name: TITULO_GRACIAS })).toBeVisible();
+  expect(respuestas).toEqual(['POST 201', 'PATCH 200']);
+  const lead = (await leerLeads()).find((l) => l.nombre_negocio === negocio);
+  expect(lead).toMatchObject({
+    estado: 'nuevo',
+    nombre: 'Ana Pérez',
+    email: 'ana@luna.com',
+    mensaje: 'Quiero turnos online',
+  });
 });
 
-test('"Otra cosa" y "Ahora no": queda el lead parcial con el pedido a medida', async ({ page }) => {
+test('"Otro": pedido a medida → formulario → "Lo armamos a medida", sin vista previa', async ({
+  page,
+}) => {
   const pedido = `Controlar el stock de mis dos locales ${Date.now()}`;
   await page.goto('/empezar');
   await abrirWizard(page);
-  await tocar(page, /^Otra cosa/);
+  await elegirRubro(page, 'otro');
+  await expect(wizard(page).getByRole('heading', { name: TITULO_A_MEDIDA })).toBeVisible();
   await wizard(page)
-    .getByLabel(/contanos qué necesitás/i)
+    .getByLabel(/qué necesita tu negocio/i)
     .fill(pedido);
   await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-  await tocar(page, /comercio/i);
-  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
-  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_WHATSAPP })).toBeVisible();
-  await guardarWhatsapp(page);
-  await wizard(page)
-    .getByRole('button', { name: /ahora no/i })
-    .click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL_PARCIAL })).toBeVisible();
-  await expect(wizard(page).getByText(/leemos lo que nos contaste/i)).toBeVisible();
+  await enviarNegocio(page, { negocio: 'Depósito Sur', boton: /^enviar$/i });
+  await expect(
+    wizard(page).getByRole('heading', { name: TITULO_RESULTADO_A_MEDIDA }),
+  ).toBeVisible();
+  await expect(wizard(page).getByTestId('negocio-preview')).toHaveCount(0);
 
-  const lead = (await leerLeads()).find(
-    (l) => (l as unknown as { necesidad_libre: string | null }).necesidad_libre === pedido,
-  );
-  expect(lead).toMatchObject({ estado: 'parcial', rubro: 'comercio', whatsapp: '+5491123456789' });
+  const lead = (await leerLeads()).find((l) => l.necesidad_libre === pedido);
+  expect(lead).toMatchObject({ estado: 'parcial', rubro: 'otro', modulos: [] });
 });
 
-test('lo que se activa en el hero llega al wizard y se guarda en el lead', async ({
+test('Gastronomía: "Probá la demo completa" abre la demo con el nombre cargado', async ({
   page,
-}, testInfo) => {
-  const negocio = negocioUnico(`hero-${testInfo.project.name}`);
+}) => {
   await page.goto('/empezar');
-  const hero = page.getByRole('group', { name: /armá tu negocio/i });
+  await abrirWizard(page);
+  await elegirRubro(page, 'gastronomia');
+  await enviarNegocio(page, { negocio: 'Lo de Tito' });
+  await wizard(page)
+    .getByRole('link', { name: /probá la demo completa/i })
+    .click();
+  await expect(page).toHaveURL(/\/demo\/gastronomia\?local=Lo\+de\+Tito/);
+});
 
-  // Dos módulos activados desde el mockup, todavía sin rubro.
-  await hero.getByRole('button', { name: /carta con qr/i }).click();
-  await hero.getByRole('button', { name: /pagos online/i }).click();
-  await expect(hero.getByRole('button', { name: /carta con qr/i })).toHaveAttribute(
+test('recargar en el medio del flujo conserva lo cargado', async ({ page }) => {
+  await irAlPaso(page, 'negocio');
+  await wizard(page).getByLabel('Nombre de tu negocio').fill('Luna Peluquería');
+  await page.reload();
+  await abrirWizard(page);
+  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
+  await expect(wizard(page).getByLabel('Nombre de tu negocio')).toHaveValue('Luna Peluquería');
+  await wizard(page).getByRole('button', { name: 'Atrás' }).click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
+  await expect(wizard(page).locator('[data-rubro="peluqueria_estetica"]')).toHaveAttribute(
     'aria-pressed',
     'true',
   );
-
-  // CTA → wizard. Comercio no sugiere Carta con QR: tiene que venir marcada por el hero.
-  await page
-    .locator('section[aria-labelledby="hero-title"]')
-    .getByRole('link', { name: HERO.cta })
-    .click();
-  await pasarNecesidad(page);
-  await tocar(page, /comercio/i);
-  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
-  await expect(wizard(page).getByRole('checkbox', { name: /carta con qr/i })).toBeChecked();
-  await expect(wizard(page).getByRole('checkbox', { name: /pagos online/i })).toBeChecked();
-  await expect(wizard(page).getByRole('checkbox', { name: /tienda y catálogo/i })).toBeChecked();
-  await expect(
-    wizard(page).getByRole('checkbox', { name: /turnos y reservas/i }),
-  ).not.toBeChecked();
-
-  await wizard(page).getByRole('button', { name: 'Siguiente' }).click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_WHATSAPP })).toBeVisible();
-  await guardarWhatsapp(page);
-  await completarNegocio(page, negocio);
-  await expect(wizard(page).getByRole('heading', { name: TITULO_FINAL })).toBeVisible();
-
-  const lead = (await leerLeads()).find((l) => l.nombre_negocio === negocio);
-  expect(lead?.rubro).toBe('comercio');
-  expect(lead?.modulos).toEqual(['catalogo', 'carta_qr', 'pagos', 'clientes', 'notificaciones']);
-  expect(lead?.objetivos).toEqual([]);
-});
-
-test('recargar en el medio del flujo conserva lo elegido, también en el hero', async ({ page }) => {
-  await irAlPaso(page, 'modulos');
-  await tocar(page, /carta con qr/i);
-  await tocar(page, /recibir turnos online/i);
-  await page.reload();
-  await abrirWizard(page);
-  await expect(wizard(page).getByRole('heading', { name: TITULO_PASO_2 })).toBeVisible();
-  await expect(
-    wizard(page).getByRole('checkbox', { name: /recibir turnos online/i }),
-  ).toBeChecked();
-  await expect(wizard(page).getByRole('checkbox', { name: /carta con qr/i })).toBeChecked();
-  await expect(
-    page
-      .getByRole('group', { name: /armá tu negocio/i })
-      .getByRole('button', { name: /carta con qr/i }),
-  ).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('el honeypot completo no guarda nada', async ({ request }, testInfo) => {

@@ -1,64 +1,92 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from 'react';
-import { WIZARD } from '@/content/empezar/wizard';
+import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
+import { CLAVE_TRASPASO_DEMO } from '@/domain/traspaso/demo-wizard';
 
-/**
- * El wizard arrastra motion + react-hook-form + zod (~70 KB gzip) y está bajo el primer viewport.
- * Se descarga cuando se acerca a la pantalla (o si la URL ya apunta a #wizard), no antes: el
- * hero, que es lo primero que se ve, carga solo lo imprescindible.
- */
-const Wizard = dynamic(() => import('./Wizard').then((m) => m.Wizard), {
-  ssr: false,
-  loading: () => <WizardEsqueleto />,
-});
-
-/** Mantiene el id (el CTA del hero baja acá) y reserva espacio para que no haya saltos. */
-function WizardEsqueleto() {
-  return (
-    <section
-      id="wizard"
-      aria-label={WIZARD.ariaSeccion}
-      aria-busy="true"
-      className="min-h-[48rem] scroll-mt-4 rounded-panel border border-line bg-surface/70 p-4 shadow-raised sm:p-8 lg:min-h-[44rem]"
-    >
-      <p className="text-small text-muted">{WIZARD.cargando}</p>
-    </section>
-  );
+interface WizardProps {
+  /** Rubro tocado antes de que terminara de descargarse el wizard: arranca desde ahí. */
+  rubroInicial: string | null;
 }
 
-/** Primer gesto de la persona: ahí se empieza a descargar, mientras baja hacia el wizard. */
+/** El wizard arrastra motion + react-hook-form + zod: se descarga recién cuando hace falta. */
+const cargarWizard = () => import('./Wizard').then((m) => m.Wizard as ComponentType<WizardProps>);
+
+/** Misma clave que features/empezar/state.ts (no se importa: arrastraría el catálogo al JS inicial). */
+const CLAVE_ESTADO = 'webya:empezar:v3';
+
+/** Primer gesto de la persona: ahí se empieza a descargar (lo más probable es que toque un rubro). */
 const GESTOS = ['scroll', 'pointerdown', 'keydown', 'touchstart'] as const;
 
-export function WizardLazy() {
-  const [cargar, setCargar] = useState(false);
-  const centinela = useRef<HTMLDivElement>(null);
+/**
+ * La pantalla 1 (`children`) llega en el HTML del servidor: se ve y se puede tocar sin esperar JS.
+ * El wizard se descarga al primer gesto, al pasar el mouse o el foco por las tarjetas, o enseguida
+ * si hay un flujo a medias (recarga) o un traspaso de la demo. Si la persona toca un rubro antes
+ * de que llegue, la tarjeta se marca al instante y el wizard arranca desde ese rubro.
+ */
+export function WizardLazy({ children }: { children: ReactNode }) {
+  const [Wizard, setWizard] = useState<ComponentType<WizardProps> | null>(null);
+  const [rubroInicial, setRubroInicial] = useState<string | null>(null);
+  const contenedor = useRef<HTMLDivElement>(null);
+  /** Tarjeta con el foco al llegar el wizard: el HTML se reemplaza y el foco no se puede perder. */
+  const enfocada = useRef<string | null>(null);
 
   useEffect(() => {
-    const el = centinela.current;
-    const abrir = () => setCargar(true);
-    // Sin IntersectionObserver, o si la URL ya apunta al wizard, se carga ya (en un timer: no se
-    // llama a setState de forma síncrona dentro del efecto).
-    if (window.location.hash === '#wizard' || !el || typeof IntersectionObserver === 'undefined') {
-      const t = setTimeout(abrir, 0);
-      return () => clearTimeout(t);
+    const el = contenedor.current;
+    let vivo = true;
+    let pedido = false;
+    const cargar = () => {
+      if (pedido) return;
+      pedido = true;
+      void cargarWizard().then((w) => {
+        if (!vivo) return;
+        const activo = document.activeElement as HTMLElement | null;
+        enfocada.current = el?.contains(activo) ? (activo?.dataset.rubro ?? null) : null;
+        setWizard(() => w);
+      });
+    };
+    const onClick = (e: MouseEvent) => {
+      const boton = (e.target as Element).closest<HTMLElement>('[data-rubro]');
+      if (!boton?.dataset.rubro) return;
+      // Feedback inmediato (< 100 ms) mientras termina de llegar el wizard.
+      boton.dataset.cargando = '';
+      setRubroInicial(boton.dataset.rubro);
+      cargar();
+    };
+
+    let flujoAMedias = false;
+    try {
+      const s = window.sessionStorage;
+      flujoAMedias = s.getItem(CLAVE_ESTADO) !== null || s.getItem(CLAVE_TRASPASO_DEMO) !== null;
+    } catch {
+      // sin sessionStorage: se carga al primer gesto
     }
-    // Lighthouse y quien solo mira el hero no pagan el wizard; quien interactúa, lo tiene a tiempo.
-    const io = new IntersectionObserver(([entrada]) => entrada?.isIntersecting && abrir());
-    io.observe(el);
-    for (const g of GESTOS) window.addEventListener(g, abrir, { once: true, passive: true });
+    if (flujoAMedias) {
+      const t = setTimeout(cargar, 0);
+      return () => {
+        vivo = false;
+        clearTimeout(t);
+      };
+    }
+
+    el?.addEventListener('click', onClick);
+    el?.addEventListener('pointerover', cargar, { once: true });
+    el?.addEventListener('focusin', cargar, { once: true });
+    for (const g of GESTOS) window.addEventListener(g, cargar, { once: true, passive: true });
     return () => {
-      io.disconnect();
-      for (const g of GESTOS) window.removeEventListener(g, abrir);
+      vivo = false;
+      el?.removeEventListener('click', onClick);
+      el?.removeEventListener('pointerover', cargar);
+      el?.removeEventListener('focusin', cargar);
+      for (const g of GESTOS) window.removeEventListener(g, cargar);
     };
   }, []);
 
-  return cargar ? (
-    <Wizard />
-  ) : (
-    <div ref={centinela}>
-      <WizardEsqueleto />
-    </div>
-  );
+  // Ya montado el wizard (mismo HTML en la pantalla 1), el foco vuelve a la misma tarjeta.
+  useEffect(() => {
+    const id = enfocada.current;
+    if (!Wizard || !id || rubroInicial) return;
+    document.querySelector<HTMLElement>(`#wizard [data-rubro="${CSS.escape(id)}"]`)?.focus();
+  }, [Wizard, rubroInicial]);
+
+  return Wizard ? <Wizard rubroInicial={rubroInicial} /> : <div ref={contenedor}>{children}</div>;
 }
