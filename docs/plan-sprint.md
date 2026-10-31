@@ -64,6 +64,7 @@ Todo sale de una rama de integración `sprint/base-marca`. Cada agente trabaja e
 dueño, me lo pide. Ningún push.
 
 ### Ola 1: contrato (yo, secuencial, ~1 commit por punto)
+
 1. Mover carpetas a la estructura final con `git mv` y re-exportar donde haga falta. **Sin cambios visuales:** la
    regresión visual tiene que pasar igual.
 2. Tokens en 3 capas + `generar.ts` + test de frescura. Escala de espaciado de 8 px, radios, elevaciones,
@@ -80,21 +81,24 @@ dueño, me lo pide. Ningún push.
    `webya-parallel-workflow`, actualizar `webya-brand` y `webya-design-system`).
 
 ### Ola 2: paralelo (4 agentes)
-| Agente | Dueño de | Entrega |
-|---|---|---|
-| `marca-sistema` | `src/brand/{tokens,logo,motion,voz}`, `BRAND.md`, `app/sistema`, `app/icon*`, `app/apple-icon*`, `scripts/exportar-marca.*` | Logo en 3 variantes; favicon y app icons; export de avatar e íconos de destacadas de Instagram (SVG + PNG con Playwright, sin dependencias nuevas); presets de motion; manual Encastre con usos correctos e incorrectos; `/sistema` (tokens, componentes, estados, ilustraciones) |
-| `ilustracion` | `src/brand/ilustracion` | Una sola grilla y un solo trazo; íconos de los 7 rubros y de los 8 módulos; estados vacíos, 404, error y carga; absorbe `ModuloArte` y el spinner suelto |
-| `ui-componentes` | `src/components/ui`, `src/components/patterns` | Primitivas con los 8 estados y un test por estado; Dialog y Sheet unificados sobre `<dialog>`; `PreviewNegocio` fusionado |
-| `copy-conversion` | `src/content`, `docs/copy-guia.md` | Copy nuevo completo: hero con 3 variantes razonadas, secciones, microcopy, errores, vacíos, confirmación, FAQ con objeciones, footer, SEO/OG, mensaje de WhatsApp, 5 captions/bio de Instagram. Test de lista prohibida (superlativos, "menta", cifras sin `TODO:`) |
+
+| Agente            | Dueño de                                                                                                                    | Entrega                                                                                                                                                                                                                                                                           |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `marca-sistema`   | `src/brand/{tokens,logo,motion,voz}`, `BRAND.md`, `app/sistema`, `app/icon*`, `app/apple-icon*`, `scripts/exportar-marca.*` | Logo en 3 variantes; favicon y app icons; export de avatar e íconos de destacadas de Instagram (SVG + PNG con Playwright, sin dependencias nuevas); presets de motion; manual Encastre con usos correctos e incorrectos; `/sistema` (tokens, componentes, estados, ilustraciones) |
+| `ilustracion`     | `src/brand/ilustracion`                                                                                                     | Una sola grilla y un solo trazo; íconos de los 7 rubros y de los 8 módulos; estados vacíos, 404, error y carga; absorbe `ModuloArte` y el spinner suelto                                                                                                                          |
+| `ui-componentes`  | `src/components/ui`, `src/components/patterns`                                                                              | Primitivas con los 8 estados y un test por estado; Dialog y Sheet unificados sobre `<dialog>`; `PreviewNegocio` fusionado                                                                                                                                                         |
+| `copy-conversion` | `src/content`, `docs/copy-guia.md`                                                                                          | Copy nuevo completo: hero con 3 variantes razonadas, secciones, microcopy, errores, vacíos, confirmación, FAQ con objeciones, footer, SEO/OG, mensaje de WhatsApp, 5 captions/bio de Instagram. Test de lista prohibida (superlativos, "menta", cifras sin `TODO:`)               |
 
 ### Ola 3: paralelo (3 agentes)
-| Agente | Dueño de | Entrega |
-|---|---|---|
-| `paginas` | `src/components/marketing`, `src/app/empezar`, `src/features/**` (solo cableado) | Recomposición de `/empezar`: hero asimétrico con el negocio armándose por piezas (CSS), nav mínima con CTA, ritmo de secciones variado, CTA persistente en celular, wizard pulido, sección "cómo trabajamos / qué pasa después", JSON-LD y OG nuevos. Lleva el copy de demo y video a `content` sin cambiar el texto |
-| `qa-rendimiento` | `tests/`, `e2e/`, `docs/reporte-sprint.md` | Tests de tokens, componentes por estado, a11y (axe), reduced-motion, teclado, regresión visual regenerada y revisada a ojo; trazas CPU ×4; comparativa antes/después en 6 viewports |
-| `seguridad-revisor` | solo lectura | Revisión del diff de las olas 1 y 2 mientras se trabaja la 3, y pasada final: inputs, headers/CSP, dependencias, secretos |
+
+| Agente              | Dueño de                                                                         | Entrega                                                                                                                                                                                                                                                                                                              |
+| ------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `paginas`           | `src/components/marketing`, `src/app/empezar`, `src/features/**` (solo cableado) | Recomposición de `/empezar`: hero asimétrico con el negocio armándose por piezas (CSS), nav mínima con CTA, ritmo de secciones variado, CTA persistente en celular, wizard pulido, sección "cómo trabajamos / qué pasa después", JSON-LD y OG nuevos. Lleva el copy de demo y video a `content` sin cambiar el texto |
+| `qa-rendimiento`    | `tests/`, `e2e/`, `docs/reporte-sprint.md`                                       | Tests de tokens, componentes por estado, a11y (axe), reduced-motion, teclado, regresión visual regenerada y revisada a ojo; trazas CPU ×4; comparativa antes/después en 6 viewports                                                                                                                                  |
+| `seguridad-revisor` | solo lectura                                                                     | Revisión del diff de las olas 1 y 2 mientras se trabaja la 3, y pasada final: inputs, headers/CSP, dependencias, secretos                                                                                                                                                                                            |
 
 ### Integración (yo)
+
 - Orden de merge: marca → ilustración → ui → copy → páginas → qa.
 - Después de **cada** merge: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm test:e2e`, con
   números reales. Si algo rompe, se revierte ese merge y se corrige en su rama.
@@ -125,23 +129,24 @@ dueño, me lo pide. Ningún push.
 
 ## 4. Skills (propuesta de instalación, alcance proyecto, por commit fijado)
 
-| Skill | Fuente | Decisión |
-|---|---|---|
-| frontend-design | anthropics/skills @ `41bbe19` | Instalar |
-| vercel-react-best-practices | vercel-labs/agent-skills @ `dc8367e` | Instalar (sin sumar las dependencias que sugiere) |
-| copywriting | coreyhaines31/marketingskills @ `15b38b5` | Instalar (la voz la manda `webya-brand`) |
-| cro | coreyhaines31/marketingskills @ `e88ace7` | Instalar (sin testimonios ni sellos: manda `webya-brand`) |
-| webapp-testing, web-design-guidelines, seo-audit, seo, core-web-vitals, accessibility, security-guidance, claude-security | — | Descartadas (duplican lo que hay, ejecutan comandos o bajan reglas de la red sin versión) |
+| Skill                                                                                                                     | Fuente                                    | Decisión                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------- |
+| frontend-design                                                                                                           | anthropics/skills @ `41bbe19`             | Instalar                                                                                  |
+| vercel-react-best-practices                                                                                               | vercel-labs/agent-skills @ `dc8367e`      | Instalar (sin sumar las dependencias que sugiere)                                         |
+| copywriting                                                                                                               | coreyhaines31/marketingskills @ `15b38b5` | Instalar (la voz la manda `webya-brand`)                                                  |
+| cro                                                                                                                       | coreyhaines31/marketingskills @ `e88ace7` | Instalar (sin testimonios ni sellos: manda `webya-brand`)                                 |
+| webapp-testing, web-design-guidelines, seo-audit, seo, core-web-vitals, accessibility, security-guidance, claude-security | —                                         | Descartadas (duplican lo que hay, ejecutan comandos o bajan reglas de la red sin versión) |
 
 Ninguna trae scripts ejecutables; son 222 KB de Markdown. **Condición aprobada:** `frontend-design` y
 `vercel-react-best-practices` solo las reciben `ui-componentes` y `paginas`.
 
 **Condiciones aprobadas (2026-10-29):**
+
 - Los textos de la demo, Pedidos y el video pasan a `src/content` sin cambios, y sus tests pasan sin tocar
   expectativas.
 - CSP fija con integridad (SRI), documentada en `docs/adr/`.
 - `inlineCss` se saca si el JS inicial supera 150 KB o si el LCP no mejora. Asignación mínima por agente:
-[auditoria-skills.md](auditoria-skills.md#asignación-mínima-de-skills-por-subagente).
+  [auditoria-skills.md](auditoria-skills.md#asignación-mínima-de-skills-por-subagente).
 
 ## 5. Riesgos
 
@@ -164,20 +169,23 @@ pagos, sistemas, automatizaciones. De Tiendanube y Shopify se toma la forma (una
 la vista), no el contenido: **sin cifras, pruebas gratis ni prueba social.**
 
 ### Modelo en 3 capas (se refleja en código, copy y UI)
-| Capa | Qué es | Dónde vive |
-|---|---|---|
-| 1. Plantillas por rubro | El rubro sugiere necesidades y módulos | `content/rubros/<id>.ts` |
-| 2. Módulos activables | Catálogo extensible, cada módulo con su estado honesto | `content/modulos/<id>.ts` |
-| 3. A medida | Pedido libre que atiende el equipo | `necesidad_libre` en el lead + vista SQL que la agrupa |
+
+| Capa                    | Qué es                                                 | Dónde vive                                             |
+| ----------------------- | ------------------------------------------------------ | ------------------------------------------------------ |
+| 1. Plantillas por rubro | El rubro sugiere necesidades y módulos                 | `content/rubros/<id>.ts`                               |
+| 2. Módulos activables   | Catálogo extensible, cada módulo con su estado honesto | `content/modulos/<id>.ts`                              |
+| 3. A medida             | Pedido libre que atiende el equipo                     | `necesidad_libre` en el lead + vista SQL que la agrupa |
 
 **Agregar un módulo = un archivo** `content/modulos/<id>.ts` con `nombre`, `beneficio`, `rubrosSugeridos`,
 `necesidades` y `estado`, más una línea en el índice.
+
 - Estados posibles: `disponible`, `en_demo`, `proximamente`, `a_medida`.
 - Un test falla si falta un campo o si un rubro sugiere un módulo que no existe.
 - La UI muestra el estado tal cual: `proximamente` no se puede tildar como si existiera, y `a_medida` lleva al
   camino libre.
 
 ### Flujo nuevo del wizard (contratos en la Ola 1, UI en la Ola 3)
+
 1. **"¿Qué necesitás?"**: vender, recibir turnos, mostrar la carta, cobrar, organizar clientes u otra cosa.
    - Se pueden marcar varias.
    - Las etiquetas viven en `content/necesidades.ts`; los ids y la relación con los módulos, en el catálogo.
@@ -193,14 +201,16 @@ la vista), no el contenido: **sin cifras, pruebas gratis ni prueba social.**
 > antes del WhatsApp porque la base lo exige para completar el lead.
 
 **Respuestas del usuario a la Ola 1 (2026-10-29):**
+
 - Webpack en producción: aceptado. El primer deploy va sin caché y primero en preview (README).
-- "Te respondemos en menos de 24 hs" pasa a `TODO:` en sus 5 lugares, y mientras tanto se usa "Te escribimos por
+- La promesa de un plazo de respuesta pasa a `TODO:` en sus 5 lugares, y mientras tanto se usa "Te escribimos por
   WhatsApp".
 - Estados de los módulos: queda la propuesta. Pero `turnos`, `catalogo`, `formularios`, `clientes`,
   `notificaciones` y `pagos` llevan un `TODO:` visible hasta que el usuario los confirme. En `pagos` se aclara
   que el cobro de la demo es simulado.
 
 ### Backend (Ola 1, yo)
+
 - **Migración nueva** `20261030120000_leads_parcial_necesidades.sql`. No se toca ninguna de las anteriores.
   - Columnas nuevas: `necesidades text[]` (ids validados, máximo 8), `necesidad_libre text` (≤ 500),
     `token_hash text` y `completado_at timestamptz`.
@@ -220,6 +230,7 @@ la vista), no el contenido: **sin cifras, pruebas gratis ni prueba social.**
   - Un E2E que confirma que el lead parcial queda guardado aunque la persona abandone.
 
 ### Copy (Ola 2, `copy-conversion`)
+
 - Titulares por beneficio y una sola promesa, con la salvedad honesta: nunca "tenemos todo" sin "o lo armamos a
   medida".
 - La objeción "¿Y si lo que necesito no está?" se responde de frente: con sección propia y en el FAQ.
@@ -227,20 +238,23 @@ la vista), no el contenido: **sin cifras, pruebas gratis ni prueba social.**
 - Microcopy del paso de WhatsApp: qué pasa después y que el resto es opcional.
 
 ### Páginas (Ola 3, `paginas`)
+
 - Nav mínima con un solo CTA.
 - Hero con el producto a la vista: el mockup interactivo hoy (cero ilustración vacía) y el enlace a la demo real.
 - Catálogo con los estados y la sección "¿Y si no está?".
 - Wizard según el flujo de arriba.
 
 ### Estados iniciales de los módulos (propuesta: **los confirmás vos**, no los invento)
-| Módulo | Propuesta | Por qué |
-|---|---|---|
-| `pedidos`, `carta_qr` | `en_demo` | Tienen demo funcionando en `/demo/gastronomia` |
-| `turnos`, `catalogo`, `formularios`, `clientes`, `notificaciones` | `disponible` | TODO: confirmar que hoy los entregás |
-| `pagos` | `disponible` | En la demo el cobro es simulado. TODO: confirmar el medio de cobro real |
-| Sistemas y automatizaciones | `a_medida` | Entran por el camino libre |
+
+| Módulo                                                            | Propuesta    | Por qué                                                                 |
+| ----------------------------------------------------------------- | ------------ | ----------------------------------------------------------------------- |
+| `pedidos`, `carta_qr`                                             | `en_demo`    | Tienen demo funcionando en `/demo/gastronomia`                          |
+| `turnos`, `catalogo`, `formularios`, `clientes`, `notificaciones` | `disponible` | TODO: confirmar que hoy los entregás                                    |
+| `pagos`                                                           | `disponible` | En la demo el cobro es simulado. TODO: confirmar el medio de cobro real |
+| Sistemas y automatizaciones                                       | `a_medida`   | Entran por el camino libre                                              |
 
 ### Presupuesto
+
 - El paso "¿Qué necesitás?" son chips, sin JS nuevo; el lead parcial es un `fetch` más.
 - Se mantienen JS inicial ≤ 150 KB, CLS < 0.05 y AA completo.
 - Metas explícitas de `qa-rendimiento`: LCP < 1763 ms (CPU ×4 + Slow 4G) e INP al elegir rubro < 100 ms.

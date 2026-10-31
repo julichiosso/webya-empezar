@@ -23,14 +23,14 @@ parrilla, no a un programador. Alguien del barrio que sabe de tecnología, no un
 - **Sin tics de IA:** nada de "no es X, es Y", listas de negaciones, "¿El resultado? …", rayas en textos cortos
   ni signos de exclamación.
 
-| Sí                                                                     | No                                                  |
-| ---------------------------------------------------------------------- | --------------------------------------------------- |
-| "Que tus clientes reserven solos."                                     | "Módulo de gestión de turnos."                      |
-| "Te lo armamos con vos."                                               | "Solución integral end-to-end."                     |
-| "Pedí como cliente y miralo llegar."                                   | "Experiencia omnicanal."                            |
-| "Te escribimos por WhatsApp." + `PENDIENTES.plazoRespuesta`            | "Te respondemos en menos de 24 hs." (sin confirmar) |
-| "Depende de lo que actives: te armamos un presupuesto sin compromiso." | "Desde $X por mes."                                 |
-| "Acá encaja tu primer pedido."                                         | "No hay datos para mostrar."                        |
+| Sí                                                                     | No                                           |
+| ---------------------------------------------------------------------- | -------------------------------------------- |
+| "Que tus clientes reserven solos."                                     | "Módulo de gestión de turnos."               |
+| "Te lo armamos con vos."                                               | "Solución integral end-to-end."              |
+| "Pedí como cliente y miralo llegar."                                   | "Experiencia omnicanal."                     |
+| "Te escribimos por WhatsApp." + `PENDIENTES.plazoRespuesta`            | Cualquier plazo de respuesta (sin confirmar) |
+| "Depende de lo que actives: te armamos un presupuesto sin compromiso." | "Desde $X por mes."                          |
+| "Acá encaja tu primer pedido."                                         | "No hay datos para mostrar."                 |
 
 ## 2. Formato
 
@@ -199,7 +199,7 @@ y se borra la clave.
 
 - Hero: "Creá tu negocio online. / Elegí tu rubro. Activá lo que necesitás." → "Todo lo digital para tu
   negocio. / Y si no está, lo armamos a medida." (variantes y razonamiento en `content/empezar/hero-variantes.ts`).
-- Señal del hero: "Te respondemos en menos de 24 hs" → "Te escribimos por WhatsApp" (+ TODO del plazo).
+- Señal del hero: la promesa de un plazo de respuesta → "Te escribimos por WhatsApp" (+ TODO del plazo).
 - FAQ: "¿En cuánto tiempo está?" → "¿Cuánto tardan?", con "depende de lo que actives" + TODO de plazos.
 - Footer: "Tu negocio. Nuestra tecnología." (lo podría decir cualquiera) → "Todo lo digital para tu negocio, o
   lo armamos a medida."

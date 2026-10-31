@@ -10,7 +10,7 @@ de la cuenta (vuelve a las 4 a. m.). Nada se pusheó; `main` (local y remoto) es
   correcciones de seguridad (`da8388c`) y la sección de Micio's apagada + guion (`c72351d`).
   `FLAGS.casoMicios = false` confirmado. Lista para retomar la publicación desde el paso 1.
 - **`feat/video-presentacion`** (worktree `.claude/worktrees/agent-a8752564f4a7d4b25`): A MEDIAS,
-  **no mergear ni publicar**. 2 commits (`3c9c260` reproductor reutilizable + guion sin "24 hs";
+  **no mergear ni publicar**. 2 commits (`3c9c260` reproductor reutilizable + guion sin el plazo de respuesta;
   `329f90b` sección con poster + animación de las 4 pantallas) y cambios sin commitear. Ojo: nació
   de `f315756` (la versión del commit de seguridad que todavía traía las 42 capturas
   autogeneradas), así que hay que pasarla sobre `c72351d` (cherry-pick de sus 2 commits) antes de
@@ -18,7 +18,7 @@ de la cuenta (vuelve a las 4 a. m.). Nada se pusheó; `main` (local y remoto) es
 - **Decisión (2026-10-31): se publica SIN el video.** El video queda para una tanda aparte:
   `feat/video-presentacion` no se mergea ni se borra, y para integrarla hay que pasar sus 2
   commits (`3c9c260`, `329f90b`) sobre la rama principal (no mergear la rama tal cual).
-- Se sacó la promesa "te escribimos en menos de veinticuatro horas" del guion del video viejo
+- Se sacó la promesa del plazo de respuesta del guion del video viejo
   ("te escribimos por WhatsApp"), del TODO visible del plazo y de las skills de marca y diseño. La voz
   del video es la síntesis del navegador (lee el texto en vivo): no hay audio que regrabar.
 - Migraciones: según el usuario, todas aplicadas en Supabase (ciudad y recargar_esquema incluidas).
