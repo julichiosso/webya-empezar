@@ -18,6 +18,8 @@ export interface LeadRow {
   /** Null solo mientras el lead es parcial. */
   rubro: string | null;
   rubro_otro: string | null;
+  /** Ciudad o localidad, opcional (migración leads_ciudad). */
+  ciudad?: string | null;
   /** Ids de módulos activados (content/modulos.ts). Mínimo 1 en el flujo de un solo envío. */
   modulos: string[];
   /** Opcionales: pueden venir vacíos. */
@@ -70,6 +72,7 @@ export type NuevoLead = Omit<
 export type NuevoLeadParcial = Pick<
   LeadRow,
   | 'whatsapp'
+  | 'nombre_negocio'
   | 'necesidades'
   | 'necesidad_libre'
   | 'rubro'
@@ -84,6 +87,8 @@ export type NuevoLeadParcial = Pick<
   | 'user_agent'
 > & {
   origen?: string;
+  /** Solo si la dejó (columna opcional: sin la migración se guarda sin ella). */
+  ciudad?: string | null;
   /** sha256 (hex) del token que se le devuelve a la persona. El token en claro nunca se guarda. */
   token_hash: string;
 };
@@ -145,7 +150,6 @@ export function aFilaParcial(lead: NuevoLeadParcial, id: string, ahora: Date): L
     ...lead,
     nombre: null,
     email: null,
-    nombre_negocio: null,
     mensaje: null,
     completado_at: null,
     id,

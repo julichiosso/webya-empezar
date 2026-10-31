@@ -197,6 +197,17 @@ export function crearEsquemasLead(catalogo: CatalogoLead, mensajes: MensajesLead
   const leadParcialSchema = z
     .object({
       whatsapp: datosFormShape.whatsapp,
+      // Pantalla 2 del flujo: el nombre del negocio va con el WhatsApp; la ciudad es opcional.
+      nombreNegocio: z
+        .string()
+        .trim()
+        .max(LIMITES.nombreNegocio, mensajes.hastaCaracteres(LIMITES.nombreNegocio))
+        .optional(),
+      ciudad: z
+        .string()
+        .trim()
+        .max(LIMITES.ciudad, mensajes.hastaCaracteres(LIMITES.ciudad))
+        .optional(),
       necesidades: listaDeIds(LIMITES.necesidades).default([]),
       // "Otra cosa / a medida": pedido libre. Vacío equivale a no haberlo escrito.
       necesidadLibre: z
@@ -246,7 +257,8 @@ export function crearEsquemasLead(catalogo: CatalogoLead, mensajes: MensajesLead
         ctx.addIssue({ code: 'custom', path: ['rubro'], message: mensajes.rubroInexistente });
         return;
       }
-      if (rubro === catalogo.rubroOtroId && (lead.rubroOtro ?? '').length < 2) {
+      // "Otro": alcanza con el nombre del rubro o con el pedido libre "a medida".
+      if (rubro === catalogo.rubroOtroId && (lead.rubroOtro ?? '').length < 2 && libre === '') {
         ctx.addIssue({ code: 'custom', path: ['rubroOtro'], message: mensajes.rubroOtroVacio });
       }
       revisarModulosDemoYObjetivos(ctx, lead, rubro);

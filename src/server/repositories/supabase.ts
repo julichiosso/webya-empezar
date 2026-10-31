@@ -24,6 +24,11 @@ export function faltaColumnaDemo(error: ErrorDb): boolean {
   return faltaColumna(error, /\bdemo\b/);
 }
 
+/** La columna `ciudad` (migración leads_ciudad) todavía no existe. */
+export function faltaColumnaCiudad(error: ErrorDb): boolean {
+  return faltaColumna(error, /\bciudad\b/);
+}
+
 /** Alguna columna del lead parcial (migración leads_parcial_necesidades) todavía no existe. */
 export function faltanColumnasParcial(error: ErrorDb): boolean {
   return faltaColumna(error, /\b(necesidades|necesidad_libre|token_hash|completado_at)\b/);
@@ -49,9 +54,16 @@ export class SupabaseLeadRepository implements LeadRepository {
 
   /** Inserta y devuelve el id. Si falta la columna `demo`, guarda sin ella (no se pierde el lead). */
   private async insertar(
-    fila: Record<string, unknown> & { demo?: unknown },
+    fila: Record<string, unknown> & { demo?: unknown; ciudad?: unknown },
   ): Promise<{ id: string }> {
     const { data, error } = await this.client.from('leads').insert(fila).select('id').single();
+    if (error && fila.ciudad !== undefined && faltaColumnaCiudad(error)) {
+      // Igual que con `demo`: el código puede llegar antes que la migración leads_ciudad.
+      console.warn('[leads] Falta la columna "ciudad": aplicá la migración leads_ciudad.');
+      const sinCiudad = { ...fila };
+      delete sinCiudad.ciudad;
+      return this.insertar(sinCiudad);
+    }
     if (error && fila.demo !== undefined && faltaColumnaDemo(error)) {
       // Transición: el código llegó antes que la migración leads_demo_origen. No se pierde el
       // lead: se guarda sin `demo` y queda el aviso en el log para aplicar la migración.

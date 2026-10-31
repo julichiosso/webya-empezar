@@ -122,6 +122,44 @@ describe('POST /api/leads con parcial: true', () => {
     });
   });
 
+  it('guarda el nombre del negocio y la ciudad de la pantalla 2 (la ciudad, solo si la dejó)', async () => {
+    await crearParcial({
+      parcial: true,
+      whatsapp: '11 2345 6789',
+      nombreNegocio: '  Lo de Tito ',
+      ciudad: 'San Jorge',
+      rubro: 'gastronomia',
+    });
+    expect(repo.leads[0]).toMatchObject({ nombre_negocio: 'Lo de Tito', ciudad: 'San Jorge' });
+    await crearParcial({ parcial: true, whatsapp: '11 2345 6788', ciudad: '' });
+    expect(repo.leads[1]).not.toHaveProperty('ciudad');
+    expect(repo.leads[1]!.nombre_negocio).toBeNull();
+  });
+
+  it('valida el largo del nombre del negocio y de la ciudad', async () => {
+    const { res, body } = await crearParcial({
+      parcial: true,
+      whatsapp: '11 2345 6789',
+      nombreNegocio: 'x'.repeat(101),
+      ciudad: 'x'.repeat(61),
+    });
+    expect(res.status).toBe(400);
+    const campos = (body as unknown as { error: { fields: Record<string, string> } }).error.fields;
+    expect(Object.keys(campos).sort()).toEqual(['ciudad', 'nombreNegocio']);
+  });
+
+  it('rubro "otro": alcanza con el pedido a medida (sin nombre de rubro)', async () => {
+    const { res } = await crearParcial({
+      parcial: true,
+      whatsapp: '11 2345 6789',
+      rubro: 'otro',
+      necesidadLibre: 'Un sistema de turnos para mi lavadero',
+    });
+    expect(res.status).toBe(201);
+    const sinNada = await crearParcial({ parcial: true, whatsapp: '11 2345 6788', rubro: 'otro' });
+    expect(sinNada.res.status).toBe(400);
+  });
+
   it('sanea el texto libre (HTML, control) conservando saltos de línea', async () => {
     await crearParcial({
       ...parcial,

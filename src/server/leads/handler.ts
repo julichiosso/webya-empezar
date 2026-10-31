@@ -244,8 +244,11 @@ async function crearParcial(
 
   const token = generarToken();
   const rubro = nullSiVacio(d.rubro);
+  const ciudad = nullSiVacio(d.ciudad);
   const lead: NuevoLeadParcial = {
     whatsapp: telefono.e164,
+    nombre_negocio: nullSiVacio(d.nombreNegocio),
+    ...(ciudad ? { ciudad } : {}),
     necesidades: d.necesidades,
     necesidad_libre: nullSiVacio(d.necesidadLibre),
     rubro,

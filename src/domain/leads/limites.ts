@@ -7,6 +7,8 @@
 export const LIMITES_BASE = {
   nombre: 80,
   nombreNegocio: 100,
+  /** Ciudad o localidad (opcional, pantalla 2 del flujo). */
+  ciudad: 60,
   rubroOtro: 80,
   email: 254,
   mensaje: 1000,

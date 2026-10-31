@@ -81,6 +81,7 @@ describe('SupabaseLeadRepository', () => {
 
 const PARCIAL: NuevoLeadParcial = {
   whatsapp: '+5491123456789',
+  nombre_negocio: null,
   necesidades: ['otra'],
   necesidad_libre: 'Facturación electrónica',
   rubro: 'comercio',
@@ -121,6 +122,18 @@ describe('SupabaseLeadRepository — lead parcial', () => {
     const repo = new SupabaseLeadRepository('', '', client);
     expect(await repo.crearParcial(PARCIAL)).toEqual({ id: 'p1' });
     expect(insertados[0]).toEqual({ ...PARCIAL, estado: 'parcial' });
+  });
+
+  it('crearParcial: si la columna ciudad todavía no existe, guarda sin ella', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { client, insertados } = clienteFalso([
+      { error: { code: 'PGRST204', message: "Could not find the 'ciudad' column of 'leads'" } },
+      { data: { id: 'p3' } },
+    ]);
+    const repo = new SupabaseLeadRepository('', '', client);
+    expect(await repo.crearParcial({ ...PARCIAL, ciudad: 'San Jorge' })).toEqual({ id: 'p3' });
+    expect(insertados[0]).toMatchObject({ ciudad: 'San Jorge' });
+    expect(insertados[1]).not.toHaveProperty('ciudad');
   });
 
   it('crearParcial: sin la migración avisa qué aplicar y falla (no hay fallback)', async () => {

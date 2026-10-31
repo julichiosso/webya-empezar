@@ -75,6 +75,7 @@ describe.each(implementaciones)('LeadRepository (%s)', (_nombre, crear) => {
 
 const parcial: NuevoLeadParcial = {
   whatsapp: '+5491123456789',
+  nombre_negocio: null,
   necesidades: ['vender'],
   necesidad_libre: 'Controlar el stock',
   rubro: 'comercio',
