@@ -196,12 +196,13 @@ function SeccionLogo() {
       </ul>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2 lg:items-center">
-        <div className="flex justify-center rounded-card border border-line bg-surface p-8">
+        {/* En celular, el logo un escalón más chico: con la zona de respeto entra sin desbordar. */}
+        <div className="flex justify-center rounded-card border border-line bg-surface p-4 sm:p-8">
           <div
             className="border border-dashed border-hueco-borde"
             style={{ padding: `${ZONA_PX}px` }}
           >
-            <Logo decorativo className="h-16" />
+            <Logo decorativo className="h-12 sm:h-16" />
           </div>
         </div>
         <dl className="grid gap-4">

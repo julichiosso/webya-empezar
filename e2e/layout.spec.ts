@@ -65,6 +65,14 @@ test("el caso real de Micio's no se publica sin permiso (flag apagado)", async (
   await expect(page.getByText("Micio's")).toHaveCount(0);
 });
 
+test('/sistema sin scroll horizontal (vitrina completa, también en celular)', async ({ page }) => {
+  await page.goto('/sistema');
+  const sobra = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(sobra).toBeLessThanOrEqual(0);
+});
+
 test('/marca sin scroll horizontal (tablas de contraste incluidas)', async ({ page }) => {
   await page.goto('/marca');
   const sobra = await page.evaluate(
