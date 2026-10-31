@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { FOOTER } from '../src/content/empezar/footer';
 import { STICKY_CTA } from '../src/content/empezar/cta-final';
 import { HERO } from '../src/content/empezar/hero';
+import { getPlantilla } from '../src/content/rubros';
 import {
   abrirWizard,
   elegirRubro,
@@ -138,14 +139,20 @@ test.describe('escritorio (lg y más)', () => {
     expect(arriba.y).toBeGreaterThanOrEqual(0);
   });
 
-  test('la vista previa refleja el rubro y sus módulos en vivo', async ({ page }) => {
+  test('la vista previa refleja el rubro, sus módulos y el nombre en vivo', async ({ page }) => {
     await page.goto('/empezar');
     await abrirWizard(page);
     const panel = page.getByTestId('negocio-preview-panel');
     await expect(panel).toContainText('Tu negocio');
     await elegirRubro(page, 'comercio');
-    await expect(panel).toContainText('Comercio y tienda');
-    await expect(panel.locator('li[data-on="true"]')).toHaveCount(4);
+    // La vista previa por rubro (navegador): la web de ejemplo de una tienda, sin huecos.
+    const vista = panel.getByTestId('preview-negocio');
+    await expect(vista).toHaveAttribute('data-rubro', 'comercio');
+    await expect(vista).toHaveAttribute('data-dispositivo', 'escritorio');
+    await expect(vista).toContainText(getPlantilla('comercio')!.portada.tituloDeEjemplo);
+    await expect(vista.locator('[data-hueco]')).toHaveCount(0);
+    await wizard(page).getByLabel('Nombre de tu negocio').fill('Tienda Sol');
+    await expect(vista).toContainText('Tienda Sol');
   });
 
   test('"Qué podés activar" en 4 columnas; FAQ en 2', async ({ page }) => {
@@ -203,5 +210,9 @@ test.describe('debajo de lg (celular y tablet)', () => {
     await irAlPaso(page, 'resultado');
     await expect(page.getByTestId('negocio-preview-panel')).toBeHidden();
     await expect(page.getByTestId('negocio-preview')).toBeVisible();
+    // En celular, la vista previa es un celular con la web del rubro y el nombre del negocio.
+    const vista = page.getByTestId('negocio-preview').getByTestId('preview-negocio');
+    await expect(vista).toHaveAttribute('data-dispositivo', 'celular');
+    await expect(vista).toContainText('Luna Peluquería');
   });
 });
