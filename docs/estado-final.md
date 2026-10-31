@@ -1,117 +1,84 @@
-# Estado final del sprint "Base de marca + Todo lo digital"
+# Estado final: sprint "tu negocio, armado en un minuto"
 
-Fecha: 2026-10-30. Todo está en `main` **local** (`2975064` y el commit de este documento). `origin/main` sigue
-en `f02db48` (producción sin tocar). La única rama subida es `sprint/base-marca` (`0a3b4ff`), para el preview.
+Fecha: 2026-10-31. **Publicado en producción**: `main` = `origin/main` = `937814e`, deploy de Vercel en
+`success`, https://webya-empezar.vercel.app/empezar.
 
-## Qué está hecho
+**Punto de retorno: `0c52f2d`** (producción anterior). Para volver atrás: Vercel → Deployments → el
+deploy de producción de `0c52f2d` → ⋯ → **Instant Rollback**. Con git, solo un `git revert` sobre main;
+nunca force push.
 
-**Sistema de diseño y marca**
-- Tokens en 3 capas (`src/brand/tokens`: primitivos → semánticos → componentes) que generan `tokens.css`, con
-  test de snapshot (`pnpm tokens` regenera).
-- Capas de código `app > features > marketing > patterns > ui > content > brand > domain > config > lib`,
-  verificadas por `tests/arquitectura`. **Cero excepciones de capas y de copy registradas.**
-- Logo, ilustración propia, movimiento con presupuesto (solo transform/opacity) y reduced-motion.
-- Tema claro/oscuro: el oscuro por defecto; "Modo claro" en el pie, que aplica solo en `/empezar`. La demo y
-  `/marca` quedan siempre en oscuro.
+## Qué se publicó (`0c52f2d..937814e`, avance directo de main, sin commits de merge)
 
-**Copy comercial**
-- Todo el texto visible sale de `src/content` (test de copy: sin palabras prohibidas, cada cifra con `TODO:`).
-- Los pendientes se muestran como `TODO:` visibles: plazos, estado de cada módulo, privacidad.
+| Commit                          | Qué                                                                                                                                                                                                                                              |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `c2d9676`, `d7f34fc`            | Arreglos de desarrollo: preload de la fuente solo en producción; la página de error registra el error entero solo en desarrollo.                                                                                                                 |
+| `7158779`                       | Lead parcial con nombre del negocio y ciudad; "Otro" alcanza con el pedido a medida. Migraciones `leads_ciudad` y (después) `leads_recargar_esquema`.                                                                                            |
+| `ffffe61`                       | Etapa (a): pantalla 1 "¿Qué negocio tenés?" en el HTML del servidor (se toca sin esperar JS), formulario mínimo (nombre, WhatsApp, ciudad) → lead parcial, "Otro" → pedido a medida, completar y gracias, eventos de medición, flag del orden B. |
+| `cb6cb37`, `3929050`            | Etapa (b): escenas SVG propias de los 6 rubros; vista previa por rubro (plantillas en `src/content/rubros`, 6 paletas compartidas con la demo, `PreviewNegocio` cargado aparte).                                                                 |
+| `b005c2c`                       | Etapa (c): "Así te queda" con celular/computadora, colores y piezas; CTA a WhatsApp en barra fija en celular; demo de Gastronomía con nombre y paleta; orden B (`?orden=b`).                                                                     |
+| `da8388c`                       | Seguridad: mínimo del nombre como la base (emojis incluidos); el guardado del lead nunca falla en silencio (aviso + reintento a mano y solo).                                                                                                    |
+| `c72351d`                       | Caso real de Micio's **detrás de un flag apagado** (`FLAGS.casoMicios = false`) y guion del video (`docs/video-guion.md`, no se usa en el sitio).                                                                                                |
+| `e495452`, `cdfd686`            | Sin la promesa de "24 hs" en ningún lado (guion del video, TODO del plazo, skills y docs).                                                                                                                                                       |
+| `95ceb38`                       | Capturas de referencia del flujo nuevo, regeneradas una vez y revisadas.                                                                                                                                                                         |
+| `e5d0192`, `7baaac3`            | Sin el número de WhatsApp: en producción no se ve un TODO interno; al recargar a mitad del flujo, la pantalla guardada aparece sin animación rara.                                                                                               |
+| `24f3fa4`, `5c91c05`, `c89f4d5` | Commits vacíos para redeployar el preview con las variables de Vercel.                                                                                                                                                                           |
+| `937814e`                       | Punto de retorno anotado en `docs/retomar-ola-3.md`.                                                                                                                                                                                             |
 
-**/empezar**
-- Hero "Todo lo digital para tu negocio", nav mínima, "¿Y si no está?", FAQ con objeciones, confianza.
-- Wizard nuevo:
-  1. Qué necesitás (con "Otra cosa", hasta 500 caracteres).
-  2. Rubro.
-  3. Módulos, cada uno con su estado y su `TODO:`.
-  4. Solo WhatsApp: guarda el **lead parcial**.
-  5. Completar (solo el nombre del negocio es obligatorio) o "Ahora no".
-  6. Confirmación completa o parcial.
-- Desde la demo se entra en módulos y se manda un solo formulario completo. El traspaso demo → wizard pasa
-  por `src/domain/traspaso`.
-- El wizard se descarga recién al primer gesto o cuando se acerca a la pantalla.
+## Verificado
 
-**Calidad y seguridad (Fase 3)**
-- CLS 0:
-  - La fila del hero reserva el alto del mockup.
-  - `content-visibility:auto` en las secciones de abajo del pliegue.
-  - La fuente se precarga a mano: con webpack, Next 16 no inyecta el preload.
-- zod sin `eval` (`src/lib/zod-sin-eval.ts`): la CSP ya no reporta violaciones.
-- API de leads:
-  - Content-Type exacto.
-  - 403 a pedidos `Sec-Fetch-Site: cross-site`.
-  - Sin texto libre en los logs.
-- Fuera de Vercel nunca se elige Supabase por defecto. Hace falta `ALLOW_SUPABASE_IN_DEV=1` para pedirla.
-- a11y: el contador de "Otra cosa" avisa a lectores de pantalla al quedar 50, 20 y 10 caracteres. Los campos
-  de la demo tienen `name`.
+- lint 0, typecheck 0, Vitest 1070 ✓ (incluye `tests/arquitectura` y `tests/copy`, sin excepciones
+  nuevas). E2E completa 430 ✓ / 0 ✗ con `--update-snapshots=none` (iPhone SE, iPhone 15, Pixel 7,
+  tablet, desktop, 1440, 1920).
+- Revisión de capturas en iPhone SE, iPhone 15, Pixel 7, 1440 y 1920: pantalla 1 sin scroll, la barra
+  fija no tapa contenido, las 6 vistas previas son distintas, sin rastro de Micio's, del video nuevo ni
+  de "24 hs".
+- Producción (`937814e`): `/empezar`, `/demo/gastronomia`, `/sistema`, `/marca` 200; `GET /api/leads`
+  405; CSP y headers de seguridad presentes; pantalla 1 nueva en el HTML; WhatsApp y mail en el pie.
+  Prueba de humo con Playwright (iPhone 13 y 1440): rubro → nombre + WhatsApp → "Así te queda" → botón
+  "Quiero esto para mi negocio" con link `wa.me/549…` y mensaje con negocio y rubro, barra fija en
+  celular, sin errores de consola. **El POST del lead se interceptó en el navegador: no se escribió
+  nada en la base real.**
+- Preview, además: POST inválido a `/api/leads` → 400 (validación) sin escribir.
 
-## Números (antes → después)
+## Mediciones (build de producción, celular 390 px, CPU ×4 y 4G lento)
 
-CPU ×4. La red se indica en cada fila. "Antes" es el baseline de la auditoría de la Fase 0 (`docs/auditoria`).
+|                                               | Antes del sprint | Publicado                                                           |
+| --------------------------------------------- | ---------------- | ------------------------------------------------------------------- |
+| JS inicial `/empezar`                         | 148,6 KB gzip    | **140,5 KB** (presupuesto 150)                                      |
+| CLS al cargar                                 | 0                | **0**                                                               |
+| CLS recorriendo el flujo hasta "Así te queda" | —                | **0,026** (meta < 0,05; antes del último arreglo daba 0, a revisar) |
+| LCP                                           | ~1000–1200 ms    | **492 ms en frío, 252–256 ms en caliente**                          |
 
-| Métrica | Antes | Después | Meta |
-|---|---|---|---|
-| JS inicial `/empezar` (gzip) | 144,0 KB | **146,8 KB** | ≤ 150 |
-| JS inicial demo (gzip) | 192,2 KB | **184,0 KB** | — |
-| Wizard (diferido, gzip) | — | 82,8 KB | fuera del inicial |
-| LCP `/empezar`, 4G lento | 1763 ms | **~1000 ms** con Slow 4G de DevTools, ~1160 con 400 kbps | < 1763 |
-| CLS `/empezar`, 4G lento | 0,00 | **0,0000** con los dos perfiles (antes de los arreglos llegó a 0,03) | 0 |
-| INP del wizard | 168 ms | **48–72 ms** (necesidad 72, rubro 64, módulos 48) | < 100 |
-| Peor frame del wizard | 150 ms | **50–67 ms** | — |
-| Peor frame de la entrada | 17 ms* | **~185–250 ms** | ver "Qué falla" |
-| Lighthouse móvil `/empezar` | — | a11y 100 · buenas prácticas 100 · SEO 100 | 100 |
-| Lighthouse móvil demo | — | a11y 100 · SEO 100 · buenas prácticas 96 → sin la causa (falta volver a medir) | 100 |
-| axe WCAG 2.2 AA | — | 0 violaciones en todos los pasos y en la demo | 0 |
-| Tests | — | lint 0 · typecheck 0 · Vitest 877 ✓ · E2E **470 ✓ / 0 ✗** | verde |
+## Lo que NO se pudo verificar
 
-\* El 17 ms del baseline no es comparable. Con Turbopack, la evaluación de React caía antes del primer pintado
-y el bucle de medición no la veía. Hoy la página pinta antes (por eso el LCP bajó) y esa evaluación aparece
-como un frame.
-
-Las E2E omitidas (104) son a propósito: hay tests que corren en un solo proyecto (SEO, teclado,
-rendimiento, lead parcial) o solo en celular o solo en escritorio.
-
-## Qué falla o queda flojo
-
-- **Peor frame de la entrada, ~200 ms con CPU ×4.** Es la evaluación del runtime de Next con webpack (chunk
-  `322`), que se adoptó por SRI (ADR 0001). Partirlo en chunks subía el JS a 155 KB sin mejorar el frame: se
-  descartó. La alternativa es volver a Turbopack, que en el baseline tardaba 91 ms en esa tarea, y renunciar
-  al SRI.
-- **La CSP sigue con `'unsafe-inline'`** (riesgo aceptado en la ADR 0001). Hoy no es explotable: los scripts
-  en línea son constantes. Queda como deuda pasarlos a hashes.
-- **El preload de la fuente está fijo por nombre de archivo.** Si Google cambia Outfit, cambia el nombre. El
-  E2E `rendimiento` lo detecta y hay que actualizar `src/brand/tipografia/fuente.ts`.
-- **Con reduced-motion quedan fundidos de opacidad cortos** (cambio de paso, 260 ms). Son aceptables para
-  WCAG, pero no es "estático total".
-- **Bajos de seguridad sin arreglar:**
-  - El body se lee entero antes de cortar en 16 KB (acotado por Vercel).
-  - `src/server` no tiene `import 'server-only'`.
-- **`Wizard.test.tsx` a veces es flaky bajo carga:** pasa al correrlo solo.
-
-## Qué no se pudo verificar
-
-- Lector de pantalla real (NVDA o VoiceOver): los anuncios se dedujeron del DOM.
-- Safari/WebKit y el navegador in-app de Instagram en un teléfono real.
-- RLS y estado real de la base Supabase (no hay credenciales en la sesión).
-- Headers y SRI del deploy real en el dominio propio.
-- El preview de Vercel desde el celular: está detrás del login de Vercel.
-- Lighthouse de la demo después de sacar el `eval` de zod (se verificó con un script que no hay violaciones
-  de CSP, pero no se volvió a correr Lighthouse).
+- **Dispositivos reales** (todo es emulación de Playwright/Chromium): Safari de iOS real, Android real,
+  Firefox (la vista previa usa `zoom`, que pide Firefox ≥ 126).
+- **El navegador interno de Instagram** (de donde llega el tráfico).
+- **El guardado de un lead en producción**: por la regla de no escribir en la base real, la prueba de
+  humo interceptó el envío. Que la API arranca bien se verificó (405 al GET; 400 a un POST inválido en el
+  preview), pero un lead real de punta a punta no.
+- El aviso por WhatsApp/mail de un lead nuevo (no hay proveedor de notificaciones configurado).
+- Lighthouse en producción y la medición de campo (Web Vitals reales).
 
 ## Qué te toca
 
-1. **Supabase:**
-   - Revisar y borrar los leads de prueba que pudieron entrar a la base real el 2026-10-30
-     (`nombre_negocio` "Peluquería desktop/tablet/pixel-7/hero-…", persona "Ana Pérez").
-   - Aplicar `supabase/migrations/20261030120000_leads_parcial_necesidades.sql`. **Sin esa migración el
-     wizard nuevo falla en producción al guardar el WhatsApp.**
-2. **Vercel:**
-   - Revisar que las variables de Supabase no tengan alcance "Preview": hoy un deploy de preview escribiría
-     en la base real.
-   - El primer deploy con webpack conviene hacerlo sin caché y probarlo antes en un preview (README).
-3. **Contenido:**
-   - Confirmar el estado real de cada módulo y el plazo de la primera respuesta (hoy son `TODO:` visibles).
-   - Agregar la política de privacidad y `NEXT_PUBLIC_CONTACT_EMAIL`.
-4. **Publicar:** cuando lo revises, decidir el push de `main` (despliega a producción). Sin tu OK no se sube.
-5. **Limpieza (opcional):** borrar las ramas ya mergeadas (`feat/*`, `sprint/fase-0-auditoria`,
-   `worktree-agent-*`) y los 5 worktrees de `.claude/worktrees/`.
+1. **Hacer un lead real de prueba** desde tu celular en https://webya-empezar.vercel.app/empezar y
+   confirmar que aparece en Supabase (con nombre del negocio y ciudad); después borrarlo. Aprovechá para
+   probar el botón de WhatsApp y el navegador de Instagram (abrí el link desde una historia o la bio).
+2. Revisar o borrar en Supabase los leads de prueba viejos (del 2026-10-30) si quedó alguno.
+3. **Dominio** `webya.ar` en Vercel (hoy da 404) y, cuando esté, `NEXT_PUBLIC_SITE_URL`.
+4. Confirmar el **plazo de respuesta** (sigue el `TODO:` visible), los **precios**, la **política de
+   privacidad** y los textos de ejemplo de los módulos sin web pública (`clientes`, `notificaciones`,
+   `pagos`).
+5. **Micio's**: el permiso escrito, la dirección del sitio, si se nombra San Jorge y las capturas.
+   Con eso se prende `FLAGS.casoMicios` (y se cambia su test a propósito).
+6. **Video**: subir el MP4 cuando lo tengas; `feat/video-presentacion` quedó para una tanda aparte (hay
+   que pasar sus 2 commits sobre `main`, no mergearla tal cual). Guion y prompt en `docs/video-guion.md`.
+7. Probar el **orden B** cuando haya tráfico (`?orden=b`) y mirar `form_enviado`/`cta_click` por orden
+   cuando enchufes un proveedor de analítica (la capa ya está, sin proveedor).
+
+## Ramas y worktrees
+
+- Ramas: `main` y `feat/video-presentacion` (la dejaste a propósito; su worktree en
+  `.claude/worktrees/agent-a8752564f4a7d4b25` tiene trabajo sin commitear). `feat/preview-por-rubro`
+  borrada (local y remota). Ningún worktree bloqueado: las carpetas viejas se borraron.
