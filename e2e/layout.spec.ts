@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { FOOTER } from '../src/content/empezar/footer';
+import { NAV } from '../src/content/empezar/nav';
 import { STICKY_CTA } from '../src/content/empezar/cta-final';
 import { HERO } from '../src/content/empezar/hero';
 import { getPlantilla } from '../src/content/rubros';
@@ -81,16 +81,18 @@ test('/marca sin scroll horizontal (tablas de contraste incluidas)', async ({ pa
   expect(sobra).toBeLessThanOrEqual(0);
 });
 
-test('tema: oscuro por defecto, el interruptor del pie pasa a claro y se recuerda al recargar', async ({
+test('tema: oscuro por defecto, el interruptor de la nav pasa a claro y se recuerda al recargar', async ({
   page,
 }) => {
   await page.goto('/empezar');
   const html = page.locator('html');
   await expect(html).not.toHaveAttribute('data-theme', 'light');
   const interruptor = page
-    .getByRole('contentinfo')
-    .getByRole('button', { name: FOOTER.tema.etiqueta });
+    .getByRole('navigation', { name: NAV.aria })
+    .getByRole('button', { name: NAV.tema.etiqueta });
   await expect(interruptor).toHaveAttribute('aria-pressed', 'false');
+  // Uno solo en la página: el pie ya no lo lleva.
+  await expect(page.getByRole('button', { name: NAV.tema.etiqueta })).toHaveCount(1);
   await interruptor.click();
   await expect(html).toHaveAttribute('data-theme', 'light');
   await page.reload();
@@ -169,15 +171,31 @@ test.describe('escritorio (lg y más)', () => {
     await expect(vista).toContainText('Tienda Sol');
   });
 
-  test('"Qué podés activar" en 4 columnas; FAQ en 2', async ({ page }) => {
+  test('"Qué podés activar" en 4 columnas; FAQ en 2 (pregunta | respuesta)', async ({ page }) => {
     await page.goto('/empezar');
     expect(await columnas(page, 'section[aria-labelledby="incluye-title"] > ul > li')).toBe(4);
-    expect(await columnas(page, 'section[aria-labelledby="faq-title"] details')).toBe(2);
+    // Las objeciones, a la vista: la pregunta a la izquierda y la respuesta a la derecha, en 2 columnas.
+    const faq = page.locator('section[aria-labelledby="faq-title"]');
+    const objeciones = faq.locator('[data-objecion]');
+    await expect(objeciones).toHaveCount(4);
+    expect(await columnas(page, 'section[aria-labelledby="faq-title"] [data-objecion] > *')).toBe(
+      2,
+    );
+    for (const o of await objeciones.all()) {
+      const pregunta = (await o.locator('h3').boundingBox())!;
+      const respuesta = (await o.locator('p').first().boundingBox())!;
+      expect(pregunta.x + pregunta.width).toBeLessThan(respuesta.x);
+    }
+    // Las dudas de detalle, en una sola columna alineada con las respuestas.
+    expect(await columnas(page, 'section[aria-labelledby="faq-title"] details')).toBe(1);
+    const duda = (await faq.locator('details').first().boundingBox())!;
+    const respuesta = (await objeciones.first().locator('p').first().boundingBox())!;
+    expect(Math.abs(duda.x - respuesta.x)).toBeLessThanOrEqual(1);
   });
 
   test('títulos de sección de una línea y descripciones de una sola frase', async ({ page }) => {
     await page.goto('/empezar');
-    for (const id of ['incluye-title', 'faq-title']) {
+    for (const id of ['incluye-title', 'como-trabajamos-title', 'faq-title']) {
       expect(await lineas(page, `#${id}`)).toBe(1);
     }
     const textos = await page
