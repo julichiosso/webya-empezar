@@ -3,6 +3,7 @@ import {
   ALFA,
   COLOR,
   CURVA,
+  DESPLAZAMIENTO,
   DURACION,
   ESCALA,
   PASO,
@@ -204,6 +205,11 @@ export const MOVIMIENTO = {
   'escala-toque': ESCALA.toque,
   'escala-sobrepaso': ESCALA.sobrepaso,
   'paso-pieza': PASO.pieza,
+  // Kinetic type: la palabra que encastra (presets.ts → encastrePalabra, motion.css → .palabra-encastre).
+  'paso-palabra': PASO.palabra,
+  'escala-palabra': ESCALA.palabra,
+  'desplazamiento-palabra': DESPLAZAMIENTO.palabra,
+  'asiento-palabra': DESPLAZAMIENTO.asiento,
 } as const;
 
 /** Radios escalonados por jerarquía: controles < tarjetas < paneles. */

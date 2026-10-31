@@ -40,6 +40,34 @@
   animation-delay: calc(var(--i, 0) * var(--paso-pieza));
 }
 
+/*
+ * Kinetic type (dirección Plano): la palabra que encastra. style={estiloPalabra(i)} pone --i y
+ * --lado (1 desde abajo, -1 desde arriba). Llega, se pasa apenas y asienta; una vez. El origen de
+ * la escala es la línea de base, así la palabra "apoya" en el renglón. Ver ENCASTRE_PALABRA.
+ */
+@keyframes encastre-palabra {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--lado, 1) * var(--desplazamiento-palabra)))
+      scale(var(--escala-palabra));
+  }
+  62% {
+    opacity: 1;
+    transform: translateY(calc(var(--lado, 1) * -1 * var(--asiento-palabra)))
+      scale(var(--escala-sobrepaso));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.palabra-encastre {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  animation: encastre-palabra var(--duration-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--paso-palabra));
+}
+
 /* Logo que se escribe (<Logo escribir />): el trazo se dibuja y después se rellena, una vez. */
 @keyframes logo-escribe {
   to {
@@ -69,7 +97,8 @@
     transition: none;
   }
   .snap,
-  .pieza-escalonada {
+  .pieza-escalonada,
+  .palabra-encastre {
     animation: none !important;
     opacity: 1;
     transform: none;

@@ -86,6 +86,10 @@
   --escala-toque: 0.98;
   --escala-sobrepaso: 1.02;
   --paso-pieza: 70ms;
+  --paso-palabra: 60ms;
+  --escala-palabra: 0.94;
+  --desplazamiento-palabra: 0.42em;
+  --asiento-palabra: 0.04em;
 
   /* Capa 3: componente */
   --boton-primario-fondo: var(--accent);
