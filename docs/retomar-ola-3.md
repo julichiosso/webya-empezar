@@ -1,6 +1,17 @@
 # Retomar: sprint "tu negocio, armado en un minuto"
 
-## PAUSA (2026-10-31): límite de uso, antes de publicar
+## Publicación a producción (2026-10-31)
+
+- **Punto de retorno: `0c52f2d`** (lo que estaba en `origin/main` antes de publicar). Para volver
+  atrás sin tocar git: en Vercel → Deployments, el deploy de producción de `0c52f2d` → ⋯ →
+  **Instant Rollback** (o "Promote to Production"). Con git (solo si hace falta): un commit de
+  `git revert` sobre main, nunca force push.
+- Se publica `feat/preview-por-rubro` por avance directo (fast-forward) de `main`. Antes, en el
+  preview: `GET /api/leads` 405, POST inválido 400, botón "Quiero esto para mi negocio" con link
+  `wa.me` correcto, barra fija en celular y mail en el pie (prueba de humo con el envío
+  interceptado: nada se escribió en la base).
+
+## PAUSA (2026-10-31): límite de uso, antes de publicar (resuelta: ver arriba)
 
 Se pausó **antes de la fase 1 de la publicación**: el agente del video cortó por el límite de 5 h
 de la cuenta (vuelve a las 4 a. m.). Nada se pusheó; `main` (local y remoto) está intacto.
