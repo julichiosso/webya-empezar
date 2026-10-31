@@ -33,6 +33,7 @@ import { buttonClasses } from '@/components/ui/boton-clases';
 import { SISTEMA } from '@/content/sistema';
 import { Snap } from './Snap';
 import { Vitrina } from './Vitrina';
+import { VitrinaPlano } from './VitrinaPlano';
 
 // Página interna del sistema de diseño: no se indexa ni se lista en el sitemap. Siempre en oscuro
 // (el tema elegible solo aplica en /empezar; ver src/brand/tema/tema.ts).
@@ -48,6 +49,7 @@ const SECCIONES = [
   'forma',
   'movimiento',
   'componentes',
+  'plano',
   'iconos',
   'ilustraciones',
 ] as const;
@@ -87,6 +89,10 @@ export default function SistemaPage() {
         bajada={SISTEMA.componentes.bajada}
       >
         <Vitrina />
+      </Seccion>
+
+      <Seccion id="plano" titulo={SISTEMA.plano.titulo} bajada={SISTEMA.plano.bajada}>
+        <VitrinaPlano />
       </Seccion>
 
       <SeccionIconos />
@@ -223,6 +229,9 @@ function Muestra({ fondo, nombre, valor }: { fondo: string; nombre: string; valo
     </li>
   );
 }
+
+/** Utilidad de Tailwind de la sombra (identificador, no copy). */
+const CLASE_SOMBRA = 'shadow-raised';
 
 const GRILLA_MUESTRAS = 'mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4';
 
@@ -373,7 +382,7 @@ function SeccionForma() {
           <span className="text-small text-muted">{t.sombraMuestra}</span>
         </div>
         <span>
-          <Token>shadow-raised</Token>
+          <Token>{CLASE_SOMBRA}</Token>
           <Valor>{SOMBRA_ELEVADA}</Valor>
         </span>
       </div>
