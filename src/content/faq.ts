@@ -14,29 +14,41 @@ export interface Pregunta {
    * que se vea en la página lo que falta definir.
    */
   todo?: string;
+  /** Objeción que se responde de frente, a la vista (sin abrir nada). Las demás van en un acordeón. */
+  objecion?: boolean;
 }
 
+/** Primero las cuatro objeciones (a la vista), después las dudas de detalle (en acordeón). */
 export const FAQ: readonly Pregunta[] = [
-  {
-    pregunta: '¿Necesito saber de tecnología?',
-    respuesta:
-      'No. Vos nos contás cómo funciona tu negocio y nosotros nos ocupamos de lo técnico, con vos.',
-  },
   {
     pregunta: '¿Cuánto cuesta?',
     respuesta:
       'Depende de lo que actives. Contanos qué necesitás y te armamos un presupuesto sin compromiso.',
     todo: PENDIENTES.precios,
+    objecion: true,
   },
   {
     pregunta: '¿Y si no me gusta?',
     respuesta:
       'Antes de decidir, probás la demo. Y antes de publicar, lo revisás y lo ajustamos con vos.',
+    objecion: true,
   },
   {
-    pregunta: '¿Puedo usar mi dominio?',
-    respuesta: 'Contanos si ya tenés uno y lo vemos cuando hablemos.',
-    todo: PENDIENTES.dominio,
+    pregunta: '¿Qué hacen con mis datos?',
+    respuesta: 'Los usamos solo para contactarte por tu proyecto. No los compartimos con nadie.',
+    todo: PENDIENTES.privacidad,
+    objecion: true,
+  },
+  {
+    pregunta: '¿Y si lo que necesito no está?',
+    respuesta:
+      'Contanos qué te falta en el paso "Otra cosa". Lo vemos con vos y, si se puede hacer, lo armamos a medida.',
+    objecion: true,
+  },
+  {
+    pregunta: '¿Necesito saber de tecnología?',
+    respuesta:
+      'No. Vos nos contás cómo funciona tu negocio y nosotros nos ocupamos de lo técnico, con vos.',
   },
   {
     pregunta: '¿Cuánto tardan?',
@@ -45,14 +57,9 @@ export const FAQ: readonly Pregunta[] = [
     todo: `${PENDIENTES.plazoEntrega} ${PENDIENTES.plazoRespuesta}`,
   },
   {
-    pregunta: '¿Qué pasa con mis datos?',
-    respuesta: 'Los usamos solo para contactarte por tu proyecto. No los compartimos con nadie.',
-    todo: PENDIENTES.privacidad,
-  },
-  {
-    pregunta: '¿Y si lo que necesito no está?',
-    respuesta:
-      'Contanos qué te falta en el paso "Otra cosa". Lo vemos con vos y, si se puede hacer, lo armamos a medida.',
+    pregunta: '¿Puedo usar mi dominio?',
+    respuesta: 'Contanos si ya tenés uno y lo vemos cuando hablemos.',
+    todo: PENDIENTES.dominio,
   },
   {
     pregunta: '¿Ya puedo armarlo por mi cuenta?',
