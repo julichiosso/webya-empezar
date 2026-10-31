@@ -10,6 +10,7 @@ import { WIZARD } from '@/content/empezar/wizard';
 export const MENSAJES_LEAD: MensajesLead = {
   hastaCaracteres: (max) => `Usá hasta ${max} caracteres.`,
   nombreNegocioCorto: 'Contanos cómo se llama tu negocio.',
+  nombreNegocioUnCaracter: 'Escribí al menos dos caracteres: el nombre con el que te conocen.',
   nombreCorto: 'Decinos tu nombre para saber a quién escribirle.',
   whatsappVacio: 'Dejanos tu WhatsApp para poder escribirte.',
   whatsappInvalido: 'Revisá el número: tiene que ser de Argentina, por ejemplo 11 2345 6789.',

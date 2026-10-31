@@ -89,7 +89,12 @@ export const FLUJO = {
     barra: 'Quiero esto para mi negocio',
     todoWhatsapp: PASO_LISTO.todoWhatsapp,
     /** El guardado del lead falló pero la vista previa igual se muestra: le dejamos la salida. */
-    sinGuardar: 'No pudimos guardar tus datos. Escribinos por WhatsApp y lo seguimos por ahí.',
+    sinGuardar:
+      'Todavía no pudimos guardar tus datos. Lo volvemos a intentar solo; si querés, reintentá ahora o escribinos por WhatsApp.',
+    reintentar: 'Reintentar ahora',
+    reintentando: 'Reintentando…',
+    /** Un reintento salió bien. */
+    guardadoTarde: 'Listo, ya guardamos tus datos.',
   },
 
   /** Orden B (experimento): el WhatsApp se pide al tocar "Quiero esto", después de la vista previa. */

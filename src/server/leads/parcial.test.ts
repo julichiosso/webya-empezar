@@ -148,6 +148,25 @@ describe('POST /api/leads con parcial: true', () => {
     expect(Object.keys(campos).sort()).toEqual(['ciudad', 'nombreNegocio']);
   });
 
+  it('el nombre del negocio tiene el mismo mínimo que la base (un emoji solo cuenta como uno)', async () => {
+    for (const nombreNegocio of ['🍕', 'x', 'A<b>']) {
+      const { res, body } = await crearParcial({
+        parcial: true,
+        whatsapp: '11 2345 6789',
+        nombreNegocio,
+      });
+      expect(res.status, nombreNegocio).toBe(400);
+      const campos = (body as unknown as { error: { fields: Record<string, string> } }).error
+        .fields;
+      expect(campos.nombreNegocio).toBe(MENSAJES_LEAD.nombreNegocioUnCaracter);
+    }
+    expect(repo.leads).toHaveLength(0);
+    for (const nombreNegocio of ['🍕🍕', 'Lo']) {
+      const { res } = await crearParcial({ parcial: true, whatsapp: '11 2345 6789', nombreNegocio });
+      expect(res.status, nombreNegocio).toBe(201);
+    }
+  });
+
   it('rubro "otro": alcanza con el pedido a medida (sin nombre de rubro)', async () => {
     const { res } = await crearParcial({
       parcial: true,

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { sanitizeLine, sanitizeMultiline } from '@/lib/sanitize';
 import { captureUtm, parseUtm } from '@/lib/utm';
-import { datosFormSchema, LIMITES, leadPayloadSchema } from './leads';
+import { datosFormSchema, LIMITES, leadPayloadSchema, MENSAJES_LEAD } from './leads';
 
 const valido = {
   nombreNegocio: 'Peluquería Luna',
@@ -26,6 +26,14 @@ describe('datosFormSchema', () => {
   it('acepta email y mensaje cuando vienen', () => {
     const r = datosFormSchema.safeParse({ ...valido, email: 'ana@luna.com', mensaje: 'Hola' });
     expect(r.success).toBe(true);
+  });
+
+  it('cuenta los caracteres como la base: un emoji solo no alcanza, dos sí', () => {
+    const corto = datosFormSchema.safeParse({ ...valido, nombreNegocio: '🍕' });
+    expect(corto.success).toBe(false);
+    expect(mensajes(corto)).toEqual([MENSAJES_LEAD.nombreNegocioUnCaracter]);
+    expect(datosFormSchema.safeParse({ ...valido, nombreNegocio: '🍕🍕' }).success).toBe(true);
+    expect(datosFormSchema.safeParse({ ...valido, nombre: '😀' }).success).toBe(false);
   });
 
   it('exige nombre del negocio, nombre y WhatsApp', () => {

@@ -25,13 +25,22 @@ export interface LeadGuardado {
   user_agent: string | null;
 }
 
+/**
+ * Lee los leads que guardó el servidor de E2E. Que no exista el archivo es "todavía ninguno"; en
+ * cambio, si la lectura cae justo en el rename atómico del repositorio (en Windows da EBUSY/EPERM,
+ * o un JSON a medio leer), se reintenta: devolver vacío ahí haría fallar el test al azar.
+ */
 export async function leerLeads(): Promise<LeadGuardado[]> {
-  try {
-    return JSON.parse(
-      await readFile(resolve(process.cwd(), E2E_LEADS_FILE), 'utf8'),
-    ) as LeadGuardado[];
-  } catch {
-    return [];
+  for (let intento = 0; ; intento++) {
+    try {
+      return JSON.parse(
+        await readFile(resolve(process.cwd(), E2E_LEADS_FILE), 'utf8'),
+      ) as LeadGuardado[];
+    } catch (e) {
+      if ((e as NodeJS.ErrnoException).code === 'ENOENT') return [];
+      if (intento >= 10) throw e;
+      await new Promise((r) => setTimeout(r, 50));
+    }
   }
 }
 

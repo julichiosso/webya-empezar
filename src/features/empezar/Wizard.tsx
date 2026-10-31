@@ -24,6 +24,7 @@ import { track } from '@/lib/analytics';
 import { siteConfig } from '@/lib/site-config';
 import { captureUtm, type Utm } from '@/lib/utm';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
+import type { LeadParcialInput } from '@/content/leads';
 import { completarLead, crearLeadParcial, type EnvioResultado } from './api';
 import { BarraCta } from './BarraCta';
 import { aplicarTraspasoDemo } from './desde-demo';
@@ -77,6 +78,11 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
   const [errorPaso, setErrorPaso] = useState<string | null>(null);
   /** El guardado del lead falló por red o servidor: la vista previa se muestra igual. */
   const [sinGuardar, setSinGuardar] = useState(false);
+  /** Reintentando el guardado (a mano o solo); `guardadoTarde`: salió bien en un reintento. */
+  const [reintentando, setReintentando] = useState(false);
+  const [guardadoTarde, setGuardadoTarde] = useState(false);
+  /** El pedido que falló, tal cual, para reintentarlo (nunca se pierde en silencio). */
+  const pendiente = useRef<LeadParcialInput | null>(null);
   /** Cómo se ve la vista previa; null = el natural (celular en celular, navegador en escritorio). */
   const [dispositivo, setDispositivo] = useState<Dispositivo | null>(null);
   /** Desde lg la vista previa vive a la derecha, en un navegador: ese es el natural. */
@@ -220,7 +226,7 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
       setTimeout(() => irA('resultado'), PAUSA_EXITO_MS);
       return { ok: true };
     }
-    const resultado = await crearLeadParcial({
+    const pedido: LeadParcialInput = {
       whatsapp: valores.whatsapp,
       nombreNegocio: valores.nombreNegocio || state.datos.nombreNegocio,
       ciudad: valores.ciudad || state.datos.ciudad || undefined,
@@ -232,25 +238,59 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
       // Si vino de una demo: de dónde y lo que armó ahí (los dos, de listas cerradas).
       ...(state.origen ? { origen: state.origen } : {}),
       ...(state.demo ? { demo: state.demo } : {}),
-    });
-    // Sin red o con el servidor caído no se frena el "wow": la vista previa sale igual y el CTA
-    // de WhatsApp lleva lo que armó. Validación y límite sí se quedan en el formulario.
+    };
+    const resultado = await crearLeadParcial(pedido);
+    // Sin red o con el servidor caído no se frena el "wow": la vista previa sale igual, con un
+    // aviso visible y el reintento (solo y a mano). Validación y límite se quedan en el formulario.
     if (!resultado.ok && (resultado.causa === 'red' || resultado.causa === 'servidor')) {
+      pendiente.current = pedido;
       setSinGuardar(true);
       setTimeout(() => irA('resultado'), PAUSA_EXITO_MS);
       return { ok: true };
     }
     if (!resultado.ok) return resultado;
-    setSinGuardar(false);
-    dispatch({ tipo: 'leadParcial', lead: { id: resultado.id, token: resultado.token } });
-    track('form_enviado', {
-      rubro: state.rubro ?? '',
-      ciudad: (valores.ciudad || state.datos.ciudad).length > 0,
-      orden: state.orden,
-    });
+    guardado(pedido, resultado);
     setTimeout(() => irA('resultado'), PAUSA_EXITO_MS);
     return { ok: true };
   };
+
+  /** El lead quedó guardado (de entrada o en un reintento). */
+  const guardado = (pedido: LeadParcialInput, lead: { id: string; token: string }) => {
+    pendiente.current = null;
+    setSinGuardar(false);
+    dispatch({ tipo: 'leadParcial', lead: { id: lead.id, token: lead.token } });
+    track('form_enviado', {
+      rubro: state.rubro ?? '',
+      ciudad: Boolean(pedido.ciudad),
+      orden: state.orden,
+    });
+  };
+
+  /** Reintenta el guardado que falló. Si vuelve a fallar, el aviso sigue a la vista. */
+  const reintentar = useCallback(async () => {
+    const pedido = pendiente.current;
+    if (!pedido || reintentando) return;
+    setReintentando(true);
+    const r = await crearLeadParcial(pedido);
+    setReintentando(false);
+    if (r.ok) {
+      guardado(pedido, r);
+      setGuardadoTarde(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- guardado lee el estado del render
+  }, [reintentando, state.rubro, state.orden]);
+
+  // Reintento solo, por detrás: a los 3 s, a los 10 s y cuando vuelve la conexión.
+  useEffect(() => {
+    if (!sinGuardar) return;
+    const timers = [3000, 10_000].map((ms) => setTimeout(() => void reintentar(), ms));
+    const alVolver = () => void reintentar();
+    window.addEventListener('online', alVolver);
+    return () => {
+      timers.forEach(clearTimeout);
+      window.removeEventListener('online', alVolver);
+    };
+  }, [sinGuardar, reintentar]);
 
   const onCta = () => {
     ctaTocado.current = true;
@@ -425,6 +465,9 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
                   demoUrl={demoUrl}
                   puedeCompletar={state.lead !== null && !sinGuardar}
                   sinGuardar={sinGuardar}
+                  reintentando={reintentando}
+                  guardadoTarde={guardadoTarde}
+                  onReintentar={() => void reintentar()}
                   headingRef={titulo}
                   onDemo={() => track('demo_abierta', { rubro: state.rubro ?? '', paleta })}
                   onCompletar={() => irA('completar')}

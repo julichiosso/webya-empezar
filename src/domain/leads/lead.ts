@@ -31,6 +31,8 @@ export interface CatalogoLead {
 export interface MensajesLead {
   hastaCaracteres: (max: number) => string;
   nombreNegocioCorto: string;
+  /** Escribió algo, pero menos de 2 caracteres (un emoji solo cuenta como uno). */
+  nombreNegocioUnCaracter: string;
   nombreCorto: string;
   whatsappVacio: string;
   whatsappInvalido: string;
@@ -57,6 +59,13 @@ export interface MensajesLead {
 export { LIMITES_BASE, TOKEN_LEAD_REGEX } from './limites';
 
 type Ctx = z.RefinementCtx;
+
+/**
+ * Largo como lo cuenta Postgres (`char_length`: puntos de código), no como JS (unidades UTF-16):
+ * "🍕" mide 1 para la base y 2 para `.length`. Los mínimos se validan con esto para que nunca pase
+ * acá algo que la base después rechace (el lead se perdería con un 500).
+ */
+export const largoComoLaBase = (v: string) => Array.from(v).length;
 
 /** Ids sin repetir y todos del catálogo. Los mensajes y la ruta son los de cada campo. */
 function revisarIds(
@@ -85,12 +94,13 @@ export function crearEsquemasLead(catalogo: CatalogoLead, mensajes: MensajesLead
     nombreNegocio: z
       .string()
       .trim()
-      .min(2, mensajes.nombreNegocioCorto)
+      .min(1, mensajes.nombreNegocioCorto)
+      .refine((v) => v === '' || largoComoLaBase(v) >= 2, mensajes.nombreNegocioUnCaracter)
       .max(LIMITES.nombreNegocio, mensajes.hastaCaracteres(LIMITES.nombreNegocio)),
     nombre: z
       .string()
       .trim()
-      .min(2, mensajes.nombreCorto)
+      .refine((v) => largoComoLaBase(v) >= 2, mensajes.nombreCorto)
       .max(LIMITES.nombre, mensajes.hastaCaracteres(LIMITES.nombre)),
     whatsapp: z
       .string()
@@ -198,10 +208,12 @@ export function crearEsquemasLead(catalogo: CatalogoLead, mensajes: MensajesLead
     .object({
       whatsapp: datosFormShape.whatsapp,
       // Pantalla 2 del flujo: el nombre del negocio va con el WhatsApp; la ciudad es opcional.
+      // Opcional (orden B lo pide después), pero si viene, con el mismo mínimo que la base.
       nombreNegocio: z
         .string()
         .trim()
         .max(LIMITES.nombreNegocio, mensajes.hastaCaracteres(LIMITES.nombreNegocio))
+        .refine((v) => v === '' || largoComoLaBase(v) >= 2, mensajes.nombreNegocioUnCaracter)
         .optional(),
       ciudad: z
         .string()

@@ -150,16 +150,38 @@ describe('Wizard — pantalla 2 (negocio): guarda el lead parcial', () => {
     expect(nombres()).toEqual(expect.arrayContaining(['form_enviado', 'preview_visto']));
   });
 
-  it('si la red falla, la vista previa sale igual y solo queda la salida por WhatsApp', async () => {
-    fetchMock.mockRejectedValue(new TypeError('sin red'));
+  it('si la red falla: vista previa igual, aviso visible y "Reintentar" guarda el lead', async () => {
+    fetchMock.mockRejectedValueOnce(new TypeError('sin red'));
     const u = user();
     render(<Wizard />);
     await elegirRubro(u);
     await completarNegocio(u);
     await u.click(screen.getByRole('button', { name: /ver cómo me queda/i }));
-    expect(await screen.findByText(/no pudimos guardar tus datos/i, {}, { timeout: 4000 }));
+    expect(
+      await screen.findByText(/todavía no pudimos guardar tus datos/i, {}, { timeout: 4000 }),
+    ).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /dejar más datos/i })).toBeNull();
+    // A mano: vuelve a mandar EXACTAMENTE el mismo pedido.
+    await u.click(screen.getByRole('button', { name: 'Reintentar ahora' }));
+    expect(await screen.findByText('Listo, ya guardamos tus datos.')).toBeInTheDocument();
+    expect(cuerpo(1)).toEqual(cuerpo(0));
+    expect(screen.getByRole('button', { name: /dejar más datos/i })).toBeInTheDocument();
+    expect(nombres()).toContain('form_enviado');
   });
+
+  it('si el servidor falla, se reintenta solo por detrás (sin que la persona haga nada)', async () => {
+    fetchMock.mockResolvedValueOnce(new Response('{}', { status: 500 }));
+    const u = user();
+    render(<Wizard />);
+    await elegirRubro(u);
+    await completarNegocio(u);
+    await u.click(screen.getByRole('button', { name: /ver cómo me queda/i }));
+    await screen.findByText(/todavía no pudimos guardar tus datos/i, {}, { timeout: 4000 });
+    expect(
+      await screen.findByText('Listo, ya guardamos tus datos.', {}, { timeout: 6000 }),
+    ).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  }, 15_000);
 
   it('un error de validación del servidor se queda en el formulario', async () => {
     fetchMock.mockResolvedValue(

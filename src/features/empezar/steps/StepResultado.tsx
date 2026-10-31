@@ -35,8 +35,12 @@ interface StepResultadoProps {
   demoUrl: string | null;
   /** Hay lead guardado: se puede completar. */
   puedeCompletar: boolean;
-  /** Falló el guardado (red o servidor): solo queda la salida por WhatsApp. */
+  /** Falló el guardado (red o servidor): aviso visible con reintento (también se reintenta solo). */
   sinGuardar: boolean;
+  reintentando: boolean;
+  /** Un reintento salió bien: se le confirma. */
+  guardadoTarde: boolean;
+  onReintentar: () => void;
   headingRef: Ref<HTMLHeadingElement>;
   onDemo: () => void;
   onCompletar: () => void;
@@ -60,6 +64,9 @@ export function StepResultado({
   demoUrl,
   puedeCompletar,
   sinGuardar,
+  reintentando,
+  guardadoTarde,
+  onReintentar,
   headingRef,
   onDemo,
   onCompletar,
@@ -81,11 +88,27 @@ export function StepResultado({
         headingRef={headingRef}
       />
 
-      {sinGuardar && (
-        <p role="status" className="mb-4 rounded-control border border-line bg-surface p-4 text-small">
-          {TXT.sinGuardar}
-        </p>
-      )}
+      {/* Nunca silencioso: si no se guardó, se ve y se puede reintentar; si se guardó tarde, se dice. */}
+      <div role="status" className="empty:hidden">
+        {sinGuardar && (
+          <div className="mb-4 rounded-control border border-danger/40 bg-danger/10 p-4 text-small">
+            <p className="text-fg">{TXT.sinGuardar}</p>
+            <Button
+              variant="secondary"
+              className="mt-3"
+              status={reintentando ? 'loading' : 'idle'}
+              onClick={onReintentar}
+            >
+              {reintentando ? TXT.reintentando : TXT.reintentar}
+            </Button>
+          </div>
+        )}
+        {!sinGuardar && guardadoTarde && (
+          <p className="mb-4 rounded-control border border-line bg-surface p-4 text-small">
+            {TXT.guardadoTarde}
+          </p>
+        )}
+      </div>
 
       {/* El CTA a la vista (en celular lo lleva la barra fija). */}
       <div className="max-lg:hidden">

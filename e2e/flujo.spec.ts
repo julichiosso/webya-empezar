@@ -102,9 +102,7 @@ test('Gastronomía: la demo completa se abre con el nombre y la paleta elegidos'
   await elegirRubro(page, 'gastronomia');
   await enviarNegocio(page, { negocio: 'Lo de Tito' });
   await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
-  await wizard(page)
-    .getByRole('button', { name: 'Colores Pileta' })
-    .click();
+  await wizard(page).getByRole('button', { name: 'Colores Pileta' }).click();
   await expect(
     wizard(page).locator('[data-testid="preview-negocio"][data-paleta="pileta"]').first(),
   ).toBeAttached();
@@ -153,10 +151,13 @@ test('orden B: nombre → vista previa → WhatsApp al tocar el CTA (y ahí se g
     'href',
     /^https:\/\/wa\.me\//,
   );
-  expect((await leerLeads()).find((l) => l.nombre_negocio === negocio)).toMatchObject({
-    estado: 'parcial',
-    rubro: 'peluqueria_estetica',
-  });
+  // Sondeo: en Windows, leer justo durante el rename atómico del repositorio en archivo da vacío.
+  await expect
+    .poll(async () => (await leerLeads()).find((l) => l.nombre_negocio === negocio))
+    .toMatchObject({
+      estado: 'parcial',
+      rubro: 'peluqueria_estetica',
+    });
 });
 
 test('recargar en el medio del flujo conserva lo cargado', async ({ page }) => {
