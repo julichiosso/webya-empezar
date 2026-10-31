@@ -28,6 +28,8 @@ export {
   type IlustracionId,
 } from './dibujos/ids';
 export { ModuloArte } from './modulos/ModuloArte';
+export { IlustracionRubro } from './rubros/IlustracionRubro';
+export { ESCENAS_RUBRO, esEscenaRubro, type EscenaRubro } from './rubros/ids';
 export { ARTES_MODULO, esArteModulo, type ArteModulo } from './modulos/ids';
 
 export type GrupoIcono = 'rubro' | 'modulo' | 'necesidad' | 'interfaz';
