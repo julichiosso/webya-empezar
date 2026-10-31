@@ -13,7 +13,9 @@ import { Confianza } from '@/components/marketing/Confianza';
 import { FLAGS } from '@/config/flags';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
+import { AsiSeArma } from '@/components/marketing/AsiSeArma';
 import { Hero } from '@/components/marketing/Hero';
+import { MiraLoQueCreas } from '@/components/marketing/MiraLoQueCreas';
 import { QueIncluye } from '@/components/marketing/QueIncluye';
 import { FAQ } from '@/content/faq';
 import { SEO_EMPEZAR, SEO_SITIO } from '@/content/seo';
@@ -70,10 +72,10 @@ export default function EmpezarPage() {
               <PantallaRubro animar />
             </Marco>
           </WizardLazy>
-          <div className="mt-6 flex justify-center">
-            <BotonExplicativo origen="empezar" />
-          </div>
         </Hero>
+        <MiraLoQueCreas />
+        {/* El video explicativo va en "Así se arma": explica cómo se arma y no le compite al creador. */}
+        <AsiSeArma accion={<BotonExplicativo origen="empezar" />} />
         <QueIncluye />
         {/* Caso real de Micio's: apagado hasta tener su permiso escrito (config/flags.ts). */}
         {FLAGS.casoMicios && <CasoReal />}

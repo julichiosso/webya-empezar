@@ -1,0 +1,32 @@
+/*
+ * "Mirá lo que creás": elegir un rubro cambia la vista previa SIN JavaScript.
+ *
+ * Las opciones son radios nativos (teclado, lector de pantalla y formulario gratis) y las vistas
+ * previas, hermanas en el mismo contenedor y en el mismo orden. `:has()` en la sección mira qué radio
+ * está marcado y muestra la vista de la misma posición. Las reglas cubren hasta 8 rubros; agregar un
+ * rubro no toca este archivo mientras no pasen de 8 (hoy son 6 con vista previa).
+ *
+ * Al pasar de `display: none` a visible, las piezas de la vista previa (`.snap`) vuelven a encastrar
+ * una vez: el cambio se ve armarse, sin código. Con movimiento reducido aparecen quietas (motion.css).
+ */
+.vista {
+  display: none;
+}
+
+.vitrina:has(.opcion:nth-child(1) input:checked) .vista:nth-child(1),
+.vitrina:has(.opcion:nth-child(2) input:checked) .vista:nth-child(2),
+.vitrina:has(.opcion:nth-child(3) input:checked) .vista:nth-child(3),
+.vitrina:has(.opcion:nth-child(4) input:checked) .vista:nth-child(4),
+.vitrina:has(.opcion:nth-child(5) input:checked) .vista:nth-child(5),
+.vitrina:has(.opcion:nth-child(6) input:checked) .vista:nth-child(6),
+.vitrina:has(.opcion:nth-child(7) input:checked) .vista:nth-child(7),
+.vitrina:has(.opcion:nth-child(8) input:checked) .vista:nth-child(8) {
+  display: block;
+}
+
+/* Navegadores sin :has(): queda a la vista el primer ejemplo (el marcado por defecto). */
+@supports not selector(:has(*)) {
+  .vista:first-child {
+    display: block;
+  }
+}
