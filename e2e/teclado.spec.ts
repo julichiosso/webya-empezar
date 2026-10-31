@@ -22,11 +22,15 @@ test('el flujo completo se puede hacer solo con teclado (y el foco no se pierde 
   const w = wizard(page);
   await expect(w.getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
 
-  // Tab: "Saltar al contenido" → logo → CTA de la nav → la primera tarjeta de rubro.
+  // Tab: "Saltar al contenido" → logo → tema → CTA de la nav → la primera tarjeta de rubro.
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: NAV.saltar })).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: NAV.inicio })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(
+    page.getByRole('navigation').getByRole('button', { name: NAV.tema.etiqueta }),
+  ).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('navigation').getByRole('link', { name: NAV.cta })).toBeFocused();
   await page.keyboard.press('Tab');

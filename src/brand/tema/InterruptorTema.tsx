@@ -32,8 +32,12 @@ export function InterruptorTema({ etiqueta, soloIcono = false, className }: Inte
       aria-pressed={claro}
       aria-label={soloIcono ? etiqueta : undefined}
       onClick={() => aplicarTema(claro ? 'dark' : 'light')}
-      className={`inline-flex min-h-tap items-center justify-center gap-2 rounded-full border border-line text-small font-medium text-fg hover:border-line-strong aria-pressed:border-accent aria-pressed:bg-accent-soft ${
-        soloIcono ? 'size-12' : 'px-4'
+      className={`inline-flex min-h-tap items-center justify-center gap-2 rounded-full text-small font-medium text-fg ${
+        soloIcono
+          ? // Ícono neutro (nav): sin contorno ni acento. El estado lo dice la forma (el ícono gira
+            // media vuelta) y la página entera, que cambia de tema.
+            'size-12 hover:bg-surface-2'
+          : 'border border-line px-4 hover:border-line-strong aria-pressed:border-accent aria-pressed:bg-accent-soft'
       } ${TOQUE_CLASE} ${className ?? ''}`.trim()}
     >
       <svg
