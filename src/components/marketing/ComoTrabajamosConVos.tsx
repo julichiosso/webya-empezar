@@ -32,7 +32,7 @@ function Marca({ final }: { final: boolean }) {
 /**
  * "Así trabajamos con vos" (fondo Brasa oscura, la única de la página): el recorrido real, de tus
  * datos a tu negocio online, como una línea de plano con cuatro estaciones. En celular la línea baja
- * por la izquierda; en escritorio cruza la página como una cota (con sus topes en los extremos).
+ * por la izquierda; en escritorio cruza la página como una cota (con su tope al final).
  * Cada estación dice quién la hace (vos o nosotros). Sin íconos de adorno, sellos ni cifras: solo
  * compromisos que hoy cumplimos y los pendientes como TODO visible. Componente de servidor, quieto.
  */
@@ -66,14 +66,11 @@ export function ComoTrabajamosConVos() {
         aria-label={TXT.aria}
         className="relative mt-12 flex flex-col gap-10 lg:mt-16 lg:grid lg:grid-cols-4 lg:gap-8"
       >
-        {/* La línea del plano (escritorio): una cota que cruza las cuatro estaciones, con topes. */}
+        {/* La línea del plano (escritorio): una cota que sale de la primera marca y cruza las
+            cuatro estaciones hasta su tope. */}
         <span
           aria-hidden="true"
-          className="absolute top-3 right-0 left-0 hidden border-t border-seccion-brasa-muted lg:block"
-        />
-        <span
-          aria-hidden="true"
-          className="absolute top-1 left-0 hidden h-4 border-l border-seccion-brasa-muted lg:block"
+          className="absolute top-3 right-0 left-3 hidden border-t border-seccion-brasa-muted lg:block"
         />
         <span
           aria-hidden="true"
@@ -88,7 +85,7 @@ export function ComoTrabajamosConVos() {
                 className="absolute top-6 -bottom-10 left-3 border-l border-seccion-brasa-muted lg:hidden"
               />
             )}
-            <span className="absolute top-0 left-0 lg:left-0">
+            <span className="absolute top-0 left-0">
               <Marca final={i === ultimo} />
             </span>
             <p className={cn('text-small font-medium', C.secundario)}>{t.rol}</p>
@@ -110,7 +107,7 @@ export function ComoTrabajamosConVos() {
 
       <div
         className={cn(
-          'mt-12 flex flex-col gap-2 border-t pt-8 lg:mt-16 lg:flex-row lg:items-center lg:justify-between lg:gap-8',
+          'mt-12 flex flex-col gap-2 border-t pt-8 lg:mt-16 lg:flex-row lg:items-baseline lg:justify-between lg:gap-8',
           C.linea,
         )}
       >

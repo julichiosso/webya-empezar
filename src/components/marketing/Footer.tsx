@@ -106,9 +106,15 @@ export function Footer() {
         </div>
       </div>
 
-      {/* El wordmark al pie, grande y entero (sin recortar ni recolorear: sigue el texto de la sección). */}
-      <div className={cn('mt-16 border-t pt-8 lg:mt-24 lg:pt-12', C.linea)}>
-        <Logo decorativo className="max-sm:h-14 sm:h-24 lg:h-36" />
+      {/* El wordmark al pie, de lado a lado del ancho de página, entero y sin recolorear (sigue el
+          texto de la sección). `[&>svg]` le gana al alto fijo del Logo sin tocar el componente. */}
+      <div
+        className={cn(
+          'mt-16 border-t pt-8 lg:mt-24 lg:pt-12 [&>svg]:h-auto [&>svg]:w-full',
+          C.linea,
+        )}
+      >
+        <Logo decorativo />
       </div>
     </Seccion>
   );

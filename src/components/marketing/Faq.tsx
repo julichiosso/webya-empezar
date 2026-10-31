@@ -19,10 +19,13 @@ function Objecion({ item }: { item: Pregunta }) {
   return (
     <li
       data-objecion=""
-      className={cn('border-t py-8 lg:grid lg:grid-cols-12 lg:gap-8 lg:py-12', C.linea)}
+      className={cn(
+        'border-t py-8 lg:grid lg:grid-cols-12 lg:items-baseline lg:gap-8 lg:py-12',
+        C.linea,
+      )}
     >
       <h3 className="text-title font-semibold text-balance lg:col-span-5">{item.pregunta}</h3>
-      <div className="mt-4 lg:col-span-6 lg:col-start-7 lg:mt-2">
+      <div className="mt-4 lg:col-span-6 lg:col-start-7 lg:mt-0">
         <p className="max-w-prose text-lead">{item.respuesta}</p>
         {item.todo && <Pendiente texto={item.todo} className="mt-2" />}
       </div>
