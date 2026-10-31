@@ -1,5 +1,15 @@
 # Retomar: sprint "tu negocio, armado en un minuto"
 
+## Sprint "Plano" (rama `feat/rediseno-plano`, desde main `5d13eae`)
+
+- **Etapa (a) cerrada, esperando OK del usuario** (pausa obligatoria antes de (b)). Tokens de sección
+  (tinta, crema, Brasa oscura, velo) con AA medido, blueprint (`FondoPlano`, `IlustracionPlano`),
+  `TituloEncastre`, `Seccion`, `SlotImagen`, guardas anti-hex y anti-texto, skill `webya-plano`.
+  Tipografía: se queda Outfit (ninguna OFL ganó claramente). Vitest 1132 ✓, E2E completa 430 ✓.
+- Para (b): en celular las cotas de `FondoPlano variante="cotas"` cruzan el texto (ubicarlas en
+  márgenes); `/sistema` desborda 5 px en celular por `#logo` (deuda previa).
+- Decisiones del usuario y pausas: ver la memoria `sprint-rediseno-plano`.
+
 ## Publicación a producción (2026-10-31)
 
 - **Punto de retorno: `0c52f2d`** (lo que estaba en `origin/main` antes de publicar). Para volver

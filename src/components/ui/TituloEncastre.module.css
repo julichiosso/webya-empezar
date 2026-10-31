@@ -49,16 +49,13 @@
 }
 
 /*
- * Entrada "vista": sin atributo queda el estado final (sin JS se lee igual). ActivadorEncastre pone
- * `espera` si el titular está fuera de pantalla y `activo` al entrar: corre una sola vez.
+ * Entrada "vista": sin atributo, en `espera` (fuera de pantalla) y en `quieto` queda el estado final:
+ * legible y sin piezas corridas, aunque nunca llegue a entrar en pantalla (una captura de página
+ * entera, una pantalla baja, sin JS). ActivadorEncastre pone `activo` al entrar: corre una sola vez.
  */
-.vista[data-encastre='espera'] .pieza,
 .vista[data-encastre='activo'] .pieza {
   animation: encastre-titulo var(--duration-slow) var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * var(--paso-pieza));
-}
-.vista[data-encastre='espera'] .pieza {
-  animation-play-state: paused;
 }
 
 /* Equivalente estático: el titular aparece en su lugar, sin movimiento. */
