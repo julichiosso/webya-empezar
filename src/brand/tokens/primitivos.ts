@@ -9,9 +9,15 @@ export const COLOR = {
   negro: { 1000: '#000000', 950: '#0b0b0c', 900: '#131316', 850: '#1a1a1e' },
   gris: { 400: '#a1a1a6', 500: '#8a8a90', 600: '#6b6b71', 700: '#55555a' },
   blanco: { 0: '#ffffff', 50: '#fafafa', 100: '#f2f2f3' },
-  crema: { 50: '#fbf8f2', 100: '#f4ede1', 700: '#5e574f' },
-  /** Acento "Brasa": 500 es el relleno; 700 es la tinta (texto sobre papel y acento del tema claro). */
-  brasa: { 500: '#ff5b24', 700: '#b83a0e' },
+  /** 300: texto secundario sobre el velo de las fotos (dirección Plano). */
+  crema: { 50: '#fbf8f2', 100: '#f4ede1', 300: '#d6cec3', 700: '#5e574f' },
+  /**
+   * Acento "Brasa": 500 es el relleno; 700 es la tinta (texto sobre papel y acento del tema claro).
+   * 950 es la brasa apagada (fondo del bloque de sección "Brasa oscura") y 200, su texto secundario.
+   */
+  brasa: { 200: '#e0c3b1', 500: '#ff5b24', 700: '#b83a0e', 950: '#4a1606' },
+  /** Negro cálido de las secciones "tinta" (dirección Plano): 950 fondo, 900 superficie, 400 secundario. */
+  tinta: { 400: '#a69d91', 900: '#211b17', 950: '#16120f' },
   /** Error en rosa frío: no se confunde con Brasa. */
   rosa: { 400: '#ff6b8a', 700: '#b4233f' },
 } as const;
@@ -28,6 +34,11 @@ export const ALFA = {
   lineaFuertePapel: 0.32,
   brillo: 0.04,
   sombra: 0.5,
+  /** Líneas del plano dentro de una sección oscura (tinta, brasa, velo): la grilla y las cotas. */
+  lineaSeccion: 0.16,
+  lineaFuerteSeccion: 0.32,
+  /** Velo sobre las fotos a pantalla completa: con 0,8 el texto pasa AA aunque la foto sea blanca. */
+  velo: 0.8,
 } as const;
 
 /**

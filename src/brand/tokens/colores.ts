@@ -1,6 +1,11 @@
 import { AA_GRANDE, AA_TEXTO, conAlfa, mezclar } from '@/lib/color';
 import { ALFA, COLOR } from './primitivos';
-import { TEMA_CLARO as CLARO, TEMA_OSCURO as OSCURO } from './semanticos';
+import {
+  SUPERFICIES,
+  TEMA_CLARO as CLARO,
+  TEMA_OSCURO as OSCURO,
+  valorDeSuperficie,
+} from './semanticos';
 
 /**
  * Colores de marca de WebYa (concepto "Encastre", ver .claude/skills/webya-brand).
@@ -187,3 +192,104 @@ export const COMBINACIONES_BASE: Combinacion[] = [
     minimo: AA_TEXTO,
   },
 ];
+
+/* ——— Fondos de sección (dirección Plano) ——— */
+
+export type SeccionId = 'tinta' | 'crema' | 'brasa' | 'velo';
+
+/** Una superficie de sección, resuelta a hex (el velo, mezclado sobre la foto más clara posible). */
+export interface SuperficieMedida {
+  id: SeccionId;
+  /** Clase de scope que la acompaña (la crema usa el `.papel` de siempre). */
+  scope: string;
+  fondo: string;
+  /** Tarjeta o campo dentro de la sección. */
+  superficie: string;
+  fg: string;
+  muted: string;
+  /** Acento de texto o de foco sobre el fondo. */
+  acento: string;
+  /** Relleno del botón principal y su texto, por tema (solo cambia en la crema). */
+  boton: Record<'oscuro' | 'claro', { fondo: string; texto: string }>;
+  danger: string;
+}
+
+/** Peor caso del velo: la foto es blanca pura (ahí el texto claro pierde más contraste). */
+export const FOTO_PEOR_CASO = COLOR.blanco[0];
+
+const SUP = {
+  tinta: SUPERFICIES['superficie-tinta'],
+  brasa: SUPERFICIES['superficie-brasa'],
+  velo: SUPERFICIES['superficie-velo'],
+};
+
+/** Botón de las superficies oscuras: el scope fija el acento y su texto, así no cambia con el tema. */
+function botonFijo(sup: (typeof SUP)[keyof typeof SUP]) {
+  const b = { fondo: valorDeSuperficie(sup.accent), texto: valorDeSuperficie(sup['accent-fg']) };
+  return { oscuro: b, claro: b };
+}
+
+function oscura(id: 'tinta' | 'brasa' | 'velo', fondo: string): SuperficieMedida {
+  const sup = SUP[id];
+  return {
+    id,
+    scope: `superficie-${id}`,
+    fondo,
+    superficie: valorDeSuperficie(sup.surface),
+    fg: valorDeSuperficie(sup.fg),
+    muted: valorDeSuperficie(sup.muted),
+    acento: valorDeSuperficie(sup.accent),
+    boton: botonFijo(sup),
+    danger: valorDeSuperficie(sup.danger),
+  };
+}
+
+export const SUPERFICIES_SECCION: readonly SuperficieMedida[] = [
+  oscura('tinta', OSCURO['seccion-tinta'].valor),
+  {
+    id: 'crema',
+    scope: 'papel',
+    fondo: OSCURO['seccion-crema'].valor,
+    superficie: OSCURO['paper-2'].valor,
+    fg: OSCURO['seccion-crema-fg'].valor,
+    muted: OSCURO['seccion-crema-muted'].valor,
+    acento: OSCURO['seccion-crema-acento'].valor,
+    // `.papel` no toca el acento: el botón es el del tema (Brasa con texto negro; en claro, la
+    // tinta de Brasa con texto blanco). El error, el del tema claro (rosa oscuro sobre crema).
+    boton: {
+      oscuro: { fondo: OSCURO.accent.valor, texto: OSCURO['accent-fg'].valor },
+      claro: { fondo: CLARO.accent.valor, texto: CLARO['accent-fg'].valor },
+    },
+    danger: CLARO.danger.valor,
+  },
+  oscura('brasa', OSCURO['seccion-brasa'].valor),
+  oscura('velo', mezclar(OSCURO['seccion-tinta'].valor, FOTO_PEOR_CASO, ALFA.velo)),
+];
+
+/**
+ * Todas las combinaciones de una sección. Texto y secundario: 4,5 sobre el fondo y sobre su
+ * tarjeta. Acento: como texto (4,5) en tinta, crema y brasa; sobre el velo solo como foco o relleno
+ * (3:1), nunca texto de acento sobre una foto. Las secciones son material, no tema: valen igual en
+ * oscuro y en claro (lo verifica marca.test.ts sobre tokens.css); solo el botón de la crema cambia.
+ */
+export function combinacionesSeccion(s: SuperficieMedida): Combinacion[] {
+  const n = (t: string) => `${s.id}: ${t}`;
+  const c = (nombre: string, texto: string, fondo: string, minimo = AA_TEXTO) => ({
+    nombre: n(nombre),
+    texto,
+    fondo,
+    minimo,
+  });
+  return [
+    c('texto', s.fg, s.fondo),
+    c('secundario', s.muted, s.fondo),
+    c('texto sobre tarjeta', s.fg, s.superficie),
+    c('secundario sobre tarjeta', s.muted, s.superficie),
+    s.id === 'velo'
+      ? c('acento (solo foco y relleno)', s.acento, s.fondo, AA_GRANDE)
+      : c('acento', s.acento, s.fondo),
+    c('texto del botón, oscuro', s.boton.oscuro.texto, s.boton.oscuro.fondo),
+    c('texto del botón, claro', s.boton.claro.texto, s.boton.claro.fondo),
+    c('error sobre tarjeta', s.danger, s.superficie),
+  ];
+}

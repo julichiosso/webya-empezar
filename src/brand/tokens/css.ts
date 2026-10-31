@@ -5,6 +5,7 @@ import {
   MOVIMIENTO,
   RADIOS,
   SOMBRA_ELEVADA,
+  SUPERFICIES,
   TEMA_CLARO,
   TEMA_OSCURO,
   TEMA_PAPEL,
@@ -31,6 +32,17 @@ export function generarTokensCss(): string {
   ];
   const movimiento = Object.entries(MOVIMIENTO).map(([k, v]) => decl(k, v));
   const componentes = Object.entries(COMPONENTES).map(([k, v]) => decl(k, `var(--${v})`));
+  const superficies = Object.entries(SUPERFICIES).flatMap(([clase, tokens]) => [
+    '',
+    `.${clase} {`,
+    '  color-scheme: dark;',
+    ...Object.entries(tokens).map(([k, v]) =>
+      decl(k, typeof v === 'string' ? `var(--${v})` : semantico(v)),
+    ),
+    '  /* Componente otra vez (ver .papel). */',
+    ...componentes,
+    '}',
+  ]);
 
   const temaColores = [...Object.keys(TEMA_OSCURO), ...Object.keys(COMPONENTES)].map((k) =>
     decl(`color-${k}`, `var(--${k})`),
@@ -76,6 +88,9 @@ export function generarTokensCss(): string {
     '   */',
     ...componentes,
     '}',
+    '',
+    '/* Superficies oscuras de sección (dirección Plano): fijas con el sitio en oscuro o en claro. */',
+    ...superficies.slice(1),
     '',
     '@theme inline {',
     ...temaColores,

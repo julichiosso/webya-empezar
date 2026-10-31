@@ -17,9 +17,15 @@
   --blanco-100: #f2f2f3;
   --crema-50: #fbf8f2;
   --crema-100: #f4ede1;
+  --crema-300: #d6cec3;
   --crema-700: #5e574f;
+  --brasa-200: #e0c3b1;
   --brasa-500: #ff5b24;
   --brasa-700: #b83a0e;
+  --brasa-950: #4a1606;
+  --tinta-400: #a69d91;
+  --tinta-900: #211b17;
+  --tinta-950: #16120f;
   --rosa-400: #ff6b8a;
   --rosa-700: #b4233f;
   --espacio-1x: 0.5rem;
@@ -50,6 +56,25 @@
   --paper-fg: var(--negro-950);
   --paper-muted: var(--crema-700);
   --paper-line: rgb(11 11 12 / 0.14);
+  --seccion-tinta: var(--tinta-950);
+  --seccion-tinta-fg: var(--crema-50);
+  --seccion-tinta-muted: var(--tinta-400);
+  --seccion-tinta-linea: rgb(251 248 242 / 0.16);
+  --seccion-tinta-acento: var(--brasa-500);
+  --seccion-crema: var(--crema-100);
+  --seccion-crema-fg: var(--negro-950);
+  --seccion-crema-muted: var(--crema-700);
+  --seccion-crema-linea: rgb(11 11 12 / 0.14);
+  --seccion-crema-acento: var(--brasa-700);
+  --seccion-brasa: var(--brasa-950);
+  --seccion-brasa-fg: var(--crema-50);
+  --seccion-brasa-muted: var(--brasa-200);
+  --seccion-brasa-linea: rgb(251 248 242 / 0.16);
+  --seccion-brasa-acento: var(--brasa-500);
+  --velo-imagen: rgb(22 18 15 / 0.8);
+  --velo-imagen-fg: var(--crema-50);
+  --velo-imagen-muted: var(--crema-300);
+  --velo-imagen-acento: var(--brasa-500);
 
   /* Movimiento. En :root para usarlos en CSS crudo (Tailwind descarta los de @theme sin uso). */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -81,6 +106,9 @@
   --foco: var(--accent);
   --hueco-borde: var(--line-strong);
   --pieza-encajada: var(--accent);
+  --plano-pieza: var(--accent);
+  --plano-cota: var(--muted);
+  --seccion-borde: var(--line);
 }
 
 :root[data-theme='light'] {
@@ -133,6 +161,127 @@
   --foco: var(--accent);
   --hueco-borde: var(--line-strong);
   --pieza-encajada: var(--accent);
+  --plano-pieza: var(--accent);
+  --plano-cota: var(--muted);
+  --seccion-borde: var(--line);
+}
+
+/* Superficies oscuras de sección (dirección Plano): fijas con el sitio en oscuro o en claro. */
+.superficie-tinta {
+  color-scheme: dark;
+  --accent-fg: var(--negro-950);
+  --accent-soft: rgb(255 91 36 / 0.14);
+  --accent-ink: var(--brasa-700);
+  --danger: var(--rosa-400);
+  --bg: var(--seccion-tinta);
+  --surface: var(--tinta-900);
+  --surface-2: var(--tinta-900);
+  --fg: var(--seccion-tinta-fg);
+  --muted: var(--seccion-tinta-muted);
+  --subtle: var(--seccion-tinta-muted);
+  --line: var(--seccion-tinta-linea);
+  --line-strong: rgb(251 248 242 / 0.32);
+  --accent: var(--seccion-tinta-acento);
+  /* Componente otra vez (ver .papel). */
+  --boton-primario-fondo: var(--accent);
+  --boton-primario-texto: var(--accent-fg);
+  --boton-secundario-borde: var(--line-strong);
+  --boton-secundario-texto: var(--fg);
+  --tarjeta-fondo: var(--surface);
+  --tarjeta-borde: var(--line);
+  --panel-fondo: var(--surface);
+  --panel-borde: var(--line);
+  --control-fondo: var(--surface);
+  --control-borde: var(--line-strong);
+  --control-texto: var(--fg);
+  --control-ayuda: var(--muted);
+  --control-error: var(--danger);
+  --seleccion-fondo: var(--accent-soft);
+  --seleccion-borde: var(--accent);
+  --foco: var(--accent);
+  --hueco-borde: var(--line-strong);
+  --pieza-encajada: var(--accent);
+  --plano-pieza: var(--accent);
+  --plano-cota: var(--muted);
+  --seccion-borde: var(--line);
+}
+
+.superficie-brasa {
+  color-scheme: dark;
+  --accent-fg: var(--negro-950);
+  --accent-soft: rgb(255 91 36 / 0.14);
+  --accent-ink: var(--brasa-700);
+  --danger: var(--rosa-400);
+  --bg: var(--seccion-brasa);
+  --surface: var(--seccion-brasa);
+  --surface-2: var(--seccion-brasa);
+  --fg: var(--seccion-brasa-fg);
+  --muted: var(--seccion-brasa-muted);
+  --subtle: var(--seccion-brasa-muted);
+  --line: var(--seccion-brasa-linea);
+  --line-strong: rgb(251 248 242 / 0.32);
+  --accent: var(--seccion-brasa-acento);
+  /* Componente otra vez (ver .papel). */
+  --boton-primario-fondo: var(--accent);
+  --boton-primario-texto: var(--accent-fg);
+  --boton-secundario-borde: var(--line-strong);
+  --boton-secundario-texto: var(--fg);
+  --tarjeta-fondo: var(--surface);
+  --tarjeta-borde: var(--line);
+  --panel-fondo: var(--surface);
+  --panel-borde: var(--line);
+  --control-fondo: var(--surface);
+  --control-borde: var(--line-strong);
+  --control-texto: var(--fg);
+  --control-ayuda: var(--muted);
+  --control-error: var(--danger);
+  --seleccion-fondo: var(--accent-soft);
+  --seleccion-borde: var(--accent);
+  --foco: var(--accent);
+  --hueco-borde: var(--line-strong);
+  --pieza-encajada: var(--accent);
+  --plano-pieza: var(--accent);
+  --plano-cota: var(--muted);
+  --seccion-borde: var(--line);
+}
+
+.superficie-velo {
+  color-scheme: dark;
+  --accent-fg: var(--negro-950);
+  --accent-soft: rgb(255 91 36 / 0.14);
+  --accent-ink: var(--brasa-700);
+  --danger: var(--rosa-400);
+  --bg: var(--velo-imagen);
+  --surface: var(--seccion-tinta);
+  --surface-2: var(--seccion-tinta);
+  --fg: var(--velo-imagen-fg);
+  --muted: var(--velo-imagen-muted);
+  --subtle: var(--velo-imagen-muted);
+  --line: var(--seccion-tinta-linea);
+  --line-strong: rgb(251 248 242 / 0.32);
+  --accent: var(--velo-imagen-acento);
+  /* Componente otra vez (ver .papel). */
+  --boton-primario-fondo: var(--accent);
+  --boton-primario-texto: var(--accent-fg);
+  --boton-secundario-borde: var(--line-strong);
+  --boton-secundario-texto: var(--fg);
+  --tarjeta-fondo: var(--surface);
+  --tarjeta-borde: var(--line);
+  --panel-fondo: var(--surface);
+  --panel-borde: var(--line);
+  --control-fondo: var(--surface);
+  --control-borde: var(--line-strong);
+  --control-texto: var(--fg);
+  --control-ayuda: var(--muted);
+  --control-error: var(--danger);
+  --seleccion-fondo: var(--accent-soft);
+  --seleccion-borde: var(--accent);
+  --foco: var(--accent);
+  --hueco-borde: var(--line-strong);
+  --pieza-encajada: var(--accent);
+  --plano-pieza: var(--accent);
+  --plano-cota: var(--muted);
+  --seccion-borde: var(--line);
 }
 
 @theme inline {
@@ -154,6 +303,25 @@
   --color-paper-fg: var(--paper-fg);
   --color-paper-muted: var(--paper-muted);
   --color-paper-line: var(--paper-line);
+  --color-seccion-tinta: var(--seccion-tinta);
+  --color-seccion-tinta-fg: var(--seccion-tinta-fg);
+  --color-seccion-tinta-muted: var(--seccion-tinta-muted);
+  --color-seccion-tinta-linea: var(--seccion-tinta-linea);
+  --color-seccion-tinta-acento: var(--seccion-tinta-acento);
+  --color-seccion-crema: var(--seccion-crema);
+  --color-seccion-crema-fg: var(--seccion-crema-fg);
+  --color-seccion-crema-muted: var(--seccion-crema-muted);
+  --color-seccion-crema-linea: var(--seccion-crema-linea);
+  --color-seccion-crema-acento: var(--seccion-crema-acento);
+  --color-seccion-brasa: var(--seccion-brasa);
+  --color-seccion-brasa-fg: var(--seccion-brasa-fg);
+  --color-seccion-brasa-muted: var(--seccion-brasa-muted);
+  --color-seccion-brasa-linea: var(--seccion-brasa-linea);
+  --color-seccion-brasa-acento: var(--seccion-brasa-acento);
+  --color-velo-imagen: var(--velo-imagen);
+  --color-velo-imagen-fg: var(--velo-imagen-fg);
+  --color-velo-imagen-muted: var(--velo-imagen-muted);
+  --color-velo-imagen-acento: var(--velo-imagen-acento);
   --color-boton-primario-fondo: var(--boton-primario-fondo);
   --color-boton-primario-texto: var(--boton-primario-texto);
   --color-boton-secundario-borde: var(--boton-secundario-borde);
@@ -172,6 +340,9 @@
   --color-foco: var(--foco);
   --color-hueco-borde: var(--hueco-borde);
   --color-pieza-encajada: var(--pieza-encajada);
+  --color-plano-pieza: var(--plano-pieza);
+  --color-plano-cota: var(--plano-cota);
+  --color-seccion-borde: var(--seccion-borde);
 
   --font-sans: var(--font-outfit), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --text-display: clamp(2.5rem, 1.7rem + 4.2vw, 4.75rem);

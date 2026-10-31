@@ -24,6 +24,13 @@ export const COMPONENTES = {
   foco: 'accent',
   'hueco-borde': 'line-strong',
   'pieza-encajada': 'accent',
+  // Dirección Plano. Se resuelven dentro de cada superficie (`.superficie-*`, `.papel`).
+  /** La pieza que encaja en las ilustraciones de plano (IlustracionPlano): el guiño Brasa. */
+  'plano-pieza': 'accent',
+  /** Anotaciones y cotas en texto chico junto al plano. */
+  'plano-cota': 'muted',
+  /** Hilo de 1 px entre dos secciones a pantalla completa del mismo fondo. */
+  'seccion-borde': 'line',
 } as const satisfies Record<string, TokenColor>;
 
 export type TokenComponente = keyof typeof COMPONENTES;
