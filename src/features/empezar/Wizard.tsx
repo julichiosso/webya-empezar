@@ -428,7 +428,9 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
               initial="entrar"
               animate="centro"
               exit="salir"
-              transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+              // Hasta que la persona navega, los cambios de pantalla (leer lo guardado al recargar) son
+              // instantáneos: la 1 no hace su salida debajo de un marco que ya dice "Paso 3 de 3".
+              transition={{ duration: interactuo ? 0.26 : 0, ease: [0.22, 1, 0.36, 1] }}
             >
               {paso === 'rubro' && (
                 <PantallaRubro elegido={state.rubro} onElegir={elegirRubro} headingRef={titulo} />
