@@ -2,6 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { MODULO_IDS } from '@/content/modulos';
 import { ModuloArte } from '@/brand/ilustracion/modulos/ModuloArte';
+import { MarcoDispositivo } from './MarcoDispositivo';
 import { PreviewPanel } from './PreviewPanel';
 
 describe('PreviewPanel', () => {
@@ -44,6 +45,20 @@ describe('PreviewPanel', () => {
     render(<PreviewPanel activos={['turnos']} />);
     expect(screen.getByTestId('negocio-preview-panel')).toHaveAttribute('aria-hidden', 'true');
   });
+});
+
+describe('MarcoDispositivo', () => {
+  it.each(['celular', 'escritorio'] as const)(
+    '%s: proporción fija (el marco vacío mide lo mismo que el lleno) y su leyenda',
+    (d) => {
+      const { container } = render(
+        <MarcoDispositivo dispositivo={d} leyenda="Textos de ejemplo" />,
+      );
+      expect(container.querySelector(`[data-marco="${d}"]`)).not.toBeNull();
+      expect(container.querySelector('[class*="aspect-"]')).not.toBeNull();
+      expect(screen.getByText('Textos de ejemplo')).toBeInTheDocument();
+    },
+  );
 });
 
 describe('ModuloArte', () => {
