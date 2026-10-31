@@ -51,8 +51,9 @@ describe('guion del video', () => {
     expect(todo).toMatch(/armás|activás|elegís|probá|dejanos/i);
     // Ni precios, ni plazos de entrega, ni "gratis", ni "en minutos", ni métricas inventadas.
     expect(todo).not.toMatch(/\$|gratis|en minutos|garantiz|\d+ ?%|clientes felices|miles de/i);
-    // El único compromiso con plazo es el primer contacto.
-    expect(todo).toMatch(/te escribimos en menos de veinticuatro horas/);
+    // Tampoco el plazo de la primera respuesta: no está confirmado (PENDIENTES.plazoRespuesta).
+    expect(todo).not.toMatch(/veinticuatro|horas|\bhs\b|minutos|días/i);
+    expect(todo).toMatch(/te escribimos por WhatsApp/);
   });
 
   it('el caso real queda apagado hasta tener permiso del negocio', () => {
