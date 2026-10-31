@@ -1,8 +1,4 @@
-import {
-  getPaletaCurada,
-  PALETA_CURADA_POR_DEFECTO,
-  PALETAS_CURADAS,
-} from '@/content/paletas';
+import { getPaletaCurada, PALETA_CURADA_POR_DEFECTO, PALETAS_CURADAS } from '@/content/paletas';
 import type { PaletaDemo } from './types';
 
 /**
