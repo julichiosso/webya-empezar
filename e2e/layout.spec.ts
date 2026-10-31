@@ -59,6 +59,12 @@ test('no hay scroll horizontal, ni en el formulario ni en la vista previa', asyn
   expect(await sobra()).toBeLessThanOrEqual(0);
 });
 
+test("el caso real de Micio's no se publica sin permiso (flag apagado)", async ({ page }) => {
+  await page.goto('/empezar');
+  await expect(page.locator('#caso-real-title')).toHaveCount(0);
+  await expect(page.getByText("Micio's")).toHaveCount(0);
+});
+
 test('/marca sin scroll horizontal (tablas de contraste incluidas)', async ({ page }) => {
   await page.goto('/marca');
   const sobra = await page.evaluate(

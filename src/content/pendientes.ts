@@ -18,3 +18,11 @@ export const PENDIENTES = {
   /** Módulos en estado "disponible" que el usuario todavía no confirmó. */
   moduloSinConfirmar: 'TODO: confirmar que hoy lo entregamos.',
 } as const;
+
+/** Lo que falta para publicar el caso real de Micio's (sección apagada con config/flags.ts). */
+export const PENDIENTES_CASO_MICIOS = {
+  permiso: "TODO: permiso escrito de Micio's para usar su marca y sus fotos.",
+  ubicacion: 'TODO: confirmar si se menciona San Jorge, Santa Fe.',
+  url: "TODO: dirección del sitio de Micio's.",
+  capturas: "TODO: capturas del sitio de Micio's (con permiso).",
+} as const;

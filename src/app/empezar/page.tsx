@@ -8,7 +8,9 @@ import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
 import { ComoTrabajamos } from '@/components/marketing/ComoTrabajamos';
 import { CtaFinal } from '@/components/marketing/CtaFinal';
 import { StickyCta } from '@/components/marketing/StickyCta';
+import { CasoReal } from '@/components/marketing/CasoReal';
 import { Confianza } from '@/components/marketing/Confianza';
+import { FLAGS } from '@/config/flags';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
 import { Hero } from '@/components/marketing/Hero';
@@ -73,6 +75,8 @@ export default function EmpezarPage() {
           </div>
         </Hero>
         <QueIncluye />
+        {/* Caso real de Micio's: apagado hasta tener su permiso escrito (config/flags.ts). */}
+        {FLAGS.casoMicios && <CasoReal />}
         <Confianza />
         <ComoTrabajamos />
         <Faq />
