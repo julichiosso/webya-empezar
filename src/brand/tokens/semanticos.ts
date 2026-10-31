@@ -3,6 +3,7 @@ import {
   ALFA,
   COLOR,
   CURVA,
+  DESPLAZAMIENTO,
   DURACION,
   ESCALA,
   PASO,
@@ -35,6 +36,41 @@ function alfa<M extends Material>(
   return { valor: conAlfa(COLOR[material][tono] as string, a) };
 }
 
+/**
+ * Fondos de sección de la dirección Plano (secciones a pantalla completa; contrato en
+ * docs/plano-contrato.md). Son MATERIALES, no tema: una sección de tinta es oscura y una de crema es
+ * clara con el sitio en oscuro o en claro, por eso el tema claro no los redefine. Lo que sí cambia
+ * con el tema son los semánticos base (`--fg`, `--accent`…): para que un componente común se vea
+ * bien adentro, la sección lleva su scope (`.superficie-tinta`, `.superficie-brasa`,
+ * `.superficie-velo`; la crema usa el `.papel` de siempre). Ver SUPERFICIES abajo.
+ * Cada combinación se mide en colores.ts (COMBINACIONES_SECCION) y marca.test.ts.
+ */
+export const SECCIONES = {
+  'seccion-tinta': ref('tinta', 950),
+  'seccion-tinta-fg': ref('crema', 50),
+  'seccion-tinta-muted': ref('tinta', 400),
+  'seccion-tinta-linea': alfa('crema', 50, ALFA.lineaSeccion),
+  'seccion-tinta-acento': ref('brasa', 500),
+  'seccion-crema': ref('crema', 100),
+  // Los mismos valores que `.papel` (paper-fg, paper-muted, paper-line): una sección crema ES papel.
+  'seccion-crema-fg': ref('negro', 950),
+  'seccion-crema-muted': ref('crema', 700),
+  'seccion-crema-linea': alfa('negro', 950, ALFA.lineaPapel),
+  /** Sobre crema el acento de TEXTO es la tinta de Brasa (el 500 da 2,66:1). El relleno sigue en 500. */
+  'seccion-crema-acento': ref('brasa', 700),
+  'seccion-brasa': ref('brasa', 950),
+  'seccion-brasa-fg': ref('crema', 50),
+  'seccion-brasa-muted': ref('brasa', 200),
+  'seccion-brasa-linea': alfa('crema', 50, ALFA.lineaSeccion),
+  'seccion-brasa-acento': ref('brasa', 500),
+  /** Velo plano (sin degradé) sobre la foto: el contraste se mide con la foto más clara posible. */
+  'velo-imagen': alfa('tinta', 950, ALFA.velo),
+  'velo-imagen-fg': ref('crema', 50),
+  'velo-imagen-muted': ref('crema', 300),
+  /** Solo relleno de CTA y foco (3:1 sobre el peor caso); nunca texto de acento sobre una foto. */
+  'velo-imagen-acento': ref('brasa', 500),
+} as const satisfies Record<string, ValorToken>;
+
 export const TEMA_OSCURO = {
   bg: ref('negro', 950),
   surface: ref('negro', 900),
@@ -54,6 +90,7 @@ export const TEMA_OSCURO = {
   'paper-fg': ref('negro', 950),
   'paper-muted': ref('crema', 700),
   'paper-line': alfa('negro', 950, ALFA.lineaPapel),
+  ...SECCIONES,
 } as const satisfies Record<string, ValorToken>;
 
 export type TokenColor = keyof typeof TEMA_OSCURO;
@@ -93,6 +130,70 @@ export const TEMA_PAPEL = {
 /** `line-strong` de papel no tiene semántico propio en oscuro: es un alfa del negro. */
 export const LINEA_FUERTE_PAPEL = alfa('negro', 950, ALFA.lineaFuertePapel);
 
+/**
+ * Superficies oscuras con scope (dirección Plano): dentro de `.superficie-tinta`, `.superficie-brasa`
+ * o `.superficie-velo` los semánticos base pasan a los de esa sección, con el sitio en oscuro O en
+ * claro (si no, en claro el acento sería `--brasa-700`, que no llega a AA sobre tinta). Así un botón,
+ * un campo o el foco se ven bien adentro sin variantes nuevas. La sección crema usa `.papel`.
+ * Un string apunta a otro semántico; un ValorToken, a un primitivo o a un alfa.
+ */
+type Superficie = Partial<Record<TokenColor, TokenColor | ValorToken>>;
+
+const BASE_OSCURA = {
+  'accent-fg': ref('negro', 950),
+  'accent-soft': alfa('brasa', 500, ALFA.seleccion),
+  'accent-ink': ref('brasa', 700),
+  danger: ref('rosa', 400),
+} as const satisfies Superficie;
+
+export const SUPERFICIES = {
+  'superficie-tinta': {
+    ...BASE_OSCURA,
+    bg: 'seccion-tinta',
+    surface: ref('tinta', 900),
+    'surface-2': ref('tinta', 900),
+    fg: 'seccion-tinta-fg',
+    muted: 'seccion-tinta-muted',
+    subtle: 'seccion-tinta-muted',
+    line: 'seccion-tinta-linea',
+    'line-strong': alfa('crema', 50, ALFA.lineaFuerteSeccion),
+    accent: 'seccion-tinta-acento',
+  },
+  // Plana a propósito: adentro las piezas se separan con línea, no con otra superficie.
+  'superficie-brasa': {
+    ...BASE_OSCURA,
+    bg: 'seccion-brasa',
+    surface: 'seccion-brasa',
+    'surface-2': 'seccion-brasa',
+    fg: 'seccion-brasa-fg',
+    muted: 'seccion-brasa-muted',
+    subtle: 'seccion-brasa-muted',
+    line: 'seccion-brasa-linea',
+    'line-strong': alfa('crema', 50, ALFA.lineaFuerteSeccion),
+    accent: 'seccion-brasa-acento',
+  },
+  // Sobre la foto: lo que necesita fondo propio (un formulario, un error) va en superficie de tinta.
+  'superficie-velo': {
+    ...BASE_OSCURA,
+    bg: 'velo-imagen',
+    surface: 'seccion-tinta',
+    'surface-2': 'seccion-tinta',
+    fg: 'velo-imagen-fg',
+    muted: 'velo-imagen-muted',
+    subtle: 'velo-imagen-muted',
+    line: 'seccion-tinta-linea',
+    'line-strong': alfa('crema', 50, ALFA.lineaFuerteSeccion),
+    accent: 'velo-imagen-acento',
+  },
+} as const satisfies Record<string, Superficie>;
+
+export type SuperficieId = keyof typeof SUPERFICIES;
+
+/** Resuelve un valor de superficie a su color final (para los tests de contraste). */
+export function valorDeSuperficie(v: TokenColor | ValorToken): string {
+  return typeof v === 'string' ? TEMA_OSCURO[v].valor : v.valor;
+}
+
 /** Movimiento: duraciones y curvas con nombre de uso (ver brand/motion). */
 export const MOVIMIENTO = {
   'ease-out': CURVA.salida,
@@ -104,6 +205,11 @@ export const MOVIMIENTO = {
   'escala-toque': ESCALA.toque,
   'escala-sobrepaso': ESCALA.sobrepaso,
   'paso-pieza': PASO.pieza,
+  // Kinetic type: la palabra que encastra (presets.ts → encastrePalabra, motion.css → .palabra-encastre).
+  'paso-palabra': PASO.palabra,
+  'escala-palabra': ESCALA.palabra,
+  'desplazamiento-palabra': DESPLAZAMIENTO.palabra,
+  'asiento-palabra': DESPLAZAMIENTO.asiento,
 } as const;
 
 /** Radios escalonados por jerarquía: controles < tarjetas < paneles. */

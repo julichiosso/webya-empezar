@@ -10,6 +10,8 @@ import {
   getPaletaMarca,
   PALETA_POR_DEFECTO,
   PALETAS_MARCA,
+  combinacionesSeccion,
+  SUPERFICIES_SECCION,
   TEMA_CLARO,
 } from './colores';
 
@@ -88,6 +90,58 @@ describe('tokens.css resuelve a los colores de la marca', () => {
     expect(valor(claro, '--accent')).toBe(TEMA_CLARO.accent);
     expect(valor(claro, '--accent-fg')).toBe(TEMA_CLARO.accentFg);
     expect(valor(claro, '--danger')).toBe(TEMA_CLARO.danger);
+  });
+});
+
+describe('fondos de sección (dirección Plano, docs/plano-contrato.md)', () => {
+  it.each(SUPERFICIES_SECCION.map((s) => [s.id, s] as const))(
+    '%s: cada combinación pasa AA',
+    (_id, s) => {
+      for (const c of combinacionesSeccion(s)) {
+        expect(contraste(c.texto, c.fondo), c.nombre).toBeGreaterThanOrEqual(c.minimo);
+      }
+    },
+  );
+
+  it('existen las clases del contrato (bg-, text- y border-)', () => {
+    const tema = bloque('@theme inline');
+    const nombres = [
+      ...['tinta', 'crema', 'brasa'].flatMap((s) =>
+        ['', '-fg', '-muted', '-linea'].map((sufijo) => `seccion-${s}${sufijo}`),
+      ),
+      'velo-imagen',
+      'velo-imagen-fg',
+      'velo-imagen-muted',
+    ];
+    for (const n of nombres) expect(tema, n).toContain(`--color-${n}: var(--${n});`);
+  });
+
+  it('tokens.css resuelve a los colores medidos', () => {
+    const root = bloque(':root');
+    for (const s of SUPERFICIES_SECCION.filter((x) => x.id !== 'velo')) {
+      expect(valor(root, `--seccion-${s.id}`), s.id).toBe(s.fondo);
+      expect(valor(root, `--seccion-${s.id}-fg`), s.id).toBe(s.fg);
+      expect(valor(root, `--seccion-${s.id}-muted`), s.id).toBe(s.muted);
+    }
+    expect(valor(root, '--velo-imagen')).toBe('rgb(22 18 15 / 0.8)');
+  });
+
+  it('son material, no tema: el claro no las redefine y cada scope fija acento y texto', () => {
+    expect(bloque(":root[data-theme='light']")).not.toMatch(/--(seccion|velo)-/);
+    for (const s of SUPERFICIES_SECCION.filter((x) => x.scope.startsWith('superficie-'))) {
+      const scope = bloque(`.${s.scope}`);
+      // Un var() del scope apunta a un semántico de :root, que apunta a un primitivo.
+      const resuelto = (t: string) => {
+        const v = declarado(scope, t) ?? '';
+        const ref = /var\((--[^)]+)\)/.exec(v)?.[1];
+        return ref ? valor(bloque(':root'), ref) : v;
+      };
+      expect(resuelto('--accent'), s.id).toBe(s.acento);
+      expect(resuelto('--accent-fg'), s.id).toBe(s.boton.claro.texto);
+      expect(resuelto('--fg'), s.id).toBe(s.fg);
+      expect(resuelto('--muted'), s.id).toBe(s.muted);
+      expect(scope, s.id).toContain('--foco: var(--accent);');
+    }
   });
 });
 

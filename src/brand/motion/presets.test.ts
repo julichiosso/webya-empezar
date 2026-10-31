@@ -8,7 +8,11 @@ import {
   demoraPieza,
   DURACIONES_MS,
   duracionEntrada,
+  duracionTitulo,
+  ENCASTRE_PALABRA,
+  encastrePalabra,
   entraEnPresupuesto,
+  estiloPalabra,
   pieza,
   PRESUPUESTO,
   segunMovimiento,
@@ -79,6 +83,48 @@ describe('presets de movimiento', () => {
   });
 });
 
+describe('kinetic type: encastrePalabra', () => {
+  it('sale de los tokens', () => {
+    expect(tokens).toContain(`--paso-palabra: ${ENCASTRE_PALABRA.pasoMs}ms;`);
+    expect(tokens).toContain(`--escala-palabra: ${ENCASTRE_PALABRA.escalaInicial};`);
+    expect(tokens).toContain(`--desplazamiento-palabra: ${ENCASTRE_PALABRA.desplazamientoEm}em;`);
+    expect(tokens).toContain(`--asiento-palabra: ${ENCASTRE_PALABRA.asientoEm}em;`);
+    expect(ENCASTRE_PALABRA.duracionMs).toBe(DURACIONES_MS.lento);
+  });
+
+  it('llega desplazada y achicada, se pasa apenas y asienta (alternando de lado)', () => {
+    const a = encastrePalabra(0);
+    expect(a.initial).toEqual({ opacity: 0, y: '0.42em', scale: 0.94 });
+    expect(a.animate.y).toEqual(['0.42em', '-0.04em', '0em']);
+    expect(a.animate.scale).toEqual([0.94, SNAP.sobrepaso, 1]);
+    expect(encastrePalabra(1).animate.y[0]).toBe('-0.42em');
+    expect(encastrePalabra(3).transition.delay).toBeCloseTo(0.18);
+  });
+
+  it('con movimiento reducido aparece en su lugar, sin transición', () => {
+    const r = encastrePalabra(4, true);
+    expect(r.initial).toBe(false);
+    expect(r.animate).toEqual({ opacity: 1, y: '0em', scale: 1 });
+    expect(r.transition).toEqual({ duration: 0 });
+  });
+
+  it('un titular largo no pasa el presupuesto: las que pasan el tope entran con la última', () => {
+    expect(estiloPalabra(2)).toEqual({ '--i': 2, '--lado': 1 });
+    expect(estiloPalabra(30)).toEqual({ '--i': ENCASTRE_PALABRA.maxPalabras - 1, '--lado': 1 });
+    expect(duracionTitulo(30)).toBe(duracionTitulo(ENCASTRE_PALABRA.maxPalabras));
+    expect(duracionTitulo(30)).toBeLessThanOrEqual(PRESUPUESTO.entradaMaximaMs);
+  });
+
+  it('motion.css usa los mismos tiempos y tokens', () => {
+    const cuerpo = keyframes(motionCss).get('encastre-palabra') ?? '';
+    expect(cuerpo).toContain(`${ENCASTRE_PALABRA.tiempos[1] * 100}%`);
+    for (const t of ['--desplazamiento-palabra', '--escala-palabra', '--asiento-palabra']) {
+      expect(cuerpo).toContain(`var(${t})`);
+    }
+    expect(motionCss).toContain('var(--paso-palabra)');
+  });
+});
+
 describe('motion.css', () => {
   const frames = keyframes(motionCss);
 
@@ -94,7 +140,13 @@ describe('motion.css', () => {
 
   it('todo lo que anima tiene su versión quieta con prefers-reduced-motion', () => {
     const reducido = motionCss.slice(motionCss.indexOf('@media (prefers-reduced-motion: reduce)'));
-    for (const clase of ['.snap', '.pieza-escalonada', '.logo-escrito .logo-pieza', '.toque']) {
+    for (const clase of [
+      '.snap',
+      '.pieza-escalonada',
+      '.palabra-encastre',
+      '.logo-escrito .logo-pieza',
+      '.toque',
+    ]) {
       expect(reducido, clase).toContain(clase);
     }
   });

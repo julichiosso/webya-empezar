@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { CURVA, DURACION, ESCALA, PASO } from '../tokens/primitivos';
+import { CURVA, DESPLAZAMIENTO, DURACION, ESCALA, PASO } from '../tokens/primitivos';
 import { TOQUE_CLASE, TOQUE_CLASE_GRUPO } from './toque';
 
 /**
@@ -182,4 +182,89 @@ export function entraEnPresupuesto(
     piezas <= PRESUPUESTO.maxPiezas &&
     duracionEntrada(piezas, duracionMs, pasoMs) <= PRESUPUESTO.entradaMaximaMs
   );
+}
+
+/* ——— Kinetic type: la palabra que encastra (dirección Plano) ——— */
+
+/** Paso entre palabras de un titular, en ms (un poco más corto que el de las piezas). */
+export const PASO_PALABRA_MS = ms(PASO.palabra);
+
+/**
+ * Titular que se arma palabra por palabra: cada palabra llega desplazada (alternando desde abajo y
+ * desde arriba, como las letras del logo que se arma) y apenas achicada, se pasa un poco (`asiento`
+ * y el sobrepaso del snap) y asienta. Una sola vez. Valores desde los tokens (`--paso-palabra`,
+ * `--escala-palabra`, `--desplazamiento-palabra`, `--asiento-palabra`, `--duration-slow`,
+ * `--ease-out`).
+ *
+ * Dos formas de usarlo, con la misma coreografía:
+ * - CSS, sin JS (la recomendada para el titular del hero: corre antes de hidratar):
+ *   `<span className={ENCASTRE_PALABRA.clase} style={estiloPalabra(i)}>palabra</span>{' '}`
+ * - motion: `<m.span {...encastrePalabra(i, useReducedMotion())}>palabra</m.span>{' '}`
+ *
+ * Pasado el tope (`maxPalabras`), las palabras entran junto con la última del tope: un titular largo
+ * nunca tarda más que `duracionTitulo(maxPalabras)`.
+ */
+export const ENCASTRE_PALABRA = {
+  clase: 'palabra-encastre',
+  duracionMs: DURACIONES_MS.lento,
+  pasoMs: PASO_PALABRA_MS,
+  escalaInicial: Number(ESCALA.palabra),
+  sobrepaso: Number(ESCALA.sobrepaso),
+  desplazamientoEm: Number.parseFloat(DESPLAZAMIENTO.palabra),
+  asientoEm: Number.parseFloat(DESPLAZAMIENTO.asiento),
+  /** Momentos del recorrido: llega (0), se pasa (0,62) y asienta (1). Los mismos que motion.css. */
+  tiempos: [0, 0.62, 1],
+  maxPalabras: PRESUPUESTO.maxPiezas,
+} as const;
+
+/** Desde dónde llega la palabra `i`: las pares desde abajo (1), las impares desde arriba (-1). */
+export function ladoPalabra(i: number): 1 | -1 {
+  return i % 2 === 0 ? 1 : -1;
+}
+
+/** Orden efectivo de la palabra `i` (las que pasan el tope entran con la última del tope). */
+export function ordenPalabra(i: number): number {
+  return Math.min(Math.max(0, i), ENCASTRE_PALABRA.maxPalabras - 1);
+}
+
+/** Estilo de la versión CSS: `--i` (orden) y `--lado`, para la clase `palabra-encastre`. */
+export function estiloPalabra(i: number): CSSProperties {
+  return { '--i': ordenPalabra(i), '--lado': ladoPalabra(i) } as CSSProperties;
+}
+
+/**
+ * Props de motion para la palabra `i` (`<m.span {...encastrePalabra(i, reducido)}>`). Con movimiento
+ * reducido la palabra aparece en su lugar, sin transición (versión estática equivalente).
+ */
+export function encastrePalabra(i: number, reducido?: boolean | null) {
+  const e = ENCASTRE_PALABRA;
+  if (reducido) {
+    return {
+      initial: false as const,
+      animate: { opacity: 1, y: '0em', scale: 1 },
+      transition: { duration: 0 },
+    };
+  }
+  const lado = ladoPalabra(i);
+  const desde = `${lado * e.desplazamientoEm}em`;
+  return {
+    initial: { opacity: 0, y: desde, scale: e.escalaInicial },
+    animate: {
+      opacity: [0, 1, 1],
+      y: [desde, `${-lado * e.asientoEm}em`, '0em'],
+      scale: [e.escalaInicial, e.sobrepaso, 1],
+    },
+    transition: {
+      duration: e.duracionMs / 1000,
+      ease: CURVAS.salida,
+      times: [...e.tiempos],
+      delay: (ordenPalabra(i) * e.pasoMs) / 1000,
+    },
+  };
+}
+
+/** Cuánto tarda en armarse un titular de `palabras` palabras, en ms (respeta el tope). */
+export function duracionTitulo(palabras: number): number {
+  const n = Math.min(Math.max(0, palabras), ENCASTRE_PALABRA.maxPalabras);
+  return duracionEntrada(n, ENCASTRE_PALABRA.duracionMs, ENCASTRE_PALABRA.pasoMs);
 }

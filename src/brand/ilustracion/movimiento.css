@@ -89,11 +89,36 @@
   animation: ilus-encaja 280ms var(--ease-out) 120ms both;
 }
 
+/* Plano (IlustracionPlano, escena hero): la pieza Brasa viaja desde su fantasma (--plano-dx/dy, en
+   unidades del lienzo), se pasa apenas y asienta en su hueco. Una vez, al montarse. */
+@keyframes ilus-plano-encaja {
+  0% {
+    opacity: 0;
+    transform: translate(var(--plano-dx, 0), var(--plano-dy, -24px));
+  }
+  25% {
+    opacity: 1;
+  }
+  72% {
+    transform: translate(0, 3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+.ilus-plano-encaja {
+  animation: ilus-plano-encaja var(--duration-slow) var(--ease-out) 240ms both;
+}
+
 /* Movimiento reducido: versión quieta equivalente. El spinner queda con la pieza en su lugar y el
    dibujo muestra la primera pieza encajada y los otros dos huecos. Las escenas de rubro quedan
    armadas, con la pieza ya en su lugar. */
 @media (prefers-reduced-motion: reduce) {
   .ilus-encaja {
+    animation: none;
+  }
+  .ilus-plano-encaja {
     animation: none;
   }
   .ilus-giro {

@@ -9,9 +9,15 @@ export const COLOR = {
   negro: { 1000: '#000000', 950: '#0b0b0c', 900: '#131316', 850: '#1a1a1e' },
   gris: { 400: '#a1a1a6', 500: '#8a8a90', 600: '#6b6b71', 700: '#55555a' },
   blanco: { 0: '#ffffff', 50: '#fafafa', 100: '#f2f2f3' },
-  crema: { 50: '#fbf8f2', 100: '#f4ede1', 700: '#5e574f' },
-  /** Acento "Brasa": 500 es el relleno; 700 es la tinta (texto sobre papel y acento del tema claro). */
-  brasa: { 500: '#ff5b24', 700: '#b83a0e' },
+  /** 300: texto secundario sobre el velo de las fotos (dirección Plano). */
+  crema: { 50: '#fbf8f2', 100: '#f4ede1', 300: '#d6cec3', 700: '#5e574f' },
+  /**
+   * Acento "Brasa": 500 es el relleno; 700 es la tinta (texto sobre papel y acento del tema claro).
+   * 950 es la brasa apagada (fondo del bloque de sección "Brasa oscura") y 200, su texto secundario.
+   */
+  brasa: { 200: '#e0c3b1', 500: '#ff5b24', 700: '#b83a0e', 950: '#4a1606' },
+  /** Negro cálido de las secciones "tinta" (dirección Plano): 950 fondo, 900 superficie, 400 secundario. */
+  tinta: { 400: '#a69d91', 900: '#211b17', 950: '#16120f' },
   /** Error en rosa frío: no se confunde con Brasa. */
   rosa: { 400: '#ff6b8a', 700: '#b4233f' },
 } as const;
@@ -28,6 +34,11 @@ export const ALFA = {
   lineaFuertePapel: 0.32,
   brillo: 0.04,
   sombra: 0.5,
+  /** Líneas del plano dentro de una sección oscura (tinta, brasa, velo): la grilla y las cotas. */
+  lineaSeccion: 0.16,
+  lineaFuerteSeccion: 0.32,
+  /** Velo sobre las fotos a pantalla completa: con 0,8 el texto pasa AA aunque la foto sea blanca. */
+  velo: 0.8,
 } as const;
 
 /**
@@ -51,10 +62,16 @@ export const DURACION = { 100: '100ms', 160: '160ms', 280: '280ms', 520: '520ms'
  * Escalas del movimiento Encastre: UNA sola escala de toque para todo lo que se aprieta (antes
  * había 0.96, 0.97, 0.98 y 0.99 sueltos) y el sobrepaso del snap (la pieza se pasa ~2 % y asienta).
  */
-export const ESCALA = { toque: '0.98', sobrepaso: '1.02' } as const;
+export const ESCALA = { toque: '0.98', sobrepaso: '1.02', palabra: '0.94' } as const;
+
+/**
+ * Kinetic type (dirección Plano): de dónde llega cada palabra de un titular que encastra, en `em`
+ * (escala con el tamaño del titular). Alterna arriba/abajo como las letras del logo que se arma.
+ */
+export const DESPLAZAMIENTO = { palabra: '0.42em', asiento: '0.04em' } as const;
 
 /** Paso entre piezas que entran escalonadas (logo, chips, tablero): pieza(i) × paso. */
-export const PASO = { pieza: '70ms' } as const;
+export const PASO = { pieza: '70ms', palabra: '60ms' } as const;
 
 export const CURVA = {
   salida: 'cubic-bezier(0.22, 1, 0.36, 1)',
