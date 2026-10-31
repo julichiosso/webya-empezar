@@ -1,5 +1,31 @@
 # Retomar: sprint "tu negocio, armado en un minuto"
 
+## PAUSA (2026-10-31): límite de uso, antes de publicar
+
+Se pausó **antes de la fase 1 de la publicación**: el agente del video cortó por el límite de 5 h
+de la cuenta (vuelve a las 4 a. m.). Nada se pusheó; `main` (local y remoto) está intacto.
+
+- **`feat/preview-por-rubro` @ `c72351d`**: estado consistente y en verde (lint, typecheck,
+  Vitest 1069 ✓ incluidos `tests/arquitectura` y `tests/copy`). Tiene (a), (b), (c), las
+  correcciones de seguridad (`da8388c`) y la sección de Micio's apagada + guion (`c72351d`).
+  `FLAGS.casoMicios = false` confirmado. Lista para retomar la publicación desde el paso 1.
+- **`feat/video-presentacion`** (worktree `.claude/worktrees/agent-a8752564f4a7d4b25`): A MEDIAS,
+  **no mergear ni publicar**. 2 commits (`3c9c260` reproductor reutilizable + guion sin "24 hs";
+  `329f90b` sección con poster + animación de las 4 pantallas) y cambios sin commitear. Ojo: nació
+  de `f315756` (la versión del commit de seguridad que todavía traía las 42 capturas
+  autogeneradas), así que hay que pasarla sobre `c72351d` (cherry-pick de sus 2 commits) antes de
+  integrarla. Se puede retomar mandándole un mensaje al mismo agente.
+- **Sin la sección de video**, /empezar no tiene rastro de ella (no está en la rama). Sigue el botón
+  viejo "Mirá cómo funciona" (ya está hoy en producción), cuya narración dice "te escribimos en menos
+  de veinticuatro horas", un plazo NO confirmado. El agente ya lo sacó en su rama; si se publica sin
+  ella, conviene sacar esa frase antes (`src/content/explicativo/guion.ts`, escena `cta`).
+- Migraciones: según el usuario, todas aplicadas en Supabase (ciudad y recargar_esquema incluidas).
+- Para retomar: seguir la "FASE 1" del pedido de publicación (integrar o descartar el video →
+  E2E completa con `--update-snapshots=none` → regenerar capturas una vez y revisarlas → medir →
+  push solo de la rama → preview → FASE 2 fast-forward a main).
+
+---
+
 Rama **`feat/preview-por-rubro`**, solo local: **sin push** (ni la rama ni main). `main` local está
 2 commits adelante de `origin/main` (los arreglos de dev `c2d9676` y `d7f34fc`), también sin subir.
 Etapas (a), (b) y (c) cerradas con todo en verde. La (d) no se empezó, como se pidió.
