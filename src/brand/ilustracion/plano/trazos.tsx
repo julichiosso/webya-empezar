@@ -135,9 +135,7 @@ export function Cota({ x1, y1, x2, y2, desde }: CotaProps) {
 
 /** Línea de eje (raya y punto, como en un plano técnico). */
 export function Eje({ d }: { d: string }) {
-  return (
-    <path {...TRAZO_PLANO} d={d} strokeOpacity={TINTA_PLANO.eje} strokeDasharray="22 6 3 6" />
-  );
+  return <path {...TRAZO_PLANO} d={d} strokeOpacity={TINTA_PLANO.eje} strokeDasharray="22 6 3 6" />;
 }
 
 /**

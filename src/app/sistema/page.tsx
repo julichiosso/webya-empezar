@@ -30,11 +30,7 @@ import {
   TOQUE,
   SNAP,
 } from '@/brand/motion/presets';
-import {
-  combinacionesSeccion,
-  SUPERFICIES_SECCION,
-  type SeccionId,
-} from '@/brand/tokens/colores';
+import { combinacionesSeccion, SUPERFICIES_SECCION, type SeccionId } from '@/brand/tokens/colores';
 import { COMPONENTES } from '@/brand/tokens/componentes';
 import { COLOR, CURVA, ESPACIO, TIPO } from '@/brand/tokens/primitivos';
 import {

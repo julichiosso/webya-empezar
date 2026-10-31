@@ -8,7 +8,9 @@ import { ESCENAS_PLANO, IlustracionPlano } from './IlustracionPlano';
 /** Lo que el plano no puede tener: texto, filtros, degradés, imágenes ni colores sueltos. */
 function revisarSvg(svg: SVGSVGElement) {
   expect(svg.getAttribute('aria-hidden')).toBe('true');
-  expect(svg.querySelectorAll('text, filter, linearGradient, radialGradient, image, foreignObject')).toHaveLength(0);
+  expect(
+    svg.querySelectorAll('text, filter, linearGradient, radialGradient, image, foreignObject'),
+  ).toHaveLength(0);
   const html = svg.outerHTML;
   expect(html).not.toMatch(/#[0-9a-f]{3,8}\b(?!\))|rgb\(|hsl\(/i);
   expect(html).not.toMatch(/TODO/i);
@@ -54,21 +56,25 @@ describe('FondoPlano', () => {
 });
 
 describe('IlustracionPlano', () => {
-  it.each(ESCENAS_PLANO.map((e) => [e]))('%s: terminada, decorativa y en currentColor', (escena) => {
-    const { container } = render(<IlustracionPlano escena={escena} className="size-full" />);
-    const svg = container.querySelector('svg') as SVGSVGElement;
-    expect(svg.dataset.escenaPlano).toBe(escena);
-    expect(svg.getAttribute('class')).toBe('size-full');
-    revisarSvg(svg);
-    // La pieza que encaja va en el acento (por token) y es UNA.
-    expect(svg.querySelectorAll('.text-plano-pieza')).toHaveLength(1);
-    // Liviana: SVG inline de pocos KB.
-    expect(svg.outerHTML.length).toBeLessThan(9000);
-  });
+  it.each(ESCENAS_PLANO.map((e) => [e]))(
+    '%s: terminada, decorativa y en currentColor',
+    (escena) => {
+      const { container } = render(<IlustracionPlano escena={escena} className="size-full" />);
+      const svg = container.querySelector('svg') as SVGSVGElement;
+      expect(svg.dataset.escenaPlano).toBe(escena);
+      expect(svg.getAttribute('class')).toBe('size-full');
+      revisarSvg(svg);
+      // La pieza que encaja va en el acento (por token) y es UNA.
+      expect(svg.querySelectorAll('.text-plano-pieza')).toHaveLength(1);
+      // Liviana: SVG inline de pocos KB.
+      expect(svg.outerHTML.length).toBeLessThan(9000);
+    },
+  );
 
   it('las tres escenas son distintas', () => {
     const html = ESCENAS_PLANO.map(
-      (e) => render(<IlustracionPlano escena={e} />).container.querySelector('svg[viewBox]')?.innerHTML,
+      (e) =>
+        render(<IlustracionPlano escena={e} />).container.querySelector('svg[viewBox]')?.innerHTML,
     );
     expect(new Set(html).size).toBe(3);
   });
