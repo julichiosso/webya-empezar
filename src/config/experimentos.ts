@@ -10,10 +10,16 @@ export type Orden = (typeof ORDENES)[number];
 
 export const ORDEN_POR_DEFECTO: Orden = 'a';
 
-const esOrden = (v: unknown): v is Orden => (ORDENES as readonly unknown[]).includes(v);
+export const esOrden = (v: unknown): v is Orden => (ORDENES as readonly unknown[]).includes(v);
 
 /** El orden de esta visita: el de la URL si es válido, si no el de por defecto. */
 export function ordenDeUrl(search: string): Orden {
   const pedido = new URLSearchParams(search).get('orden');
   return esOrden(pedido) ? pedido : ORDEN_POR_DEFECTO;
+}
+
+/** El orden pedido en la URL (`?orden=`), o null si no hay uno válido. */
+export function ordenPedido(search: string): Orden | null {
+  const pedido = new URLSearchParams(search).get('orden');
+  return esOrden(pedido) ? pedido : null;
 }

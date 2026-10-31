@@ -215,4 +215,21 @@ test.describe('debajo de lg (celular y tablet)', () => {
     await expect(vista).toHaveAttribute('data-dispositivo', 'celular');
     await expect(vista).toContainText('Luna Peluquería');
   });
+
+  test('pantalla 3: el CTA va en una barra fija abajo, sin la barra general encima', async ({
+    page,
+  }) => {
+    await irAlPaso(page, 'resultado');
+    const barra = page.getByTestId('barra-cta');
+    await expect(barra).toHaveAttribute('data-visible', 'true');
+    const cta = barra.getByRole('link', { name: /quiero esto para mi negocio/i });
+    await expect(cta).toBeVisible();
+    const caja = (await cta.boundingBox())!;
+    expect(caja.y + caja.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+    expect(caja.height).toBeGreaterThanOrEqual(47.5);
+    await expect(page.getByRole('region', { name: STICKY_CTA.aria })).toHaveAttribute(
+      'data-visible',
+      'false',
+    );
+  });
 });

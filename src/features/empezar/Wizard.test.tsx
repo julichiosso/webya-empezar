@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { dejarTraspasoDemo } from '@/domain/traspaso/demo-wizard';
@@ -71,14 +71,18 @@ describe('Wizard — pantalla 1 (rubro)', () => {
     expect(await screen.findByRole('heading', { name: '¿Qué negocio tenés?' })).toBeInTheDocument();
     expect(screen.getAllByRole('button', { pressed: false })).toHaveLength(7);
     await elegirRubro(u, /gastronomía/i);
-    expect(await screen.findByRole('heading', { name: /contanos de tu negocio/i })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: /contanos de tu negocio/i }),
+    ).toBeInTheDocument();
     expect(screen.getByText('Completalo y en segundos ves cómo te quedaría.')).toBeInTheDocument();
     expect(nombres()).toContain('rubro_elegido');
   });
 
   it('arranca desde el rubro que se tocó antes de que llegara el wizard', async () => {
     render(<Wizard rubroInicial="comercio" />);
-    expect(await screen.findByRole('heading', { name: /contanos de tu negocio/i })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: /contanos de tu negocio/i }),
+    ).toBeInTheDocument();
   });
 
   it('"Atrás" vuelve a los rubros con el elegido marcado', async () => {
@@ -86,7 +90,9 @@ describe('Wizard — pantalla 1 (rubro)', () => {
     render(<Wizard />);
     await elegirRubro(u, /comercio/i);
     await u.click(await screen.findByRole('button', { name: 'Atrás' }));
-    expect(await screen.findByRole('button', { name: /comercio/i, pressed: true })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: /comercio/i, pressed: true }),
+    ).toBeInTheDocument();
   });
 });
 
@@ -157,10 +163,9 @@ describe('Wizard — pantalla 2 (negocio): guarda el lead parcial', () => {
 
   it('un error de validación del servidor se queda en el formulario', async () => {
     fetchMock.mockResolvedValue(
-      new Response(
-        JSON.stringify({ error: { fields: { whatsapp: 'Revisá el número.' } } }),
-        { status: 400 },
-      ),
+      new Response(JSON.stringify({ error: { fields: { whatsapp: 'Revisá el número.' } } }), {
+        status: 400,
+      }),
     );
     const u = user();
     render(<Wizard />);
@@ -176,14 +181,14 @@ describe('Wizard — pantalla 3 (resultado), completar y gracias', () => {
   it('el CTA abre WhatsApp con rubro, nombre y módulos', async () => {
     const u = user();
     await llegarAlResultado(u);
-    const cta = screen.queryByRole('link', { name: /quiero esto para mi negocio/i });
+    const cta = screen.queryAllByRole('link', { name: /quiero esto para mi negocio/i })[0];
     // Sin número configurado (test) el CTA muestra su TODO; con número, el link lleva el mensaje.
     if (cta) {
       const texto = decodeURIComponent(cta.getAttribute('href') ?? '');
       expect(texto).toContain('Luna Peluquería');
       expect(texto).toContain('Peluquería');
     } else {
-      expect(screen.getByText(/NEXT_PUBLIC_WHATSAPP_NUMBER/)).toBeInTheDocument();
+      expect(screen.getAllByText(/NEXT_PUBLIC_WHATSAPP_NUMBER/).length).toBeGreaterThan(0);
     }
   });
 
@@ -195,7 +200,11 @@ describe('Wizard — pantalla 3 (resultado), completar y gracias', () => {
     expect(screen.getByLabelText(/nombre de tu negocio/i)).toHaveValue('Luna Peluquería');
     await u.click(screen.getByRole('button', { name: 'Enviar mis datos' }));
     expect(
-      await screen.findByRole('heading', { name: /listo, ya nos llegaron tus datos/i }, { timeout: 4000 }),
+      await screen.findByRole(
+        'heading',
+        { name: /listo, ya nos llegaron tus datos/i },
+        { timeout: 4000 },
+      ),
     ).toBeInTheDocument();
     const [url, init] = fetchMock.mock.calls[1] as [string, RequestInit];
     expect(url).toBe(`/api/leads/${ID}`);
@@ -220,10 +229,14 @@ describe('Wizard — pantalla 3 (resultado), completar y gracias', () => {
     await elegirRubro(u, /gastronomía/i);
     await completarNegocio(u, { negocio: 'Lo de Tito' });
     await u.click(screen.getByRole('button', { name: /ver cómo me queda/i }));
-    const demo = await screen.findByRole('link', { name: /probá la demo completa/i }, {
-      timeout: 4000,
-    });
-    expect(demo).toHaveAttribute('href', '/demo/gastronomia?local=Lo+de+Tito');
+    const demo = await screen.findByRole(
+      'link',
+      { name: /probá la demo completa/i },
+      {
+        timeout: 4000,
+      },
+    );
+    expect(demo).toHaveAttribute('href', '/demo/gastronomia?local=Lo+de+Tito&paleta=brasa');
   });
 });
 
@@ -244,9 +257,13 @@ describe('Wizard — desde la demo', () => {
     expect(await screen.findByLabelText(/nombre de tu negocio/i)).toHaveValue('Lo de Tito');
     await u.type(screen.getByLabelText(/tu whatsapp/i), '1123456789');
     await u.click(screen.getByRole('button', { name: /ver cómo me queda/i }));
-    const demo = await screen.findByRole('link', { name: /probá la demo completa/i }, {
-      timeout: 4000,
-    });
+    const demo = await screen.findByRole(
+      'link',
+      { name: /probá la demo completa/i },
+      {
+        timeout: 4000,
+      },
+    );
     expect(demo).toHaveAttribute('href', '/demo/gastronomia?local=Lo+de+Tito&paleta=pileta');
     expect(cuerpo(0)).toMatchObject({
       origen: 'demo_gastronomia',
@@ -282,7 +299,9 @@ describe('Wizard — persistencia en sessionStorage', () => {
       JSON.stringify({ paso: 'resultado', rubro: 'comercio' }),
     );
     render(<Wizard />);
-    expect(await screen.findByRole('heading', { name: /contanos de tu negocio/i })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: /contanos de tu negocio/i }),
+    ).toBeInTheDocument();
   });
 });
 
@@ -301,5 +320,77 @@ describe('Wizard — abandono', () => {
     expect(eventos.filter(([e]) => e === 'abandono_paso')).toEqual([
       ['abandono_paso', { paso: 'negocio' }],
     ]);
+  });
+});
+
+describe('Wizard — pantalla 3: cómo se ve, colores y piezas', () => {
+  it('cambia celular/computadora, la paleta y las piezas (y lo mide)', async () => {
+    const u = user();
+    await llegarAlResultado(u);
+    const ver = screen.getByRole('group', { name: 'Ver en' });
+    await u.click(within(ver).getByRole('button', { name: 'Computadora' }));
+    expect(within(ver).getByRole('button', { name: 'Computadora' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await u.click(screen.getByRole('button', { name: 'Colores Pileta' }));
+    expect(screen.getByRole('button', { name: 'Colores Pileta' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    const turnos = screen.getByRole('button', { name: /turnos y reservas/i, pressed: true });
+    await u.click(turnos);
+    expect(turnos).toHaveAttribute('aria-pressed', 'false');
+    expect(nombres()).toEqual(expect.arrayContaining(['preview_toggle', 'modulo_alternado']));
+  });
+
+  it('la demo de Gastronomía se abre con la paleta elegida', async () => {
+    const u = user();
+    render(<Wizard />);
+    await elegirRubro(u, /gastronomía/i);
+    await completarNegocio(u, { negocio: 'Lo de Tito' });
+    await u.click(screen.getByRole('button', { name: /ver cómo me queda/i }));
+    await screen.findByRole('heading', { name: /así te queda/i }, { timeout: 4000 });
+    await u.click(screen.getByRole('button', { name: 'Colores Ciruela' }));
+    expect(screen.getByRole('link', { name: /probá la demo completa/i })).toHaveAttribute(
+      'href',
+      '/demo/gastronomia?local=Lo+de+Tito&paleta=ciruela',
+    );
+  });
+
+  it('en celular el CTA también va en la barra fija abajo', async () => {
+    const u = user();
+    await llegarAlResultado(u);
+    expect(screen.getByTestId('barra-cta')).toBeInTheDocument();
+  });
+});
+
+describe('Wizard — orden B (?orden=b)', () => {
+  beforeEach(() => window.history.replaceState(null, '', '/empezar?orden=b'));
+  afterEach(() => window.history.replaceState(null, '', '/'));
+
+  it('pide solo el nombre, muestra la vista previa y el WhatsApp recién al tocar el CTA', async () => {
+    const u = user();
+    render(<Wizard />);
+    await elegirRubro(u);
+    await screen.findByRole('heading', { name: /contanos de tu negocio/i });
+    expect(screen.queryByLabelText(/tu whatsapp/i)).toBeNull();
+    await u.type(screen.getByLabelText(/nombre de tu negocio/i), 'Luna Peluquería');
+    await u.click(screen.getByRole('button', { name: /ver cómo me queda/i }));
+    await screen.findByRole(
+      'heading',
+      { name: /así te queda luna peluquería/i },
+      { timeout: 4000 },
+    );
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    await u.click(screen.getAllByRole('button', { name: /quiero esto para mi negocio/i })[0]!);
+    await screen.findByRole('heading', { name: /a qué whatsapp te escribimos/i });
+    await u.type(screen.getByLabelText(/tu whatsapp/i), '1123456789');
+    await u.click(screen.getByRole('button', { name: 'Guardar y seguir' }));
+    await screen.findByRole('heading', { name: /así te queda/i }, { timeout: 4000 });
+    expect(cuerpo(0)).toMatchObject({ parcial: true, nombreNegocio: 'Luna Peluquería' });
+    expect(eventos).toContainEqual(['form_enviado', expect.objectContaining({ orden: 'b' })]);
+    expect(eventos).toContainEqual(['cta_click', expect.objectContaining({ destino: 'contacto' })]);
   });
 });

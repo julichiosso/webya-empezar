@@ -1,5 +1,6 @@
 import { esOrigen } from '@/config/origenes';
 import { MODULO_IDS, type ModuloId } from '@/content/modulos';
+import { esPaletaCurada } from '@/content/paletas';
 import { getRubro } from '@/content/rubros';
 import { LIMITES_BASE } from '@/domain/leads/limites';
 import { tomarTraspasoDemo } from '@/domain/traspaso/demo-wizard';
@@ -28,9 +29,12 @@ export function aplicarTraspasoDemo(storage: StorageLike): boolean {
   for (const id of rubro.modulosSugeridos as readonly ModuloId[]) modulosManual[id] = false;
   for (const id of modulos) modulosManual[id] = true;
 
+  const demo = sanearDemo(d.demo);
   guardarEstado(
     {
       ...ESTADO_INICIAL,
+      // La paleta que eligió en la demo sigue en la vista previa (y vuelve a la demo con ella).
+      paleta: demo && esPaletaCurada(demo.paleta) ? demo.paleta : null,
       paso: 'negocio',
       rubro: rubro.id,
       modulosManual,
@@ -42,7 +46,7 @@ export function aplicarTraspasoDemo(storage: StorageLike): boolean {
             : '',
       },
       origen: d.origen,
-      demo: sanearDemo(d.demo),
+      demo,
     },
     storage,
   );

@@ -40,6 +40,8 @@ export const FLUJO = {
     promesa: 'Completalo y en segundos ves cómo te quedaría.',
     /** En "Otro" no hay vista previa: la promesa es otra. */
     promesaAMedida: 'Completalo y te escribimos para armarlo con vos.',
+    /** Orden B (experimento): solo el nombre antes de la vista previa. */
+    promesaSoloNombre: 'Poné el nombre y mirá cómo te queda.',
     campos: {
       nombreNegocio: { ...PASO_DATOS.campos.nombreNegocio, placeholder: 'Ej: Lo de Tito' },
       whatsapp: PASO_DATOS.campos.whatsapp,
@@ -72,9 +74,29 @@ export const FLUJO = {
         'Para lo que nos contaste no hay una vista previa armada: lo leemos nosotros y te decimos si se puede hacer y cómo.',
       cta: 'Hablarlo por WhatsApp',
     },
+    /** Cambiar cómo se ve la vista previa (celular o computadora). */
+    verEn: { leyenda: 'Ver en', celular: 'Celular', escritorio: 'Computadora' },
+    /** Elegir entre las paletas curadas (content/paletas.ts). */
+    colores: { leyenda: 'Colores', opcion: (nombre: string) => `Colores ${nombre}` },
+    /** Prender o apagar los módulos del rubro en la vista previa. */
+    modulos: {
+      leyenda: 'Qué incluye',
+      ayuda: 'Tocá para sacar o sumar.',
+      estado: (cantidad: number) =>
+        `${cantidad} ${cantidad === 1 ? 'pieza activada' : 'piezas activadas'}.`,
+    },
+    /** Barra fija abajo en celular, con el CTA siempre a mano. */
+    barra: 'Quiero esto para mi negocio',
     todoWhatsapp: PASO_LISTO.todoWhatsapp,
     /** El guardado del lead falló pero la vista previa igual se muestra: le dejamos la salida. */
     sinGuardar: 'No pudimos guardar tus datos. Escribinos por WhatsApp y lo seguimos por ahí.',
+  },
+
+  /** Orden B (experimento): el WhatsApp se pide al tocar "Quiero esto", después de la vista previa. */
+  contacto: {
+    titulo: '¿A qué WhatsApp te escribimos?',
+    promesa: 'Te escribimos con esto armado para seguirlo con vos.',
+    enviar: 'Guardar y seguir',
   },
 
   /** Completar (opcional): todo menos el nombre del negocio es opcional. Actualiza el mismo lead. */

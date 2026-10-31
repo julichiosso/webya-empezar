@@ -14,16 +14,27 @@ import type { DatosFlujo } from '../state';
 import { StepHeader } from './StepHeader';
 
 const TXT = FLUJO.negocio;
+const CONTACTO = FLUJO.contacto;
 
-const esquema = z.object({
-  nombreNegocio: datosFormShape.nombreNegocio,
-  whatsapp: datosFormShape.whatsapp,
-  ciudad: z
-    .string()
-    .trim()
-    .max(LIMITES.ciudad, MENSAJES_LEAD.hastaCaracteres(LIMITES.ciudad)),
-});
-export type ValoresNegocio = z.output<typeof esquema>;
+const ciudad = z.string().trim().max(LIMITES.ciudad, MENSAJES_LEAD.hastaCaracteres(LIMITES.ciudad));
+const opcional = z.string().trim();
+
+/**
+ * `completo`: nombre, WhatsApp y ciudad (orden A). `soloNombre`: nombre y ciudad, sin WhatsApp
+ * (orden B, antes de la vista previa). `contacto`: solo el WhatsApp (orden B, al tocar el CTA).
+ */
+export type VarianteNegocio = 'completo' | 'soloNombre' | 'contacto';
+
+const ESQUEMAS = {
+  completo: z.object({
+    nombreNegocio: datosFormShape.nombreNegocio,
+    whatsapp: datosFormShape.whatsapp,
+    ciudad,
+  }),
+  soloNombre: z.object({ nombreNegocio: datosFormShape.nombreNegocio, whatsapp: opcional, ciudad }),
+  contacto: z.object({ nombreNegocio: opcional, whatsapp: datosFormShape.whatsapp, ciudad }),
+} as const;
+export type ValoresNegocio = z.output<(typeof ESQUEMAS)['completo']>;
 type Campo = keyof ValoresNegocio;
 
 /** Orden visual: el foco va al primer campo con error. */
@@ -33,6 +44,8 @@ interface StepNegocioProps {
   inicial: Pick<DatosFlujo, Campo>;
   /** "Otro": no hay vista previa, cambian la promesa y el botón. */
   aMedida: boolean;
+  /** Qué campos se piden (ver VarianteNegocio). Por defecto, el formulario completo. */
+  variante?: VarianteNegocio;
   headingRef: Ref<HTMLHeadingElement>;
   /** Enfoca el primer campo (solo cuando la persona llegó acá avanzando, no al recargar). */
   enfocarPrimero: boolean;
@@ -54,6 +67,7 @@ const honeypotDe = (evento?: BaseSyntheticEvent) => {
 export function StepNegocio({
   inicial,
   aMedida,
+  variante = 'completo',
   headingRef,
   enfocarPrimero,
   onCambio,
@@ -66,13 +80,15 @@ export function StepNegocio({
     setError,
     setFocus,
     formState: { errors, touchedFields },
-  } = useForm<z.input<typeof esquema>, unknown, ValoresNegocio>({
-    resolver: zodResolver(esquema),
+  } = useForm<z.input<(typeof ESQUEMAS)['completo']>, unknown, ValoresNegocio>({
+    resolver: zodResolver(ESQUEMAS[variante]),
     defaultValues: inicial,
     mode: 'onTouched',
     shouldFocusError: false,
   });
   const [status, setStatus] = useState<ButtonStatus>('idle');
+  const contacto = variante === 'contacto';
+  const soloNombre = variante === 'soloNombre';
   const [errorGlobal, setErrorGlobal] = useState<string | null>(null);
 
   // Persistir lo que se va escribiendo para sobrevivir a una recarga.
@@ -112,48 +128,61 @@ export function StepNegocio({
 
   return (
     <form noValidate onSubmit={enviar} className="lg:max-w-xl">
-      <StepHeader title={TXT.titulo} headingRef={headingRef} />
+      <StepHeader title={contacto ? CONTACTO.titulo : TXT.titulo} headingRef={headingRef} />
       {/* La promesa de la pantalla, bien visible arriba del formulario. */}
       <p className="-mt-3 mb-6 rounded-control border border-accent bg-accent-soft px-4 py-3 text-lead font-medium">
-        {aMedida ? TXT.promesaAMedida : TXT.promesa}
+        {contacto
+          ? CONTACTO.promesa
+          : aMedida
+            ? TXT.promesaAMedida
+            : soloNombre
+              ? TXT.promesaSoloNombre
+              : TXT.promesa}
       </p>
 
       <div className="flex flex-col gap-5">
-        <Input
-          label={TXT.campos.nombreNegocio.etiqueta}
-          placeholder={TXT.campos.nombreNegocio.placeholder}
-          autoComplete="organization"
-          enterKeyHint="next"
-          maxLength={LIMITES.nombreNegocio}
-          autoFocus={enfocarPrimero}
-          error={errors.nombreNegocio?.message}
-          valid={ok('nombreNegocio')}
-          {...register('nombreNegocio')}
-        />
-        <Input
-          label={TXT.campos.whatsapp.etiqueta}
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel-national"
-          enterKeyHint="next"
-          placeholder={TXT.campos.whatsapp.placeholder}
-          hint={TXT.campos.whatsapp.ayuda}
-          maxLength={20}
-          error={errors.whatsapp?.message}
-          valid={ok('whatsapp')}
-          {...tel}
-          onChange={onTelefono}
-        />
-        <Input
-          label={TXT.campos.ciudad.etiqueta}
-          placeholder={TXT.campos.ciudad.placeholder}
-          optional
-          autoComplete="address-level2"
-          enterKeyHint="send"
-          maxLength={LIMITES.ciudad}
-          error={errors.ciudad?.message}
-          {...register('ciudad')}
-        />
+        {!contacto && (
+          <Input
+            label={TXT.campos.nombreNegocio.etiqueta}
+            placeholder={TXT.campos.nombreNegocio.placeholder}
+            autoComplete="organization"
+            enterKeyHint="next"
+            maxLength={LIMITES.nombreNegocio}
+            autoFocus={enfocarPrimero && !contacto}
+            error={errors.nombreNegocio?.message}
+            valid={ok('nombreNegocio')}
+            {...register('nombreNegocio')}
+          />
+        )}
+        {!soloNombre && (
+          <Input
+            label={TXT.campos.whatsapp.etiqueta}
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel-national"
+            enterKeyHint="next"
+            placeholder={TXT.campos.whatsapp.placeholder}
+            hint={TXT.campos.whatsapp.ayuda}
+            maxLength={20}
+            autoFocus={enfocarPrimero && contacto}
+            error={errors.whatsapp?.message}
+            valid={ok('whatsapp')}
+            {...tel}
+            onChange={onTelefono}
+          />
+        )}
+        {!contacto && (
+          <Input
+            label={TXT.campos.ciudad.etiqueta}
+            placeholder={TXT.campos.ciudad.placeholder}
+            optional
+            autoComplete="address-level2"
+            enterKeyHint="send"
+            maxLength={LIMITES.ciudad}
+            error={errors.ciudad?.message}
+            {...register('ciudad')}
+          />
+        )}
       </div>
 
       {/* Honeypot: invisible y fuera del orden de tabulación. Si se completa, es un bot. */}
@@ -173,7 +202,13 @@ export function StepNegocio({
       </div>
 
       <Button type="submit" fullWidth status={status} className="mt-6">
-        {status === 'loading' ? TXT.enviando : aMedida ? TXT.enviarAMedida : TXT.enviar}
+        {status === 'loading'
+          ? TXT.enviando
+          : contacto
+            ? CONTACTO.enviar
+            : aMedida
+              ? TXT.enviarAMedida
+              : TXT.enviar}
       </Button>
 
       <p className="mt-4 text-small text-subtle">

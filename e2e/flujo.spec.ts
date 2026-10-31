@@ -48,7 +48,8 @@ test('recorrido completo: rubro → formulario (lead parcial) → vista previa �
   expect(parcial?.ip_hash).toMatch(/^[0-9a-f]{32,}$/);
 
   // CTA único: WhatsApp con rubro, nombre y módulos.
-  const cta = wizard(page).getByRole('link', { name: /quiero esto para mi negocio/i });
+  // En celular el CTA va en la barra fija (fuera del flujo); en escritorio, en la pantalla.
+  const cta = page.getByRole('link', { name: /quiero esto para mi negocio/i });
   await expect(cta).toHaveAttribute('href', /^https:\/\/wa\.me\/5491100000000\?text=/);
   const texto = decodeURIComponent((await cta.getAttribute('href')) ?? '');
   expect(texto).toContain(negocio);
@@ -93,17 +94,69 @@ test('"Otro": pedido a medida → formulario → "Lo armamos a medida", sin vist
   expect(lead).toMatchObject({ estado: 'parcial', rubro: 'otro', modulos: [] });
 });
 
-test('Gastronomía: "Probá la demo completa" abre la demo con el nombre cargado', async ({
+test('Gastronomía: la demo completa se abre con el nombre y la paleta elegidos', async ({
   page,
 }) => {
   await page.goto('/empezar');
   await abrirWizard(page);
   await elegirRubro(page, 'gastronomia');
   await enviarNegocio(page, { negocio: 'Lo de Tito' });
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
+  await wizard(page)
+    .getByRole('button', { name: 'Colores Pileta' })
+    .click();
+  await expect(
+    wizard(page).locator('[data-testid="preview-negocio"][data-paleta="pileta"]').first(),
+  ).toBeAttached();
   await wizard(page)
     .getByRole('link', { name: /probá la demo completa/i })
     .click();
-  await expect(page).toHaveURL(/\/demo\/gastronomia\?local=Lo\+de\+Tito/);
+  await expect(page).toHaveURL(/\/demo\/gastronomia\?local=Lo\+de\+Tito&paleta=pileta/);
+  // La demo arranca con ese nombre (lo lee de la URL).
+  await expect(page.getByText('Lo de Tito').first()).toBeVisible();
+});
+
+test('pantalla 3: celular/computadora y piezas cambian la vista previa', async ({ page }) => {
+  await irAlPaso(page, 'resultado');
+  const ver = wizard(page).getByRole('group', { name: 'Ver en' });
+  await ver.getByRole('button', { name: 'Computadora' }).click();
+  await expect(
+    wizard(page).locator('[data-testid="preview-negocio"][data-dispositivo="escritorio"]').first(),
+  ).toBeAttached();
+  const turnos = wizard(page).getByRole('button', { name: /turnos y reservas/i });
+  await expect(turnos).toHaveAttribute('aria-pressed', 'true');
+  await turnos.click();
+  await expect(turnos).toHaveAttribute('aria-pressed', 'false');
+});
+
+test('orden B: nombre → vista previa → WhatsApp al tocar el CTA (y ahí se guarda el lead)', async ({
+  page,
+}, testInfo) => {
+  const negocio = negocioUnico(`b-${testInfo.project.name}`);
+  await page.goto('/empezar?orden=b');
+  await abrirWizard(page);
+  await elegirRubro(page);
+  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
+  await expect(wizard(page).getByLabel('Tu WhatsApp')).toHaveCount(0);
+  await wizard(page).getByLabel('Nombre de tu negocio').fill(negocio);
+  await wizard(page)
+    .getByRole('button', { name: /ver cómo me queda/i })
+    .click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
+  expect((await leerLeads()).some((l) => l.nombre_negocio === negocio)).toBe(false);
+
+  await page.getByRole('button', { name: /quiero esto para mi negocio/i }).click();
+  await wizard(page).getByLabel('Tu WhatsApp').fill('1123456789');
+  await wizard(page).getByRole('button', { name: 'Guardar y seguir' }).click();
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
+  await expect(page.getByRole('link', { name: /quiero esto para mi negocio/i })).toHaveAttribute(
+    'href',
+    /^https:\/\/wa\.me\//,
+  );
+  expect((await leerLeads()).find((l) => l.nombre_negocio === negocio)).toMatchObject({
+    estado: 'parcial',
+    rubro: 'peluqueria_estetica',
+  });
 });
 
 test('recargar en el medio del flujo conserva lo cargado', async ({ page }) => {

@@ -16,7 +16,8 @@ export interface EventosAnalitica {
   preview_visto: { rubro: string; paleta: string };
   preview_toggle: { dispositivo: 'celular' | 'escritorio' };
   demo_abierta: { rubro: string; paleta: string };
-  cta_click: { destino: 'whatsapp'; rubro: string; modulos: number };
+  /** `contacto`: orden B, el CTA lleva primero a dejar el WhatsApp. */
+  cta_click: { destino: 'whatsapp' | 'contacto'; rubro: string; modulos: number };
   /** Se fue (pestaña oculta o cerrada) sin llegar al CTA. Una vez por visita. */
   abandono_paso: { paso: string };
   lead_completado: { completo: boolean };

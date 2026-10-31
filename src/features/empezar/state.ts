@@ -1,4 +1,5 @@
-import { esPaletaCurada } from '@/content/paletas';
+import { esOrden, ORDEN_POR_DEFECTO, type Orden } from '@/config/experimentos';
+import { esPaletaCurada, type PaletaCuradaId } from '@/content/paletas';
 import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { esOrigen, type Origen } from '@/config/origenes';
 import { WIZARD } from '@/content/empezar/wizard';
@@ -22,8 +23,19 @@ export interface DesdeDemo {
  *
  * Quien viene de una demo ya eligió rubro y nombre del local: entra en `negocio`, con el nombre
  * cargado.
+ *
+ * Orden B (experimento, config/experimentos): `negocio` pide solo el nombre, la vista previa sale
+ * sin lead y el WhatsApp se pide en `contacto`, al tocar el CTA.
  */
-export const PASOS = ['rubro', 'aMedida', 'negocio', 'resultado', 'completar', 'listo'] as const;
+export const PASOS = [
+  'rubro',
+  'aMedida',
+  'negocio',
+  'resultado',
+  'contacto',
+  'completar',
+  'listo',
+] as const;
 export type Paso = (typeof PASOS)[number];
 export const STORAGE_KEY = 'webya:empezar:v3';
 
@@ -47,6 +59,10 @@ export interface WizardState {
   necesidadLibre: string;
   /** Decisiones a mano sobre los módulos del rubro (en la vista previa). */
   modulosManual: ModulosManual;
+  /** Paleta elegida en la vista previa (null = la de la demo si vino de ahí, si no la por defecto). */
+  paleta: PaletaCuradaId | null;
+  /** Orden del flujo de esta visita (experimento). */
+  orden: Orden;
   datos: DatosFlujo;
   lead: LeadGuardado | null;
   /** Mandó los datos de "completar" (la pantalla final lo agradece). */
@@ -76,6 +92,8 @@ export const ESTADO_INICIAL: WizardState = {
   rubro: null,
   necesidadLibre: '',
   modulosManual: {},
+  paleta: null,
+  orden: ORDEN_POR_DEFECTO,
   datos: DATOS_VACIOS,
   lead: null,
   completo: false,
@@ -90,6 +108,8 @@ export type Accion =
   | { tipo: 'elegirRubro'; id: string }
   | { tipo: 'necesidadLibre'; texto: string }
   | { tipo: 'alternarModulo'; id: ModuloId }
+  | { tipo: 'paleta'; id: PaletaCuradaId }
+  | { tipo: 'orden'; orden: Orden }
   | { tipo: 'datos'; datos: Partial<DatosFlujo> }
   | { tipo: 'leadParcial'; lead: LeadGuardado }
   | { tipo: 'irA'; paso: Paso }
@@ -114,6 +134,10 @@ export function reducer(state: WizardState, accion: Accion): WizardState {
         ...state,
         modulosManual: alternarModulo(state.rubro, state.modulosManual, accion.id),
       };
+    case 'paleta':
+      return { ...state, paleta: accion.id };
+    case 'orden':
+      return { ...state, orden: accion.orden };
     case 'datos':
       return { ...state, datos: { ...state.datos, ...accion.datos } };
     case 'leadParcial':
@@ -155,6 +179,7 @@ export function pasoAnterior(state: Pick<WizardState, 'paso' | 'rubro'>): Paso |
     case 'negocio':
       return esAMedida(state) ? 'aMedida' : 'rubro';
     case 'completar':
+    case 'contacto':
       return 'resultado';
     // Con el lead ya guardado no se vuelve al formulario: se completa o se sigue por WhatsApp.
     default:
@@ -194,6 +219,8 @@ export function guardarEstado(state: WizardState, storage: StorageLike): void {
       rubro: state.rubro,
       necesidadLibre: state.necesidadLibre,
       modulosManual: state.modulosManual,
+      paleta: state.paleta,
+      orden: state.orden,
       datos: state.datos,
       // El token vive en sessionStorage como el resto del flujo: se va al cerrar la pestaña y la
       // API lo acepta una sola vez y por 6 horas.
@@ -242,15 +269,19 @@ function sanearLead(v: unknown): LeadGuardado | null {
 /** El paso guardado, corregido para que nunca quede en uno al que no se pudo haber llegado. */
 export function pasoCoherente(
   paso: unknown,
-  e: Pick<WizardState, 'rubro' | 'necesidadLibre' | 'lead' | 'completo'>,
+  e: Pick<WizardState, 'rubro' | 'necesidadLibre' | 'lead' | 'completo'> & { orden?: Orden },
 ): Paso {
   const p: Paso = (PASOS as readonly unknown[]).includes(paso) ? (paso as Paso) : 'rubro';
   if (!e.rubro) return 'rubro';
   const aMedida = esAMedida(e);
   if (p === 'aMedida') return aMedida ? 'aMedida' : 'negocio';
   if (aMedida && p !== 'rubro' && errorAMedida(e.necesidadLibre)) return 'aMedida';
+  // `contacto` es solo del orden B (y sin lead: con lead ya no hace falta).
+  if (p === 'contacto') return e.orden === 'b' && !e.lead && !aMedida ? 'contacto' : 'resultado';
   if (p === 'resultado' || p === 'completar' || p === 'listo') {
-    if (!e.lead) return 'negocio';
+    // Sin lead no se completa ni se agradece. En el orden B la vista previa sale antes del lead
+    // (con el nombre ya cargado): ahí se vuelve; en el A, al formulario.
+    if (!e.lead) return e.orden === 'b' && !aMedida ? 'resultado' : 'negocio';
     if (p === 'listo' && !e.completo) return 'resultado';
   }
   return p;
@@ -268,12 +299,15 @@ export function leerEstadoGuardado(storage: StorageLike): WizardState | null {
     const lead = sanearLead(d.lead);
     const necesidadLibre = str(d.necesidadLibre, LIMITES.necesidadLibre);
     const completo = d.completo === true && lead !== null;
+    const orden = esOrden(d.orden) ? d.orden : ORDEN_POR_DEFECTO;
     return {
-      paso: pasoCoherente(d.paso, { rubro, necesidadLibre, lead, completo }),
+      paso: pasoCoherente(d.paso, { rubro, necesidadLibre, lead, completo, orden }),
       direccion: 1,
       rubro,
       necesidadLibre,
       modulosManual: sanearManual(d.modulosManual),
+      paleta: esPaletaCurada(d.paleta) ? d.paleta : null,
+      orden,
       datos: {
         nombreNegocio: str(datos.nombreNegocio, LIMITES.nombreNegocio),
         nombre: str(datos.nombre, LIMITES.nombre),

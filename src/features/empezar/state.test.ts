@@ -28,6 +28,18 @@ describe('pasoCoherente: nunca un paso al que no se pudo haber llegado', () => {
     expect(pasoCoherente('listo', { ...base, lead: LEAD, completo: true })).toBe('listo');
   });
 
+  it('orden B: la vista previa sale sin lead; contacto solo sin lead y nunca con "Otro"', () => {
+    const b = { ...base, orden: 'b' as const };
+    expect(pasoCoherente('resultado', b)).toBe('resultado');
+    expect(pasoCoherente('contacto', b)).toBe('contacto');
+    expect(pasoCoherente('contacto', { ...b, lead: LEAD })).toBe('resultado');
+    expect(pasoCoherente('completar', b)).toBe('resultado');
+    expect(pasoCoherente('contacto', base)).toBe('resultado');
+    expect(pasoCoherente('resultado', { ...b, rubro: 'otro', necesidadLibre: 'Turnos' })).toBe(
+      'negocio',
+    );
+  });
+
   it('"Otro" sin pedido a medida vuelve a pedirlo; otro rubro no pasa por ahí', () => {
     const otro = { ...base, rubro: 'otro' };
     expect(pasoCoherente('negocio', otro)).toBe('aMedida');

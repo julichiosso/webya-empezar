@@ -31,6 +31,7 @@ describe('de la demo al flujo (traspaso por domain/traspaso)', () => {
       rubro: 'gastronomia',
       origen: 'demo_gastronomia',
       demo: { paleta: 'pileta', cocina: 'parrilla' },
+      paleta: 'pileta',
     });
     expect(e?.datos.nombreNegocio).toBe('Lo de Tito');
     // Los módulos activos son EXACTAMENTE los de la demo (lo sugerido que no está, apagado).
