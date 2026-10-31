@@ -31,6 +31,13 @@ export { ModuloArte } from './modulos/ModuloArte';
 export { IlustracionRubro } from './rubros/IlustracionRubro';
 export { ESCENAS_RUBRO, esEscenaRubro, type EscenaRubro } from './rubros/ids';
 export { ARTES_MODULO, esArteModulo, type ArteModulo } from './modulos/ids';
+export { FondoPlano } from './plano/FondoPlano';
+export {
+  ESCENAS_PLANO,
+  IlustracionPlano,
+  LIENZO_PLANO,
+  type EscenaPlano,
+} from './plano/IlustracionPlano';
 
 export type GrupoIcono = 'rubro' | 'modulo' | 'necesidad' | 'interfaz';
 export type GrupoDibujo = 'plato' | 'estado';
