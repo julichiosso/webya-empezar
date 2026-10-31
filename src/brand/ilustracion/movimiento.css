@@ -69,9 +69,33 @@
   animation: ilus-cae 1600ms var(--ease-out) infinite both;
 }
 
+/* Escenas de rubro (grilla 96): la pieza en acento cae, se pasa apenas y asienta. Una sola vez, al
+   montarse (no hay loop). Arranca después de que el resto de la escena ya está puesto. */
+@keyframes ilus-encaja {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.ilus-encaja {
+  animation: ilus-encaja 280ms var(--ease-out) 120ms both;
+}
+
 /* Movimiento reducido: versión quieta equivalente. El spinner queda con la pieza en su lugar y el
-   dibujo muestra la primera pieza encajada y los otros dos huecos. */
+   dibujo muestra la primera pieza encajada y los otros dos huecos. Las escenas de rubro quedan
+   armadas, con la pieza ya en su lugar. */
 @media (prefers-reduced-motion: reduce) {
+  .ilus-encaja {
+    animation: none;
+  }
   .ilus-giro {
     animation: none;
   }

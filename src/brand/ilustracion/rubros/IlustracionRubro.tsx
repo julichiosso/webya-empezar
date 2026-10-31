@@ -1,30 +1,37 @@
-import { Icon } from '../iconos/Icon';
-import { isIconName } from '../iconos/paths';
+import { GRILLA_DIBUJO, TRAZO } from '../grilla';
+import { ESCENA_GENERICA, ESCENAS } from './escenas';
+import { esEscenaRubro } from './ids';
+import '../movimiento.css';
 
 interface IlustracionRubroProps {
   /** Id del rubro (content/rubros). Uno desconocido dibuja el genérico. */
   rubro: string;
+  /**
+   * El tamaño lo pone quien la usa (p. ej. `size-16` en la cabecera chica, `size-40` en escritorio).
+   * Sin tamaño, el SVG ocupa el ancho de su contenedor, cuadrado.
+   */
   className?: string;
 }
 
 /**
  * Escena propia de cada rubro para la vista previa de /empezar (grilla de dibujo 96, Encastre).
- * PROVISORIO: dibuja el ícono del rubro en grande hasta que estén las escenas (agente ilustracion,
- * etapa b). La firma no cambia: quien la usa no se entera del reemplazo.
+ * Decorativa: el nombre del rubro ya está escrito al lado. El acento es `--accent`, así que toma la
+ * paleta del contenedor (`variablesDePaleta`). Al montarse, la pieza en acento cae y asienta una vez
+ * (`.ilus-encaja`); con movimiento reducido queda quieta en su lugar. Para repetir el "clic" al
+ * cambiar de rubro, quien la usa le pone `key={rubro}`.
  */
 export function IlustracionRubro({ rubro, className }: IlustracionRubroProps) {
-  const ICONOS: Record<string, string> = {
-    peluqueria_estetica: 'tijera',
-    gastronomia: 'cubiertos',
-    comercio: 'tienda',
-    profesionales: 'portafolio',
-    gimnasio_deportes: 'pesa',
-    servicios_tecnicos: 'llave',
-  };
-  const nombre = ICONOS[rubro] ?? 'mas';
   return (
-    <span aria-hidden="true" className={className}>
-      <Icon name={isIconName(nombre) ? nombre : 'mas'} size={48} />
-    </span>
+    <svg
+      viewBox={GRILLA_DIBUJO.viewBox}
+      {...TRAZO}
+      strokeWidth={GRILLA_DIBUJO.trazo}
+      aria-hidden="true"
+      focusable="false"
+      data-escena={esEscenaRubro(rubro) ? rubro : 'generico'}
+      className={className}
+    >
+      {esEscenaRubro(rubro) ? ESCENAS[rubro] : ESCENA_GENERICA}
+    </svg>
   );
 }

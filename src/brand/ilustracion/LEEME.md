@@ -75,8 +75,17 @@ Tres formas, siempre las mismas:
 | `Ilustracion`                                                         | `dibujos/Ilustracion.tsx` | `<Ilustracion id="vacio" size={96} title?>`                   |
 | `ILUSTRACIONES`, `ESTADOS`, `DIBUJO_IDS`                              | `dibujos/ids.ts`          | Ids de platos, de estados y de todos                          |
 | `ModuloArte`, `ARTES_MODULO`, `ArteModulo`                            | `modulos/`                | Arte de banda por módulo                                      |
+| `IlustracionRubro`, `ESCENAS_RUBRO`                                   | `rubros/`                 | Escena por rubro (grilla 96); id desconocido → genérico       |
 | `Cargando`                                                            | `Cargando.tsx`            | Spinner Encastre (grilla 24, `currentColor`)                  |
 | `ICONOS`, `DIBUJOS`                                                   | `index.ts`                | Listados con grupo, para recorrer todo (vitrina de /sistema)  |
+
+**Escenas de rubro** (`rubros/`): la portada de la mini web en la vista previa de /empezar. Misma
+grilla 96 y una sola pieza en acento que encaja en otra (la boquilla del secador, la comida en el
+plato, la bolsa con muesca, la hoja en la muesca de la carpeta, los discos en la barra, la tuerca en
+la llave). El acento es `fill-accent` y no `fill-pieza-encajada`: la vista previa re-tiñe redefiniendo
+`--accent` en su contenedor, y `--pieza-encajada` ya viene resuelta desde `:root`. Esa pieza cae y
+asienta una vez al montarse (`.ilus-encaja`); con movimiento reducido queda quieta. El tamaño lo da
+quien la usa (`size-16` en celular, `size-40` en escritorio).
 
 **Brand define el vocabulario, `content` elige.** Los ids de íconos, dibujos y artes son de brand;
 `content` dice cuál usa cada rubro, módulo o necesidad. Brand nunca importa de `content`.
