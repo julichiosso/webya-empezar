@@ -1,4 +1,4 @@
-import { PALETAS_DEMO } from '@/content/demos/gastronomia/paletas';
+import { PALETA_CURADA_IDS } from '@/content/paletas';
 import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { MODULO_IDS } from '@/content/modulos';
 import { NECESIDAD_IDS, NECESIDAD_OTRA_ID } from '@/content/necesidades';
@@ -46,7 +46,7 @@ export const CATALOGO_LEAD: CatalogoLead = {
   moduloIds: MODULO_IDS,
   necesidadIds: NECESIDAD_IDS,
   necesidadOtraId: NECESIDAD_OTRA_ID,
-  paletaDemoIds: PALETAS_DEMO.map((p) => p.id),
+  paletaDemoIds: PALETA_CURADA_IDS,
   cocinaDemoIds: COCINA_IDS,
 };
 

@@ -4,12 +4,17 @@ import { AnimatePresence, domAnimation, LazyMotion, MotionConfig } from 'motion/
 import * as m from 'motion/react-m';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import type { Dispositivo } from '@/components/patterns/MarcoDispositivo';
+import {
+  precargarPreviewNegocio,
+  PreviewNegocioDiferido,
+} from '@/components/patterns/PreviewNegocioDiferido';
 import { PreviewPanel } from '@/components/patterns/PreviewPanel';
-import { NegocioPreview } from '@/components/patterns/NegocioPreview';
 import { Button } from '@/components/ui/Button';
 import { ordenDeUrl } from '@/config/experimentos';
 import { RUBRO_DEMO } from '@/content/demos/gastronomia/types';
 import { WIZARD } from '@/content/empezar/wizard';
+import { PALETA_CURADA_POR_DEFECTO } from '@/content/paletas';
 import { getRubro } from '@/content/rubros';
 import { MENSAJE_WHATSAPP } from '@/content/whatsapp';
 import { urlDemoConDatos } from '@/domain/traspaso/demo-wizard';
@@ -84,6 +89,8 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
 
   const elegirRubro = useCallback(
     (id: string) => {
+      // La vista previa se descarga ya: en la pantalla 3 (y en el panel de escritorio) está lista.
+      if (!esAMedida({ rubro: id })) void precargarPreviewNegocio().catch(() => {});
       dispatch({ tipo: 'elegirRubro', id });
       track('rubro_elegido', { rubro: id });
       irA(esAMedida({ rubro: id }) ? 'aMedida' : 'negocio');
@@ -108,6 +115,17 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
   useEffect(() => {
     if (hidratado) guardarEstado(state, window.sessionStorage);
   }, [state, hidratado]);
+
+  // Con el navegador libre se descarga la vista previa (por si llegó con un rubro ya elegido).
+  useEffect(() => {
+    const precargar = () => void precargarPreviewNegocio().catch(() => {});
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(precargar);
+      return () => window.cancelIdleCallback(id);
+    }
+    const t = setTimeout(precargar, 1500);
+    return () => clearTimeout(t);
+  }, []);
 
   // Abandono: se va sin llegar al CTA. Una sola vez por visita, con la pantalla en la que estaba.
   const pasoActual = useRef(paso);
@@ -214,15 +232,31 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
     dispatch({ tipo: 'reiniciar' });
   };
 
-  // La vista previa: en escritorio vive a la derecha (sticky); en celular, dentro de la pantalla 3.
-  const vistaPrevia = (compacta: boolean) => {
-    const props = {
-      rubroNombre: rubro ? nombreNegocio || nombreRubroVisible(state) : undefined,
-      rubroIcono: rubro?.icono,
-      activos: modulos,
-    };
-    return compacta ? <NegocioPreview {...props} /> : <PreviewPanel {...props} />;
-  };
+  // La vista previa por rubro: en escritorio vive a la derecha (sticky, navegador); en celular,
+  // dentro de la pantalla 3 (celular). Sin rubro, o con "Otro", queda el panel de huecos.
+  // TODO(etapa c): el cambio de dispositivo y el selector de paleta en la pantalla 3.
+  const vistaPrevia = (dispositivo: Dispositivo) => (
+    <PreviewNegocioDiferido
+      rubro={state.rubro ?? ''}
+      nombre={nombreNegocio}
+      paleta={paleta ?? PALETA_CURADA_POR_DEFECTO}
+      dispositivo={dispositivo}
+      modulos={modulos}
+      ciudad={state.datos.ciudad}
+    />
+  );
+  const aside =
+    paso === 'rubro' || !rubro || aMedida ? (
+      <PreviewPanel
+        rubroNombre={
+          paso === 'rubro' || !rubro ? undefined : nombreNegocio || nombreRubroVisible(state)
+        }
+        rubroIcono={rubro?.icono}
+        activos={paso === 'rubro' ? [] : modulos}
+      />
+    ) : (
+      <div data-testid="negocio-preview-panel">{vistaPrevia('escritorio')}</div>
+    );
 
   useEffect(() => {
     if (paso === 'resultado' && !aMedida && state.rubro) {
@@ -238,7 +272,7 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
         <Marco
           ref={raiz}
           pantalla={pantallaDe(paso)}
-          aside={paso === 'rubro' ? <PreviewPanel activos={[]} /> : vistaPrevia(false)}
+          aside={aside}
           atras={
             anterior && (
               <Button variant="ghost" onClick={() => irA(anterior)}>
@@ -297,7 +331,7 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
                 <StepResultado
                   nombreNegocio={nombreNegocio}
                   aMedida={aMedida}
-                  preview={vistaPrevia(true)}
+                  preview={<div data-testid="negocio-preview">{vistaPrevia('celular')}</div>}
                   whatsappLink={whatsappLink}
                   demoUrl={demoUrl}
                   puedeCompletar={state.lead !== null && !sinGuardar}
