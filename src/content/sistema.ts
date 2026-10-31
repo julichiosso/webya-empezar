@@ -211,6 +211,10 @@ export const SISTEMA = {
     bajada:
       'Grilla de noventa y seis, trazo dos, como mucho dos tonos planos. Lo que falta es un hueco punteado; lo que encaja, Brasa.',
     grupos: { plato: 'Platos de ejemplo', estado: 'Estados' },
+    rubros: 'Escenas de rubro',
+    rubrosBajada:
+      'La portada de la vista previa en /empezar, chica y mediana. La pieza que encaja toma el acento de la paleta del negocio.',
+    rubroGenerico: 'Genérico (otro rubro)',
     modulos: 'Arte de módulos',
     modulosBajada: 'Apagado en gris de línea; encendido, la pieza clave pasa al acento.',
     encendido: 'Encendido',

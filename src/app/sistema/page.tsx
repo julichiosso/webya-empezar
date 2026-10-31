@@ -4,11 +4,13 @@ import {
   ARTES_MODULO,
   Cargando,
   DIBUJOS,
+  ESCENAS_RUBRO,
   GRILLA_DIBUJO,
   GRILLA_ICONO,
   Icon,
   ICONOS,
   Ilustracion,
+  IlustracionRubro,
   ModuloArte,
   type GrupoDibujo,
   type GrupoIcono,
@@ -503,6 +505,20 @@ function SeccionIlustraciones() {
           </ul>
         </div>
       ))}
+
+      <Subtitulo bajada={t.rubrosBajada}>{t.rubros}</Subtitulo>
+      <ul className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-2">
+        {/* Un id que no es escena (el de "otro" o uno desconocido) dibuja el genérico. */}
+        {[...ESCENAS_RUBRO, ''].map((id) => (
+          <Pieza key={id || 'generico'} nombre={id || t.rubroGenerico}>
+            {/* Los dos tamaños de la vista previa: cabecera en celular (64) y escritorio (160). */}
+            <span className="flex items-end gap-4">
+              <IlustracionRubro rubro={id} className="size-16" />
+              <IlustracionRubro rubro={id} className="size-40" />
+            </span>
+          </Pieza>
+        ))}
+      </ul>
 
       <Subtitulo bajada={t.modulosBajada}>{t.modulos}</Subtitulo>
       <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
