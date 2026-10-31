@@ -3,8 +3,17 @@ import { STICKY_CTA } from '@/content/empezar/cta-final';
 import { BarraFija } from './BarraFija';
 import { ID_CTA_FINAL } from './CtaFinal';
 
-/** Donde ya hay un CTA a la vista (o el wizard mismo): ahí la barra se esconde. */
-const ZONAS = ['section[aria-labelledby="hero-title"]', '#wizard', `#${ID_CTA_FINAL}`, 'footer'];
+/**
+ * Donde ya hay un CTA a la vista (o el wizard mismo): ahí la barra se esconde. También en el video
+ * de presentación: tiene su propio play y no compite con otro botón de acento.
+ */
+const ZONAS = [
+  'section[aria-labelledby="hero-title"]',
+  '#wizard',
+  'section[aria-labelledby="video-title"]',
+  `#${ID_CTA_FINAL}`,
+  'footer',
+];
 
 /**
  * CTA persistente en celular: aparece cuando el CTA del hero ya no se ve y todavía no se llegó al

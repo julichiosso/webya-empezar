@@ -4,7 +4,7 @@ import { ID_CONTENIDO, Nav } from '@/components/marketing/Nav';
 import { PreviewPanel } from '@/components/patterns/PreviewPanel';
 import { Marco } from '@/features/empezar/Marco';
 import { PantallaRubro } from '@/features/empezar/PantallaRubro';
-import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
+import { VideoPresentacion } from '@/features/explicativo/VideoPresentacion';
 import { ComoTrabajamos } from '@/components/marketing/ComoTrabajamos';
 import { CtaFinal } from '@/components/marketing/CtaFinal';
 import { StickyCta } from '@/components/marketing/StickyCta';
@@ -68,10 +68,8 @@ export default function EmpezarPage() {
               <PantallaRubro animar />
             </Marco>
           </WizardLazy>
-          <div className="mt-6 flex justify-center">
-            <BotonExplicativo origen="empezar" />
-          </div>
         </Hero>
+        <VideoPresentacion />
         <QueIncluye />
         <Confianza />
         <ComoTrabajamos />
