@@ -1,7 +1,7 @@
 import { ButtonLink } from '@/components/ui/Button';
 import { STICKY_CTA } from '@/content/empezar/cta-final';
 import { BarraFija } from './BarraFija';
-import { ID_CTA_FINAL } from './CtaFinal';
+import { ID_CTA_FINAL } from './Cierre';
 
 /** Donde ya hay un CTA a la vista (o el wizard mismo): ahí la barra se esconde. */
 const ZONAS = ['section[aria-labelledby="hero-title"]', '#wizard', `#${ID_CTA_FINAL}`, 'footer'];
