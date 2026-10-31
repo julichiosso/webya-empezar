@@ -1,0 +1,71 @@
+/*
+ * TituloEncastre: las palabras (o letras) llegan por piezas, se pasan apenas y asientan. Una vez.
+ *
+ * PRESET: reemplazar por el de brand/motion cuando marca-sistema publique el del kinetic type. El
+ * `encastre-snap` de motion.css arranca en opacidad 0 y esconde el titular (mal para LCP); este
+ * arranca legible (opacidad 0.55, desplazamiento chico) y solo anima transform/opacity.
+ *
+ * Valores: --duration-slow, --ease-out, --paso-pieza y --escala-sobrepaso (tokens.css).
+ * Cada pieza trae en línea --i (orden, puede ser fraccionario) y --lado (1 llega de abajo, -1 de
+ * arriba, alternando como el logo que se arma).
+ */
+@keyframes encastre-titulo {
+  from {
+    opacity: 0.55;
+    transform: translate3d(0, calc(var(--lado, 1) * 0.32em), 0) scale(0.94);
+  }
+  65% {
+    opacity: 1;
+    transform: translate3d(0, calc(var(--lado, 1) * -0.04em), 0) scale(var(--escala-sobrepaso));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Contenedor de las piezas (aria-hidden): el texto accesible está en el aria-label del heading. */
+.piezas {
+  display: inline;
+}
+
+/* inline-block para que el transform aplique; la palabra no se corta (las letras van adentro). */
+.pieza {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Modo letras: la palabra no se corta ni se anima; sus letras sí. */
+.palabra {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Entrada "carga": corre una vez al pintar (primer pliegue, cero JS). */
+.carga .pieza {
+  animation: encastre-titulo var(--duration-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--paso-pieza));
+}
+
+/*
+ * Entrada "vista": sin atributo queda el estado final (sin JS se lee igual). ActivadorEncastre pone
+ * `espera` si el titular está fuera de pantalla y `activo` al entrar: corre una sola vez.
+ */
+.vista[data-encastre='espera'] .pieza,
+.vista[data-encastre='activo'] .pieza {
+  animation: encastre-titulo var(--duration-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--paso-pieza));
+}
+.vista[data-encastre='espera'] .pieza {
+  animation-play-state: paused;
+}
+
+/* Equivalente estático: el titular aparece en su lugar, sin movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  .carga .pieza,
+  .vista .pieza {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}

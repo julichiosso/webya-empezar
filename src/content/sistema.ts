@@ -19,6 +19,7 @@ export const SISTEMA = {
     forma: 'Espacio y forma',
     movimiento: 'Movimiento',
     componentes: 'Componentes',
+    plano: 'Plano',
     iconos: 'Íconos',
     ilustraciones: 'Ilustraciones',
   },
@@ -196,6 +197,48 @@ export const SISTEMA = {
     papel: {
       titulo: 'Sobre papel',
       bajada: 'Los mismos componentes dentro de .papel: los tokens pasan solos a su versión clara.',
+    },
+  },
+
+  plano: {
+    titulo: 'Plano',
+    bajada:
+      'Las piezas de la dirección Plano: el titular que encastra, las secciones a pantalla completa y el lugar de las fotos con su velo.',
+    titular: {
+      titulo: 'Titular que encastra',
+      bajada:
+        'Cada palabra llega, se pasa apenas y asienta, una sola vez. Se lee entero desde el primer cuadro y el lector de pantalla lo dice de corrido. Con movimiento reducido aparece quieto.',
+      carga: 'Al cargar, sin JavaScript',
+      letras: 'Por letras, para titulares cortos',
+      vista: 'Al entrar en pantalla, una vez',
+      muestraCarga: 'Tu negocio se arma pieza por pieza',
+      muestraLetras: 'Creá vos',
+      muestraVista: 'Activá solo lo que necesitás',
+      repetir: 'Recargá la página para verlo de nuevo.',
+    },
+    secciones: {
+      titulo: 'Secciones a pantalla completa',
+      bajada:
+        'El fondo llega a los bordes de la ventana y el contenido queda al ancho de la página. Cuatro fondos: tinta, crema, Brasa oscura e imagen con velo.',
+      fondos: {
+        tinta: 'Tinta',
+        crema: 'Crema',
+        brasa: 'Brasa oscura',
+        imagen: 'Imagen con velo',
+      },
+      texto:
+        'Texto secundario de la sección. El foco de los controles se ajusta al fondo para que siempre se vea.',
+      accion: 'Empezar a crear',
+    },
+    imagen: {
+      titulo: 'Lugar de la foto',
+      bajada:
+        'Foto en AVIF y WebP con duotono Brasa y tinta, y un velo que deja leer el texto encima. Mientras no hay foto, se ve el plano de la escena.',
+      escenas: {
+        hero: 'Inicio, sin foto todavía',
+        'como-funciona': 'Cómo funciona, sin foto todavía',
+        cierre: 'Cierre, sin foto todavía',
+      },
     },
   },
 
