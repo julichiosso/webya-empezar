@@ -51,7 +51,8 @@ export default defineConfig({
     })),
   ],
   webServer: {
-    command: `pnpm build && pnpm start -p ${PORT}`,
+    // Primero se limpia la caché de webpack (ver scripts/limpiar-cache-webpack.mjs).
+    command: `node scripts/limpiar-cache-webpack.mjs && pnpm build && pnpm start -p ${PORT}`,
     url: `http://localhost:${PORT}/empezar`,
     reuseExistingServer: !process.env.CI,
     timeout: 240_000,

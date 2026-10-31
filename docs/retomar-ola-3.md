@@ -1,14 +1,29 @@
 # Retomar: sprint "tu negocio, armado en un minuto"
 
-## Sprint "Plano" (rama `feat/rediseno-plano`, desde main `5d13eae`)
+## Sprint "Plano" (rama `feat/rediseno-plano`, desde main `5d13eae`, SIN push)
 
-- **Etapa (a) cerrada, esperando OK del usuario** (pausa obligatoria antes de (b)). Tokens de sección
-  (tinta, crema, Brasa oscura, velo) con AA medido, blueprint (`FondoPlano`, `IlustracionPlano`),
-  `TituloEncastre`, `Seccion`, `SlotImagen`, guardas anti-hex y anti-texto, skill `webya-plano`.
-  Tipografía: se queda Outfit (ninguna OFL ganó claramente). Vitest 1132 ✓, E2E completa 430 ✓.
-- Para (b): en celular las cotas de `FondoPlano variante="cotas"` cruzan el texto (ubicarlas en
-  márgenes); `/sistema` desborda 5 px en celular por `#logo` (deuda previa).
-- Decisiones del usuario y pausas: ver la memoria `sprint-rediseno-plano`.
+Estado exacto (2026-10-31):
+
+- **Etapa (a) cerrada y aprobada por el usuario.** Último commit de (a): `5210583`. Contiene:
+  contrato entre agentes (`2e262a5`, `docs/plano-contrato.md`), merge de `feat/plano-ui`
+  (`TituloEncastre`, `Seccion`, `SlotImagen`, guardas `tests/guardas` anti-hex y anti-texto),
+  merge de `feat/plano-marca` (tokens de sección tinta/crema/Brasa oscura/velo con AA medido, scopes
+  `.superficie-*`, `FondoPlano`/`IlustracionPlano`, preset `encastrePalabra`, skill `webya-plano`,
+  BRAND.md), ajustes de integración (`dd8df85`) y el arreglo de `TituloEncastre` en espera.
+  Tipografía: se queda Outfit. Verificado: Vitest 1132 ✓, E2E completa 430 ✓, a11y /sistema y /marca.
+- **`/empezar` todavía no cambió**: las piezas del Plano solo se ven en `/sistema`.
+- **Etapa (b) en curso**: recomposición de `/empezar`. Condiciones del usuario: cotas del plano en
+  los márgenes (sin cruzar texto en celular), arreglar el desborde de 5 px de `/sistema`, slots de
+  imagen con plano terminado (sin "TODO" visible), un fondo y una composición distintos por sección,
+  JS inicial ≤ 150 KB, CLS < 0,05, LCP < 1 s. **Al terminar (b), frenar** con capturas de /empezar en
+  iPhone SE, iPhone 15 y 1440 (hero, "Mirá lo que creás", "Cómo trabajamos con vos", cierre, footer).
+  No seguir a (c) sin OK.
+- La E2E limpia `.next/cache/webpack` antes de construir (`scripts/limpiar-cache-webpack.mjs`, en
+  el `webServer` de `playwright.config.ts`): la caché se corrompió dos veces.
+- Ramas: `main` (= origin), `feat/rediseno-plano` (esta), `feat/video-presentacion` (aparte, no
+  tocar), y las de los agentes de (a) ya integradas (`feat/plano-ui`, `feat/plano-marca`): se
+  borran al cerrar el sprint.
+- Decisiones y pausas del usuario: memoria `sprint-rediseno-plano`.
 
 ## Publicación a producción (2026-10-31)
 
