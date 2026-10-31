@@ -1,9 +1,10 @@
 /*
  * TituloEncastre: las palabras (o letras) llegan por piezas, se pasan apenas y asientan. Una vez.
  *
- * PRESET: reemplazar por el de brand/motion cuando marca-sistema publique el del kinetic type. El
- * `encastre-snap` de motion.css arranca en opacidad 0 y esconde el titular (mal para LCP); este
- * arranca legible (opacidad 0.55, desplazamiento chico) y solo anima transform/opacity.
+ * Decisión (etapa a): NO usa el preset `.palabra-encastre` de brand/motion, que arranca en opacidad 0
+ * y escondería el titular del hero en el primer cuadro (mal para LCP). Este arranca legible
+ * (opacidad 0.55, desplazamiento chico) y solo anima transform/opacity. El preset de brand queda
+ * para titulares fuera del primer pliegue.
  *
  * Valores: --duration-slow, --ease-out, --paso-pieza y --escala-sobrepaso (tokens.css).
  * Cada pieza trae en línea --i (orden, puede ser fraccionario) y --lado (1 llega de abajo, -1 de

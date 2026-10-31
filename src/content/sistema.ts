@@ -264,4 +264,12 @@ export const SISTEMA = {
     apagado: 'Apagado',
     cargando: 'Cargando',
   },
+  /** Identificadores de código que muestra la vitrina del Plano (tokens y componentes). */
+  codigoPlano: {
+    fondos: 'bg-seccion-tinta · bg-seccion-crema · bg-seccion-brasa · bg-velo-imagen',
+    preset: 'encastrePalabra(i)',
+    fondoPlano: '<FondoPlano variante="grilla" | "cotas" />',
+    ilustracionPlano: '<IlustracionPlano escena="hero" | "como-funciona" | "cierre" />',
+    papelCierre: 'papel · cierre',
+  },
 } as const;

@@ -348,7 +348,7 @@ function SuperficiesPlano() {
   return (
     <>
       <Subtitulo>
-        <Token>bg-seccion-tinta · bg-seccion-crema · bg-seccion-brasa · bg-velo-imagen</Token>
+        <Token>{SISTEMA.codigoPlano.fondos}</Token>
       </Subtitulo>
       <ul className="mt-4 grid gap-4 lg:grid-cols-2">
         {SUPERFICIES_SECCION.map((s) => {
@@ -560,7 +560,7 @@ function SeccionMovimiento() {
       <div className="mt-10 grid gap-8 lg:grid-cols-2">
         <div>
           <h3 className="font-semibold">
-            <Token>encastrePalabra(i)</Token>
+            <Token>{SISTEMA.codigoPlano.preset}</Token>
           </h3>
           <dl className="mt-2 divide-y divide-line">
             <Fila nombre="--paso-palabra" valor={ms(ENCASTRE_PALABRA.pasoMs)} />
@@ -691,7 +691,7 @@ function PlanoVitrina() {
   return (
     <>
       <Subtitulo>
-        <Token>{'<FondoPlano variante="grilla" | "cotas" />'}</Token>
+        <Token>{SISTEMA.codigoPlano.fondoPlano}</Token>
       </Subtitulo>
       <ul className="mt-4 grid gap-4 lg:grid-cols-2">
         {(['grilla', 'cotas'] as const).map((v) => (
@@ -708,7 +708,7 @@ function PlanoVitrina() {
       </ul>
 
       <Subtitulo>
-        <Token>{'<IlustracionPlano escena="hero" | "como-funciona" | "cierre" />'}</Token>
+        <Token>{SISTEMA.codigoPlano.ilustracionPlano}</Token>
       </Subtitulo>
       <ul className="mt-4 grid gap-8">
         {ESCENAS_PLANO.map((escena) => (
@@ -728,7 +728,7 @@ function PlanoVitrina() {
           </li>
         ))}
         <li className="grid gap-2">
-          <Token>{'papel · cierre'}</Token>
+          <Token>{SISTEMA.codigoPlano.papelCierre}</Token>
           <div className="papel relative aspect-video overflow-hidden rounded-panel bg-seccion-crema text-seccion-crema-fg">
             <IlustracionPlano escena="cierre" className="absolute inset-0 size-full" />
           </div>

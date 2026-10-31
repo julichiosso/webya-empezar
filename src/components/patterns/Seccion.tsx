@@ -16,8 +16,8 @@ export const CLASES_SECCION = {
     texto: 'text-seccion-tinta-fg',
     secundario: 'text-seccion-tinta-muted',
     linea: 'border-seccion-tinta-linea',
-    // Sobre tinta, el foco global (Brasa) ya contrasta.
-    foco: '',
+    // `superficie-tinta` fija texto, acento y controles para tinta (también con el sitio en claro).
+    foco: 'superficie-tinta',
   },
   crema: {
     fondo: 'bg-seccion-crema',
@@ -33,14 +33,14 @@ export const CLASES_SECCION = {
     secundario: 'text-seccion-brasa-muted',
     linea: 'border-seccion-brasa-linea',
     // Brasa sobre Brasa oscura no llega a 3:1: el anillo toma el color del texto de la sección.
-    foco: '[&_:focus-visible]:outline-seccion-brasa-fg',
+    foco: 'superficie-brasa [&_:focus-visible]:outline-seccion-brasa-fg',
   },
   imagen: {
     fondo: '',
     texto: 'text-velo-imagen-fg',
     secundario: 'text-velo-imagen-muted',
     linea: '',
-    foco: '[&_:focus-visible]:outline-velo-imagen-fg',
+    foco: 'superficie-velo [&_:focus-visible]:outline-velo-imagen-fg',
   },
 } as const satisfies Record<
   FondoSeccion,
