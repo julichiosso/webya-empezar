@@ -328,11 +328,17 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
         <Icon name="chat" size={20} />
         {textoCta}
       </ButtonLink>
-    ) : (
+    ) : process.env.NODE_ENV !== 'production' ? (
+      // Sin el número de WhatsApp de WebYa configurado: el TODO solo fuera de producción.
       <p data-todo className="text-small text-subtle">
         {TXT_RES.todoWhatsapp}
       </p>
-    );
+    ) : state.lead ? (
+      // En producción, sin número: nada de textos internos; los datos ya llegaron.
+      <p className="text-body">{TXT_RES.sinNumero}</p>
+    ) : null;
+  /** La barra fija lleva un botón de verdad (link a WhatsApp o, en el orden B, al contacto). */
+  const ctaAccionable = Boolean(whatsappLink) || (ordenB && !state.lead && !sinGuardar);
 
   const controles: ControlesPreview | null = aMedida
     ? null
@@ -462,6 +468,7 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
                   preview={<div data-testid="negocio-preview">{vistaPrevia('celular')}</div>}
                   controles={controles}
                   cta={cta}
+                  ctaEnBarra={ctaAccionable}
                   demoUrl={demoUrl}
                   puedeCompletar={state.lead !== null && !sinGuardar}
                   sinGuardar={sinGuardar}
@@ -517,7 +524,7 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
             </m.div>
           </AnimatePresence>
         </Marco>
-        {paso === 'resultado' && <BarraCta>{cta}</BarraCta>}
+        {paso === 'resultado' && ctaAccionable && <BarraCta>{cta}</BarraCta>}
       </MotionConfig>
     </LazyMotion>
   );

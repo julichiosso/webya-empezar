@@ -31,6 +31,11 @@ interface StepResultadoProps {
   controles: ControlesPreview | null;
   /** El CTA principal ya armado (link a WhatsApp o, en el orden B, el paso al contacto). */
   cta: ReactNode;
+  /**
+   * El CTA es un botón y en celular va en la barra fija. Si no (sin el número de WhatsApp de
+   * WebYa configurado), lo que haya en `cta` se ve en la pantalla también en celular.
+   */
+  ctaEnBarra: boolean;
   /** Link a la demo completa con nombre y paleta cargados (solo rubros con demo). */
   demoUrl: string | null;
   /** Hay lead guardado: se puede completar. */
@@ -61,6 +66,7 @@ export function StepResultado({
   preview,
   controles,
   cta,
+  ctaEnBarra,
   demoUrl,
   puedeCompletar,
   sinGuardar,
@@ -110,10 +116,10 @@ export function StepResultado({
         )}
       </div>
 
-      {/* El CTA a la vista (en celular lo lleva la barra fija). */}
-      <div className="max-lg:hidden">
+      {/* El CTA a la vista (en celular lo lleva la barra fija, si hay botón). */}
+      <div className={ctaEnBarra ? 'max-lg:hidden' : undefined}>
         {cta}
-        <p className="mt-3 text-small text-muted">{TXT.queSigue}</p>
+        {ctaEnBarra && <p className="mt-3 text-small text-muted">{TXT.queSigue}</p>}
         <p data-todo className="mt-1 text-small text-subtle">
           {TXT.todoPlazo}
         </p>
@@ -185,12 +191,14 @@ export function StepResultado({
       )}
 
       {/* En celular, qué pasa al tocar el CTA (el botón va en la barra fija). */}
-      <div className="mt-6 lg:hidden">
-        <p className="text-small text-muted">{TXT.queSigue}</p>
-        <p data-todo className="mt-1 text-small text-subtle">
-          {TXT.todoPlazo}
-        </p>
-      </div>
+      {ctaEnBarra && (
+        <div className="mt-6 lg:hidden">
+          <p className="text-small text-muted">{TXT.queSigue}</p>
+          <p data-todo className="mt-1 text-small text-subtle">
+            {TXT.todoPlazo}
+          </p>
+        </div>
+      )}
 
       {demoUrl && (
         <a

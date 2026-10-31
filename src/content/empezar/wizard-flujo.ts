@@ -88,6 +88,8 @@ export const FLUJO = {
     /** Barra fija abajo en celular, con el CTA siempre a mano. */
     barra: 'Quiero esto para mi negocio',
     todoWhatsapp: PASO_LISTO.todoWhatsapp,
+    /** En producción sin el número de WhatsApp de WebYa configurado (en lugar del CTA). */
+    sinNumero: 'Ya tenemos tus datos: te escribimos por WhatsApp para seguir.',
     /** El guardado del lead falló pero la vista previa igual se muestra: le dejamos la salida. */
     sinGuardar:
       'Todavía no pudimos guardar tus datos. Lo volvemos a intentar solo; si querés, reintentá ahora o escribinos por WhatsApp.',

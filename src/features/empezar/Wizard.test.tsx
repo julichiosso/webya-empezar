@@ -380,10 +380,19 @@ describe('Wizard — pantalla 3: cómo se ve, colores y piezas', () => {
     );
   });
 
-  it('en celular el CTA también va en la barra fija abajo', async () => {
-    const u = user();
-    await llegarAlResultado(u);
-    expect(screen.getByTestId('barra-cta')).toBeInTheDocument();
+  it('sin el número de WhatsApp de WebYa, en producción: ni TODO interno ni barra vacía', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    try {
+      const u = user();
+      await llegarAlResultado(u);
+      expect(screen.queryByText(/NEXT_PUBLIC_WHATSAPP_NUMBER/)).toBeNull();
+      expect(screen.queryByTestId('barra-cta')).toBeNull();
+      expect(
+        screen.getByText('Ya tenemos tus datos: te escribimos por WhatsApp para seguir.'),
+      ).toBeInTheDocument();
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 });
 
