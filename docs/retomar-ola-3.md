@@ -15,10 +15,12 @@ de la cuenta (vuelve a las 4 a. m.). Nada se pusheó; `main` (local y remoto) es
   de `f315756` (la versión del commit de seguridad que todavía traía las 42 capturas
   autogeneradas), así que hay que pasarla sobre `c72351d` (cherry-pick de sus 2 commits) antes de
   integrarla. Se puede retomar mandándole un mensaje al mismo agente.
-- **Sin la sección de video**, /empezar no tiene rastro de ella (no está en la rama). Sigue el botón
-  viejo "Mirá cómo funciona" (ya está hoy en producción), cuya narración dice "te escribimos en menos
-  de veinticuatro horas", un plazo NO confirmado. El agente ya lo sacó en su rama; si se publica sin
-  ella, conviene sacar esa frase antes (`src/content/explicativo/guion.ts`, escena `cta`).
+- **Decisión (2026-10-31): se publica SIN el video.** El video queda para una tanda aparte:
+  `feat/video-presentacion` no se mergea ni se borra, y para integrarla hay que pasar sus 2
+  commits (`3c9c260`, `329f90b`) sobre la rama principal (no mergear la rama tal cual).
+- Se sacó la promesa "te escribimos en menos de veinticuatro horas" del guion del video viejo
+  ("te escribimos por WhatsApp"), del TODO visible del plazo y de las skills de marca y diseño. La voz
+  del video es la síntesis del navegador (lee el texto en vivo): no hay audio que regrabar.
 - Migraciones: según el usuario, todas aplicadas en Supabase (ciudad y recargar_esquema incluidas).
 - Para retomar: seguir la "FASE 1" del pedido de publicación (integrar o descartar el video →
   E2E completa con `--update-snapshots=none` → regenerar capturas una vez y revisarlas → medir →

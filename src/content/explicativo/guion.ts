@@ -3,7 +3,8 @@
  * (features/explicativo/escenas) y lo que dice la voz, que también se muestra como subtítulo.
  *
  * Reglas (skill webya-brand): voseo, frases cortas, CERO promesas que el producto no cumpla. La
- * entrega es manual (lo armamos nosotros); lo único con plazo es el primer contacto (< 24 hs).
+ * entrega es manual (lo armamos nosotros) y NINGÚN plazo está confirmado, tampoco el del primer
+ * contacto (ver PENDIENTES.plazoRespuesta): se dice "te escribimos por WhatsApp", sin plazo.
  * Cada narración dura menos de ~12 s: algunos navegadores cortan las frases largas de la voz.
  */
 export const ESCENAS_EXPLICATIVO = [
@@ -57,7 +58,7 @@ export const ESCENAS_EXPLICATIVO = [
     id: 'cta',
     capitulo: 'Empezá',
     narracion:
-      'Probá la demo ahora mismo, o dejanos tus datos y te escribimos en menos de veinticuatro horas.',
+      'Probá la demo ahora mismo, o dejanos tus datos y te escribimos por WhatsApp.',
   },
 ] as const;
 

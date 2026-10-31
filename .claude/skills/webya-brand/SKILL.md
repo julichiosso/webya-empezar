@@ -56,7 +56,7 @@ Rioplatense, directa, cálida, con humor liviano. Hablamos como alguien del barr
 | ---------------------------------------------------------- | ----------------------------------------------- |
 | "Activá lo que necesitás."                                 | "Potenciá tu negocio con soluciones digitales." |
 | "Acá encaja tu primer pedido."                             | "No hay datos para mostrar."                    |
-| "Te escribimos en menos de 24 hs."                         | "Tu web lista en minutos."                      |
+| "Te escribimos por WhatsApp."                              | "Tu web lista en minutos."                      |
 | "Demo con datos de ejemplo. No se cobra ni se envía nada." | (esconder que es una demo)                      |
 
 ## 4. Logo

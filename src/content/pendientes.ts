@@ -6,7 +6,7 @@
 export const PENDIENTES = {
   /** Plazo de la primera respuesta. Mientras tanto se dice "Te escribimos por WhatsApp". */
   plazoRespuesta:
-    'TODO: confirmar el plazo de la primera respuesta (antes decía "menos de 24 hs").',
+    'TODO: confirmar el plazo de la primera respuesta.',
   /** Precios y planes. Mientras tanto: presupuesto sin compromiso. */
   precios: 'TODO: definir precios y planes.',
   /** Plazos de armado y entrega. Mientras tanto: "te lo decimos en el presupuesto". */
