@@ -68,7 +68,10 @@ export function QueIncluye() {
                   <span className="sr-only">{ESTADO_MODULO_UI.accesible(estado)}</span>
                 </h3>
                 {/* Estado honesto, tal cual: texto, sin pastilla de color. */}
-                <span aria-hidden="true" className={`shrink-0 text-small leading-6 ${T.secundario}`}>
+                <span
+                  aria-hidden="true"
+                  className={`shrink-0 text-small leading-6 ${T.secundario}`}
+                >
                   {estado}
                 </span>
               </div>

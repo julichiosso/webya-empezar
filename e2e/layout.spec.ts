@@ -47,6 +47,81 @@ async function lineas(page: Page, selector: string) {
     });
 }
 
+/**
+ * Renglones de un titular que encastra (TituloEncastre): cada palabra es una pieza inline-block, así
+ * que se cuentan las alturas distintas de las piezas (no los fragmentos de cada nodo de texto).
+ * Con `offsetTop` (posición de layout): no lo mueve el transform de la entrada que encastra.
+ */
+async function renglonesDePiezas(page: Page, selector: string) {
+  return page
+    .locator(selector)
+    .first()
+    .evaluate(
+      (el) =>
+        new Set(
+          [...el.querySelectorAll<HTMLElement>('[data-pieza]')].map((p) =>
+            Math.round(p.offsetTop / 8),
+          ),
+        ).size,
+    );
+}
+
+test('las cotas del plano quedan en los márgenes: nunca cruzan un texto', async ({ page }) => {
+  await page.goto('/empezar');
+  const cruces = await page.evaluate(() => {
+    const seCruzan = (a: DOMRect, b: DOMRect) =>
+      a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+    const salida: string[] = [];
+    for (const svg of document.querySelectorAll('svg[data-plano="cotas"]')) {
+      const seccion = svg.closest('section') ?? svg.parentElement!;
+      const textos = [...seccion.querySelectorAll('h1, h2, h3, p, li, a, button, label')].map((t) =>
+        t.getBoundingClientRect(),
+      );
+      // Cada trazo visible de las capas de cotas y registro (las ocultas miden 0).
+      for (const trazo of svg.querySelectorAll('[data-plano-capa] path, [data-plano-capa] rect')) {
+        const caja = trazo.getBoundingClientRect();
+        if (caja.width === 0 && caja.height === 0) continue;
+        if (textos.some((t) => t.width > 0 && seCruzan(caja, t)))
+          salida.push(`${seccion.getAttribute('aria-labelledby')}: ${JSON.stringify(caja)}`);
+      }
+    }
+    return salida;
+  });
+  expect(cruces).toEqual([]);
+});
+
+test('"Mirá lo que creás": elegir un rubro cambia la vista previa (con mouse y con flechas)', async ({
+  page,
+}) => {
+  await page.goto('/empezar');
+  const seccion = page.locator('#mira-lo-que-creas');
+  const visibles = () =>
+    seccion
+      .locator('[data-vista]')
+      .evaluateAll((els) =>
+        els.filter((e) => getComputedStyle(e).display !== 'none').map((e) => e.dataset.vista),
+      );
+  // Por defecto, el primer rubro; una sola vista a la vez y es la vista previa real (no una captura).
+  expect(await visibles()).toEqual(['peluqueria_estetica']);
+  const vista = seccion
+    .locator('[data-vista="peluqueria_estetica"]')
+    .getByTestId('preview-negocio');
+  await expect(vista).toBeVisible();
+  await expect(vista).toHaveAttribute('data-rubro', 'peluqueria_estetica');
+
+  await seccion.locator('input[value="gastronomia"]').check();
+  expect(await visibles()).toEqual(['gastronomia']);
+  // Grupo de radios nativo: las flechas pasan al siguiente.
+  await page.keyboard.press('ArrowDown');
+  await expect(seccion.locator('input[value="comercio"]')).toBeChecked();
+  expect(await visibles()).toEqual(['comercio']);
+  // Opciones de 48 px.
+  for (const caja of await seccion
+    .locator('label:has(input[type="radio"])')
+    .evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height)))
+    expect(caja).toBeGreaterThanOrEqual(47.5);
+});
+
 test('no hay scroll horizontal, ni en el formulario ni en la vista previa', async ({ page }) => {
   const sobra = () =>
     page.evaluate(
@@ -123,12 +198,14 @@ test.describe('escritorio (lg y más)', () => {
     expect(ultima.y + ultima.height).toBeLessThanOrEqual(page.viewportSize()!.height);
   });
 
-  test('título en hasta 3 líneas, línea gris en una y copy del hero', async ({ page }) => {
+  test('título en hasta 3 líneas, salvedad gris en una y copy del hero', async ({ page }) => {
     await page.goto('/empezar');
+    // El h1 encastra palabra por palabra (TituloEncastre): su nombre accesible es el titular entero.
     await expect(page.locator('h1')).toContainText(HERO.titulo);
-    await expect(page.locator('h1')).toContainText(HERO.subtitulo);
-    expect(await lineas(page, 'h1 > span')).toBe(1);
-    expect(await lineas(page, 'h1')).toBeLessThanOrEqual(3);
+    await expect(page.getByRole('heading', { level: 1, name: HERO.titulo })).toBeVisible();
+    await expect(page.locator('#hero-salvedad')).toHaveText(HERO.subtitulo);
+    expect(await lineas(page, '#hero-salvedad')).toBe(1);
+    expect(await renglonesDePiezas(page, 'h1')).toBeLessThanOrEqual(3);
   });
 
   test('flujo en 2 paneles: pantalla a la izquierda y vista previa sticky a la derecha', async ({
@@ -169,9 +246,30 @@ test.describe('escritorio (lg y más)', () => {
     await expect(vista).toContainText('Tienda Sol');
   });
 
-  test('"Qué podés activar" en 4 columnas; FAQ en 2', async ({ page }) => {
+  test('"Qué podés activar" es un mapa de piezas (filas completas, anchos distintos); FAQ en 2', async ({
+    page,
+  }) => {
     await page.goto('/empezar');
-    expect(await columnas(page, 'section[aria-labelledby="incluye-title"] > ul > li')).toBe(4);
+    const piezas = page.locator('[data-mapa-piezas] > li');
+    await expect(piezas).toHaveCount(8);
+    // Varias piezas por fila (al menos 3 posiciones X), en 3 filas.
+    expect(await columnas(page, '[data-mapa-piezas] > li')).toBeGreaterThanOrEqual(3);
+    const cajas = await piezas.evaluateAll((els) =>
+      els.map((e) => {
+        const r = e.getBoundingClientRect();
+        return { top: Math.round(r.top), left: r.left, right: r.right, width: Math.round(r.width) };
+      }),
+    );
+    expect(new Set(cajas.map((c) => c.top)).size).toBe(3);
+    // No son tarjetas iguales: al menos 3 anchos distintos.
+    expect(new Set(cajas.map((c) => c.width)).size).toBeGreaterThanOrEqual(3);
+    // Cada fila encastra de borde a borde del tablero (sin huecos al final).
+    const tablero = (await page.locator('[data-mapa-piezas]').boundingBox())!;
+    for (const top of new Set(cajas.map((c) => c.top))) {
+      const fila = cajas.filter((c) => c.top === top);
+      expect(Math.max(...fila.map((c) => c.right))).toBeGreaterThan(tablero.x + tablero.width - 4);
+      expect(Math.min(...fila.map((c) => c.left))).toBeLessThan(tablero.x + 4);
+    }
     expect(await columnas(page, 'section[aria-labelledby="faq-title"] details')).toBe(2);
   });
 
@@ -182,7 +280,7 @@ test.describe('escritorio (lg y más)', () => {
     }
     const textos = await page
       .locator(
-        'section[aria-labelledby="incluye-title"] li p:not([data-todo]), section[aria-labelledby="incluye-title"] > p',
+        'section[aria-labelledby="incluye-title"] [data-mapa-piezas] li p, #incluye-title + p',
       )
       .allTextContents();
     expect(textos.length).toBeGreaterThanOrEqual(5);
