@@ -20,7 +20,7 @@ export interface ReproductorBaseProps<Id extends string> {
    */
   modo: 'modal' | 'embebido';
   guion: readonly EscenaGuion<Id>[];
-  /** Título del diálogo (modal) o nombre accesible de la región (embebido). */
+  /** Título del diálogo (modal) o nombre accesible del grupo (embebido). */
   titulo: string;
   /** Dibuja la escena `id`. Se remonta en cada (re)arranque: su animación corre una vez. */
   Escena: (props: { id: Id }) => ReactNode;
@@ -248,10 +248,12 @@ export function ReproductorBase<Id extends string>({
 
   const controles = (
     <div className="flex items-center justify-between gap-2">
-      <p className={`tabular text-small text-muted ${modal ? '' : 'lg:invisible'}`}>
-        {indice + 1}/{total} · {escena.capitulo}
+      {/* Embebido: en escritorio el índice ya dice el capítulo; en celular angosto, solo el número. */}
+      <p className={`tabular text-small text-muted ${modal ? '' : 'lg:hidden'}`}>
+        {indice + 1}/{total}
+        <span className={modal ? '' : 'max-sm:hidden'}> · {escena.capitulo}</span>
       </p>
-      <div className="flex items-center gap-1">
+      <div className="ml-auto flex items-center gap-1">
         <BotonControl
           etiqueta={REPRODUCTOR.anterior}
           onClick={() => irA(indice - 1)}
@@ -304,7 +306,7 @@ export function ReproductorBase<Id extends string>({
     return (
       <div
         ref={region}
-        role="region"
+        role="group"
         aria-label={titulo}
         data-presentacion=""
         onKeyDown={alTeclear}

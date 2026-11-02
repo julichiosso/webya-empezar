@@ -145,7 +145,8 @@ export function SlotVideo({
               {cargando ? T.cargando : T.play}
               <span className="tabular text-small font-normal">{duracion}</span>
             </button>
-            <p id="video-error" aria-live="polite" className="text-small text-danger empty:hidden">
+            {/* Siempre montado (vacío): una región aria-live que aparece de golpe no se anuncia. */}
+            <p id="video-error" aria-live="polite" className="text-small text-danger">
               {estado === 'error' ? T.errorCarga : ''}
             </p>
           </div>

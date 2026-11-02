@@ -19,10 +19,10 @@ describe('PresentacionFlujo (animación en código del video de /empezar)', () =
     vi.unstubAllGlobals();
   });
 
-  it('es una región con nombre, con los cuatro capítulos del flujo y el foco en pausa', () => {
+  it('es un grupo con nombre (no otro landmark), con los cuatro capítulos del flujo y el foco en pausa', () => {
     render(<PresentacionFlujo />);
     expect(
-      screen.getByRole('region', { name: VIDEO_PRESENTACION.reproductor }),
+      screen.getByRole('group', { name: VIDEO_PRESENTACION.reproductor }),
     ).toBeInTheDocument();
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(screen.getAllByRole('button', { name: /^Capítulo \d/ })).toHaveLength(4);
@@ -36,7 +36,7 @@ describe('PresentacionFlujo (animación en código del video de /empezar)', () =
       vi.advanceTimersByTime(duracionEstimadaMs(PRIMERA.narracion) + PAUSA_ENTRE_ESCENAS_MS + 10);
     });
     expect(subtitulo()).toHaveTextContent(SEGUNDA.narracion);
-    fireEvent.keyDown(screen.getByRole('region'), { key: 'ArrowLeft' });
+    fireEvent.keyDown(screen.getByRole('group'), { key: 'ArrowLeft' });
     expect(subtitulo()).toHaveTextContent(PRIMERA.narracion);
   });
 

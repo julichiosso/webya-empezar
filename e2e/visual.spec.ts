@@ -121,8 +121,9 @@ test('demo — panel del dueño con pedidos', async ({ page, viewport }) => {
   });
 });
 
+// En /empezar el video ahora es la sección de presentación (embebida); el diálogo vive en la demo.
 test('video explicativo — última escena', async ({ page }) => {
-  await page.goto('/empezar');
+  await demoLista(page);
   await page.getByRole('button', { name: /mirá cómo funciona/i }).click();
   const video = page.getByRole('dialog', { name: 'Cómo funciona WebYa' });
   await video.getByRole('button', { name: 'Pausar' }).click();

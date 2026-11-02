@@ -13,7 +13,7 @@ export const VIDEO_PRESENTACION = {
   /** Si no se pudo descargar la animación (sin conexión): el botón queda para reintentar. */
   errorCarga: 'No pudimos cargar el video. Revisá tu conexión y tocá de nuevo.',
   /** Nombre accesible del reproductor embebido y del video. */
-  reproductor: 'Cómo se arma tu negocio',
+  reproductor: 'Video de presentación',
   /** Lista de capítulos del poster (es el índice del video). */
   indice: 'Qué vas a ver',
   /** Pista del <track> de subtítulos. */
