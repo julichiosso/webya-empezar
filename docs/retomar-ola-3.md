@@ -12,6 +12,17 @@ Estado exacto (2026-10-31):
   BRAND.md), ajustes de integración (`dd8df85`) y el arreglo de `TituloEncastre` en espera.
   Tipografía: se queda Outfit. Verificado: Vitest 1132 ✓, E2E completa 430 ✓, a11y /sistema y /marca.
 - **`/empezar` todavía no cambió**: las piezas del Plano solo se ven en `/sistema`.
+- **PAUSA por límite de uso (2026-11-01).** Etapa (b) INTEGRADA en `8690e3a` (merges de
+  `feat/plano-b1`: hero con titular que encastra, "Mirá lo que creás", "Así se arma", mapa de piezas,
+  cotas en márgenes; y `feat/plano-b2`: nav con tema como ícono, "Así trabajamos con vos", FAQ,
+  cierre a pantalla completa, pie, sin bordes de acento). Lint, typecheck y Vitest 1136 ✓. Según los
+  agentes: JS inicial 140,4 KB, CLS 0, E2E no visual en verde por separado. **Falta al retomar**:
+  E2E completa sobre la integración (`--update-snapshots=none`; `visual` va a fallar por el
+  rediseño), medir LCP, sacar el `pb-24 lg:pb-32` del `<main>` (franja entre el cierre y el pie),
+  revisar `InterruptorTema.tsx` (lo editó b2) y el check de `StepGracias` con borde naranja, y
+  FRENAR con capturas de /empezar (iPhone SE, iPhone 15, 1440: hero, "Mirá lo que creás", "Así
+  trabajamos con vos", cierre, footer) para el OK del usuario. Después: (c1) editor, (d), (e). Sin
+  push: main sigue en producción con `5d13eae`.
 - **Etapa (b) en curso**: recomposición de `/empezar`. Condiciones del usuario: cotas del plano en
   los márgenes (sin cruzar texto en celular), arreglar el desborde de 5 px de `/sistema`, slots de
   imagen con plano terminado (sin "TODO" visible), un fondo y una composición distintos por sección,
