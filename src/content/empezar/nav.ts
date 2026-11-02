@@ -1,6 +1,6 @@
 import { HERO } from '@/content/empezar/hero';
 
-/** Nav mínima de /empezar: el logo y UN solo CTA (el mismo del hero, para no sumar decisiones). */
+/** Nav mínima de /empezar: el logo, el interruptor de tema y UN solo CTA (el mismo del hero). */
 export const NAV = {
   /** Nombre accesible del <nav>. */
   aria: 'Principal',
@@ -10,8 +10,9 @@ export const NAV = {
   saltar: 'Saltar al contenido',
   cta: HERO.cta,
   /**
-   * Interruptor discreto de tema (docs/plan-sprint.md §3). Nombre fijo: nombra lo que queda activo
-   * cuando está presionado (aria-pressed dice si lo está), no la acción.
+   * Interruptor de tema (docs/plan-sprint.md §3), solo ícono: la etiqueta es su nombre accesible.
+   * Nombre fijo: nombra lo que queda activo cuando está presionado (aria-pressed dice si lo está),
+   * no la acción.
    */
   tema: {
     etiqueta: 'Modo claro',

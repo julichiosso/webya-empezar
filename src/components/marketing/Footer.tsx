@@ -1,80 +1,121 @@
+import type { ReactNode } from 'react';
 import { siteConfig } from '@/lib/site-config';
-import { Icon } from '@/brand/ilustracion/iconos/Icon';
-import { InterruptorTema } from '@/brand/tema/InterruptorTema';
+import { Logo } from '@/brand/logo/Logo';
+import { CLASES_SECCION, Seccion } from '@/components/patterns/Seccion';
+import { cn } from '@/components/ui/clases';
 import { FOOTER } from '@/content/empezar/footer';
 import { MENSAJE_WHATSAPP } from '@/content/whatsapp';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
 
+const C = CLASES_SECCION.tinta;
+const ENLACE = '-mx-2 inline-flex min-h-tap items-center px-2 underline-offset-4 hover:underline';
+
+/** Un grupo del pie: su título (nombre accesible de la lista) y sus renglones. */
+function Grupo({
+  id,
+  titulo,
+  children,
+  className,
+}: {
+  id: string;
+  titulo: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={className}>
+      <p id={id} className={cn('text-small font-medium', C.secundario)}>
+        {titulo}
+      </p>
+      <ul aria-labelledby={id} className="mt-2 flex flex-col">
+        {children}
+      </ul>
+    </div>
+  );
+}
+
+/**
+ * Pie de /empezar (fondo tinta, fijo con el sitio en claro también). No repite la nav: el lema con
+ * su salvedad, tres grupos (hablemos, probalo, legales) y el wordmark grande al pie, entero y sin
+ * tocar. El interruptor de tema vive en la nav. Una línea lo separa del cierre (los dos son oscuros).
+ */
 export function Footer() {
   const { contactEmail, instagramUrl, whatsappNumber } = siteConfig;
   const whatsapp = buildWhatsAppLink(whatsappNumber, MENSAJE_WHATSAPP.contacto);
   return (
-    <footer className="diferido mx-auto w-full max-w-xl border-t border-line px-4 py-12 lg:max-w-page lg:px-8 lg:py-16">
-      <div className="lg:flex lg:items-start lg:justify-between lg:gap-12">
-        <div>
-          <p className="text-heading font-semibold">{FOOTER.lema}</p>
-          <p className="mt-1 text-muted">{FOOTER.bajada}</p>
+    <Seccion
+      como="footer"
+      fondo="tinta"
+      className={cn('diferido border-t', C.linea)}
+      contenidoClassName="pt-16 pb-8 lg:pt-24 lg:pb-12"
+    >
+      <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-5">
+          <p className="text-title font-semibold text-balance">{FOOTER.lema}</p>
+          <p className={cn('mt-2 max-w-sm', C.secundario)}>{FOOTER.bajada}</p>
         </div>
-        <ul
-          aria-label={FOOTER.enlaces.aria}
-          className="mt-8 flex flex-col gap-1 lg:mt-0 lg:items-end"
-        >
-          <li>
-            <a
-              href="/demo/gastronomia"
-              className="-mx-2 inline-flex min-h-tap items-center px-2 text-muted hover:text-fg"
-            >
-              {FOOTER.enlaces.demo}
-            </a>
-          </li>
-          {whatsapp && (
+
+        <div className="mt-12 grid gap-8 sm:grid-cols-3 lg:col-span-7 lg:mt-0">
+          <Grupo id="pie-contacto" titulo={FOOTER.contacto.titulo}>
+            {whatsapp && (
+              <li>
+                <a href={whatsapp} target="_blank" rel="noopener noreferrer" className={ENLACE}>
+                  {FOOTER.contacto.whatsapp}
+                  <span className="sr-only">{FOOTER.externo}</span>
+                </a>
+              </li>
+            )}
             <li>
-              <a
-                href={whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="-mx-2 inline-flex min-h-tap items-center px-2 text-muted hover:text-fg"
-              >
-                {FOOTER.enlaces.whatsapp}
-                <span className="sr-only">{FOOTER.enlaces.externo}</span>
+              {contactEmail ? (
+                <a href={`mailto:${contactEmail}`} className={cn(ENLACE, 'break-all')}>
+                  {contactEmail}
+                </a>
+              ) : (
+                // TODO: completar NEXT_PUBLIC_CONTACT_EMAIL para mostrar el mail de contacto.
+                process.env.NODE_ENV !== 'production' && (
+                  <span data-todo className={cn('text-small', C.secundario)}>
+                    {FOOTER.todoEmail}
+                  </span>
+                )
+              )}
+            </li>
+            <li>
+              <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className={ENLACE}>
+                {FOOTER.instagram}
+                <span className="sr-only">{FOOTER.externo}</span>
               </a>
             </li>
-          )}
-          <li>
-            {contactEmail ? (
-              <a
-                href={`mailto:${contactEmail}`}
-                className="-mx-2 inline-flex min-h-tap items-center gap-2 px-2 text-muted hover:text-fg"
-              >
-                <Icon name="mail" size={20} />
-                {contactEmail}
+          </Grupo>
+
+          <Grupo id="pie-probar" titulo={FOOTER.probar.titulo}>
+            <li>
+              <a href="/demo/gastronomia" className={ENLACE}>
+                {FOOTER.probar.demo}
               </a>
-            ) : (
-              // TODO: completar NEXT_PUBLIC_CONTACT_EMAIL para mostrar el mail de contacto.
-              process.env.NODE_ENV !== 'production' && (
-                <span className="text-small text-subtle">{FOOTER.todoEmail}</span>
-              )
-            )}
-          </li>
-          <li>
-            <a
-              href={instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="-mx-2 inline-flex min-h-tap items-center px-2 text-muted hover:text-fg"
-            >
-              {FOOTER.instagram}
-              <span className="sr-only">{FOOTER.enlaces.externo}</span>
-            </a>
-          </li>
-        </ul>
+            </li>
+          </Grupo>
+
+          <Grupo id="pie-legales" titulo={FOOTER.legales.titulo}>
+            <li data-todo className={cn('py-2 text-small', C.secundario)}>
+              {FOOTER.legales.todoPrivacidad}
+            </li>
+            <li className={cn('tabular py-2 text-small', C.secundario)}>
+              {FOOTER.copyright(new Date().getFullYear())}
+            </li>
+          </Grupo>
+        </div>
       </div>
-      {/* Interruptor discreto de tema (el oscuro es el default); en el pie para no sumar nada a la nav. */}
-      <InterruptorTema etiqueta={FOOTER.tema.etiqueta} className="mt-8" />
-      <p className="mt-8 text-small text-subtle">{FOOTER.todoPrivacidad}</p>
-      <p className="tabular mt-2 text-small text-subtle">
-        {FOOTER.copyright(new Date().getFullYear())}
-      </p>
-    </footer>
+
+      {/* El wordmark al pie, de lado a lado del ancho de página, entero y sin recolorear (sigue el
+          texto de la sección). `[&>svg]` le gana al alto fijo del Logo sin tocar el componente. */}
+      <div
+        className={cn(
+          'mt-16 border-t pt-8 lg:mt-24 lg:pt-12 [&>svg]:h-auto [&>svg]:w-full',
+          C.linea,
+        )}
+      >
+        <Logo decorativo />
+      </div>
+    </Seccion>
   );
 }

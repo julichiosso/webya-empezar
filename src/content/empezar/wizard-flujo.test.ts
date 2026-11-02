@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { LIMITES } from '@/content/leads';
-import { COMO_TRABAJAMOS } from './como-trabajamos';
+import { COMO_TRABAJAMOS_CON_VOS } from './como-trabajamos-con-vos';
+import { FAQ_SECCION } from './faq-seccion';
 import { CTA_FINAL } from './cta-final';
 import { FLUJO } from './wizard-flujo';
 
@@ -17,7 +18,9 @@ describe('copy del flujo de /empezar', () => {
       FLUJO.resultado.aMedida.titulo,
       FLUJO.completar.titulo,
       FLUJO.listo.titulo,
-      COMO_TRABAJAMOS.titulo,
+      COMO_TRABAJAMOS_CON_VOS.titulo,
+      ...COMO_TRABAJAMOS_CON_VOS.tramos.map((t) => t.titulo),
+      FAQ_SECCION.titulo,
       CTA_FINAL.titulo,
     ];
     for (const t of titulos) expect(palabras(t), t).toBeLessThanOrEqual(8);

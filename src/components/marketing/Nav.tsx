@@ -1,4 +1,5 @@
 import { Logo } from '@/brand/logo/Logo';
+import { InterruptorTema } from '@/brand/tema/InterruptorTema';
 import { ButtonLink } from '@/components/ui/Button';
 import { NAV } from '@/content/empezar/nav';
 
@@ -6,8 +7,9 @@ import { NAV } from '@/content/empezar/nav';
 export const ID_CONTENIDO = 'contenido';
 
 /**
- * Nav mínima de /empezar: el logo (que se arma una vez) y UN solo CTA, el mismo del hero. Sin menú:
- * cada enlace más es una decisión más antes del wizard. El primer foco es "Saltar al contenido".
+ * Nav mínima de /empezar: el logo (que se arma una vez), el interruptor de tema como ícono neutro y
+ * UN solo CTA, el mismo del hero. Sin menú: cada enlace más es una decisión más antes del wizard.
+ * El primer foco es "Saltar al contenido". El tema solo aplica en /empezar (src/brand/tema).
  */
 export function Nav() {
   return (
@@ -18,14 +20,15 @@ export function Nav() {
       >
         {NAV.saltar}
       </a>
-      <nav aria-label={NAV.aria} className="flex items-center justify-between gap-4">
+      <nav aria-label={NAV.aria} className="flex items-center gap-2">
         <a
           href="/empezar"
           aria-label={NAV.inicio}
-          className="-mx-2 inline-flex min-h-tap items-center px-2"
+          className="-mx-2 mr-auto inline-flex min-h-tap items-center px-2"
         >
           <Logo armar />
         </a>
+        <InterruptorTema etiqueta={NAV.tema.etiqueta} soloIcono />
         <ButtonLink href="#wizard" variante="secundario" tamanio="compacto">
           {NAV.cta}
         </ButtonLink>

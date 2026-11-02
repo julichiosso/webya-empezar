@@ -49,7 +49,7 @@ export function BarraFija({ etiqueta, zonas, children }: BarraFijaProps) {
       aria-label={etiqueta}
       inert={!visible}
       data-visible={visible}
-      className="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-line bg-bg/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] opacity-0 backdrop-blur transition-[transform,opacity] duration-(--duration-base) ease-(--ease-out) data-[visible=true]:translate-y-0 data-[visible=true]:opacity-100 motion-reduce:transition-none lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-line bg-bg px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] opacity-0 transition-[transform,opacity] duration-(--duration-base) ease-(--ease-out) data-[visible=true]:translate-y-0 data-[visible=true]:opacity-100 motion-reduce:transition-none lg:hidden"
     >
       {children}
     </div>

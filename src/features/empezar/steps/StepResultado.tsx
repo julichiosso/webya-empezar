@@ -78,11 +78,7 @@ export function StepResultado({
   onCompletar,
 }: StepResultadoProps) {
   const nombre = nombreNegocio.trim();
-  const titulo = aMedida
-    ? TXT.aMedida.titulo
-    : nombre
-      ? TXT.titulo(nombre)
-      : TXT.tituloSinNombre;
+  const titulo = aMedida ? TXT.aMedida.titulo : nombre ? TXT.titulo(nombre) : TXT.tituloSinNombre;
   const activos = controles?.modulos.filter((m) => m.activo).length ?? 0;
 
   return (
@@ -97,8 +93,8 @@ export function StepResultado({
       {/* Nunca silencioso: si no se guardó, se ve y se puede reintentar; si se guardó tarde, se dice. */}
       <div role="status" className="empty:hidden">
         {sinGuardar && (
-          <div className="mb-4 rounded-control border border-danger/40 bg-danger/10 p-4 text-small">
-            <p className="text-fg">{TXT.sinGuardar}</p>
+          <div className="mb-4 rounded-control border border-line bg-surface p-4 text-small">
+            <p className="text-danger">{TXT.sinGuardar}</p>
             <Button
               variant="secondary"
               className="mt-3"
@@ -204,7 +200,7 @@ export function StepResultado({
         <a
           href={demoUrl}
           onClick={onDemo}
-          className="mt-6 flex min-h-tap items-center justify-between gap-4 rounded-card border border-line-strong bg-surface p-4 hover:border-accent"
+          className="mt-6 flex min-h-tap items-center justify-between gap-4 rounded-card border border-line-strong bg-surface p-4 hover:border-fg/40"
         >
           <span>
             <span className="block font-semibold">{TXT.demo.titulo}</span>

@@ -94,8 +94,14 @@ test('JSON-LD del FAQ es válido y coincide con lo que se ve', async ({ page }) 
   };
   expect(data['@type']).toBe('FAQPage');
   expect(data.mainEntity.length).toBeGreaterThanOrEqual(4);
+  const faq = page.locator('section[aria-labelledby="faq-title"]');
   for (const q of data.mainEntity) {
-    await expect(page.locator('summary', { hasText: q.name })).toBeVisible();
+    // Las objeciones van a la vista (h3); las dudas de detalle, en un <details> (summary).
+    await expect(faq.locator('h3, summary').filter({ hasText: q.name, visible: true })).toHaveCount(
+      1,
+    );
+    // La respuesta es la misma que está en la página (a la vista o dentro del <details>).
+    await expect(faq.getByText(q.acceptedAnswer.text, { exact: true })).toHaveCount(1);
     expect(q.acceptedAnswer.text.length).toBeGreaterThan(20);
   }
 });

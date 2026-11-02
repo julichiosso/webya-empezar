@@ -129,8 +129,8 @@ export function StepNegocio({
   return (
     <form noValidate onSubmit={enviar} className="lg:max-w-xl">
       <StepHeader title={contacto ? CONTACTO.titulo : TXT.titulo} headingRef={headingRef} />
-      {/* La promesa de la pantalla, bien visible arriba del formulario. */}
-      <p className="-mt-3 mb-6 rounded-control border border-accent bg-accent-soft px-4 py-3 text-lead font-medium">
+      {/* La promesa de la pantalla: texto de ayuda en línea, sin recuadro (Plano: sin avisos con borde). */}
+      <p className="-mt-2 mb-6 text-lead text-muted">
         {contacto
           ? CONTACTO.promesa
           : aMedida
@@ -195,7 +195,7 @@ export function StepNegocio({
 
       <div role="alert" className="mt-5 empty:hidden">
         {errorGlobal && (
-          <p className="rounded-control border border-danger/40 bg-danger/10 p-4 text-small text-fg">
+          <p className="rounded-control border border-line bg-surface p-4 text-small text-danger">
             {errorGlobal}
           </p>
         )}

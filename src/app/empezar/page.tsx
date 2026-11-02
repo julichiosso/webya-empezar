@@ -5,11 +5,10 @@ import { PreviewPanel } from '@/components/patterns/PreviewPanel';
 import { Marco } from '@/features/empezar/Marco';
 import { PantallaRubro } from '@/features/empezar/PantallaRubro';
 import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
-import { ComoTrabajamos } from '@/components/marketing/ComoTrabajamos';
-import { CtaFinal } from '@/components/marketing/CtaFinal';
+import { ComoTrabajamosConVos } from '@/components/marketing/ComoTrabajamosConVos';
+import { Cierre } from '@/components/marketing/Cierre';
 import { StickyCta } from '@/components/marketing/StickyCta';
 import { CasoReal } from '@/components/marketing/CasoReal';
-import { Confianza } from '@/components/marketing/Confianza';
 import { FLAGS } from '@/config/flags';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
@@ -79,10 +78,9 @@ export default function EmpezarPage() {
         <QueIncluye />
         {/* Caso real de Micio's: apagado hasta tener su permiso escrito (config/flags.ts). */}
         {FLAGS.casoMicios && <CasoReal />}
-        <Confianza />
-        <ComoTrabajamos />
+        <ComoTrabajamosConVos />
         <Faq />
-        <CtaFinal />
+        <Cierre />
       </main>
       <Footer />
       <StickyCta />
