@@ -1,5 +1,13 @@
 # Retomar: sprint "tu negocio, armado en un minuto"
 
+## SIN hacer (sprint Plano, mergeado a main el 2026-11-01 con (a) y (b))
+
+- E2E completa sobre la integración (`--update-snapshots=none`).
+- Medir LCP (CPU ×4, 4G lento).
+- Retoques: franja entre el cierre y el pie (`pb-24 lg:pb-32` del `<main>`) y borde naranja del check de "gracias".
+- Capturas de /empezar en iPhone SE, iPhone 15 y 1440 (y regenerar las de `e2e/visual`).
+- Editor guiado (c1), copy y SEO (d), QA final (e).
+
 ## Sprint "Plano" (rama `feat/rediseno-plano`, desde main `5d13eae`, SIN push)
 
 Estado exacto (2026-10-31):
