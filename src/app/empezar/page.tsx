@@ -7,7 +7,7 @@ import { PantallaRubro } from '@/features/empezar/PantallaRubro';
 import { Cierre } from '@/components/marketing/Cierre';
 import { StickyCta } from '@/components/marketing/StickyCta';
 import { RubrosFlotantes } from '@/components/marketing/RubrosFlotantes';
-import { YaLoUsan } from '@/components/marketing/YaLoUsan';
+import { YaCrearon } from '@/components/marketing/YaCrearon';
 import { MensajeRubro } from '@/components/marketing/MensajeRubro';
 import { PorQueWebya } from '@/components/marketing/PorQueWebya';
 import { Faq } from '@/components/marketing/Faq';
@@ -75,7 +75,7 @@ export default function EmpezarPage() {
         <MensajeRubro />
         <MiraLoQueCreas />
         <QueIncluye />
-        <YaLoUsan />
+        <YaCrearon />
         <PorQueWebya />
         <Faq />
         <Cierre />

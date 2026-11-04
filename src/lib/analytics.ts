@@ -19,6 +19,8 @@ export interface EventosAnalitica {
   /** `contacto`: orden B, el CTA lleva primero a dejar el WhatsApp. */
   cta_click: { destino: 'whatsapp' | 'contacto'; rubro: string; modulos: number };
   /** Se fue (pestaña oculta o cerrada) sin llegar al CTA. Una vez por visita. */
+  /** Abrió el sitio de un cliente en "Ya crearon con WebYa". */
+  cliente_abierto: { cliente: string };
   abandono_paso: { paso: string };
   lead_completado: { completo: boolean };
   modulo_alternado: { modulo: string; activo: boolean; origen: 'preview' };

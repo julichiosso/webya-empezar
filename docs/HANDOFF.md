@@ -43,7 +43,7 @@
 - Verificado visualmente en desktop (Playwright instalado; para `next start` usar IP_HASH_SALT de 16+ caracteres). Las secciones `diferido` salen vacías en capturas fullPage (content-visibility): hay que scrollear antes de capturar.
 
 ## Hecho en la sesión 3 (Fase 2C parcial)
-- `content/clientes.ts` + `YaLoUsan.tsx` (micios.com.ar y abelardo.vercel.app, sin capturas todavía), `content/precios.ts` (monto null: la FAQ dice "Te pasamos un presupuesto por WhatsApp, sin compromiso"), CTA único "Crear mi sistema", hero "Tu carta y tus pedidos, sin líos." con SEO alineado.
+- `content/clientes.ts` + `YaLoUsan.tsx` (miciospizzas.com.ar y abelardo.vercel.app, sin capturas todavía), `content/precios.ts` (monto null: la FAQ dice "Te pasamos un presupuesto por WhatsApp, sin compromiso"), CTA único "Crear mi sistema", hero "Tu carta y tus pedidos, sin líos." con SEO alineado.
 
 ## Hecho en la sesión 4
 - 2C-b: hero genérico "Tu negocio online, armado con vos."; `content/rubros/mensajes.ts` (titular, descripción y 3 beneficios por cada uno de los 7 rubros; solo gastronomía `listo: true`, los demás dicen "Lo armamos con vos") y `MensajeRubro.tsx` (aparece bajo el hero al elegir rubro, escucha EVENTO_RUBRO).
@@ -51,13 +51,19 @@
 - Datos del dueño: el bloque llegó sin completar (placeholder): todo lo que depende de ellos queda PENDIENTE (precios, fundador, capturas, WhatsApp).
 
 ## Hecho en la sesión 5
-- Capturas: `public/clientes/abelardo.webp` (375px, real). micios.com.ar NO resolvió DNS desde esta máquina: falta su captura (Micio's se muestra sin imagen; cargarla en `content/clientes.ts` campo captura/alt).
+- Capturas: `public/clientes/abelardo.webp` (375px, real). miciospizzas.com.ar NO resolvió DNS desde esta máquina: falta su captura (Micio's se muestra sin imagen; cargarla en `content/clientes.ts` campo captura/alt).
 - `PorQueWebya.tsx` + `content/por-que-webya.ts` (4 puntos ciertos + 3 objeciones con enlace a /privacidad; FUNDADOR = null, el bloque no se muestra hasta cargar nombre y foto).
 - Header nuevo (`Nav.tsx`): barra fija con línea, logo, "Ver ejemplos" y CTA naranja; sin interruptor de tema. Hero con titular + bajada.
 - Fondo: RubrosFlotantes ahora dibuja íconos SVG del set propio (cubiertos, tijera, tienda, portafolio, pesa, llave y otros) con el nombre del rubro; el rubro elegido se enciende en naranja.
 - 2C-e: el UTM ya se guarda en el lead (lib/utm.ts) y la og:image ya sale de SEO_EMPEZAR. Falta un evento "cliente_abierto" al abrir un sitio de Ya lo usan.
 - Medición mobile 375px, CPU x4, red 4G lenta: LCP 0,7-0,9 s (el H1), CLS 0.
 - Detalle visual: en desktop los íconos se transparentan detrás de la tarjeta del wizard; conviene volverla opaca.
+
+## Hecho en la sesión 6
+- Paso 1 completo: `content/clientes.ts` (3 clientes verificados mirando los sitios: Micio's miciospizzas.com.ar, Abelardo, Fonosanjorge; capturas webp < 30 KB en public/clientes/; `clientesPorRubro()` agrupa y omite rubros sin clientes; test en clientes.test.ts) y `YaCrearon.tsx` (índice editorial, sin cards; enlace `EnlaceCliente` que mide el evento `cliente_abierto`). Reemplaza a YaLoUsan.
+- Se quitó la línea "Cada sitio lleva Creado con WebYa": hoy es FALSO (los sitios de clientes dicen "Creado con Micio's/Abelardo"). Volver a ponerla cuando la Fase 3 publique sitios con ese pie.
+- Verificado en 1366px y 375px (sin scroll horizontal). Build, lint, typecheck y 1137 tests verdes.
+- NO hecho de la sesión: Paso 2 (resto: Por qué WebYa ya existe como lista editorial; faltan objeciones junto a cada sección), Paso 3 (vista previa real), Paso 4 (limpieza, ticker, e2e), Paso 5 (Fase 3).
 
 ## Pendiente priorizado (Fase 2C sin hacer)
 0. 2C: copy por resultados en los módulos; nombre del negocio + vista previa real de la plantilla antes del WhatsApp; capturas reales de clientes; sección "Por qué WebYa" y "Quién está detrás" (foto del fundador); objeciones junto a cada sección; eventos de embudo y UTM al lead; og:image real; medir LCP; botón flotante de WhatsApp (si hay número).
