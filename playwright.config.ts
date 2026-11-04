@@ -66,6 +66,9 @@ export default defineConfig({
       RATE_LIMIT_BURST_PER_MINUTE: '5000',
       // Las NEXT_PUBLIC_* se inlinean en el build: se fijan acá para que E2E y capturas no dependan
       // del .env local de quien corre los tests. Sin número, el botón de WhatsApp quedaría deshabilitado.
+      // La intro empieza el recorrido 200vh arriba del hero: las capturas y los flujos se prueban sin
+      // ella; intro.spec.ts la prueba con NEXT_PUBLIC_INTRO_LOGO=1 E2E_INTRO=1.
+      NEXT_PUBLIC_INTRO_LOGO: process.env.NEXT_PUBLIC_INTRO_LOGO ?? '0',
       NEXT_PUBLIC_WHATSAPP_NUMBER: '5491100000000',
       NEXT_PUBLIC_SITE_URL: 'https://webya.ar',
       NEXT_PUBLIC_CONTACT_EMAIL: 'contacto@example.com',

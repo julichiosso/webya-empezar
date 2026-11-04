@@ -108,11 +108,6 @@ test('las objeciones están junto a su sección', async ({ page }) => {
     await expect(page.locator('dt', { hasText: o.pregunta }).first()).toBeVisible();
 });
 
-test('la intro del telón está apagada por defecto', async ({ page }) => {
-  await page.goto('/empezar');
-  await expect(page.locator('[data-telon]')).toHaveCount(0);
-});
-
 test.describe('escritorio (lg y más)', () => {
   test.beforeEach(({ page }) => {
     test.skip(!esLg(page), 'solo escritorio');

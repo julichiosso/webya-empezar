@@ -91,6 +91,26 @@ export const CLIENTES: readonly Cliente[] = [
     rotulo: 'Fonosanjorge · sitio de una fonoaudióloga',
     alt: 'Inicio del sitio de Fonosanjorge en el celular: presentación de la fonoaudióloga y sus especialidades.',
   },
+  {
+    id: 'petrucci',
+    nombre: 'Joyería Petrucci',
+    rubroId: 'comercio',
+    url: 'https://joyeria-petrucci-web.vercel.app',
+    ciudad: 'San Jorge, Santa Fe',
+    hizo: 'Catálogo online de joyas, relojes y más, con consulta por WhatsApp en cada producto.',
+    armamos: [
+      'Catálogo por categorías: joyería, relojes, marroquinería y mates',
+      'Novedades y consulta por WhatsApp en cada producto',
+      'Sus marcas y sus trabajos a medida',
+      'Dirección con mapa',
+    ],
+    captura: '/clientes/petrucci.webp',
+    capturaAncho: 375,
+    capturaAlto: 4200,
+    telon: '/clientes/telon-petrucci.webp',
+    rotulo: 'Joyería Petrucci · catálogo y consultas',
+    alt: 'Inicio del sitio de Joyería Petrucci en el celular: alianzas y joyas hechas en su taller, categorías y novedades.',
+  },
 ];
 
 export interface GrupoClientes {

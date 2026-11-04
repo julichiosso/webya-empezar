@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { LOGO_TRAZOS, LOGO_VIEWBOX } from '@/brand/logo/trazos';
 import { CLIENTES } from '@/content/clientes';
 import { TELON } from '@/content/telon';
@@ -6,13 +7,13 @@ import estilos from './Telon.module.css';
 /** Id del h1 del hero: destino del enlace "Saltar". */
 const DESTINO = 'hero-title';
 
-/** La intro se enciende con NEXT_PUBLIC_INTRO_LOGO=1 (se resuelve al compilar). */
-export const INTRO_ACTIVA = process.env.NEXT_PUBLIC_INTRO_LOGO === '1';
+/** La intro está encendida; NEXT_PUBLIC_INTRO_LOGO=0 la apaga (se resuelve al compilar). */
+export const INTRO_ACTIVA = process.env.NEXT_PUBLIC_INTRO_LOGO !== '0';
 
 // Tres filas con las mismas capturas en otro orden; cada una deriva distinto con el scroll.
 const TAMANO_FILA = 14;
 const FILAS = [0, 1, 2, 3, 4].map((desfase) =>
-  Array.from({ length: TAMANO_FILA }, (_, k) => (k + desfase) % 3),
+  Array.from({ length: TAMANO_FILA }, (_, k) => (k + desfase) % CLIENTES.length),
 );
 
 const RECT = { x: -8000, y: -8000, width: 17000, height: 16300 } as const;
@@ -75,7 +76,16 @@ export function Telon() {
         <p className={estilos.pista}>{TELON.pista}</p>
         <div className={estilos.rotulos}>
           {CLIENTES.map((c, i) => (
-            <p key={c.id} className={`${estilos.rotulo} ${estilos[`r${i}`]}`}>
+            <p
+              key={c.id}
+              className={estilos.rotulo}
+              style={
+                {
+                  '--ini': `${4 + (i * 94) / CLIENTES.length}svh`,
+                  '--fin': `${1 + ((i + 1) * 94) / CLIENTES.length}svh`,
+                } as CSSProperties
+              }
+            >
               {c.rotulo}
             </p>
           ))}

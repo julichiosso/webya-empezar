@@ -11,3 +11,5 @@ Archivos clave: components/marketing/{RubrosFlotantes,YaCrearon,CapturaCliente,T
 Entorno: `next start` pide IP_HASH_SALT de 16+ caracteres; tests de Wizard con --testTimeout=20000; Playwright instalado (scrolleá antes de fullPage por content-visibility); no hay python: usá node con archivos .mjs escritos con Write; en este shell los heredocs con comillas anidadas fallan.
 Pendientes del dueño: WhatsApp (NEXT_PUBLIC_WHATSAPP_NUMBER, también Vercel), precios, nombre y foto del fundador, módulos extra entregados.
 Orden: copy residual → 3a (solo si se cierra con build verde) → resto de la Fase 3. Cerrá cada bloque con typecheck, lint, tests, build, capturas 375/1366 y un commit local.
+
+SESIÓN 3: se agregó el cliente Joyería Petrucci y la intro del telón quedó ENCENDIDA por defecto (NEXT_PUBLIC_INTRO_LOGO=0 la apaga). Ver docs/HANDOFF.md, bloque SESIÓN 3, para el estado exacto y qué verificar antes de commitear.
