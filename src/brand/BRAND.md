@@ -158,14 +158,7 @@ SVG propio e inline, en `src/brand/ilustracion` (detalle en su `LEEME.md`). Sin 
 - **Arte de módulos:** banda 160 × 64, rellenos planos; apagado en gris de línea, encendido en acento.
 - Lenguaje Encastre: la muesca (ticket colgado), el hueco punteado y la pieza en Brasa.
 - Decorativo → `aria-hidden`; si comunica → `role="img"` + `<title>` con texto de `src/content`.
-- **Plano** (`ilustracion/plano/`, dirección Plano): `FondoPlano({ variante?: 'grilla' | 'cotas', className? })`
-  e `IlustracionPlano({ escena: 'hero' | 'como-funciona' | 'cierre', className? })`. Grilla de 16/64 px,
-  cotas con flechas y rótulo mudo, ejes raya-punto, rayado de corte, anotaciones sin texto y marcas de
-  registro pegadas a las esquinas. Trazo fino que no engorda al escalar (`non-scaling-stroke`), todo en
-  `currentColor` con opacidades (`TINTA_PLANO`) y una sola pieza en Brasa (`text-plano-pieza`). Las
-  escenas usan un lienzo 1000 × 1000 con `slice`: lo importante está en la zona segura
-  (`LIENZO_PLANO.zonaSegura`), que se ve entera de 9:19,5 a 16:9. Solo `hero` se mueve (la pieza viaja
-  desde su fantasma y encastra, `ilus-plano-encaja`, una vez); quieta con movimiento reducido.
+- El lenguaje Plano (grilla, cotas, marcas de registro) se retiró de /empezar: fondos planos crema y casi-negro.
 
 ## 7. Movimiento
 
@@ -211,7 +204,6 @@ Presets en `src/brand/motion/presets.ts` (TS y `motion`) y `motion.css` (CSS). V
 | Fuente                                                    | `src/brand/tipografia/fuente.ts`                                     |
 | Voz                                                       | `src/brand/voz/diccionario.ts`                                       |
 | Íconos e ilustraciones                                    | `src/brand/ilustracion/`                                             |
-| Plano (blueprint)                                         | `src/brand/ilustracion/plano/` (`FondoPlano`, `IlustracionPlano`)    |
 | Fondos de sección y su contraste                          | `semanticos.ts` (`SECCIONES`, `SUPERFICIES`), `colores.ts`           |
 | Dirección Plano (reglas y prohibidos)                     | `.claude/skills/webya-plano/SKILL.md`                                |
 | Favicon y app icon                                        | `src/app/icon.svg`, `src/app/apple-icon.tsx`                         |

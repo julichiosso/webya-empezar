@@ -100,8 +100,8 @@ describe('salidas del flujo', () => {
   });
 
   it('el orden del experimento sale de la URL solo si es válido', () => {
-    expect(ordenDeUrl('?orden=b')).toBe('b');
-    expect(ordenDeUrl('?orden=z')).toBe('a');
-    expect(ordenDeUrl('')).toBe('a');
+    expect(ordenDeUrl('?orden=a')).toBe('a');
+    expect(ordenDeUrl('?orden=z')).toBe('b');
+    expect(ordenDeUrl('')).toBe('b');
   });
 });

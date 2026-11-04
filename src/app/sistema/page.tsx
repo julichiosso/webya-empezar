@@ -4,15 +4,12 @@ import {
   ARTES_MODULO,
   Cargando,
   DIBUJOS,
-  ESCENAS_PLANO,
   ESCENAS_RUBRO,
-  FondoPlano,
   GRILLA_DIBUJO,
   GRILLA_ICONO,
   Icon,
   ICONOS,
   Ilustracion,
-  IlustracionPlano,
   IlustracionRubro,
   ModuloArte,
   type GrupoDibujo,
@@ -30,7 +27,6 @@ import {
   TOQUE,
   SNAP,
 } from '@/brand/motion/presets';
-import { combinacionesSeccion, SUPERFICIES_SECCION, type SeccionId } from '@/brand/tokens/colores';
 import { COMPONENTES } from '@/brand/tokens/componentes';
 import { COLOR, CURVA, ESPACIO, TIPO } from '@/brand/tokens/primitivos';
 import {
@@ -43,11 +39,9 @@ import {
 } from '@/brand/tokens/semanticos';
 import { buttonClasses } from '@/components/ui/boton-clases';
 import { SISTEMA } from '@/content/sistema';
-import { contraste } from '@/lib/color';
 import { PalabrasEncastre } from './PalabrasEncastre';
 import { Snap } from './Snap';
 import { Vitrina } from './Vitrina';
-import { VitrinaPlano } from './VitrinaPlano';
 
 // Página interna del sistema de diseño: no se indexa ni se lista en el sitemap. Siempre en oscuro
 // (el tema elegible solo aplica en /empezar; ver src/brand/tema/tema.ts).
@@ -63,7 +57,6 @@ const SECCIONES = [
   'forma',
   'movimiento',
   'componentes',
-  'plano',
   'iconos',
   'ilustraciones',
 ] as const;
@@ -103,10 +96,6 @@ export default function SistemaPage() {
         bajada={SISTEMA.componentes.bajada}
       >
         <Vitrina />
-      </Seccion>
-
-      <Seccion id="plano" titulo={SISTEMA.plano.titulo} bajada={SISTEMA.plano.bajada}>
-        <VitrinaPlano />
       </Seccion>
 
       <SeccionIconos />
@@ -308,95 +297,7 @@ function SeccionColor() {
           />
         ))}
       </ul>
-
-      <SuperficiesPlano />
     </Seccion>
-  );
-}
-
-/* ——— Fondos de sección (dirección Plano) ——— */
-
-/**
- * Clases de cada fondo, tal como las usa una sección: el fondo y el texto del contrato
- * (docs/plano-contrato.md) más el scope que fija los semánticos adentro (`.superficie-*`, `.papel`).
- */
-const CLASES_SUPERFICIE: Record<SeccionId, { caja: string; muted: string; linea: string }> = {
-  tinta: {
-    caja: 'superficie-tinta bg-seccion-tinta text-seccion-tinta-fg',
-    muted: 'text-seccion-tinta-muted',
-    linea: 'border-seccion-tinta-linea',
-  },
-  crema: {
-    caja: 'papel bg-seccion-crema text-seccion-crema-fg',
-    muted: 'text-seccion-crema-muted',
-    linea: 'border-seccion-crema-linea',
-  },
-  brasa: {
-    caja: 'superficie-brasa bg-seccion-brasa text-seccion-brasa-fg',
-    muted: 'text-seccion-brasa-muted',
-    linea: 'border-seccion-brasa-linea',
-  },
-  // El velo va sobre una "foto": acá, la ilustración de plano sobre crema (el peor caso, claro).
-  velo: {
-    caja: 'superficie-velo bg-seccion-crema text-velo-imagen-fg',
-    muted: 'text-velo-imagen-muted',
-    linea: 'border-line',
-  },
-};
-
-function SuperficiesPlano() {
-  const tc = SISTEMA.componentes;
-  return (
-    <>
-      <Subtitulo>
-        <Token>{SISTEMA.codigoPlano.fondos}</Token>
-      </Subtitulo>
-      <ul className="mt-4 grid gap-4 lg:grid-cols-2">
-        {SUPERFICIES_SECCION.map((s) => {
-          const c = CLASES_SUPERFICIE[s.id];
-          return (
-            <li
-              key={s.id}
-              data-superficie={s.id}
-              className={`relative isolate overflow-hidden rounded-panel ${c.caja}`}
-            >
-              {s.id === 'velo' ? (
-                <>
-                  <IlustracionPlano
-                    escena="cierre"
-                    className="absolute inset-0 -z-10 size-full text-seccion-crema-fg"
-                  />
-                  <span aria-hidden="true" className="absolute inset-0 -z-10 bg-velo-imagen" />
-                </>
-              ) : (
-                <FondoPlano variante={s.id === 'brasa' ? 'grilla' : 'cotas'} className="-z-10" />
-              )}
-              <div className="grid gap-4 p-8 pt-24">
-                <Token>{s.scope}</Token>
-                <p className="text-title font-semibold text-balance">{SISTEMA.tipo.muestra}</p>
-                <p className={c.muted}>{tc.tarjeta.texto}</p>
-                <div className="flex flex-wrap gap-4">
-                  <button type="button" className={buttonClasses('primario')}>
-                    {tc.boton.muestra}
-                  </button>
-                  <button type="button" className={buttonClasses('secundario')}>
-                    {tc.boton.secundario}
-                  </button>
-                </div>
-                <dl className={`mt-2 border-t pt-4 ${c.linea}`}>
-                  {combinacionesSeccion(s).map((k) => (
-                    <div key={k.nombre} className="flex justify-between gap-4 text-small">
-                      <dt className={c.muted}>{k.nombre}</dt>
-                      <dd className="tabular">{contraste(k.texto, k.fondo).toFixed(2)}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-    </>
   );
 }
 
@@ -674,67 +575,6 @@ function SeccionIlustraciones() {
           </li>
         ))}
       </ul>
-
-      <PlanoVitrina />
     </Seccion>
-  );
-}
-
-/* ——— Plano (blueprint) ——— */
-
-/** Proporciones en las que se ve una escena: escritorio (16:9) y celular parado (9:19,5). */
-const PROPORCIONES = [
-  { id: '16:9', clase: 'aspect-video flex-1' },
-  { id: '9:19.5', clase: 'aspect-[9/19.5] w-32 shrink-0 sm:w-40' },
-] as const;
-
-function PlanoVitrina() {
-  return (
-    <>
-      <Subtitulo>
-        <Token>{SISTEMA.codigoPlano.fondoPlano}</Token>
-      </Subtitulo>
-      <ul className="mt-4 grid gap-4 lg:grid-cols-2">
-        {(['grilla', 'cotas'] as const).map((v) => (
-          <li
-            key={v}
-            className="superficie-tinta relative h-72 overflow-hidden rounded-panel bg-seccion-tinta text-seccion-tinta-fg"
-          >
-            <FondoPlano variante={v} />
-            <span className="absolute bottom-4 left-16">
-              <Token>{v}</Token>
-            </span>
-          </li>
-        ))}
-      </ul>
-
-      <Subtitulo>
-        <Token>{SISTEMA.codigoPlano.ilustracionPlano}</Token>
-      </Subtitulo>
-      <ul className="mt-4 grid gap-8">
-        {ESCENAS_PLANO.map((escena) => (
-          <li key={escena} className="grid gap-2">
-            <Token>{escena}</Token>
-            <div className="flex items-start gap-4">
-              {PROPORCIONES.map((p) => (
-                <div
-                  key={p.id}
-                  data-proporcion={p.id}
-                  className={`superficie-tinta relative min-w-0 overflow-hidden rounded-panel bg-seccion-tinta text-seccion-tinta-fg ${p.clase}`}
-                >
-                  <IlustracionPlano escena={escena} className="absolute inset-0 size-full" />
-                </div>
-              ))}
-            </div>
-          </li>
-        ))}
-        <li className="grid gap-2">
-          <Token>{SISTEMA.codigoPlano.papelCierre}</Token>
-          <div className="papel relative aspect-video overflow-hidden rounded-panel bg-seccion-crema text-seccion-crema-fg">
-            <IlustracionPlano escena="cierre" className="absolute inset-0 size-full" />
-          </div>
-        </li>
-      </ul>
-    </>
   );
 }

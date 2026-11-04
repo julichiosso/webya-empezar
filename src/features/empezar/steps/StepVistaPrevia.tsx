@@ -3,7 +3,6 @@
 import type { CSSProperties, ReactNode, Ref } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { variablesDePaleta } from '@/brand/tokens/colores';
-import type { Dispositivo } from '@/components/patterns/MarcoDispositivo';
 import { Button } from '@/components/ui/Button';
 import { FLUJO } from '@/content/empezar/wizard-flujo';
 import type { ModuloId } from '@/content/modulos';
@@ -14,15 +13,13 @@ const TXT = FLUJO.resultado;
 
 /** Lo que se puede cambiar en la vista previa (no existe en "Otro": ahí no hay vista previa). */
 export interface ControlesPreview {
-  dispositivo: Dispositivo;
-  onDispositivo: (d: Dispositivo) => void;
   paleta: PaletaCuradaId;
   onPaleta: (id: PaletaCuradaId) => void;
   modulos: readonly { id: ModuloId; nombre: string; activo: boolean }[];
   onModulo: (id: ModuloId) => void;
 }
 
-interface StepResultadoProps {
+interface StepVistaPreviaProps {
   nombreNegocio: string;
   /** "Otro": sin vista previa, la pantalla honesta de "Lo armamos a medida". */
   aMedida: boolean;
@@ -60,7 +57,7 @@ const opcion =
  * en una barra fija abajo (ver BarraCta). El secundario es dejar más datos. Si eligió "Otro", no
  * hay vista previa: "Lo armamos a medida".
  */
-export function StepResultado({
+export function StepVistaPrevia({
   nombreNegocio,
   aMedida,
   preview,
@@ -76,7 +73,7 @@ export function StepResultado({
   headingRef,
   onDemo,
   onCompletar,
-}: StepResultadoProps) {
+}: StepVistaPreviaProps) {
   const nombre = nombreNegocio.trim();
   const titulo = aMedida ? TXT.aMedida.titulo : nombre ? TXT.titulo(nombre) : TXT.tituloSinNombre;
   const activos = controles?.modulos.filter((m) => m.activo).length ?? 0;
@@ -120,20 +117,6 @@ export function StepResultado({
 
       {controles && (
         <div className="flex flex-col gap-5 lg:mt-8">
-          <div role="group" aria-label={TXT.verEn.leyenda} className="grid grid-cols-2 gap-2">
-            {(['celular', 'escritorio'] as const).map((d) => (
-              <button
-                key={d}
-                type="button"
-                aria-pressed={controles.dispositivo === d}
-                onClick={() => controles.onDispositivo(d)}
-                className={`${opcion} border-line text-muted hover:border-line-strong`}
-              >
-                {TXT.verEn[d]}
-              </button>
-            ))}
-          </div>
-
           <div className="lg:hidden">{preview}</div>
 
           <fieldset>

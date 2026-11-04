@@ -9,7 +9,7 @@ export const PREVIEW = {
    * Debajo del celular o del navegador de la vista previa por rubro: los textos de la plantilla
    * son de ejemplo (src/content/rubros/*.ts, `plantilla`). Lo real lo armamos con la persona.
    */
-  deEjemplo: 'Textos de ejemplo',
+  deEjemplo: 'Vista previa con platos y precios de ejemplo. Después cargás los tuyos.',
   /** Lugar de una pieza cuyo módulo está apagado (hueco punteado del mismo tamaño). */
   hueco: (modulo: string) => `Acá encaja ${modulo}`,
 } as const;

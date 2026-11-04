@@ -15,10 +15,10 @@ import { PorQueWebya } from '@/components/marketing/PorQueWebya';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
 import { Hero } from '@/components/marketing/Hero';
-import { MiraLoQueCreas } from '@/components/marketing/MiraLoQueCreas';
 import { QueIncluye } from '@/components/marketing/QueIncluye';
 import { FAQ } from '@/content/faq';
 import { SEO_EMPEZAR, SEO_SITIO } from '@/content/seo';
+import { VistaPreviaCartaLazy } from '@/features/demo/gastronomia/VistaPreviaCartaLazy';
 import { WizardLazy } from '@/features/empezar/WizardLazy';
 
 const { titulo: TITULO, descripcion: DESCRIPCION } = SEO_EMPEZAR;
@@ -68,7 +68,7 @@ export default function EmpezarPage() {
       >
         <Hero>
           {/* Pantalla 1 en el HTML del servidor: se ve y se toca antes de que llegue el wizard. */}
-          <WizardLazy>
+          <WizardLazy VistaPrevia={VistaPreviaCartaLazy}>
             <Marco pantalla={1} aside={<PreviewPanel activos={[]} />}>
               <PantallaRubro animar />
             </Marco>
@@ -77,7 +77,6 @@ export default function EmpezarPage() {
         <Objeciones donde="hero" />
         <TickerRubros />
         <MensajeRubro />
-        <MiraLoQueCreas />
         <QueIncluye />
         <Objeciones donde="modulos" />
         <YaCrearon />

@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/components/ui/clases';
-import { SlotImagen, type SlotImagenProps } from './SlotImagen';
 
-export type FondoSeccion = 'tinta' | 'crema' | 'brasa' | 'imagen';
+export type FondoSeccion = 'tinta' | 'crema' | 'brasa';
 
 /**
  * Clases del contrato (docs/plano-contrato.md) por fondo. Escritas enteras para que Tailwind las
@@ -34,22 +33,9 @@ export const CLASES_SECCION = {
     // Brasa sobre Brasa oscura no llega a 3:1: el anillo toma el color del texto de la sección.
     foco: 'superficie-brasa [&_:focus-visible]:outline-seccion-brasa-fg',
   },
-  imagen: {
-    fondo: '',
-    texto: 'text-velo-imagen-fg',
-    secundario: 'text-velo-imagen-muted',
-    linea: '',
-    foco: 'superficie-velo [&_:focus-visible]:outline-velo-imagen-fg',
-  },
 } as const satisfies Record<
   FondoSeccion,
   { fondo: string; texto: string; secundario: string; linea: string; foco: string }
->;
-
-/** La foto de una sección `imagen` (va de fondo, bajo el velo). */
-export type ImagenSeccion = Pick<
-  SlotImagenProps,
-  'fuente' | 'alt' | 'escena' | 'primerPliegue' | 'sizes' | 'duotono'
 >;
 
 interface Comunes {
@@ -65,11 +51,7 @@ interface Comunes {
   children: ReactNode;
 }
 
-export type SeccionProps = Comunes &
-  (
-    | { fondo: 'tinta' | 'crema' | 'brasa'; imagen?: never }
-    | { fondo: 'imagen'; imagen: ImagenSeccion }
-  );
+export type SeccionProps = Comunes & { fondo: FondoSeccion };
 
 /**
  * Bloque a pantalla completa del Plano: el fondo ocupa todo el ancho de la ventana y el contenido
@@ -86,7 +68,6 @@ export type SeccionProps = Comunes &
 export function Seccion({
   como: Raiz = 'section',
   fondo,
-  imagen,
   pantallaCompleta = false,
   id,
   'aria-labelledby': etiquetadaPor,
@@ -109,7 +90,6 @@ export function Seccion({
         className,
       )}
     >
-      {fondo === 'imagen' && imagen && <SlotImagen {...imagen} modo="fondo" />}
       <div
         className={cn(
           'relative mx-auto w-full max-w-page px-4 py-16 lg:px-8 lg:py-24',

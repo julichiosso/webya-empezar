@@ -11,6 +11,7 @@ const { Wizard } = await import('./Wizard');
 
 const fetchMock = vi.fn();
 beforeEach(() => {
+  window.history.replaceState(null, '', '/empezar?orden=a');
   window.sessionStorage.clear();
   fetchMock.mockResolvedValue(
     new Response(JSON.stringify({ ok: true, id: 'abc-1', token: 'a'.repeat(43) }), {

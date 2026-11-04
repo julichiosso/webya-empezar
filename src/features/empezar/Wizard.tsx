@@ -2,13 +2,16 @@
 
 import { AnimatePresence, domAnimation, LazyMotion, MotionConfig } from 'motion/react';
 import * as m from 'motion/react-m';
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Icon } from '@/brand/ilustracion/iconos/Icon';
-import type { Dispositivo } from '@/components/patterns/MarcoDispositivo';
 import {
-  precargarPreviewNegocio,
-  PreviewNegocioDiferido,
-} from '@/components/patterns/PreviewNegocioDiferido';
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+  type ComponentType,
+} from 'react';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { PreviewPanel } from '@/components/patterns/PreviewPanel';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { ordenPedido } from '@/config/experimentos';
@@ -51,7 +54,7 @@ import { StepAMedida } from './steps/StepAMedida';
 import { StepCompletar } from './steps/StepCompletar';
 import { StepGracias } from './steps/StepGracias';
 import { StepNegocio, type ValoresNegocio } from './steps/StepNegocio';
-import { StepResultado, type ControlesPreview } from './steps/StepResultado';
+import { StepVistaPrevia, type ControlesPreview } from './steps/StepVistaPrevia';
 
 /** Pantallas que enfocan su primer campo al llegar (el resto enfoca el título). */
 const PASOS_CON_CAMPO: readonly Paso[] = ['aMedida', 'negocio', 'contacto', 'completar'];
@@ -65,7 +68,12 @@ const variantes = {
   salir: (dir: number) => ({ opacity: 0, x: dir * -28 }),
 };
 
+/** La carta real del rubro con plantilla (la trae la página: features no se importan entre sí). */
+export type VistaPreviaRubro = ComponentType<{ nombre: string; paleta?: string | null }>;
+
 interface WizardProps {
+  /** Vista previa real de Gastronomía; sin ella (tests) queda el panel simple. */
+  VistaPrevia?: VistaPreviaRubro;
   /** Rubro tocado en el HTML del servidor antes de que llegara el wizard (ver WizardLazy). */
   rubroInicial?: string | null;
 }
@@ -74,7 +82,7 @@ interface WizardProps {
  * Flujo de /empezar: rubro → (Otro: pedido a medida) → negocio (guarda el lead parcial) →
  * "Así te queda" → completar (opcional) → gracias. Ver state.ts.
  */
-export function Wizard({ rubroInicial = null }: WizardProps) {
+export function Wizard({ rubroInicial = null, VistaPrevia }: WizardProps) {
   const [state, dispatch] = useReducer(reducer, ESTADO_INICIAL);
   const [errorPaso, setErrorPaso] = useState<string | null>(null);
   /** El guardado del lead falló por red o servidor: la vista previa se muestra igual. */
@@ -84,18 +92,6 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
   const [guardadoTarde, setGuardadoTarde] = useState(false);
   /** El pedido que falló, tal cual, para reintentarlo (nunca se pierde en silencio). */
   const pendiente = useRef<LeadParcialInput | null>(null);
-  /** Cómo se ve la vista previa; null = el natural (celular en celular, navegador en escritorio). */
-  const [dispositivo, setDispositivo] = useState<Dispositivo | null>(null);
-  /** Desde lg la vista previa vive a la derecha, en un navegador: ese es el natural. */
-  const [natural, setNatural] = useState<Dispositivo>('celular');
-  useEffect(() => {
-    if (typeof window.matchMedia !== 'function') return;
-    const mq = window.matchMedia('(min-width: 64rem)');
-    const actualizar = () => setNatural(mq.matches ? 'escritorio' : 'celular');
-    actualizar();
-    mq.addEventListener('change', actualizar);
-    return () => mq.removeEventListener('change', actualizar);
-  }, []);
   const raiz = useRef<HTMLElement>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
   const utm = useRef<Utm>({});
@@ -119,8 +115,6 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
 
   const elegirRubro = useCallback(
     (id: string) => {
-      // La vista previa se descarga ya: en la pantalla 3 (y en el panel de escritorio) está lista.
-      if (!esAMedida({ rubro: id })) void precargarPreviewNegocio().catch(() => {});
       dispatch({ tipo: 'elegirRubro', id });
       track('rubro_elegido', { rubro: id });
       irA(esAMedida({ rubro: id }) ? 'aMedida' : 'negocio');
@@ -148,17 +142,6 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
   useEffect(() => {
     if (hidratado) guardarEstado(state, window.sessionStorage);
   }, [state, hidratado]);
-
-  // Con el navegador libre se descarga la vista previa (por si llegó con un rubro ya elegido).
-  useEffect(() => {
-    const precargar = () => void precargarPreviewNegocio().catch(() => {});
-    if ('requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(precargar);
-      return () => window.cancelIdleCallback(id);
-    }
-    const t = setTimeout(precargar, 1500);
-    return () => clearTimeout(t);
-  }, []);
 
   // Abandono: se va sin llegar al CTA. Una sola vez por visita, con la pantalla en la que estaba.
   const pasoActual = useRef(paso);
@@ -352,11 +335,6 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
   const controles: ControlesPreview | null = aMedida
     ? null
     : {
-        dispositivo: dispositivo ?? natural,
-        onDispositivo: (d) => {
-          setDispositivo(d);
-          track('preview_toggle', { dispositivo: d });
-        },
         paleta,
         onPaleta: (id) => dispatch({ tipo: 'paleta', id }),
         modulos: (rubro?.modulosSugeridos ?? [])
@@ -377,15 +355,11 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
 
   // La vista previa por rubro: en escritorio vive a la derecha (sticky, navegador); en celular,
   // dentro de la pantalla 3 (celular). Sin rubro, o con "Otro", queda el panel de huecos.
-  const vistaPrevia = (lugar: Dispositivo) => (
-    <PreviewNegocioDiferido
-      rubro={state.rubro ?? ''}
-      nombre={nombreNegocio}
-      paleta={paleta}
-      dispositivo={dispositivo ?? lugar}
-      modulos={modulos}
-      ciudad={state.datos.ciudad}
-    />
+  const conCarta = state.rubro === RUBRO_DEMO && !aMedida && VistaPrevia;
+  const vistaPrevia = conCarta ? (
+    <VistaPrevia nombre={nombreNegocio} paleta={paleta} />
+  ) : (
+    <PreviewPanel rubroNombre={nombreNegocio || nombreRubroVisible(state)} activos={modulos} />
   );
   const aside =
     paso === 'rubro' || !rubro || aMedida ? (
@@ -393,11 +367,10 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
         rubroNombre={
           paso === 'rubro' || !rubro ? undefined : nombreNegocio || nombreRubroVisible(state)
         }
-        rubroIcono={rubro?.icono}
         activos={paso === 'rubro' ? [] : modulos}
       />
     ) : (
-      <div data-testid="negocio-preview-panel">{vistaPrevia('escritorio')}</div>
+      <div data-testid="negocio-preview-panel">{vistaPrevia}</div>
     );
 
   useEffect(() => {
@@ -472,11 +445,15 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
                   onEnviar={onGuardarNegocio}
                 />
               )}
+              {/* En celular la carta se arma acá mismo, mientras escribe el nombre. */}
+              {paso === 'negocio' && conCarta && ordenB && (
+                <div className="mt-8 lg:hidden">{vistaPrevia}</div>
+              )}
               {paso === 'resultado' && (
-                <StepResultado
+                <StepVistaPrevia
                   nombreNegocio={nombreNegocio}
                   aMedida={aMedida}
-                  preview={<div data-testid="negocio-preview">{vistaPrevia('celular')}</div>}
+                  preview={<div data-testid="negocio-preview">{vistaPrevia}</div>}
                   controles={controles}
                   cta={cta}
                   ctaEnBarra={ctaAccionable}

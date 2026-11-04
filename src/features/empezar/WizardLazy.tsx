@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { CLAVE_TRASPASO_DEMO } from '@/domain/traspaso/demo-wizard';
+import type { VistaPreviaRubro } from './Wizard';
 
 interface WizardProps {
+  VistaPrevia?: VistaPreviaRubro;
   /** Rubro tocado antes de que terminara de descargarse el wizard: arranca desde ahí. */
   rubroInicial: string | null;
 }
@@ -23,7 +25,14 @@ const GESTOS = ['scroll', 'pointerdown', 'keydown', 'touchstart'] as const;
  * si hay un flujo a medias (recarga) o un traspaso de la demo. Si la persona toca un rubro antes
  * de que llegue, la tarjeta se marca al instante y el wizard arranca desde ese rubro.
  */
-export function WizardLazy({ children }: { children: ReactNode }) {
+export function WizardLazy({
+  children,
+  VistaPrevia,
+}: {
+  children: ReactNode;
+  /** La carta real de Gastronomía (la pasa la página). */
+  VistaPrevia?: VistaPreviaRubro;
+}) {
   const [Wizard, setWizard] = useState<ComponentType<WizardProps> | null>(null);
   const [rubroInicial, setRubroInicial] = useState<string | null>(null);
   const contenedor = useRef<HTMLDivElement>(null);
@@ -88,5 +97,5 @@ export function WizardLazy({ children }: { children: ReactNode }) {
     document.querySelector<HTMLElement>(`#wizard [data-rubro="${CSS.escape(id)}"]`)?.focus();
   }, [Wizard, rubroInicial]);
 
-  return Wizard ? <Wizard rubroInicial={rubroInicial} /> : <div ref={contenedor}>{children}</div>;
+  return Wizard ? <Wizard rubroInicial={rubroInicial} VistaPrevia={VistaPrevia} /> : <div ref={contenedor}>{children}</div>;
 }

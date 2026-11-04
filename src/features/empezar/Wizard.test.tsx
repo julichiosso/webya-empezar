@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { dejarTraspasoDemo } from '@/domain/traspaso/demo-wizard';
@@ -21,6 +21,8 @@ let eventos: [string, unknown][] = [];
 let quitarSink: () => void;
 
 beforeEach(() => {
+  // Estos tests recorren el orden A (WhatsApp antes de la vista previa); el B tiene su describe.
+  window.history.replaceState(null, '', '/empezar?orden=a');
   window.sessionStorage.clear();
   fetchMock.mockReset();
   fetchMock.mockImplementation((_url: string, init?: RequestInit) => Promise.resolve(api(init)));
@@ -318,7 +320,7 @@ describe('Wizard — persistencia en sessionStorage', () => {
   it('un paso imposible se corrige (vista previa sin lead → formulario)', async () => {
     window.sessionStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ paso: 'resultado', rubro: 'comercio' }),
+      JSON.stringify({ paso: 'resultado', rubro: 'comercio', orden: 'a' }),
     );
     render(<Wizard />);
     expect(
@@ -346,21 +348,14 @@ describe('Wizard — abandono', () => {
 });
 
 describe('Wizard — pantalla 3: cómo se ve, colores y piezas', () => {
-  it('cambia celular/computadora, la paleta y las piezas (y lo mide)', async () => {
+  it('cambia la paleta', async () => {
     const u = user();
     await llegarAlResultado(u);
-    const ver = screen.getByRole('group', { name: 'Ver en' });
-    await u.click(within(ver).getByRole('button', { name: 'Computadora' }));
-    expect(within(ver).getByRole('button', { name: 'Computadora' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
     await u.click(screen.getByRole('button', { name: 'Colores Pileta' }));
     expect(screen.getByRole('button', { name: 'Colores Pileta' })).toHaveAttribute(
       'aria-pressed',
       'true',
     );
-    expect(nombres()).toEqual(expect.arrayContaining(['preview_toggle']));
   });
 
   it('la demo de Gastronomía se abre con la paleta elegida', async () => {
@@ -419,5 +414,18 @@ describe('Wizard — orden B (?orden=b)', () => {
     expect(cuerpo(0)).toMatchObject({ parcial: true, nombreNegocio: 'Luna Peluquería' });
     expect(eventos).toContainEqual(['form_enviado', expect.objectContaining({ orden: 'b' })]);
     expect(eventos).toContainEqual(['cta_click', expect.objectContaining({ destino: 'contacto' })]);
+  });
+
+  it('Gastronomía: la carta real se arma con el nombre mientras se escribe', async () => {
+    const u = user();
+    const VistaPrevia = ({ nombre }: { nombre: string }) => (
+      <div data-testid="carta-real">{nombre || 'ejemplo'}</div>
+    );
+    render(<Wizard VistaPrevia={VistaPrevia} />);
+    await elegirRubro(u, /gastronomía/i);
+    await screen.findByRole('heading', { name: /contanos de tu negocio/i });
+    expect(screen.getAllByTestId('carta-real')[0]).toHaveTextContent('ejemplo');
+    await u.type(screen.getByLabelText(/nombre de tu negocio/i), 'Lo de Tito');
+    expect(screen.getAllByTestId('carta-real')[0]).toHaveTextContent('Lo de Tito');
   });
 });
