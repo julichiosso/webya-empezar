@@ -50,6 +50,15 @@
 - 2C-a (auditoría PARCIAL, sin recorrer 375px completo; puntajes de lo visto en desktop y en el fold móvil): hero 7, wizard 7, vista previa 5 (mockup, no la plantilla real), módulos 6, prueba social 4 (sin capturas), FAQ 6, cierre 6. Peores razones de no convencer: 1) la vista previa no es el sitio real con el nombre del negocio; 2) prueba social sin capturas; 3) no hay "Por qué WebYa" ni persona detrás; 4) el mensaje por rubro está recién cableado y sin medir; 5) sin eventos de embudo ni medición de LCP.
 - Datos del dueño: el bloque llegó sin completar (placeholder): todo lo que depende de ellos queda PENDIENTE (precios, fundador, capturas, WhatsApp).
 
+## Hecho en la sesión 5
+- Capturas: `public/clientes/abelardo.webp` (375px, real). micios.com.ar NO resolvió DNS desde esta máquina: falta su captura (Micio's se muestra sin imagen; cargarla en `content/clientes.ts` campo captura/alt).
+- `PorQueWebya.tsx` + `content/por-que-webya.ts` (4 puntos ciertos + 3 objeciones con enlace a /privacidad; FUNDADOR = null, el bloque no se muestra hasta cargar nombre y foto).
+- Header nuevo (`Nav.tsx`): barra fija con línea, logo, "Ver ejemplos" y CTA naranja; sin interruptor de tema. Hero con titular + bajada.
+- Fondo: RubrosFlotantes ahora dibuja íconos SVG del set propio (cubiertos, tijera, tienda, portafolio, pesa, llave y otros) con el nombre del rubro; el rubro elegido se enciende en naranja.
+- 2C-e: el UTM ya se guarda en el lead (lib/utm.ts) y la og:image ya sale de SEO_EMPEZAR. Falta un evento "cliente_abierto" al abrir un sitio de Ya lo usan.
+- Medición mobile 375px, CPU x4, red 4G lenta: LCP 0,7-0,9 s (el H1), CLS 0.
+- Detalle visual: en desktop los íconos se transparentan detrás de la tarjeta del wizard; conviene volverla opaca.
+
 ## Pendiente priorizado (Fase 2C sin hacer)
 0. 2C: copy por resultados en los módulos; nombre del negocio + vista previa real de la plantilla antes del WhatsApp; capturas reales de clientes; sección "Por qué WebYa" y "Quién está detrás" (foto del fundador); objeciones junto a cada sección; eventos de embudo y UTM al lead; og:image real; medir LCP; botón flotante de WhatsApp (si hay número).
 

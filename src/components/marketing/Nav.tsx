@@ -1,5 +1,4 @@
 import { Logo } from '@/brand/logo/Logo';
-import { InterruptorTema } from '@/brand/tema/InterruptorTema';
 import { ButtonLink } from '@/components/ui/Button';
 import { NAV } from '@/content/empezar/nav';
 
@@ -7,20 +6,23 @@ import { NAV } from '@/content/empezar/nav';
 export const ID_CONTENIDO = 'contenido';
 
 /**
- * Nav mínima de /empezar: el logo (que se arma una vez), el interruptor de tema como ícono neutro y
- * UN solo CTA, el mismo del hero. Sin menú: cada enlace más es una decisión más antes del wizard.
- * El primer foco es "Saltar al contenido". El tema solo aplica en /empezar (src/brand/tema).
+ * Barra superior de /empezar: fija arriba, fondo crema con una línea abajo, el logo a la izquierda
+ * y a la derecha el enlace a los ejemplos y el CTA único. Sin menú ni interruptores: lo que no ayuda
+ * a empezar no está. El primer foco es "Saltar al contenido".
  */
 export function Nav() {
   return (
-    <header className="papel mx-auto text-seccion-crema-fg w-full max-w-xl px-4 pt-6 lg:max-w-page lg:px-8 lg:pt-8">
+    <header className="papel sticky top-0 z-30 border-b border-seccion-crema-linea bg-seccion-crema/90 text-seccion-crema-fg backdrop-blur">
       <a
         href={`#${ID_CONTENIDO}`}
         className="sr-only rounded-control bg-surface px-4 text-body text-fg focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:inline-flex focus:min-h-tap focus:items-center"
       >
         {NAV.saltar}
       </a>
-      <nav aria-label={NAV.aria} className="flex items-center gap-2">
+      <nav
+        aria-label={NAV.aria}
+        className="mx-auto flex h-16 w-full max-w-xl items-center gap-3 px-4 lg:max-w-page lg:px-8"
+      >
         <a
           href="/empezar"
           aria-label={NAV.inicio}
@@ -28,8 +30,13 @@ export function Nav() {
         >
           <Logo armar />
         </a>
-        <InterruptorTema etiqueta={NAV.tema.etiqueta} soloIcono />
-        <ButtonLink href="#wizard" variante="secundario" tamanio="compacto">
+        <a
+          href="#ya-lo-usan"
+          className="hidden min-h-tap items-center px-2 text-small font-semibold underline-offset-4 hover:underline sm:inline-flex"
+        >
+          {NAV.ejemplos}
+        </a>
+        <ButtonLink href="#wizard" tamanio="compacto">
           {NAV.cta}
         </ButtonLink>
       </nav>

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Seccion } from '@/components/patterns/Seccion';
+import { CLASES_SECCION, Seccion } from '@/components/patterns/Seccion';
 import { HERO } from '@/content/empezar/hero';
 
 interface HeroProps {
@@ -8,10 +8,9 @@ interface HeroProps {
 }
 
 /**
- * Hero de /empezar (fondo crema, plano): la pregunta y, enseguida, el creador. La pantalla 1 tiene
- * que entrar arriba del pliegue también en un celular chico, así que el título es corto y va pegado
- * al flujo. `overflow-clip!` evita que la sección sea contenedor de scroll y rompa el `sticky` de la
- * vista previa.
+ * Hero de /empezar (crema, plano): un titular y una línea que dice qué hacer; enseguida el creador.
+ * La pantalla 1 entra arriba del pliegue también en un celular chico. `overflow-clip!` evita que la
+ * sección sea contenedor de scroll y rompa el `sticky` de la vista previa.
  */
 export function Hero({ children }: HeroProps) {
   return (
@@ -19,14 +18,17 @@ export function Hero({ children }: HeroProps) {
       fondo="crema"
       aria-labelledby="hero-title"
       className="overflow-clip!"
-      contenidoClassName="max-w-xl pt-3 pb-12 sm:pt-10 lg:max-w-page lg:pt-10 lg:pb-16 lg:bajo:pt-6 lg:bajo:pb-12"
+      contenidoClassName="max-w-xl pt-6 pb-12 sm:pt-12 lg:max-w-page lg:pt-14 lg:pb-16"
     >
       <h1
         id="hero-title"
-        className="mb-3 text-title font-semibold text-balance sm:mb-8 sm:text-display lg:text-hero"
+        className="max-w-3xl text-display font-semibold text-balance sm:text-hero"
       >
         {HERO.titulo}
       </h1>
+      <p className={`mt-3 mb-6 max-w-xl text-lead sm:mb-10 ${CLASES_SECCION.crema.secundario}`}>
+        {HERO.subtitulo}
+      </p>
       {children}
     </Seccion>
   );

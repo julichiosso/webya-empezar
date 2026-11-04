@@ -7,7 +7,7 @@ const C = CLASES_SECCION.crema;
 export function YaLoUsan() {
   if (CLIENTES.length === 0) return null;
   return (
-    <Seccion fondo="crema" aria-labelledby="usan-title" className="diferido">
+    <Seccion fondo="crema" id="ya-lo-usan" aria-labelledby="usan-title" className="scroll-mt-16">
       <h2 id="usan-title" className="text-title font-semibold text-balance">
         {YA_LO_USAN.titulo}
       </h2>
@@ -16,8 +16,19 @@ export function YaLoUsan() {
         {CLIENTES.map((c) => (
           <li
             key={c.url}
-            className={`flex flex-wrap items-baseline justify-between gap-x-6 border-b py-4 ${C.linea}`}
+            className={`flex flex-col items-start gap-1 border-b py-6 ${C.linea}`}
           >
+            {c.captura && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={c.captura}
+                alt={c.alt ?? ''}
+                width={225}
+                height={420}
+                loading="lazy"
+                className="mb-3 h-auto w-full max-w-56 rounded-card border border-seccion-crema-linea"
+              />
+            )}
             <div>
               <p className="font-semibold">{c.nombre}</p>
               <p className={`text-small ${C.secundario}`}>{c.rubro}</p>

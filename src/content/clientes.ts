@@ -8,11 +8,19 @@ export interface Cliente {
   url: string;
   /** Captura real del sitio (ruta en /public). Sin captura, la tarjeta va sin imagen. */
   captura?: string;
+  /** Qué muestra la captura, para lectores de pantalla. */
+  alt?: string;
 }
 
 export const CLIENTES: readonly Cliente[] = [
   { nombre: "Micio's Pizzería", rubro: 'Pizzería', url: 'https://micios.com.ar' },
-  { nombre: 'Abelardo', rubro: 'Gastronomía', url: 'https://abelardo.vercel.app' },
+  {
+    nombre: 'Abelardo',
+    rubro: 'Gastronomía',
+    url: 'https://abelardo.vercel.app',
+    captura: '/clientes/abelardo.webp',
+    alt: 'Carta de Abelardo en el celular: promos del día y categorías de pizzas y pizzanesas.',
+  },
 ];
 
 export const YA_LO_USAN = {

@@ -16,26 +16,26 @@
 }
 
 .palabra {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
   white-space: nowrap;
   font-weight: 700;
   line-height: 1;
   color: var(--seccion-crema-fg);
-  opacity: 0.07;
+  opacity: 0.11;
   animation: deriva var(--dur) ease-in-out var(--delay) infinite alternate;
   transition:
     opacity 600ms ease-out,
     color 250ms ease-out;
 }
 
-.t1 {
-  font-size: 1.25rem;
+.etiqueta {
+  font-size: 0.8rem;
 }
-.t2 {
-  font-size: 2rem;
-}
-.t3 {
-  font-size: 3.25rem;
+.t3 .etiqueta {
+  font-size: 1rem;
 }
 
 /* Con un rubro elegido, el resto baja y el elegido se enciende. */
@@ -43,7 +43,7 @@
   opacity: 0.04;
 }
 .capa[data-elegido='si'] .palabra[data-activo] {
-  opacity: 0.6;
+  opacity: 0.7;
   color: var(--accent-ink);
 }
 
@@ -54,9 +54,6 @@
 @media (max-width: 639px) {
   .pos[data-i='oculto'] {
     display: none;
-  }
-  .t3 {
-    font-size: 2.25rem;
   }
 }
 

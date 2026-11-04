@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { Icon } from '@/brand/ilustracion/iconos/Icon';
+import type { IconName } from '@/brand/ilustracion/iconos/paths';
 import { RUBROS_FLOTANTES, type RubroFlotante } from '@/content/rubros-flotantes';
 import { EVENTO_RUBRO } from '@/lib/eventos';
 import estilos from './RubrosFlotantes.module.css';
@@ -16,6 +18,22 @@ interface Props {
 // Posiciones y movimiento determinísticos: mismo HTML en servidor y cliente.
 const media = (q: string) =>
   typeof window.matchMedia === 'function' && window.matchMedia(q).matches;
+
+/** Ícono de cada familia de rubros; "otro" rota entre íconos de uso general. */
+const ICONO_RUBRO: Record<string, IconName> = {
+  gastronomia: 'cubiertos',
+  peluqueria_estetica: 'tijera',
+  comercio: 'tienda',
+  profesionales: 'portafolio',
+  gimnasio_deportes: 'pesa',
+  servicios_tecnicos: 'llave',
+};
+const ICONOS_OTROS: readonly IconName[] = ['agenda', 'ticket', 'bolsa', 'mesa', 'reloj', 'chat'];
+const LADO_ICONO = [36, 52, 72] as const;
+
+function iconoDe(r: RubroFlotante, indice: number): IconName {
+  return ICONO_RUBRO[r.rubroWizard] ?? ICONOS_OTROS[indice % ICONOS_OTROS.length] ?? 'chat';
+}
 
 const num = (i: number, k: number) => {
   const v = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453;
@@ -160,7 +178,8 @@ export function RubrosFlotantes({
                 } as CSSProperties
               }
             >
-              {r.nombre}
+              <Icon name={iconoDe(r, idx)} size={LADO_ICONO[s.tam - 1] ?? 52} />
+              <span className={estilos.etiqueta}>{r.nombre}</span>
             </span>
           </span>
         );
