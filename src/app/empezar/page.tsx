@@ -8,6 +8,7 @@ import { Cierre } from '@/components/marketing/Cierre';
 import { StickyCta } from '@/components/marketing/StickyCta';
 import { RubrosFlotantes } from '@/components/marketing/RubrosFlotantes';
 import { YaLoUsan } from '@/components/marketing/YaLoUsan';
+import { MensajeRubro } from '@/components/marketing/MensajeRubro';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
 import { Hero } from '@/components/marketing/Hero';
@@ -70,6 +71,7 @@ export default function EmpezarPage() {
             </Marco>
           </WizardLazy>
         </Hero>
+        <MensajeRubro />
         <MiraLoQueCreas />
         <QueIncluye />
         <YaLoUsan />

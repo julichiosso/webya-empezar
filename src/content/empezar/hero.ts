@@ -3,7 +3,7 @@
  * Es la variante `todo_lo_digital` de content/empezar/hero-variantes.ts (un test verifica que coincidan).
  */
 export const HERO = {
-  titulo: 'Tu carta y tus pedidos, sin líos.',
+  titulo: 'Tu negocio online, armado con vos.',
   /** Segunda línea del título (más apagada): la salvedad honesta de "todo". */
   subtitulo: 'Elegí tu rubro y mirá cómo queda.',
   bajada:

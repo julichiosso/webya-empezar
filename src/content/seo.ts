@@ -14,14 +14,14 @@ export const SEO_SITIO = {
 
 /** /empezar (metadata y opengraph-image). Mismo mensaje que el hero, para que el clic no sorprenda. */
 export const SEO_EMPEZAR = {
-  titulo: 'Tu carta y tus pedidos, sin líos',
+  titulo: 'Tu negocio online, armado con vos',
   /** Hasta ~155 caracteres: lo que Google muestra sin cortar. */
   descripcion:
     'Elegí tu rubro y armá la carta con QR y los pedidos de tu negocio. Mirá cómo queda antes de decidir.',
   /** Imagen para compartir (se genera en el build). */
   og: {
-    alt: 'WebYa: tu carta y tus pedidos, sin líos. Elegí tu rubro y mirá cómo queda.',
-    titulo: 'Tu carta y tus pedidos, sin líos.',
+    alt: 'WebYa: tu negocio online, armado con vos. Elegí tu rubro y mirá cómo queda.',
+    titulo: 'Tu negocio online, armado con vos.',
     subtitulo: 'Elegí tu rubro y mirá cómo queda.',
     /** Pastillas de abajo: módulos de ejemplo y el camino a medida. */
     modulos: ['Carta con QR', 'Pedidos online'],

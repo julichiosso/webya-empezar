@@ -23,7 +23,7 @@ export const HERO_VARIANTES: readonly VarianteHero[] = [
   {
     id: 'todo_lo_digital',
     formula: 'Resultado + para quién, con la salvedad en el mismo titular',
-    titulo: 'Tu carta y tus pedidos, sin líos.',
+    titulo: 'Tu negocio online, armado con vos.',
     subtitulo: 'Elegí tu rubro y mirá cómo queda.',
     bajada:
       'Tienda, turnos, carta con QR, pedidos y pagos. Activá solo lo que usás y lo armamos con vos.',

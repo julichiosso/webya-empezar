@@ -45,8 +45,13 @@
 ## Hecho en la sesión 3 (Fase 2C parcial)
 - `content/clientes.ts` + `YaLoUsan.tsx` (micios.com.ar y abelardo.vercel.app, sin capturas todavía), `content/precios.ts` (monto null: la FAQ dice "Te pasamos un presupuesto por WhatsApp, sin compromiso"), CTA único "Crear mi sistema", hero "Tu carta y tus pedidos, sin líos." con SEO alineado.
 
+## Hecho en la sesión 4
+- 2C-b: hero genérico "Tu negocio online, armado con vos."; `content/rubros/mensajes.ts` (titular, descripción y 3 beneficios por cada uno de los 7 rubros; solo gastronomía `listo: true`, los demás dicen "Lo armamos con vos") y `MensajeRubro.tsx` (aparece bajo el hero al elegir rubro, escucha EVENTO_RUBRO).
+- 2C-a (auditoría PARCIAL, sin recorrer 375px completo; puntajes de lo visto en desktop y en el fold móvil): hero 7, wizard 7, vista previa 5 (mockup, no la plantilla real), módulos 6, prueba social 4 (sin capturas), FAQ 6, cierre 6. Peores razones de no convencer: 1) la vista previa no es el sitio real con el nombre del negocio; 2) prueba social sin capturas; 3) no hay "Por qué WebYa" ni persona detrás; 4) el mensaje por rubro está recién cableado y sin medir; 5) sin eventos de embudo ni medición de LCP.
+- Datos del dueño: el bloque llegó sin completar (placeholder): todo lo que depende de ellos queda PENDIENTE (precios, fundador, capturas, WhatsApp).
+
 ## Pendiente priorizado (Fase 2C sin hacer)
-0. 2C: auditoría con puntajes; copy por resultados en los módulos; mensaje por rubro (3 dolores/3 beneficios por rubro en content/rubros); nombre del negocio + vista previa real de la plantilla antes del WhatsApp; capturas reales de clientes; sección "Por qué WebYa" y "Quién está detrás" (foto del fundador); objeciones junto a cada sección; eventos de embudo y UTM al lead; og:image real; medir LCP; botón flotante de WhatsApp (si hay número).
+0. 2C: copy por resultados en los módulos; nombre del negocio + vista previa real de la plantilla antes del WhatsApp; capturas reales de clientes; sección "Por qué WebYa" y "Quién está detrás" (foto del fundador); objeciones junto a cada sección; eventos de embudo y UTM al lead; og:image real; medir LCP; botón flotante de WhatsApp (si hay número).
 
 ## Pendientes del dueño
 Precios (content/precios.ts), foto y nombre del fundador, más clientes, número de WhatsApp, qué módulos se entregan.
