@@ -1,0 +1,239 @@
+/* Por defecto no hay intro: se enciende solo con soporte de animation-timeline y sin reduced-motion. */
+.telon {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .telon {
+      display: block;
+      position: relative;
+      /* Una pantalla pegada y otra de salida: recorrido total 200svh. */
+      height: 200svh;
+      background-color: var(--seccion-tinta);
+    }
+
+    .escena {
+      position: sticky;
+      top: 4rem;
+      height: calc(100svh - 4rem);
+      overflow: hidden;
+      contain: paint;
+    }
+
+    .perspectiva {
+      position: absolute;
+      inset: 0;
+      perspective: 900px;
+      perspective-origin: 50% 40%;
+    }
+
+    .pared {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 220vmax;
+      margin-left: -110vmax;
+      margin-top: -55vmax;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      transform: rotateX(38deg) rotateZ(-8deg);
+    }
+
+    .fila {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100svh;
+      will-change: transform;
+    }
+    .f0 {
+      animation-name: deriva-a;
+      margin-left: 10vmax;
+    }
+    .f1 {
+      animation-name: deriva-b;
+      margin-left: 4vmax;
+    }
+    .f2 {
+      animation-name: deriva-c;
+      margin-left: 14vmax;
+    }
+
+    .captura {
+      display: block;
+      width: 11rem;
+      height: auto;
+      aspect-ratio: 375 / 560;
+      object-fit: cover;
+    }
+
+    /* Atenúa la pared al principio para que se lea el logo; se va con el scroll. */
+    .velo {
+      position: absolute;
+      inset: 0;
+      background-color: var(--seccion-tinta);
+      animation: velo linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 60svh;
+    }
+
+    .mascara {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(92vw, 1180px);
+      height: auto;
+      aspect-ratio: 1217 / 281;
+      margin-left: calc(min(92vw, 1180px) / -2);
+      margin-top: calc(min(92vw, 1180px) * 281 / 1217 / -2);
+      overflow: visible;
+      transform-origin: 50% 50%;
+      animation: abre linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100svh;
+      will-change: transform, opacity;
+    }
+    .tinta {
+      fill: var(--seccion-tinta);
+    }
+
+    .pista {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 1.25rem;
+      margin: 0;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--seccion-tinta-muted);
+      animation: pista linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100svh;
+    }
+
+    .rotulos {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 1.25rem;
+      text-align: center;
+    }
+    .rotulo {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      width: max-content;
+      max-width: calc(100% - 2rem);
+      margin: 0 auto;
+      padding: 0.5rem 1rem;
+      background-color: var(--seccion-tinta);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--seccion-tinta-fg);
+      opacity: 0;
+      animation: rotulo linear both;
+      animation-timeline: scroll(root block);
+    }
+    .r0 {
+      animation-range: 4svh 34svh;
+    }
+    .r1 {
+      animation-range: 36svh 66svh;
+    }
+    .r2 {
+      animation-range: 68svh 98svh;
+    }
+
+    .saltar {
+      position: absolute;
+      left: 0.5rem;
+      top: 0.5rem;
+      z-index: 5;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      background-color: var(--seccion-crema);
+      color: var(--seccion-crema-fg);
+      font-weight: 600;
+      transform: translateY(-300%);
+    }
+    .saltar:focus-visible {
+      transform: none;
+    }
+
+    @media (max-width: 639px) {
+      .captura {
+        width: 7.5rem;
+      }
+      .pared {
+        transform: rotateX(22deg) rotateZ(-5deg);
+      }
+      /* La barra fija con el CTA ocupa el borde de abajo en el celular. */
+      .pista,
+      .rotulos {
+        bottom: 5.5rem;
+      }
+    }
+  }
+}
+
+@keyframes abre {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(4.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(8);
+    opacity: 0;
+  }
+}
+@keyframes deriva-a {
+  to {
+    transform: translate3d(-22vmax, 0, 0);
+  }
+}
+@keyframes deriva-b {
+  to {
+    transform: translate3d(16vmax, 0, 0);
+  }
+}
+@keyframes deriva-c {
+  to {
+    transform: translate3d(-10vmax, 0, 0);
+  }
+}
+@keyframes velo {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes pista {
+  0% {
+    opacity: 1;
+  }
+  15%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes rotulo {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0.5rem, 0);
+  }
+  25%,
+  75% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}

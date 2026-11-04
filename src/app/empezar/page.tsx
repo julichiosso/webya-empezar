@@ -4,6 +4,7 @@ import { PreviewPanel } from '@/components/patterns/PreviewPanel';
 import { Marco } from '@/features/empezar/Marco';
 import { PantallaRubro } from '@/features/empezar/PantallaRubro';
 import { Cierre } from '@/components/marketing/Cierre';
+import { INTRO_ACTIVA, Telon } from '@/components/marketing/Telon';
 import { StickyCta } from '@/components/marketing/StickyCta';
 import { RubrosFlotantes } from '@/components/marketing/RubrosFlotantes';
 import { YaCrearon } from '@/components/marketing/YaCrearon';
@@ -58,6 +59,7 @@ export default function EmpezarPage() {
       />
       <RubrosFlotantes />
       <Nav />
+      {INTRO_ACTIVA && <Telon />}
       <main
         id={ID_CONTENIDO}
         className="mx-auto w-full max-w-xl px-4 pb-24 lg:max-w-page lg:px-8 lg:pb-32"

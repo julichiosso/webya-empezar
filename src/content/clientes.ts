@@ -18,6 +18,10 @@ export interface Cliente {
   /** Medidas reales del archivo, para reservar el alto (CLS 0). */
   capturaAncho: number;
   capturaAlto: number;
+  /** Recorte de la primera pantalla (375x560) para el telón de la intro. */
+  telon: string;
+  /** Rótulo corto del telón: nombre y qué hace, verdadero. */
+  rotulo: string;
   /** Qué muestra la captura, para lectores de pantalla. */
   alt: string;
 }
@@ -32,6 +36,8 @@ export const CLIENTES: readonly Cliente[] = [
     captura: '/clientes/micios.webp',
     capturaAncho: 375,
     capturaAlto: 2198,
+    telon: '/clientes/telon-micios.webp',
+    rotulo: "Micio's Pizzería · carta y pedidos",
     alt: "Inicio del sitio de Micio's Pizzería en el celular: carta con pizzas, bebidas y postres.",
   },
   {
@@ -43,6 +49,8 @@ export const CLIENTES: readonly Cliente[] = [
     captura: '/clientes/abelardo.webp',
     capturaAncho: 375,
     capturaAlto: 2178,
+    telon: '/clientes/telon-abelardo.webp',
+    rotulo: 'Abelardo Pizzas · promos y pedidos',
     alt: 'Inicio del sitio de Abelardo en el celular: promos del día y categorías de la carta.',
   },
   {
@@ -54,6 +62,8 @@ export const CLIENTES: readonly Cliente[] = [
     captura: '/clientes/fonosanjorge.webp',
     capturaAncho: 375,
     capturaAlto: 4200,
+    telon: '/clientes/telon-fonosanjorge.webp',
+    rotulo: 'Fonosanjorge · sitio de una fonoaudióloga',
     alt: 'Inicio del sitio de Fonosanjorge en el celular: presentación de la fonoaudióloga y sus especialidades.',
   },
 ];
