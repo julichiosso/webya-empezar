@@ -15,10 +15,10 @@ async function hidratado(page: Page) {
   });
 }
 
-test('desde /empezar: se abre, muestra subtítulos y capítulos, y cierra con Escape devolviendo el foco', async ({
+test('desde la demo: se abre, muestra subtítulos y capítulos, y cierra con Escape devolviendo el foco', async ({
   page,
 }) => {
-  await page.goto('/empezar');
+  await page.goto('/demo/gastronomia');
   await hidratado(page);
   await boton(page).click();
   await expect(video(page)).toBeVisible();
@@ -34,7 +34,7 @@ test('desde /empezar: se abre, muestra subtítulos y capítulos, y cierra con Es
 });
 
 test('la última escena lleva al wizard y cierra el video', async ({ page }) => {
-  await page.goto('/empezar');
+  await page.goto('/demo/gastronomia');
   await hidratado(page);
   await boton(page).click();
   await video(page)
@@ -58,7 +58,7 @@ test('desde la demo también se abre', async ({ page }) => {
 });
 
 test('sin scroll horizontal y controles de 48 px con el video abierto', async ({ page }) => {
-  await page.goto('/empezar');
+  await page.goto('/demo/gastronomia');
   await hidratado(page);
   await boton(page).click();
   await expect(video(page)).toBeVisible();
@@ -84,7 +84,7 @@ test.describe('accesibilidad y movimiento reducido', () => {
   test.use({ reducedMotion: 'reduce' });
 
   test('el video no tiene violaciones WCAG AA y las escenas aparecen quietas', async ({ page }) => {
-    await page.goto('/empezar');
+    await page.goto('/demo/gastronomia');
     await hidratado(page);
     await boton(page).click();
     await expect(video(page)).toBeVisible();

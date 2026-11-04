@@ -122,7 +122,7 @@ test('demo — panel del dueño con pedidos', async ({ page, viewport }) => {
 });
 
 test('video explicativo — última escena', async ({ page }) => {
-  await page.goto('/empezar');
+  await page.goto('/demo/gastronomia');
   await page.getByRole('button', { name: /mirá cómo funciona/i }).click();
   const video = page.getByRole('dialog', { name: 'Cómo funciona WebYa' });
   await video.getByRole('button', { name: 'Pausar' }).click();

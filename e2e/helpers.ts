@@ -61,7 +61,6 @@ export const TITULO_COMPLETAR = 'Contanos un poco más';
 export const TITULO_GRACIAS = 'Listo, ya nos llegaron tus datos';
 
 /** Módulos que sugiere el rubro peluquería (los que van en el lead y en la vista previa). */
-export const MODULOS_PELUQUERIA = ['turnos', 'catalogo', 'pagos', 'clientes', 'notificaciones'];
 
 /**
  * La pantalla 1 llega en el HTML del servidor (arriba del pliegue): se espera a que se vea. El
@@ -93,7 +92,9 @@ export type Destino = 'rubro' | 'negocio' | 'resultado' | 'completar';
 
 /** Lleva el flujo hasta la pantalla pedida con peluquería y el negocio dado. */
 export async function irAlPaso(page: Page, destino: Destino, query = '', negocio?: string) {
-  await page.goto(`/empezar${query}`);
+  // Orden A (WhatsApp antes de la vista previa); el B tiene su propio test.
+  const url = query.includes("orden=") ? query : `${query}${query.includes("?") ? "&" : "?"}orden=a`;
+  await page.goto(`/empezar${url}`);
   await abrirWizard(page);
   await expect(wizard(page).getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
   if (destino === 'rubro') return;

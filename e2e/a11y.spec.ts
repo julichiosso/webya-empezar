@@ -20,6 +20,8 @@ async function auditar(page: Page) {
   );
   await page.waitForTimeout(400);
   const r = await new AxeBuilder({ page })
+    // La capa de palabras de fondo es decorativa (aria-hidden) y a propósito casi transparente.
+    .exclude('[data-plena]')
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
     .analyze();
   expect(

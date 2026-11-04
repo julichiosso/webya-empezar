@@ -9,6 +9,7 @@ import {
   useReducer,
   useRef,
   useState,
+  useSyncExternalStore,
   type ComponentType,
 } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
@@ -68,6 +69,21 @@ const variantes = {
   salir: (dir: number) => ({ opacity: 0, x: dir * -28 }),
 };
 
+/** Desde lg la vista previa vive a la derecha; debajo, dentro de la pantalla. Se monta una sola. */
+const CONSULTA_LG = '(min-width: 64rem)';
+function useEsLg(): boolean {
+  return useSyncExternalStore(
+    (avisar) => {
+      if (typeof window.matchMedia !== 'function') return () => undefined;
+      const mq = window.matchMedia(CONSULTA_LG);
+      mq.addEventListener('change', avisar);
+      return () => mq.removeEventListener('change', avisar);
+    },
+    () => typeof window.matchMedia !== 'function' || window.matchMedia(CONSULTA_LG).matches,
+    () => true,
+  );
+}
+
 /** La carta real del rubro con plantilla (la trae la página: features no se importan entre sí). */
 export type VistaPreviaRubro = ComponentType<{ nombre: string; paleta?: string | null }>;
 
@@ -84,6 +100,7 @@ interface WizardProps {
  */
 export function Wizard({ rubroInicial = null, VistaPrevia }: WizardProps) {
   const [state, dispatch] = useReducer(reducer, ESTADO_INICIAL);
+  const esLg = useEsLg();
   const [errorPaso, setErrorPaso] = useState<string | null>(null);
   /** El guardado del lead falló por red o servidor: la vista previa se muestra igual. */
   const [sinGuardar, setSinGuardar] = useState(false);
@@ -369,9 +386,9 @@ export function Wizard({ rubroInicial = null, VistaPrevia }: WizardProps) {
         }
         activos={paso === 'rubro' ? [] : modulos}
       />
-    ) : (
+    ) : esLg ? (
       <div data-testid="negocio-preview-panel">{vistaPrevia}</div>
-    );
+    ) : null;
 
   useEffect(() => {
     if (paso === 'resultado' && !aMedida && state.rubro) {
@@ -446,14 +463,14 @@ export function Wizard({ rubroInicial = null, VistaPrevia }: WizardProps) {
                 />
               )}
               {/* En celular la carta se arma acá mismo, mientras escribe el nombre. */}
-              {paso === 'negocio' && conCarta && ordenB && (
+              {paso === 'negocio' && conCarta && ordenB && !esLg && (
                 <div className="mt-8 lg:hidden">{vistaPrevia}</div>
               )}
               {paso === 'resultado' && (
                 <StepVistaPrevia
                   nombreNegocio={nombreNegocio}
                   aMedida={aMedida}
-                  preview={<div data-testid="negocio-preview">{vistaPrevia}</div>}
+                  preview={esLg ? null : <div data-testid="negocio-preview">{vistaPrevia}</div>}
                   controles={controles}
                   cta={cta}
                   ctaEnBarra={ctaAccionable}

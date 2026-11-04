@@ -24,7 +24,7 @@ interface StepVistaPreviaProps {
   /** "Otro": sin vista previa, la pantalla honesta de "Lo armamos a medida". */
   aMedida: boolean;
   /** La vista previa (en celular va acá; en escritorio vive en la columna derecha). */
-  preview: ReactNode;
+  preview: ReactNode | null;
   controles: ControlesPreview | null;
   /** El CTA principal ya armado (link a WhatsApp o, en el orden B, el paso al contacto). */
   cta: ReactNode;

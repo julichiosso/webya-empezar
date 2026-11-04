@@ -142,6 +142,7 @@
   --subtle: var(--paper-muted);
   --line: var(--paper-line);
   --line-strong: rgb(11 11 12 / 0.32);
+  --danger: var(--rosa-700);
 
   /*
    * Componente otra vez: un var() se resuelve donde se declara, así que los de :root quedarían

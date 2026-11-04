@@ -1,185 +1,116 @@
 import { expect, test, type Page } from '@playwright/test';
-import { NAV } from '../src/content/empezar/nav';
 import { STICKY_CTA } from '../src/content/empezar/cta-final';
 import { HERO } from '../src/content/empezar/hero';
-import { getPlantilla } from '../src/content/rubros';
-import {
-  abrirWizard,
-  elegirRubro,
-  enviarNegocio,
-  irAlPaso,
-  TITULO_NEGOCIO,
-  TITULO_RESULTADO,
-  TITULO_RUBRO,
-  wizard,
-} from './helpers';
+import { CLIENTES } from '../src/content/clientes';
+import { OBJECIONES } from '../src/content/por-que-webya';
+import { abrirWizard, irAlPaso, TITULO_NEGOCIO, TITULO_RUBRO, wizard } from './helpers';
 
-// Layout responsive. Los chequeos de escritorio (lg ≥ 1024 px) se saltean en celular y tablet.
+// Layout responsive de la página nueva. Los chequeos de escritorio (lg ≥ 1024 px) se saltean en
+// celular y tablet.
 const ANCHO_LG = 1024;
-const ancho = (page: Page) => page.viewportSize()?.width ?? 0;
-const esLg = (page: Page) => ancho(page) >= ANCHO_LG;
+const esLg = (page: Page) => (page.viewportSize()?.width ?? 0) >= ANCHO_LG;
+const sobra = (page: Page) =>
+  page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 
-/** Cantidad de posiciones X distintas (≈ columnas) entre los elementos que matchean. */
-async function columnas(page: Page, selector: string) {
-  return page
-    .locator(selector)
-    .evaluateAll((els) => new Set(els.map((e) => Math.round(e.getBoundingClientRect().left))).size);
-}
-
-/**
- * Renglones visuales que ocupa el texto de un elemento: suma los fragmentos de línea de cada
- * nodo de texto (un nodo en una sola línea da 1). No cuenta cajas de bloque.
- */
-async function lineas(page: Page, selector: string) {
-  return page
-    .locator(selector)
-    .first()
-    .evaluate((el) => {
-      const recorrido = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-      let total = 0;
-      for (let n = recorrido.nextNode(); n; n = recorrido.nextNode()) {
-        if (!n.textContent?.trim()) continue;
-        const rango = document.createRange();
-        rango.selectNodeContents(n);
-        total += [...rango.getClientRects()].filter((r) => r.width > 0).length;
-      }
-      return total;
-    });
-}
-
-/**
- * Renglones de un titular que encastra (TituloEncastre): cada palabra es una pieza inline-block, así
- * que se cuentan las alturas distintas de las piezas (no los fragmentos de cada nodo de texto).
- * Con `offsetTop` (posición de layout): no lo mueve el transform de la entrada que encastra.
- */
-async function renglonesDePiezas(page: Page, selector: string) {
-  return page
-    .locator(selector)
-    .first()
-    .evaluate(
-      (el) =>
-        new Set(
-          [...el.querySelectorAll<HTMLElement>('[data-pieza]')].map((p) =>
-            Math.round(p.offsetTop / 8),
-          ),
-        ).size,
-    );
-}
-
-test('las cotas del plano quedan en los márgenes: nunca cruzan un texto', async ({ page }) => {
-  await page.goto('/empezar');
-  const cruces = await page.evaluate(() => {
-    const seCruzan = (a: DOMRect, b: DOMRect) =>
-      a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
-    const salida: string[] = [];
-    for (const svg of document.querySelectorAll('svg[data-plano="cotas"]')) {
-      const seccion = svg.closest('section') ?? svg.parentElement!;
-      const textos = [...seccion.querySelectorAll('h1, h2, h3, p, li, a, button, label')].map((t) =>
-        t.getBoundingClientRect(),
-      );
-      // Cada trazo visible de las capas de cotas y registro (las ocultas miden 0).
-      for (const trazo of svg.querySelectorAll('[data-plano-capa] path, [data-plano-capa] rect')) {
-        const caja = trazo.getBoundingClientRect();
-        if (caja.width === 0 && caja.height === 0) continue;
-        if (textos.some((t) => t.width > 0 && seCruzan(caja, t)))
-          salida.push(`${seccion.getAttribute('aria-labelledby')}: ${JSON.stringify(caja)}`);
-      }
-    }
-    return salida;
-  });
-  expect(cruces).toEqual([]);
-});
-
-test('"Mirá lo que creás": elegir un rubro cambia la vista previa (con mouse y con flechas)', async ({
-  page,
-}) => {
-  await page.goto('/empezar');
-  const seccion = page.locator('#mira-lo-que-creas');
-  const visibles = () =>
-    seccion
-      .locator('[data-vista]')
-      .evaluateAll((els) =>
-        els.filter((e) => getComputedStyle(e).display !== 'none').map((e) => e.dataset.vista),
-      );
-  // Por defecto, el primer rubro; una sola vista a la vez y es la vista previa real (no una captura).
-  expect(await visibles()).toEqual(['peluqueria_estetica']);
-  const vista = seccion
-    .locator('[data-vista="peluqueria_estetica"]')
-    .getByTestId('preview-negocio');
-  await expect(vista).toBeVisible();
-  await expect(vista).toHaveAttribute('data-rubro', 'peluqueria_estetica');
-
-  await seccion.locator('input[value="gastronomia"]').check();
-  expect(await visibles()).toEqual(['gastronomia']);
-  // Grupo de radios nativo: las flechas pasan al siguiente.
-  await page.keyboard.press('ArrowDown');
-  await expect(seccion.locator('input[value="comercio"]')).toBeChecked();
-  expect(await visibles()).toEqual(['comercio']);
-  // Opciones de 48 px.
-  for (const caja of await seccion
-    .locator('label:has(input[type="radio"])')
-    .evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height)))
-    expect(caja).toBeGreaterThanOrEqual(47.5);
-});
-
-test('no hay scroll horizontal, ni en el formulario ni en la vista previa', async ({ page }) => {
-  const sobra = () =>
-    page.evaluate(
-      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-    );
-  await irAlPaso(page, 'negocio');
-  expect(await sobra()).toBeLessThanOrEqual(0);
-  await enviarNegocio(page);
-  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
-  expect(await sobra()).toBeLessThanOrEqual(0);
-});
-
-test("el caso real de Micio's no se publica sin permiso (flag apagado)", async ({ page }) => {
-  await page.goto('/empezar');
-  await expect(page.locator('#caso-real-title')).toHaveCount(0);
-  await expect(page.getByText("Micio's")).toHaveCount(0);
-});
-
-test('/sistema sin scroll horizontal (vitrina completa, también en celular)', async ({ page }) => {
-  await page.goto('/sistema');
-  const sobra = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  );
-  expect(sobra).toBeLessThanOrEqual(0);
-});
-
-test('/marca sin scroll horizontal (tablas de contraste incluidas)', async ({ page }) => {
-  await page.goto('/marca');
-  const sobra = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  );
-  expect(sobra).toBeLessThanOrEqual(0);
-});
-
-test('tema: oscuro por defecto, el interruptor de la nav pasa a claro y se recuerda al recargar', async ({
-  page,
-}) => {
-  await page.goto('/empezar');
-  const html = page.locator('html');
-  await expect(html).not.toHaveAttribute('data-theme', 'light');
-  const interruptor = page
-    .getByRole('navigation', { name: NAV.aria })
-    .getByRole('button', { name: NAV.tema.etiqueta });
-  await expect(interruptor).toHaveAttribute('aria-pressed', 'false');
-  // Uno solo en la página: el pie ya no lo lleva.
-  await expect(page.getByRole('button', { name: NAV.tema.etiqueta })).toHaveCount(1);
-  await interruptor.click();
-  await expect(html).toHaveAttribute('data-theme', 'light');
-  await page.reload();
-  // El script en línea lo aplica antes de hidratar: el atributo ya está y el botón queda presionado.
-  await expect(html).toHaveAttribute('data-theme', 'light');
-  await expect(interruptor).toHaveAttribute('aria-pressed', 'true');
-
-  // El claro es solo de /empezar: la demo y /marca siguen en oscuro con el claro guardado.
-  for (const ruta of ['/demo/gastronomia', '/marca']) {
-    await page.goto(ruta);
-    await expect(html).not.toHaveAttribute('data-theme', 'light');
+/** Recorre la página para que las secciones diferidas (content-visibility) se dibujen. */
+async function recorrer(page: Page) {
+  const alto = await page.evaluate(() => document.documentElement.scrollHeight);
+  for (let y = 0; y < alto; y += 500) {
+    await page.evaluate((v) => window.scrollTo(0, v), y);
+    await page.waitForTimeout(60);
   }
+}
+
+test('sin scroll horizontal: página completa, formulario y vista previa', async ({ page }) => {
+  await page.goto('/empezar');
+  await abrirWizard(page);
+  expect(await sobra(page)).toBeLessThanOrEqual(0);
+  await recorrer(page);
+  expect(await sobra(page)).toBeLessThanOrEqual(0);
+  await irAlPaso(page, 'negocio');
+  expect(await sobra(page)).toBeLessThanOrEqual(0);
+  // El flujo queda guardado en la sesión: se parte de cero para llegar a la vista previa.
+  await page.evaluate(() => window.sessionStorage.clear());
+  await irAlPaso(page, 'resultado');
+  expect(await sobra(page)).toBeLessThanOrEqual(0);
+});
+
+test('/sistema y /marca sin scroll horizontal', async ({ page }) => {
+  for (const ruta of ['/sistema', '/marca']) {
+    await page.goto(ruta);
+    expect(await sobra(page), ruta).toBeLessThanOrEqual(0);
+  }
+});
+
+test('el CTA "Crear mi sistema" está en el header desde el primer cuadro', async ({ page }) => {
+  await page.goto('/empezar');
+  const cta = page.getByRole('banner').getByRole('link', { name: 'Crear mi sistema' });
+  await expect(cta).toBeVisible();
+  const caja = (await cta.boundingBox())!;
+  expect(caja.y + caja.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+});
+
+test('el h1 y el wizard existen en el DOM y el titular está arriba del flujo', async ({ page }) => {
+  await page.goto('/empezar');
+  await expect(page.getByRole('heading', { level: 1, name: HERO.titulo })).toBeVisible();
+  const h1 = (await page.locator('h1').boundingBox())!;
+  const flujo = (await wizard(page).boundingBox())!;
+  expect(h1.y + h1.height).toBeLessThanOrEqual(flujo.y);
+  const main = (await page.locator('main').boundingBox())!;
+  expect(main.width).toBeLessThanOrEqual(1200);
+});
+
+test('rubros flotantes: solo palabras, sin íconos, y casi invisibles sobre las secciones con texto', async ({
+  page,
+}) => {
+  await page.goto('/empezar');
+  const capa = page.locator('[data-plena]');
+  await expect(capa).toHaveAttribute('aria-hidden', 'true');
+  await expect(capa.locator('svg, img')).toHaveCount(0);
+  await expect(capa).toHaveAttribute('data-plena', 'si');
+  await page.locator('#ya-lo-usan').scrollIntoViewIfNeeded();
+  await expect(capa).toHaveAttribute('data-plena', 'no');
+  await expect
+    .poll(async () => Number(await capa.evaluate((e) => getComputedStyle(e).opacity)))
+    .toBeLessThanOrEqual(0.25);
+});
+
+test('Ya crearon con WebYa: un índice por rubro con capturas grandes y enlaces seguros', async ({
+  page,
+}) => {
+  await page.goto('/empezar');
+  const seccion = page.locator('#ya-lo-usan');
+  await seccion.scrollIntoViewIfNeeded();
+  await recorrer(page);
+  await expect(seccion.locator('li')).toHaveCount(CLIENTES.length);
+  const marcos = seccion.locator('a[tabindex="-1"]');
+  await expect(marcos).toHaveCount(CLIENTES.length);
+  const medidas = await marcos.evaluateAll((els) =>
+    els.map((e) => {
+      const r = e.getBoundingClientRect();
+      return { w: Math.round(r.width), h: Math.round(r.height) };
+    }),
+  );
+  // Mismo alto para todas y a partir de 320 px de ancho en escritorio.
+  expect(new Set(medidas.map((m) => m.h)).size).toBe(1);
+  if (esLg(page)) for (const m of medidas) expect(m.w).toBeGreaterThanOrEqual(320);
+  for (const enlace of await seccion.locator('a[href^="https://"]').all()) {
+    await expect(enlace).toHaveAttribute('target', '_blank');
+    await expect(enlace).toHaveAttribute('rel', 'noopener noreferrer');
+  }
+  expect(await seccion.locator('img').count()).toBe(CLIENTES.length);
+});
+
+test('las objeciones están junto a su sección', async ({ page }) => {
+  await page.goto('/empezar');
+  await recorrer(page);
+  for (const o of OBJECIONES)
+    await expect(page.locator('dt', { hasText: o.pregunta }).first()).toBeVisible();
+});
+
+test('la intro del telón está apagada por defecto', async ({ page }) => {
+  await page.goto('/empezar');
+  await expect(page.locator('[data-telon]')).toHaveCount(0);
 });
 
 test.describe('escritorio (lg y más)', () => {
@@ -187,30 +118,7 @@ test.describe('escritorio (lg y más)', () => {
     test.skip(!esLg(page), 'solo escritorio');
   });
 
-  test('hero: el titular arriba y la pantalla 1 entera en el primer viewport, dentro de 1200 px', async ({
-    page,
-  }) => {
-    await page.goto('/empezar');
-    const h1 = (await page.locator('h1').boundingBox())!;
-    const flujo = (await wizard(page).boundingBox())!;
-    expect(h1.y + h1.height).toBeLessThanOrEqual(flujo.y);
-    const main = (await page.locator('main').boundingBox())!;
-    expect(main.width).toBeLessThanOrEqual(1200);
-    const ultima = (await wizard(page).locator('[data-rubro]').last().boundingBox())!;
-    expect(ultima.y + ultima.height).toBeLessThanOrEqual(page.viewportSize()!.height);
-  });
-
-  test('título en hasta 3 líneas, salvedad gris en una y copy del hero', async ({ page }) => {
-    await page.goto('/empezar');
-    // El h1 encastra palabra por palabra (TituloEncastre): su nombre accesible es el titular entero.
-    await expect(page.locator('h1')).toContainText(HERO.titulo);
-    await expect(page.getByRole('heading', { level: 1, name: HERO.titulo })).toBeVisible();
-    await expect(page.locator('#hero-salvedad')).toHaveText(HERO.subtitulo);
-    expect(await lineas(page, '#hero-salvedad')).toBe(1);
-    expect(await renglonesDePiezas(page, 'h1')).toBeLessThanOrEqual(3);
-  });
-
-  test('flujo en 2 paneles: pantalla a la izquierda y vista previa sticky a la derecha', async ({
+  test('flujo en 2 paneles: pantalla a la izquierda y vista previa a la derecha', async ({
     page,
   }) => {
     await page.goto('/empezar');
@@ -220,96 +128,20 @@ test.describe('escritorio (lg y más)', () => {
     const paso = (await wizard(page).getByRole('heading', { name: TITULO_RUBRO }).boundingBox())!;
     const prev = (await panel.boundingBox())!;
     expect(paso.x + paso.width).toBeLessThan(prev.x);
-
-    // Sticky: con el flujo parcialmente scrolleado, el panel sigue a la vista.
-    await elegirRubro(page, 'comercio');
-    await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
-    await page.evaluate(() => {
-      const w = document.querySelector('#wizard')!.getBoundingClientRect();
-      window.scrollBy(0, w.top + 200);
-    });
-    const arriba = (await panel.boundingBox())!;
-    expect(arriba.y).toBeGreaterThanOrEqual(0);
   });
 
-  test('la vista previa refleja el rubro, sus módulos y el nombre en vivo', async ({ page }) => {
+  test('Gastronomía: la carta real se arma con el nombre mientras se escribe', async ({ page }) => {
     await page.goto('/empezar');
     await abrirWizard(page);
-    const panel = page.getByTestId('negocio-preview-panel');
-    await expect(panel).toContainText('Tu negocio');
-    await elegirRubro(page, 'comercio');
-    // La vista previa por rubro (navegador): la web de ejemplo de una tienda, sin huecos.
-    const vista = panel.getByTestId('preview-negocio');
-    await expect(vista).toHaveAttribute('data-rubro', 'comercio');
-    await expect(vista).toHaveAttribute('data-dispositivo', 'escritorio');
-    await expect(vista).toContainText(getPlantilla('comercio')!.portada.tituloDeEjemplo);
-    await expect(vista.locator('[data-hueco]')).toHaveCount(0);
-    await wizard(page).getByLabel('Nombre de tu negocio').fill('Tienda Sol');
-    await expect(vista).toContainText('Tienda Sol');
-  });
-
-  test('"Qué podés activar" es un mapa de piezas (filas completas, anchos distintos)', async ({
-    page,
-  }) => {
-    await page.goto('/empezar');
-    const piezas = page.locator('[data-mapa-piezas] > li');
-    await expect(piezas).toHaveCount(8);
-    // Varias piezas por fila (al menos 3 posiciones X), en 3 filas.
-    expect(await columnas(page, '[data-mapa-piezas] > li')).toBeGreaterThanOrEqual(3);
-    const cajas = await piezas.evaluateAll((els) =>
-      els.map((e) => {
-        const r = e.getBoundingClientRect();
-        return { top: Math.round(r.top), left: r.left, right: r.right, width: Math.round(r.width) };
-      }),
-    );
-    expect(new Set(cajas.map((c) => c.top)).size).toBe(3);
-    // No son tarjetas iguales: al menos 3 anchos distintos.
-    expect(new Set(cajas.map((c) => c.width)).size).toBeGreaterThanOrEqual(3);
-    // Cada fila encastra de borde a borde del tablero (sin huecos al final).
-    const tablero = (await page.locator('[data-mapa-piezas]').boundingBox())!;
-    for (const top of new Set(cajas.map((c) => c.top))) {
-      const fila = cajas.filter((c) => c.top === top);
-      expect(Math.max(...fila.map((c) => c.right))).toBeGreaterThan(tablero.x + tablero.width - 4);
-      expect(Math.min(...fila.map((c) => c.left))).toBeLessThan(tablero.x + 4);
-    }
-  });
-
-  test('FAQ: las objeciones en 2 columnas (pregunta | respuesta) y las dudas alineadas', async ({
-    page,
-  }) => {
-    await page.goto('/empezar');
-    // Las objeciones, a la vista: la pregunta a la izquierda y la respuesta a la derecha, en 2 columnas.
-    const faq = page.locator('section[aria-labelledby="faq-title"]');
-    const objeciones = faq.locator('[data-objecion]');
-    await expect(objeciones).toHaveCount(4);
-    expect(await columnas(page, 'section[aria-labelledby="faq-title"] [data-objecion] > *')).toBe(
-      2,
-    );
-    for (const o of await objeciones.all()) {
-      const pregunta = (await o.locator('h3').boundingBox())!;
-      const respuesta = (await o.locator('p').first().boundingBox())!;
-      expect(pregunta.x + pregunta.width).toBeLessThan(respuesta.x);
-    }
-    // Las dudas de detalle, en una sola columna alineada con las respuestas.
-    expect(await columnas(page, 'section[aria-labelledby="faq-title"] details')).toBe(1);
-    const duda = (await faq.locator('details').first().boundingBox())!;
-    const respuesta = (await objeciones.first().locator('p').first().boundingBox())!;
-    expect(Math.abs(duda.x - respuesta.x)).toBeLessThanOrEqual(1);
-  });
-
-  test('títulos de sección de una línea y descripciones de una sola frase', async ({ page }) => {
-    await page.goto('/empezar');
-    for (const id of ['incluye-title', 'faq-title']) {
-      expect(await lineas(page, `#${id}`)).toBe(1);
-    }
-    const textos = await page
-      .locator(
-        'section[aria-labelledby="incluye-title"] [data-mapa-piezas] li p, #incluye-title + p',
-      )
-      .allTextContents();
-    expect(textos.length).toBeGreaterThanOrEqual(5);
-    // Una sola frase: ningún punto/!/? seguido de otra palabra. Los TODO visibles (data-todo) no cuentan.
-    for (const t of textos) expect(t, t).not.toMatch(/[.!?]\s+\S/);
+    await wizard(page).locator('[data-rubro="gastronomia"]').click();
+    await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
+    const carta = page.getByTestId('negocio-preview-panel').getByTestId('vista-previa-carta');
+    await expect(carta).toBeVisible();
+    await wizard(page).getByLabel('Nombre de tu negocio').fill('Lo de Tito');
+    await expect(carta).toContainText('Lo de Tito');
+    await expect(carta).toContainText('platos y precios de ejemplo');
+    // Sin pedir WhatsApp todavía.
+    await expect(wizard(page).getByLabel('Tu WhatsApp')).toHaveCount(0);
   });
 });
 
@@ -322,34 +154,28 @@ test.describe('debajo de lg (celular y tablet)', () => {
     await page.goto('/empezar');
     const barra = page.getByRole('region', { name: STICKY_CTA.aria });
     await expect(barra).toHaveAttribute('data-visible', 'false');
-    // Entre secciones (sin hero, flujo, cierre ni pie a la vista): aparece.
-    await page.locator('section[aria-labelledby="incluye-title"]').scrollIntoViewIfNeeded();
+    await page.locator('#ya-lo-usan').scrollIntoViewIfNeeded();
     await page.mouse.wheel(0, 200);
     await expect(barra).toHaveAttribute('data-visible', 'true');
     await expect(barra.getByRole('link', { name: STICKY_CTA.cta })).toHaveAttribute(
       'href',
       '#wizard',
     );
-    // En el flujo ya hay a dónde tocar: se esconde.
     await page.evaluate(() => window.scrollTo(0, 0));
     await expect(barra).toHaveAttribute('data-visible', 'false');
   });
 
-  test('una columna: la pantalla 1 entera sin scroll y la vista previa dentro de la pantalla 3', async ({
+  test('Gastronomía: la carta real aparece dentro de la pantalla 2, debajo del nombre', async ({
     page,
   }) => {
     await page.goto('/empezar');
     await abrirWizard(page);
-    const ultima = (await wizard(page).locator('[data-rubro]').last().boundingBox())!;
-    expect(ultima.y + ultima.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+    await wizard(page).locator('[data-rubro="gastronomia"]').click();
+    await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
+    await wizard(page).getByLabel('Nombre de tu negocio').fill('Lo de Tito');
+    const carta = page.getByTestId('vista-previa-carta').first();
+    await expect(carta).toContainText('Lo de Tito');
     await expect(page.getByTestId('negocio-preview-panel')).toBeHidden();
-    await irAlPaso(page, 'resultado');
-    await expect(page.getByTestId('negocio-preview-panel')).toBeHidden();
-    await expect(page.getByTestId('negocio-preview')).toBeVisible();
-    // En celular, la vista previa es un celular con la web del rubro y el nombre del negocio.
-    const vista = page.getByTestId('negocio-preview').getByTestId('preview-negocio');
-    await expect(vista).toHaveAttribute('data-dispositivo', 'celular');
-    await expect(vista).toContainText('Luna Peluquería');
   });
 
   test('pantalla 3: el CTA va en una barra fija abajo, sin la barra general encima', async ({

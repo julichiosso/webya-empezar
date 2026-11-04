@@ -21,15 +21,17 @@ export function Objeciones({ donde }: Props) {
             <dt className="font-semibold">{o.pregunta}</dt>
             <dd className={`mt-1 text-small ${C.secundario}`}>
               {o.precio ? PRECIO_SIN_DEFINIR : o.respuesta}
-              {o.enlace && (
-                <>
-                  {' '}
-                  <a href={o.enlace.href} className="underline underline-offset-4">
-                    {o.enlace.texto}
-                  </a>
-                </>
-              )}
             </dd>
+            {o.enlace && (
+              <dd>
+                <a
+                  href={o.enlace.href}
+                  className="inline-flex min-h-tap items-center text-small underline underline-offset-4"
+                >
+                  {o.enlace.texto}
+                </a>
+              </dd>
+            )}
           </div>
         ))}
       </dl>

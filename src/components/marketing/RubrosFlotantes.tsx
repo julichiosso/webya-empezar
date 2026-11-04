@@ -57,6 +57,8 @@ export function RubrosFlotantes({
   const [saliendo, setSaliendo] = useState<number | null>(null);
   const [elegido, setElegido] = useState<string | null>(null);
   const [plena, setPlena] = useState(true);
+  /** La intro del telón está en pantalla: las palabras esperan a que termine de abrirse. */
+  const [enIntro, setEnIntro] = useState(false);
   const capa = useRef<HTMLDivElement>(null);
   const indicesRef = useRef(indices);
 
@@ -114,6 +116,14 @@ export function RubrosFlotantes({
   }, []);
 
   useEffect(() => {
+    const intro = document.querySelector('[data-telon]');
+    if (!intro || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([e]) => setEnIntro(!!e?.isIntersecting));
+    io.observe(intro);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
     const alElegir = (e: Event) => {
       const id = (e as CustomEvent<string | null>).detail ?? null;
       setElegido(id);
@@ -159,6 +169,7 @@ export function RubrosFlotantes({
       className={estilos.capa}
       data-elegido={elegido ? 'si' : 'no'}
       data-plena={plena ? 'si' : 'no'}
+      data-intro={enIntro ? 'si' : 'no'}
     >
       {indices.map((idx, slot) => {
         const r = rubros[idx];

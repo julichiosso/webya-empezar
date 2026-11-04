@@ -53,7 +53,7 @@ const faqJsonLd = {
 
 export default function EmpezarPage() {
   return (
-    <div className="fondo-rubros relative bg-seccion-crema">
+    <div className="fondo-rubros papel relative bg-seccion-crema text-seccion-crema-fg">
       <script
         type="application/ld+json"
         // Se escapa "<" para que ningún texto pueda cerrar la etiqueta <script>.

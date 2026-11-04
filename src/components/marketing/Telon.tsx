@@ -26,7 +26,7 @@ const RECT = { x: -8000, y: -8000, width: 17000, height: 16300 } as const;
  */
 export function Telon() {
   return (
-    <div className={estilos.telon}>
+    <div className={estilos.telon} data-telon>
       <a href={`#${DESTINO}`} className={estilos.saltar}>
         {TELON.saltar}
       </a>

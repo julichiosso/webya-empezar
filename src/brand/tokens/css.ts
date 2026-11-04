@@ -29,6 +29,8 @@ export function generarTokensCss(): string {
   const papel = [
     ...Object.entries(TEMA_PAPEL).map(([k, v]) => decl(k, `var(--${v})`)),
     decl('line-strong', LINEA_FUERTE_PAPEL.valor),
+    // Texto de error: el rosa claro del oscuro no llega a AA sobre crema.
+    decl('danger', 'var(--rosa-700)'),
   ];
   const movimiento = Object.entries(MOVIMIENTO).map(([k, v]) => decl(k, v));
   const componentes = Object.entries(COMPONENTES).map(([k, v]) => decl(k, `var(--${v})`));

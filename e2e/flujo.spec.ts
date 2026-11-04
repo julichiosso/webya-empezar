@@ -6,7 +6,6 @@ import {
   enviarNegocio,
   irAlPaso,
   leerLeads,
-  MODULOS_PELUQUERIA,
   negocioUnico,
   TITULO_A_MEDIDA,
   TITULO_GRACIAS,
@@ -26,7 +25,7 @@ test('recorrido completo: rubro → formulario (lead parcial) → vista previa �
     if (r.url().includes('/api/leads')) respuestas.push(`${r.request().method()} ${r.status()}`);
   });
 
-  await page.goto('/empezar?utm_source=instagram&utm_medium=bio&utm_campaign=lanzamiento');
+  await page.goto('/empezar?utm_source=instagram&utm_medium=bio&utm_campaign=lanzamiento&orden=a');
   await abrirWizard(page);
   await elegirRubro(page);
   await enviarNegocio(page, { negocio, ciudad: 'San Jorge' });
@@ -40,7 +39,7 @@ test('recorrido completo: rubro → formulario (lead parcial) → vista previa �
     whatsapp: '+5491123456789',
     rubro: 'peluqueria_estetica',
     ciudad: 'San Jorge',
-    modulos: MODULOS_PELUQUERIA,
+    modulos: [],
     utm_source: 'instagram',
     utm_medium: 'bio',
     utm_campaign: 'lanzamiento',
@@ -54,7 +53,6 @@ test('recorrido completo: rubro → formulario (lead parcial) → vista previa �
   const texto = decodeURIComponent((await cta.getAttribute('href')) ?? '');
   expect(texto).toContain(negocio);
   expect(texto).toContain('Peluquería y estética');
-  expect(texto).toContain('Turnos y reservas');
 
   // Secundario: completar con el token (PATCH) → gracias.
   await wizard(page)
@@ -100,12 +98,12 @@ test('Gastronomía: la demo completa se abre con el nombre y la paleta elegidos'
   await page.goto('/empezar');
   await abrirWizard(page);
   await elegirRubro(page, 'gastronomia');
-  await enviarNegocio(page, { negocio: 'Lo de Tito' });
+  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
+  await wizard(page).getByLabel('Nombre de tu negocio').fill('Lo de Tito');
+  await wizard(page).getByRole('button', { name: /ver cómo me queda/i }).click();
   await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
   await wizard(page).getByRole('button', { name: 'Colores Pileta' }).click();
-  await expect(
-    wizard(page).locator('[data-testid="preview-negocio"][data-paleta="pileta"]').first(),
-  ).toBeAttached();
+  await expect(page.getByTestId('vista-previa-carta').first()).toContainText('Lo de Tito');
   await wizard(page)
     .getByRole('link', { name: /probá la demo completa/i })
     .click();
@@ -114,17 +112,16 @@ test('Gastronomía: la demo completa se abre con el nombre y la paleta elegidos'
   await expect(page.getByText('Lo de Tito').first()).toBeVisible();
 });
 
-test('pantalla 3: celular/computadora y piezas cambian la vista previa', async ({ page }) => {
-  await irAlPaso(page, 'resultado');
-  const ver = wizard(page).getByRole('group', { name: 'Ver en' });
-  await ver.getByRole('button', { name: 'Computadora' }).click();
-  await expect(
-    wizard(page).locator('[data-testid="preview-negocio"][data-dispositivo="escritorio"]').first(),
-  ).toBeAttached();
-  const turnos = wizard(page).getByRole('button', { name: /turnos y reservas/i });
-  await expect(turnos).toHaveAttribute('aria-pressed', 'true');
-  await turnos.click();
-  await expect(turnos).toHaveAttribute('aria-pressed', 'false');
+test('pantalla 3: las piezas disponibles se pueden activar y apagar', async ({ page }) => {
+  await page.goto('/empezar?orden=a');
+  await abrirWizard(page);
+  await elegirRubro(page, 'gastronomia');
+  await enviarNegocio(page, { negocio: 'Lo de Tito' });
+  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
+  const pedidos = wizard(page).getByRole('button', { name: /pedidos online/i });
+  await expect(pedidos).toHaveAttribute('aria-pressed', 'true');
+  await pedidos.click();
+  await expect(pedidos).toHaveAttribute('aria-pressed', 'false');
 });
 
 test('orden B: nombre → vista previa → WhatsApp al tocar el CTA (y ahí se guarda el lead)', async ({
