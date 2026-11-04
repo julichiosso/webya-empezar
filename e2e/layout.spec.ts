@@ -82,7 +82,7 @@ test('Ya crearon con WebYa: un índice por rubro con capturas grandes y enlaces 
   const seccion = page.locator('#ya-lo-usan');
   await seccion.scrollIntoViewIfNeeded();
   await recorrer(page);
-  await expect(seccion.locator('li')).toHaveCount(CLIENTES.length);
+  await expect(seccion.locator('[data-caso]')).toHaveCount(CLIENTES.length);
   const marcos = seccion.locator('a[tabindex="-1"]');
   await expect(marcos).toHaveCount(CLIENTES.length);
   const medidas = await marcos.evaluateAll((els) =>

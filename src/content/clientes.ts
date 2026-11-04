@@ -11,8 +11,12 @@ export interface Cliente {
   /** Id de un rubro de content/rubros. */
   rubroId: string;
   url: string;
+  /** Ciudad del negocio, tal como figura en su sitio. */
+  ciudad: string;
   /** Una frase de lo que se hizo, verdadera y concreta. */
   hizo: string;
+  /** Lo que tiene el sitio hoy, punto por punto. Solo lo verificado mirando el sitio publicado. */
+  armamos: readonly string[];
   /** Captura de móvil (375 px) en /public/clientes. */
   captura: string;
   /** Medidas reales del archivo, para reservar el alto (CLS 0). */
@@ -32,7 +36,14 @@ export const CLIENTES: readonly Cliente[] = [
     nombre: "Micio's Pizzería",
     rubroId: 'gastronomia',
     url: 'https://miciospizzas.com.ar',
+    ciudad: 'San Jorge, Santa Fe',
     hizo: 'Carta online con buscador y pedidos que se confirman por WhatsApp.',
+    armamos: [
+      'Carta online con buscador',
+      'Pedidos que se confirman por WhatsApp',
+      'Días y horarios de atención',
+      'Mapa y enlace a su Instagram',
+    ],
     captura: '/clientes/micios.webp',
     capturaAncho: 375,
     capturaAlto: 2198,
@@ -45,7 +56,14 @@ export const CLIENTES: readonly Cliente[] = [
     nombre: 'Abelardo Pizzas',
     rubroId: 'gastronomia',
     url: 'https://abelardo.vercel.app',
+    ciudad: 'San Jorge, Santa Fe',
     hizo: 'Carta con promos del día y pedidos que se confirman por WhatsApp.',
+    armamos: [
+      'Carta con categorías y promos del día',
+      'Pedidos que se confirman por WhatsApp',
+      'Horario de hoy y mapa',
+      'Se puede agregar a la pantalla de inicio del celular',
+    ],
     captura: '/clientes/abelardo.webp',
     capturaAncho: 375,
     capturaAlto: 2178,
@@ -58,7 +76,14 @@ export const CLIENTES: readonly Cliente[] = [
     nombre: 'Fonosanjorge',
     rubroId: 'profesionales',
     url: 'https://fonosanjorge.com.ar',
+    ciudad: 'San Jorge, Santa Fe',
     hizo: 'Sitio de la fonoaudióloga Lorena Almagro: especialidades, cómo trabaja y contacto.',
+    armamos: [
+      'Especialidades y talleres infantiles',
+      'Cobertura de obras sociales',
+      'Cómo trabaja con cada familia',
+      'Turno y consultas por WhatsApp, con el mensaje ya armado',
+    ],
     captura: '/clientes/fonosanjorge.webp',
     capturaAncho: 375,
     capturaAlto: 4200,
@@ -84,9 +109,20 @@ export function clientesPorRubro(clientes: readonly Cliente[] = CLIENTES): Grupo
   });
 }
 
+/** Cifras de la sección: salen de la lista de clientes, nunca se escriben a mano. */
+export function resumenClientes(clientes: readonly Cliente[] = CLIENTES) {
+  return { sitios: clientes.length, rubros: new Set(clientes.map((c) => c.rubroId)).size };
+}
+
+/** Dominio para mostrar: sin protocolo ni www. */
+export const dominioDe = (url: string) => new URL(url).host.replace(/^www\./, '');
+
 export const YA_CREARON = {
   titulo: 'Ya crearon con WebYa',
-  bajada: 'Negocios reales, con su sitio funcionando. Abrilos y fijate.',
+  bajada: 'Negocios reales, con su sitio funcionando. Conocelos.',
+  resumen: { sitios: 'sitios funcionando', rubros: 'rubros' },
+  caso: (n: number) => `Caso ${String(n).padStart(2, '0')}`,
+  queArmamos: 'Qué tiene hoy',
   ver: 'Verlo funcionando',
   flecha: ' ↗',
   /** Se dice después del nombre del negocio: "Verlo funcionando, Abelardo Pizzas". */
