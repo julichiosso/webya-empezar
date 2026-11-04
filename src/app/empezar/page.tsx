@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { SplashLogo } from '@/brand/logo/SplashLogo';
 import { ID_CONTENIDO, Nav } from '@/components/marketing/Nav';
 import { PreviewPanel } from '@/components/patterns/PreviewPanel';
 import { Marco } from '@/features/empezar/Marco';
@@ -52,7 +51,6 @@ const faqJsonLd = {
 export default function EmpezarPage() {
   return (
     <div className="fondo-rubros relative bg-seccion-crema">
-      <SplashLogo />
       <script
         type="application/ld+json"
         // Se escapa "<" para que ningún texto pueda cerrar la etiqueta <script>.

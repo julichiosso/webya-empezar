@@ -4,7 +4,12 @@
   overflow: hidden;
   pointer-events: none;
   contain: strict;
-  will-change: transform;
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Secciones con texto: casi invisible (<= 3%). */
+.capa[data-plena='no'] {
+  opacity: 0.2;
 }
 
 .pos {
@@ -16,10 +21,7 @@
 }
 
 .palabra {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.35rem;
+  font-size: 0.85rem;
   white-space: nowrap;
   font-weight: 700;
   line-height: 1;
@@ -31,11 +33,11 @@
     color 250ms ease-out;
 }
 
-.etiqueta {
-  font-size: 0.8rem;
+.t2 {
+  font-size: 1.15rem;
 }
-.t3 .etiqueta {
-  font-size: 1rem;
+.t3 {
+  font-size: 1.6rem;
 }
 
 /* Con un rubro elegido, el resto baja y el elegido se enciende. */
@@ -43,8 +45,11 @@
   opacity: 0.04;
 }
 .capa[data-elegido='si'] .palabra[data-activo] {
-  opacity: 0.7;
+  opacity: 0.15;
   color: var(--accent-ink);
+}
+.capa[data-plena='no'] .palabra[data-activo] {
+  color: var(--seccion-crema-fg);
 }
 
 .palabra[data-saliendo] {

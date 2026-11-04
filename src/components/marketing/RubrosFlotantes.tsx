@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { Icon } from '@/brand/ilustracion/iconos/Icon';
-import type { IconName } from '@/brand/ilustracion/iconos/paths';
 import { RUBROS_FLOTANTES, type RubroFlotante } from '@/content/rubros-flotantes';
 import { EVENTO_RUBRO } from '@/lib/eventos';
 import estilos from './RubrosFlotantes.module.css';
@@ -18,22 +16,6 @@ interface Props {
 // Posiciones y movimiento determinísticos: mismo HTML en servidor y cliente.
 const media = (q: string) =>
   typeof window.matchMedia === 'function' && window.matchMedia(q).matches;
-
-/** Ícono de cada familia de rubros; "otro" rota entre íconos de uso general. */
-const ICONO_RUBRO: Record<string, IconName> = {
-  gastronomia: 'cubiertos',
-  peluqueria_estetica: 'tijera',
-  comercio: 'tienda',
-  profesionales: 'portafolio',
-  gimnasio_deportes: 'pesa',
-  servicios_tecnicos: 'llave',
-};
-const ICONOS_OTROS: readonly IconName[] = ['agenda', 'ticket', 'bolsa', 'mesa', 'reloj', 'chat'];
-const LADO_ICONO = [36, 52, 72] as const;
-
-function iconoDe(r: RubroFlotante, indice: number): IconName {
-  return ICONO_RUBRO[r.rubroWizard] ?? ICONOS_OTROS[indice % ICONOS_OTROS.length] ?? 'chat';
-}
 
 const num = (i: number, k: number) => {
   const v = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453;
@@ -59,7 +41,7 @@ function ranura(i: number, cantidad: number) {
 }
 
 /**
- * Capa de fondo con rubros que derivan despacio. Decorativa (aria-hidden, sin eventos). El
+ * Capa de fondo con palabras de rubros que derivan despacio. Decorativa (aria-hidden, sin eventos). El
  * movimiento es CSS; el JS rota una palabra cada 6-12 s, enciende el rubro elegido en el wizard y
  * hace un parallax leve con el cursor (solo con mouse y sin reduced-motion).
  */
@@ -74,6 +56,7 @@ export function RubrosFlotantes({
   );
   const [saliendo, setSaliendo] = useState<number | null>(null);
   const [elegido, setElegido] = useState<string | null>(null);
+  const [plena, setPlena] = useState(true);
   const capa = useRef<HTMLDivElement>(null);
   const indicesRef = useRef(indices);
 
@@ -107,6 +90,28 @@ export function RubrosFlotantes({
       clearTimeout(swap);
     };
   }, [rubros, total]);
+
+  // Presencia plena solo en el hero y el cierre; en las secciones con texto la capa casi desaparece.
+  useEffect(() => {
+    const zonas = [
+      document.getElementById('hero-title')?.closest('section'),
+      document.getElementById('cta-final'),
+    ].filter((z): z is HTMLElement => !!z);
+    if (zonas.length === 0 || typeof IntersectionObserver === 'undefined') return;
+    const visibles = new Set<Element>();
+    const io = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas) {
+          if (e.isIntersecting) visibles.add(e.target);
+          else visibles.delete(e.target);
+        }
+        setPlena(visibles.size > 0);
+      },
+      { rootMargin: '-35% 0px -35% 0px' },
+    );
+    zonas.forEach((z) => io.observe(z));
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const alElegir = (e: Event) => {
@@ -153,6 +158,7 @@ export function RubrosFlotantes({
       aria-hidden="true"
       className={estilos.capa}
       data-elegido={elegido ? 'si' : 'no'}
+      data-plena={plena ? 'si' : 'no'}
     >
       {indices.map((idx, slot) => {
         const r = rubros[idx];
@@ -178,8 +184,7 @@ export function RubrosFlotantes({
                 } as CSSProperties
               }
             >
-              <Icon name={iconoDe(r, idx)} size={LADO_ICONO[s.tam - 1] ?? 52} />
-              <span className={estilos.etiqueta}>{r.nombre}</span>
+              {r.nombre}
             </span>
           </span>
         );

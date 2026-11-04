@@ -1,3 +1,4 @@
+import { CapturaCliente } from '@/components/marketing/CapturaCliente';
 import { EnlaceCliente } from '@/components/marketing/EnlaceCliente';
 import { CLASES_SECCION, Seccion } from '@/components/patterns/Seccion';
 import { YA_CREARON, clientesPorRubro } from '@/content/clientes';
@@ -6,8 +7,9 @@ const C = CLASES_SECCION.crema;
 
 /**
  * "Ya crearon con WebYa": índice editorial de clientes reales por rubro. Sin tarjetas: el rubro es
- * una etiqueta a la izquierda y a la derecha van filas separadas por una línea fina, cada una con el
- * nombre, lo que se hizo, el enlace y una captura chica. Solo aparecen rubros con clientes.
+ * una etiqueta a la izquierda (fija dentro de su grupo) y a la derecha van filas separadas por una
+ * línea fina, con el texto a un lado y la captura grande de la página completa al otro. Solo aparecen
+ * rubros con clientes.
  */
 export function YaCrearon() {
   const grupos = clientesPorRubro();
@@ -27,7 +29,7 @@ export function YaCrearon() {
             className="mt-12 first:mt-0 lg:grid lg:grid-cols-12 lg:gap-8"
           >
             <h3
-              className={`text-small font-semibold tracking-wide uppercase lg:col-span-3 ${C.secundario}`}
+              className={`text-small font-semibold tracking-wide uppercase lg:sticky lg:top-24 lg:col-span-3 lg:self-start lg:pt-14 ${C.secundario}`}
             >
               {g.rubro}
             </h3>
@@ -35,9 +37,9 @@ export function YaCrearon() {
               {g.clientes.map((c) => (
                 <li
                   key={c.id}
-                  className={`flex flex-col gap-5 border-t py-8 first:pt-6 sm:flex-row sm:items-start sm:justify-between sm:gap-10 ${C.linea}`}
+                  className={`grid gap-6 border-t py-10 sm:grid-cols-2 sm:gap-10 lg:py-14 ${C.linea}`}
                 >
-                  <div className="sm:max-w-md">
+                  <div className="sm:self-start">
                     <p className="text-heading font-semibold text-balance">{c.nombre}</p>
                     <p className={`mt-2 ${C.secundario}`}>{c.hizo}</p>
                     <EnlaceCliente
@@ -53,14 +55,13 @@ export function YaCrearon() {
                       </span>
                     </EnlaceCliente>
                   </div>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <CapturaCliente
+                    href={c.url}
+                    cliente={c.id}
                     src={c.captura}
                     alt={c.alt}
-                    width={225}
-                    height={420}
-                    loading="lazy"
-                    className="aspect-[4/3] w-full rounded-[2px] object-cover object-top sm:aspect-auto sm:w-40 sm:shrink-0"
+                    width={c.capturaAncho}
+                    height={c.capturaAlto}
                   />
                 </li>
               ))}

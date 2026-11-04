@@ -15,6 +15,9 @@ export interface Cliente {
   hizo: string;
   /** Captura de móvil (375 px) en /public/clientes. */
   captura: string;
+  /** Medidas reales del archivo, para reservar el alto (CLS 0). */
+  capturaAncho: number;
+  capturaAlto: number;
   /** Qué muestra la captura, para lectores de pantalla. */
   alt: string;
 }
@@ -27,6 +30,8 @@ export const CLIENTES: readonly Cliente[] = [
     url: 'https://miciospizzas.com.ar',
     hizo: 'Carta online con buscador y pedidos que se confirman por WhatsApp.',
     captura: '/clientes/micios.webp',
+    capturaAncho: 375,
+    capturaAlto: 2198,
     alt: "Inicio del sitio de Micio's Pizzería en el celular: carta con pizzas, bebidas y postres.",
   },
   {
@@ -36,6 +41,8 @@ export const CLIENTES: readonly Cliente[] = [
     url: 'https://abelardo.vercel.app',
     hizo: 'Carta con promos del día y pedidos que se confirman por WhatsApp.',
     captura: '/clientes/abelardo.webp',
+    capturaAncho: 375,
+    capturaAlto: 2178,
     alt: 'Inicio del sitio de Abelardo en el celular: promos del día y categorías de la carta.',
   },
   {
@@ -45,6 +52,8 @@ export const CLIENTES: readonly Cliente[] = [
     url: 'https://fonosanjorge.com.ar',
     hizo: 'Sitio de la fonoaudióloga Lorena Almagro: especialidades, cómo trabaja y contacto.',
     captura: '/clientes/fonosanjorge.webp',
+    capturaAncho: 375,
+    capturaAlto: 4200,
     alt: 'Inicio del sitio de Fonosanjorge en el celular: presentación de la fonoaudióloga y sus especialidades.',
   },
 ];

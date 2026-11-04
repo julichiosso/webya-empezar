@@ -1,0 +1,50 @@
+.marco {
+  --alto-marco: 30rem;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: var(--alto-marco);
+  width: 100%;
+  background-color: var(--seccion-crema-linea);
+}
+
+@media (min-width: 40rem) {
+  .marco {
+    --alto-marco: 32rem;
+    max-width: 22rem;
+    margin-inline-start: auto;
+  }
+}
+
+.imagen {
+  display: block;
+  width: 100%;
+  height: auto;
+  animation: desliza 14s cubic-bezier(0.65, 0, 0.35, 1) infinite alternate;
+  animation-play-state: paused;
+}
+
+.marco[data-visible] .imagen {
+  will-change: transform;
+  animation-play-state: running;
+}
+
+.marco:hover .imagen,
+.marco:focus-visible .imagen {
+  animation-play-state: paused;
+}
+
+@keyframes desliza {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, calc(-100% + var(--alto-marco)), 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .imagen {
+    animation: none;
+  }
+}

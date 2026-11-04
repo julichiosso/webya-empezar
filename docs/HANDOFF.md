@@ -2,6 +2,11 @@
 
 Última actualización: 2026-11-04. Actualizar en cada checkpoint.
 
+## ESTADO ACTUAL / PRÓXIMO PASO EXACTO
+- Bloque 4 (correcciones urgentes): HECHO. RubrosFlotantes solo palabras (sin íconos), capa a 20% (≈2,2% efectivo) fuera de hero y cierre (IntersectionObserver sobre #hero-title y #cta-final), rubro activo naranja a 15% y neutro fuera del hero; tarjeta del wizard opaca; "Ya crearon" con captura grande de página completa (CapturaCliente: recorte 30-32rem, desliza 14 s con translateY, pausa fuera de pantalla/hover/foco, quieta con reduced-motion); capturas recapturadas a 375px (micios 43 KB, abelardo 42 KB, fonosanjorge 111 KB recortada a 4200 px de alto). Se quitó el SplashLogo de /empezar (tapaba el CTA en el primer frame; lo reemplaza el telón del bloque 5). Autopuntaje: diseño 8, claridad 8, rendimiento 8. Typecheck, lint, 1137 tests y build verdes.
+- Siguiente: bloque 5 (intro "El telón") detrás de NEXT_PUBLIC_INTRO_LOGO=1; luego 6, 7, 3.
+- Decisión: "Creado con WebYa" NO va en Ya crearon (hoy es falso).
+
 ## Fases
 - [x] Fase 0 — Diagnóstico (abajo)
 - [x] Fase 1 — Limpieza inmediata (hecha; falta confirmar qué módulos se entregan y el número de WhatsApp)

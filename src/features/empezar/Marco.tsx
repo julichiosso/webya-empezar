@@ -28,7 +28,7 @@ export function Marco({ pantalla, atras, aside, children, ref }: MarcoProps) {
       aria-label={WIZARD.ariaSeccion}
       // Debajo de lg, el flujo mide al menos la pantalla: al pasar a una más alta ("Así te queda")
       // no empuja a la vista lo que está debajo (CLS 0 aunque la red tarde).
-      className="scroll-mt-4 rounded-panel border border-line bg-surface/70 p-3 shadow-raised max-lg:min-h-svh sm:p-8 lg:p-10 lg:bajo:p-6"
+      className="scroll-mt-4 rounded-panel border border-line bg-surface p-3 shadow-raised max-lg:min-h-svh sm:p-8 lg:p-10 lg:bajo:p-6"
     >
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-12 xl:grid-cols-[minmax(0,1fr)_26rem]">
         <div className="min-w-0">
