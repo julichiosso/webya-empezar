@@ -70,7 +70,7 @@ test('recorrido completo: rubro → formulario (lead parcial) → vista previa �
   });
 });
 
-test('"Otro": pedido a medida → formulario → "Lo armamos a medida", sin vista previa', async ({
+test('"Otro": pedido a medida → formulario → "Lo armamos con vos", sin vista previa', async ({
   page,
 }) => {
   const pedido = `Controlar el stock de mis dos locales ${Date.now()}`;

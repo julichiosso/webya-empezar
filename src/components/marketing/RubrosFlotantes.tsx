@@ -183,7 +183,7 @@ export function RubrosFlotantes({
             style={{ '--x': s.x, '--y': s.y, '--d': s.d } as CSSProperties}
           >
             <span
-              className={`${estilos.palabra} ${estilos[`t${s.tam}`]}`}
+              className={`${estilos.palabra} ${s.tam > 1 ? estilos[`t${s.tam}`] : ""}`}
               data-activo={elegido && r.rubroWizard === elegido ? '' : undefined}
               data-saliendo={saliendo === slot ? '' : undefined}
               style={

@@ -30,6 +30,6 @@ export const FAQ: readonly Pregunta[] = [
   },
   {
     pregunta: '¿Y si lo que necesito no está?',
-    respuesta: 'Contanos qué te falta en "Otra cosa". Si se puede hacer, lo armamos a medida.',
+    respuesta: 'Contanos qué te falta en "Otra cosa". Si se puede hacer, lo armamos con vos.',
   },
 ];

@@ -67,7 +67,7 @@ export const FLUJO = {
     /** Debajo del CTA: qué pasa al tocarlo. */
     queSigue: 'Se abre WhatsApp con lo que armaste. Lo seguimos por ahí.',
     aMedida: {
-      titulo: 'Lo armamos a medida',
+      titulo: 'Lo armamos con vos',
       texto:
         'Para lo que nos contaste no hay una vista previa armada: lo leemos nosotros y te decimos si se puede hacer y cómo.',
       cta: 'Hablarlo por WhatsApp',

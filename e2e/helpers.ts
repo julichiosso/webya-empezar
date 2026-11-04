@@ -56,7 +56,7 @@ export const TITULO_RUBRO = '¿Qué negocio tenés?';
 export const TITULO_A_MEDIDA = 'Contanos qué necesitás';
 export const TITULO_NEGOCIO = 'Contanos de tu negocio';
 export const TITULO_RESULTADO = /^Así te queda/;
-export const TITULO_RESULTADO_A_MEDIDA = 'Lo armamos a medida';
+export const TITULO_RESULTADO_A_MEDIDA = 'Lo armamos con vos';
 export const TITULO_COMPLETAR = 'Contanos un poco más';
 export const TITULO_GRACIAS = 'Listo, ya nos llegaron tus datos';
 

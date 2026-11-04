@@ -12,9 +12,9 @@
   opacity: 0 !important;
 }
 
-/* Secciones con texto: casi invisible (<= 3%). */
+/* Secciones con texto: oculta, así nunca pisa un texto. */
 .capa[data-plena='no'] {
-  opacity: 0.2;
+  opacity: 0;
 }
 
 .pos {

@@ -72,7 +72,7 @@ test('rubros flotantes: solo palabras, sin íconos, y casi invisibles sobre las 
   await expect(capa).toHaveAttribute('data-plena', 'no');
   await expect
     .poll(async () => Number(await capa.evaluate((e) => getComputedStyle(e).opacity)))
-    .toBeLessThanOrEqual(0.25);
+    .toBeLessThanOrEqual(0.05);
 });
 
 test('Ya crearon con WebYa: un índice por rubro con capturas grandes y enlaces seguros', async ({

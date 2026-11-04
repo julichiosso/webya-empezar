@@ -5,7 +5,7 @@ export const rubro: Rubro = {
   id: 'otro',
   nombre: 'Otro',
   icono: 'mas',
-  descripcionCorta: 'Tu rubro no está en la lista: contanos y lo armamos a medida.',
+  descripcionCorta: 'Tu rubro no está en la lista: contanos y lo armamos con vos.',
   objetivos: [
     { id: 'que_me_contacten', etiqueta: 'Que me contacten fácil' },
     { id: 'mostrar_negocio', etiqueta: 'Mostrar mi negocio' },

@@ -99,7 +99,7 @@ describe('Wizard — pantalla 1 (rubro)', () => {
 });
 
 describe('Wizard — "Otro" (a medida)', () => {
-  it('pide el pedido libre, lo exige y termina en "Lo armamos a medida" sin vista previa', async () => {
+  it('pide el pedido libre, lo exige y termina en "Lo armamos con vos" sin vista previa', async () => {
     const u = user();
     render(<Wizard />);
     await elegirRubro(u, /^otro/i);
@@ -111,7 +111,7 @@ describe('Wizard — "Otro" (a medida)', () => {
     await completarNegocio(u, { negocio: 'Lavadero Sol' });
     await u.click(screen.getByRole('button', { name: 'Enviar' }));
     expect(
-      await screen.findByRole('heading', { name: 'Lo armamos a medida' }, { timeout: 4000 }),
+      await screen.findByRole('heading', { name: 'Lo armamos con vos' }, { timeout: 4000 }),
     ).toBeInTheDocument();
     expect(cuerpo(0)).toMatchObject({
       parcial: true,
