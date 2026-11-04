@@ -22,23 +22,49 @@ export const POR_QUE_WEBYA = {
       texto: 'Si tenés una duda, te contesta una persona por WhatsApp.',
     },
   ],
-  /** Objeciones respondidas junto a la sección donde aparecen. */
-  objeciones: [
-    {
-      pregunta: '¿Necesito saber de tecnología?',
-      respuesta: 'No. Elegís tu rubro, cargás tu carta y listo.',
-    },
-    {
-      pregunta: '¿Y si no me gusta?',
-      respuesta: 'Lo revisás antes de publicarlo. Nada sale online sin tu visto bueno.',
-    },
-    {
-      pregunta: '¿Qué pasa con mis datos?',
-      respuesta: 'Los usamos solo para contactarte.',
-      enlace: { texto: 'Leer la política de privacidad', href: '/privacidad' },
-    },
-  ],
 } as const;
+
+export type DondeObjecion = 'hero' | 'modulos' | 'clientes';
+
+export interface Objecion {
+  donde: DondeObjecion;
+  pregunta: string;
+  respuesta: string;
+  /** true: la respuesta es el texto de precios (content/precios.ts), que no inventa montos. */
+  precio?: boolean;
+  enlace?: { texto: string; href: string };
+}
+
+/** Objeciones respondidas junto a la sección que las genera. Cortas y verdaderas; sin plazos ni precios. */
+export const OBJECIONES: readonly Objecion[] = [
+  {
+    donde: 'hero',
+    pregunta: '¿Necesito saber de tecnología?',
+    respuesta: 'No. Elegís tu rubro, cargás tu carta y listo.',
+  },
+  {
+    donde: 'hero',
+    pregunta: '¿Y si no me gusta?',
+    respuesta: 'Lo revisás antes de publicarlo. Nada sale online sin tu visto bueno.',
+  },
+  {
+    donde: 'modulos',
+    pregunta: '¿Cuánto cuesta?',
+    respuesta: '',
+    precio: true,
+  },
+  {
+    donde: 'modulos',
+    pregunta: '¿Y mi dominio?',
+    respuesta: 'Si ya tenés uno, contanos cuál es y lo vemos juntos.',
+  },
+  {
+    donde: 'clientes',
+    pregunta: '¿Qué pasa con mis datos?',
+    respuesta: 'Los usamos solo para contactarte por tu negocio.',
+    enlace: { texto: 'Leer la política de privacidad', href: '/privacidad' },
+  },
+];
 
 /**
  * Quién está detrás. Mientras `FUNDADOR` sea null el bloque no se muestra. PENDIENTE DEL DUEÑO:

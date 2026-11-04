@@ -9,6 +9,7 @@ import { StickyCta } from '@/components/marketing/StickyCta';
 import { RubrosFlotantes } from '@/components/marketing/RubrosFlotantes';
 import { YaCrearon } from '@/components/marketing/YaCrearon';
 import { MensajeRubro } from '@/components/marketing/MensajeRubro';
+import { Objeciones } from '@/components/marketing/Objeciones';
 import { PorQueWebya } from '@/components/marketing/PorQueWebya';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
@@ -72,10 +73,13 @@ export default function EmpezarPage() {
             </Marco>
           </WizardLazy>
         </Hero>
+        <Objeciones donde="hero" />
         <MensajeRubro />
         <MiraLoQueCreas />
         <QueIncluye />
+        <Objeciones donde="modulos" />
         <YaCrearon />
+        <Objeciones donde="clientes" />
         <PorQueWebya />
         <Faq />
         <Cierre />

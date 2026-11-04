@@ -3,7 +3,7 @@ import { FUNDADOR, POR_QUE_WEBYA } from '@/content/por-que-webya';
 
 const C = CLASES_SECCION.crema;
 
-/** "Por qué WebYa": cuatro puntos ciertos, las objeciones comunes y, si está cargado, quién está detrás. */
+/** "Por qué WebYa": cuatro puntos ciertos y, si está cargado, quién está detrás. */
 export function PorQueWebya() {
   return (
     <Seccion fondo="crema" aria-labelledby="porque-title" className="diferido">
@@ -18,24 +18,6 @@ export function PorQueWebya() {
           </li>
         ))}
       </ul>
-      <dl className="mt-10 grid max-w-2xl gap-6">
-        {POR_QUE_WEBYA.objeciones.map((o) => (
-          <div key={o.pregunta}>
-            <dt className="font-semibold">{o.pregunta}</dt>
-            <dd className={`mt-1 ${C.secundario}`}>
-              {o.respuesta}
-              {'enlace' in o && (
-                <>
-                  {' '}
-                  <a href={o.enlace.href} className="underline underline-offset-4">
-                    {o.enlace.texto}
-                  </a>
-                </>
-              )}
-            </dd>
-          </div>
-        ))}
-      </dl>
       {FUNDADOR && (
         <div className="mt-10 flex items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
