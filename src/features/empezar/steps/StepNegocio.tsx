@@ -212,7 +212,10 @@ export function StepNegocio({
       </Button>
 
       <p className="mt-4 text-small text-subtle">
-        {TXT.privacidad} <span className="text-muted">{TXT.todoPrivacidad}</span>
+        {TXT.privacidad}{' '}
+        <a href="/privacidad" className="underline underline-offset-4">
+          {TXT.verPrivacidad}
+        </a>
       </p>
     </form>
   );

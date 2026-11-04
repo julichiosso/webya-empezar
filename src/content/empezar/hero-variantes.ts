@@ -23,11 +23,11 @@ export const HERO_VARIANTES: readonly VarianteHero[] = [
   {
     id: 'todo_lo_digital',
     formula: 'Resultado + para quién, con la salvedad en el mismo titular',
-    titulo: 'Todo lo digital para tu negocio.',
-    subtitulo: 'Y si no está, lo armamos a medida.',
+    titulo: 'Tu carta y tus pedidos, sin líos.',
+    subtitulo: 'Elegí tu rubro y mirá cómo queda.',
     bajada:
       'Tienda, turnos, carta con QR, pedidos y pagos. Activá solo lo que usás y lo armamos con vos.',
-    cta: 'Empezar a crear',
+    cta: 'Crear mi sistema',
     razonamiento:
       'Dice en cinco segundos qué es WebYa (el lugar donde un negocio consigue lo digital) y responde en la misma frase la duda que genera "todo": si no está, se arma. La bajada baja la promesa a cosas que se pueden tocar. Riesgo: "todo lo digital" suena amplio; por eso la salvedad va en el titular y no en letra chica.',
     elegida: true,
@@ -38,7 +38,7 @@ export const HERO_VARIANTES: readonly VarianteHero[] = [
     titulo: 'Armá tu negocio online, pieza por pieza.',
     subtitulo: 'Lo que no esté, lo hacemos a medida.',
     bajada: 'Elegí tu rubro, activá lo que necesitás y lo armamos con vos.',
-    cta: 'Empezar a crear',
+    cta: 'Crear mi sistema',
     razonamiento:
       'Es el concepto Encastre dicho tal cual y conversa con el mockup de al lado, donde las piezas se activan. Es la más cercana al hero anterior ("Creá tu negocio online"), así que es la de menor riesgo. Pierde la amplitud de "todo lo digital": alguien que busca un sistema o una automatización puede pensar que solo hacemos webs.',
     elegida: false,
@@ -49,7 +49,7 @@ export const HERO_VARIANTES: readonly VarianteHero[] = [
     titulo: '¿No sabés de tecnología? Mejor.',
     subtitulo: 'Vos contás tu negocio, nosotros lo armamos.',
     bajada: 'Tienda, turnos, carta, pedidos, pagos… y si lo tuyo no está, lo armamos a medida.',
-    cta: 'Empezar a crear',
+    cta: 'Crear mi sistema',
     razonamiento:
       'Ataca la objeción más común del dueño de un local y suena a persona, no a empresa. Funciona mejor con tráfico de Instagram, que llega sin saber qué es WebYa pero con esa duda. Riesgo: el titular no dice qué se obtiene; todo el peso cae en la bajada, que en celular queda debajo del mockup.',
     elegida: false,

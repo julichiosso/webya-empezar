@@ -105,7 +105,6 @@ export function VitrinaPlano() {
                 key={fondo}
                 fondo={fondo}
                 aria-labelledby={id}
-                plano={fondo === 'crema' ? undefined : fondo === 'tinta' ? 'cotas' : 'grilla'}
               >
                 {contenido}
               </Seccion>

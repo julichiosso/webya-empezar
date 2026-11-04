@@ -15,15 +15,15 @@ export interface TextoEstado {
 export const ESTADOS_MODULO_TEXTO = {
   disponible: {
     etiqueta: 'Disponible',
-    explicacion: 'Lo armamos para tu negocio, con vos.',
+    explicacion: 'Lo podés activar ahora.',
   },
   en_demo: {
     etiqueta: 'Con demo',
-    explicacion: 'Probalo antes en la demo, con datos de ejemplo.',
+    explicacion: 'Se puede probar en la demo.',
   },
   proximamente: {
     etiqueta: 'Próximamente',
-    explicacion: 'Todavía no lo entregamos. Si lo necesitás, contanos y lo tenemos en cuenta.',
+    explicacion: 'Todavía no se puede activar.',
   },
   a_medida: {
     etiqueta: 'A medida',
@@ -39,10 +39,6 @@ export const ESTADO_MODULO_UI = {
   noSeActiva: 'Todavía no se puede activar. Si lo necesitás, contanoslo en "Otra cosa".',
   /** Acción de un módulo `a_medida`: lleva al texto libre. */
   irAMedida: 'Contanos qué necesitás',
-  /** Nota pendiente agrupada: "Turnos y reservas, Formularios: TODO: confirmar…". */
-  notaAgrupada: (nombres: readonly string[], nota: string) => `${nombres.join(', ')}: ${nota}`,
-  /** Título del bloque de pendientes debajo de un catálogo de módulos. */
-  pendientes: 'Pendiente de confirmar',
   /** Enlace junto a un módulo `en_demo`. */
   verDemo: 'Probalo en la demo',
 } as const;

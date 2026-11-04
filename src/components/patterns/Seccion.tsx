@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { FondoPlano } from '@/brand/ilustracion/plano/FondoPlano';
 import { cn } from '@/components/ui/clases';
 import { SlotImagen, type SlotImagenProps } from './SlotImagen';
 
@@ -58,8 +57,6 @@ interface Comunes {
   como?: 'section' | 'div' | 'header' | 'footer';
   id?: string;
   'aria-labelledby'?: string;
-  /** Grilla de plano detrás del contenido (`FondoPlano`). Sin valor, no hay grilla. */
-  plano?: 'grilla' | 'cotas';
   /** Alto mínimo de una pantalla, contenido centrado en vertical. */
   pantallaCompleta?: boolean;
   className?: string;
@@ -90,7 +87,6 @@ export function Seccion({
   como: Raiz = 'section',
   fondo,
   imagen,
-  plano,
   pantallaCompleta = false,
   id,
   'aria-labelledby': etiquetadaPor,
@@ -114,7 +110,6 @@ export function Seccion({
       )}
     >
       {fondo === 'imagen' && imagen && <SlotImagen {...imagen} modo="fondo" />}
-      {plano && <FondoPlano variante={plano} />}
       <div
         className={cn(
           'relative mx-auto w-full max-w-page px-4 py-16 lg:px-8 lg:py-24',

@@ -65,11 +65,6 @@ describe('Seccion: pantalla completa sin scroll horizontal', () => {
     expect(seccion('crema').container.querySelector('[data-plano]')).toBeNull();
   });
 
-  it('FondoPlano con la variante pedida', () => {
-    const { container } = seccion('brasa', { plano: 'cotas' });
-    expect(container.querySelector('[data-plano]')).toHaveAttribute('data-plano', 'cotas');
-  });
-
   it('el foco se adapta al fondo (Brasa sobre Brasa oscura no contrasta)', () => {
     expect(CLASES_SECCION.brasa.foco).toContain('outline-seccion-brasa-fg');
     expect(CLASES_SECCION.imagen.foco).toContain('outline-velo-imagen-fg');

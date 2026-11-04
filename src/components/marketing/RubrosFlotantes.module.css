@@ -1,0 +1,78 @@
+.capa {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  will-change: transform;
+}
+
+.pos {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate3d(calc(var(--px, 0px) * var(--d)), calc(var(--py, 0px) * var(--d)), 0);
+  transition: transform 300ms ease-out;
+}
+
+.palabra {
+  display: block;
+  white-space: nowrap;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--seccion-crema-fg);
+  opacity: 0.07;
+  animation: deriva var(--dur) ease-in-out var(--delay) infinite alternate;
+  transition:
+    opacity 600ms ease-out,
+    color 250ms ease-out;
+}
+
+.t1 {
+  font-size: 1.25rem;
+}
+.t2 {
+  font-size: 2rem;
+}
+.t3 {
+  font-size: 3.25rem;
+}
+
+/* Con un rubro elegido, el resto baja y el elegido se enciende. */
+.capa[data-elegido='si'] .palabra {
+  opacity: 0.04;
+}
+.capa[data-elegido='si'] .palabra[data-activo] {
+  opacity: 0.6;
+  color: var(--accent-ink);
+}
+
+.palabra[data-saliendo] {
+  opacity: 0 !important;
+}
+
+@media (max-width: 639px) {
+  .pos[data-i='oculto'] {
+    display: none;
+  }
+  .t3 {
+    font-size: 2.25rem;
+  }
+}
+
+@keyframes deriva {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(var(--ax), var(--ay), 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .palabra,
+  .pos {
+    animation: none !important;
+    transition: none !important;
+  }
+}

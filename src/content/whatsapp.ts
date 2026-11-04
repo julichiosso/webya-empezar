@@ -48,7 +48,7 @@ export const MENSAJE_WHATSAPP = {
       d.modulos?.length ? `Quiero activar: ${d.modulos.join(', ')}.` : '',
       d.objetivos?.length ? `Quiero lograr: ${d.objetivos.join(', ')}.` : '',
       d.necesidadLibre ? `También necesito esto: ${conPunto(d.necesidadLibre)}` : '',
-      'Dejé mis datos en webya.ar/empezar. ¿Hablamos?',
+      'Dejé mis datos en webya.dev/empezar. ¿Hablamos?',
     ]
       .filter(Boolean)
       .join('\n'),
@@ -58,7 +58,7 @@ export const MENSAJE_WHATSAPP = {
       saludo(d),
       d.necesidadLibre
         ? `Necesito esto: ${conPunto(d.necesidadLibre)}`
-        : 'Vi cómo me quedaría en webya.ar/empezar y lo quiero para mi negocio.',
+        : 'Vi cómo me quedaría en webya.dev/empezar y lo quiero para mi negocio.',
       d.modulos?.length ? `Me interesa: ${d.modulos.join(', ')}.` : '',
       '¿Hablamos?',
     ]

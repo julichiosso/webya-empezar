@@ -13,7 +13,7 @@ export const ID_CONTENIDO = 'contenido';
  */
 export function Nav() {
   return (
-    <header className="mx-auto w-full max-w-xl px-4 pt-6 lg:max-w-page lg:px-8 lg:pt-8">
+    <header className="papel mx-auto text-seccion-crema-fg w-full max-w-xl px-4 pt-6 lg:max-w-page lg:px-8 lg:pt-8">
       <a
         href={`#${ID_CONTENIDO}`}
         className="sr-only rounded-control bg-surface px-4 text-body text-fg focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:inline-flex focus:min-h-tap focus:items-center"

@@ -69,21 +69,9 @@ describe('estado y necesidades de cada módulo', () => {
     }
   });
 
-  it('los módulos "disponible" sin confirmar llevan su TODO visible y pagos aclara la demo', () => {
-    const sinConfirmar = [
-      'turnos',
-      'catalogo',
-      'formularios',
-      'clientes',
-      'notificaciones',
-      'pagos',
-    ];
-    for (const id of MODULO_IDS) {
-      const m = getModulo(id);
-      if (sinConfirmar.includes(id)) expect(m.notaEstado, id).toMatch(/TODO: confirmar/);
-      else expect(m.notaEstado, id).toBeUndefined();
-    }
-    expect(getModulo('pagos').notaEstado).toMatch(/cobro es simulado/);
+  it('solo se ofrecen como disponibles los módulos que hoy se entregan', () => {
+    const disponibles = MODULO_IDS.filter((id) => getModulo(id).estado === 'disponible');
+    expect(disponibles.sort()).toEqual(['carta_qr', 'pedidos']);
   });
 
   it('cada rubro sugiere módulos que existen', () => {

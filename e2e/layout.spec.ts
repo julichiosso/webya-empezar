@@ -299,7 +299,7 @@ test.describe('escritorio (lg y más)', () => {
 
   test('títulos de sección de una línea y descripciones de una sola frase', async ({ page }) => {
     await page.goto('/empezar');
-    for (const id of ['incluye-title', 'como-trabajamos-title', 'faq-title']) {
+    for (const id of ['incluye-title', 'faq-title']) {
       expect(await lineas(page, `#${id}`)).toBe(1);
     }
     const textos = await page

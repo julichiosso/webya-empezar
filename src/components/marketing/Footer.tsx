@@ -66,18 +66,9 @@ export function Footer() {
               </li>
             )}
             <li>
-              {contactEmail ? (
-                <a href={`mailto:${contactEmail}`} className={cn(ENLACE, 'break-all')}>
-                  {contactEmail}
-                </a>
-              ) : (
-                // TODO: completar NEXT_PUBLIC_CONTACT_EMAIL para mostrar el mail de contacto.
-                process.env.NODE_ENV !== 'production' && (
-                  <span data-todo className={cn('text-small', C.secundario)}>
-                    {FOOTER.todoEmail}
-                  </span>
-                )
-              )}
+              <a href={`mailto:${contactEmail}`} className={cn(ENLACE, 'break-all')}>
+                {contactEmail}
+              </a>
             </li>
             <li>
               <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className={ENLACE}>
@@ -96,8 +87,15 @@ export function Footer() {
           </Grupo>
 
           <Grupo id="pie-legales" titulo={FOOTER.legales.titulo}>
-            <li data-todo className={cn('py-2 text-small', C.secundario)}>
-              {FOOTER.legales.todoPrivacidad}
+            <li>
+              <a href="/privacidad" className={ENLACE}>
+                {FOOTER.legales.privacidad}
+              </a>
+            </li>
+            <li>
+              <a href="/terminos" className={ENLACE}>
+                {FOOTER.legales.terminos}
+              </a>
             </li>
             <li className={cn('tabular py-2 text-small', C.secundario)}>
               {FOOTER.copyright(new Date().getFullYear())}

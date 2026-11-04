@@ -15,7 +15,7 @@ function storage() {
 const TRASPASO = {
   origen: 'demo_gastronomia',
   rubro: 'gastronomia',
-  modulos: ['carta_qr', 'pagos', 'notificaciones'],
+  modulos: ['carta_qr', 'pedidos'],
   nombreNegocio: 'Lo de Tito',
   demo: { paleta: 'pileta', cocina: 'parrilla' },
 } as const;
@@ -35,7 +35,7 @@ describe('de la demo al flujo (traspaso por domain/traspaso)', () => {
     });
     expect(e?.datos.nombreNegocio).toBe('Lo de Tito');
     // Los módulos activos son EXACTAMENTE los de la demo (lo sugerido que no está, apagado).
-    expect(modulosDe(e!).sort()).toEqual(['carta_qr', 'notificaciones', 'pagos'].sort());
+    expect(modulosDe(e!).sort()).toEqual(['carta_qr', 'pedidos'].sort());
   });
 
   it('se toma una sola vez: después no queda nada que aplicar', () => {

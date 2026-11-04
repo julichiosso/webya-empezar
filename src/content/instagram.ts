@@ -1,4 +1,3 @@
-import { PENDIENTES } from '@/content/pendientes';
 
 /**
  * Instagram de WebYa (@webya.dev): la bio y una caption lista para publicar por cada pilar de contenido.
@@ -9,9 +8,9 @@ import { PENDIENTES } from '@/content/pendientes';
 /** Bio del perfil. Instagram corta en 150 caracteres; el link va además en su campo propio. */
 export const BIO_INSTAGRAM = {
   texto:
-    'Todo lo digital para tu negocio. Y si no está, lo armamos a medida. Te escribe una persona, por WhatsApp. Armá el tuyo: webya.ar/empezar',
+    'Todo lo digital para tu negocio. Y si no está, lo armamos a medida. Te escribe una persona, por WhatsApp. Armá el tuyo: webya.dev/empezar',
   /** Campo "Enlace" del perfil. Sin UTM: si no hay origen, el lead queda como "instagram". */
-  link: 'https://webya.ar/empezar',
+  link: 'https://webya.dev/empezar',
 } as const;
 
 export type PilarInstagram =
@@ -65,7 +64,6 @@ const CAPTIONS: readonly CaptionInstagram[] = [
     ],
     cta: 'Contanos cómo te organizás hoy: link en la bio.',
     hashtags: ['#Peluqueria', '#Estetica', '#Turnos', '#NegocioLocal'],
-    antesDePublicar: `Turnos y reservas: ${PENDIENTES.moduloSinConfirmar}`,
   },
   {
     pilar: 'a_medida',
@@ -86,7 +84,6 @@ const CAPTIONS: readonly CaptionInstagram[] = [
     ],
     cta: 'Dejá tu WhatsApp en el link de la bio.',
     hashtags: ['#NegocioLocal', '#Emprendedores', '#HechoConVos', '#WebYa'],
-    antesDePublicar: PENDIENTES.plazoRespuesta,
   },
 ];
 

@@ -17,7 +17,7 @@ export function buildWhatsAppMessage(d: DatosWhatsApp): string {
     `¡Hola WebYa! Soy ${d.nombre}, de ${d.nombreNegocio} (${d.rubro}).`,
     d.modulos.length > 0 ? `Quiero activar: ${d.modulos.join(', ')}.` : '',
     d.objetivos.length > 0 ? `Quiero lograr: ${d.objetivos.join(', ')}.` : '',
-    'Acabo de completar el formulario en webya.ar/empezar. ¿Hablamos?',
+    'Acabo de completar el formulario en webya.dev/empezar. ¿Hablamos?',
   ];
   return lineas.filter(Boolean).join('\n');
 }

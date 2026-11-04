@@ -1,6 +1,5 @@
 import { PASO_DATOS, PASO_LISTO, PASO_RUBRO } from '@/content/empezar/pasos';
 import { WIZARD } from '@/content/empezar/wizard';
-import { PENDIENTES } from '@/content/pendientes';
 
 /**
  * Textos del flujo "tu negocio, armado en un minuto" de /empezar:
@@ -54,7 +53,7 @@ export const FLUJO = {
     enviarAMedida: 'Enviar',
     enviando: 'Armando…',
     privacidad: PASO_DATOS.privacidad,
-    todoPrivacidad: PASO_DATOS.todoPrivacidad,
+    verPrivacidad: 'Leer la política de privacidad',
   },
 
   /** Pantalla 3: "Así te queda" (o "Lo armamos a medida" si eligió "Otro"). */
@@ -67,7 +66,6 @@ export const FLUJO = {
     demo: { titulo: 'Probá la demo completa', bajada: 'Con tu nombre y tus colores ya cargados.' },
     /** Debajo del CTA: qué pasa al tocarlo. */
     queSigue: 'Se abre WhatsApp con lo que armaste. Lo seguimos por ahí.',
-    todoPlazo: PENDIENTES.plazoRespuesta,
     aMedida: {
       titulo: 'Lo armamos a medida',
       texto:
@@ -87,7 +85,6 @@ export const FLUJO = {
     },
     /** Barra fija abajo en celular, con el CTA siempre a mano. */
     barra: 'Quiero esto para mi negocio',
-    todoWhatsapp: PASO_LISTO.todoWhatsapp,
     /** En producción sin el número de WhatsApp de WebYa configurado (en lugar del CTA). */
     sinNumero: 'Ya tenemos tus datos: te escribimos por WhatsApp para seguir.',
     /** El guardado del lead falló pero la vista previa igual se muestra: le dejamos la salida. */
@@ -131,7 +128,6 @@ export const FLUJO = {
     titulo: 'Listo, ya nos llegaron tus datos',
     texto: (negocio: string) => `Te escribimos por WhatsApp para armar ${negocio} con vos.`,
     textoSinNombre: 'Te escribimos por WhatsApp para armar tu negocio con vos.',
-    todoPlazo: PENDIENTES.plazoRespuesta,
     whatsapp: PASO_LISTO.whatsapp,
     reiniciar: PASO_LISTO.reiniciar,
   },

@@ -575,3 +575,8 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* /empezar: las secciones crema son transparentes para dejar ver los rubros que flotan de fondo. */
+.fondo-rubros [data-fondo='crema'] {
+  background-color: transparent;
+}

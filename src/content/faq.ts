@@ -1,69 +1,35 @@
-import { PENDIENTES } from '@/content/pendientes';
-
 /**
  * Preguntas frecuentes de /empezar. Texto plano (sin JSX) para poder reutilizarlo en el JSON-LD
  * de SEO. Regla: respuestas honestas; no se promete nada que el producto todavía no cumpla.
- * Cada objeción se responde de frente (skill webya-copy-comercial → "Objeciones"). Donde no hay
- * definición, se dice, se ofrece presupuesto sin compromiso y el pendiente queda en `todo`.
  */
+import { PRECIO_SIN_DEFINIR } from '@/content/precios';
+
 export interface Pregunta {
   pregunta: string;
   respuesta: string;
-  /**
-   * Pendiente visible (empieza con "TODO:") que va debajo de la respuesta. No va al JSON-LD: es para
-   * que se vea en la página lo que falta definir.
-   */
-  todo?: string;
-  /** Objeción que se responde de frente, a la vista (sin abrir nada). Las demás van en un acordeón. */
-  objecion?: boolean;
 }
 
-/** Primero las cuatro objeciones (a la vista), después las dudas de detalle (en acordeón). */
 export const FAQ: readonly Pregunta[] = [
   {
     pregunta: '¿Cuánto cuesta?',
-    respuesta:
-      'Depende de lo que actives. Contanos qué necesitás y te armamos un presupuesto sin compromiso.',
-    todo: PENDIENTES.precios,
-    objecion: true,
+    respuesta: PRECIO_SIN_DEFINIR,
   },
   {
-    pregunta: '¿Y si no me gusta?',
+    pregunta: '¿Cuánto tarda?',
     respuesta:
-      'Antes de decidir, probás la demo. Y antes de publicar, lo revisás y lo ajustamos con vos.',
-    objecion: true,
+      'Elegir tu rubro y ver cómo queda lleva unos minutos. La puesta online la coordinamos por WhatsApp.',
+  },
+  {
+    pregunta: '¿Puedo usar mi propio dominio?',
+    respuesta: 'Contanos cuál es y lo vemos juntos.',
   },
   {
     pregunta: '¿Qué hacen con mis datos?',
-    respuesta: 'Los usamos solo para contactarte por tu proyecto. No los compartimos con nadie.',
-    todo: PENDIENTES.privacidad,
-    objecion: true,
+    respuesta:
+      'Los usamos solo para contactarte por tu negocio. No los compartimos ni los vendemos. Está todo en la política de privacidad.',
   },
   {
     pregunta: '¿Y si lo que necesito no está?',
-    respuesta:
-      'Contanos qué te falta en el paso "Otra cosa". Lo vemos con vos y, si se puede hacer, lo armamos a medida.',
-    objecion: true,
-  },
-  {
-    pregunta: '¿Necesito saber de tecnología?',
-    respuesta:
-      'No. Vos nos contás cómo funciona tu negocio y nosotros nos ocupamos de lo técnico, con vos.',
-  },
-  {
-    pregunta: '¿Cuánto tardan?',
-    respuesta:
-      'Depende de lo que actives: el plazo te lo decimos en el presupuesto. Primero te escribimos por WhatsApp.',
-    todo: `${PENDIENTES.plazoEntrega} ${PENDIENTES.plazoRespuesta}`,
-  },
-  {
-    pregunta: '¿Puedo usar mi dominio?',
-    respuesta: 'Contanos si ya tenés uno y lo vemos cuando hablemos.',
-    todo: PENDIENTES.dominio,
-  },
-  {
-    pregunta: '¿Ya puedo armarlo por mi cuenta?',
-    // TODO: cuando exista la plataforma de autoservicio, actualizar esta respuesta.
-    respuesta: 'Todavía no. Elegís lo que necesitás acá y lo armamos nosotros, con vos.',
+    respuesta: 'Contanos qué te falta en "Otra cosa". Si se puede hacer, lo armamos a medida.',
   },
 ];

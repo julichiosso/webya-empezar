@@ -146,7 +146,7 @@ describe('Wizard — pantalla 2 (negocio): guarda el lead parcial', () => {
       rubro: 'peluqueria_estetica',
       whatsapp: expect.stringContaining('11'),
     });
-    expect((cuerpo(0).modulos as string[]).length).toBeGreaterThan(0);
+    expect(Array.isArray(cuerpo(0).modulos)).toBe(true);
     expect(nombres()).toEqual(expect.arrayContaining(['form_enviado', 'preview_visto']));
   });
 
@@ -204,13 +204,13 @@ describe('Wizard — pantalla 3 (resultado), completar y gracias', () => {
     const u = user();
     await llegarAlResultado(u);
     const cta = screen.queryAllByRole('link', { name: /quiero esto para mi negocio/i })[0];
-    // Sin número configurado (test) el CTA muestra su TODO; con número, el link lleva el mensaje.
+    // Sin número configurado (test) no hay CTA y se avisa que los datos llegaron; con número, el link lleva el mensaje.
     if (cta) {
       const texto = decodeURIComponent(cta.getAttribute('href') ?? '');
       expect(texto).toContain('Luna Peluquería');
       expect(texto).toContain('Peluquería');
     } else {
-      expect(screen.getAllByText(/NEXT_PUBLIC_WHATSAPP_NUMBER/).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/ya tenemos tus datos/i).length).toBeGreaterThan(0);
     }
   });
 
@@ -360,10 +360,7 @@ describe('Wizard — pantalla 3: cómo se ve, colores y piezas', () => {
       'aria-pressed',
       'true',
     );
-    const turnos = screen.getByRole('button', { name: /turnos y reservas/i, pressed: true });
-    await u.click(turnos);
-    expect(turnos).toHaveAttribute('aria-pressed', 'false');
-    expect(nombres()).toEqual(expect.arrayContaining(['preview_toggle', 'modulo_alternado']));
+    expect(nombres()).toEqual(expect.arrayContaining(['preview_toggle']));
   });
 
   it('la demo de Gastronomía se abre con la paleta elegida', async () => {
@@ -380,12 +377,11 @@ describe('Wizard — pantalla 3: cómo se ve, colores y piezas', () => {
     );
   });
 
-  it('sin el número de WhatsApp de WebYa, en producción: ni TODO interno ni barra vacía', async () => {
+  it('sin el número de WhatsApp de WebYa: ni texto interno ni barra vacía', async () => {
     vi.stubEnv('NODE_ENV', 'production');
     try {
       const u = user();
       await llegarAlResultado(u);
-      expect(screen.queryByText(/NEXT_PUBLIC_WHATSAPP_NUMBER/)).toBeNull();
       expect(screen.queryByTestId('barra-cta')).toBeNull();
       expect(
         screen.getByText('Ya tenemos tus datos: te escribimos por WhatsApp para seguir.'),

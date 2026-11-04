@@ -4,15 +4,12 @@ import { ID_CONTENIDO, Nav } from '@/components/marketing/Nav';
 import { PreviewPanel } from '@/components/patterns/PreviewPanel';
 import { Marco } from '@/features/empezar/Marco';
 import { PantallaRubro } from '@/features/empezar/PantallaRubro';
-import { BotonExplicativo } from '@/features/explicativo/BotonExplicativo';
-import { ComoTrabajamosConVos } from '@/components/marketing/ComoTrabajamosConVos';
 import { Cierre } from '@/components/marketing/Cierre';
 import { StickyCta } from '@/components/marketing/StickyCta';
-import { CasoReal } from '@/components/marketing/CasoReal';
-import { FLAGS } from '@/config/flags';
+import { RubrosFlotantes } from '@/components/marketing/RubrosFlotantes';
+import { YaLoUsan } from '@/components/marketing/YaLoUsan';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
-import { AsiSeArma } from '@/components/marketing/AsiSeArma';
 import { Hero } from '@/components/marketing/Hero';
 import { MiraLoQueCreas } from '@/components/marketing/MiraLoQueCreas';
 import { QueIncluye } from '@/components/marketing/QueIncluye';
@@ -52,13 +49,14 @@ const faqJsonLd = {
 
 export default function EmpezarPage() {
   return (
-    <>
+    <div className="fondo-rubros relative bg-seccion-crema">
       <SplashLogo />
       <script
         type="application/ld+json"
         // Se escapa "<" para que ningún texto pueda cerrar la etiqueta <script>.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }}
       />
+      <RubrosFlotantes />
       <Nav />
       <main
         id={ID_CONTENIDO}
@@ -73,17 +71,13 @@ export default function EmpezarPage() {
           </WizardLazy>
         </Hero>
         <MiraLoQueCreas />
-        {/* El video explicativo va en "Así se arma": explica cómo se arma y no le compite al creador. */}
-        <AsiSeArma accion={<BotonExplicativo origen="empezar" />} />
         <QueIncluye />
-        {/* Caso real de Micio's: apagado hasta tener su permiso escrito (config/flags.ts). */}
-        {FLAGS.casoMicios && <CasoReal />}
-        <ComoTrabajamosConVos />
+        <YaLoUsan />
         <Faq />
         <Cierre />
       </main>
       <Footer />
       <StickyCta />
-    </>
+    </div>
   );
 }

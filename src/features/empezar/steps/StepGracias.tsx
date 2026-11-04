@@ -38,9 +38,6 @@ export function StepGracias({
         subtitle={nombre ? TXT.texto(nombre) : TXT.textoSinNombre}
         headingRef={headingRef}
       />
-      <p data-todo className="-mt-3 mb-6 text-small text-subtle">
-        {TXT.todoPlazo}
-      </p>
       {whatsappLink && (
         <ButtonLink
           href={whatsappLink}

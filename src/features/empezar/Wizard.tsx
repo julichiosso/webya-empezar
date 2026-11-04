@@ -18,6 +18,7 @@ import { FLUJO } from '@/content/empezar/wizard-flujo';
 import { getModulo, type ModuloId } from '@/content/modulos';
 import { esPaletaCurada, PALETA_CURADA_POR_DEFECTO, type PaletaCuradaId } from '@/content/paletas';
 import { getRubro } from '@/content/rubros';
+import { EVENTO_RUBRO } from '@/lib/eventos';
 import { MENSAJE_WHATSAPP } from '@/content/whatsapp';
 import { urlDemoConDatos } from '@/domain/traspaso/demo-wizard';
 import { track } from '@/lib/analytics';
@@ -182,6 +183,11 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
   }, [paso]);
 
   const rubro = getRubro(state.rubro);
+
+  // Avisa al fondo de rubros (RubrosFlotantes) cuál se eligió.
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent(EVENTO_RUBRO, { detail: state.rubro ?? null }));
+  }, [state.rubro]);
   const nombreNegocio = state.datos.nombreNegocio.trim();
   // La elegida en la vista previa; si no, la que traía de la demo; si no, la por defecto.
   const paletaDemo = state.demo?.paleta;
@@ -328,13 +334,8 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
         <Icon name="chat" size={20} />
         {textoCta}
       </ButtonLink>
-    ) : process.env.NODE_ENV !== 'production' ? (
-      // Sin el número de WhatsApp de WebYa configurado: el TODO solo fuera de producción.
-      <p data-todo className="text-small text-subtle">
-        {TXT_RES.todoWhatsapp}
-      </p>
     ) : state.lead ? (
-      // En producción, sin número: nada de textos internos; los datos ya llegaron.
+      // Sin número de WhatsApp configurado: los datos ya llegaron, se dice y listo.
       <p className="text-body">{TXT_RES.sinNumero}</p>
     ) : null;
   /** La barra fija lleva un botón de verdad (link a WhatsApp o, en el orden B, al contacto). */

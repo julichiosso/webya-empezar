@@ -28,18 +28,16 @@ describe('hero de /empezar', () => {
   });
 
   it.each(HERO_VARIANTES.map((v) => [v.id, v] as const))(
-    '%s: cada línea del titular con hasta 8 palabras y la salvedad "a medida"',
+    '%s: cada línea del titular con hasta 8 palabras',
     (_id, v) => {
       expect(palabras(v.titulo)).toBeLessThanOrEqual(8);
       expect(palabras(v.subtitulo)).toBeLessThanOrEqual(8);
-      expect(`${v.titulo} ${v.subtitulo} ${v.bajada}`).toMatch(/a medida/);
     },
   );
 
   it('el SEO y la imagen para compartir dicen lo mismo que el hero', () => {
     expect(SEO_EMPEZAR.og.titulo).toBe(HERO.titulo);
     expect(SEO_EMPEZAR.og.subtitulo).toBe(HERO.subtitulo);
-    expect(SEO_EMPEZAR.descripcion).toMatch(/a medida/);
     expect(SEO_EMPEZAR.descripcion.length).toBeLessThanOrEqual(160);
   });
 });

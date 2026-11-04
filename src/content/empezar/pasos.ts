@@ -1,5 +1,3 @@
-import { PENDIENTES } from '@/content/pendientes';
-
 /**
  * Los cuatro pasos del wizard actual de /empezar: rubro, módulos, datos y confirmación.
  * El flujo nuevo (necesidad → rubro → módulos → WhatsApp → completar) está en content/empezar/wizard-flujo.ts
@@ -82,8 +80,6 @@ export const PASO_DATOS = {
   enviando: 'Enviando…',
   privacidad:
     'Usamos tus datos solo para contactarte por tu proyecto y no los compartimos con nadie.',
-  /** Visible hasta que exista la política de privacidad. */
-  todoPrivacidad: PENDIENTES.privacidad,
 } as const;
 
 /** Paso 4: confirmación. */
@@ -96,15 +92,10 @@ export const PASO_LISTO = {
     trasRubro: ', estas son las piezas que activaste:',
   },
   ariaPiezas: 'Las piezas de tu negocio',
-  // TODO: definir plazos de entrega y precios; no se prometen hasta tenerlos.
   /** Aviso honesto: hoy la entrega es manual, la hacemos nosotros. */
   avisoEntrega:
     'Lo armamos nosotros: no tenés que configurar nada. Cuando lo tengamos listo, lo ponemos online juntos.',
   whatsapp: 'Hablar por WhatsApp',
   contacto: 'Te escribimos por WhatsApp para ponerlo online.',
-  /** Visible debajo de `contacto` hasta que el usuario confirme el plazo de respuesta. */
-  todoPlazo: PENDIENTES.plazoRespuesta,
-  /** Visible solo fuera de producción, mientras falte el número. */
-  todoWhatsapp: 'TODO: configurar NEXT_PUBLIC_WHATSAPP_NUMBER en .env.local.',
   reiniciar: 'Cargar otro negocio',
 } as const;

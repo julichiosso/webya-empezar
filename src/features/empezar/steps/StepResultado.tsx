@@ -116,9 +116,6 @@ export function StepResultado({
       <div className={ctaEnBarra ? 'max-lg:hidden' : undefined}>
         {cta}
         {ctaEnBarra && <p className="mt-3 text-small text-muted">{TXT.queSigue}</p>}
-        <p data-todo className="mt-1 text-small text-subtle">
-          {TXT.todoPlazo}
-        </p>
       </div>
 
       {controles && (
@@ -190,9 +187,6 @@ export function StepResultado({
       {ctaEnBarra && (
         <div className="mt-6 lg:hidden">
           <p className="text-small text-muted">{TXT.queSigue}</p>
-          <p data-todo className="mt-1 text-small text-subtle">
-            {TXT.todoPlazo}
-          </p>
         </div>
       )}
 
