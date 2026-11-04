@@ -62,8 +62,8 @@ export function Telon() {
         <svg viewBox={LOGO_VIEWBOX} className={estilos.mascara} focusable="false">
           <defs>
             <mask id="telon-mascara" maskUnits="userSpaceOnUse" {...RECT}>
-              <rect {...RECT} fill="#fff" />
-              <g fill="#000" fillRule="evenodd">
+              <rect {...RECT} fill="white" />
+              <g fill="black" fillRule="evenodd">
                 {LOGO_TRAZOS.map((t) => (
                   <path key={t.letra} d={t.d} />
                 ))}

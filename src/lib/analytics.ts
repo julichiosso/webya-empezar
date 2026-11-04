@@ -13,6 +13,8 @@ export interface EventosAnalitica {
   rubro_elegido: { rubro: string };
   /** Se guardó el lead parcial (pantalla 2). `orden`: el del experimento (config/experimentos). */
   form_enviado: { rubro: string; ciudad: boolean; orden: string };
+  /** Avanzó de la pantalla `paso` a una posterior del flujo. */
+  paso_completado: { paso: number };
   preview_visto: { rubro: string; paleta: string };
   preview_toggle: { dispositivo: 'celular' | 'escritorio' };
   demo_abierta: { rubro: string; paleta: string };

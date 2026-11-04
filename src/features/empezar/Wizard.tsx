@@ -104,7 +104,15 @@ export function Wizard({ rubroInicial = null }: WizardProps) {
   const aMedida = esAMedida(state);
   const modulos = useMemo(() => modulosDe(state), [state]);
 
+  // Última pantalla vista: sirve para medir "completó el paso N" solo al avanzar.
+  const pantallaVista = useRef(1);
+  useEffect(() => {
+    pantallaVista.current = pantallaDe(paso);
+  }, [paso]);
+
   const irA = useCallback((siguiente: Paso) => {
+    const destino = pantallaDe(siguiente);
+    if (destino > pantallaVista.current) track('paso_completado', { paso: pantallaVista.current });
     setErrorPaso(null);
     dispatch({ tipo: 'irA', paso: siguiente });
   }, []);

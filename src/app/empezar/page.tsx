@@ -5,6 +5,7 @@ import { Marco } from '@/features/empezar/Marco';
 import { PantallaRubro } from '@/features/empezar/PantallaRubro';
 import { Cierre } from '@/components/marketing/Cierre';
 import { INTRO_ACTIVA, Telon } from '@/components/marketing/Telon';
+import { TickerRubros } from '@/components/marketing/TickerRubros';
 import { StickyCta } from '@/components/marketing/StickyCta';
 import { RubrosFlotantes } from '@/components/marketing/RubrosFlotantes';
 import { YaCrearon } from '@/components/marketing/YaCrearon';
@@ -74,6 +75,7 @@ export default function EmpezarPage() {
           </WizardLazy>
         </Hero>
         <Objeciones donde="hero" />
+        <TickerRubros />
         <MensajeRubro />
         <MiraLoQueCreas />
         <QueIncluye />

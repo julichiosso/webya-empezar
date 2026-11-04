@@ -1,0 +1,51 @@
+.ticker {
+  overflow: hidden;
+  border-block: 1px solid var(--seccion-crema-linea);
+  padding-block: 0.9rem;
+  color: var(--seccion-crema-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.pista {
+  display: flex;
+  width: max-content;
+  animation: corre 90s linear infinite;
+  animation-play-state: paused;
+}
+
+.ticker[data-corre] .pista {
+  will-change: transform;
+  animation-play-state: running;
+}
+
+.ticker:hover .pista,
+.ticker:focus-within .pista,
+.ticker:active .pista {
+  animation-play-state: paused;
+}
+
+.lista {
+  display: flex;
+  flex-shrink: 0;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  margin: 0;
+  list-style: none;
+  white-space: nowrap;
+}
+
+@keyframes corre {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pista {
+    animation: none;
+  }
+  .ticker {
+    overflow-x: auto;
+  }
+}
