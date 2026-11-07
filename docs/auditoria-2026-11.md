@@ -88,10 +88,10 @@ Los datos de competidores vienen de búsquedas de hoy, varios de fuentes del pro
 
 ## Lo que tenés que hacer vos
 
-1. **Cargar los avisos en Vercel.** Sin esto seguís sin enterarte de los leads: `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` y/o `RESEND_API_KEY` + `NOTIFY_TO_EMAIL`. Los pasos están en `.env.example`.
-2. **Aplicar dos migraciones en Supabase:** `20261106120000_leads_origenes_crear.sql` y `20261106130000_eventos.sql`. Hasta entonces el sitio funciona, pero no se guardan los eventos y los orígenes nuevos se guardan como `instagram`.
-3. **Revisar lo que se dice de tu bot.** Solo sé lo que me dijiste: bot, turnero, agenda, estadísticas, ciencia de datos e IA. No sé el canal (no dice "WhatsApp" a propósito), ni si manda recordatorios o cobra señas. Textos en `content/empezar/productos.ts`, `content/faq.ts` y `content/rubros/mensajes.ts`.
-4. **Confirmar el dominio.** `.env` y `.env.example` dicen `webya.ar`; el código, la marca y el handoff dicen `webya.dev`. Afecta canonical, sitemap y Open Graph.
+1. **Arreglar el dominio (P0).** Verificado el 2026-11-07: el sitio responde solo en `webya-empezar.vercel.app`. El canonical, el Open Graph y el sitemap de producción dicen `webya.dev`, que devuelve 404 (Cloudflare). `webya.ar` responde otra cosa (Hostinger) y su `/empezar` da 404. Mientras tanto, Google recibe la orden de indexar una página que no existe, y `content/instagram.ts` y los mensajes de WhatsApp mencionan `webya.dev/empezar`. Conectá el dominio al proyecto de Vercel, o cargá `NEXT_PUBLIC_SITE_URL` con la dirección que funciona y volvé a desplegar.
+2. **Cargar los avisos en Vercel.** Sin esto seguís sin enterarte de los leads: `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` y/o `RESEND_API_KEY` + `NOTIFY_TO_EMAIL`. Los pasos están en `.env.example`. Los canales solo se probaron con tests simulados: mandá un lead tuyo y confirmá que llega.
+3. **Aplicar dos migraciones en Supabase:** `20261106120000_leads_origenes_crear.sql` y `20261106130000_eventos.sql`. Hasta entonces el sitio funciona, pero no se guardan los eventos y los orígenes nuevos se guardan como `instagram`.
+4. **Revisar lo que se dice de tu bot.** Solo sé lo que me dijiste: bot, turnero, agenda, estadísticas, ciencia de datos e IA. No sé el canal (no dice "WhatsApp" a propósito), ni si manda recordatorios o cobra señas. Textos en `content/empezar/productos.ts`, `content/faq.ts` y `content/rubros/mensajes.ts`.
 5. **Definir el precio** (`content/precios.ts`). Es la objeción más grande que sigue sin respuesta.
 6. **Sumar nombre y foto de quien está detrás** (`FUNDADOR`) y, cuando los tengas, testimonios reales.
 7. **Probar el telón en el navegador de Instagram.** Sigue sin probarse en el dispositivo real; `NEXT_PUBLIC_INTRO_LOGO=0` lo apaga.
