@@ -15,3 +15,16 @@ Reglas de uso:
 - `vercel-react-best-practices` sugiere librerías (swr, lru-cache…): no se suma ninguna sin aprobación.
 - `copywriting` y `cro` recomiendan testimonios, sellos y métricas: en WebYa no existen; manda `webya-brand`.
 - Para actualizar: bajar de nuevo desde el commit nuevo, releer todo y actualizar esta tabla.
+
+## Sumadas el 2026-11-06
+
+Revisadas: solo Markdown, sin scripts; búsqueda de comandos, pedidos de secretos e instrucciones ocultas sin
+hallazgos, y cabeceras leídas (no línea por línea). Sin la carpeta `evals`.
+
+| Skill | Origen | Commit | Licencia |
+|---|---|---|---|
+| seo-audit, schema, signup, analytics, pricing, onboarding | github.com/coreyhaines31/marketingskills | 96798cf38736ecdba015a1d2b0521b0c8f8f41dd | MIT |
+| web-design-guidelines | github.com/vercel-labs/agent-skills + reglas de vercel-labs/web-interface-guidelines (fijadas en references/) | 1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62 + 434b7f91364665f2f733b310ec54809bf8f37937 | MIT |
+
+Las mismas reglas de arriba: `webya-*` manda; nada de testimonios, sellos ni precios inventados.
+`analytics` y `pricing` sugieren herramientas y planes: no se suma ninguno sin aprobación del dueño.

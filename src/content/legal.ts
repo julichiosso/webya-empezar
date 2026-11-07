@@ -55,6 +55,12 @@ export const PRIVACIDAD: TextoLegal = {
         'Guardamos en tu navegador solo lo necesario para recordar tu borrador y tu preferencia de tema. No usamos cookies de publicidad.',
       ],
     },
+    {
+      titulo: 'Cómo medimos',
+      parrafos: [
+        'Contamos por qué pantallas pasa cada visita para saber dónde se traba la página. Es un número al azar por pestaña, sin IP, sin cookies y sin lo que escribís. No lo cruzamos con tus datos ni lo compartimos.',
+      ],
+    },
   ],
 };
 

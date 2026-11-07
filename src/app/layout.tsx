@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { Medicion } from '@/components/marketing/Medicion';
 import { Outfit } from 'next/font/google';
 import { preload } from 'react-dom';
 import { ScriptTema } from '@/brand/tema/ScriptTema';
@@ -43,7 +44,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Arriba de todo: aplica el tema guardado antes del primer pintado (el oscuro es el default). */}
         <ScriptTema />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Medicion />
+      </body>
     </html>
   );
 }

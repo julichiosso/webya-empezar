@@ -103,6 +103,48 @@ export interface DatosCompletar {
 
 export type ResultadoCompletar = 'ok' | 'no_encontrado';
 
+/**
+ * Lo que trae un reenvío del mismo lead parcial. Lo que llega vacío no pisa lo que ya estaba. Sin IP
+ * ni navegador: el lead sigue siendo el del primer envío.
+ */
+export type CambiosParcial = Omit<NuevoLeadParcial, 'ip_hash' | 'user_agent'>;
+
+/** Ventana en la que un nuevo envío del mismo WhatsApp actualiza el lead parcial en vez de duplicarlo. */
+export const VENTANA_REENVIO_MS = 30 * 60 * 1000;
+
+/** ¿Es el mismo negocio? Un nombre que falta de un lado no alcanza para decir que es otro. */
+export function esMismoNegocio(a: string | null | undefined, b: string | null | undefined): boolean {
+  if (!a || !b) return true;
+  return a.trim().toLowerCase() === b.trim().toLowerCase();
+}
+
+/** Sin lo vacío: un reenvío no borra lo que la persona ya había dejado. */
+export function soloConValor<T extends object>(cambios: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(cambios).filter(
+      ([, v]) => v !== null && v !== undefined && !(Array.isArray(v) && v.length === 0),
+    ),
+  ) as Partial<T>;
+}
+
+/** Busca en memoria el lead parcial que un reenvío tiene que actualizar (memoria y archivo). */
+export function indiceParcialReciente(
+  filas: readonly LeadRow[],
+  whatsapp: string,
+  ipHash: string,
+  desde: Date,
+  negocio: string | null | undefined,
+): number {
+  return filas.findLastIndex(
+    (l) =>
+      l.whatsapp === whatsapp &&
+      l.ip_hash === ipHash &&
+      l.estado === ESTADO_PARCIAL &&
+      new Date(l.created_at).getTime() >= desde.getTime() &&
+      esMismoNegocio(l.nombre_negocio, negocio),
+  );
+}
+
 export interface LeadRepository {
   crear(lead: NuevoLead): Promise<{ id: string }>;
   /** Guarda un lead con estado 'parcial' (solo WhatsApp y lo que haya elegido antes). */
@@ -118,6 +160,18 @@ export interface LeadRepository {
     datos: DatosCompletar,
     ahora: Date,
   ): Promise<ResultadoCompletar>;
+  /**
+   * Reenvío (doble toque, respuesta perdida, volvió atrás y cambió algo): si ese WhatsApp ya dejó un
+   * lead parcial del mismo negocio desde `desde` y desde la misma IP, lo actualiza con el token nuevo
+   * y devuelve su id. Si no hay ninguno, null y corresponde crear uno. La IP es parte de la condición:
+   * conocer el número de alguien no alcanza para pisar su lead ni para invalidarle el token.
+   */
+  renovarParcial(
+    whatsapp: string,
+    ipHash: string,
+    desde: Date,
+    cambios: CambiosParcial,
+  ): Promise<{ id: string } | null>;
   /** Cuántos leads guardó esa IP (hasheada) desde la fecha dada. Alimenta el rate limit. */
   contarRecientesPorIp(ipHash: string, desde: Date): Promise<number>;
 }

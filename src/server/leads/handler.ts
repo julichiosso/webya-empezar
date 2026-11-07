@@ -14,7 +14,12 @@ import type { ServerEnv } from '../env';
 import { getClientIp, hashIp } from '../ip';
 import type { NotificationService } from '../notifications';
 import { excedeLimiteDeLeads, type BurstLimiter } from '../rate-limit';
-import type { LeadRepository, NuevoLead, NuevoLeadParcial } from '../repositories/types';
+import {
+  VENTANA_REENVIO_MS,
+  type LeadRepository,
+  type NuevoLead,
+  type NuevoLeadParcial,
+} from '../repositories/types';
 import { generarToken, hashToken } from './token';
 
 export interface HandlerDeps {
@@ -23,10 +28,15 @@ export interface HandlerDeps {
   env: Pick<ServerEnv, 'IP_HASH_SALT' | 'RATE_LIMIT_MAX' | 'RATE_LIMIT_WINDOW_SECONDS'>;
   burst?: BurstLimiter;
   ahora?: () => Date;
+  /** Corre un aviso después de responder (`after` de Next). Sin esto se espera ahí mismo. */
+  programar?: (tarea: () => Promise<void>) => void;
 }
 
 /** Lo que necesita PATCH /api/leads/[id] (las mismas deps del POST sirven). */
-export type CompletarDeps = Pick<HandlerDeps, 'repo' | 'burst' | 'ahora'> & {
+export type CompletarDeps = Pick<
+  HandlerDeps,
+  'repo' | 'burst' | 'ahora' | 'notifier' | 'programar'
+> & {
   env: Pick<ServerEnv, 'IP_HASH_SALT'>;
 };
 
@@ -63,6 +73,26 @@ function error(
     { error: { code, message: MENSAJES[code], ...(extra.fields && { fields: extra.fields }) } },
     extra.headers,
   );
+}
+
+/** El aviso es "best effort": si falla no se le devuelve un error a quien ya dejó sus datos. */
+async function avisar(
+  deps: Pick<HandlerDeps, 'programar'>,
+  queAviso: string,
+  tarea: () => Promise<void>,
+): Promise<void> {
+  const segura = async () => {
+    try {
+      await tarea();
+    } catch (e) {
+      console.error(
+        `[leads] falló el aviso de ${queAviso}`,
+        e instanceof Error ? e.message : 'error',
+      );
+    }
+  };
+  if (deps.programar) deps.programar(segura);
+  else await segura();
 }
 
 const nullSiVacio = (v: string | undefined) => (v && v.length > 0 ? v : null);
@@ -203,15 +233,7 @@ export async function handleCreateLead(request: Request, deps: HandlerDeps): Pro
 
     const { id } = await deps.repo.crear(lead);
 
-    // El aviso es "best effort": si falla no se le devuelve un error a quien ya dejó sus datos.
-    try {
-      await deps.notifier.nuevoLead({ ...lead, id });
-    } catch (e) {
-      console.error(
-        '[leads] falló el aviso de nuevo lead',
-        e instanceof Error ? e.message : 'error',
-      );
-    }
+    await avisar(deps, 'nuevo lead', () => deps.notifier.nuevoLead({ ...lead, id }));
 
     return respuesta(201, { ok: true, id });
   } catch (e) {
@@ -266,10 +288,21 @@ async function crearParcial(
     token_hash: hashToken(token),
   };
 
+  // Reenvío (doble toque, respuesta perdida, volvió atrás): mismo lead con token nuevo y sin otro aviso.
+  const ahora = (deps.ahora ?? (() => new Date()))();
+  const { ip_hash: _ip, user_agent: _ua, ...cambios } = lead;
+  const previo = await deps.repo.renovarParcial(
+    lead.whatsapp,
+    ipHash,
+    new Date(ahora.getTime() - VENTANA_REENVIO_MS),
+    cambios,
+  );
+  if (previo) return respuesta(201, { ok: true, id: previo.id, token });
+
   const { id } = await deps.repo.crearParcial(lead);
 
-  try {
-    await deps.notifier.nuevoLeadParcial({
+  await avisar(deps, 'lead parcial', () =>
+    deps.notifier.nuevoLeadParcial({
       id,
       whatsapp: lead.whatsapp,
       necesidades: lead.necesidades,
@@ -277,13 +310,11 @@ async function crearParcial(
       rubro: lead.rubro,
       rubro_otro: lead.rubro_otro,
       modulos: lead.modulos,
-    });
-  } catch (e) {
-    console.error(
-      '[leads] falló el aviso de lead parcial',
-      e instanceof Error ? e.message : 'error',
-    );
-  }
+      nombre_negocio: lead.nombre_negocio,
+      ciudad: lead.ciudad,
+      origen: lead.origen,
+    }),
+  );
 
   return respuesta(201, { ok: true, id, token });
 }
@@ -324,18 +355,15 @@ export async function handleCompletarLead(
     }
     const d = validado.data;
 
-    const resultado = await deps.repo.completar(
-      id.toLowerCase(),
-      hashToken(d.token),
-      {
-        nombre_negocio: d.nombreNegocio,
-        nombre: nullSiVacio(d.nombre),
-        email: nullSiVacio(d.email),
-        mensaje: nullSiVacio(d.mensaje),
-      },
-      ahora,
-    );
+    const datos = {
+      nombre_negocio: d.nombreNegocio,
+      nombre: nullSiVacio(d.nombre),
+      email: nullSiVacio(d.email),
+      mensaje: nullSiVacio(d.mensaje),
+    };
+    const resultado = await deps.repo.completar(id.toLowerCase(), hashToken(d.token), datos, ahora);
     if (resultado !== 'ok') return error(404, 'NOT_FOUND');
+    await avisar(deps, 'lead completado', () => deps.notifier.leadCompletado(id, datos));
     return respuesta(200, { ok: true });
   } catch (e) {
     console.error('[leads] error interno al completar', e instanceof Error ? e.message : 'error');

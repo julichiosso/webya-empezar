@@ -8,6 +8,8 @@
  */
 
 export interface EventosAnalitica {
+  /** Abrió una página (sale apenas carga: cuenta también a quien se va sin tocar nada). */
+  pagina_vista: { ruta: string; utm_source?: string; utm_medium?: string; utm_campaign?: string };
   empezar_view: Record<string, never>;
   // Flujo "tu negocio, armado en un minuto": rubro → formulario → vista previa → CTA.
   rubro_elegido: { rubro: string };
@@ -43,6 +45,35 @@ export interface EventosAnalitica {
 }
 
 export type NombreEvento = keyof EventosAnalitica;
+
+/** Lista cerrada para la API de eventos: un nombre que no esté acá no se guarda. */
+export const NOMBRES_EVENTO = [
+  'pagina_vista',
+  'empezar_view',
+  'rubro_elegido',
+  'form_enviado',
+  'paso_completado',
+  'preview_visto',
+  'preview_toggle',
+  'demo_abierta',
+  'cta_click',
+  'cliente_abierto',
+  'abandono_paso',
+  'lead_completado',
+  'modulo_alternado',
+  'whatsapp_click',
+  'demo_view',
+  'demo_personalizada',
+  'demo_pedido_creado',
+  'demo_estado_avanzado',
+  'demo_cta_click',
+  'demo_qr_celular',
+  'demo_whatsapp_click',
+  'explicativo_abierto',
+  'explicativo_capitulo',
+  'explicativo_completo',
+  'explicativo_cta',
+] as const satisfies readonly NombreEvento[];
 export type Sink = <E extends NombreEvento>(evento: E, props: EventosAnalitica[E]) => void;
 
 const sinks = new Set<Sink>();

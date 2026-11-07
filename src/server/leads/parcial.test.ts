@@ -59,6 +59,7 @@ beforeEach(() => {
   notifier = {
     nuevoLead: vi.fn().mockResolvedValue(undefined),
     nuevoLeadParcial: vi.fn().mockResolvedValue(undefined),
+    leadCompletado: vi.fn().mockResolvedValue(undefined),
   };
   deps = {
     repo,
@@ -206,7 +207,7 @@ describe('POST /api/leads con parcial: true', () => {
   it('avisa del lead parcial con el WhatsApp, las necesidades y el texto libre', async () => {
     const { body } = await crearParcial();
     expect(notifier.nuevoLeadParcial).toHaveBeenCalledOnce();
-    expect(notifier.nuevoLeadParcial.mock.calls[0]?.[0]).toEqual({
+    expect(notifier.nuevoLeadParcial.mock.calls[0]?.[0]).toMatchObject({
       id: body.id,
       whatsapp: '+5491123456789',
       necesidades: ['vender', 'otra'],
@@ -233,7 +234,11 @@ describe('POST /api/leads con parcial: true', () => {
   });
 
   it('rate limit por IP: el parcial cuenta igual que un lead completo', async () => {
-    for (let i = 0; i < 3; i++) expect((await crearParcial()).res.status).toBe(201);
+    // Números distintos: el mismo número reenviado actualiza su lead (ver "reenvíos", abajo).
+    for (let i = 0; i < 3; i++) {
+      const { res } = await crearParcial({ ...parcial, whatsapp: `011 15 2345 678${i}` });
+      expect(res.status).toBe(201);
+    }
     const res = await handleCreateLead(peticion(parcial), deps);
     expect(res.status).toBe(429);
     expect(res.headers.get('retry-after')).toBe('600');
@@ -384,5 +389,56 @@ describe('PATCH /api/leads/[id]', () => {
     );
     expect(res.status).toBe(500);
     expect(await res.text()).not.toMatch(/supabase|hunter2/);
+  });
+});
+
+describe('reenvíos del mismo lead parcial', () => {
+  const conNombre = { ...parcial, nombreNegocio: 'Luna Deco' };
+
+  it('un doble envío no duplica el lead ni el aviso, y el token nuevo es el que vale', async () => {
+    const a = (await crearParcial(conNombre)).body;
+    const { res, body: b } = await crearParcial(conNombre);
+    expect(res.status).toBe(201);
+    expect(b.id).toBe(a.id);
+    expect(b.token).not.toBe(a.token);
+    expect(repo.leads).toHaveLength(1);
+    expect(repo.leads[0]?.token_hash).toBe(hashToken(b.token));
+    expect(notifier.nuevoLeadParcial).toHaveBeenCalledOnce();
+  });
+
+  it('lo que llega vacío no pisa lo que ya estaba', async () => {
+    await crearParcial(conNombre);
+    await crearParcial({ parcial: true, whatsapp: parcial.whatsapp, website: '' });
+    expect(repo.leads).toHaveLength(1);
+    expect(repo.leads[0]).toMatchObject({ nombre_negocio: 'Luna Deco', rubro: 'comercio' });
+  });
+
+  it('otro negocio con el mismo WhatsApp es otro lead', async () => {
+    await crearParcial(conNombre);
+    await crearParcial({ ...parcial, nombreNegocio: 'Otro Local' });
+    expect(repo.leads).toHaveLength(2);
+    expect(notifier.nuevoLeadParcial).toHaveBeenCalledTimes(2);
+  });
+
+  it('desde otra IP no se puede pisar el lead ni invalidar su token', async () => {
+    const a = (await crearParcial(conNombre)).body;
+    await handleCreateLead(peticion({ ...conNombre, rubro: 'gastronomia' }, { ip: '198.51.100.9' }), deps);
+    expect(repo.leads).toHaveLength(2);
+    expect(repo.leads[0]).toMatchObject({ rubro: 'comercio', token_hash: hashToken(a.token) });
+  });
+
+  it('pasada la ventana, un envío nuevo es un lead nuevo', async () => {
+    await crearParcial(conNombre);
+    ahora = new Date(T0.getTime() + 31 * 60 * 1000);
+    await crearParcial(conNombre);
+    expect(repo.leads).toHaveLength(2);
+  });
+
+  it('un lead que ya se completó no se reabre, y avisa que sumó datos', async () => {
+    const { id, token } = (await crearParcial(conNombre)).body;
+    expect((await patch(id, { ...completar, token })).status).toBe(200);
+    expect(notifier.leadCompletado).toHaveBeenCalledOnce();
+    await crearParcial(conNombre);
+    expect(repo.leads).toHaveLength(2);
   });
 });

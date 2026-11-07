@@ -5,6 +5,9 @@ import {
   aFila,
   aFilaParcial,
   completarFila,
+  indiceParcialReciente,
+  soloConValor,
+  type CambiosParcial,
   type DatosCompletar,
   type LeadRepository,
   type LeadRow,
@@ -89,6 +92,22 @@ export class FileLeadRepository implements LeadRepository {
       filas[i] = completa;
       await this.escribir(filas);
       return 'ok';
+    });
+  }
+
+  renovarParcial(
+    whatsapp: string,
+    ipHash: string,
+    desde: Date,
+    cambios: CambiosParcial,
+  ): Promise<{ id: string } | null> {
+    return this.encolar(async () => {
+      const filas = await this.leer();
+      const i = indiceParcialReciente(filas, whatsapp, ipHash, desde, cambios.nombre_negocio);
+      if (i === -1) return null;
+      filas[i] = { ...filas[i]!, ...soloConValor(cambios) };
+      await this.escribir(filas);
+      return { id: filas[i]!.id };
     });
   }
 

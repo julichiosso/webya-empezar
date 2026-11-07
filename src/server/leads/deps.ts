@@ -1,3 +1,4 @@
+import { after } from 'next/server';
 import { MENSAJES_API_LEAD } from '@/content/leads';
 import { getEnv } from '../env';
 import { getNotificationService } from '../notifications';
@@ -13,7 +14,14 @@ let burst: BurstLimiter | undefined;
 export function getLeadHandlerDeps(): HandlerDeps {
   const env = getEnv();
   burst ??= crearBurstLimiter(env.RATE_LIMIT_BURST_PER_MINUTE, 60_000);
-  return { repo: getLeadRepository(), notifier: getNotificationService(), env, burst };
+  return {
+    repo: getLeadRepository(),
+    notifier: getNotificationService(),
+    env,
+    burst,
+    // Telegram o el mail no demoran la respuesta a la persona.
+    programar: (tarea) => after(tarea),
+  };
 }
 
 /** Configuración inválida (instrumentation.ts debería haberlo frenado al arrancar): 500 genérico. */

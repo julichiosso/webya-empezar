@@ -2,7 +2,11 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import {
   ESTADO_INICIAL_LEAD,
   ESTADO_PARCIAL,
+  esMismoNegocio,
+  ORIGEN_POR_DEFECTO,
+  soloConValor,
   TTL_TOKEN_MS,
+  type CambiosParcial,
   type DatosCompletar,
   type LeadRepository,
   type NuevoLead,
@@ -27,6 +31,11 @@ export function faltaColumnaDemo(error: ErrorDb): boolean {
 /** La columna `ciudad` (migración leads_ciudad) todavía no existe. */
 export function faltaColumnaCiudad(error: ErrorDb): boolean {
   return faltaColumna(error, /\bciudad\b/);
+}
+
+/** El origen todavía no está en la lista de la base (migración leads_origenes_crear). */
+export function origenRechazado(error: ErrorDb): boolean {
+  return error.code === '23514' && /leads_origen_check/.test(error.message ?? '');
 }
 
 /** Alguna columna del lead parcial (migración leads_parcial_necesidades) todavía no existe. */
@@ -72,6 +81,11 @@ export class SupabaseLeadRepository implements LeadRepository {
       delete sinDemo.demo;
       return this.insertar(sinDemo);
     }
+    if (error && fila.origen !== ORIGEN_POR_DEFECTO && origenRechazado(error)) {
+      // El código llegó antes que la migración: el lead vale más que el dato de dónde vino.
+      console.warn('[leads] Origen rechazado: aplicá la migración leads_origenes_crear.');
+      return this.insertar({ ...fila, origen: ORIGEN_POR_DEFECTO });
+    }
     if (error && faltanColumnasParcial(error)) console.warn(AVISO_MIGRACION_PARCIAL);
     if (error) throw new Error(`Supabase insert falló: ${error.code ?? ''} ${error.message}`);
     return { id: (data as { id: string }).id };
@@ -113,6 +127,40 @@ export class SupabaseLeadRepository implements LeadRepository {
     if (error && faltanColumnasParcial(error)) console.warn(AVISO_MIGRACION_PARCIAL);
     if (error) throw new Error(`Supabase update falló: ${error.code ?? ''} ${error.message}`);
     return Array.isArray(data) && data.length > 0 ? 'ok' : 'no_encontrado';
+  }
+
+  async renovarParcial(
+    whatsapp: string,
+    ipHash: string,
+    desde: Date,
+    cambios: CambiosParcial,
+  ): Promise<{ id: string } | null> {
+    const { data, error } = await this.client
+      .from('leads')
+      .select('id, nombre_negocio')
+      .eq('whatsapp', whatsapp)
+      .eq('ip_hash', ipHash)
+      .eq('estado', ESTADO_PARCIAL)
+      .gte('created_at', desde.toISOString())
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (error) throw new Error(`Supabase select falló: ${error.code ?? ''} ${error.message}`);
+    const previo = (data as { id: string; nombre_negocio: string | null }[] | null)?.[0];
+    if (!previo || !esMismoNegocio(previo.nombre_negocio, cambios.nombre_negocio)) return null;
+
+    // Ciudad, demo y origen pueden no existir o no estar admitidos todavía: no se reenvían. Lo
+    // importante del reenvío es el token nuevo y lo que eligió; el lead original no se toca más.
+    const { ciudad: _ciudad, demo: _demo, origen: _origen, ...resto } = cambios;
+    const { data: filas, error: errorUpdate } = await this.client
+      .from('leads')
+      .update(soloConValor(resto))
+      .eq('id', previo.id)
+      .eq('estado', ESTADO_PARCIAL)
+      .select('id');
+    if (errorUpdate) {
+      throw new Error(`Supabase update falló: ${errorUpdate.code ?? ''} ${errorUpdate.message}`);
+    }
+    return Array.isArray(filas) && filas.length > 0 ? { id: previo.id } : null;
   }
 
   async contarRecientesPorIp(ipHash: string, desde: Date): Promise<number> {
