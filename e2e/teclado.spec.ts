@@ -22,7 +22,7 @@ test('el flujo completo se puede hacer solo con teclado (y el foco no se pierde 
   const w = wizard(page);
   await expect(w.getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
 
-  // Tab: "Saltar al contenido" → logo → ejemplos → CTA de la nav → la primera tarjeta de rubro.
+  // Tab: "Saltar al contenido" → logo → demos → clientes → CTA de la nav → la primera tarjeta de rubro.
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: NAV.saltar })).toBeFocused();
   await page.keyboard.press('Tab');
@@ -30,6 +30,8 @@ test('el flujo completo se puede hacer solo con teclado (y el foco no se pierde 
   // "Ver ejemplos" solo se muestra desde sm.
   const ejemplos = page.getByRole('navigation').getByRole('link', { name: NAV.ejemplos });
   if (await ejemplos.isVisible()) {
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('navigation').getByRole('link', { name: NAV.demos })).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(ejemplos).toBeFocused();
   }

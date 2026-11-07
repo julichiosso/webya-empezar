@@ -150,7 +150,10 @@ export class SupabaseLeadRepository implements LeadRepository {
 
     // Ciudad, demo y origen pueden no existir o no estar admitidos todavía: no se reenvían. Lo
     // importante del reenvío es el token nuevo y lo que eligió; el lead original no se toca más.
-    const { ciudad: _ciudad, demo: _demo, origen: _origen, ...resto } = cambios;
+    const resto = { ...cambios };
+    delete resto.ciudad;
+    delete resto.demo;
+    delete resto.origen;
     const { data: filas, error: errorUpdate } = await this.client
       .from('leads')
       .update(soloConValor(resto))

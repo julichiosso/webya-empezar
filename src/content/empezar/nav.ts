@@ -10,7 +10,9 @@ export const NAV = {
   saltar: 'Saltar al contenido',
   cta: HERO.cta,
   /** Enlace a los ejemplos reales ("Ya lo usan"). */
-  ejemplos: 'Ver ejemplos',
+  ejemplos: 'Clientes',
+  /** Enlace a las demos, en la barra de arriba. */
+  demos: 'Probalo',
   /**
    * Interruptor de tema (docs/plan-sprint.md §3), solo ícono: la etiqueta es su nombre accesible.
    * Nombre fijo: nombra lo que queda activo cuando está presionado (aria-pressed dice si lo está),

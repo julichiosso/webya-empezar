@@ -45,7 +45,9 @@ test('"Otro" con el error del pedido a medida sin violaciones', async ({ page })
 
 test('formulario con errores visibles sin violaciones', async ({ page }) => {
   await irAlPaso(page, 'negocio');
-  await wizard(page).getByRole('button', { name: /ver cómo me queda/i }).click();
+  await wizard(page)
+    .getByRole('button', { name: /ver cómo me queda/i })
+    .click();
   await expect(wizard(page).locator('[aria-invalid="true"]').first()).toBeVisible();
   await auditar(page);
 });
@@ -67,6 +69,37 @@ test('gracias sin violaciones', async ({ page }) => {
   await irAlPaso(page, 'completar', '', negocioUnico('a11y'));
   await completarDatos(page);
   await expect(wizard(page).getByRole('heading', { name: TITULO_GRACIAS })).toBeVisible();
+  await auditar(page);
+});
+
+test('/demo/peluqueria sin violaciones: la charla, la agenda y las estadísticas', async ({
+  page,
+}) => {
+  await page.goto('/demo/peluqueria');
+  await page.getByLabel('Escribile al bot').fill('corte el sábado');
+  await page.getByRole('button', { name: 'Enviar' }).click();
+  await expect(page.getByRole('log').getByRole('button').first()).toBeVisible();
+  await auditar(page);
+  if ((page.viewportSize()?.width ?? 0) < 1024) {
+    await page.getByRole('button', { name: 'Tu agenda' }).click();
+  }
+  await auditar(page);
+  await page.getByRole('button', { name: 'Estadísticas' }).click();
+  await expect(page.getByRole('table')).toBeVisible();
+  await auditar(page);
+});
+
+test('/crear y /ver sin violaciones', async ({ page }) => {
+  await page.goto('/crear?rubro=peluqueria_estetica&nombre=Barber%C3%ADa');
+  await expect(page.getByTestId('sitio-negocio').first()).toBeAttached();
+  await auditar(page);
+  if ((page.viewportSize()?.width ?? 0) < 1024) {
+    await page.getByRole('button', { name: 'Ver mi sitio' }).click();
+  }
+  await auditar(page);
+  const ruta = await page.getByRole('link', { name: 'Abrir' }).getAttribute('href');
+  await page.goto(ruta!);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await auditar(page);
 });
 

@@ -1,19 +1,23 @@
 /**
- * Hero de /empezar: la promesa con su salvedad, el CTA que baja al wizard y las señales de confianza.
- * Es la variante `todo_lo_digital` de content/empezar/hero-variantes.ts (un test verifica que coincidan).
+ * Hero de /empezar: la promesa, el CTA que baja al creador y la prueba.
+ * Es la variante `atiende_solo` de content/empezar/hero-variantes.ts (un test verifica que coincidan).
  */
 export const HERO = {
-  titulo: 'Tu negocio online, armado con vos.',
-  /** Segunda línea del título (más apagada): la salvedad honesta de "todo". */
-  subtitulo: 'Elegí tu rubro y mirá cómo queda.',
+  titulo: 'Tu negocio atiende mientras vos trabajás.',
+  /** Debajo del titular: qué es, en cosas que se pueden tocar. */
+  subtitulo: 'Pedidos, turnos con bot y tu sitio.',
   bajada:
-    'Tienda, turnos, carta con QR, pedidos y pagos. Activá solo lo que usás y lo armamos con vos.',
+    'Carta con QR y pedidos para gastronomía. Bot de turnos con agenda y estadísticas para peluquerías. Si lo tuyo es otra cosa, lo armamos a medida.',
   cta: 'Crear mi sistema',
-  /**
-   * Señales de confianza (solo escritorio). Son promesas que ya cumplimos, sin sellos, métricas
-   * ni testimonios.
-   */
-  senales: ['Sin saber de tecnología', 'Armado para tu rubro', 'Te escribimos por WhatsApp'],
-  /** Enlace secundario (no botón) a la demo real, debajo del CTA. */
-  enlaceDemo: 'O mirá una demo funcionando',
+  /** Debajo del creador: negocios reales, con link a sus casos. */
+  prueba: { antes: 'Ya funcionando:' },
+  /** Las demos que se pueden tocar sin dejar ningún dato. */
+  demos: {
+    antes: 'Probalo ahora:',
+    separador: 'o',
+    enlaces: [
+      { texto: 'el bot de turnos', href: '/demo/peluqueria' },
+      { texto: 'la carta con pedidos', href: '/demo/gastronomia' },
+    ],
+  },
 } as const;

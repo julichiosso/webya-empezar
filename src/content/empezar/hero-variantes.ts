@@ -7,7 +7,7 @@
  * cifras, clientes ni plazos, y la promesa "todo lo digital" siempre con su salvedad "lo armamos a medida".
  */
 export interface VarianteHero {
-  id: 'todo_lo_digital' | 'pieza_por_pieza' | 'objecion_tecnologia';
+  id: 'atiende_solo' | 'pieza_por_pieza' | 'objecion_tecnologia';
   /** Fórmula de titular que usa (webya-copy-comercial → "Fórmulas de titular"). */
   formula: string;
   titulo: string;
@@ -21,15 +21,15 @@ export interface VarianteHero {
 
 export const HERO_VARIANTES: readonly VarianteHero[] = [
   {
-    id: 'todo_lo_digital',
-    formula: 'Resultado + para quién, con la salvedad en el mismo titular',
-    titulo: 'Tu negocio online, armado con vos.',
-    subtitulo: 'Elegí tu rubro y mirá cómo queda.',
+    id: 'atiende_solo',
+    formula: 'Resultado en la vida del dueño, sin nombrar la categoría',
+    titulo: 'Tu negocio atiende mientras vos trabajás.',
+    subtitulo: 'Pedidos, turnos con bot y tu sitio.',
     bajada:
-      'Tienda, turnos, carta con QR, pedidos y pagos. Activá solo lo que usás y lo armamos con vos.',
+      'Carta con QR y pedidos para gastronomía. Bot de turnos con agenda y estadísticas para peluquerías. Si lo tuyo es otra cosa, lo armamos a medida.',
     cta: 'Crear mi sistema',
     razonamiento:
-      'Dice en cinco segundos qué es WebYa (el lugar donde un negocio consigue lo digital) y responde en la misma frase la duda que genera "todo": si no está, se arma. La bajada baja la promesa a cosas que se pueden tocar. Riesgo: "todo lo digital" suena amplio; por eso la salvedad va en el titular y no en letra chica.',
+      'Nombra el dolor real de quien corta el pelo o cocina y no puede contestar el teléfono, y vale igual para los dos productos que ya existen. Dice el resultado y no "sitio" ni "sistema", que suenan a trabajo. Riesgo: en un rubro que solo necesita presencia promete de más; por eso la bajada aclara qué es y dice que lo demás se arma a medida.',
     elegida: true,
   },
   {

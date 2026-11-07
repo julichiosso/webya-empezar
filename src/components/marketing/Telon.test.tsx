@@ -7,7 +7,7 @@ import { Telon } from './Telon';
 describe('Telon', () => {
   it('tiene el enlace para saltar y el resto es decorativo', () => {
     const { container } = render(<Telon />);
-    expect(screen.getByRole('link', { name: TELON.saltar })).toHaveAttribute('href', '#hero-title');
+    expect(screen.getByRole('link', { name: TELON.saltar })).toHaveAttribute('href', '#ya-lo-usan');
     expect(container.querySelector('[aria-hidden="true"]')).not.toBeNull();
   });
 

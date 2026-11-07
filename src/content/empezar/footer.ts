@@ -16,6 +16,8 @@ export const FOOTER = {
   },
   probar: {
     titulo: 'Probalo',
+    crear: 'Armar mi sitio',
+    turnos: 'El bot de turnos',
     demo: 'Probar la demo',
   },
   legales: {

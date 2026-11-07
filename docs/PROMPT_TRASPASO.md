@@ -13,3 +13,5 @@ Pendientes del dueño: WhatsApp (NEXT_PUBLIC_WHATSAPP_NUMBER, también Vercel), 
 Orden: copy residual → 3a (solo si se cierra con build verde) → resto de la Fase 3. Cerrá cada bloque con typecheck, lint, tests, build, capturas 375/1366 y un commit local.
 
 SESIÓN 3: se agregó el cliente Joyería Petrucci y la intro del telón quedó ENCENDIDA por defecto (NEXT_PUBLIC_INTRO_LOGO=0 la apaga). Ver docs/HANDOFF.md, bloque SESIÓN 3, para el estado exacto y qué verificar antes de commitear.
+
+SESIÓN 2026-11-06: hero nuevo, telón después del hero, /demo/peluqueria, /crear + /ver, avisos reales de leads, medición propia. Empezá por docs/auditoria-2026-11.md y el bloque de arriba de docs/HANDOFF.md. Este archivo dice "NUNCA pushees": sigue valiendo salvo pedido explícito del dueño.

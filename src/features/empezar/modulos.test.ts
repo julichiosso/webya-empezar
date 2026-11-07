@@ -22,8 +22,9 @@ describe('modulosSeleccionados', () => {
   });
 
   it('un módulo "próximamente" nunca queda activo, ni sugerido ni a mano', () => {
-    expect(modulosSeleccionados(PELUQUERIA, {})).toEqual([]);
-    expect(modulosSeleccionados(null, { turnos: true, pagos: true })).toEqual([]);
+    // Peluquería sugiere también pagos, clientes y avisos: quedan afuera hasta que se entreguen.
+    expect(modulosSeleccionados(PELUQUERIA, {})).toEqual(['turnos', 'catalogo']);
+    expect(modulosSeleccionados(null, { pagos: true, clientes: true })).toEqual([]);
   });
 
   it('lo activado a mano sin rubro (desde el hero) cuenta', () => {

@@ -41,11 +41,11 @@ export function PantallaRubro({ elegido, onElegir, headingRef, animar }: Pantall
                 data-rubro={r.id}
                 aria-pressed={marcado}
                 onClick={onElegir ? () => onElegir(r.id) : undefined}
-                className="group flex h-full min-h-14 w-full items-center gap-2.5 rounded-card border border-line bg-surface p-2.5 text-left hover:border-line-strong aria-pressed:border-accent aria-pressed:bg-accent-soft data-[cargando]:border-accent data-[cargando]:bg-accent-soft sm:gap-3 sm:p-3"
+                className="group flex h-full min-h-14 w-full items-center gap-2.5 rounded-card border border-line bg-surface p-2.5 text-left hover:border-line-strong aria-pressed:border-accent aria-pressed:bg-accent-soft data-[cargando]:border-accent data-[cargando]:bg-accent-soft data-[en-vitrina]:border-fg/50 sm:gap-3 sm:p-3 sm:px-3"
               >
                 <span
                   aria-hidden="true"
-                  className="flex size-8 shrink-0 items-center justify-center rounded-control border border-dashed sm:size-10 border-line-strong text-fg group-aria-pressed:border-solid group-aria-pressed:border-accent"
+                  className="flex size-8 shrink-0 items-center justify-center rounded-control border border-dashed border-line-strong text-fg group-aria-pressed:border-solid group-aria-pressed:border-accent"
                 >
                   <Icon name={isIconName(r.icono) ? r.icono : 'mas'} size={20} />
                 </span>
@@ -54,10 +54,7 @@ export function PantallaRubro({ elegido, onElegir, headingRef, animar }: Pantall
                   <span className="block text-small leading-tight font-semibold sm:hidden">
                     {r.nombreCorto ?? r.nombre}
                   </span>
-                  <span className="hidden font-semibold sm:block">{r.nombre}</span>
-                  <span className="mt-0.5 hidden text-small text-muted sm:line-clamp-2 lg:bajo:hidden">
-                    {r.descripcionCorta}
-                  </span>
+                  <span className="hidden leading-tight font-semibold sm:block">{r.nombre}</span>
                 </span>
               </button>
             </li>

@@ -39,7 +39,7 @@ test('recorrido completo: rubro → formulario (lead parcial) → vista previa �
     whatsapp: '+5491123456789',
     rubro: 'peluqueria_estetica',
     ciudad: 'San Jorge',
-    modulos: [],
+    modulos: ['turnos', 'catalogo'],
     utm_source: 'instagram',
     utm_medium: 'bio',
     utm_campaign: 'lanzamiento',
@@ -100,7 +100,9 @@ test('Gastronomía: la demo completa se abre con el nombre y la paleta elegidos'
   await elegirRubro(page, 'gastronomia');
   await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
   await wizard(page).getByLabel('Nombre de tu negocio').fill('Lo de Tito');
-  await wizard(page).getByRole('button', { name: /ver cómo me queda/i }).click();
+  await wizard(page)
+    .getByRole('button', { name: /ver cómo me queda/i })
+    .click();
   await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
   await wizard(page).getByRole('button', { name: 'Colores Pileta' }).click();
   await expect(page.getByTestId('vista-previa-carta').first()).toContainText('Lo de Tito');

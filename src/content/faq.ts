@@ -20,6 +20,16 @@ export const FAQ: readonly Pregunta[] = [
       'Elegir tu rubro y ver cómo queda lleva unos minutos. La puesta online la coordinamos por WhatsApp.',
   },
   {
+    pregunta: '¿Qué hace el bot de turnos?',
+    respuesta:
+      'Atiende a tus clientes, les toma el turno y lo deja en tu agenda. Además ves las estadísticas de tu negocio, con ciencia de datos e IA. Lo podés probar en la demo.',
+  },
+  {
+    pregunta: '¿Tengo que crear una cuenta para probar?',
+    respuesta:
+      'No. Las demos y el armado de tu sitio andan sin cuenta y sin dejar tus datos. Tu WhatsApp te lo pedimos recién cuando quieras seguir.',
+  },
+  {
     pregunta: '¿Puedo usar mi propio dominio?',
     respuesta: 'Contanos cuál es y lo vemos juntos.',
   },

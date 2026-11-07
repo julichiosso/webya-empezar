@@ -54,7 +54,7 @@ test('el h1 y el wizard existen en el DOM y el titular está arriba del flujo', 
   await page.goto('/empezar');
   await expect(page.getByRole('heading', { level: 1, name: HERO.titulo })).toBeVisible();
   const h1 = (await page.locator('h1').boundingBox())!;
-  const flujo = (await wizard(page).boundingBox())!;
+  const flujo = (await wizard(page).getByRole('heading', { name: TITULO_RUBRO }).boundingBox())!;
   expect(h1.y + h1.height).toBeLessThanOrEqual(flujo.y);
   const main = (await page.locator('main').boundingBox())!;
   expect(main.width).toBeLessThanOrEqual(1200);
@@ -113,12 +113,10 @@ test.describe('escritorio (lg y más)', () => {
     test.skip(!esLg(page), 'solo escritorio');
   });
 
-  test('flujo en 2 paneles: pantalla a la izquierda y vista previa a la derecha', async ({
-    page,
-  }) => {
+  test('flujo en 2 paneles: pantalla a la izquierda y vitrina a la derecha', async ({ page }) => {
     await page.goto('/empezar');
     await abrirWizard(page);
-    const panel = page.getByTestId('negocio-preview-panel');
+    const panel = page.getByTestId('vitrina-rubros');
     await expect(panel).toBeVisible();
     const paso = (await wizard(page).getByRole('heading', { name: TITULO_RUBRO }).boundingBox())!;
     const prev = (await panel.boundingBox())!;

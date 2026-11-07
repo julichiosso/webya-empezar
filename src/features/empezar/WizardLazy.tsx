@@ -6,6 +6,8 @@ import type { VistaPreviaRubro } from './Wizard';
 
 interface WizardProps {
   VistaPrevia?: VistaPreviaRubro;
+  encabezado?: ReactNode;
+  vitrina?: ReactNode;
   /** Rubro tocado antes de que terminara de descargarse el wizard: arranca desde ahí. */
   rubroInicial: string | null;
 }
@@ -28,8 +30,13 @@ const GESTOS = ['scroll', 'pointerdown', 'keydown', 'touchstart'] as const;
 export function WizardLazy({
   children,
   VistaPrevia,
+  encabezado,
+  vitrina,
 }: {
   children: ReactNode;
+  /** El titular y la vitrina del hero, dibujados en el servidor: el wizard los reutiliza. */
+  encabezado?: ReactNode;
+  vitrina?: ReactNode;
   /** La carta real de Gastronomía (la pasa la página). */
   VistaPrevia?: VistaPreviaRubro;
 }) {
@@ -97,5 +104,14 @@ export function WizardLazy({
     document.querySelector<HTMLElement>(`#wizard [data-rubro="${CSS.escape(id)}"]`)?.focus();
   }, [Wizard, rubroInicial]);
 
-  return Wizard ? <Wizard rubroInicial={rubroInicial} VistaPrevia={VistaPrevia} /> : <div ref={contenedor}>{children}</div>;
+  return Wizard ? (
+    <Wizard
+      rubroInicial={rubroInicial}
+      VistaPrevia={VistaPrevia}
+      encabezado={encabezado}
+      vitrina={vitrina}
+    />
+  ) : (
+    <div ref={contenedor}>{children}</div>
+  );
 }

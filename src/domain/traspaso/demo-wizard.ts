@@ -13,7 +13,7 @@ export interface TraspasoDemo {
   modulos: readonly string[];
   nombreNegocio: string;
   /** Lo que armó en la demo (paleta y tipo de cocina). */
-  demo: { paleta: string; cocina: string };
+  demo?: { paleta: string; cocina: string };
 }
 
 /** Adónde lleva el CTA de la demo: el wizard, que se descarga solo porque la URL apunta a #wizard. */

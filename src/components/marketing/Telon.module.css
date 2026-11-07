@@ -11,6 +11,11 @@
       /* Una pantalla pegada y otra de salida: recorrido total 200svh. */
       height: 200svh;
       background-color: var(--seccion-tinta);
+      /* El recorrido es el del propio telón: anda en cualquier lugar de la página. */
+      view-timeline: --telon block;
+      view-timeline-inset: 0;
+      margin-inline: calc(50% - 50vw);
+      width: 100vw;
     }
 
     .escena {
@@ -49,8 +54,8 @@
       width: max-content;
       animation-timing-function: linear;
       animation-fill-mode: both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 100svh;
+      animation-timeline: --telon;
+      animation-range: contain 0% contain 100%;
       will-change: transform;
     }
     .f0 {
@@ -80,8 +85,8 @@
       inset: 0;
       background-color: var(--seccion-tinta);
       animation: velo linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 60svh;
+      animation-timeline: --telon;
+      animation-range: contain 0% contain 60%;
     }
 
     .mascara {
@@ -96,8 +101,8 @@
       overflow: visible;
       transform-origin: 50% 50%;
       animation: abre linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 100svh;
+      animation-timeline: --telon;
+      animation-range: contain 0% contain 100%;
       will-change: transform, opacity;
     }
     .tinta {
@@ -113,8 +118,8 @@
       font-size: 0.875rem;
       color: var(--seccion-tinta-muted);
       animation: pista linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 100svh;
+      animation-timeline: --telon;
+      animation-range: contain 0% contain 100%;
     }
 
     .rotulos {
@@ -137,10 +142,10 @@
       color: var(--seccion-tinta-fg);
       opacity: 0;
       animation: rotulo linear both;
-      animation-timeline: scroll(root block);
+      animation-timeline: --telon;
     }
     .rotulo {
-      animation-range: var(--ini) var(--fin);
+      animation-range: contain var(--ini) contain var(--fin);
     }
 
     .saltar {
@@ -153,10 +158,13 @@
       background-color: var(--seccion-crema);
       color: var(--seccion-crema-fg);
       font-weight: 600;
-      transform: translateY(-300%);
+      /* El telón ya no está al principio de la página: arriba suyo hay contenido que no debe tapar. */
+      opacity: 0;
+      pointer-events: none;
     }
     .saltar:focus-visible {
-      transform: none;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     @media (max-width: 639px) {
@@ -214,7 +222,7 @@
 }
 @keyframes velo {
   from {
-    opacity: 0.5;
+    opacity: 0.15;
   }
   to {
     opacity: 0;

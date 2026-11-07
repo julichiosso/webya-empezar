@@ -3,6 +3,18 @@
 Última actualización: 2026-11-04 (sesión 2). Actualizar en cada checkpoint.
 
 ## ESTADO ACTUAL / PRÓXIMO PASO EXACTO
+- SESIÓN 2026-11-06 ("maxear todo y vender"). Auditoría completa, hallazgos y pendientes en **docs/auditoria-2026-11.md**: leela primero.
+  - Hero nuevo en tinta: titular "Tu negocio atiende mientras vos trabajás.", celular con el sitio de cada rubro y ticket de lo que entra (`marketing/VitrinaRubros`, `ControlVitrina`). El h1 vive dentro de `Marco` (prop `encabezado`), visible solo en la pantalla 1.
+  - El telón sigue encendido por defecto, pero DESPUÉS del hero, antes de los casos de clientes: usa `view-timeline` propio. El dueño lo había pedido al inicio; se movió porque tapaba el mensaje. Si lo quiere de nuevo primero, se conversa.
+  - `patterns/SitioNegocio` dibuja la plantilla del rubro. Es uno solo para vitrina, wizard, `/crear` y `/ver`. Usa `data-sitio`, no `data-rubro`: `data-rubro` es de las tarjetas y lo escuchan WizardLazy y ControlVitrina.
+  - `/demo/peluqueria`: bot por reglas con texto libre, agenda y estadísticas. Reglas en `domain/turnos/` (agenda, bot, estadísticas, con tests); datos con semilla fija en `content/demos/peluqueria/datos.ts`.
+  - `/crear` + `/ver`: editor sin cuenta; el borrador viaja en el hash del link (`features/empezar/crear/borrador.ts`). NO es publicación real. `/ver` no se indexa y lleva cartel de "no publicado".
+  - Backend: avisos reales por Telegram/Resend (`server/notifications.ts`), reenvíos sin duplicar (`renovarParcial`, mismo WhatsApp + IP + negocio en 30 min), medición propia (`POST /api/eventos`, `lib/medicion.ts`, vista `embudo_diario`).
+  - Módulos: `turnos` y `catalogo` pasaron a `disponible`. `turnos` hoy significa el bot de peluquerías.
+  - Skills nuevas: seo-audit, schema, signup, analytics, pricing, onboarding, web-design-guidelines (ver .claude/skills/TERCEROS.md).
+  - PENDIENTE DEL DUEÑO: credenciales de avisos en Vercel, aplicar las dos migraciones del 2026-11-06, revisar lo que se dice del bot, dominio webya.ar vs webya.dev, precios, fundador. Detalle en la auditoría.
+  - SIGUIENTE técnico: publicación real (tenants, auth, `/n/[slug]`, moderación) solo si el dueño lo decide; copy de `instagram.ts` y del video.
+  - E2E: la suite normal compila con `NEXT_PUBLIC_INTRO_LOGO=0`; el telón (encendido en producción) solo lo cubre `intro.spec.ts` con `NEXT_PUBLIC_INTRO_LOGO=1 E2E_INTRO=1`.
 - SESIÓN 3 (pedido del dueño: "agregá Petrucci y que el telón se vea épico"): 
   - Cliente nuevo Joyería Petrucci (https://joyeria-petrucci-web.vercel.app, rubro comercio, datos verificados mirando el sitio: catálogo por categorías joyería/relojes/marroquinería/mates, novedades, consulta por WhatsApp por producto, marcas, trabajos a medida, dirección con mapa). Capturas public/clientes/petrucci.webp (59 KB) y telon-petrucci.webp.
   - La intro del telón pasa a estar ENCENDIDA por defecto (el dueño lo pidió: "no hiciste lo del telón"). Se apaga con NEXT_PUBLIC_INTRO_LOGO=0. Telon.tsx: INTRO_ACTIVA = flag !== '0'. Rótulos del telón con rangos calculados por cliente (--ini/--fin), ya no fijos para 3. Entrada animada: la pared aparece con fundido (un zoom continuo "respira" bajó los fps de 57 a 41 y se quitó). playwright.config fija NEXT_PUBLIC_INTRO_LOGO='0' para el suite normal (la intro empuja el hero 200vh); intro.spec.ts corre con NEXT_PUBLIC_INTRO_LOGO=1 E2E_INTRO=1 (build propio).

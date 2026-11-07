@@ -290,7 +290,11 @@ async function crearParcial(
 
   // Reenvío (doble toque, respuesta perdida, volvió atrás): mismo lead con token nuevo y sin otro aviso.
   const ahora = (deps.ahora ?? (() => new Date()))();
-  const { ip_hash: _ip, user_agent: _ua, ...cambios } = lead;
+  const cambios: Partial<NuevoLeadParcial> & Omit<NuevoLeadParcial, 'ip_hash' | 'user_agent'> = {
+    ...lead,
+  };
+  delete cambios.ip_hash;
+  delete cambios.user_agent;
   const previo = await deps.repo.renovarParcial(
     lead.whatsapp,
     ipHash,

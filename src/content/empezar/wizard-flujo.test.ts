@@ -25,7 +25,7 @@ describe('copy del flujo de /empezar', () => {
 
   it('la pantalla 1 y la 2 dicen lo que pidió el brief, tal cual', () => {
     expect(FLUJO.rubro.titulo).toBe('¿Qué negocio tenés?');
-    expect(FLUJO.rubro.bajada).toBe('Elegí el tuyo y en menos de un minuto ves cómo te queda.');
+    expect(FLUJO.rubro.bajada).toBe('Tocá el tuyo y miralo, sin dejar tu teléfono.');
     expect(FLUJO.negocio.promesa).toBe('Completalo y en segundos ves cómo te quedaría.');
     expect(FLUJO.resultado.cta).toBe('Quiero esto para mi negocio');
   });

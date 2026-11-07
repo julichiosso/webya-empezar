@@ -80,6 +80,16 @@ export function Footer() {
 
           <Grupo id="pie-probar" titulo={FOOTER.probar.titulo}>
             <li>
+              <a href="/crear" className={ENLACE}>
+                {FOOTER.probar.crear}
+              </a>
+            </li>
+            <li>
+              <a href="/demo/peluqueria" className={ENLACE}>
+                {FOOTER.probar.turnos}
+              </a>
+            </li>
+            <li>
               <a href="/demo/gastronomia" className={ENLACE}>
                 {FOOTER.probar.demo}
               </a>

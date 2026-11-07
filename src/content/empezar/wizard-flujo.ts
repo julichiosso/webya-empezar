@@ -11,7 +11,7 @@ export const FLUJO = {
   /** Pantalla 1, arriba del pliegue: una sola pregunta y un toque avanza. */
   rubro: {
     titulo: '¿Qué negocio tenés?',
-    bajada: 'Elegí el tuyo y en menos de un minuto ves cómo te queda.',
+    bajada: 'Tocá el tuyo y miralo, sin dejar tu teléfono.',
     leyenda: PASO_RUBRO.leyendaRubros,
     /** Nombre accesible de cada tarjeta: "Gastronomía. Restaurantes, bares…". */
     tarjeta: (nombre: string, descripcion: string) => `${nombre}. ${descripcion}`,
@@ -61,9 +61,16 @@ export const FLUJO = {
     titulo: (negocio: string) => `Así te queda ${negocio}`,
     tituloSinNombre: 'Así te queda tu negocio',
     bajada: 'Es una vista previa con textos de ejemplo. Lo real lo armamos con vos.',
+    /** Debajo del sitio de la plantilla, en los rubros sin demo propia. */
+    deEjemplo: 'Con textos de ejemplo. Después cargás los tuyos.',
     cta: 'Quiero esto para mi negocio',
     completar: 'Prefiero dejar más datos',
     demo: { titulo: 'Probá la demo completa', bajada: 'Con tu nombre y tus colores ya cargados.' },
+    /** Para quien quiere seguir solo: el editor, con lo que ya eligió. */
+    editar: {
+      titulo: 'Cargá tus datos ahora',
+      bajada: 'Tus servicios y precios, y te llevás un link para compartir.',
+    },
     /** Debajo del CTA: qué pasa al tocarlo. */
     queSigue: 'Se abre WhatsApp con lo que armaste. Lo seguimos por ahí.',
     aMedida: {

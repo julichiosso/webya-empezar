@@ -14,6 +14,17 @@ import {
 // Se generan con `pnpm test:e2e visual --update-snapshots` y se revisan a ojo antes de commitear.
 test.use({ reducedMotion: 'reduce' });
 
+// La barra fija quedaría encima del wizard en un lugar distinto en cada captura de un elemento.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const estilo = document.createElement('style');
+      estilo.textContent = 'header { position: static !important; }';
+      document.head.append(estilo);
+    });
+  });
+});
+
 test('hero — pantalla 1 (¿qué negocio tenés?)', async ({ page }) => {
   await page.goto('/empezar');
   await abrirWizard(page);

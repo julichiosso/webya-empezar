@@ -15,7 +15,7 @@ export const POR_QUE_WEBYA = {
     },
     {
       titulo: 'Para cualquier rubro',
-      texto: 'Gastronomía ya funciona. Los demás rubros los armamos con vos.',
+      texto: 'Gastronomía y peluquerías ya funcionan. Los demás rubros los armamos con vos.',
     },
     {
       titulo: 'Una persona atrás',
@@ -40,7 +40,7 @@ export const OBJECIONES: readonly Objecion[] = [
   {
     donde: 'hero',
     pregunta: '¿Necesito saber de tecnología?',
-    respuesta: 'No. Elegís tu rubro, cargás tu carta y listo.',
+    respuesta: 'No. Vos nos contás tu negocio y lo armamos con vos.',
   },
   {
     donde: 'hero',

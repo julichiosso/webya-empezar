@@ -1,0 +1,59 @@
+/* El ticket se apoya sobre el celular y sale un poco por el costado. */
+.escenario {
+  position: relative;
+  margin-inline: auto;
+  max-width: 20rem;
+}
+
+.pantalla {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+.pantalla[data-activa='true'] {
+  opacity: 1;
+}
+
+/* Comanda colgada: papel crema con la línea de borde del tema. Solo transform y opacity. */
+.ticket {
+  position: absolute;
+  right: -0.5rem;
+  bottom: 2rem;
+  width: min(15rem, 80%);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--seccion-crema-linea);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-raised);
+  background-color: var(--seccion-crema);
+  color: var(--seccion-crema-fg);
+  opacity: 0;
+  transform: translateY(1.5rem) rotate(-2deg);
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+.ticket[data-activa='true'] {
+  opacity: 1;
+  transform: rotate(-2deg);
+  /* Primero aparece el sitio; el ticket entra después, como algo que acaba de llegar. */
+  transition:
+    opacity var(--duration-base) var(--ease-out) var(--duration-slow),
+    transform var(--duration-base) var(--ease-out) var(--duration-slow);
+}
+
+@media (min-width: 64rem) {
+  .ticket {
+    right: auto;
+    left: -5.5rem;
+    bottom: 3.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pantalla,
+  .ticket,
+  .ticket[data-activa='true'] {
+    transition: none;
+  }
+}

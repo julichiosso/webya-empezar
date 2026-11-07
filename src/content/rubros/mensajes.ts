@@ -23,14 +23,15 @@ export const MENSAJES_RUBRO: Readonly<Record<string, MensajeRubro>> = {
     listo: true,
   },
   peluqueria_estetica: {
-    titulo: 'Tus servicios y tu agenda en un solo link.',
-    descripcion: 'Una web con lo que hacés, tus precios y un botón directo a tu WhatsApp.',
+    titulo: 'Seguí cortando. El bot te toma los turnos.',
+    descripcion:
+      'Un bot atiende a tus clientes y reserva por vos. Vos ves la agenda ordenada y las estadísticas de tu negocio.',
     beneficios: [
-      'Tus servicios y precios claros.',
-      'Tus clientas te escriben con un toque.',
-      'Un link para la bio de Instagram.',
+      'Turnos tomados aunque tengas las manos ocupadas.',
+      'La agenda del día en un solo lugar.',
+      'Estadísticas con ciencia de datos e IA, para saber qué hacer.',
     ],
-    listo: false,
+    listo: true,
   },
   comercio: {
     titulo: 'Tus productos a la vista, todo el día.',

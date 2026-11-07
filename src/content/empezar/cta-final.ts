@@ -6,7 +6,7 @@ import { HERO } from '@/content/empezar/hero';
  */
 export const CTA_FINAL = {
   titulo: 'Armá el tuyo ahora.',
-  bajada: 'Elegí tu rubro y mirá cómo queda tu negocio.',
+  bajada: 'Elegí tu rubro y mirá cómo te queda, sin dejar tu teléfono.',
   cta: HERO.cta,
   /** Debajo del botón: baja la fricción sin prometer nada que no pase. */
   apoyo: 'Sin compromiso.',

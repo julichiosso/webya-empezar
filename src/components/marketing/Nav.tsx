@@ -12,7 +12,7 @@ export const ID_CONTENIDO = 'contenido';
  */
 export function Nav() {
   return (
-    <header className="papel sticky top-0 z-30 border-b border-seccion-crema-linea bg-seccion-crema/90 text-seccion-crema-fg backdrop-blur">
+    <header className="superficie-tinta sticky top-0 z-30 border-b border-seccion-tinta-linea bg-seccion-tinta text-seccion-tinta-fg">
       <a
         href={`#${ID_CONTENIDO}`}
         className="sr-only rounded-control bg-surface px-4 text-body text-fg focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:inline-flex focus:min-h-tap focus:items-center"
@@ -29,6 +29,12 @@ export function Nav() {
           className="-mx-2 mr-auto inline-flex min-h-tap items-center px-2"
         >
           <Logo armar />
+        </a>
+        <a
+          href="#productos"
+          className="hidden min-h-tap items-center px-2 text-small font-semibold underline-offset-4 hover:underline sm:inline-flex"
+        >
+          {NAV.demos}
         </a>
         <a
           href="#ya-lo-usan"

@@ -71,7 +71,7 @@ describe('estado y necesidades de cada módulo', () => {
 
   it('solo se ofrecen como disponibles los módulos que hoy se entregan', () => {
     const disponibles = MODULO_IDS.filter((id) => getModulo(id).estado === 'disponible');
-    expect(disponibles.sort()).toEqual(['carta_qr', 'pedidos']);
+    expect(disponibles.sort()).toEqual(['carta_qr', 'catalogo', 'pedidos', 'turnos']);
   });
 
   it('cada rubro sugiere módulos que existen', () => {

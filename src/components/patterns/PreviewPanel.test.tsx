@@ -8,14 +8,14 @@ describe('PreviewPanel', () => {
     const panel = screen.getByTestId('negocio-preview-panel');
     expect(within(panel).getAllByRole('listitem', { hidden: true })).toHaveLength(2);
     expect(within(panel).getByText('Comercio y tienda')).toBeInTheDocument();
-    expect(within(panel).getByText('2 módulos')).toBeInTheDocument();
+    expect(within(panel).getByText('2 piezas')).toBeInTheDocument();
   });
 
   it('sin rubro ni módulos muestra el estado vacío', () => {
     render(<PreviewPanel activos={[]} />);
     const panel = screen.getByTestId('negocio-preview-panel');
     expect(within(panel).getByText('Tu negocio')).toBeInTheDocument();
-    expect(within(panel).getByText('Acá encajan tus módulos')).toBeInTheDocument();
+    expect(within(panel).getByText('Lo armamos con vos')).toBeInTheDocument();
     expect(within(panel).queryAllByRole('listitem', { hidden: true })).toHaveLength(0);
   });
 

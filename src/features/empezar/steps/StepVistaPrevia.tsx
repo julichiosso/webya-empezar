@@ -35,6 +35,8 @@ interface StepVistaPreviaProps {
   ctaEnBarra: boolean;
   /** Link a la demo completa con nombre y paleta cargados (solo rubros con demo). */
   demoUrl: string | null;
+  /** Link al editor con el rubro, el nombre y los colores ya cargados (rubros con plantilla). */
+  editarUrl?: string | null;
   /** Hay lead guardado: se puede completar. */
   puedeCompletar: boolean;
   /** Falló el guardado (red o servidor): aviso visible con reintento (también se reintenta solo). */
@@ -65,6 +67,7 @@ export function StepVistaPrevia({
   cta,
   ctaEnBarra,
   demoUrl,
+  editarUrl,
   puedeCompletar,
   sinGuardar,
   reintentando,
@@ -182,6 +185,19 @@ export function StepVistaPrevia({
           <span>
             <span className="block font-semibold">{TXT.demo.titulo}</span>
             <span className="block text-small text-muted">{TXT.demo.bajada}</span>
+          </span>
+          <Icon name="arrowRight" size={20} />
+        </a>
+      )}
+
+      {editarUrl && (
+        <a
+          href={editarUrl}
+          className="mt-4 flex min-h-tap items-center justify-between gap-4 rounded-card border border-line-strong bg-surface p-4 hover:border-fg/40"
+        >
+          <span>
+            <span className="block font-semibold">{TXT.editar.titulo}</span>
+            <span className="block text-small text-muted">{TXT.editar.bajada}</span>
           </span>
           <Icon name="arrowRight" size={20} />
         </a>

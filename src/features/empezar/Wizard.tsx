@@ -11,9 +11,12 @@ import {
   useState,
   useSyncExternalStore,
   type ComponentType,
+  type ReactNode,
 } from 'react';
 import { Icon } from '@/brand/ilustracion/iconos/Icon';
 import { PreviewPanel } from '@/components/patterns/PreviewPanel';
+import { SitioNegocio } from '@/components/patterns/SitioNegocio';
+import { Telefono } from '@/components/patterns/Telefono';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { ordenPedido } from '@/config/experimentos';
 import { RUBRO_DEMO } from '@/content/demos/gastronomia/types';
@@ -21,7 +24,7 @@ import { WIZARD } from '@/content/empezar/wizard';
 import { FLUJO } from '@/content/empezar/wizard-flujo';
 import { getModulo, type ModuloId } from '@/content/modulos';
 import { esPaletaCurada, PALETA_CURADA_POR_DEFECTO, type PaletaCuradaId } from '@/content/paletas';
-import { getRubro } from '@/content/rubros';
+import { getPlantilla, getRubro } from '@/content/rubros';
 import { EVENTO_RUBRO } from '@/lib/eventos';
 import { MENSAJE_WHATSAPP } from '@/content/whatsapp';
 import { urlDemoConDatos } from '@/domain/traspaso/demo-wizard';
@@ -92,13 +95,17 @@ interface WizardProps {
   VistaPrevia?: VistaPreviaRubro;
   /** Rubro tocado en el HTML del servidor antes de que llegara el wizard (ver WizardLazy). */
   rubroInicial?: string | null;
+  /** Titular del hero: se ve en la pantalla 1. */
+  encabezado?: ReactNode;
+  /** El celular de la pantalla 1, antes de elegir rubro. */
+  vitrina?: ReactNode;
 }
 
 /**
  * Flujo de /empezar: rubro → (Otro: pedido a medida) → negocio (guarda el lead parcial) →
  * "Así te queda" → completar (opcional) → gracias. Ver state.ts.
  */
-export function Wizard({ rubroInicial = null, VistaPrevia }: WizardProps) {
+export function Wizard({ rubroInicial = null, VistaPrevia, encabezado, vitrina }: WizardProps) {
   const [state, dispatch] = useReducer(reducer, ESTADO_INICIAL);
   const esLg = useEsLg();
   const [errorPaso, setErrorPaso] = useState<string | null>(null);
@@ -370,16 +377,38 @@ export function Wizard({ rubroInicial = null, VistaPrevia }: WizardProps) {
     dispatch({ tipo: 'reiniciar' });
   };
 
-  // La vista previa por rubro: en escritorio vive a la derecha (sticky, navegador); en celular,
-  // dentro de la pantalla 3 (celular). Sin rubro, o con "Otro", queda el panel de huecos.
+  // La vista previa por rubro: en escritorio vive a la derecha (sticky); en celular, dentro de la
+  // pantalla. Gastronomía muestra la carta real; los demás, el sitio de la plantilla de su rubro. Con
+  // "Otro" no hay plantilla: queda el panel de lo que pidió.
   const conCarta = state.rubro === RUBRO_DEMO && !aMedida && VistaPrevia;
+  const conSitio = !conCarta && !aMedida && Boolean(state.rubro && getPlantilla(state.rubro));
   const vistaPrevia = conCarta ? (
     <VistaPrevia nombre={nombreNegocio} paleta={paleta} />
+  ) : conSitio ? (
+    <figure className="m-0" data-testid="vista-previa-sitio">
+      <Telefono>
+        {/* En escritorio el panel es decorativo (aria-hidden): ahí no puede recibir foco. */}
+        <div className="h-full overflow-y-auto overscroll-contain" tabIndex={esLg ? undefined : 0}>
+          <SitioNegocio
+            rubro={state.rubro!}
+            nombre={nombreNegocio}
+            paleta={paleta}
+            ciudad={state.datos.ciudad}
+            modulos={modulos}
+          />
+        </div>
+      </Telefono>
+      <figcaption className="mt-2 text-center text-small text-muted">
+        {FLUJO.resultado.deEjemplo}
+      </figcaption>
+    </figure>
   ) : (
     <PreviewPanel rubroNombre={nombreNegocio || nombreRubroVisible(state)} activos={modulos} />
   );
   const aside =
-    paso === 'rubro' || !rubro || aMedida ? (
+    paso === 'rubro' && vitrina ? (
+      vitrina
+    ) : paso === 'rubro' || !rubro || aMedida ? (
       <PreviewPanel
         rubroNombre={
           paso === 'rubro' || !rubro ? undefined : nombreNegocio || nombreRubroVisible(state)
@@ -404,7 +433,9 @@ export function Wizard({ rubroInicial = null, VistaPrevia }: WizardProps) {
         <Marco
           ref={raiz}
           pantalla={pantallaDe(paso)}
+          encabezado={encabezado}
           aside={aside}
+          asideEnCelular={paso === 'rubro' && Boolean(vitrina)}
           atras={
             anterior && (
               <Button variant="ghost" onClick={() => irA(anterior)}>
@@ -463,7 +494,7 @@ export function Wizard({ rubroInicial = null, VistaPrevia }: WizardProps) {
                 />
               )}
               {/* En celular la carta se arma acá mismo, mientras escribe el nombre. */}
-              {paso === 'negocio' && conCarta && ordenB && !esLg && (
+              {paso === 'negocio' && (conCarta || conSitio) && ordenB && !esLg && (
                 <div className="mt-8 lg:hidden">{vistaPrevia}</div>
               )}
               {paso === 'resultado' && (
@@ -475,6 +506,11 @@ export function Wizard({ rubroInicial = null, VistaPrevia }: WizardProps) {
                   cta={cta}
                   ctaEnBarra={ctaAccionable}
                   demoUrl={demoUrl}
+                  editarUrl={
+                    conSitio || conCarta
+                      ? `/crear?${new URLSearchParams({ rubro: state.rubro!, nombre: nombreNegocio, paleta })}`
+                      : null
+                  }
                   puedeCompletar={state.lead !== null && !sinGuardar}
                   sinGuardar={sinGuardar}
                   reintentando={reintentando}

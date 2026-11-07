@@ -72,7 +72,7 @@ export const TERMINOS: TextoLegal = {
     {
       titulo: 'Qué es WebYa',
       parrafos: [
-        'Un servicio para crear el sitio y las herramientas digitales de un negocio. Hoy el rubro más avanzado es gastronomía.',
+        'Un servicio para crear el sitio y las herramientas digitales de un negocio. Hoy los rubros más avanzados son gastronomía y peluquería.',
       ],
     },
     {
@@ -89,7 +89,9 @@ export const TERMINOS: TextoLegal = {
     },
     {
       titulo: 'Precios',
-      parrafos: ['Te informamos el precio antes de que publiques. No cobramos nada sin tu acuerdo.'],
+      parrafos: [
+        'Te informamos el precio antes de que publiques. No cobramos nada sin tu acuerdo.',
+      ],
     },
     {
       titulo: 'Disponibilidad',

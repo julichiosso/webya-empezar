@@ -12,7 +12,8 @@ import {
 } from '@/content/demos/gastronomia';
 import { PERSONALIZAR } from '@/content/demos/gastronomia/ui/personalizar';
 import { track } from '@/lib/analytics';
-import { CodigoQR } from './CodigoQR';
+import { CodigoQR } from '@/components/patterns/CodigoQR';
+import { COMPARTIR } from '@/content/demos/gastronomia/ui/compartir';
 import { linkWhatsAppDemo, urlCompartible } from './compartir';
 import { LARGO_NOMBRE_LOCAL, personalizar, useDemo } from './store';
 
@@ -154,7 +155,7 @@ export function Personalizar() {
           </button>
           {qr && origen && (
             <div className="mt-4 flex items-center gap-4">
-              <CodigoQR url={url} />
+              <CodigoQR url={url} etiqueta={COMPARTIR.ariaQr} />
               <p className="max-w-56 text-small text-muted">
                 {PERSONALIZAR.qr.ayuda(nombreVisible)}
               </p>
