@@ -1,0 +1,109 @@
+/* El iPhone: un marco de titanio (el degradado) con un bisel negro adentro. `--tel-ancho` lo escala todo. */
+.telefono {
+  --tel-ancho: 20rem;
+  --titanio-claro: color-mix(in srgb, var(--seccion-tinta-fg) 78%, var(--seccion-tinta));
+  --titanio: color-mix(in srgb, var(--seccion-tinta-muted) 70%, var(--seccion-tinta));
+  --titanio-oscuro: color-mix(in srgb, var(--seccion-tinta-muted) 35%, var(--seccion-tinta));
+  position: relative;
+  padding: calc(var(--tel-ancho) * 0.012);
+  border-radius: calc(var(--tel-ancho) * 0.165);
+  background-image: linear-gradient(
+    135deg,
+    var(--titanio-claro),
+    var(--titanio-oscuro) 22%,
+    var(--titanio) 50%,
+    var(--titanio-oscuro) 78%,
+    var(--titanio-claro)
+  );
+}
+
+.bisel {
+  padding: calc(var(--tel-ancho) * 0.024);
+  border-radius: calc(var(--tel-ancho) * 0.155);
+  background-color: var(--paper-fg);
+}
+
+.pantalla {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: calc(var(--tel-ancho) * 0.13);
+  background-color: var(--paper-fg);
+}
+
+/* Lugar de la barra de estado: el sitio empieza debajo de la isla, como en el teléfono de verdad. */
+.barra {
+  flex: none;
+  height: calc(var(--tel-ancho) * 0.125);
+  background-color: var(--paper);
+}
+
+.contenido {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  background-color: var(--paper);
+}
+
+.isla {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--tel-ancho) * 0.03);
+  left: 50%;
+  width: 31%;
+  height: calc(var(--tel-ancho) * 0.078);
+  margin-left: -15.5%;
+  border-radius: 999px;
+  background-color: var(--paper-fg);
+  pointer-events: none;
+}
+
+.inicio {
+  position: absolute;
+  z-index: 2;
+  bottom: calc(var(--tel-ancho) * 0.018);
+  left: 50%;
+  width: 36%;
+  height: calc(var(--tel-ancho) * 0.012);
+  min-height: 2px;
+  margin-left: -18%;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--seccion-tinta-muted) 85%, transparent);
+  pointer-events: none;
+}
+
+/* Los botones de los costados, apenas asomados. */
+.boton {
+  position: absolute;
+  z-index: -1;
+  width: calc(var(--tel-ancho) * 0.012);
+  min-width: 2px;
+  background-color: var(--titanio);
+}
+.accion,
+.volumenMas,
+.volumenMenos {
+  left: calc(var(--tel-ancho) * -0.009);
+  border-radius: 2px 0 0 2px;
+}
+.accion {
+  top: 16%;
+  height: 4.5%;
+}
+.volumenMas {
+  top: 24%;
+  height: 8.5%;
+}
+.volumenMenos {
+  top: 34.5%;
+  height: 8.5%;
+}
+.encendido {
+  top: 27%;
+  right: calc(var(--tel-ancho) * -0.009);
+  height: 13%;
+  border-radius: 0 2px 2px 0;
+}

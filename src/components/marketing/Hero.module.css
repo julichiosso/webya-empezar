@@ -2,14 +2,14 @@
  * Hero de /empezar. Tres capas de movimiento, todas de transform y opacity:
  *  - Al abrir (una vez): la cortina sube, las palabras salen de su máscara y los celulares suben.
  *  - Al scrollear (si hay animation-timeline): el texto se va y los celulares forman fila.
- *  - En loop: el sitio se recorre dentro de cada celular (se pausa fuera de pantalla: data-pausa).
+ *  - Los videos de los iPhones: los reproduce y los pausa ControlHero.
  * Sin soporte queda el abanico quieto, y con reduced-motion todo aparece en su estado final.
  */
 .hero {
   --alto-nav: 4rem;
   --alto-escena: calc(100svh - var(--alto-nav));
   --tel-w: clamp(10rem, min(15vw, 27svh), 16rem);
-  --tel-h: calc(var(--tel-w) * 2.04);
+  --tel-h: calc(var(--tel-w) * 2.095);
   --rebote: cubic-bezier(0.2, 1.25, 0.32, 1);
   position: relative;
   isolation: isolate;
@@ -27,16 +27,15 @@
   overflow: clip;
 }
 
-/* La grilla del plano: estática y apenas visible. */
-.grilla {
+/* Una luz cálida detrás de los iPhones, quieta: los separa del fondo sin competir con ellos. */
+.luz {
   position: absolute;
   inset: 0;
-  opacity: 0.5;
-  background-image:
-    linear-gradient(var(--seccion-tinta-linea) 1px, transparent 1px),
-    linear-gradient(90deg, var(--seccion-tinta-linea) 1px, transparent 1px);
-  background-size: 4rem 4rem;
-  background-position: 50% 50%;
+  background-image: radial-gradient(
+    ellipse 46% 62% at 72% 52%,
+    color-mix(in srgb, var(--seccion-brasa) 85%, transparent),
+    transparent 72%
+  );
 }
 
 /* El texto */
@@ -191,33 +190,34 @@
   transform-style: preserve-3d;
 }
 
-.celular {
+.aparato {
   position: relative;
-  padding: 0.5rem;
-  border-radius: calc(var(--tel-w) * 0.16);
-  background-color: var(--seccion-tinta);
-  border: 2px solid var(--seccion-tinta-muted);
 }
 
-.pantalla {
-  height: calc(var(--tel-h) - 1rem - 4px);
-  overflow: hidden;
-  border-radius: calc(var(--tel-w) * 0.115);
-  background-color: var(--seccion-crema);
+.aparato .celular {
+  --tel-ancho: var(--tel-w);
+  max-width: none;
 }
 
-.captura {
+/* La proporción de la pantalla de un iPhone: el alto lo da el video. */
+.aparato .pantalla {
+  height: auto;
+  aspect-ratio: 390 / 844;
+}
+
+.video {
   display: block;
   width: 100%;
-  height: auto;
-  --alto-pantalla: calc(var(--tel-h) - 1rem - 4px);
+  height: 100%;
+  object-fit: cover;
+  background-color: var(--paper-fg);
 }
 
 /* El borde que se enciende cuando el celular hace clic en su lugar. Quieto, no se ve. */
 .encendido {
   position: absolute;
   inset: -2px;
-  border-radius: inherit;
+  border-radius: calc(var(--tel-w) * 0.165);
   border: 2px solid var(--accent);
   opacity: 0;
   pointer-events: none;
@@ -263,7 +263,14 @@
 /* Celular: el texto arriba y los celulares como una mano de cartas abajo; al final, grilla de 2x2. */
 @media (max-width: 63.99rem) {
   .hero {
-    --tel-w: min(36vw, 16.5svh);
+    --tel-w: min(36vw, 15.5svh);
+  }
+  .luz {
+    background-image: radial-gradient(
+      ellipse 90% 40% at 50% 88%,
+      color-mix(in srgb, var(--seccion-brasa) 85%, transparent),
+      transparent 72%
+    );
   }
   .contenido {
     align-content: start;
@@ -299,7 +306,7 @@
     --ry0: 10deg;
     --rz0: -14deg;
     --x1: calc(var(--tel-w) * -0.56);
-    --y1: calc(var(--tel-h) * -0.5);
+    --y1: calc(var(--tel-h) * -0.46);
   }
   .vuelo[data-n='1'] {
     --x0: -10vw;
@@ -308,7 +315,7 @@
     --ry0: 4deg;
     --rz0: -5deg;
     --x1: calc(var(--tel-w) * 0.56);
-    --y1: calc(var(--tel-h) * -0.5);
+    --y1: calc(var(--tel-h) * -0.46);
   }
   .vuelo[data-n='2'] {
     --x0: 10vw;
@@ -317,7 +324,7 @@
     --ry0: -4deg;
     --rz0: 5deg;
     --x1: calc(var(--tel-w) * -0.56);
-    --y1: calc(var(--tel-h) * 0.72);
+    --y1: calc(var(--tel-h) * 0.7);
   }
   .vuelo[data-n='3'] {
     --x0: 30vw;
@@ -326,7 +333,7 @@
     --ry0: -10deg;
     --rz0: 14deg;
     --x1: calc(var(--tel-w) * 0.56);
-    --y1: calc(var(--tel-h) * 0.72);
+    --y1: calc(var(--tel-h) * 0.7);
   }
   .rotulo {
     margin-top: 0.5rem;
@@ -427,27 +434,6 @@
   }
   .vuelo[data-n='3'] .entrada {
     animation-delay: 1330ms;
-  }
-
-  /* En loop: el sitio real se recorre dentro del celular */
-  .captura {
-    animation: recorre 32s ease-in-out infinite alternate;
-    will-change: transform;
-  }
-  .vuelo[data-n='1'] .captura {
-    animation-duration: 26s;
-    animation-delay: -9s;
-  }
-  .vuelo[data-n='2'] .captura {
-    animation-duration: 44s;
-    animation-delay: -6s;
-  }
-  .vuelo[data-n='3'] .captura {
-    animation-duration: 38s;
-    animation-delay: -20s;
-  }
-  .escena[data-pausa] .captura {
-    animation-play-state: paused;
   }
 
   /* Al scrollear. Con la pantalla muy baja (celular apaisado) no se fija: no entraría. */
@@ -559,14 +545,6 @@
   to {
     opacity: 1;
     transform: none;
-  }
-}
-@keyframes recorre {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(0, calc(-100% + var(--alto-pantalla)), 0);
   }
 }
 @keyframes texto-se-va {

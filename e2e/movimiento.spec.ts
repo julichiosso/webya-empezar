@@ -27,6 +27,17 @@ test.describe('prefers-reduced-motion: reduce', () => {
     }
   });
 
+  test('los iPhones del hero muestran el póster y no reproducen el video', async ({ page }) => {
+    await page.goto('/empezar', { waitUntil: 'load' });
+    const videos = page.locator('section[aria-labelledby="hero-title"] video');
+    await expect(videos).toHaveCount(4);
+    await page.waitForTimeout(1500);
+    for (const v of await videos.all()) {
+      await expect(v).toHaveAttribute('poster', /\/clientes\/uso-.+\.webp$/);
+      expect(await v.evaluate((e) => (e as HTMLVideoElement).paused)).toBe(true);
+    }
+  });
+
   test('el flujo sigue funcionando', async ({ page }) => {
     await page.goto('/empezar');
     await abrirWizard(page);
@@ -68,9 +79,7 @@ test.describe('movimiento normal', () => {
     for (const el of await letras.all()) await expect(el).toHaveCSS('opacity', '1');
   });
 
-  test('solo se animan transform y opacity (tarjetas, revelado y logo)', async ({
-    page,
-  }) => {
+  test('solo se animan transform y opacity (tarjetas, revelado y logo)', async ({ page }) => {
     const recoger = (selectores: string[]) =>
       page.evaluate((sels) => {
         const nombres = new Set<string>();

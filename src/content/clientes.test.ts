@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RUBRO_IDS } from '@/content/rubros';
 import { CLIENTES, clientesPorRubro, dominioDe, resumenClientes } from './clientes';
@@ -9,6 +11,11 @@ describe('clientes', () => {
       expect(c.url, c.id).toMatch(/^https:\/\//);
       expect(c.captura, c.id).toMatch(/^\/clientes\/.+\.webp$/);
       expect(c.alt.length, c.id).toBeGreaterThan(20);
+      // El video del hero y su póster (scripts/grabar-usos.mjs), con el id del cliente.
+      for (const extension of ['mp4', 'webp']) {
+        const archivo = resolve('public/clientes', `uso-${c.id}.${extension}`);
+        expect(existsSync(archivo), archivo).toBe(true);
+      }
     }
   });
 

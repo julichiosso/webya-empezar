@@ -20,7 +20,8 @@ El dueño vio el hero nuevo y dijo que no parecía una empresa que se dedica a e
 
 - **El hero dejó de ser un formulario.** Ahora dice quién es WebYa ("Somos la parte digital de tu negocio.") y muestra los sitios reales de los clientes. El creador pasó a su propia sección y todos los CTA bajan ahí. **Riesgo a medir:** ver el negocio propio ya no está en la primera pantalla; con `embudo_diario` se ve si baja `eligieron_rubro`.
 - **Secciones de empresa nuevas:** "Qué hacemos", "Cómo trabajamos" y "Antes de confiar, comprobalo", con contacto a la vista. La nav y el pie nombran esas secciones.
-- **Movimiento:** cortina, celulares en 3D, tablero que encastra, trabajos que se recorren con el scroll. Reglas en `webya-plano`.
+- **Movimiento:** cortina, iPhones en 3D, tablero que encastra, trabajos que se recorren con el scroll. Reglas en `webya-plano`.
+- **Sitios en uso:** los iPhones del hero muestran videos reales de los sitios de los clientes (`scripts/grabar-usos.mjs`). Se grabaron sin enviar nada. Micio's y Abelardo aparecen como en horario de atención porque se cortó su consulta de horario; los precios que se ven quedan fijos hasta volver a grabar. **Conviene confirmar con los clientes** que están de acuerdo con aparecer así.
 
 La confianza se apoya en lo verificable. **Lo que más la subiría y no se puede inventar:** nombre y cara de quien está detrás, testimonios reales y razón social. Los tiene que dar el dueño.
 

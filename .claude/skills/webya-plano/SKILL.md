@@ -61,8 +61,9 @@ Una sola vez, al entrar. Con `prefers-reduced-motion` todo aparece en su estado 
 El dueño pidió animaciones muy llamativas y que se vea como una empresa. Estos momentos son la excepción
 a "una sola vez, al entrar" y a "nada de parallax". Son los únicos; no se suman otros sin que lo pida:
 
-- **Apertura** (`Hero`): cortina Brasa con el logo, palabras que salen de su máscara y celulares con
-  los sitios reales de clientes que suben en abanico. Al scrollear, forman fila y hacen clic.
+- **Apertura** (`Hero`): cortina Brasa con el logo, palabras que salen de su máscara e iPhones que suben
+  en abanico con videos de los sitios reales mientras alguien los usa (`scripts/grabar-usos.mjs`). Al
+  scrollear, forman fila y hacen clic. El hero no lleva grilla: el dueño la rechazó.
 - **Tablero** (`QueHacemos`): las piezas vuelan y encastran con la sección fija (en celular, al entrar).
 - **Telón** (`Telon`), **trabajos** que se recorren con el scroll (`CapturaCliente`), **riel** que se llena
   (`ComoTrabajamos`), **panel** del cierre que crece (`Cierre`) y **wordmark** del pie que sube (`Footer`).
