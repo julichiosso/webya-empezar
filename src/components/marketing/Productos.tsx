@@ -7,6 +7,7 @@ import { ButtonLink } from '@/components/ui/Button';
 import { cn } from '@/components/ui/clases';
 import { CLIENTES } from '@/content/clientes';
 import { PRODUCTOS } from '@/content/empezar/productos';
+import estilos from './Productos.module.css';
 
 const C = CLASES_SECCION.crema;
 
@@ -87,6 +88,7 @@ export function Productos() {
                 <p
                   key={m.texto}
                   className={cn(
+                    estilos.burbuja,
                     'max-w-[85%] rounded-card px-4 py-2 text-small',
                     m.de === 'bot'
                       ? 'self-start border border-paper-line bg-paper-2'

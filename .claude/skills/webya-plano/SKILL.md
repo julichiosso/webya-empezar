@@ -56,6 +56,21 @@ Solo `transform` y `opacity` (excepción documentada: `stroke-dashoffset` en tra
 Una sola vez, al entrar. Con `prefers-reduced-motion` todo aparece en su estado final (lo resuelven
 `motion.css`, `movimiento.css` y `encastrePalabra(i, true)`). Reservá el espacio: CLS < 0,05.
 
+### Momentos grandes de /empezar (pedido del dueño, 2026-11-07)
+
+El dueño pidió animaciones muy llamativas y que se vea como una empresa. Estos momentos son la excepción
+a "una sola vez, al entrar" y a "nada de parallax". Son los únicos; no se suman otros sin que lo pida:
+
+- **Apertura** (`Hero`): cortina Brasa con el logo, palabras que salen de su máscara y celulares con
+  los sitios reales de clientes que suben en abanico. Al scrollear, forman fila y hacen clic.
+- **Tablero** (`QueHacemos`): las piezas vuelan y encastran con la sección fija (en celular, al entrar).
+- **Telón** (`Telon`), **trabajos** que se recorren con el scroll (`CapturaCliente`), **riel** que se llena
+  (`ComoTrabajamos`), **panel** del cierre que crece (`Cierre`) y **wordmark** del pie que sube (`Footer`).
+
+Lo que no cambia: solo `transform` y `opacity`, CSS con `animation-timeline` (sin JS de scroll), lo que
+corre en loop se pausa fuera de pantalla, y sin soporte o con reduced-motion todo se ve completo y quieto.
+Lo que se mueve muestra trabajo real: la confianza sale de los sitios funcionando, no de efectos sueltos.
+
 ## 5. Prohibido (síntomas de IA)
 
 - Glassmorphism, `backdrop-blur` decorativo, gradient mesh, degradés violeta/azul, glows, neón, sombras de color.

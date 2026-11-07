@@ -1,0 +1,619 @@
+/*
+ * Hero de /empezar. Tres capas de movimiento, todas de transform y opacity:
+ *  - Al abrir (una vez): la cortina sube, las palabras salen de su máscara y los celulares suben.
+ *  - Al scrollear (si hay animation-timeline): el texto se va y los celulares forman fila.
+ *  - En loop: el sitio se recorre dentro de cada celular (se pausa fuera de pantalla: data-pausa).
+ * Sin soporte queda el abanico quieto, y con reduced-motion todo aparece en su estado final.
+ */
+.hero {
+  --alto-nav: 4rem;
+  --alto-escena: calc(100svh - var(--alto-nav));
+  --tel-w: clamp(10rem, min(15vw, 27svh), 16rem);
+  --tel-h: calc(var(--tel-w) * 2.04);
+  --rebote: cubic-bezier(0.2, 1.25, 0.32, 1);
+  position: relative;
+  isolation: isolate;
+  width: 100vw;
+  max-width: none;
+  margin-inline: calc(50% - 50vw);
+}
+
+.escena {
+  --px: 0;
+  --py: 0;
+  position: relative;
+  height: var(--alto-escena);
+  min-height: 30rem;
+  overflow: clip;
+}
+
+/* La grilla del plano: estática y apenas visible. */
+.grilla {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(var(--seccion-tinta-linea) 1px, transparent 1px),
+    linear-gradient(90deg, var(--seccion-tinta-linea) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  background-position: 50% 50%;
+}
+
+/* El texto */
+
+.contenido {
+  position: relative;
+  display: grid;
+  align-content: center;
+  height: 100%;
+  width: 100%;
+  max-width: var(--container-page, 75rem);
+  margin-inline: auto;
+  padding-inline: 2rem;
+  pointer-events: none;
+}
+
+.texto {
+  max-width: 46rem;
+  pointer-events: auto;
+}
+
+.titulo {
+  margin: 0;
+  font-size: clamp(3rem, min(6.6vw, 13svh), 6.75rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+/* Cada palabra sale de atrás de su propia máscara. El padding deja lugar a las colas de la g y la j. */
+.mascara {
+  display: inline-block;
+  overflow: clip;
+  vertical-align: top;
+  padding-block: 0.08em 0.16em;
+  margin-block: -0.08em -0.16em;
+  padding-inline: 0.04em;
+  margin-inline: -0.04em;
+}
+
+.palabra {
+  display: inline-block;
+  transform-origin: 0 100%;
+}
+
+.subtitulo {
+  margin: 1.5rem 0 0;
+  font-size: var(--text-lead);
+  font-weight: 600;
+}
+
+.bajada {
+  margin: 0.5rem 0 0;
+  max-width: 34rem;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.prueba {
+  margin: 1.5rem 0 0;
+  max-width: 42rem;
+  font-size: var(--text-small);
+}
+
+/* Los celulares. Cada uno: pose del recorrido (.vuelo) > subida al abrir (.entrada) > el aparato. */
+
+.escenario {
+  position: absolute;
+  inset: 0;
+  perspective: 75rem;
+  perspective-origin: 50% 45%;
+}
+
+.mundo {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateY(calc(var(--px) * 9deg)) rotateX(calc(var(--py) * -6deg));
+  transition: transform 500ms var(--ease-out);
+}
+
+.vuelo {
+  --x0: 0;
+  --y0: 0;
+  --z0: 0;
+  --ry0: 0deg;
+  --rz0: 0deg;
+  --x1: 0;
+  --y1: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--tel-w);
+  margin-left: calc(var(--tel-w) / -2);
+  margin-top: calc(var(--tel-h) / -2);
+  transform-style: preserve-3d;
+  transform: translate3d(var(--x0), var(--y0), var(--z0)) rotateY(var(--ry0)) rotateZ(var(--rz0));
+}
+
+/* Abanico a la derecha del texto y, al final, fila centrada. */
+.vuelo[data-n='0'] {
+  --x0: 14vw;
+  --y0: 7svh;
+  --z0: -9rem;
+  --ry0: 24deg;
+  --rz0: -9deg;
+  --x1: calc(var(--tel-w) * -1.68);
+  --y1: 3svh;
+  --ini: 8%;
+  --fin: 42%;
+}
+.vuelo[data-n='1'] {
+  --x0: 23vw;
+  --y0: -5svh;
+  --z0: 3rem;
+  --ry0: -14deg;
+  --rz0: -2deg;
+  --x1: calc(var(--tel-w) * -0.56);
+  --y1: 3svh;
+  --ini: 14%;
+  --fin: 52%;
+}
+.vuelo[data-n='2'] {
+  --x0: 33vw;
+  --y0: 9svh;
+  --z0: -3rem;
+  --ry0: -26deg;
+  --rz0: 6deg;
+  --x1: calc(var(--tel-w) * 0.56);
+  --y1: 3svh;
+  --ini: 20%;
+  --fin: 62%;
+}
+.vuelo[data-n='3'] {
+  --x0: 42vw;
+  --y0: -8svh;
+  --z0: -12rem;
+  --ry0: -38deg;
+  --rz0: 11deg;
+  --x1: calc(var(--tel-w) * 1.68);
+  --y1: 3svh;
+  --ini: 26%;
+  --fin: 72%;
+}
+
+.entrada {
+  transform-style: preserve-3d;
+}
+
+.celular {
+  position: relative;
+  padding: 0.5rem;
+  border-radius: calc(var(--tel-w) * 0.16);
+  background-color: var(--seccion-tinta);
+  border: 2px solid var(--seccion-tinta-muted);
+}
+
+.pantalla {
+  height: calc(var(--tel-h) - 1rem - 4px);
+  overflow: hidden;
+  border-radius: calc(var(--tel-w) * 0.115);
+  background-color: var(--seccion-crema);
+}
+
+.captura {
+  display: block;
+  width: 100%;
+  height: auto;
+  --alto-pantalla: calc(var(--tel-h) - 1rem - 4px);
+}
+
+/* El borde que se enciende cuando el celular hace clic en su lugar. Quieto, no se ve. */
+.encendido {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rotulo {
+  display: none;
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-size: var(--text-small);
+  line-height: 1.25;
+}
+.rotuloNombre {
+  display: block;
+  font-weight: 600;
+}
+.rotuloCiudad {
+  display: block;
+  color: var(--seccion-tinta-muted);
+}
+
+.final {
+  display: none;
+  position: absolute;
+  inset-inline: 0;
+  top: 4svh;
+  margin: 0;
+  padding-inline: 1rem;
+  text-align: center;
+  font-size: var(--text-title);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+/* La cortina */
+
+.cortina {
+  display: none;
+}
+
+/* Celular: el texto arriba y los celulares como una mano de cartas abajo; al final, grilla de 2x2. */
+@media (max-width: 63.99rem) {
+  .hero {
+    --tel-w: min(36vw, 16.5svh);
+  }
+  .contenido {
+    align-content: start;
+    padding: 1.5rem 1rem 0;
+  }
+  .titulo {
+    font-size: clamp(2.75rem, min(13.4vw, 7.4svh), 5rem);
+  }
+  .subtitulo {
+    margin-top: 1rem;
+  }
+  .bajada {
+    font-size: var(--text-small);
+  }
+  .acciones {
+    margin-top: 1rem;
+  }
+  .acciones {
+    flex-wrap: nowrap;
+  }
+  .acciones > * {
+    flex: 1 1 auto;
+    padding-inline: 0.75rem;
+    white-space: nowrap;
+  }
+  .prueba {
+    margin-top: 1rem;
+  }
+  .vuelo[data-n='0'] {
+    --x0: -30vw;
+    --y0: 44svh;
+    --z0: 0rem;
+    --ry0: 10deg;
+    --rz0: -14deg;
+    --x1: calc(var(--tel-w) * -0.56);
+    --y1: calc(var(--tel-h) * -0.5);
+  }
+  .vuelo[data-n='1'] {
+    --x0: -10vw;
+    --y0: 38svh;
+    --z0: 4rem;
+    --ry0: 4deg;
+    --rz0: -5deg;
+    --x1: calc(var(--tel-w) * 0.56);
+    --y1: calc(var(--tel-h) * -0.5);
+  }
+  .vuelo[data-n='2'] {
+    --x0: 10vw;
+    --y0: 39svh;
+    --z0: 3rem;
+    --ry0: -4deg;
+    --rz0: 5deg;
+    --x1: calc(var(--tel-w) * -0.56);
+    --y1: calc(var(--tel-h) * 0.72);
+  }
+  .vuelo[data-n='3'] {
+    --x0: 30vw;
+    --y0: 45svh;
+    --z0: 0rem;
+    --ry0: -10deg;
+    --rz0: 14deg;
+    --x1: calc(var(--tel-w) * 0.56);
+    --y1: calc(var(--tel-h) * 0.72);
+  }
+  .rotulo {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  .rotuloCiudad {
+    display: none;
+  }
+  .final {
+    top: 2svh;
+    font-size: var(--text-heading);
+  }
+}
+
+/* En los celulares más bajos, lo que ya se ve en los celulares deja lugar al CTA. */
+@media (max-width: 63.99rem) and (max-height: 46rem) {
+  .prueba {
+    display: none;
+  }
+}
+@media (max-width: 63.99rem) and (max-height: 40rem) {
+  .hero {
+    --tel-w: min(36vw, 14.5svh);
+  }
+  .bajada {
+    display: none;
+  }
+  .acciones > * {
+    font-size: var(--text-small);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Al abrir */
+  .cortina {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    overflow: clip;
+    animation: se-apaga 1ms linear 1450ms both;
+  }
+  .cortinaBrasa,
+  .cortinaTinta {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    animation: sube 620ms cubic-bezier(0.76, 0, 0.24, 1) both;
+  }
+  .cortinaBrasa {
+    background-color: var(--accent);
+    color: var(--accent-fg);
+    animation-delay: 620ms;
+  }
+  .cortinaTinta {
+    background-color: var(--seccion-tinta);
+    animation-delay: 760ms;
+  }
+  .cortinaLogo {
+    width: min(70vw, 44rem);
+    height: auto;
+    overflow: visible;
+    fill: currentColor;
+  }
+  .cortinaLogo path {
+    animation: letra-abajo 420ms var(--rebote) both;
+    animation-delay: calc(var(--i) * 60ms);
+  }
+  .cortinaLogo path[data-par] {
+    animation-name: letra-arriba;
+  }
+  /* Quien llega a una parte de la página (el traspaso de una demo) no espera la apertura. */
+  body:has(:target) .cortina {
+    display: none;
+  }
+
+  .palabra {
+    animation: palabra-sale 900ms var(--rebote) both;
+    animation-delay: calc(860ms + var(--i) * 70ms);
+  }
+  .resto {
+    animation: resto-aparece 700ms var(--ease-out) 1350ms both;
+  }
+  .entrada {
+    animation: celular-sube 1200ms var(--rebote) both;
+  }
+  .vuelo[data-n='0'] .entrada {
+    animation-delay: 1000ms;
+  }
+  .vuelo[data-n='1'] .entrada {
+    animation-delay: 1110ms;
+  }
+  .vuelo[data-n='2'] .entrada {
+    animation-delay: 1220ms;
+  }
+  .vuelo[data-n='3'] .entrada {
+    animation-delay: 1330ms;
+  }
+
+  /* En loop: el sitio real se recorre dentro del celular */
+  .captura {
+    animation: recorre 32s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+  .vuelo[data-n='1'] .captura {
+    animation-duration: 26s;
+    animation-delay: -9s;
+  }
+  .vuelo[data-n='2'] .captura {
+    animation-duration: 44s;
+    animation-delay: -6s;
+  }
+  .vuelo[data-n='3'] .captura {
+    animation-duration: 38s;
+    animation-delay: -20s;
+  }
+  .escena[data-pausa] .captura {
+    animation-play-state: paused;
+  }
+
+  /* Al scrollear. Con la pantalla muy baja (celular apaisado) no se fija: no entraría. */
+  @supports (animation-timeline: view()) {
+    @media (min-height: 34rem) {
+      .hero {
+        height: calc(var(--alto-escena) + 180svh);
+        view-timeline: --apertura block;
+        view-timeline-inset: var(--alto-nav) 0;
+      }
+      .escena {
+        position: sticky;
+        top: var(--alto-nav);
+      }
+      .texto {
+        animation: texto-se-va linear both;
+        animation-timeline: --apertura;
+        animation-range: contain 0% contain 24%;
+      }
+      /* Si el teclado llega hasta acá, el texto vuelve: nunca hay foco sobre algo invisible. */
+      .texto:focus-within {
+        animation: none;
+      }
+      .vuelo {
+        animation: vuela linear both;
+        animation-timeline: --apertura;
+        animation-range: contain var(--ini) contain var(--fin);
+      }
+      .encendido {
+        animation: enciende linear both;
+        animation-timeline: --apertura;
+        animation-range: contain calc(var(--fin) - 6%) contain calc(var(--fin) + 12%);
+      }
+      .rotulo {
+        display: block;
+        position: absolute;
+        inset-inline: 0;
+        top: 100%;
+        animation: aparece linear both;
+        animation-timeline: --apertura;
+        animation-range: contain 72% contain 84%;
+      }
+      .final {
+        display: block;
+        animation: final-llega linear both;
+        animation-timeline: --apertura;
+        animation-range: contain 66% contain 82%;
+      }
+    }
+  }
+}
+
+@keyframes se-apaga {
+  to {
+    visibility: hidden;
+  }
+}
+@keyframes sube {
+  to {
+    transform: translate3d(0, -101%, 0);
+  }
+}
+@keyframes letra-abajo {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes letra-arriba {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -12%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes palabra-sale {
+  from {
+    transform: translate3d(0, 115%, 0) rotate(7deg);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes resto-aparece {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes celular-sube {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 90svh, -20rem) rotateX(48deg) rotateZ(14deg);
+  }
+  25% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes recorre {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, calc(-100% + var(--alto-pantalla)), 0);
+  }
+}
+@keyframes texto-se-va {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -14svh, 0) scale(0.94);
+    pointer-events: none;
+  }
+}
+@keyframes vuela {
+  from {
+    transform: translate3d(var(--x0), var(--y0), var(--z0)) rotateY(var(--ry0)) rotateZ(var(--rz0))
+      scale(1);
+  }
+  /* Se pasa apenas y asienta: el "clic" del encastre, en grande. */
+  86% {
+    transform: translate3d(var(--x1), calc(var(--y1) + 0.75rem), 0) rotateY(0deg) rotateZ(0deg)
+      scale(1.05);
+  }
+  to {
+    transform: translate3d(var(--x1), var(--y1), 0) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+}
+@keyframes enciende {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+}
+@keyframes aparece {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes final-llega {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 2.5rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

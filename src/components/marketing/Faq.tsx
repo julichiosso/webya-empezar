@@ -30,7 +30,7 @@ function Duda({ item }: { item: Pregunta }) {
 /** Preguntas frecuentes (fondo crema). El mismo texto alimenta el JSON-LD de page.tsx. */
 export function Faq() {
   return (
-    <Seccion fondo="crema" aria-labelledby="faq-title" className="diferido">
+    <Seccion fondo="crema" id="faq" aria-labelledby="faq-title" className="diferido scroll-mt-16">
       <h2 id="faq-title" className="text-title font-semibold text-balance">
         {FAQ_SECCION.titulo}
       </h2>

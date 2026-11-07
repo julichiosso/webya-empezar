@@ -13,9 +13,12 @@ import { Objeciones } from '@/components/marketing/Objeciones';
 import { PorQueWebya } from '@/components/marketing/PorQueWebya';
 import { Faq } from '@/components/marketing/Faq';
 import { Footer } from '@/components/marketing/Footer';
-import { Hero, TituloHero } from '@/components/marketing/Hero';
+import { Hero } from '@/components/marketing/Hero';
 import { VitrinaRubros } from '@/components/marketing/VitrinaRubros';
+import { ComoTrabajamos } from '@/components/marketing/ComoTrabajamos';
 import { Productos } from '@/components/marketing/Productos';
+import { QueHacemos } from '@/components/marketing/QueHacemos';
+import { SeccionCreador } from '@/components/marketing/SeccionCreador';
 import { QueIncluye } from '@/components/marketing/QueIncluye';
 import { FAQ } from '@/content/faq';
 import { siteConfig } from '@/lib/site-config';
@@ -81,34 +84,27 @@ export default function EmpezarPage() {
       <Nav />
       <main
         id={ID_CONTENIDO}
-        className="mx-auto w-full max-w-xl px-4 pb-24 lg:max-w-page lg:px-8 lg:pb-32"
+        className="mx-auto w-full max-w-xl px-4 lg:max-w-page lg:px-8"
       >
-        <Hero>
-          {/* Pantalla 1 en el HTML del servidor: se ve y se toca antes de que llegue el wizard. */}
-          <WizardLazy
-            VistaPrevia={VistaPreviaCartaLazy}
-            encabezado={<TituloHero />}
-            vitrina={<VitrinaRubros />}
-          >
-            <Marco
-              pantalla={1}
-              encabezado={<TituloHero />}
-              aside={<VitrinaRubros />}
-              asideEnCelular
-            >
-              <PantallaRubro animar />
-            </Marco>
-          </WizardLazy>
-        </Hero>
+        <Hero />
         <TickerRubros />
-        <MensajeRubro />
-        <Productos />
+        <QueHacemos />
         <Objeciones donde="hero" />
-        <QueIncluye />
-        <Objeciones donde="modulos" />
         {INTRO_ACTIVA && <Telon />}
         <YaCrearon />
         <Objeciones donde="clientes" />
+        <Productos />
+        <ComoTrabajamos />
+        <SeccionCreador>
+          <WizardLazy VistaPrevia={VistaPreviaCartaLazy} vitrina={<VitrinaRubros />}>
+            <Marco pantalla={1} aside={<VitrinaRubros />} asideEnCelular>
+              <PantallaRubro animar />
+            </Marco>
+          </WizardLazy>
+        </SeccionCreador>
+        <MensajeRubro />
+        <QueIncluye />
+        <Objeciones donde="modulos" />
         <PorQueWebya />
         <Faq />
         <Cierre />

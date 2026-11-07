@@ -14,13 +14,23 @@ WebYa tenía buena ingeniería y poca venta. Los tests, la seguridad y el rendim
 
 Los cinco quedaron resueltos, con las condiciones de la sección "Lo que tenés que hacer vos".
 
+## Actualización del 2026-11-07: que se vea como una empresa
+
+El dueño vio el hero nuevo y dijo que no parecía una empresa que se dedica a esto, y pidió animaciones muy llamativas sin perder la confianza. Lo que cambió en `/empezar`:
+
+- **El hero dejó de ser un formulario.** Ahora dice quién es WebYa ("Somos la parte digital de tu negocio.") y muestra los sitios reales de los clientes. El creador pasó a su propia sección y todos los CTA bajan ahí. **Riesgo a medir:** ver el negocio propio ya no está en la primera pantalla; con `embudo_diario` se ve si baja `eligieron_rubro`.
+- **Secciones de empresa nuevas:** "Qué hacemos", "Cómo trabajamos" y "Antes de confiar, comprobalo", con contacto a la vista. La nav y el pie nombran esas secciones.
+- **Movimiento:** cortina, celulares en 3D, tablero que encastra, trabajos que se recorren con el scroll. Reglas en `webya-plano`.
+
+La confianza se apoya en lo verificable. **Lo que más la subiría y no se puede inventar:** nombre y cara de quien está detrás, testimonios reales y razón social. Los tiene que dar el dueño.
+
 ## Qué existe de verdad
 
 No es un SaaS con cuentas: no hay usuarios, tenants, panel persistente ni sitios publicados. Son estas pantallas, y esto es lo que se auditó:
 
 | Pantalla | Qué es |
 |---|---|
-| `/empezar` | Landing y wizard: rubro → nombre → vista previa → WhatsApp → datos opcionales |
+| `/empezar` | Landing de la empresa y wizard: rubro → nombre → vista previa → WhatsApp → datos opcionales |
 | `/demo/gastronomia` | Carta y panel de pedidos, con datos de ejemplo |
 | `/demo/peluqueria` (nueva) | Bot de turnos, agenda y estadísticas, con datos de ejemplo |
 | `/crear` (nueva) | Editor del sitio, sin cuenta |

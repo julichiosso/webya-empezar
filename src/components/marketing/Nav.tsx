@@ -1,14 +1,26 @@
 import { Logo } from '@/brand/logo/Logo';
 import { ButtonLink } from '@/components/ui/Button';
+import { cn } from '@/components/ui/clases';
 import { NAV } from '@/content/empezar/nav';
 
 /** Id del <main> de /empezar: destino del enlace "Saltar al contenido". */
 export const ID_CONTENIDO = 'contenido';
 
+const ENLACE =
+  'hidden min-h-tap items-center px-2 text-small font-semibold underline-offset-4 hover:underline';
+
+/** En celular solo queda el CTA: las secciones se recorren bajando. */
+const ENLACES = [
+  { href: '#que-hacemos', texto: NAV.queHacemos, clase: 'lg:inline-flex' },
+  { href: '#ya-lo-usan', texto: NAV.ejemplos, clase: 'sm:inline-flex' },
+  { href: '#como-trabajamos', texto: NAV.comoTrabajamos, clase: 'lg:inline-flex' },
+  { href: '#productos', texto: NAV.demos, clase: 'sm:inline-flex' },
+];
+
 /**
  * Barra superior de /empezar: fija arriba, fondo crema con una línea abajo, el logo a la izquierda
- * y a la derecha el enlace a los ejemplos y el CTA único. Sin menú ni interruptores: lo que no ayuda
- * a empezar no está. El primer foco es "Saltar al contenido".
+ * y a la derecha las secciones de la empresa y el CTA único. Sin interruptores: lo que no ayuda a
+ * empezar no está. El primer foco es "Saltar al contenido".
  */
 export function Nav() {
   return (
@@ -30,18 +42,11 @@ export function Nav() {
         >
           <Logo armar />
         </a>
-        <a
-          href="#productos"
-          className="hidden min-h-tap items-center px-2 text-small font-semibold underline-offset-4 hover:underline sm:inline-flex"
-        >
-          {NAV.demos}
-        </a>
-        <a
-          href="#ya-lo-usan"
-          className="hidden min-h-tap items-center px-2 text-small font-semibold underline-offset-4 hover:underline sm:inline-flex"
-        >
-          {NAV.ejemplos}
-        </a>
+        {ENLACES.map((e) => (
+          <a key={e.href} href={e.href} className={cn(ENLACE, e.clase)}>
+            {e.texto}
+          </a>
+        ))}
         <ButtonLink href="#wizard" tamanio="compacto">
           {NAV.cta}
         </ButtonLink>

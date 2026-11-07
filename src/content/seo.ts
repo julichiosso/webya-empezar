@@ -14,17 +14,17 @@ export const SEO_SITIO = {
 
 /** /empezar (metadata y opengraph-image). Mismo mensaje que el hero, para que el clic no sorprenda. */
 export const SEO_EMPEZAR = {
-  titulo: 'Tu negocio atiende mientras vos trabajás',
+  titulo: 'Somos la parte digital de tu negocio',
   /** Zona que atiende WebYa (datos estructurados de la página). */
   zona: 'Argentina',
   /** Hasta ~155 caracteres: lo que Google muestra sin cortar. */
   descripcion:
-    'Carta con QR y pedidos, bot de turnos con agenda y estadísticas, y el sitio de tu negocio. Elegí tu rubro y mirá cómo te queda.',
+    'WebYa diseña y deja andando el sitio, la carta con QR, los pedidos y el bot de turnos de tu negocio. Mirá los negocios que ya funcionan.',
   /** Imagen para compartir (se genera en el build). */
   og: {
-    alt: 'WebYa: tu negocio atiende mientras vos trabajás. Pedidos, turnos con bot y tu sitio.',
-    titulo: 'Tu negocio atiende mientras vos trabajás.',
-    subtitulo: 'Pedidos, turnos con bot y tu sitio.',
+    alt: 'WebYa: somos la parte digital de tu negocio. Sitios, cartas, pedidos y turnos que funcionan.',
+    titulo: 'Somos la parte digital de tu negocio.',
+    subtitulo: 'Sitios, cartas, pedidos y turnos que funcionan.',
     /** Pastillas de abajo: módulos de ejemplo y el camino a medida. */
     modulos: ['Carta con QR', 'Pedidos online', 'Bot de turnos'],
   },

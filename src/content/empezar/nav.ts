@@ -1,6 +1,6 @@
 import { HERO } from '@/content/empezar/hero';
 
-/** Nav mínima de /empezar: el logo, el interruptor de tema y UN solo CTA (el mismo del hero). */
+/** Nav de /empezar: el logo, las secciones de la empresa y UN solo CTA (el mismo del hero). */
 export const NAV = {
   /** Nombre accesible del <nav>. */
   aria: 'Principal',
@@ -9,8 +9,10 @@ export const NAV = {
   /** Enlace para saltar la navegación con el teclado (primer foco de la página). */
   saltar: 'Saltar al contenido',
   cta: HERO.cta,
-  /** Enlace a los ejemplos reales ("Ya lo usan"). */
-  ejemplos: 'Clientes',
+  queHacemos: 'Qué hacemos',
+  /** Enlace a los casos reales ("Ya lo usan"). */
+  ejemplos: 'Trabajos',
+  comoTrabajamos: 'Cómo trabajamos',
   /** Enlace a las demos, en la barra de arriba. */
   demos: 'Probalo',
   /**

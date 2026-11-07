@@ -6,6 +6,7 @@ import { cn } from '@/components/ui/clases';
 import { FOOTER } from '@/content/empezar/footer';
 import { MENSAJE_WHATSAPP } from '@/content/whatsapp';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
+import estilos from './Footer.module.css';
 
 const C = CLASES_SECCION.tinta;
 const ENLACE = '-mx-2 inline-flex min-h-tap items-center px-2 underline-offset-4 hover:underline';
@@ -36,7 +37,7 @@ function Grupo({
 
 /**
  * Pie de /empezar (fondo tinta, fijo con el sitio en claro también). No repite la nav: el lema con
- * su salvedad, tres grupos (hablemos, probalo, legales) y el wordmark grande al pie, entero y sin
+ * su salvedad, cuatro grupos (la empresa, hablemos, probalo, legales) y el wordmark grande al pie, entero y sin
  * tocar. El interruptor de tema vive en la nav. Una línea lo separa del cierre (los dos son oscuros).
  */
 export function Footer() {
@@ -50,13 +51,40 @@ export function Footer() {
       contenidoClassName="pt-16 pb-8 lg:pt-24 lg:pb-12"
     >
       <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-5">
+        <div className="lg:col-span-4">
           <p className="text-title font-semibold text-balance">{FOOTER.lema}</p>
           <p className={cn('mt-2 max-w-sm', C.secundario)}>{FOOTER.bajada}</p>
         </div>
 
-        <div className="mt-12 grid gap-8 sm:grid-cols-3 lg:col-span-7 lg:mt-0">
-          <Grupo id="pie-contacto" titulo={FOOTER.contacto.titulo}>
+        <div className="mt-12 grid grid-cols-2 gap-8 sm:flex sm:justify-between lg:col-span-8 lg:mt-0">
+          <Grupo id="pie-empresa" titulo={FOOTER.empresa.titulo}>
+            <li>
+              <a href="#que-hacemos" className={ENLACE}>
+                {FOOTER.empresa.queHacemos}
+              </a>
+            </li>
+            <li>
+              <a href="#ya-lo-usan" className={ENLACE}>
+                {FOOTER.empresa.trabajos}
+              </a>
+            </li>
+            <li>
+              <a href="#como-trabajamos" className={ENLACE}>
+                {FOOTER.empresa.comoTrabajamos}
+              </a>
+            </li>
+            <li>
+              <a href="#faq" className={ENLACE}>
+                {FOOTER.empresa.preguntas}
+              </a>
+            </li>
+          </Grupo>
+
+          <Grupo
+            id="pie-contacto"
+            titulo={FOOTER.contacto.titulo}
+            className="col-span-2 sm:col-auto"
+          >
             {whatsapp && (
               <li>
                 <a href={whatsapp} target="_blank" rel="noopener noreferrer" className={ENLACE}>
@@ -66,7 +94,7 @@ export function Footer() {
               </li>
             )}
             <li>
-              <a href={`mailto:${contactEmail}`} className={cn(ENLACE, 'break-all')}>
+              <a href={`mailto:${contactEmail}`} className={ENLACE}>
                 {contactEmail}
               </a>
             </li>
@@ -118,7 +146,8 @@ export function Footer() {
           texto de la sección). `[&>svg]` le gana al alto fijo del Logo sin tocar el componente. */}
       <div
         className={cn(
-          'mt-16 border-t pt-8 lg:mt-24 lg:pt-12 [&>svg]:h-auto [&>svg]:w-full',
+          'mt-16 overflow-clip border-t pt-8 lg:mt-24 lg:pt-12 [&>svg]:h-auto [&>svg]:w-full',
+          estilos.logo,
           C.linea,
         )}
       >

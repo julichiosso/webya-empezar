@@ -3,25 +3,43 @@
  * aparecen. Sin cifras, plazos ni precios inventados.
  */
 export const POR_QUE_WEBYA = {
-  titulo: 'Por qué WebYa',
+  titulo: 'Antes de confiar, comprobalo.',
+  bajada: 'No te pedimos que nos creas: todo esto lo podés revisar vos.',
   puntos: [
+    {
+      titulo: 'Los sitios están online',
+      texto: 'Entrá a los de nuestros clientes y usalos como cualquier persona.',
+      enlace: { texto: 'Ver trabajos', href: '#ya-lo-usan' },
+    },
+    {
+      titulo: 'Lo probás sin dejar datos',
+      texto: 'El bot de turnos y la carta con pedidos andan acá mismo.',
+      enlace: { texto: 'Probar las demos', href: '#productos' },
+    },
+    {
+      titulo: 'Nada sale sin tu visto bueno',
+      texto: 'Lo revisás antes de publicarlo.',
+    },
+    {
+      titulo: 'Te contesta una persona',
+      texto: 'Si tenés una duda, hablás con alguien por WhatsApp.',
+    },
     {
       titulo: 'Hecho en Argentina',
       texto: 'En español rioplatense, pensado para negocios de acá.',
     },
     {
-      titulo: 'Pensado para WhatsApp',
-      texto: 'Ahí ya hablan tus clientes. Tus pedidos y consultas llegan por ahí, ordenados.',
-    },
-    {
-      titulo: 'Para cualquier rubro',
-      texto: 'Gastronomía y peluquerías ya funcionan. Los demás rubros los armamos con vos.',
-    },
-    {
-      titulo: 'Una persona atrás',
-      texto: 'Si tenés una duda, te contesta una persona por WhatsApp.',
+      titulo: 'Tus datos, para lo tuyo',
+      texto: 'Los usamos solo para contactarte por tu negocio.',
+      enlace: { texto: 'Leer la política de privacidad', href: '/privacidad' },
     },
   ],
+  contacto: {
+    titulo: '¿Querés preguntarnos algo antes?',
+    whatsapp: 'Escribinos por WhatsApp',
+    instagram: 'Instagram @webya.dev',
+    externo: ' (se abre en otra pestaña)',
+  },
 } as const;
 
 export type DondeObjecion = 'hero' | 'modulos' | 'clientes';

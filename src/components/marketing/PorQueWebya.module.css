@@ -1,0 +1,51 @@
+.titulo {
+  margin: 0;
+  font-size: clamp(2.25rem, 4.4vw, 4rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.punto {
+  margin: 0;
+  font-size: var(--text-heading);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* La pieza que encaja: el check en Brasa hace clic al entrar en pantalla. */
+.check {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .check {
+      animation: check-encaja linear both;
+      animation-timeline: view();
+      animation-range: entry 40% cover 35%;
+    }
+  }
+}
+
+@keyframes check-encaja {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -1.5rem, 0) rotate(-30deg) scale(1.8);
+  }
+  80% {
+    opacity: 1;
+    transform: translate3d(0, 0.125rem, 0) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

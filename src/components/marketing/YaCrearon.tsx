@@ -20,7 +20,7 @@ export function YaCrearon() {
     <Seccion fondo="crema" id="ya-lo-usan" aria-labelledby="crearon-title" className="scroll-mt-16">
       <div className="lg:grid lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-7">
-          <h2 id="crearon-title" className="text-title font-semibold text-balance">
+          <h2 id="crearon-title" className="text-display font-semibold text-balance">
             {YA_CREARON.titulo}
           </h2>
           <p className={`mt-4 max-w-md text-lead ${C.secundario}`}>{YA_CREARON.bajada}</p>
@@ -47,7 +47,7 @@ export function YaCrearon() {
             className="mt-12 first:mt-0 lg:grid lg:grid-cols-12 lg:gap-8"
           >
             <h3
-              className={`text-small font-semibold tracking-wide uppercase lg:sticky lg:top-24 lg:col-span-3 lg:self-start lg:pt-14 ${C.secundario}`}
+              className={`text-small font-semibold lg:sticky lg:top-24 lg:col-span-3 lg:self-start lg:pt-14 ${C.secundario}`}
             >
               {g.rubro}
             </h3>
@@ -64,7 +64,7 @@ export function YaCrearon() {
                       <p className={`tabular text-small ${C.secundario}`}>
                         {YA_CREARON.caso(numero)} · {c.ciudad}
                       </p>
-                      <h4 className="mt-2 text-title font-semibold text-balance">{c.nombre}</h4>
+                      <h4 className="mt-2 text-display font-semibold text-balance">{c.nombre}</h4>
                       <p className={`mt-3 ${C.secundario}`}>{c.hizo}</p>
 
                       <p className="mt-8 text-small font-semibold">{YA_CREARON.queArmamos}</p>

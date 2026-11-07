@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { HERO } from '../src/content/empezar/hero';
 import { NAV } from '../src/content/empezar/nav';
 import {
   leerLeads,
@@ -22,23 +23,28 @@ test('el flujo completo se puede hacer solo con teclado (y el foco no se pierde 
   const w = wizard(page);
   await expect(w.getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
 
-  // Tab: "Saltar al contenido" → logo → demos → clientes → CTA de la nav → la primera tarjeta de rubro.
+  // Tab: "Saltar al contenido" → logo → secciones de la nav → CTA de la nav → CTA del hero.
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: NAV.saltar })).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: NAV.inicio })).toBeFocused();
-  // "Ver ejemplos" solo se muestra desde sm.
-  const ejemplos = page.getByRole('navigation').getByRole('link', { name: NAV.ejemplos });
-  if (await ejemplos.isVisible()) {
-    await page.keyboard.press('Tab');
-    await expect(page.getByRole('navigation').getByRole('link', { name: NAV.demos })).toBeFocused();
-    await page.keyboard.press('Tab');
-    await expect(ejemplos).toBeFocused();
+  const nav = page.getByRole('navigation');
+  // Las secciones de la nav solo se muestran desde cierto ancho.
+  for (const nombre of [NAV.queHacemos, NAV.ejemplos, NAV.comoTrabajamos, NAV.demos]) {
+    const enlace = nav.getByRole('link', { name: nombre });
+    if (await enlace.isVisible()) {
+      await page.keyboard.press('Tab');
+      await expect(enlace).toBeFocused();
+    }
   }
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('navigation').getByRole('link', { name: NAV.cta })).toBeFocused();
+  await expect(nav.getByRole('link', { name: NAV.cta })).toBeFocused();
   await page.keyboard.press('Tab');
+  await expect(page.getByRole('main').getByRole('link', { name: HERO.cta }).first()).toBeFocused();
+  // El CTA baja al flujo: lo que sigue con Tab desde ahí es la primera tarjeta de rubro.
+  await page.keyboard.press('Enter');
   const primera = w.locator('[data-rubro="peluqueria_estetica"]');
+  await primera.focus();
   await expect(primera).toBeFocused();
   // El foco dispara la descarga del wizard: al reemplazarse el HTML, sigue en la misma tarjeta.
   await page.waitForTimeout(800);

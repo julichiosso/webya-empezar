@@ -1,23 +1,22 @@
+import { CLIENTES } from '@/content/clientes';
+
 /**
- * Hero de /empezar: la promesa, el CTA que baja al creador y la prueba.
- * Es la variante `atiende_solo` de content/empezar/hero-variantes.ts (un test verifica que coincidan).
+ * Hero de /empezar: quién es WebYa y qué hace, el CTA que baja al creador y la prueba real.
+ * Es la variante `parte_digital` de content/empezar/hero-variantes.ts (un test verifica que coincidan).
  */
 export const HERO = {
-  titulo: 'Tu negocio atiende mientras vos trabajás.',
-  /** Debajo del titular: qué es, en cosas que se pueden tocar. */
-  subtitulo: 'Pedidos, turnos con bot y tu sitio.',
+  titulo: 'Somos la parte digital de tu negocio.',
+  /** Debajo del titular: qué se entrega, en cosas que se pueden tocar. */
+  subtitulo: 'Sitios, cartas, pedidos y turnos que funcionan.',
   bajada:
-    'Carta con QR y pedidos para gastronomía. Bot de turnos con agenda y estadísticas para peluquerías. Si lo tuyo es otra cosa, lo armamos a medida.',
+    'WebYa diseña, programa y deja andando lo que tu negocio necesita. Hablás con una persona y nada sale online sin tu visto bueno.',
   cta: 'Crear mi sistema',
-  /** Debajo del creador: negocios reales, con link a sus casos. */
-  prueba: { antes: 'Ya funcionando:' },
-  /** Las demos que se pueden tocar sin dejar ningún dato. */
-  demos: {
-    antes: 'Probalo ahora:',
-    separador: 'o',
-    enlaces: [
-      { texto: 'el bot de turnos', href: '/demo/peluqueria' },
-      { texto: 'la carta con pedidos', href: '/demo/gastronomia' },
-    ],
+  ctaTrabajos: 'Ver trabajos',
+  /** Debajo de los botones: negocios reales, con link a sus casos. */
+  prueba: {
+    antes: 'Ya funcionan con WebYa:',
+    nombres: new Intl.ListFormat('es-AR').format(CLIENTES.map((c) => c.nombre)),
   },
+  /** Al final del recorrido del hero, con los celulares ya en fila. */
+  final: 'Estos negocios ya funcionan con WebYa.',
 } as const;

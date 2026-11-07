@@ -1,6 +1,7 @@
 .marco {
   --alto-marco: 30rem;
   display: block;
+  border-radius: 1.5rem;
   position: relative;
   overflow: hidden;
   height: var(--alto-marco);
@@ -40,6 +41,24 @@
   }
   to {
     transform: translate3d(0, calc(-100% + var(--alto-marco)), 0);
+  }
+}
+
+/* Con soporte, el sitio del cliente se recorre con el scroll de la página, no solo. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .marco {
+      view-timeline: --captura block;
+    }
+    .imagen,
+    .marco[data-visible] .imagen,
+    .marco:hover .imagen,
+    .marco:focus-visible .imagen {
+      animation: desliza linear both;
+      animation-timeline: --captura;
+      animation-range: cover 5% cover 95%;
+      animation-play-state: running;
+    }
   }
 }
 

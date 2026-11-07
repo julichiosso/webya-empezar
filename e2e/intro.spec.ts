@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { HERO } from '../src/content/empezar/hero';
 import { TELON } from '../src/content/telon';
 import { CLIENTES } from '../src/content/clientes';
 
@@ -19,7 +20,9 @@ test('la primera pantalla es el hero: dice qué es WebYa, sin esperar al telón'
 }) => {
   await page.goto('/empezar');
   await expect(page.locator('h1')).toBeInViewport();
-  await expect(page.locator('[data-rubro="gastronomia"]')).toBeInViewport();
+  await expect(
+    page.getByRole('main').getByRole('link', { name: HERO.cta }).first(),
+  ).toBeInViewport();
   await expect(telon(page)).not.toBeInViewport();
   // Los rótulos salen de content/clientes.
   for (const c of CLIENTES) await expect(page.getByText(c.rotulo)).toBeAttached();

@@ -7,7 +7,7 @@
  * cifras, clientes ni plazos, y la promesa "todo lo digital" siempre con su salvedad "lo armamos a medida".
  */
 export interface VarianteHero {
-  id: 'atiende_solo' | 'pieza_por_pieza' | 'objecion_tecnologia';
+  id: 'parte_digital' | 'atiende_solo' | 'pieza_por_pieza';
   /** Fórmula de titular que usa (webya-copy-comercial → "Fórmulas de titular"). */
   formula: string;
   titulo: string;
@@ -21,6 +21,18 @@ export interface VarianteHero {
 
 export const HERO_VARIANTES: readonly VarianteHero[] = [
   {
+    id: 'parte_digital',
+    formula: 'Quiénes somos + qué lugar ocupamos en tu negocio',
+    titulo: 'Somos la parte digital de tu negocio.',
+    subtitulo: 'Sitios, cartas, pedidos y turnos que funcionan.',
+    bajada:
+      'WebYa diseña, programa y deja andando lo que tu negocio necesita. Hablás con una persona y nada sale online sin tu visto bueno.',
+    cta: 'Crear mi sistema',
+    razonamiento:
+      'Dice que WebYa es una empresa y qué hace, en vez de sonar a herramienta o a formulario: es lo que el dueño pidió después de ver el hero anterior. Se apoya en los sitios reales de los clientes, que están a la vista en la misma pantalla. Riesgo: "digital" es una palabra genérica; por eso el subtítulo la baja a cosas concretas.',
+    elegida: true,
+  },
+  {
     id: 'atiende_solo',
     formula: 'Resultado en la vida del dueño, sin nombrar la categoría',
     titulo: 'Tu negocio atiende mientras vos trabajás.',
@@ -30,7 +42,7 @@ export const HERO_VARIANTES: readonly VarianteHero[] = [
     cta: 'Crear mi sistema',
     razonamiento:
       'Nombra el dolor real de quien corta el pelo o cocina y no puede contestar el teléfono, y vale igual para los dos productos que ya existen. Dice el resultado y no "sitio" ni "sistema", que suenan a trabajo. Riesgo: en un rubro que solo necesita presencia promete de más; por eso la bajada aclara qué es y dice que lo demás se arma a medida.',
-    elegida: true,
+    elegida: false,
   },
   {
     id: 'pieza_por_pieza',
@@ -41,17 +53,6 @@ export const HERO_VARIANTES: readonly VarianteHero[] = [
     cta: 'Crear mi sistema',
     razonamiento:
       'Es el concepto Encastre dicho tal cual y conversa con el mockup de al lado, donde las piezas se activan. Es la más cercana al hero anterior ("Creá tu negocio online"), así que es la de menor riesgo. Pierde la amplitud de "todo lo digital": alguien que busca un sistema o una automatización puede pensar que solo hacemos webs.',
-    elegida: false,
-  },
-  {
-    id: 'objecion_tecnologia',
-    formula: 'Pregunta de objeción',
-    titulo: '¿No sabés de tecnología? Mejor.',
-    subtitulo: 'Vos contás tu negocio, nosotros lo armamos.',
-    bajada: 'Tienda, turnos, carta, pedidos, pagos… y si lo tuyo no está, lo armamos a medida.',
-    cta: 'Crear mi sistema',
-    razonamiento:
-      'Ataca la objeción más común del dueño de un local y suena a persona, no a empresa. Funciona mejor con tráfico de Instagram, que llega sin saber qué es WebYa pero con esa duda. Riesgo: el titular no dice qué se obtiene; todo el peso cae en la bajada, que en celular queda debajo del mockup.',
     elegida: false,
   },
 ];

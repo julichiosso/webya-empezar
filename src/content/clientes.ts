@@ -138,8 +138,8 @@ export function resumenClientes(clientes: readonly Cliente[] = CLIENTES) {
 export const dominioDe = (url: string) => new URL(url).host.replace(/^www\./, '');
 
 export const YA_CREARON = {
-  titulo: 'Ya crearon con WebYa',
-  bajada: 'Negocios reales, con su sitio funcionando. Conocelos.',
+  titulo: 'Trabajos que ya están funcionando',
+  bajada: 'Negocios reales, con su sitio online hoy. Entrá y usalos como cualquier cliente.',
   resumen: { sitios: 'sitios funcionando', rubros: 'rubros' },
   caso: (n: number) => `Caso ${String(n).padStart(2, '0')}`,
   queArmamos: 'Qué tiene hoy',

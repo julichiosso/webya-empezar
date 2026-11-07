@@ -1,0 +1,117 @@
+.titulo {
+  margin: 0;
+  font-size: clamp(2.25rem, 4.4vw, 4rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.riel {
+  position: relative;
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* El riel: una línea punteada de base y encima la de Brasa, que crece solo con scaleY. */
+.riel::before,
+.riel::after {
+  content: '';
+  position: absolute;
+  top: 3.5rem;
+  bottom: 3.5rem;
+  left: 1.5rem;
+  width: 2px;
+  margin-left: -1px;
+}
+.riel::before {
+  background-image: linear-gradient(var(--seccion-tinta-linea) 50%, transparent 50%);
+  background-size: 2px 0.75rem;
+}
+.riel::after {
+  background-color: var(--accent);
+  transform-origin: 50% 0;
+}
+
+.paso {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 1.5rem;
+  padding-block: 2rem;
+}
+
+.numero {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--seccion-tinta-linea);
+  border-radius: 50%;
+  background-color: var(--seccion-tinta);
+  font-weight: 600;
+}
+
+.nombre {
+  margin: 0;
+  font-size: var(--text-title);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .riel {
+      view-timeline: --riel block;
+    }
+    .riel::after {
+      animation: riel-llena linear both;
+      animation-timeline: --riel;
+      animation-range: entry 60% exit 30%;
+    }
+    .numero {
+      animation: paso-numero linear both;
+      animation-timeline: view();
+      animation-range: entry 55% cover 50%;
+    }
+    .detalle {
+      animation: paso-detalle linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 45%;
+    }
+  }
+}
+
+@keyframes riel-llena {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes paso-numero {
+  from {
+    transform: scale(0.6);
+  }
+  85% {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes paso-detalle {
+  from {
+    opacity: 0.15;
+    transform: translate3d(2.5rem, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

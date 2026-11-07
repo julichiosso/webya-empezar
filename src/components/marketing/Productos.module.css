@@ -1,0 +1,25 @@
+/* La conversación del bot se escribe sola mientras la sección entra en pantalla. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .burbuja {
+      animation: burbuja-llega linear both;
+      animation-timeline: view();
+      animation-range: entry 60% cover 40%;
+    }
+  }
+}
+
+@keyframes burbuja-llega {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0) scale(0.8);
+  }
+  80% {
+    opacity: 1;
+    transform: translate3d(0, -0.125rem, 0) scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

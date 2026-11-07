@@ -1,0 +1,19 @@
+/* El wordmark del pie sube desde abajo de la línea mientras se llega al final de la página. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .logo > svg {
+      animation: logo-sube linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@keyframes logo-sube {
+  from {
+    transform: translate3d(0, 70%, 0);
+  }
+  to {
+    transform: none;
+  }
+}

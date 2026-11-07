@@ -3,12 +3,19 @@
  * interruptor de tema vive en la nav.
  */
 export const FOOTER = {
-  lema: 'Tu negocio online, armado con vos.',
+  lema: 'Somos la parte digital de tu negocio.',
   /** Debajo del lema: la promesa con su salvedad, en una línea. */
   bajada: 'Elegís tu rubro, lo armamos juntos y lo revisás antes de publicar.',
   instagram: 'Instagram @webya.dev',
   copyright: (anio: number) => `© ${anio} WebYa`,
   /** Grupos de enlaces del pie (el CTA principal de la página es el del hero). */
+  empresa: {
+    titulo: 'WebYa',
+    queHacemos: 'Qué hacemos',
+    trabajos: 'Trabajos',
+    comoTrabajamos: 'Cómo trabajamos',
+    preguntas: 'Preguntas frecuentes',
+  },
   contacto: {
     titulo: 'Hablemos',
     aria: 'Contacto',
