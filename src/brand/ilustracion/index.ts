@@ -1,6 +1,6 @@
 /**
- * Punto de entrada del sistema de ilustración. Los listados (`ICONOS`, `DIBUJOS`, `ARTES_MODULO`)
- * son para recorrer todo el vocabulario (la vitrina de /sistema); las pantallas importan el
+ * Punto de entrada del sistema de ilustración. Los listados (`ICONOS`, `DIBUJOS`)
+ * son para recorrer todo el vocabulario (los tests); las pantallas importan el
  * componente que usan. Los nombres de grupo son ids, no copy: los títulos viven en `src/content`.
  */
 import { ESTADOS, ILUSTRACIONES, type DibujoId } from './dibujos/ids';
@@ -13,7 +13,6 @@ import {
 } from './iconos/paths';
 
 export * from './grilla';
-export { Cargando } from './Cargando';
 export { Icon } from './iconos/Icon';
 export { ICONO_DE_NECESIDAD, ICONS, isIconName, type IconName } from './iconos/paths';
 export { Ilustracion } from './dibujos/Ilustracion';
@@ -27,10 +26,6 @@ export {
   type EstadoId,
   type IlustracionId,
 } from './dibujos/ids';
-export { ModuloArte } from './modulos/ModuloArte';
-export { IlustracionRubro } from './rubros/IlustracionRubro';
-export { ESCENAS_RUBRO, esEscenaRubro, type EscenaRubro } from './rubros/ids';
-export { ARTES_MODULO, esArteModulo, type ArteModulo } from './modulos/ids';
 
 export type GrupoIcono = 'rubro' | 'modulo' | 'necesidad' | 'interfaz';
 export type GrupoDibujo = 'plato' | 'estado';

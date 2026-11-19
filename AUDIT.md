@@ -11,15 +11,15 @@ con precarga manual (`src/brand/tipografia/fuente.ts`).
 
 **Rutas.**
 
-| Ruta | Qué es | Estado |
-| --- | --- | --- |
-| `/` | No existe: `next.config.ts` redirige (307) a `/empezar` | sin contenido propio |
-| `/empezar` | Landing del link de Instagram: hero + wizard de lead, telón, rubros flotantes, ticker, casos, FAQ | funciona |
-| `/demo/gastronomia` | Demo interactiva de carta + pedidos + panel del dueño (estado en localStorage) | funciona |
-| `/marca`, `/sistema` | Páginas internas del sistema de marca anterior (naranja/crema) | internas |
-| `/privacidad`, `/terminos` | Legales | funcionan |
-| `/api/leads` POST, `/api/leads/[id]` PATCH | Alta y completado de leads: Zod, rate limit, IP hasheada, honeypot, repos memory/file/supabase | funciona |
-| `robots.txt`, `sitemap.xml`, `icon.svg`, `apple-icon`, OG de `/empezar` | SEO | funcionan |
+| Ruta                                                                    | Qué es                                                                                            | Estado               |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | -------------------- |
+| `/`                                                                     | No existe: `next.config.ts` redirige (307) a `/empezar`                                           | sin contenido propio |
+| `/empezar`                                                              | Landing del link de Instagram: hero + wizard de lead, telón, rubros flotantes, ticker, casos, FAQ | funciona             |
+| `/demo/gastronomia`                                                     | Demo interactiva de carta + pedidos + panel del dueño (estado en localStorage)                    | funciona             |
+| `/marca`, `/sistema`                                                    | Páginas internas del sistema de marca anterior (naranja/crema)                                    | internas             |
+| `/privacidad`, `/terminos`                                              | Legales                                                                                           | funcionan            |
+| `/api/leads` POST, `/api/leads/[id]` PATCH                              | Alta y completado de leads: Zod, rate limit, IP hasheada, honeypot, repos memory/file/supabase    | funciona             |
+| `robots.txt`, `sitemap.xml`, `icon.svg`, `apple-icon`, OG de `/empezar` | SEO                                                                                               | funcionan            |
 
 **Componentes.** `src/components/marketing/*` (Nav, Hero, Telon, RubrosFlotantes, TickerRubros, YaCrearon,
 CapturaCliente, PorQueWebya, Objeciones, QueIncluye, Faq, Cierre, Footer, StickyCta), `src/components/ui/*`
@@ -77,10 +77,10 @@ sinks). Supabase para leads. Sin pagos, sin auth, sin multi-tenant.
 
 Medido hoy:
 
-| URL | Respuesta | Quién responde |
-| --- | --- | --- |
-| `https://webya-empezar.vercel.app/` | 307 → `/empezar` → 200 | Vercel (funciona) |
-| `https://webya.dev/` y `https://www.webya.dev/` | **404** | **Cloudflare → nginx/1.24.0 (Ubuntu)** |
+| URL                                             | Respuesta              | Quién responde                         |
+| ----------------------------------------------- | ---------------------- | -------------------------------------- |
+| `https://webya-empezar.vercel.app/`             | 307 → `/empezar` → 200 | Vercel (funciona)                      |
+| `https://webya.dev/` y `https://www.webya.dev/` | **404**                | **Cloudflare → nginx/1.24.0 (Ubuntu)** |
 
 **Causa:** el dominio `webya.dev` no apunta a Vercel. El DNS está en Cloudflare con proxy y el origen es un
 servidor nginx que no tiene el sitio. No es un problema del código ni de `next.config`.
@@ -91,24 +91,30 @@ apuntara bien, los cambios no iban a publicarse.
 `vercel.json` con `framework: nextjs` explícito para que un preset mal puesto no sirva `public/` y dé 404.
 
 **Arreglo fuera del repo (lo tiene que hacer Julián, toca producción):**
+
 1. Vercel → proyecto `webya-empezar` → Settings → Domains → agregar `webya.dev` y `www.webya.dev`.
 2. Cloudflare → DNS de `webya.dev`: reemplazar el registro que apunta al servidor nginx por
    `A @ 76.76.21.21` y `CNAME www cname.vercel-dns.com`, con la nube en **gris (DNS only)**.
    Si se deja el proxy naranja, SSL/TLS tiene que estar en **Full (strict)** o hay bucles de redirección.
-3. En Vercel → Environment Variables (Production): `NEXT_PUBLIC_SITE_URL=https://webya.dev`,
-   `NEXT_PUBLIC_WHATSAPP_NUMBER`, `IP_HASH_SALT` (16+ caracteres). Redeploy.
+3. En Vercel → Environment Variables (Production): `NEXT_PUBLIC_SITE_URL=https://webya.dev` e `IP_HASH_SALT`
+   (16+ caracteres). El WhatsApp ya está por defecto en el código. Redeploy.
+4. En Supabase, aplicar las migraciones que falten de `supabase/migrations/`: `20261106120000_leads_origenes_crear`,
+   `20261106130000_eventos` y `20261119120000_embudo_configurador`. Sin ellas el sitio anda igual, pero no se
+   guardan los eventos del embudo.
+5. Opcional: avisos de leads de `/api/leads` por Telegram (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`) o mail
+   (`RESEND_API_KEY`, `NOTIFY_TO_EMAIL`). Hoy el configurador manda el pedido directo a tu WhatsApp.
 
 ## 6. Plan priorizado (impacto / esfuerzo)
 
-| # | Mejora | Impacto | Esfuerzo |
-| --- | --- | --- | --- |
-| 1 | Next parcheado + `/` real + `vercel.json` (deploy) | crítico | bajo |
-| 2 | Sistema visual negro/blanco, Geist, tonos por sección, motion CSS + un solo observer | alto | medio |
-| 3 | Configurador "Armá tu sistema" (3 toques → WhatsApp prellenado, cero requests) | crítico | medio |
-| 4 | Home editorial: hero, marquee, bento, turnero sticky, pedidos, proyectos, rubros, proceso, FAQ, cierre | alto | alto |
-| 5 | Manifiesto de proyectos con placeholders vectoriales | alto | medio |
-| 6 | SEO local: JSON-LD, metadata, OG, sitemap, landings `/turnero`, `/pizzerias`, `/tiendas` | alto | medio |
-| 7 | `/empezar` → `/` (el link de Instagram sigue andando), demo apuntando al configurador | medio | bajo |
-| 8 | e2e nuevos de la home (sin desborde en 6 anchos, flujo del configurador, axe) | medio | medio |
-| 9 | QA: Lighthouse móvil ≥ 95 en las 4, consola limpia | alto | medio |
-| 10 | Borrar el legado de `/empezar` (wizard, telón, rubros flotantes) | medio | alto → `ROADMAP.md` |
+| #   | Mejora                                                                                                 | Impacto | Esfuerzo            |
+| --- | ------------------------------------------------------------------------------------------------------ | ------- | ------------------- |
+| 1   | Next parcheado + `/` real + `vercel.json` (deploy)                                                     | crítico | bajo                |
+| 2   | Sistema visual negro/blanco, Geist, tonos por sección, motion CSS + un solo observer                   | alto    | medio               |
+| 3   | Configurador "Armá tu sistema" (3 toques → WhatsApp prellenado, cero requests)                         | crítico | medio               |
+| 4   | Home editorial: hero, marquee, bento, turnero sticky, pedidos, proyectos, rubros, proceso, FAQ, cierre | alto    | alto                |
+| 5   | Manifiesto de proyectos con placeholders vectoriales                                                   | alto    | medio               |
+| 6   | SEO local: JSON-LD, metadata, OG, sitemap, landings `/turnero`, `/pizzerias`, `/tiendas`               | alto    | medio               |
+| 7   | `/empezar` → `/` (el link de Instagram sigue andando), demo apuntando al configurador                  | medio   | bajo                |
+| 8   | e2e nuevos de la home (sin desborde en 6 anchos, flujo del configurador, axe)                          | medio   | medio               |
+| 9   | QA: Lighthouse móvil ≥ 95 en las 4, consola limpia                                                     | alto    | medio               |
+| 10  | Borrar el legado de `/empezar` (wizard, telón, rubros flotantes)                                       | medio   | alto → `ROADMAP.md` |

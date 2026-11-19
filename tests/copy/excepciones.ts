@@ -11,12 +11,12 @@ export const CIFRAS_PERMITIDAS = /\b11 2345 6789\b|el 15 ni el \+54|#[0-9a-f]{6}
 /** Prefijos de ruta dentro de src/content (archivo + clave) cuyos números son datos de ejemplo. */
 export const EXCEPCIONES_CIFRAS: { prefijo: string; motivo: string }[] = [
   { prefijo: 'demos/gastronomia/cocinas/', motivo: 'Datos de ejemplo (demo): no son promesas.' },
+  { prefijo: 'demos/peluqueria/', motivo: 'Datos de ejemplo (demo): no son promesas.' },
   { prefijo: 'demos/gastronomia/index.ts', motivo: 'Datos de ejemplo (demo): no son promesas.' },
   {
     prefijo: 'demos/gastronomia/ui/carta.ts.CARTA.escaneaste',
     motivo: 'Datos de ejemplo (demo): no son promesas.',
   },
-  { prefijo: 'marca.ts.MARCA.pedidoMuestra', motivo: 'Datos de ejemplo (demo): no son promesas.' },
   {
     prefijo: 'explicativo/escenas.ts.TEXTOS_ESCENAS.carta',
     motivo: 'Datos de ejemplo (demo): no son promesas.',

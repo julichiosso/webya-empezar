@@ -86,9 +86,9 @@ describe('variantes del logo (geometría para favicon, app icons y export)', () 
     expect(svg).toContain(`d="${w.d}"`);
     expect(svg).toContain(`fill="${COLOR.negro[950]}"`);
     // Centro de la letra → centro del cuadro.
-    const [, tx, ty, s] = /translate\(([-\d.]+) ([-\d.]+)\) scale\(([-\d.]+)\)/.exec(svg)!.map(
-      Number,
-    ) as [number, number, number, number];
+    const [, tx, ty, s] = /translate\(([-\d.]+) ([-\d.]+)\) scale\(([-\d.]+)\)/
+      .exec(svg)!
+      .map(Number) as [number, number, number, number];
     const c = cajaDe(w.d);
     expect(tx! + (c.x + c.ancho / 2) * s!).toBeCloseTo(16, 1);
     expect(ty! + (c.y + c.alto / 2) * s!).toBeCloseTo(16, 1);

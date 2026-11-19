@@ -49,6 +49,7 @@ beforeEach(() => {
   notifier = {
     nuevoLead: vi.fn().mockResolvedValue(undefined),
     nuevoLeadParcial: vi.fn().mockResolvedValue(undefined),
+    leadCompletado: vi.fn().mockResolvedValue(undefined),
   };
   deps = {
     repo,
@@ -317,6 +318,7 @@ const repoNoUsado: LeadRepository = {
     throw new Error('no usado');
   },
   contarRecientesPorIp: async () => 0,
+  renovarParcial: async () => null,
 };
 
 describe('POST /api/leads — falla del repositorio', () => {

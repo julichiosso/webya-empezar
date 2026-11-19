@@ -1,6 +1,6 @@
 /**
- * Capa de analítica abstracta. Sin proveedor todavía: para enchufar uno, registrá un "sink"
- * una vez en el cliente (ver README, sección Analítica):
+ * Capa de analítica abstracta. El sink propio (lib/medicion.ts) manda cada evento a /api/eventos con
+ * sendBeacon. Para sumar otro proveedor, registrá otro "sink" una vez en el cliente:
  *
  *   registerSink((evento, props) => window.plausible?.(evento, { props }));
  *   registerSink((evento, props) => window.gtag?.('event', evento, props));
@@ -8,29 +8,12 @@
  */
 
 export interface EventosAnalitica {
-  empezar_view: Record<string, never>;
-  // Flujo "tu negocio, armado en un minuto": rubro → formulario → vista previa → CTA.
-  rubro_elegido: { rubro: string };
-  /** Se guardó el lead parcial (pantalla 2). `orden`: el del experimento (config/experimentos). */
-  form_enviado: { rubro: string; ciudad: boolean; orden: string };
-  /** Avanzó de la pantalla `paso` a una posterior del flujo. */
-  paso_completado: { paso: number };
-  preview_visto: { rubro: string; paleta: string };
-  preview_toggle: { dispositivo: 'celular' | 'escritorio' };
-  demo_abierta: { rubro: string; paleta: string };
-  /** `contacto`: orden B, el CTA lleva primero a dejar el WhatsApp. */
-  cta_click: { destino: 'whatsapp' | 'contacto'; rubro: string; modulos: number };
-  /** Se fue (pestaña oculta o cerrada) sin llegar al CTA. Una vez por visita. */
-  /** Abrió el sitio de un cliente en "Ya crearon con WebYa". */
-  cliente_abierto: { cliente: string };
-  // Configurador "Armá tu sistema" de la home.
+  /** Abrió una página (sale apenas carga: cuenta también a quien se va sin tocar nada). */
+  pagina_vista: { ruta: string; utm_source?: string; utm_medium?: string; utm_campaign?: string };
+  // Configurador "Armá tu sistema" (home y landings).
   configurador_tipo: { tipo: string; origen: 'tarjeta' | 'atajo' };
   configurador_enviar: { tipo: string; rubro: string; modulos: number; canal: 'whatsapp' | 'mail' };
   configurador_demo: { rubro: string };
-  abandono_paso: { paso: string };
-  lead_completado: { completo: boolean };
-  modulo_alternado: { modulo: string; activo: boolean; origen: 'preview' };
-  whatsapp_click: { origen: 'confirmacion' | 'flotante' };
   // Demos de rubro (/demo/<rubro>). `demo` es el rubro (p. ej. 'gastronomia').
   demo_view: { demo: string; cocina: string };
   demo_personalizada: { demo: string; campo: 'nombre' | 'paleta' | 'cocina'; valor: string };
@@ -47,6 +30,25 @@ export interface EventosAnalitica {
 }
 
 export type NombreEvento = keyof EventosAnalitica;
+
+/** Lista cerrada para la API de eventos: un nombre que no esté acá no se guarda. */
+export const NOMBRES_EVENTO = [
+  'pagina_vista',
+  'configurador_tipo',
+  'configurador_enviar',
+  'configurador_demo',
+  'demo_view',
+  'demo_personalizada',
+  'demo_pedido_creado',
+  'demo_estado_avanzado',
+  'demo_cta_click',
+  'demo_qr_celular',
+  'demo_whatsapp_click',
+  'explicativo_abierto',
+  'explicativo_capitulo',
+  'explicativo_completo',
+  'explicativo_cta',
+] as const satisfies readonly NombreEvento[];
 export type Sink = <E extends NombreEvento>(evento: E, props: EventosAnalitica[E]) => void;
 
 const sinks = new Set<Sink>();

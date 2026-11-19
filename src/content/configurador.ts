@@ -31,12 +31,12 @@ export const RUBROS_CONFIG: readonly RubroConfig[] = [
   {
     id: 'estetica',
     nombre: 'Peluquería o estética',
-    demo: { href: '/#proyecto-canina', texto: 'Mirá el turnero de una peluquería' },
+    demo: { href: '/demo/peluqueria', texto: 'Probá la demo del turnero' },
   },
   {
     id: 'mascotas',
     nombre: 'Mascotas',
-    demo: { href: '/#proyecto-canina', texto: 'Mirá el turnero de Peluquería Canina' },
+    demo: { href: '/demo/peluqueria', texto: 'Probá la demo del turnero' },
   },
   {
     id: 'servicios',

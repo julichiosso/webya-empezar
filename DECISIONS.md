@@ -89,3 +89,22 @@ Decisiones tomadas en modo autónomo. Cada una: qué y por qué.
 - **Primera captura real del turnero**: la notificación push "Nueva reserva" sobre la reserva confirmada, en un
   iPhone. Reemplaza el mockup del paso 3 ("El aviso"). No va en la tarjeta de Peluquería Canina porque la captura
   es de otro panel (corte de cabello masculino): mostrarla ahí sería atribuirle algo que no es suyo.
+
+## Merge con `origin/main` (2026-11-19)
+
+El rediseño salió de `74ff2f1`; en GitHub había 5 commits posteriores (6 y 7 de noviembre) sobre el `/empezar`
+viejo. Julián pidió hacer pull y dejar todo limpio. Criterio: **la cara del sitio es el rediseño**; de GitHub se
+queda lo que funciona por debajo o suma prueba real.
+
+- **Se queda**: avisos de leads (Telegram y mail), `/api/eventos` + `lib/medicion.ts` (montada en el layout),
+  migraciones de Supabase (no se borra una migración que puede estar aplicada), `/demo/peluqueria` con su dominio
+  de turnos (ahora vuelve a `/` y su CTA lleva a `/turnero#armar`), skills nuevas de `.claude/`.
+- **Se va**: el hero, las secciones y el telón del `/empezar` viejo, `/crear` y `/ver` (hechos sobre el wizard;
+  quedan en el historial, ver `ROADMAP.md`), los videos de uso de los sitios (eran del hero viejo) y las capturas
+  de `visual.spec`.
+- **Limpieza del legado**: fuera `/marca`, `/sistema`, el script de tema claro/oscuro (solo aplicaba a
+  `/empezar`), los componentes que solo usaban esas páginas, las dependencias `motion` y `react-hook-form`, los
+  eventos del wizard y los docs de traspaso viejos (`docs/PROMPT_TRASPASO.md`, `docs/auditoria-2026-11.md`; sus
+  pasos pendientes pasaron a `AUDIT.md` §5). README reescrito para el sitio actual.
+- **Embudo**: migración nueva `embudo_configurador` que recrea la vista `embudo_diario` con los pasos del
+  configurador (la vieja contaba pasos del wizard).

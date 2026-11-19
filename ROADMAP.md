@@ -7,10 +7,14 @@ sitios publicados desde la plataforma (ver `docs/HANDOFF.md`, Fase 0). Lo que s�
 
 - El **configurador "Armá tu sistema"** (home y landings): captura la intención (tipo, rubro, módulos, nombre) y la
   manda a Julián por WhatsApp como un brief ordenado. Cero requests, estado en el cliente.
-- Una **API de leads** con validación, rate limit, IP hasheada y repos memory/file/Supabase (`/api/leads`), hoy sin
-  uso desde la UI nueva.
+- Una **API de leads** con validación, rate limit, IP hasheada, repos memory/file/Supabase y avisos por Telegram y
+  mail (`/api/leads`), hoy sin uso desde la UI nueva.
+- **Medición propia**: cada página vista y cada paso del configurador van por `sendBeacon` a `/api/eventos`
+  (tabla `eventos`, vista `embudo_diario`).
 - Un **dominio de pedidos** (`src/domain/pedidos`: estados, totales, dinero en centavos) y la migración SQL `pedidos`.
 - La **demo de gastronomía** (`/demo/gastronomia`): carta, carrito, panel y seguimiento en el cliente.
+- La **demo de peluquería** (`/demo/peluqueria`): bot de turnos, agenda y estadísticas en el cliente
+  (`src/domain/turnos`).
 
 Por eso el sitio dice "lo armamos con vos" y no promete nada automático.
 
@@ -19,11 +23,10 @@ Por eso el sitio dice "lo armamos con vos" y no promete nada automático.
 1. **Guardar el brief del configurador** al tocar "Mandar": `navigator.sendBeacon('/api/briefs', …)` con el mismo
    payload que el mensaje. Endpoint nuevo reusando `server/rate-limit.ts`, el hash de IP y un esquema Zod chico
    (tipo, rubro, módulos ⊂ catálogo, nombre ≤ 60). Una sola request, sin bloquear la apertura de WhatsApp.
-2. **Analítica**: conectar un sink en `lib/analytics.ts` (Plausible o Vercel Analytics) para los eventos
-   `configurador_tipo`, `configurador_enviar` y `configurador_demo`, y medir el embudo real.
-3. **Terminar la limpieza del legado**: el wizard, el telón y los componentes del `/empezar` viejo ya se borraron.
-   Quedan `/marca` y `/sistema` (páginas internas del sistema naranja/crema), `src/brand/tokens` con la paleta vieja y
-   la API de leads sin UI. Decidir si se migran al sistema editorial o se borran.
+2. ~~Analítica~~: hecho (medición propia, ver arriba). Falta mirar `embudo_diario` después del deploy.
+3. ~~Limpieza del legado~~: hecho el 2026-11-19 (`/marca`, `/sistema`, tema claro/oscuro, telón, wizard).
+4. **Creador sin cuenta** (`/crear` y `/ver`, commit `06bd6c9`): se sacó del sitio porque estaba hecho sobre el
+   wizard viejo. Es la semilla natural de la fase 2: rehacerlo con el sistema editorial cuando arranque.
 
 ## Fase 2 — Alta self-service (multi-tenant)
 

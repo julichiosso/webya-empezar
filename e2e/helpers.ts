@@ -93,7 +93,9 @@ export type Destino = 'rubro' | 'negocio' | 'resultado' | 'completar';
 /** Lleva el flujo hasta la pantalla pedida con peluquería y el negocio dado. */
 export async function irAlPaso(page: Page, destino: Destino, query = '', negocio?: string) {
   // Orden A (WhatsApp antes de la vista previa); el B tiene su propio test.
-  const url = query.includes("orden=") ? query : `${query}${query.includes("?") ? "&" : "?"}orden=a`;
+  const url = query.includes('orden=')
+    ? query
+    : `${query}${query.includes('?') ? '&' : '?'}orden=a`;
   await page.goto(`/empezar${url}`);
   await abrirWizard(page);
   await expect(wizard(page).getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
@@ -104,7 +106,9 @@ export async function irAlPaso(page: Page, destino: Destino, query = '', negocio
   await enviarNegocio(page, negocio ? { negocio } : {});
   await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
   if (destino === 'resultado') return;
-  await wizard(page).getByRole('button', { name: /dejar más datos/i }).click();
+  await wizard(page)
+    .getByRole('button', { name: /dejar más datos/i })
+    .click();
   await expect(wizard(page).getByRole('heading', { name: TITULO_COMPLETAR })).toBeVisible();
 }
 

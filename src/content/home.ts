@@ -137,6 +137,7 @@ export const TURNERO = {
   prueba:
     'Lo desarrollé para Peluquería Canina San Jorge: turnos con Mercado Pago y varios profesionales.',
   cta: 'Armá tu turnero',
+  demo: 'Probá la demo',
   verMas: 'Cómo funciona el turnero',
 } as const;
 

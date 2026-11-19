@@ -18,19 +18,21 @@ export interface Modulo {
   necesidades: readonly NecesidadId[];
 }
 
-// Solo se ofrecen como `disponible` los módulos que hoy se entregan (Gastronomía). El resto va como
-// `proximamente`: se ve, pero no se puede activar. Cuando un módulo se entrega, pasa a `disponible`.
+// Solo se ofrecen como `disponible` los módulos que hoy se entregan. El resto va como `proximamente`:
+// se ve, pero no se puede activar. Cuando un módulo se entrega, pasa a `disponible`. Turnos: el bot de
+// peluquerías. Tienda y catálogo: verificado en el sitio de Joyería Petrucci (content/clientes.ts).
 export const MODULOS = {
   turnos: {
-    nombre: 'Turnos y reservas',
-    descripcion: 'Tus clientes eligen día y horario solos, y vos ves la agenda ordenada.',
-    estado: 'proximamente',
+    nombre: 'Bot de turnos',
+    descripcion:
+      'Un bot toma los turnos, vos ves la agenda ordenada y las estadísticas de tu negocio. Listo para peluquerías y barberías; otro rubro, lo armamos con vos.',
+    estado: 'disponible',
     necesidades: ['turnos'],
   },
   catalogo: {
     nombre: 'Tienda y catálogo',
     descripcion: 'Tus productos o servicios con fotos y precios, siempre actualizados.',
-    estado: 'proximamente',
+    estado: 'disponible',
     necesidades: ['vender'],
   },
   carta_qr: {

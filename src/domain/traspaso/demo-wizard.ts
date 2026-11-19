@@ -13,11 +13,13 @@ export interface TraspasoDemo {
   modulos: readonly string[];
   nombreNegocio: string;
   /** Lo que armó en la demo (paleta y tipo de cocina). */
-  demo: { paleta: string; cocina: string };
+  demo?: { paleta: string; cocina: string };
 }
 
 /** Adónde lleva el CTA de la demo: el wizard, que se descarga solo porque la URL apunta a #wizard. */
 export const URL_WIZARD_DESDE_DEMO = '/pizzerias#armar';
+/** CTA de la demo de peluquería: el configurador de la página del turnero. */
+export const URL_TURNERO_DESDE_DEMO = '/turnero#armar';
 
 export const CLAVE_TRASPASO_DEMO = 'webya:traspaso-demo:v1';
 

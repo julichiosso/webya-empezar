@@ -57,8 +57,7 @@ export const ESCENAS_EXPLICATIVO = [
   {
     id: 'cta',
     capitulo: 'Empezá',
-    narracion:
-      'Probá la demo ahora mismo, o dejanos tus datos y te escribimos por WhatsApp.',
+    narracion: 'Probá la demo ahora mismo, o dejanos tus datos y te escribimos por WhatsApp.',
   },
 ] as const;
 

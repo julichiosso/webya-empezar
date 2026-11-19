@@ -21,11 +21,14 @@ type LeadArchivo = Awaited<ReturnType<typeof leerLeads>>[number] & {
 
 const unico = () => `Stock de dos locales ${Date.now()}${Math.floor(Math.random() * 1000)}`;
 
-async function crearParcial(request: APIRequestContext, texto: string) {
+/** Un número por lead: el mismo número reenviado actualiza su lead en vez de crear otro. */
+const numeroUnico = () => `11${String(Math.floor(10_000_000 + Math.random() * 89_999_999))}`;
+
+async function crearParcial(request: APIRequestContext, texto: string, whatsapp = numeroUnico()) {
   const res = await request.post('/api/leads', {
     data: {
       parcial: true,
-      whatsapp: '11 2345 6789',
+      whatsapp,
       necesidades: ['vender', 'otra'],
       necesidadLibre: texto,
       rubro: 'comercio',
@@ -43,13 +46,14 @@ const buscar = async (id: string) =>
 
 test('el lead parcial queda guardado aunque la persona no complete nada', async ({ request }) => {
   const texto = unico();
-  const { ok, id, token } = await crearParcial(request, texto);
+  const numero = numeroUnico();
+  const { ok, id, token } = await crearParcial(request, texto, numero);
   expect(ok).toBe(true);
   expect(token).toMatch(/^[A-Za-z0-9_-]{43}$/);
 
   const lead = await buscar(id);
   expect(lead?.estado).toBe('parcial');
-  expect(lead?.whatsapp).toBe('+5491123456789');
+  expect(lead?.whatsapp).toBe(`+549${numero}`);
   expect(lead?.necesidades).toEqual(['vender', 'otra']);
   expect(lead?.necesidad_libre).toBe(texto);
   expect(lead?.nombre_negocio).toBeNull();

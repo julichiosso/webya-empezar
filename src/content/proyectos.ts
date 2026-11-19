@@ -96,7 +96,8 @@ export const PROYECTOS: readonly Proyecto[] = [
       'Horarios configurables',
       'Panel simple para ver el día',
     ],
-    resultado: 'Desarrollado para la peluquería; todavía no está en uso. Pedí la demo y lo ves funcionando.',
+    resultado:
+      'Desarrollado para la peluquería; todavía no está en uso. Pedí la demo y lo ves funcionando.',
     mockup: 'turnero',
     imagenes: [],
   },

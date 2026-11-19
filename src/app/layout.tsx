@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Geist } from 'next/font/google';
 import { ViewTransition } from 'react';
 import { preload } from 'react-dom';
-import { ScriptTema } from '@/brand/tema/ScriptTema';
 import { FUENTE_PRECARGADA } from '@/brand/tipografia/fuente';
+import { Medicion } from '@/components/marketing/Medicion';
 import { EDITORIAL } from '@/brand/tokens/colores';
 import { SEO_SITIO } from '@/content/seo';
 import { SCRIPT_MOVIMIENTO } from '@/lib/motion/script';
@@ -41,16 +41,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     preload(FUENTE_PRECARGADA, { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
   }
   return (
-    // suppressHydrationWarning: los scripts de tema y de movimiento tocan <html> antes de hidratar.
+    // suppressHydrationWarning: el script de movimiento le pone la clase .mo a <html> antes de hidratar.
     <html lang="es-AR" className={geist.variable} suppressHydrationWarning>
       <head>
-        {/* Arriba de todo: tema de las páginas internas y clase `.mo` antes del primer pintado. */}
-        <ScriptTema />
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_MOVIMIENTO }} />
       </head>
       <body>
         {/* Navegaciones entre páginas con View Transitions donde el navegador las soporte. */}
         <ViewTransition>{children}</ViewTransition>
+        {/* Embudo propio: un sendBeacon a /api/eventos por página vista y por paso (sin cookies). */}
+        <Medicion />
       </body>
     </html>
   );

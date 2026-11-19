@@ -64,8 +64,11 @@ export function Boton({
       </a>
     );
   }
+  // Las demos son pesadas y tienen CSS propio: precargarlas desde la home solo suma bytes (y el
+  // navegador avisa que ese CSS precargado no se usó).
+  const prefetch = href.startsWith('/demo/') ? false : undefined;
   return (
-    <Link href={href} className={clases} {...datos}>
+    <Link href={href} prefetch={prefetch} className={clases} {...datos}>
       {contenido}
     </Link>
   );

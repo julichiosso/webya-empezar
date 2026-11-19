@@ -74,6 +74,8 @@ Cada componente interactivo implementa **default, hover, focus-visible, active, 
 8. Duraciones: instantáneo 100ms, rápido 160ms, base 280ms, lento 520ms. Curva `--ease-out`. Resortes (`spring`) solo para selección de tarjetas.
 9. Si el “wow” compromete performance o accesibilidad, **gana la performance**: simplificar y avisar.
 
+Los momentos grandes de /empezar (apertura, tablero, telón y compañía) están en `webya-plano`, sección "Momentos grandes".
+
 Momentos diseñados (el resto del sitio queda quieto), todos en el lenguaje "Encastre" (la pieza llega, se pasa apenas y asienta; ver `webya-brand`):
 
 - **Logo que se arma** (`<Logo armar />`, solo en el header de `/empezar`): las 5 letras del wordmark entran alternando arriba/abajo y asientan, **una vez**. Es SVG inline de servidor (`components/logo-trazos.ts`, generado desde `public/webya-logo.svg`): cero JS.

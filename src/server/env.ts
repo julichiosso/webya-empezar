@@ -17,6 +17,11 @@ const envSchema = z.object({
   SUPABASE_URL: opcional(z.url()),
   SUPABASE_SERVICE_ROLE_KEY: opcional(z.string().min(20)),
   IP_HASH_SALT: opcional(z.string().min(16, 'IP_HASH_SALT debe tener al menos 16 caracteres')),
+  TELEGRAM_BOT_TOKEN: opcional(z.string().min(10)),
+  TELEGRAM_CHAT_ID: opcional(z.string().min(1)),
+  RESEND_API_KEY: opcional(z.string().min(10)),
+  NOTIFY_TO_EMAIL: opcional(z.email()),
+  NOTIFY_FROM_EMAIL: opcional(z.string().min(3)),
   RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(100).default(5),
   RATE_LIMIT_BURST_PER_MINUTE: z.coerce.number().int().min(1).max(10_000).default(20),
   RATE_LIMIT_WINDOW_SECONDS: z.coerce.number().int().min(10).max(86_400).default(600),
@@ -33,6 +38,12 @@ export interface ServerEnv {
   /** Intentos (válidos o no) por minuto y por IP, en memoria por instancia. */
   RATE_LIMIT_BURST_PER_MINUTE: number;
   RATE_LIMIT_WINDOW_SECONDS: number;
+  /** Avisos de leads (server/notifications.ts). Sin ninguno, solo queda la línea en el log. */
+  TELEGRAM_BOT_TOKEN?: string;
+  TELEGRAM_CHAT_ID?: string;
+  RESEND_API_KEY?: string;
+  NOTIFY_TO_EMAIL?: string;
+  NOTIFY_FROM_EMAIL: string;
 }
 
 export class EnvError extends Error {
@@ -82,6 +93,15 @@ export function loadEnv(source: Record<string, string | undefined> = process.env
   }
   if (problemas.length > 0) throw new EnvError(problemas);
 
+  const conAvisos =
+    (e.TELEGRAM_BOT_TOKEN && e.TELEGRAM_CHAT_ID) || (e.RESEND_API_KEY && e.NOTIFY_TO_EMAIL);
+  if (desplegado && !conAvisos) {
+    console.warn(
+      '[leads] Sin canal de avisos: los leads se guardan pero nadie se entera. ' +
+        'Configurá TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID o RESEND_API_KEY + NOTIFY_TO_EMAIL.',
+    );
+  }
+
   return {
     NODE_ENV: e.NODE_ENV,
     LEAD_REPOSITORY: repositorio,
@@ -92,6 +112,11 @@ export function loadEnv(source: Record<string, string | undefined> = process.env
     RATE_LIMIT_MAX: e.RATE_LIMIT_MAX,
     RATE_LIMIT_BURST_PER_MINUTE: e.RATE_LIMIT_BURST_PER_MINUTE,
     RATE_LIMIT_WINDOW_SECONDS: e.RATE_LIMIT_WINDOW_SECONDS,
+    TELEGRAM_BOT_TOKEN: e.TELEGRAM_BOT_TOKEN,
+    TELEGRAM_CHAT_ID: e.TELEGRAM_CHAT_ID,
+    RESEND_API_KEY: e.RESEND_API_KEY,
+    NOTIFY_TO_EMAIL: e.NOTIFY_TO_EMAIL,
+    NOTIFY_FROM_EMAIL: e.NOTIFY_FROM_EMAIL ?? 'WebYa <onboarding@resend.dev>',
   };
 }
 

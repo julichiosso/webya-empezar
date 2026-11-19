@@ -108,6 +108,7 @@ describe('migración leads: demo y origen', () => {
 
   it('el origen queda cerrado a la misma lista que valida la API', () => {
     const lista = ORIGENES.map((o) => `'${o}'`).join(', ');
-    expect(leadsDemo).toContain(`check (origen in (${lista}))`);
+    // La lista vigente es la de la última migración que la cambió.
+    expect(archivo('_leads_origenes_crear.sql')).toContain(`check (origen in (${lista}))`);
   });
 });
