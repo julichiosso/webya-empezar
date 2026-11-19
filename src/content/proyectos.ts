@@ -1,3 +1,4 @@
+import { BARRA_CAPTURA } from '@/brand/tokens/colores';
 import type { TipoId } from './servicios';
 
 /**
@@ -19,6 +20,11 @@ export interface ImagenProyecto {
   ancho: number;
   alto: number;
   alt: string;
+  /**
+   * Barra de estado del teléfono: toma el color de arriba del sitio, como en Safari. `claro`: hora e
+   * íconos en blanco (sitios oscuros).
+   */
+  barra?: { fondo: string; claro: boolean };
 }
 
 export interface Testimonio {
@@ -75,6 +81,7 @@ export const PROYECTOS: readonly Proyecto[] = [
     imagenes: [
       {
         src: '/clientes/micios.webp',
+        barra: { fondo: BARRA_CAPTURA.micios, claro: true },
         ancho: 375,
         alto: 2198,
         alt: "Sitio de Micio's Pizzería en el celular: carta con pizzas, bebidas y postres.",
@@ -122,6 +129,7 @@ export const PROYECTOS: readonly Proyecto[] = [
     imagenes: [
       {
         src: '/clientes/petrucci.webp',
+        barra: { fondo: BARRA_CAPTURA.petrucci, claro: true },
         ancho: 375,
         alto: 4200,
         alt: 'Sitio de Joyería Petrucci en el celular: alianzas, categorías y novedades.',
@@ -149,6 +157,7 @@ export const PROYECTOS: readonly Proyecto[] = [
     imagenes: [
       {
         src: '/clientes/fonosanjorge.webp',
+        barra: { fondo: BARRA_CAPTURA.fonosanjorge, claro: false },
         ancho: 375,
         alto: 4200,
         alt: 'Sitio de Fonosanjorge en el celular: presentación de la fonoaudióloga y sus especialidades.',
@@ -171,6 +180,7 @@ export const PROYECTOS: readonly Proyecto[] = [
     imagenes: [
       {
         src: '/clientes/abelardo.webp',
+        barra: { fondo: BARRA_CAPTURA.abelardo, claro: true },
         ancho: 375,
         alto: 2178,
         alt: 'Avance del sitio de Abelardo en el celular: promos del día y categorías.',

@@ -108,3 +108,15 @@ queda lo que funciona por debajo o suma prueba real.
   pasos pendientes pasaron a `AUDIT.md` §5). README reescrito para el sitio actual.
 - **Embudo**: migración nueva `embudo_configurador` que recrea la vista `embudo_diario` con los pasos del
   configurador (la vieja contaba pasos del wizard).
+
+## Teléfonos con isla flotante (2026-11-19)
+
+- Pedido de Julián: teléfonos "bien reales", como el último iPhone Pro Max. El marco es CSS puro
+  (`.e-tel*` en `editorial.css`), en `cqw` del propio teléfono: proporción 77,6 × 163 mm, titanio, bisel fino,
+  isla con lente, barra de estado (9:41, señal, wifi, batería), barra de inicio y botones de acción, volumen,
+  encendido y control de cámara. Sin imágenes ni JS.
+- La barra de estado mide lo mismo que la de una captura real de iPhone: la captura del aviso push calza debajo.
+- En las tarjetas de proyectos la barra toma el color de arriba de cada sitio (`BARRA_CAPTURA` en
+  `brand/tokens/colores.ts`), como hace Safari.
+- El teléfono de las demos (`components/patterns/Telefono`) ya tenía isla; el del video explicativo es SVG y no
+  se tocó.

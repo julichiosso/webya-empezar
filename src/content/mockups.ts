@@ -6,6 +6,8 @@
 
 export const MOCKUPS = {
   etiqueta: 'Ejemplo ilustrativo',
+  /** Barra de estado del marco de teléfono (la hora clásica de las fotos de producto). */
+  estado: { hora: '9:41' },
   turnero: {
     alt: 'El turnero en el celular: reserva con seña, aviso al dueño, recordatorio del bot y agenda.',
     app: 'Turnos',

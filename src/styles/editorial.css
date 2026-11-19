@@ -413,6 +413,173 @@
   }
 }
 
+/*
+ * Teléfono (línea Pro Max). Todo mide en cqw del propio teléfono para escalar junto: 77,6 × 163 mm,
+ * marco de titanio, bisel negro, isla flotante a 2,4 % del borde y barra de estado de 12,5 cqw (la
+ * misma proporción que una captura real de iPhone, así las capturas calzan bajo el marco).
+ * Las sombras de acá son internas: dan el canto del metal y la lente, no decoran.
+ */
+.e-tel {
+  --tel-barra: 12.5cqw;
+  container-type: inline-size;
+  aspect-ratio: 776 / 1630;
+  padding: 1.1%;
+  border-radius: 16% / 7.62%;
+  background: linear-gradient(
+    135deg,
+    #9a9aa0 0%,
+    #3f3f42 9%,
+    #232325 32%,
+    #2e2e31 58%,
+    #1c1c1e 84%,
+    #77777c 100%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.22),
+    inset 0 0 0 2px rgb(0 0 0 / 0.55);
+}
+.e-tel-bisel {
+  height: 100%;
+  padding: 2.3cqw;
+  border-radius: 15cqw;
+  background: #030303;
+}
+.e-tel-pantalla {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12.8cqw;
+  background: var(--e-bg);
+  color: var(--e-fg);
+}
+.e-tel-contenido {
+  position: absolute;
+  inset: var(--tel-barra) 0 0 0;
+}
+.e-tel-barra {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: var(--tel-barra);
+  background: var(--e-bg);
+  color: var(--e-fg);
+  font-size: 3.9cqw;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.e-tel-barra-clara {
+  color: #fff;
+}
+.e-tel-hora,
+.e-tel-iconos {
+  position: absolute;
+  width: 33cqw;
+  display: flex;
+  justify-content: center;
+}
+.e-tel-hora {
+  left: 0;
+  top: 4.45cqw;
+}
+.e-tel-iconos {
+  right: 0;
+  top: 5cqw;
+  height: 2.75cqw;
+  gap: 1.3cqw;
+}
+.e-tel-isla {
+  position: absolute;
+  top: 2.4cqw;
+  left: 50%;
+  z-index: 3;
+  width: 26.5cqw;
+  height: 7.9cqw;
+  border-radius: 999px;
+  background: #000;
+  transform: translateX(-50%);
+}
+.e-tel-lente {
+  position: absolute;
+  top: 50%;
+  right: 2.2cqw;
+  width: 4.3cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 34%, #4a5a80 0, #1a2236 32%, #080a12 62%, #000 100%);
+  box-shadow: inset 0 0 0 0.55cqw #101014;
+  transform: translateY(-50%);
+}
+.e-tel-lente::after {
+  content: '';
+  position: absolute;
+  top: 26%;
+  left: 30%;
+  width: 18%;
+  height: 18%;
+  border-radius: 50%;
+  background: rgb(160 180 255 / 0.35);
+}
+.e-tel-inicio {
+  position: absolute;
+  bottom: 2.1cqw;
+  left: 50%;
+  z-index: 3;
+  width: 34cqw;
+  height: 1.25cqw;
+  border-radius: 999px;
+  background: var(--e-fg);
+  opacity: 0.85;
+  transform: translateX(-50%);
+}
+.e-tel-reflejo {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgb(255 255 255 / 0.09) 0%, rgb(255 255 255 / 0) 30%);
+}
+.e-tel-boton {
+  position: absolute;
+  width: 1%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2a2a2d, #707075 50%, #2a2a2d);
+}
+.e-tel-accion,
+.e-tel-volumen-mas,
+.e-tel-volumen-menos {
+  left: -0.7%;
+}
+.e-tel-encendido,
+.e-tel-camara {
+  right: -0.7%;
+}
+.e-tel-accion {
+  top: 17.5%;
+  height: 5%;
+}
+.e-tel-volumen-mas {
+  top: 25.5%;
+  height: 9.5%;
+}
+.e-tel-volumen-menos {
+  top: 37%;
+  height: 9.5%;
+}
+.e-tel-encendido {
+  top: 27%;
+  height: 14.5%;
+}
+/* Control de cámara: casi al ras, de zafiro. */
+.e-tel-camara {
+  top: 57%;
+  right: -0.35%;
+  width: 0.7%;
+  height: 9%;
+  background: linear-gradient(90deg, #111, #3a3a3e 50%, #111);
+}
+
 /* Sticky storytelling: la pantalla cambia según el paso activo (data-paso en el contenedor). */
 .e-escena {
   transition:

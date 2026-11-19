@@ -20,6 +20,7 @@ function Visual({ p }: { p: Proyecto }) {
           className="max-w-none"
           etiqueta={img ? undefined : PROYECTOS_UI.mockupAlt(p.sistema)}
           decorativo={!img}
+          colorBarra={img?.barra}
         >
           {img ? (
             <Image

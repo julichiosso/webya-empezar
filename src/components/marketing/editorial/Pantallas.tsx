@@ -12,12 +12,66 @@ import { Tilde } from './Iconos';
 const T = MOCKUPS.turnero;
 const P = MOCKUPS.pedidos;
 
-/** Marco de teléfono: borde fino, pantalla clara. Sin sombras. */
+/**
+ * Barra de estado de iOS: hora a la izquierda de la isla; señal, wifi y batería a la derecha.
+ * Mide en unidades del contenedor (el teléfono), así escala igual en cualquier tamaño.
+ */
+function BarraEstado({ fondo, claro }: { fondo?: string; claro?: boolean }) {
+  return (
+    <div
+      className={cn('e-tel-barra', claro && 'e-tel-barra-clara')}
+      style={fondo ? { background: fondo } : undefined}
+      aria-hidden="true"
+    >
+      <span className="e-tel-hora">{MOCKUPS.estado.hora}</span>
+      <span className="e-tel-iconos">
+        <svg viewBox="0 0 18 12" className="h-full w-auto" fill="currentColor">
+          <rect x="0" y="8" width="3" height="4" rx="0.8" />
+          <rect x="5" y="5.5" width="3" height="6.5" rx="0.8" />
+          <rect x="10" y="3" width="3" height="9" rx="0.8" />
+          <rect x="15" y="0" width="3" height="12" rx="0.8" />
+        </svg>
+        <svg viewBox="0 0 16 12" className="h-full w-auto" fill="currentColor">
+          <path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.3-1.4A10.6 10.6 0 0 0 8 .3 10.6 10.6 0 0 0 .7 3.2L2 4.6a8.7 8.7 0 0 1 6-2.4Z" />
+          <path d="M8 5.6c1.4 0 2.6.5 3.6 1.4l1.3-1.4A7.1 7.1 0 0 0 8 3.7c-1.9 0-3.6.7-4.9 1.9L4.4 7A5.2 5.2 0 0 1 8 5.6Z" />
+          <path d="M8 9.1c.5 0 1 .2 1.3.5L8 11.7 6.7 9.6c.3-.3.8-.5 1.3-.5Z" />
+        </svg>
+        <svg viewBox="0 0 27 13" className="h-full w-auto">
+          <rect
+            x="0.5"
+            y="0.5"
+            width="23"
+            height="12"
+            rx="3.6"
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity="0.4"
+          />
+          <rect x="2" y="2" width="17" height="9" rx="2.2" fill="currentColor" />
+          <path
+            d="M25 4.3v4.4c.9-.3 1.5-1.2 1.5-2.2s-.6-1.9-1.5-2.2Z"
+            fill="currentColor"
+            fillOpacity="0.45"
+          />
+        </svg>
+      </span>
+    </div>
+  );
+}
+
+/**
+ * iPhone de la línea Pro Max dibujado con CSS: marco de titanio con sus botones (acción, volumen,
+ * encendido y control de cámara), bisel negro finito, isla flotante con la lente, barra de estado y
+ * barra de inicio. Todo mide en `cqw` del propio teléfono: escala sin perder proporción.
+ * `barra={false}`: el contenido es una captura real que ya trae su barra de estado.
+ */
 export function Telefono({
   children,
   className,
   etiqueta,
   decorativo = true,
+  barra = true,
+  colorBarra,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -25,20 +79,32 @@ export function Telefono({
   etiqueta?: string;
   /** false: el contenido (por ejemplo, una captura con su alt) se lee tal cual. */
   decorativo?: boolean;
+  barra?: boolean;
+  /** Color de la barra de estado para capturas de sitios (el de arriba de la página). */
+  colorBarra?: { fondo: string; claro: boolean };
 }) {
   return (
     <div
-      className={cn(
-        'relative mx-auto aspect-[9/18.5] w-full max-w-[17.5rem] rounded-[2.4rem] border border-ed-line-strong p-2',
-        className,
-      )}
+      className={cn('e-tel relative mx-auto w-full max-w-[17.5rem]', className)}
       role={etiqueta ? 'img' : undefined}
       aria-label={etiqueta}
       aria-hidden={etiqueta || !decorativo ? undefined : true}
     >
-      <div className="tono-claro relative h-full overflow-hidden rounded-[1.9rem] border border-ed-line">
-        <div className="absolute top-2 left-1/2 z-10 h-1.5 w-14 -translate-x-1/2 rounded-full bg-ed-line" />
-        {children}
+      <span aria-hidden="true" className="e-tel-boton e-tel-accion" />
+      <span aria-hidden="true" className="e-tel-boton e-tel-volumen-mas" />
+      <span aria-hidden="true" className="e-tel-boton e-tel-volumen-menos" />
+      <span aria-hidden="true" className="e-tel-boton e-tel-encendido" />
+      <span aria-hidden="true" className="e-tel-boton e-tel-camara" />
+      <div className="e-tel-bisel">
+        <div className="e-tel-pantalla tono-claro">
+          <div className={barra ? 'e-tel-contenido' : 'absolute inset-0'}>{children}</div>
+          {barra ? <BarraEstado fondo={colorBarra?.fondo} claro={colorBarra?.claro} /> : null}
+          <span aria-hidden="true" className="e-tel-isla">
+            <span className="e-tel-lente" />
+          </span>
+          <span aria-hidden="true" className="e-tel-inicio" />
+          <span aria-hidden="true" className="e-tel-reflejo" />
+        </div>
       </div>
     </div>
   );
@@ -46,7 +112,7 @@ export function Telefono({
 
 function BarraApp({ titulo, extra }: { titulo: string; extra?: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-ed-line px-4 pt-7 pb-3 text-[0.8125rem] font-semibold">
+    <div className="flex items-center justify-between border-b border-ed-line px-4 pt-1 pb-3 text-[0.8125rem] font-semibold">
       <span>{titulo}</span>
       {extra ? <span className="font-normal text-ed-muted">{extra}</span> : null}
     </div>
@@ -120,17 +186,23 @@ function EscenaSena() {
   );
 }
 
-/** Captura real: la reserva confirmada y la notificación push que le llega al dueño. */
+/**
+ * Captura real: la reserva confirmada y la notificación push que le llega al dueño. Sube hasta el
+ * borde de la pantalla para que su propia barra de estado quede bajo la del marco (miden lo mismo:
+ * la captura es de un iPhone con isla).
+ */
 function EscenaAviso() {
   return (
-    <Image
-      src={T.aviso.src}
-      alt={T.aviso.alt}
-      width={T.aviso.ancho}
-      height={T.aviso.alto}
-      sizes="(min-width: 1024px) 17rem, 12.5rem"
-      className="absolute inset-0 h-full w-full object-cover object-top"
-    />
+    <div className="absolute inset-x-0 -top-[var(--tel-barra)] bottom-0">
+      <Image
+        src={T.aviso.src}
+        alt={T.aviso.alt}
+        width={T.aviso.ancho}
+        height={T.aviso.alto}
+        sizes="(min-width: 1024px) 17rem, 12.5rem"
+        className="h-full w-full object-cover object-top"
+      />
+    </div>
   );
 }
 

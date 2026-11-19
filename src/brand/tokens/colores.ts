@@ -305,3 +305,14 @@ export const EDITORIAL = {
   linea: '#262626',
   lima: '#c6f135',
 } as const;
+
+/**
+ * Color de arriba de cada captura de sitio (medido en el archivo): la barra de estado del teléfono lo
+ * toma, como hace Safari con la página.
+ */
+export const BARRA_CAPTURA = {
+  micios: '#464443',
+  petrucci: '#2c2a28',
+  fonosanjorge: '#fef6f0',
+  abelardo: '#271f1b',
+} as const;
