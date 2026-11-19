@@ -78,3 +78,14 @@ Decisiones tomadas en modo autónomo. Cada una: qué y por qué.
 - **El skill `.claude/skills/webya-brand` y el design system naranja/crema quedaron desactualizados** para las
   páginas públicas: la marca ahora es negro y blanco. `/marca` y `/sistema` (internas, no indexadas) siguen
   mostrando el sistema anterior.
+
+## Ajustes de Julián (2026-11-19)
+
+- **Fuera las secciones de relleno.** Pedido explícito: sacar lo genérico. Se borraron de la home la marquesina de
+  rubros (listaba rubros sin trabajos hechos), la cita y las cifras ("Hablás directo…", 5 / 3 / 4), el índice de
+  rubros, "Cómo trabajo" y las preguntas frecuentes; de las landings, "Cómo trabajo" y las preguntas. Con las
+  preguntas se fue el JSON-LD `FAQPage` (Google pide que coincida con texto visible). La zona de atención sigue
+  visible en el hero y el pie. Queda: hero, qué armo, turnero, pedidos, proyectos, configurador y cierre.
+- **Primera captura real del turnero**: la notificación push "Nueva reserva" sobre la reserva confirmada, en un
+  iPhone. Reemplaza el mockup del paso 3 ("El aviso"). No va en la tarjeta de Peluquería Canina porque la captura
+  es de otro panel (corte de cabello masculino): mostrarla ahí sería atribuirle algo que no es suyo.

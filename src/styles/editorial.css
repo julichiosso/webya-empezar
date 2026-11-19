@@ -388,24 +388,6 @@
   transform: scaleX(0);
 }
 
-/* Marquesina: corre solo en pantalla (`.on` lo pone el observer) y nunca con reduced-motion. */
-.e-marquesina-pista {
-  display: flex;
-  width: max-content;
-}
-.mo .e-marquesina-pista {
-  animation: e-marquesina 48s linear infinite;
-  animation-play-state: paused;
-}
-.mo .on > .e-marquesina-pista {
-  animation-play-state: running;
-}
-@keyframes e-marquesina {
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
 /* Carril horizontal con snap. */
 .e-carril {
   display: grid;
@@ -450,18 +432,13 @@
   transform: none;
 }
 
-/* Dentro de una escena: lo que llega un instante después (notificación, burbujas, confirmación). */
-.e-notificacion,
+/* Dentro de una escena: lo que llega un instante después (burbujas, confirmación). */
 .e-burbuja,
 .e-aparece-tarde {
   transition:
     opacity 500ms var(--ease-editorial),
     transform 500ms var(--ease-editorial);
   transition-delay: calc(350ms + var(--i, 0) * 450ms);
-}
-.mo [data-steps]:not([data-paso='3']) [data-escena='3'] .e-notificacion {
-  opacity: 0;
-  transform: translate3d(0, -1.5rem, 0);
 }
 .mo [data-steps]:not([data-paso='4']) [data-escena='4'] .e-burbuja,
 .mo [data-steps]:not([data-paso='2']) [data-escena='2'] .e-aparece-tarde {

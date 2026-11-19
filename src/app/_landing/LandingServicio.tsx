@@ -4,12 +4,10 @@ import { Cierre } from '@/components/marketing/editorial/Cierre';
 import { Encabezado, ID_PRINCIPAL } from '@/components/marketing/editorial/Encabezado';
 import { Hero } from '@/components/marketing/editorial/Hero';
 import { Pie } from '@/components/marketing/editorial/Pie';
-import { Preguntas } from '@/components/marketing/editorial/Preguntas';
-import { Proceso } from '@/components/marketing/editorial/Proceso';
 import { Proyectos } from '@/components/marketing/editorial/Proyectos';
 import { CTA } from '@/content/home';
 import type { Landing } from '@/content/landings';
-import { SEO_SITIO, jsonLdFaq, jsonLdServicio, serializarLd } from '@/content/seo';
+import { SEO_SITIO, jsonLdServicio, serializarLd } from '@/content/seo';
 import { getServicio } from '@/content/servicios';
 import { SeccionConfigurador } from '@/features/configurador/SeccionConfigurador';
 import { siteConfig } from '@/lib/site-config';
@@ -52,10 +50,7 @@ export function LandingServicio({
   children: React.ReactNode;
 }) {
   const servicio = getServicio(landing.tipo)!;
-  const ld = [
-    jsonLdServicio(siteConfig.url, servicio, landing.nombre),
-    jsonLdFaq(landing.preguntas),
-  ];
+  const ld = [jsonLdServicio(siteConfig.url, servicio, landing.nombre)];
   return (
     <>
       {ld.map((d, i) => (
@@ -78,9 +73,7 @@ export function LandingServicio({
         {[
           <Suspense key="bloque">{children}</Suspense>,
           <Proyectos key="proyectos" numero={2} filtro={(p) => p.tipo === landing.tipo} />,
-          <Proceso key="proceso" numero={3} />,
-          <SeccionConfigurador key="armar" numero={4} inicial={landing.tipo} />,
-          <Preguntas key="preguntas" numero={5} preguntas={landing.preguntas} />,
+          <SeccionConfigurador key="armar" numero={3} inicial={landing.tipo} />,
           <Cierre key="cierre" />,
         ].map((seccion) => (
           <Suspense key={seccion.key}>{seccion}</Suspense>

@@ -3,18 +3,12 @@ import { Suspense } from 'react';
 import { Bento } from '@/components/marketing/editorial/Bento';
 import { Cierre } from '@/components/marketing/editorial/Cierre';
 import { Encabezado, ID_PRINCIPAL } from '@/components/marketing/editorial/Encabezado';
-import { Hechos } from '@/components/marketing/editorial/Hechos';
 import { Hero } from '@/components/marketing/editorial/Hero';
-import { Marquesina } from '@/components/marketing/editorial/Marquesina';
 import { Pedidos } from '@/components/marketing/editorial/Pedidos';
 import { Pie } from '@/components/marketing/editorial/Pie';
-import { Preguntas } from '@/components/marketing/editorial/Preguntas';
-import { Proceso } from '@/components/marketing/editorial/Proceso';
 import { Proyectos } from '@/components/marketing/editorial/Proyectos';
-import { RubrosIndice } from '@/components/marketing/editorial/RubrosIndice';
 import { Turnero } from '@/components/marketing/editorial/Turnero';
-import { FAQ_HOME } from '@/content/home';
-import { SEO_SITIO, jsonLdFaq, jsonLdNegocio, serializarLd } from '@/content/seo';
+import { SEO_SITIO, jsonLdNegocio, serializarLd } from '@/content/seo';
 import { SeccionConfigurador } from '@/features/configurador/SeccionConfigurador';
 import { siteConfig } from '@/lib/site-config';
 
@@ -44,13 +38,12 @@ const LD = [
     instagram: siteConfig.instagramUrl,
     telefono: siteConfig.whatsappNumber || undefined,
   }),
-  jsonLdFaq(FAQ_HOME),
 ];
 
 /**
- * Home editorial. Capítulos alternando oscuro y claro: hero → rubros → qué armo (bento) → turnero
- * (sticky) → pedidos (split) → cita y cifras → proyectos (carril) → índice de rubros → cómo trabajo
- * → configurador → preguntas → cierre. Todo de servidor salvo el configurador y los controles del carril.
+ * Home editorial. Capítulos alternando oscuro y claro: hero → qué armo (bento) → turnero (sticky) →
+ * pedidos (split) → proyectos (carril) → configurador → cierre. Sin secciones de relleno: cada una
+ * muestra un sistema real o lleva a armarlo. Todo de servidor salvo el configurador y el carril.
  */
 export default function Inicio() {
   return (
@@ -70,16 +63,11 @@ export default function Inicio() {
           una y otra, en lugar de una sola tarea larga sobre toda la página (TBT).
         */}
         {[
-          <Marquesina key="marquesina" />,
           <Bento key="bento" numero={1} />,
           <Turnero key="turnero" numero={2} />,
           <Pedidos key="pedidos" numero={3} />,
-          <Hechos key="hechos" />,
           <Proyectos key="proyectos" numero={4} />,
-          <RubrosIndice key="rubros" numero={5} />,
-          <Proceso key="proceso" numero={6} />,
-          <SeccionConfigurador key="armar" numero={7} />,
-          <Preguntas key="preguntas" numero={8} preguntas={FAQ_HOME} />,
+          <SeccionConfigurador key="armar" numero={5} />,
           <Cierre key="cierre" />,
         ].map((seccion) => (
           <Suspense key={seccion.key}>{seccion}</Suspense>

@@ -18,7 +18,7 @@ de publicar.
 | Micio's Pizzería      | La app instalada en la pantalla de inicio                  | celular                      | `micios-pwa.png`            |
 | Peluquería Canina     | Elegir día, hora y profesional                             | celular                      | `canina-reserva.png`        |
 | Peluquería Canina     | Pantalla de pago de la seña (Mercado Pago)                 | celular                      | `canina-sena.png`           |
-| Peluquería Canina     | Notificación push de nueva reserva en el celular del dueño | celular (pantalla bloqueada) | `canina-push.png`           |
+| Turnero               | Notificación push de nueva reserva — **recibida**, en el paso «El aviso» | celular | `public/proyectos/turnero-aviso.webp` |
 | Peluquería Canina     | Agenda del día por profesional (panel)                     | celular o escritorio         | `canina-agenda.png`         |
 | Joyería Petrucci      | Una categoría del catálogo                                 | celular                      | `petrucci-catalogo.png`     |
 | Joyería Petrucci      | Panel: subir la foto de un producto desde el celular       | celular                      | `petrucci-panel.png`        |

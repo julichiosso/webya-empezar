@@ -2,7 +2,7 @@
  * Textos de SEO y de compartir: títulos, descripciones, imagen Open Graph y datos estructurados.
  * Lo que se ve en la pestaña, en Google y en la vista previa de WhatsApp/Instagram.
  */
-import { FAQ_HOME, MARCA } from './home';
+import { MARCA } from './home';
 import { SERVICIOS, type Servicio } from './servicios';
 
 /** Del sitio entero (app/layout.tsx). */
@@ -119,20 +119,6 @@ export function jsonLdNegocio(opts: {
       },
       ...SERVICIOS.map((s) => servicioLd(url, s)),
     ],
-  };
-}
-
-export function jsonLdFaq(
-  preguntas: readonly { pregunta: string; respuesta: string }[] = FAQ_HOME,
-) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: preguntas.map((f) => ({
-      '@type': 'Question',
-      name: f.pregunta,
-      acceptedAnswer: { '@type': 'Answer', text: f.respuesta },
-    })),
   };
 }
 

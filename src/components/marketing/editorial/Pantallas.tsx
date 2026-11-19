@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { MOCKUPS } from '@/content/mockups';
@@ -119,25 +120,17 @@ function EscenaSena() {
   );
 }
 
+/** Captura real: la reserva confirmada y la notificación push que le llega al dueño. */
 function EscenaAviso() {
   return (
-    <div className="flex h-full flex-col items-center bg-ed-fg px-3 pt-14 text-ed-bg">
-      <p className="text-[3rem] leading-none font-semibold tracking-tight tabular-nums">
-        {T.bloqueo.hora}
-      </p>
-      <p className="mt-2 text-[0.75rem] opacity-70">{T.bloqueo.fecha}</p>
-      <div className="e-notificacion mt-8 w-full rounded-2xl border border-ed-line-strong bg-ed-bg p-3 text-ed-fg">
-        <p className="flex items-center gap-2 text-[0.6875rem] text-ed-muted">
-          <span className="grid size-5 place-items-center rounded-md bg-ed-fg">
-            <span className="size-2 rounded-full bg-lima" />
-          </span>
-          <span className="font-semibold text-ed-fg">{T.notificacion.app}</span>
-          <span className="ml-auto">{T.notificacion.cuando}</span>
-        </p>
-        <p className="mt-2 text-[0.8125rem] font-semibold">{T.notificacion.titulo}</p>
-        <p className="text-[0.75rem] text-ed-muted">{T.notificacion.texto}</p>
-      </div>
-    </div>
+    <Image
+      src={T.aviso.src}
+      alt={T.aviso.alt}
+      width={T.aviso.ancho}
+      height={T.aviso.alto}
+      sizes="(min-width: 1024px) 17rem, 12.5rem"
+      className="absolute inset-0 h-full w-full object-cover object-top"
+    />
   );
 }
 

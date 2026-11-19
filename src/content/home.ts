@@ -26,8 +26,8 @@ export const HEADER = {
   links: [
     { href: '/#que-armo', texto: 'Qué armo' },
     { href: '/turnero', texto: 'Turnero' },
+    { href: '/pizzerias', texto: 'Pedidos' },
     { href: '/#proyectos', texto: 'Proyectos' },
-    { href: '/#como-trabajo', texto: 'Cómo trabajo' },
   ],
 } as const;
 
@@ -38,24 +38,6 @@ export const HERO = {
   bajada:
     'Armo sistemas para comercios: tiendas online, pedidos para pizzerías y turneros con seña. Los usás desde el celular y hablás directo con quien los programa.',
   disponibilidad: 'Tomando proyectos nuevos',
-} as const;
-
-export const MARQUESINA = {
-  etiqueta: 'Rubros con los que trabajo',
-  rubros: [
-    'Pizzerías',
-    'Joyerías',
-    'Kinesiología',
-    'Peluquerías',
-    'Comercios',
-    'Rotiserías',
-    'Veterinarias',
-    'Fonoaudiología',
-    'Estética',
-    'Cafeterías',
-    'Odontología',
-    'Profesionales',
-  ],
 } as const;
 
 export const SECCIONES = {
@@ -79,24 +61,8 @@ export const SECCIONES = {
   proyectos: {
     id: 'proyectos',
     rotulo: 'Proyectos reales',
-    titulo: 'Negocios de acá que ya lo usan.',
-    bajada: 'Sistemas funcionando, con nombre y apellido. Tocá cualquiera para verlo de cerca.',
-  },
-  rubros: {
-    id: 'rubros',
-    rotulo: 'Por rubro',
-    titulo: 'Buscá tu rubro.',
-    bajada: 'Lo que más piden en cada uno. Si el tuyo no está, contámelo igual.',
-  },
-  comoTrabajo: {
-    id: 'como-trabajo',
-    rotulo: 'Cómo trabajo',
-    titulo: 'Sin vueltas, de principio a fin.',
-  },
-  faq: {
-    id: 'preguntas',
-    rotulo: 'Preguntas',
-    titulo: 'Lo que todos preguntan antes de arrancar.',
+    titulo: 'Negocios de acá, con su sistema.',
+    bajada: 'Trabajos reales, con nombre y apellido. Tocá cualquiera para verlo de cerca.',
   },
 } as const;
 
@@ -190,13 +156,6 @@ export const PEDIDOS = {
   demo: 'Probá la demo',
 } as const;
 
-export const CITAS = {
-  directo: {
-    texto: 'Hablás directo con quien programa tu sistema. Sin intermediarios, sin call center.',
-    autor: 'Julián Chiosso, fundador de Webya',
-  },
-} as const;
-
 export const PROYECTOS_UI = {
   problema: 'El problema',
   incluye: 'Qué hace',
@@ -211,120 +170,6 @@ export const PROYECTOS_UI = {
   siguiente: 'Proyecto siguiente',
   mockupAlt: (sistema: string) => `Esquema del ${sistema.toLowerCase()}`,
 } as const;
-
-export const HECHOS = {
-  titulo: 'Lo que hay, sin inflar.',
-  items: {
-    total: 'sistemas hechos para negocios de la zona',
-    enProduccion: 'funcionando en producción',
-    rubros: 'rubros distintos',
-  },
-  persona: {
-    cifra: 'Una',
-    texto: 'persona: la misma que te atiende es la que programa',
-  },
-} as const;
-
-export interface FilaRubro {
-  nombre: string;
-  ejemplos: string;
-  arma: string;
-  link: { href: string; texto: string };
-}
-
-export const RUBROS_INDICE: readonly FilaRubro[] = [
-  {
-    nombre: 'Pizzerías y comida',
-    ejemplos: 'Pizzerías, rotiserías, hamburgueserías',
-    arma: 'Pedidos online con horario de retiro, franjas y comandas impresas.',
-    link: { href: '/pizzerias', texto: 'Pedidos para pizzerías' },
-  },
-  {
-    nombre: 'Joyerías y comercios',
-    ejemplos: 'Joyerías, regalerías, indumentaria',
-    arma: 'Tienda o catálogo con panel propio y consulta por WhatsApp.',
-    link: { href: '/tiendas', texto: 'Tiendas online' },
-  },
-  {
-    nombre: 'Peluquerías y estética',
-    ejemplos: 'Peluquerías, barberías, uñas, estética',
-    arma: 'Turnero con seña, agenda por profesional y recordatorios.',
-    link: { href: '/turnero', texto: 'Turnero con seña' },
-  },
-  {
-    nombre: 'Salud',
-    ejemplos: 'Kinesiología, fonoaudiología, odontología',
-    arma: 'Sitio profesional y turnos online con seña.',
-    link: { href: '/#proyecto-lorena', texto: 'Ver el caso de Lorena' },
-  },
-  {
-    nombre: 'Mascotas',
-    ejemplos: 'Peluquerías caninas, veterinarias',
-    arma: 'Turnos con pago por Mercado Pago y varios profesionales.',
-    link: { href: '/#proyecto-canina', texto: 'Ver el caso de la peluquería canina' },
-  },
-  {
-    nombre: 'Profesionales y servicios',
-    ejemplos: 'Estudios, consultorios, técnicos',
-    arma: 'Página web con tus servicios y contacto por WhatsApp.',
-    link: { href: '/#armar', texto: 'Armá tu página' },
-  },
-];
-
-export const PROCESO = {
-  pasos: [
-    {
-      titulo: 'Me contás qué necesitás',
-      texto:
-        'Armás tu pedido acá y me llega por WhatsApp. Si no sabés bien qué pedir, lo vemos juntos.',
-    },
-    {
-      titulo: 'Te muestro cómo quedaría',
-      texto: 'Una demo de tu rubro y el presupuesto por escrito, antes de empezar. Sin compromiso.',
-    },
-    {
-      titulo: 'Lo armamos con vos',
-      texto: 'Ves los avances y opinás. Nada se publica hasta que te cierra.',
-    },
-    {
-      titulo: 'Lo usás y te acompaño',
-      texto: 'Te enseño a usar el panel desde el celular. Si necesitás un cambio, me escribís.',
-    },
-  ],
-} as const;
-
-export const FAQ_HOME = [
-  {
-    pregunta: '¿Cuánto sale?',
-    respuesta:
-      'Depende de lo que armes. Me mandás tu pedido y te paso el presupuesto por escrito antes de empezar, sin compromiso.',
-  },
-  {
-    pregunta: '¿Cuánto tarda?',
-    respuesta:
-      'Depende del sistema. Junto con el presupuesto te paso una fecha estimada de entrega.',
-  },
-  {
-    pregunta: '¿Tengo que saber de computación?',
-    respuesta:
-      'No. Te lo dejo funcionando y te enseño a usar el panel desde el celular. Si algo no te sale, me escribís.',
-  },
-  {
-    pregunta: '¿Cómo cobra la seña el turnero?',
-    respuesta:
-      'Con Mercado Pago. El cliente paga la seña al reservar y el turno recién se confirma cuando el pago entra.',
-  },
-  {
-    pregunta: '¿Trabajás fuera de San Jorge?',
-    respuesta:
-      'Sí. Atiendo San Jorge y zona, y San Francisco y alrededores. Si estás más lejos, escribime igual y lo vemos.',
-  },
-  {
-    pregunta: '¿Qué pasa si después quiero cambiar algo?',
-    respuesta:
-      'Me escribís y lo vemos. Hablás siempre con la misma persona, la que conoce tu sistema por dentro.',
-  },
-] as const;
 
 export const CIERRE = {
   titulo: 'Tu sistema, armado por alguien de acá.',

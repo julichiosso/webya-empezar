@@ -1,4 +1,3 @@
-import { FAQ_HOME } from './home';
 import type { TipoId } from './servicios';
 
 /**
@@ -13,10 +12,7 @@ export interface Landing {
   nombre: string;
   seo: { titulo: string; descripcion: string };
   hero: { rotulo: string; titulo: readonly string[]; bajada: string };
-  preguntas: readonly { pregunta: string; respuesta: string }[];
 }
-
-const faq = (...indices: number[]) => indices.map((i) => FAQ_HOME[i]!);
 
 export const LANDINGS = {
   turnero: {
@@ -34,7 +30,6 @@ export const LANDINGS = {
       bajada:
         'El cliente reserva y paga la seña con Mercado Pago. Vos recibís el aviso al instante y el bot le recuerda el turno. Se acabaron los huecos en la agenda.',
     },
-    preguntas: faq(3, 0, 2, 4),
   },
   pizzerias: {
     ruta: '/pizzerias',
@@ -51,7 +46,6 @@ export const LANDINGS = {
       bajada:
         'Tus clientes piden desde el celular y eligen la hora de retiro. Vos decidís cuántos pedidos entran por franja y la comanda sale impresa sola.',
     },
-    preguntas: faq(0, 1, 2, 4),
   },
   tiendas: {
     ruta: '/tiendas',
@@ -68,7 +62,6 @@ export const LANDINGS = {
       bajada:
         'Todo tu catálogo con fotos y precios. Cargás productos desde el celular y cada consulta te llega por WhatsApp con el producto ya elegido.',
     },
-    preguntas: faq(0, 1, 2, 5),
   },
 } as const satisfies Record<string, Landing>;
 

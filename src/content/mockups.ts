@@ -1,12 +1,13 @@
 /**
  * Textos de las mini pantallas vectoriales (turnero, pedidos, tienda, web). Son DATOS DE EJEMPLO para
- * explicar el flujo: no son clientes, precios ni horarios reales.
+ * explicar el flujo: no son clientes, precios ni horarios reales. La excepción es `turnero.aviso`: una
+ * captura real del turnero (reserva confirmada y la notificación push que le llega al dueño).
  */
 
 export const MOCKUPS = {
   etiqueta: 'Ejemplo ilustrativo',
   turnero: {
-    alt: 'Ejemplo del turnero en el celular: reserva con seña, aviso al dueño, recordatorio del bot y agenda.',
+    alt: 'El turnero en el celular: reserva con seña, aviso al dueño, recordatorio del bot y agenda.',
     app: 'Turnos',
     dia: 'Sábado 14',
     noVino: 'No vino',
@@ -20,12 +21,11 @@ export const MOCKUPS = {
     sena: 'Seña 50%',
     pagar: 'Pagar seña con Mercado Pago',
     asegurado: 'Turno asegurado',
-    bloqueo: { hora: '10:24', fecha: 'jueves 12 de noviembre' },
-    notificacion: {
-      app: 'Turnos',
-      cuando: 'ahora',
-      titulo: 'Nueva reserva',
-      texto: 'Sábado 10:30 · Seña pagada',
+    aviso: {
+      src: '/proyectos/turnero-aviso.webp',
+      ancho: 738,
+      alto: 1600,
+      alt: 'Captura real del turnero en un iPhone: el turno quedó confirmado con la seña pagada y arriba entra la notificación «Nueva reserva» para el dueño.',
     },
     chat: {
       nombre: 'Turnos · Bot',

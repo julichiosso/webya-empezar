@@ -30,7 +30,6 @@ test('JSON-LD del negocio: ProfessionalService con zona, servicios y FAQ', async
   expect(JSON.stringify(negocio.areaServed)).toContain('San Jorge');
   expect(JSON.stringify(negocio.areaServed)).toContain('San Francisco');
   expect(grafo.filter((n) => n['@type'] === 'Service').length).toBeGreaterThanOrEqual(6);
-  expect(datos.some((d) => d['@type'] === 'FAQPage')).toBe(true);
 });
 
 test('sitemap con las landings y robots que lo apunta', async ({ request }) => {

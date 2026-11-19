@@ -186,15 +186,6 @@ export const ESTADO_PROYECTO: Record<EstadoProyecto, string> = {
 
 export const getProyecto = (id: string) => PROYECTOS.find((p) => p.id === id);
 
-/** Cifras de la home: salen del manifiesto, nunca se escriben a mano. */
-export function resumenProyectos(lista: readonly Proyecto[] = PROYECTOS) {
-  return {
-    total: lista.length,
-    enProduccion: lista.filter((p) => p.estado === 'produccion').length,
-    rubros: new Set(lista.map((p) => p.rubro)).size,
-  };
-}
-
 /** Dominio para mostrar: sin protocolo ni www. */
 export const dominioDe = (url: string) => new URL(url).host.replace(/^www\./, '');
 
