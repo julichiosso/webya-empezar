@@ -28,7 +28,7 @@ export function SeccionConfigurador({
           bajada={CONFIGURADOR.bajada}
           idTitulo="titulo-armar"
         />
-        <div className="mt-14 md:mt-20">
+        <div className="mt-8 md:mt-12">
           <Configurador inicial={inicial} />
         </div>
       </div>

@@ -134,7 +134,7 @@ export function Bento({ numero = 1 }: { numero?: number }) {
           bajada={S.bajada}
           idTitulo="titulo-que-armo"
         />
-        <ul className="mt-14 grid grid-cols-1 gap-3 md:mt-20 md:grid-cols-12 md:gap-4">
+        <ul className="mt-8 grid grid-cols-1 gap-3 md:mt-12 md:grid-cols-12 md:gap-4">
           {CELDAS.map((c, i) => {
             const t = BENTO.celdas[c.id];
             const estrella = c.id === 'turnero';

@@ -45,7 +45,7 @@ export function SplitTienda({ numero = 1 }: { numero?: number }) {
               {TIENDA.prueba}
             </p>
             <div className="mt-8">
-              <Boton href="#armar" armar="tienda" iman>
+              <Boton href="#armar" armar="tienda">
                 {TIENDA.cta}
               </Boton>
             </div>

@@ -63,12 +63,48 @@ export const HORARIO_NEGOCIO: readonly FranjaDemo[] = [
 ];
 
 export const SERVICIOS_DEMO: readonly ServicioDemo[] = [
-  { id: 'corte', nombre: 'Corte', descripcion: 'Lavado, corte y peinado', duracionMin: 30, precio: 18000 },
-  { id: 'corte-barba', nombre: 'Corte y barba', descripcion: 'Corte con perfilado de barba', duracionMin: 45, precio: 22000 },
-  { id: 'infantil', nombre: 'Corte infantil', descripcion: 'Hasta 12 años', duracionMin: 30, precio: 14000 },
-  { id: 'peinado', nombre: 'Peinado', descripcion: 'Brushing o peinado para evento', duracionMin: 45, precio: 20000 },
-  { id: 'color', nombre: 'Color', descripcion: 'Tintura completa con lavado', duracionMin: 90, precio: 38000 },
-  { id: 'alisado', nombre: 'Alisado', descripcion: 'Alisado con keratina', duracionMin: 120, precio: 45000 },
+  {
+    id: 'corte',
+    nombre: 'Corte',
+    descripcion: 'Lavado, corte y peinado',
+    duracionMin: 30,
+    precio: 18000,
+  },
+  {
+    id: 'corte-barba',
+    nombre: 'Corte y barba',
+    descripcion: 'Corte con perfilado de barba',
+    duracionMin: 45,
+    precio: 22000,
+  },
+  {
+    id: 'infantil',
+    nombre: 'Corte infantil',
+    descripcion: 'Hasta 12 años',
+    duracionMin: 30,
+    precio: 14000,
+  },
+  {
+    id: 'peinado',
+    nombre: 'Peinado',
+    descripcion: 'Brushing o peinado para evento',
+    duracionMin: 45,
+    precio: 20000,
+  },
+  {
+    id: 'color',
+    nombre: 'Color',
+    descripcion: 'Tintura completa con lavado',
+    duracionMin: 90,
+    precio: 38000,
+  },
+  {
+    id: 'alisado',
+    nombre: 'Alisado',
+    descripcion: 'Alisado con keratina',
+    duracionMin: 120,
+    precio: 45000,
+  },
 ];
 
 const f = (dia: number, inicio: string, fin: string): FranjaDemo => ({ dia, inicio, fin });
@@ -127,12 +163,7 @@ export const NOTAS_CLIENTES: Readonly<Record<string, string>> = {
 };
 
 export type EstadoSemilla =
-  | 'confirmado'
-  | 'completado'
-  | 'ausente'
-  | 'cancelado'
-  | 'pendiente_pago'
-  | 'conflicto_pago';
+  'confirmado' | 'completado' | 'ausente' | 'cancelado' | 'pendiente_pago' | 'conflicto_pago';
 
 export interface TurnoSemilla {
   /** Días desde hoy (−1 = ayer). */
@@ -153,21 +184,162 @@ export interface TurnoSemilla {
 
 /** La agenda con la que arranca la demo (DEMO_SPEC_TURNOS §8). */
 export const AGENDA_DEMO: readonly TurnoSemilla[] = [
-  { dia: -1, hora: '10:00', servicioId: 'corte', profesionalId: 'lucia', cliente: 'Sofía Ramírez', estado: 'completado', sena: 'pagada', origen: 'web', cobrado: 9000, medio: 'efectivo' },
-  { dia: -1, hora: '16:00', servicioId: 'corte-barba', profesionalId: 'tomas', cliente: 'Joaquín Medina', estado: 'ausente', sena: 'pagada', origen: 'web' },
-  { dia: -1, hora: '17:00', servicioId: 'infantil', profesionalId: 'tomas', cliente: 'Tiziano Correa', estado: 'completado', sena: 'no_aplica', origen: 'panel', cobrado: 14000, medio: 'transferencia' },
-  { dia: 0, hora: '10:00', servicioId: 'color', profesionalId: 'martina', cliente: 'Camila Herrera', estado: 'confirmado', sena: 'pagada', origen: 'web' },
-  { dia: 0, hora: '16:00', servicioId: 'corte', profesionalId: 'lucia', cliente: 'Valentina Ortiz', estado: 'confirmado', sena: 'pagada', origen: 'web', nota: 'Vengo con mi hijo' },
-  { dia: 0, hora: '16:30', servicioId: 'corte-barba', profesionalId: 'tomas', cliente: 'Bruno Acosta', estado: 'confirmado', sena: 'pagada', origen: 'bot' },
-  { dia: 0, hora: '17:30', servicioId: 'peinado', profesionalId: 'lucia', cliente: 'Florencia Ledesma', estado: 'confirmado', sena: 'no_aplica', origen: 'panel' },
-  { dia: 0, hora: '18:30', servicioId: 'corte', profesionalId: 'tomas', cliente: 'Mateo Giménez', estado: 'pendiente_pago', sena: 'pendiente', origen: 'web', holdMinutosRestantes: 7 },
-  { dia: 1, hora: '10:30', servicioId: 'alisado', profesionalId: 'martina', cliente: 'Abril Domínguez', estado: 'confirmado', sena: 'pagada', origen: 'web' },
-  { dia: 1, hora: '16:00', servicioId: 'corte', profesionalId: 'tomas', cliente: 'Lautaro Benítez', estado: 'confirmado', sena: 'pagada', origen: 'web' },
-  { dia: 1, hora: '17:00', servicioId: 'corte', profesionalId: 'lucia', cliente: 'Sofía Ramírez', estado: 'cancelado', sena: 'pagada', origen: 'web' },
-  { dia: 2, hora: '11:00', servicioId: 'corte-barba', profesionalId: 'tomas', cliente: 'Joaquín Medina', estado: 'confirmado', sena: 'pagada', origen: 'bot' },
-  { dia: 2, hora: '13:00', servicioId: 'color', profesionalId: 'martina', cliente: 'Valentina Ortiz', estado: 'confirmado', sena: 'pagada', origen: 'web' },
-  { dia: 3, hora: '09:00', servicioId: 'peinado', profesionalId: 'lucia', cliente: 'Florencia Ledesma', estado: 'confirmado', sena: 'pagada', origen: 'web' },
-  { dia: 3, hora: '10:00', servicioId: 'corte', profesionalId: 'tomas', cliente: 'Tiziano Correa', estado: 'conflicto_pago', sena: 'pagada', origen: 'web' },
+  {
+    dia: -1,
+    hora: '10:00',
+    servicioId: 'corte',
+    profesionalId: 'lucia',
+    cliente: 'Sofía Ramírez',
+    estado: 'completado',
+    sena: 'pagada',
+    origen: 'web',
+    cobrado: 9000,
+    medio: 'efectivo',
+  },
+  {
+    dia: -1,
+    hora: '16:00',
+    servicioId: 'corte-barba',
+    profesionalId: 'tomas',
+    cliente: 'Joaquín Medina',
+    estado: 'ausente',
+    sena: 'pagada',
+    origen: 'web',
+  },
+  {
+    dia: -1,
+    hora: '17:00',
+    servicioId: 'infantil',
+    profesionalId: 'tomas',
+    cliente: 'Tiziano Correa',
+    estado: 'completado',
+    sena: 'no_aplica',
+    origen: 'panel',
+    cobrado: 14000,
+    medio: 'transferencia',
+  },
+  {
+    dia: 0,
+    hora: '10:00',
+    servicioId: 'color',
+    profesionalId: 'martina',
+    cliente: 'Camila Herrera',
+    estado: 'confirmado',
+    sena: 'pagada',
+    origen: 'web',
+  },
+  {
+    dia: 0,
+    hora: '16:00',
+    servicioId: 'corte',
+    profesionalId: 'lucia',
+    cliente: 'Valentina Ortiz',
+    estado: 'confirmado',
+    sena: 'pagada',
+    origen: 'web',
+    nota: 'Vengo con mi hijo',
+  },
+  {
+    dia: 0,
+    hora: '16:30',
+    servicioId: 'corte-barba',
+    profesionalId: 'tomas',
+    cliente: 'Bruno Acosta',
+    estado: 'confirmado',
+    sena: 'pagada',
+    origen: 'bot',
+  },
+  {
+    dia: 0,
+    hora: '17:30',
+    servicioId: 'peinado',
+    profesionalId: 'lucia',
+    cliente: 'Florencia Ledesma',
+    estado: 'confirmado',
+    sena: 'no_aplica',
+    origen: 'panel',
+  },
+  {
+    dia: 0,
+    hora: '18:30',
+    servicioId: 'corte',
+    profesionalId: 'tomas',
+    cliente: 'Mateo Giménez',
+    estado: 'pendiente_pago',
+    sena: 'pendiente',
+    origen: 'web',
+    holdMinutosRestantes: 7,
+  },
+  {
+    dia: 1,
+    hora: '10:30',
+    servicioId: 'alisado',
+    profesionalId: 'martina',
+    cliente: 'Abril Domínguez',
+    estado: 'confirmado',
+    sena: 'pagada',
+    origen: 'web',
+  },
+  {
+    dia: 1,
+    hora: '16:00',
+    servicioId: 'corte',
+    profesionalId: 'tomas',
+    cliente: 'Lautaro Benítez',
+    estado: 'confirmado',
+    sena: 'pagada',
+    origen: 'web',
+  },
+  {
+    dia: 1,
+    hora: '17:00',
+    servicioId: 'corte',
+    profesionalId: 'lucia',
+    cliente: 'Sofía Ramírez',
+    estado: 'cancelado',
+    sena: 'pagada',
+    origen: 'web',
+  },
+  {
+    dia: 2,
+    hora: '11:00',
+    servicioId: 'corte-barba',
+    profesionalId: 'tomas',
+    cliente: 'Joaquín Medina',
+    estado: 'confirmado',
+    sena: 'pagada',
+    origen: 'bot',
+  },
+  {
+    dia: 2,
+    hora: '13:00',
+    servicioId: 'color',
+    profesionalId: 'martina',
+    cliente: 'Valentina Ortiz',
+    estado: 'confirmado',
+    sena: 'pagada',
+    origen: 'web',
+  },
+  {
+    dia: 3,
+    hora: '09:00',
+    servicioId: 'peinado',
+    profesionalId: 'lucia',
+    cliente: 'Florencia Ledesma',
+    estado: 'confirmado',
+    sena: 'pagada',
+    origen: 'web',
+  },
+  {
+    dia: 3,
+    hora: '10:00',
+    servicioId: 'corte',
+    profesionalId: 'tomas',
+    cliente: 'Tiziano Correa',
+    estado: 'conflicto_pago',
+    sena: 'pagada',
+    origen: 'web',
+  },
 ];
 
 /** Bloqueos de la agenda (solo los ve el dueño). Sin horas = el día entero; sin profesional = todo el local. */

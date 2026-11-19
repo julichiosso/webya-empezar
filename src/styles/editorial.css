@@ -84,7 +84,8 @@
 }
 
 .e-seccion {
-  padding-block: clamp(4.5rem, 9vw, 10rem);
+  /* Aire entre capítulos, sin obligar a scrollear de más (antes llegaba a 10rem). */
+  padding-block: clamp(3rem, 5.5vw, 6rem);
   /* Lo que está lejos del viewport no se maqueta ni se pinta hasta acercarse. `auto` recuerda el alto
      real una vez visto, así el scroll no salta. */
   content-visibility: auto;
@@ -104,6 +105,10 @@
   font-weight: 650;
   text-wrap: balance;
 }
+/* Hero de la home: el titular deja lugar a los botones y a las demos en la primera pantalla. */
+.e-hero-compacto {
+  font-size: clamp(2.125rem, 1.2rem + 3.2vw, 4.75rem);
+}
 /* En el celular el titular del hero entra en tres líneas y deja lugar a los botones. */
 @media (max-width: 39.99rem) {
   .e-hero-titulo {
@@ -111,7 +116,7 @@
   }
 }
 .e-h2 {
-  font-size: clamp(2.125rem, 1.15rem + 4.2vw, 5.25rem);
+  font-size: clamp(1.875rem, 1.1rem + 2.9vw, 4rem);
   line-height: 0.95;
   letter-spacing: -0.045em;
   font-weight: 620;
@@ -186,8 +191,24 @@
   --press: 0.97;
 }
 .e-btn-primario {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   background: var(--e-invert);
   color: var(--e-invert-fg);
+}
+/*
+ * Al pasar el mouse por el principal: se pone lima y un destello lo cruza una vez, de izquierda a
+ * derecha. No se mueve ni late: llama la atención en el momento justo y queda quieto.
+ */
+.e-btn-primario::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 30%, rgb(255 255 255 / 0.85) 50%, transparent 70%);
+  transform: translateX(-130%);
+  pointer-events: none;
 }
 .e-btn-secundario {
   border-color: var(--e-line-strong);
@@ -205,6 +226,10 @@
   .e-btn-primario:hover {
     background: #c6f135;
     color: #0a0a0a;
+  }
+  .e-btn-primario:hover::after {
+    transform: translateX(130%);
+    transition: transform 750ms var(--ease-editorial);
   }
   .e-btn-secundario:hover {
     border-color: var(--e-fg);
@@ -782,4 +807,64 @@
 .d-barra-fina {
   scrollbar-width: thin;
   scrollbar-color: rgb(0 0 0 / 0.2) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .e-btn-primario::after {
+    display: none;
+  }
+}
+
+/* La barrita del paso del turnero que avanza solo: se llena mientras dura el paso. */
+@keyframes e-llenar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.e-progreso-paso {
+  transform-origin: left;
+  animation: e-llenar 4.5s linear both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .e-progreso-paso {
+    display: none;
+  }
+}
+
+/* Mapa de la zona: el área que cubre cada ciudad y un pulso que se apaga después de tres vueltas. */
+.e-zona-area {
+  fill: color-mix(in srgb, #c6f135 9%, transparent);
+  stroke: #c6f135;
+  stroke-opacity: 0.55;
+  stroke-width: 1.25;
+  stroke-dasharray: 4 5;
+}
+@keyframes e-zona-pulso {
+  from {
+    transform: scale(0.45);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+.e-zona-pulso {
+  fill: #c6f135;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.mo .in .e-zona-pulso,
+.mo .in.e-zona-pulso,
+.mo [data-reveal].in .e-zona-pulso {
+  animation: e-zona-pulso 1.8s ease-out calc(var(--i, 0) * 0.4s) 3;
+}
+@media (prefers-reduced-motion: reduce) {
+  .e-zona-pulso {
+    display: none;
+  }
 }

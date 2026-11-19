@@ -36,7 +36,7 @@ export function CabezaSeccion({
         <TituloPalabras lineas={[titulo]} id={idTitulo} className="e-h2 max-w-[18ch]" />
         {bajada ? (
           <p
-            className="e-lead mt-6 max-w-[52ch] text-ed-muted"
+            className="e-lead mt-4 max-w-[52ch] text-ed-muted"
             data-reveal=""
             style={{ '--i': 2 } as React.CSSProperties}
           >

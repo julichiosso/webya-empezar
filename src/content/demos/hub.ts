@@ -1,3 +1,4 @@
+import type { TipoId } from '../servicios';
 /**
  * Página para elegir demo (/demo) y la barra común de las demos. Lo que dice "el sistema real, además"
  * sale de los sistemas entregados (Micio's y el turnero): no se agrega nada que no exista.
@@ -18,6 +19,8 @@ export const HUB_DEMOS = {
 
 export interface DemoInfo {
   id: 'pedidos' | 'turnos';
+  /** El tipo de sistema que muestra (los proyectos sin sitio publicado enlazan a su demo). */
+  sistema: TipoId;
   href: string;
   rubro: string;
   titulo: string;
@@ -33,6 +36,7 @@ export interface DemoInfo {
 export const DEMOS: readonly DemoInfo[] = [
   {
     id: 'pedidos',
+    sistema: 'pedidos',
     href: '/demo/pedidos',
     rubro: 'Pizzerías y comida',
     titulo: 'Pedidos online',
@@ -51,11 +55,11 @@ export const DEMOS: readonly DemoInfo[] = [
   },
   {
     id: 'turnos',
+    sistema: 'turnero',
     href: '/demo/turnos',
     rubro: 'Peluquerías y estética',
     titulo: 'Turnos con seña',
-    texto:
-      'El cliente elige servicio, día y hora, paga la seña y el turno entra solo a tu agenda.',
+    texto: 'El cliente elige servicio, día y hora, paga la seña y el turno entra solo a tu agenda.',
     barra: 'Turnos',
     ademas: [
       'Cobra la seña de verdad con Mercado Pago y la acredita sola',

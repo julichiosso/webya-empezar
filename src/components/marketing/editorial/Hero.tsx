@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'react';
-import { cn } from '@/components/ui/clases';
 import { DEMOS } from '@/content/demos/hub';
 import { CTA, HERO, MARCA } from '@/content/home';
 import { Boton } from './Boton';
+import { Flecha } from './Iconos';
 import { TituloPalabras } from './TituloPalabras';
 
 interface Props {
@@ -20,16 +20,117 @@ interface Props {
 }
 
 /**
- * Hero editorial: rótulo, titular gigante por palabras (anima al cargar, es el LCP), bajada concreta,
- * dos CTA y la zona de atención con el punto de disponibilidad. Componente de servidor.
+ * Hero editorial: rótulo, titular por palabras (anima al cargar, es el LCP), bajada concreta, dos CTA y
+ * la zona de atención. La home usa la versión con las demos; las landings, la de "Armá tu sistema".
  */
-export function Hero({
+export function Hero(props: Props) {
+  return props.demos ? <HeroDemos /> : <HeroLanding {...props} />;
+}
+
+/**
+ * Hero de la home: todo lo que importa entra en la primera pantalla, en celular y en escritorio. A la
+ * izquierda el mensaje y los dos CTA ("Ver demos" primero: probar antes de pedir); a la derecha las dos
+ * demos, directas. Abajo, la zona de atención con el link al mapa.
+ */
+function HeroDemos() {
+  return (
+    <section className="tono-oscuro" aria-labelledby="titulo-hero">
+      <div className="e-wrap grid grid-cols-12 gap-x-6 pt-8 pb-8 lg:items-center lg:gap-x-12 lg:pt-14 lg:pb-12">
+        <div className="col-span-12 lg:col-span-7 xl:col-span-8">
+          <p
+            className="e-rotulo e-hero-aparece text-ed-muted"
+            style={{ '--i': 0 } as CSSProperties}
+          >
+            {HERO.rotulo}
+          </p>
+          <TituloPalabras
+            as="h1"
+            id="titulo-hero"
+            lineas={HERO.titulo}
+            alCargar
+            className="e-display e-hero-compacto mt-4 lg:mt-6"
+          />
+          <p
+            className="e-lead e-hero-aparece mt-5 max-w-[44ch] text-ed-muted lg:mt-7"
+            style={{ '--i': 1 } as CSSProperties}
+          >
+            <span className="sm:hidden">{HERO.bajadaCorta}</span>
+            <span className="max-sm:hidden">{HERO.bajada}</span>
+          </p>
+          <div
+            className="e-hero-aparece mt-6 grid grid-cols-2 gap-3 sm:flex lg:mt-8"
+            style={{ '--i': 2 } as CSSProperties}
+          >
+            <Boton href="/demo" externo>
+              {CTA.verDemos}
+            </Boton>
+            <Boton href="#armar" armar="" variante="secundario" icono={false}>
+              {CTA.armar}
+            </Boton>
+          </div>
+        </div>
+        <div
+          className="e-hero-aparece col-span-12 mt-8 lg:col-span-5 lg:mt-0 xl:col-span-4"
+          style={{ '--i': 3 } as CSSProperties}
+        >
+          <p className="e-rotulo text-ed-muted">{HERO.probar}</p>
+          <ul className="mt-3 grid grid-cols-2 gap-2.5 lg:grid-cols-1 lg:gap-3">
+            {DEMOS.map((d) => (
+              <li key={d.id}>
+                <a
+                  href={d.href}
+                  target="_blank"
+                  rel="noopener"
+                  className="group flex h-full flex-col items-start gap-2.5 rounded-2xl border border-ed-line p-3 transition-colors hover:border-ed-fg hover:bg-ed-surface sm:flex-row sm:items-center sm:gap-3 lg:items-start lg:gap-4 lg:p-5"
+                >
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-ed-fg text-ed-bg lg:size-12">
+                    <IconoDemo id={d.id} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[0.875rem] leading-tight font-semibold md:text-[0.9375rem] lg:text-[1.0625rem]">
+                      {d.titulo}
+                    </span>
+                    <span className="mt-0.5 block text-[0.75rem] leading-snug text-ed-muted lg:hidden">
+                      {d.rubro}
+                    </span>
+                    <span className="mt-1 hidden text-[0.8125rem] leading-snug text-ed-muted lg:block">
+                      {d.texto}
+                    </span>
+                    <span className="mt-3 hidden items-center gap-1.5 text-[0.8125rem] font-medium lg:inline-flex">
+                      {HERO.abrirDemo}
+                      <Flecha />
+                    </span>
+                  </span>
+                  <span className="sr-only">{HERO.abrir}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="e-wrap">
+        <div className="flex flex-col gap-2 border-t border-ed-line py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="e-chico flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="e-punto" aria-hidden="true" />
+            <span>{MARCA.zona}</span>
+            <a href="#zona" className="e-link e-link-nav text-ed-muted hover:text-ed-fg">
+              {HERO.verZona}
+            </a>
+          </p>
+          <p className="e-chico text-ed-muted">{HERO.disponibilidad}</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** Hero de las landings: titular grande, bajada, "Armá tu sistema" como principal y la zona. */
+function HeroLanding({
   rotulo = HERO.rotulo,
   titulo = HERO.titulo,
   bajada = HERO.bajada,
   armar,
   secundario = { href: '#proyectos', texto: CTA.proyectos },
-  demos = false,
 }: Props) {
   return (
     <section className="tono-oscuro" aria-labelledby="titulo-hero">
@@ -52,81 +153,25 @@ export function Hero({
             className="e-lead e-hero-aparece col-span-12 max-w-[46ch] text-ed-muted md:col-span-7 lg:col-span-6"
             style={{ '--i': 1 } as CSSProperties}
           >
-            {demos ? (
-              <>
-                <span className="sm:hidden">{HERO.bajadaCorta}</span>
-                <span className="max-sm:hidden">{bajada}</span>
-              </>
-            ) : (
-              bajada
-            )}
+            {bajada}
           </p>
           <div
-            className={cn(
-              'e-hero-aparece col-span-12 gap-3 sm:flex sm:flex-row md:col-span-5 md:justify-end md:self-end lg:col-span-6',
-              demos ? 'grid grid-cols-2' : 'flex flex-col',
-            )}
+            className="e-hero-aparece col-span-12 flex flex-col gap-3 sm:flex-row md:col-span-5 md:justify-end md:self-end lg:col-span-6"
             style={{ '--i': 2 } as CSSProperties}
           >
-            {demos ? (
-              <>
-                <Boton href="/demo" externo iman>
-                  {CTA.verDemos}
-                </Boton>
-                <Boton href="#armar" armar="" variante="secundario" icono={false}>
-                  {CTA.armar}
-                </Boton>
-              </>
-            ) : (
-              <>
-                <Boton href="#armar" armar={armar ?? ''} iman>
-                  {CTA.armar}
-                </Boton>
-                <Boton
-                  href={secundario.href}
-                  variante="secundario"
-                  icono={false}
-                  externo={secundario.externo}
-                >
-                  {secundario.texto}
-                </Boton>
-              </>
-            )}
+            <Boton href="#armar" armar={armar ?? ''}>
+              {CTA.armar}
+            </Boton>
+            <Boton
+              href={secundario.href}
+              variante="secundario"
+              icono={false}
+              externo={secundario.externo}
+            >
+              {secundario.texto}
+            </Boton>
           </div>
         </div>
-        {demos ? (
-          <div
-            className="e-hero-aparece col-span-12 mt-8 md:mt-14"
-            style={{ '--i': 3 } as CSSProperties}
-          >
-            <p className="e-rotulo text-ed-muted">{HERO.probar}</p>
-            <ul className="mt-3 grid grid-cols-2 gap-2.5 md:max-w-[40rem] md:gap-3">
-              {DEMOS.map((d) => (
-                <li key={d.id}>
-                  <a
-                    href={d.href}
-                    target="_blank"
-                    rel="noopener"
-                    className="group flex h-full flex-col items-start gap-2.5 rounded-2xl border border-ed-line p-3 transition-colors hover:border-ed-fg sm:flex-row sm:items-center sm:gap-3 md:p-4"
-                  >
-                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-ed-fg text-ed-bg">
-                      <IconoDemo id={d.id} />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[0.875rem] leading-tight font-semibold md:text-[0.9375rem]">
-                        {d.titulo}
-                      </span>
-                      <span className="mt-0.5 block text-[0.75rem] leading-snug text-ed-muted">
-                        {d.rubro}
-                      </span>
-                    </span>
-                    <span className="sr-only">{HERO.abrir}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
         <div
           className="e-hero-aparece col-span-12 mt-8 flex flex-col gap-3 border-t border-ed-line pt-5 sm:flex-row sm:items-center sm:justify-between md:mt-20"
           style={{ '--i': 3 } as CSSProperties}

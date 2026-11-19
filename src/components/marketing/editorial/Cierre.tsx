@@ -24,7 +24,7 @@ export function Cierre() {
             className="col-span-12 flex flex-col gap-3 sm:flex-row md:col-span-6 md:justify-end md:self-end"
             data-reveal=""
           >
-            <Boton href="#armar" armar="" iman>
+            <Boton href="#armar" armar="">
               {CTA.armar}
             </Boton>
             <Boton

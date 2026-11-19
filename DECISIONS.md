@@ -203,3 +203,20 @@ queda lo que funciona por debajo o suma prueba real.
   es "Ver demos" (probar antes de pedir), "Armá tu sistema" queda al lado, y abajo van las dos demos directas
   ("Probalo vos, ahora"). En el celular, título más chico y bajada corta: todo entra en la primera pantalla. Las
   landings mantienen "Armá tu sistema" como principal.
+
+## Home más corta y directa, mapa de la zona (2026-11-19)
+
+- Pedido de Julián: en la primera pantalla tienen que verse los botones y las demos; había que scrollear demasiado.
+- Hero de la home en dos columnas en escritorio: mensaje y CTA ("Ver demos" y "Armá tu sistema") a la izquierda,
+  las dos demos a la derecha con su descripción y "Abrir demo". Titular más contenido (`.e-hero-compacto`). Entra
+  todo en 1366×690 y en un iPhone 15. Abajo, la zona con "Ver en el mapa".
+- Menos scroll en toda la página: aire entre capítulos de hasta 6rem (era 10rem), títulos de sección más chicos.
+  El turnero pasó de cinco pantallas de scroll a una: lista de pasos y teléfono que muestra el activo, avanza solo
+  mientras está a la vista con una barrita que se llena, y se queda quieto si la persona toca un paso. Las
+  tarjetas de proyectos: teléfono más chico, el problema en una línea y "Qué hace" plegado.
+- Botones: fuera el imán (el botón que seguía al mouse). El principal se pone lima y un destello lo cruza una vez
+  al pasar el mouse: llama la atención sin moverse ni repetirse.
+- Mapa "Dónde atiendo" (SVG propio, sin mapas de terceros: liviano, sin requests ni datos a Google): San Jorge y
+  San Francisco en sus coordenadas reales, el área de cada una, el límite entre Córdoba y Santa Fe (aproximado) y
+  pueblos de referencia. Los puntos laten tres veces y paran.
+- Proyecto sin sitio publicado con una demo de su sistema (Peluquería Canina): "Probá la demo" la abre directo.

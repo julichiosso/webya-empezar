@@ -2,11 +2,12 @@ import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { enlaceContacto } from '@/components/marketing/editorial/contacto';
+import { DEMOS } from '@/content/demos/hub';
 import { PROYECTOS_UI, SECCIONES } from '@/content/home';
 import { ESTADO_PROYECTO, PROYECTOS, dominioDe, type Proyecto } from '@/content/proyectos';
 import { CabezaSeccion } from './CabezaSeccion';
 import { ControlesCarril } from './ControlesCarril';
-import { FlechaDiagonal } from './Iconos';
+import { FlechaDiagonal, Mas } from './Iconos';
 import { PantallaProyecto, Telefono } from './Pantallas';
 
 const CARRIL = 'carril-proyectos';
@@ -14,8 +15,8 @@ const CARRIL = 'carril-proyectos';
 function Visual({ p }: { p: Proyecto }) {
   const img = p.imagenes[0];
   return (
-    <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-ed-line bg-ed-surface">
-      <div className="absolute top-8 left-1/2 w-[62%] -translate-x-1/2">
+    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-ed-line bg-ed-surface">
+      <div className="absolute top-6 left-1/2 w-[46%] -translate-x-1/2">
         <Telefono
           className="max-w-none"
           etiqueta={img ? undefined : PROYECTOS_UI.mockupAlt(p.sistema)}
@@ -41,7 +42,10 @@ function Visual({ p }: { p: Proyecto }) {
 
 function Tarjeta({ p, i }: { p: Proyecto; i: number }) {
   const enProduccion = p.estado === 'produccion';
-  const demo = enlaceContacto(PROYECTOS_UI.mensajeDemo(p.cliente));
+  const demoPropia = DEMOS.find((d) => d.sistema === p.tipo);
+  const demo = demoPropia
+    ? { href: demoPropia.href }
+    : enlaceContacto(PROYECTOS_UI.mensajeDemo(p.cliente));
   return (
     <article
       id={`proyecto-${p.id}`}
@@ -51,7 +55,7 @@ function Tarjeta({ p, i }: { p: Proyecto; i: number }) {
       style={{ '--i': i } as CSSProperties}
     >
       <Visual p={p} />
-      <div className="mt-6 flex items-center justify-between gap-4">
+      <div className="mt-4 flex items-center justify-between gap-4">
         <p className="e-rotulo text-ed-muted">
           {p.rubro} · {p.ciudad}
         </p>
@@ -65,31 +69,31 @@ function Tarjeta({ p, i }: { p: Proyecto; i: number }) {
           {ESTADO_PROYECTO[p.estado]}
         </p>
       </div>
-      <h3 id={`titulo-proyecto-${p.id}`} className="e-h3 mt-4">
+      <h3 id={`titulo-proyecto-${p.id}`} className="e-h3 mt-3">
         {p.cliente}
       </h3>
       <p className="e-cuerpo mt-1 text-ed-muted">{p.sistema}</p>
-      <dl className="mt-6 space-y-5 border-t border-ed-line pt-5">
-        <div>
-          <dt className="e-rotulo text-ed-muted">{PROYECTOS_UI.problema}</dt>
-          <dd className="e-cuerpo mt-2">{p.problema}</dd>
-        </div>
-        <div>
-          <dt className="e-rotulo text-ed-muted">{PROYECTOS_UI.incluye}</dt>
-          <dd>
-            <ul className="e-chico mt-2 space-y-1.5">
-              {p.incluye.map((x) => (
-                <li key={x} className="flex gap-2.5">
-                  <span aria-hidden="true" className="mt-[0.6em] h-px w-3 shrink-0 bg-ed-fg" />
-                  {x}
-                </li>
-              ))}
-            </ul>
-          </dd>
-        </div>
-      </dl>
-      <p className="e-chico mt-5 text-ed-muted">{p.resultado}</p>
-      <div className="mt-auto pt-6">
+      <p className="e-chico mt-3">{p.problema}</p>
+      <details className="group mt-4 border-t border-ed-line pt-3">
+        <summary className="e-chico flex min-h-11 cursor-pointer list-none items-center justify-between font-medium [&::-webkit-details-marker]:hidden">
+          {PROYECTOS_UI.incluye}
+          <span
+            aria-hidden="true"
+            className="text-ed-muted transition-transform group-open:rotate-45"
+          >
+            <Mas />
+          </span>
+        </summary>
+        <ul className="e-chico space-y-1.5 pb-1 text-ed-muted">
+          {p.incluye.map((x) => (
+            <li key={x} className="flex gap-2.5">
+              <span aria-hidden="true" className="mt-[0.6em] h-px w-3 shrink-0 bg-ed-fg" />
+              {x}
+            </li>
+          ))}
+        </ul>
+      </details>
+      <div className="mt-auto pt-4">
         {p.url ? (
           <a href={p.url} target="_blank" rel="noopener" className="e-link e-cuerpo font-medium">
             {enProduccion ? PROYECTOS_UI.ver : PROYECTOS_UI.verAvance}
@@ -104,7 +108,7 @@ function Tarjeta({ p, i }: { p: Proyecto; i: number }) {
             rel="noopener"
             className="e-link e-cuerpo font-medium"
           >
-            {PROYECTOS_UI.pedirDemo}
+            {demoPropia ? PROYECTOS_UI.probarDemo : PROYECTOS_UI.pedirDemo}
             <FlechaDiagonal />
             <span className="sr-only">{PROYECTOS_UI.externo}</span>
           </a>
@@ -151,7 +155,7 @@ export function Proyectos({
       </div>
       <div
         id={CARRIL}
-        className="e-carril mt-12"
+        className="e-carril mt-8"
         tabIndex={0}
         role="region"
         aria-labelledby="titulo-proyectos"

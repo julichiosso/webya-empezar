@@ -7,8 +7,6 @@ interface BotonProps {
   children: React.ReactNode;
   variante?: 'primario' | 'secundario';
   chico?: boolean;
-  /** Imán sutil con mouse: solo en los CTA principales. */
-  iman?: boolean;
   /** Preselección del configurador ("turnero", "pedidos"…). */
   armar?: string;
   /** Módulo que se marca al llegar al configurador. */
@@ -20,14 +18,13 @@ interface BotonProps {
 
 /**
  * Botón-enlace del sistema editorial. Pill, sin sombra; el hover del primario es el único lugar
- * donde aparece el acento. Micro-interacciones: flecha que avanza, presión al tocar, imán opcional.
+ * donde aparece el acento. Micro-interacciones: flecha que avanza, presión al tocar y un destello que cruza el principal al pasar el mouse.
  */
 export function Boton({
   href,
   children,
   variante = 'primario',
   chico = false,
-  iman = false,
   armar,
   modulo,
   externo = false,
@@ -47,7 +44,6 @@ export function Boton({
     </>
   );
   const datos = {
-    'data-magnet': iman ? '' : undefined,
     'data-armar': armar,
     'data-modulo': modulo,
   };

@@ -8,6 +8,7 @@ import { Pedidos } from '@/components/marketing/editorial/Pedidos';
 import { Pie } from '@/components/marketing/editorial/Pie';
 import { Proyectos } from '@/components/marketing/editorial/Proyectos';
 import { Turnero } from '@/components/marketing/editorial/Turnero';
+import { Zona } from '@/components/marketing/editorial/Zona';
 import { SEO_SITIO, jsonLdNegocio, serializarLd } from '@/content/seo';
 import { SeccionConfigurador } from '@/features/configurador/SeccionConfigurador';
 import { siteConfig } from '@/lib/site-config';
@@ -67,7 +68,8 @@ export default function Inicio() {
           <Turnero key="turnero" numero={2} />,
           <Pedidos key="pedidos" numero={3} />,
           <Proyectos key="proyectos" numero={4} />,
-          <SeccionConfigurador key="armar" numero={5} />,
+          <Zona key="zona" numero={5} />,
+          <SeccionConfigurador key="armar" numero={6} />,
           <Cierre key="cierre" />,
         ].map((seccion) => (
           <Suspense key={seccion.key}>{seccion}</Suspense>

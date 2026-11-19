@@ -44,6 +44,8 @@ export const HERO = {
   bajadaCorta: 'Pedidos, turnos y tiendas online. Hablás directo con quien los programa.',
   disponibilidad: 'Tomando proyectos nuevos',
   probar: 'Probalo vos, ahora',
+  abrirDemo: 'Abrir demo',
+  verZona: 'Ver en el mapa',
   abrir: ' (se abre en otra pestaña)',
 } as const;
 
@@ -71,6 +73,33 @@ export const SECCIONES = {
     titulo: 'Negocios de acá, con su sistema.',
     bajada: 'Trabajos reales, con nombre y apellido. Tocá cualquiera para verlo de cerca.',
   },
+  zona: {
+    id: 'zona',
+    rotulo: 'Dónde atiendo',
+    titulo: 'Cerca tuyo.',
+    bajada:
+      'Atiendo en San Jorge y zona, y en San Francisco y alrededores. Hablás conmigo, no con un call center.',
+  },
+} as const;
+
+/** El mapa de la zona de atención (los pueblos son de referencia, para ubicarse). */
+export const ZONA_UI = {
+  mapaAlt:
+    'Mapa de la zona de atención: San Jorge y alrededores, en Santa Fe, y San Francisco y alrededores, en Córdoba.',
+  provincias: { cordoba: 'Córdoba', santaFe: 'Santa Fe' },
+  ciudades: { sanJorge: 'San Jorge', sanFrancisco: 'San Francisco' },
+  pueblos: {
+    sastre: 'Sastre',
+    mariaJuana: 'María Juana',
+    pellegrini: 'Carlos Pellegrini',
+    piamonte: 'Piamonte',
+    trebol: 'El Trébol',
+  },
+  areas: [
+    { nombre: 'San Jorge y zona', provincia: 'Santa Fe' },
+    { nombre: 'San Francisco y alrededores', provincia: 'Córdoba' },
+  ],
+  lejos: 'Si estás más lejos, escribime igual y lo vemos.',
 } as const;
 
 export const BENTO = {
@@ -171,6 +200,7 @@ export const PROYECTOS_UI = {
   verAvance: 'Ver el avance',
   externo: ' (se abre en otra pestaña)',
   pedirDemo: 'Pedí la demo',
+  probarDemo: 'Probá la demo',
   mensajeDemo: (cliente: string) =>
     `Hola Julián, vengo de webya.dev. Vi el proyecto de ${cliente} y quiero ver una demo para mi negocio.`,
   deslizar: 'Deslizá para ver más',

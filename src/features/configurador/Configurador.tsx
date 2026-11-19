@@ -323,7 +323,6 @@ function BotonEnviar({
       rel="noopener"
       onClick={onEnviar}
       className={clases}
-      data-magnet=""
     >
       {texto}
     </a>

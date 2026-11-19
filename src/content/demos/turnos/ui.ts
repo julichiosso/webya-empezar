@@ -235,7 +235,7 @@ export const PANEL_TURNOS = {
     resumen: (n: number | string, monto: string) => `${n} turnos · ${monto} en señas`,
     libre: (hasta: string) => `Libre hasta las ${hasta}`,
     bloqueado: (hasta: string, motivo: string) => `Bloqueado hasta las ${hasta} · ${motivo}`,
-  bloqueadoDia: (motivo: string) => `Bloqueado todo el día · ${motivo}`,
+    bloqueadoDia: (motivo: string) => `Bloqueado todo el día · ${motivo}`,
     todos: 'Todos',
     cerrado: 'Cerrado',
     filtroAria: 'Profesional',

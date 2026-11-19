@@ -16,7 +16,7 @@ export function Pedidos({ numero = 3, conCta = true }: { numero?: number; conCta
           titulo={S.titulo}
           idTitulo="titulo-pedidos"
         />
-        <div className="mt-14 grid grid-cols-12 items-center gap-x-6 gap-y-14 md:mt-20">
+        <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-10 md:mt-12">
           <div className="col-span-12 lg:col-span-6">
             <p className="e-h3 max-w-[30ch] font-medium" data-reveal="">
               {PEDIDOS.dolor}
@@ -47,7 +47,7 @@ export function Pedidos({ numero = 3, conCta = true }: { numero?: number; conCta
             </p>
             {conCta ? (
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Boton href="#armar" armar="pedidos" iman>
+                <Boton href="#armar" armar="pedidos">
                   {PEDIDOS.cta}
                 </Boton>
                 <Boton href="/demo/pedidos" variante="secundario" externo>
