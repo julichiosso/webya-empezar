@@ -7,6 +7,7 @@ for (const ruta of [
   '/pizzerias',
   '/tiendas',
   '/privacidad',
+  '/demo',
   '/demo/pedidos',
   '/demo/peluqueria',
 ]) {

@@ -139,3 +139,30 @@ queda lo que funciona por debajo o suma prueba real.
   ve como ticket de 80 mm y se puede imprimir.
 - Se borraron la demo de gastronomía, su contenido, el video explicativo (solo se abría desde ahí), el QR y dos
   componentes sin uso. `/demo/gastronomia` redirige a `/demo/pedidos`.
+
+## Demos más a mano y claras (2026-11-19)
+
+- Pedido de Julián: que quede claro que es una demo y que el sistema real hace más, sin texto que suene a IA;
+  que en el celular se llegue rápido a la demo y que la demo se abra aparte, como otro sistema.
+- "Ver demo" en el encabezado (visible en el celular) y como segundo botón del hero. Abre `/demo` en otra pestaña:
+  una página corta para elegir (pedidos o turnos) que en el celular se ve sin scrollear.
+- Cada demo lleva una barra fina propia (`BarraDemo`): "Demo", el sistema, "Qué más hace", reiniciar y volver a
+  las demos. Sin el encabezado del sitio. La primera vez que se entra se abre sola con "Esto es una demo" y la
+  lista concreta de lo que el sistema real hace además (sale de lo entregado, `content/demos/hub.ts`).
+- Los "Probá la demo" de las secciones y del configurador también abren en otra pestaña.
+
+## La demo muestra el producto, no al cliente (2026-11-19)
+
+- Pedido de Julián: la demo de pedidos no puede ser "la de Micio's". Ahora es el producto: la app dice "Tu
+  pizzería", el panel "Panel del local", el mensaje y la comanda no nombran a nadie. La barra dice solo "Pedidos".
+- El cliente real va aparte y bien mostrado: "Conocé cómo ya lo usa Micio's Pizzería", con su captura y el link a
+  su sitio (`EnUso`, sale del manifiesto de proyectos). En escritorio debajo de la guía; en celular, en el aviso
+  de entrada. La demo de turnos no lo lleva: no hay un turnero en producción todavía.
+- Etiqueta "Demo" como cápsula rellena, sin borde y sin el punto separador.
+- La app de la demo usa un azul neutro como acento (`--m-acento`), no el lima de Micio's: en el sistema real es el
+  color de cada negocio. Sobre el acento, texto blanco.
+- "Quiero esto para mi negocio": se probó un destello animado y no convenció; queda como los demás botones del
+  sitio, con la flecha.
+- Rótulos de escritorio: "Así lo ve tu cliente" sobre el teléfono y "Así lo manejás vos" sobre el panel. Cortos.
+- La tarjeta del caso real no es un link entero: el borde aparece al pasar el mouse y el link es solo el dominio,
+  que se subraya al pararse encima.

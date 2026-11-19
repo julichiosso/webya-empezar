@@ -50,7 +50,7 @@ export function Pedidos({ numero = 3, conCta = true }: { numero?: number; conCta
                 <Boton href="#armar" armar="pedidos" iman>
                   {PEDIDOS.cta}
                 </Boton>
-                <Boton href="/demo/pedidos" variante="secundario">
+                <Boton href="/demo/pedidos" variante="secundario" externo>
                   {PEDIDOS.demo}
                 </Boton>
               </div>

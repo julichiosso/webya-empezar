@@ -1,14 +1,16 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
-import { LogoCorchetes } from '@/brand/logo/LogoCorchetes';
+import { BarraDemo } from '@/components/marketing/editorial/BarraDemo';
+import { EnUso } from '@/components/marketing/editorial/EnUso';
 import { Tilde } from '@/components/marketing/editorial/Iconos';
 import { Telefono } from '@/components/marketing/editorial/Pantallas';
 import { cn } from '@/components/ui/clases';
-import { BARRA_DEMO, GUIA, VISTAS } from '@/content/demos/pedidos/ui';
+import { getDemo } from '@/content/demos/hub';
+import { BARRA_DEMO, GUIA, LADOS, VISTAS } from '@/content/demos/pedidos/ui';
 import { track } from '@/lib/analytics';
 import { AppCliente } from './AppCliente';
+import { Escalado } from './Escalado';
 import { Panel } from './Panel';
 import { ahoraDemo, crearEstado, crearStore, type Pedido } from './store';
 
@@ -17,7 +19,7 @@ const DEMO = 'pedidos';
 const CTA_HREF = '/pizzerias#armar';
 
 /**
- * Demo del sistema de pedidos de Micio's. En escritorio, el celular del cliente y el panel del dueño
+ * Demo del sistema de pedidos. En escritorio, el celular del cliente y el panel del dueño
  * lado a lado, del mismo alto y siempre dentro de la pantalla. En celular, la app a pantalla completa y
  * un selector "Cliente / Dueño" abajo. Todo en memoria: nada se envía.
  */
@@ -91,79 +93,64 @@ export function DemoPedidos() {
 
   return (
     <div className="m-paleta tono-oscuro min-h-svh bg-ed-bg text-ed-fg">
-      <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b border-ed-line bg-ed-bg px-4 md:px-6">
-        <Link href="/" aria-label={BARRA_DEMO.volver} className="flex min-h-11 items-center">
-          <LogoCorchetes decorativo className="h-5 w-auto" />
-        </Link>
-        <div className="invisible min-w-0 flex-1 sm:visible">
-          <p className="truncate text-[0.875rem] font-semibold">
-            <span className="md:hidden">{BARRA_DEMO.tituloCorto}</span>
-            <span className="hidden md:inline">{BARRA_DEMO.titulo}</span>
-          </p>
-          <p className="hidden truncate text-[0.75rem] text-ed-muted md:block">
-            {BARRA_DEMO.bajada}
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={reiniciar}
-          aria-label={BARRA_DEMO.reiniciarAria}
-          className="flex min-h-11 items-center gap-2 rounded-full px-3 text-[0.8125rem] font-medium text-ed-muted hover:text-ed-fg"
-        >
-          <Reinicio />
-          <span className="hidden sm:inline">{BARRA_DEMO.reiniciar}</span>
-        </button>
-        <a href={CTA_HREF} onClick={cta('barra')} className="e-btn e-btn-primario e-btn-chico">
-          <span className="hidden md:inline">{BARRA_DEMO.cta}</span>
-          <span className="md:hidden">{BARRA_DEMO.ctaCorto}</span>
-        </a>
-      </header>
+      <BarraDemo demo="pedidos" onReiniciar={reiniciar} />
 
       <main>
         <h1 className="sr-only">{BARRA_DEMO.titulo}</h1>
         {/* Escritorio: guía arriba, celular y panel lado a lado. */}
-        <div className="m-escenario hidden px-6 pt-5 pb-8 lg:block">
-          <ol aria-label={GUIA.aria} className="mx-auto grid max-w-[60rem] grid-cols-3 gap-3">
-            {GUIA.pasos.map((p, i) => {
-              const actual = hechos.findIndex((h) => !h) === i;
-              return (
-                <li
-                  key={p.titulo}
-                  aria-current={actual ? 'step' : undefined}
-                  className={cn(
-                    'flex gap-3 rounded-2xl border p-3 transition-colors',
-                    actual ? 'border-ed-fg' : 'border-ed-line',
-                  )}
-                >
-                  <span
+        <div className="m-escenario hidden justify-center gap-8 px-6 py-6 lg:flex xl:gap-12">
+          <div className="w-[13rem] shrink-0 pt-2">
+            <ol aria-label={GUIA.aria} className="space-y-2">
+              {GUIA.pasos.map((p, i) => {
+                const actual = hechos.findIndex((h) => !h) === i;
+                return (
+                  <li
+                    key={p.titulo}
+                    aria-current={actual ? 'step' : undefined}
                     className={cn(
-                      'grid size-7 shrink-0 place-items-center rounded-full text-[0.75rem] font-bold tabular-nums',
-                      hechos[i] ? 'bg-lima text-tinta' : 'border border-ed-line-strong',
+                      'flex gap-3 rounded-xl border p-3 transition-colors',
+                      actual ? 'border-ed-fg' : 'border-transparent',
                     )}
                   >
-                    {hechos[i] ? <Tilde className="size-3.5" /> : i + 1}
-                    {hechos[i] ? <span className="sr-only">{GUIA.hecho}</span> : null}
-                  </span>
-                  <span>
-                    <span className="block text-[0.875rem] font-semibold">{p.titulo}</span>
-                    <span className="block text-[0.75rem] text-ed-muted">{p.texto}</span>
-                  </span>
-                </li>
-              );
-            })}
-          </ol>
-          <div className="mt-5 flex items-start justify-center gap-10">
+                    <span
+                      className={cn(
+                        'grid size-6 shrink-0 place-items-center rounded-full text-[0.6875rem] font-bold tabular-nums',
+                        hechos[i] ? 'bg-lima text-tinta' : 'border border-ed-line-strong',
+                      )}
+                    >
+                      {hechos[i] ? <Tilde className="size-3" /> : i + 1}
+                      {hechos[i] ? <span className="sr-only">{GUIA.hecho}</span> : null}
+                    </span>
+                    <span>
+                      <span className="block text-[0.8125rem] font-semibold">{p.titulo}</span>
+                      <span className="mt-0.5 block text-[0.75rem] leading-snug text-ed-muted">
+                        {p.texto}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+            <EnUso proyecto={getDemo('pedidos').enUso!} className="mt-6" />
+          </div>
+          <div className="shrink-0">
+            <p className="mb-2 text-center text-[0.75rem] text-ed-muted">{LADOS.cliente}</p>
             <Telefono
               className="m-tel shrink-0"
               decorativo={false}
               colorBarra={{ fondo: 'var(--m-oscuro)', claro: true }}
             >
-              <AppCliente key={`c${ronda}`} {...comunes} />
+              <Escalado>
+                <AppCliente key={`c${ronda}`} {...comunes} />
+              </Escalado>
             </Telefono>
+          </div>
+          <div className="w-full max-w-[30rem] min-w-0">
+            <p className="mb-2 text-center text-[0.75rem] text-ed-muted">{LADOS.panel}</p>
             <div
               ref={panel}
               tabIndex={-1}
-              className="m-ventana w-full max-w-[32rem] overflow-hidden rounded-[1.5rem] border border-ed-line outline-none focus-visible:ring-2 focus-visible:ring-lima"
+              className="m-ventana w-full overflow-hidden rounded-[1.5rem] border border-ed-line outline-none focus-visible:ring-2 focus-visible:ring-lima"
             >
               <Panel key={`p${ronda}`} {...panelProps} />
             </div>
@@ -171,7 +158,7 @@ export function DemoPedidos() {
         </div>
 
         {/* Celular y tablet: una cara a la vez, a pantalla completa, y abajo el selector con su propio lugar. */}
-        <div className="flex h-[calc(100svh-3.5rem)] flex-col lg:hidden">
+        <div className="flex h-[calc(100svh-2.75rem)] flex-col lg:hidden">
           <div className="relative min-h-0 flex-1">
             <div className={vista === 'cliente' ? 'h-full' : 'hidden'}>
               <AppCliente key={`mc${ronda}`} {...comunes} />
@@ -222,20 +209,5 @@ function BotonVista({
     >
       {children}
     </button>
-  );
-}
-
-function Reinicio() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="size-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      aria-hidden="true"
-    >
-      <path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
   );
 }

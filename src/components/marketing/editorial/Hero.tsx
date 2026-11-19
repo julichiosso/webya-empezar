@@ -9,7 +9,7 @@ interface Props {
   bajada?: string;
   /** Preselección del configurador desde el CTA principal (landings). */
   armar?: string;
-  secundario?: { href: string; texto: string };
+  secundario?: { href: string; texto: string; externo?: boolean };
 }
 
 /**
@@ -53,7 +53,12 @@ export function Hero({
             <Boton href="#armar" armar={armar ?? ''} iman>
               {CTA.armar}
             </Boton>
-            <Boton href={secundario.href} variante="secundario" icono={false}>
+            <Boton
+              href={secundario.href}
+              variante="secundario"
+              icono={false}
+              externo={secundario.externo}
+            >
               {secundario.texto}
             </Boton>
           </div>

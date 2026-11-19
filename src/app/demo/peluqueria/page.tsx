@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { Logo } from '@/brand/logo/Logo';
+import { BarraDemo } from '@/components/marketing/editorial/BarraDemo';
 import { PAGINA_PELU } from '@/content/demos/peluqueria/ui';
 import { DemoPeluqueria } from '@/features/demo/peluqueria/DemoPeluqueria';
 
@@ -23,24 +22,11 @@ export const metadata: Metadata = {
 
 export default function DemoPeluqueriaPage() {
   return (
-    <main>
-      <DemoPeluqueria
-        encabezado={
-          <>
-            <Link
-              href="/"
-              aria-label={PAGINA_PELU.ariaLogo}
-              className="inline-flex min-h-tap items-center"
-            >
-              <Logo />
-            </Link>
-            <h1 className="mt-6 text-title font-semibold text-balance">
-              {PAGINA_PELU.encabezado.titulo}
-            </h1>
-            <p className="mt-2 max-w-xl text-lead text-muted">{PAGINA_PELU.encabezado.bajada}</p>
-          </>
-        }
-      />
-    </main>
+    <>
+      <BarraDemo demo="turnos" />
+      <main>
+        <DemoPeluqueria encabezado={<h1 className="sr-only">{PAGINA_PELU.encabezado.titulo}</h1>} />
+      </main>
+    </>
   );
 }

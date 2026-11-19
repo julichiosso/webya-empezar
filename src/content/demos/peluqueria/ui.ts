@@ -32,13 +32,10 @@ const FRANJA_FRASE: Readonly<Record<Franja, string>> = {
   tarde: 'a la tarde',
 };
 
-export const AVISO_DEMO_PELU = 'Demo con datos de ejemplo. No se reserva ni se envía nada.';
-
 export const PAGINA_PELU = {
   titulo: 'Bot de turnos para peluquerías y barberías',
   descripcion:
     'Probá el bot que toma los turnos de tu peluquería, mirá cómo se llena la agenda y qué te dicen las estadísticas. Con datos de ejemplo.',
-  ariaLogo: 'WebYa: volver al inicio',
   encabezado: {
     titulo: 'Seguí cortando. El bot te toma los turnos.',
     bajada:

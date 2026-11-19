@@ -18,6 +18,8 @@ export const CTA = {
   demo: 'Pedí tu demo',
   hablar: 'Hablá con Julián',
   proyectos: 'Ver proyectos reales',
+  verDemo: 'Ver demo',
+  pestana: ' (se abre en otra pestaña)',
 } as const;
 
 export const HEADER = {

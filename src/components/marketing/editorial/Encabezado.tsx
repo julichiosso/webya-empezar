@@ -40,9 +40,23 @@ export function Encabezado({ cta = '#armar' }: { cta?: string }) {
             ))}
           </ul>
         </nav>
-        <Boton href={cta} chico armar="">
-          {CTA.armarCorto}
-        </Boton>
+        <div className="flex items-center gap-1 sm:gap-3">
+          {/* En pantallas de menos de 380 px no entra junto al CTA: queda el "Ver demo" del hero. */}
+          <span className="max-[379px]:hidden">
+            <a
+              href="/demo"
+              target="_blank"
+              rel="noopener"
+              className="e-link e-chico flex min-h-11 items-center px-2 text-ed-muted hover:text-ed-fg"
+            >
+              {CTA.verDemo}
+              <span className="sr-only">{CTA.pestana}</span>
+            </a>
+          </span>
+          <Boton href={cta} chico armar="">
+            {CTA.armarCorto}
+          </Boton>
+        </div>
       </div>
     </header>
   );

@@ -212,6 +212,7 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-ed-line pt-5">
             <a
               href={r.demo?.href ?? '#proyectos'}
+              {...(r.demo?.href.startsWith('/demo') ? { target: '_blank', rel: 'noopener' } : {})}
               className="e-link e-chico font-medium"
               onClick={() => track('configurador_demo', { rubro: estado.rubro ?? '' })}
             >

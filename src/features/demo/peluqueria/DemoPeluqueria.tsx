@@ -15,7 +15,6 @@ import {
   TURNOS_SEMANA_DEMO,
 } from '@/content/demos/peluqueria/datos';
 import {
-  AVISO_DEMO_PELU,
   BOT,
   CTA_PELU,
   DIA_LARGO,
@@ -147,19 +146,13 @@ export function DemoPeluqueria({ encabezado }: { encabezado: ReactNode }) {
       style={variablesDePaleta(getPaletaCurada(paleta)) as CSSProperties}
       className="pb-24 lg:pb-0"
     >
-      <div className="sticky top-0 z-30 flex h-14 items-center justify-center gap-4 bg-surface-2 px-4 lg:justify-between lg:px-8">
-        <p role="note" className="text-center text-small leading-tight font-medium text-fg">
-          {AVISO_DEMO_PELU}
-        </p>
-        <CtaQuiero negocio={negocio} origen="barra" className="hidden lg:inline-flex" />
-      </div>
-
       <p aria-live="polite" className="sr-only">
         {anuncio}
       </p>
 
       <div className="mx-auto w-full max-w-[90rem] lg:px-8 lg:pb-16">
-        <div className="px-4 pt-6 pb-6 lg:px-0 lg:pt-10">{encabezado}</div>
+        {encabezado}
+        <div className="h-4 lg:h-8" />
         <div className="flex flex-col gap-4 px-4 pb-6 sm:flex-row sm:items-end lg:px-0 lg:pb-8">
           <label className="block w-full max-w-sm">
             <span className="mb-2 block text-small font-semibold">

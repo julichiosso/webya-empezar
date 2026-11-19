@@ -57,11 +57,12 @@ interface Props {
 
 const desdePrecio = (p: Producto) => Math.min(...Object.values(p.precios));
 
-/** La app del cliente, como la de Micio's: inicio, carta por sección, producto, carrito y confirmación. */
+/** La app del cliente: inicio, carta por sección, producto, carrito y confirmación. */
 export function AppCliente(props: Props) {
   const { e, set, margenInferior } = props;
   const [pantalla, setPantalla] = useState<Pantalla>({ tipo: 'inicio' });
-  const [aviso, setAviso] = useState(false);
+  /** El aviso de agregado vive en la pantalla donde se agregó: al cambiar de pantalla no se muestra. */
+  const [aviso, setAviso] = useState<Pantalla | false>(false);
   const [confirmacion, setConfirmacion] = useState<{ p: Pedido; enviado: boolean }>();
   const scroller = useRef<HTMLDivElement>(null);
   const n = cantidadCarrito(e);
@@ -87,7 +88,10 @@ export function AppCliente(props: Props) {
 
   return (
     <div className="m-app relative h-full overflow-hidden">
-      <div ref={scroller} className="absolute inset-0 overflow-y-auto overscroll-contain">
+      <div
+        ref={scroller}
+        className="m-sin-barra absolute inset-0 overflow-y-auto overscroll-contain"
+      >
         <Encabezado
           atras={pantalla.tipo !== 'inicio' ? volver : undefined}
           onInicio={() => ir({ tipo: 'inicio' })}
@@ -102,7 +106,7 @@ export function AppCliente(props: Props) {
             id={pantalla.id}
             onAgregar={(t, mitad) => {
               set((x) => agregar(x, pantalla.id, t, mitad));
-              setAviso(true);
+              setAviso(pantalla);
             }}
           />
         )}
@@ -121,7 +125,7 @@ export function AppCliente(props: Props) {
           type="button"
           onClick={() => ir({ tipo: 'carrito' })}
           className={cn(
-            'm-tocar m-aparece absolute inset-x-4 z-10 rounded-full bg-[var(--m-lima)] px-5 py-3.5 text-[0.875rem] font-bold text-[var(--m-oscuro)]',
+            'm-tocar m-aparece absolute inset-x-4 z-10 rounded-full bg-[var(--m-acento)] px-5 py-3.5 text-[0.875rem] font-bold text-[var(--m-sobre-acento)]',
             margenInferior ? 'bottom-24' : 'bottom-5',
           )}
         >
@@ -145,10 +149,10 @@ export function AppCliente(props: Props) {
         />
       ) : null}
 
-      {aviso ? (
+      {aviso && aviso === pantalla ? (
         <p
           role="status"
-          className="m-aparece absolute bottom-24 left-1/2 z-20 -translate-x-1/2 rounded-full bg-[var(--m-lima)] px-4 py-2 text-[0.8125rem] font-bold whitespace-nowrap text-[var(--m-oscuro)]"
+          className="m-aparece absolute bottom-24 left-1/2 z-20 -translate-x-1/2 rounded-full bg-[var(--m-acento)] px-4 py-2 text-[0.8125rem] font-bold whitespace-nowrap text-[var(--m-sobre-acento)]"
         >
           {APP.agregado}
         </p>
@@ -247,7 +251,7 @@ function Encabezado({
         {cantidad > 0 ? (
           <span
             key={cantidad}
-            className="m-pop absolute -top-1 -right-1 grid size-5 place-items-center rounded-full bg-[var(--m-lima)] text-[0.6875rem] font-bold text-[var(--m-oscuro)]"
+            className="m-pop absolute -top-1 -right-1 grid size-5 place-items-center rounded-full bg-[var(--m-acento)] text-[0.6875rem] font-bold text-[var(--m-sobre-acento)]"
           >
             {cantidad}
           </span>
@@ -272,7 +276,7 @@ function Inicio({ e, ahora, ir }: { e: EstadoDemo; ahora: number; ir: (p: Pantal
       <section className="px-4 pt-2 pb-7">
         <div className="relative flex min-h-[15rem] flex-col justify-end overflow-hidden rounded-[1.75rem] bg-[var(--m-blanco-8)] p-5">
           <Dibujo producto={muzza} className="absolute -top-10 -right-12 size-52 opacity-90" />
-          <span className="relative w-fit rounded-full bg-[var(--m-lima)] px-3 py-1 text-[0.6875rem] font-bold tracking-wide text-[var(--m-oscuro)] uppercase">
+          <span className="relative w-fit rounded-full bg-[var(--m-acento)] px-3 py-1 text-[0.6875rem] font-bold tracking-wide text-[var(--m-sobre-acento)] uppercase">
             {APP.takeAway}
           </span>
           <h2 className="m-titulo relative mt-3 text-[1.875rem]">
@@ -284,7 +288,7 @@ function Inicio({ e, ahora, ir }: { e: EstadoDemo; ahora: number; ir: (p: Pantal
         </div>
       </section>
       <Rotulo>{APP.elegi}</Rotulo>
-      <ul className="mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
+      <ul className="m-sin-barra mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
         {SECCIONES.map((s) => {
           const primero = PRODUCTOS.find((p) => p.seccion === s.id)!;
           return (
@@ -321,7 +325,7 @@ function Inicio({ e, ahora, ir }: { e: EstadoDemo; ahora: number; ir: (p: Pantal
                     {APP.desde(pesos(desdePrecio(p)))}
                   </span>
                 </span>
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[var(--m-lima)] text-[var(--m-oscuro)]">
+                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[var(--m-acento)] text-[var(--m-sobre-acento)]">
                   <Signo mas />
                 </span>
               </button>
@@ -343,7 +347,7 @@ function EstadoLocal({ e, ahora }: { e: EstadoDemo; ahora: number }) {
         aria-hidden="true"
         className={cn(
           'size-1.5 rounded-full',
-          e.abierto ? 'bg-[var(--m-lima)]' : 'bg-[var(--m-salsa)]',
+          e.abierto ? 'bg-[var(--m-acento)]' : 'bg-[var(--m-salsa)]',
         )}
       />
       {texto}
@@ -369,14 +373,14 @@ function Seccion({ e, id, ir }: { e: EstadoDemo; id: SeccionId; ir: (p: Pantalla
         <p className="text-[0.75rem] text-[var(--m-blanco-60)]">
           {APP.cantidadProductos(lista.length)}
         </p>
-        <div className="mt-4 flex gap-2 overflow-x-auto">
+        <div className="m-sin-barra mt-4 flex gap-2 overflow-x-auto">
           {SECCIONES.map((s) => (
             <button
               key={s.id}
               type="button"
               aria-pressed={s.id === id}
               onClick={() => ir({ tipo: 'seccion', id: s.id })}
-              className="shrink-0 rounded-full bg-[var(--m-blanco-8)] px-4 py-2 text-[0.8125rem] font-semibold aria-pressed:bg-[var(--m-lima)] aria-pressed:text-[var(--m-oscuro)]"
+              className="shrink-0 rounded-full bg-[var(--m-blanco-8)] px-4 py-2 text-[0.8125rem] font-semibold aria-pressed:bg-[var(--m-acento)] aria-pressed:text-[var(--m-sobre-acento)]"
             >
               {s.nombre}
             </button>
@@ -402,7 +406,7 @@ function Seccion({ e, id, ir }: { e: EstadoDemo; id: SeccionId; ir: (p: Pantalla
                       .join(' · ')}
                   </span>
                 </span>
-                <span className="shrink-0 rounded-full bg-[var(--m-oscuro)] px-3.5 py-2 text-[0.75rem] font-bold text-[var(--m-lima)]">
+                <span className="shrink-0 rounded-full bg-[var(--m-oscuro)] px-3.5 py-2 text-[0.75rem] font-bold text-[var(--m-acento-claro)]">
                   {APP.agregar}
                 </span>
               </button>
@@ -485,7 +489,7 @@ function Detalle({
             onAgregar(t, mitad);
             setMitad(undefined);
           }}
-          className="m-tocar sticky bottom-4 mt-6 w-full rounded-full bg-[var(--m-oscuro)] px-5 py-3.5 text-[0.875rem] font-bold text-[var(--m-lima)] disabled:opacity-40"
+          className="m-tocar sticky bottom-4 mt-6 w-full rounded-full bg-[var(--m-oscuro)] px-5 py-3.5 text-[0.875rem] font-bold text-[var(--m-acento-claro)] disabled:opacity-40"
         >
           {falta ? APP.otraMitad : APP.agregarPrecio(pesos(p.precios[t]!))}
         </button>
@@ -541,7 +545,7 @@ function Carrito({
             <button
               type="button"
               onClick={irCarta}
-              className="mt-4 rounded-full bg-[var(--m-oscuro)] px-5 py-3 text-[0.8125rem] font-bold text-[var(--m-lima)]"
+              className="mt-4 rounded-full bg-[var(--m-oscuro)] px-5 py-3 text-[0.8125rem] font-bold text-[var(--m-acento-claro)]"
             >
               {CARRITO.verCarta}
             </button>
@@ -619,7 +623,7 @@ function Carrito({
                 </>
               ) : null}
               {cot ? (
-                <p className="mt-3 flex gap-2 rounded-xl bg-[var(--m-lima-suave)] p-3 text-[0.75rem] font-medium text-[var(--m-lima-oscuro)]">
+                <p className="mt-3 flex gap-2 rounded-xl bg-[var(--m-acento-suave)] p-3 text-[0.75rem] font-medium text-[var(--m-acento-texto)]">
                   {CARRITO.demora(cot.retiro.minutosEspera, minAHhmm(cot.retiro.hora))}
                 </p>
               ) : null}
@@ -727,7 +731,7 @@ function Confirmacion({
             <button
               type="button"
               onClick={onEnviar}
-              className="m-tocar mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-[var(--m-lima)] px-5 py-3.5 text-[0.875rem] font-bold"
+              className="m-tocar mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-[var(--m-acento)] px-5 py-3.5 text-[0.875rem] font-bold text-[var(--m-sobre-acento)]"
             >
               <WhatsApp className="size-4" />
               {ENVIADO.enviar}
@@ -735,7 +739,7 @@ function Confirmacion({
           </>
         ) : (
           <div className="text-center">
-            <span className="mx-auto grid size-12 place-items-center rounded-full bg-[var(--m-lima)]">
+            <span className="mx-auto grid size-12 place-items-center rounded-full bg-[var(--m-acento)] text-[var(--m-sobre-acento)]">
               <Tilde className="size-6" />
             </span>
             <h2 className="m-titulo mt-3 text-[1.5rem]">{ENVIADO.listo}</h2>
@@ -743,7 +747,7 @@ function Confirmacion({
             <button
               type="button"
               onClick={onVerPanel}
-              className="m-tocar mt-4 w-full rounded-full bg-[var(--m-oscuro)] px-5 py-3.5 text-[0.875rem] font-bold text-[var(--m-lima)]"
+              className="m-tocar mt-4 w-full rounded-full bg-[var(--m-oscuro)] px-5 py-3.5 text-[0.875rem] font-bold text-[var(--m-acento-claro)]"
             >
               {ENVIADO.verPanel}
             </button>

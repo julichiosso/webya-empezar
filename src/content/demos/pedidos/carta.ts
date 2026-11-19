@@ -1,6 +1,6 @@
 /**
- * Carta de la demo de pedidos: las pizzas son las de la carta real de Micio's Pizzería (DEMO_SPEC del
- * sistema, 2026-11-19). Bebidas, postres y TODOS los precios son de ejemplo: la pantalla lo dice.
+ * Carta de la demo de pedidos: pizzas de una carta real de pizzería, sin el nombre del local. Bebidas,
+ * postres y TODOS los precios son de ejemplo: la pantalla lo dice.
  */
 
 export type Tamanio = 'xl' | 'media_xl' | 'clasica' | 'media_clasica' | 'unico';

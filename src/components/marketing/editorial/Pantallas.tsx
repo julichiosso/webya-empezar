@@ -31,10 +31,15 @@ function BarraEstado({ fondo, claro }: { fondo?: string; claro?: boolean }) {
           <rect x="10" y="3" width="3" height="9" rx="0.8" />
           <rect x="15" y="0" width="3" height="12" rx="0.8" />
         </svg>
-        <svg viewBox="0 0 16 12" className="h-full w-auto" fill="currentColor">
-          <path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.3-1.4A10.6 10.6 0 0 0 8 .3 10.6 10.6 0 0 0 .7 3.2L2 4.6a8.7 8.7 0 0 1 6-2.4Z" />
-          <path d="M8 5.6c1.4 0 2.6.5 3.6 1.4l1.3-1.4A7.1 7.1 0 0 0 8 3.7c-1.9 0-3.6.7-4.9 1.9L4.4 7A5.2 5.2 0 0 1 8 5.6Z" />
-          <path d="M8 9.1c.5 0 1 .2 1.3.5L8 11.7 6.7 9.6c.3-.3.8-.5 1.3-.5Z" />
+        <svg viewBox="0 0 16 12" className="h-full w-auto">
+          <path
+            d="M.93 4.43a10 10 0 0 1 14.14 0M3.4 6.9a6.5 6.5 0 0 1 9.2 0"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+          />
+          <path d="M8 11.5 5.88 9.38a3 3 0 0 1 4.24 0z" fill="currentColor" />
         </svg>
         <svg viewBox="0 0 27 13" className="h-full w-auto">
           <rect

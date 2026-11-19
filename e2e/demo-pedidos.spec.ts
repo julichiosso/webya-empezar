@@ -1,5 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
+import { BARRA_DEMOS } from '../src/content/demos/hub';
 import { APP, CARRITO, COMANDA, ENVIADO, PANEL, VISTAS } from '../src/content/demos/pedidos/ui';
+
+/** Entra a la demo y pasa el aviso "Esto es una demo" (se abre solo la primera vez). */
+async function entrar(page: Page, ruta: string) {
+  await page.goto(ruta);
+  await page.getByRole('button', { name: BARRA_DEMOS.aviso.cerrar }).click();
+}
 
 /**
  * Demo del sistema de pedidos: el pedido que arma el cliente entra al panel del dueño en su franja y
@@ -8,8 +15,11 @@ import { APP, CARRITO, COMANDA, ENVIADO, PANEL, VISTAS } from '../src/content/de
 const escritorio = (page: Page) => (page.viewportSize()?.width ?? 0) >= 1024;
 
 async function pedir(page: Page) {
-  await page.goto('/demo/pedidos');
-  await page.getByRole('button', { name: /Muzzarella/ }).first().click();
+  await entrar(page, '/demo/pedidos');
+  await page
+    .getByRole('button', { name: /Muzzarella/ })
+    .first()
+    .click();
   await page.getByRole('button', { name: /Agregar al carrito/ }).click();
   await page.getByRole('button', { name: /Ver el carrito/ }).click();
   await expect(page.getByText(/Demora estimada/)).toBeVisible();
@@ -40,7 +50,7 @@ test('el pedido del cliente entra al panel y sale la comanda', async ({ page }) 
 });
 
 test('cerrar el local desde el panel se ve en la app del cliente', async ({ page }) => {
-  await page.goto('/demo/pedidos');
+  await entrar(page, '/demo/pedidos');
   if (!escritorio(page)) await page.getByRole('button', { name: VISTAS.duenio }).click();
   await page.getByRole('switch', { name: PANEL.localAbierto }).click();
   if (!escritorio(page)) await page.getByRole('button', { name: VISTAS.cliente }).click();
@@ -50,4 +60,20 @@ test('cerrar el local desde el panel se ve en la app del cliente', async ({ page
 test('/demo/gastronomia lleva a la demo nueva', async ({ page }) => {
   await page.goto('/demo/gastronomia');
   await expect(page).toHaveURL(/\/demo\/pedidos$/);
+});
+
+test('la demo avisa que es una demo y qué más hace el sistema real', async ({ page }) => {
+  await page.goto('/demo/pedidos');
+  const aviso = page.getByRole('region', { name: BARRA_DEMOS.aviso.titulo });
+  await expect(aviso).toContainText(BARRA_DEMOS.aviso.ademas);
+  await page.getByRole('button', { name: BARRA_DEMOS.aviso.cerrar }).click();
+  await expect(aviso).toBeHidden();
+  await page.getByRole('button', { name: BARRA_DEMOS.infoAria }).click();
+  await expect(aviso).toBeVisible();
+});
+
+test('desde /demo se elige qué sistema probar', async ({ page }) => {
+  await page.goto('/demo');
+  await page.getByRole('link', { name: /Turnos con bot/ }).click();
+  await expect(page).toHaveURL(/\/demo\/peluqueria$/);
 });

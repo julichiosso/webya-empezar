@@ -1,6 +1,6 @@
 /**
- * Textos de la demo del sistema de pedidos (/demo/pedidos): la app del cliente como la de Micio's
- * Pizzería, el panel del dueño y la comanda. Todo pasa en el navegador: no se envía nada.
+ * Textos de la demo del sistema de pedidos (/demo/pedidos): la app del cliente, el panel del local y la
+ * comanda. Es el producto, sin nombre de cliente (el caso real se muestra aparte). No se envía nada.
  */
 
 export const pesos = (n: number) =>
@@ -9,7 +9,7 @@ export const pesos = (n: number) =>
 export const PAGINA_PEDIDOS = {
   titulo: 'Demo del sistema de pedidos para pizzerías',
   descripcion:
-    'Probá el sistema de pedidos de Micio’s Pizzería: pedí desde el celular, elegí la franja de retiro y mirá cómo entra el pedido al panel del dueño.',
+    'Probá el sistema de pedidos para pizzerías: pedí desde el celular, elegí la franja de retiro y mirá cómo entra el pedido al panel del local.',
   og: {
     sitio: 'Webya',
     titulo: (t: string) => `${t} · Webya`,
@@ -17,14 +17,7 @@ export const PAGINA_PEDIDOS = {
 } as const;
 
 export const BARRA_DEMO = {
-  volver: 'Volver a Webya',
   titulo: 'Demo del sistema de pedidos',
-  tituloCorto: 'Demo de pedidos',
-  bajada: 'El sistema de Micio’s Pizzería. Carta real; bebidas, postres y precios de ejemplo.',
-  reiniciar: 'Reiniciar',
-  reiniciarAria: 'Reiniciar la demo',
-  cta: 'Quiero esto para mi pizzería',
-  ctaCorto: 'Lo quiero',
 } as const;
 
 export const GUIA = {
@@ -37,6 +30,12 @@ export const GUIA = {
   hecho: 'Hecho',
 } as const;
 
+/** Rótulos de escritorio sobre cada lado de la demo. */
+export const LADOS = {
+  cliente: 'Así lo ve tu cliente',
+  panel: 'Así lo manejás vos',
+} as const;
+
 export const VISTAS = {
   aria: 'Qué pantalla ver',
   cliente: 'Cliente',
@@ -45,7 +44,7 @@ export const VISTAS = {
 } as const;
 
 export const APP = {
-  marca: 'MICIO’S',
+  marca: 'TU PIZZERÍA',
   carritoAria: (n: number | string) => `Ver el carrito: ${n} productos`,
   takeAway: 'Take away',
   titulo: ['Pedí tu pizza', 'y retirala sin esperar.'],
@@ -66,7 +65,7 @@ export const APP = {
   conMitad: (otra: string) => `Mitad y mitad con ${otra}`,
   verPedido: (n: number | string, total: string) => `Ver mi pedido (${n}) · ${total}`,
   inicioAria: 'Ir al inicio',
-  avisoEjemplo: 'Carta real de Micio’s. Bebidas, postres y precios de ejemplo.',
+  avisoEjemplo: 'Carta, precios y pedidos de ejemplo.',
 } as const;
 
 export const CARRITO = {
@@ -93,7 +92,7 @@ export const CARRITO = {
 } as const;
 
 export const ENVIADO = {
-  titulo: 'Así le llega el pedido a Micio’s',
+  titulo: 'Así le llega el pedido al local',
   texto: 'En el sistema real se abre WhatsApp con este mensaje. Acá no se envía nada.',
   enviar: 'Enviar (simulado)',
   listo: '¡Pedido enviado!',
@@ -111,7 +110,7 @@ export function mensajeWhatsapp(d: {
   retiro: string;
 }) {
   return [
-    `Hola Micio’s, soy ${d.nombre}. Quiero hacer este pedido:`,
+    `Hola, soy ${d.nombre}. Quiero hacer este pedido:`,
     ...d.lineas.map((l) => `• ${l}`),
     `Total: ${d.total}`,
     `Retiro: ${d.retiro}`,
@@ -122,7 +121,7 @@ export const lineaItem = (cantidad: number | string, nombre: string, tamanio: st
   `${cantidad}x ${nombre} (${tamanio})`;
 
 export const PANEL = {
-  marca: 'Panel de Micio’s',
+  marca: 'Panel del local',
   turnos: 'Turnos',
   productos: 'Productos',
   pestanasAria: 'Secciones del panel',
@@ -159,7 +158,7 @@ export const PANEL = {
 } as const;
 
 export const COMANDA = {
-  marca: 'MICIO’S PIZZERÍA',
+  marca: 'TU PIZZERÍA',
   titulo: (id: number | string) => `Comanda #${id}`,
   cliente: 'Cliente',
   retira: 'Retira',
