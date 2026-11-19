@@ -14,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     { url: `${u}/demo`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${u}/demo/pedidos`, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${u}/demo/peluqueria`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${u}/demo/turnos`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${u}/privacidad`, changeFrequency: 'yearly', priority: 0.2 },
     { url: `${u}/terminos`, changeFrequency: 'yearly', priority: 0.2 },
   ];

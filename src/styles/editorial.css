@@ -104,6 +104,12 @@
   font-weight: 650;
   text-wrap: balance;
 }
+/* En el celular el titular del hero entra en tres líneas y deja lugar a los botones. */
+@media (max-width: 39.99rem) {
+  .e-hero-titulo {
+    font-size: clamp(2rem, 1.2rem + 4vw, 2.5rem);
+  }
+}
 .e-h2 {
   font-size: clamp(2.125rem, 1.15rem + 4.2vw, 5.25rem);
   line-height: 0.95;
@@ -750,4 +756,30 @@
   ::view-transition-new(*) {
     animation: none !important;
   }
+}
+
+/*
+ * Escenario de las demos (escritorio): guía, teléfono y panel del mismo alto, siempre dentro de la
+ * pantalla (barra de la demo 3rem, rótulos 1.75rem y 3rem de aire).
+ */
+.d-escenario {
+  --d-alto: clamp(28rem, calc(100svh - 7.75rem), 46rem);
+}
+.d-escenario .d-tel {
+  width: calc(var(--d-alto) / 2.1);
+  max-width: none;
+}
+.d-escenario .d-ventana {
+  height: var(--d-alto);
+}
+/* Adentro del teléfono no se ve barra de scroll (como en el celular); en los paneles, fina. */
+.d-sin-barra {
+  scrollbar-width: none;
+}
+.d-sin-barra::-webkit-scrollbar {
+  display: none;
+}
+.d-barra-fina {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(0 0 0 / 0.2) transparent;
 }

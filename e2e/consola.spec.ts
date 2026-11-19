@@ -9,7 +9,7 @@ for (const ruta of [
   '/privacidad',
   '/demo',
   '/demo/pedidos',
-  '/demo/peluqueria',
+  '/demo/turnos',
 ]) {
   test(`${ruta}: consola sin errores ni advertencias`, async ({ page }) => {
     const mensajes: string[] = [];

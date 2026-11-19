@@ -166,3 +166,40 @@ queda lo que funciona por debajo o suma prueba real.
 - Rótulos de escritorio: "Así lo ve tu cliente" sobre el teléfono y "Así lo manejás vos" sobre el panel. Cortos.
 - La tarjeta del caso real no es un link entero: el borde aparece al pasar el mouse y el link es solo el dominio,
   que se subraya al pararse encima.
+
+## Demo de turnos con el sistema real (2026-11-19)
+
+- Base: `DEMO_SPEC_TURNOS.md` (secciones 1 a 5) extraído del sistema real. Reemplaza la demo vieja del bot de
+  peluquería (`/demo/peluqueria` redirige a `/demo/turnos`); se borraron su feature, su contenido y su dominio.
+- Cliente: portada del negocio, servicio con su próximo libre, profesional ("Cualquiera" primero), día y hora
+  (lo más cercano, días con lugar, mañana/tarde/noche, "Quedan N"), datos, checkout simulado de Mercado Pago
+  (aprobado, rechazado o volver), apartado de 10 minutos con contador, confirmación con aviso, calendario (.ics
+  real) y la regla de cancelación de 24 horas. "¿Lo de siempre?" después de la primera reserva.
+- Dueño: "Tu Panel" con Inicio (en la silla con la barra que avanza, la fila, atendidos, a resolver) y Agenda
+  (siete días, por profesional, huecos libres y bloqueos), hoja del turno, cobro al terminar con medio y
+  carteles con "Deshacer". La reserva nueva entra sola, confirmada, con la etiqueta "Nueva": no hay que aprobarla.
+- Lógica pura y con tests en `src/domain/reservas` (el mismo algoritmo de horarios libres del sistema real). Los
+  profesionales son una extensión de la demo, como pide el spec: cada uno con su agenda.
+- Escenario común de las demos (`EscenarioDemo`): las dos demos comparten barra, guía, teléfono escalado, panel
+  y selector del celular.
+- Pendiente: secciones 6 a 10 del spec (diseño, assets, datos de ejemplo, simulación del backend y "el sistema
+  real, además") para ajustar colores, datos y la lista de lo que la demo no muestra.
+
+## Turnos: secciones 6 a 10 del spec y hero que lleva a las demos (2026-11-19)
+
+- Demo de turnos con el diseño real (§6): tokens de color exactos, fuente del sistema, curva
+  `cubic-bezier(0.2, 0.8, 0.2, 1)`, presión al tocar (`scale(0.97)`), "pop" al elegir día u horario. Logo genérico:
+  la inicial sobre cuadrado negro (§7). Texto "Mercado Pago" en su azul y WhatsApp en su verde.
+- Datos del spec (§8): Lucía, Tomás y Martina, seis servicios, agenda de ayer a dentro de tres días con todos los
+  casos (atendido con cobro, no vino, sin seña, esperando seña con su apartado, cancelado con seña y pago sin
+  horario) y un feriado. El "hoy" de la demo es un miércoles a las 16:40, para que cada turno caiga en un día en
+  que su profesional atiende.
+- Simulación (§9): reloj de la demo que se puede adelantar ("+10 min" en el panel) para ver vencer un apartado o
+  cerrarse un turno; aviso de reserva nueva con las dos notas y la vibración del real. Quedan afuera la bandeja de
+  correos, el bot y las métricas: están en "El sistema real, además" (§10).
+- Panel: "A resolver" suma la seña de un turno cancelado; la hoja muestra la nota, "Sobre el cliente", el origen y
+  "Faltó N veces antes".
+- Hero de la home: en el celular había que scrollear mucho para llegar a algo para hacer. Ahora el CTA principal
+  es "Ver demos" (probar antes de pedir), "Armá tu sistema" queda al lado, y abajo van las dos demos directas
+  ("Probalo vos, ahora"). En el celular, título más chico y bajada corta: todo entra en la primera pantalla. Las
+  landings mantienen "Armá tu sistema" como principal.

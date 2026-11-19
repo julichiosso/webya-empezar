@@ -90,7 +90,7 @@ export function AppCliente(props: Props) {
     <div className="m-app relative h-full overflow-hidden">
       <div
         ref={scroller}
-        className="m-sin-barra absolute inset-0 overflow-y-auto overscroll-contain"
+        className="d-sin-barra absolute inset-0 overflow-y-auto overscroll-contain"
       >
         <Encabezado
           atras={pantalla.tipo !== 'inicio' ? volver : undefined}
@@ -288,7 +288,7 @@ function Inicio({ e, ahora, ir }: { e: EstadoDemo; ahora: number; ir: (p: Pantal
         </div>
       </section>
       <Rotulo>{APP.elegi}</Rotulo>
-      <ul className="m-sin-barra mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
+      <ul className="d-sin-barra mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
         {SECCIONES.map((s) => {
           const primero = PRODUCTOS.find((p) => p.seccion === s.id)!;
           return (
@@ -373,7 +373,7 @@ function Seccion({ e, id, ir }: { e: EstadoDemo; id: SeccionId; ir: (p: Pantalla
         <p className="text-[0.75rem] text-[var(--m-blanco-60)]">
           {APP.cantidadProductos(lista.length)}
         </p>
-        <div className="m-sin-barra mt-4 flex gap-2 overflow-x-auto">
+        <div className="d-sin-barra mt-4 flex gap-2 overflow-x-auto">
           {SECCIONES.map((s) => (
             <button
               key={s.id}

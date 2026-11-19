@@ -69,7 +69,7 @@ export function Turnero({ numero = 2, conCta = true }: { numero?: number; conCta
               <Boton href="#armar" armar="turnero" iman>
                 {TURNERO.cta}
               </Boton>
-              <Boton href="/demo/peluqueria" variante="secundario" externo>
+              <Boton href="/demo/turnos" variante="secundario" externo>
                 {TURNERO.demo}
               </Boton>
             </div>

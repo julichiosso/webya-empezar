@@ -1,0 +1,139 @@
+/*
+ * Demo del sistema de turnos (/demo/turnos): la estética del sistema real, blanco y negro con verde para
+ * lo libre, ámbar para lo justo y el azul de Mercado Pago solo en el pago. Los tonos de texto sobre
+ * fondos suaves están ajustados para pasar AA.
+ */
+
+.t-paleta {
+  /* Tokens del sistema real (DEMO_SPEC_TURNOS §6.1). Sin sombras: la respuesta es el movimiento. */
+  --t-fondo: #fff;
+  --t-tinta: #111;
+  --t-tinta-2: #4a4a48;
+  --t-gris: #6b6b67;
+  --t-suave: #f7f7f5;
+  --t-panel: #f7f7f5;
+  --t-papel-3: #efefec;
+  --t-linea: #e4e4e0;
+  --t-linea-2: #cfcfc9;
+  --t-verde: #17663a;
+  --t-verde-suave: #e9f4ed;
+  --t-verde-punto: #4ade80;
+  --t-ambar: #7f4c00;
+  --t-ambar-suave: #fbf2df;
+  --t-ambar-punto: #f59e0b;
+  --t-rojo: #b3261e;
+  --t-rojo-suave: #fbecea;
+  --t-mp: #007bc1;
+  --t-mp-hover: #00689f;
+  --t-mp-texto: #2d3277;
+  --t-whatsapp: #25d366;
+  --t-curva: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --t-curva-salto: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* La fuente del sistema, sin fuentes web, como el real. Números siempre tabulares. */
+.t-app,
+.t-panel {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+.t-app {
+  background: var(--t-fondo);
+  color: var(--t-tinta);
+}
+
+/* Presión: todo lo tocable se achica un poco (60 ms al apretar, 180 ms al soltar). */
+.t-app button,
+.t-panel button {
+  transition:
+    transform 180ms var(--t-curva),
+    background-color 180ms var(--t-curva),
+    border-color 180ms var(--t-curva),
+    color 180ms var(--t-curva);
+}
+.t-app button:active:not(:disabled),
+.t-panel button:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 60ms;
+}
+
+/* El día u horario elegido hace "pop". */
+@keyframes t-pop {
+  50% {
+    transform: scale(1.18);
+  }
+}
+.t-app [aria-pressed='true'].t-elegible {
+  animation: t-pop 0.36s var(--t-curva-salto);
+}
+
+/* Espera con marca: el anillo gira y el logo "respira". */
+@keyframes t-girar {
+  to {
+    transform: rotate(1turn);
+  }
+}
+@keyframes t-respirar {
+  50% {
+    transform: scale(0.92);
+    opacity: 0.75;
+  }
+}
+.t-anillo {
+  animation: t-girar 0.9s linear infinite;
+}
+.t-respira {
+  animation: t-respirar 1.8s ease-in-out infinite;
+}
+
+/* Lo nuevo entra desde abajo. */
+@keyframes t-entra {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.t-entra {
+  animation: t-entra 0.32s var(--t-curva) both;
+}
+
+/* El punto de "En vivo" y el de "lo más cercano" laten. */
+@keyframes t-late {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.t-late {
+  position: relative;
+}
+.t-late::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: inherit;
+  animation: t-late 2s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-anillo,
+  .t-respira,
+  .t-entra,
+  .t-late::after,
+  .t-app [aria-pressed='true'].t-elegible {
+    animation: none;
+  }
+  .t-app button:active:not(:disabled),
+  .t-panel button:active:not(:disabled) {
+    transform: none;
+  }
+}

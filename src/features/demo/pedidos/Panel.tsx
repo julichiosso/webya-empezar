@@ -85,7 +85,7 @@ export function Panel({ e, ahora, set, onComanda, onConfirmar, visible = true }:
     <div className="m-panel relative h-full overflow-hidden">
       <div
         ref={scroller}
-        className="m-barra-fina relative h-full overflow-y-auto overscroll-contain"
+        className="d-barra-fina relative h-full overflow-y-auto overscroll-contain"
       >
         <header className="sticky top-0 z-10 border-b border-[var(--p-linea)] bg-[var(--p-fondo)]/90 px-4 pt-4 pb-3 backdrop-blur">
           <div className="flex items-center justify-between gap-3">

@@ -26,7 +26,7 @@ for (const ruta of [
   '/privacidad',
   '/demo',
   '/demo/pedidos',
-  '/demo/peluqueria',
+  '/demo/turnos',
 ]) {
   test(`${ruta} sin violaciones WCAG AA`, async ({ page }) => {
     await page.goto(ruta, { waitUntil: 'networkidle' });

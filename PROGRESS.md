@@ -15,6 +15,8 @@
 | —    | Secciones de relleno fuera (marquesina, cifras, rubros, cómo trabajo, preguntas) y captura real del aviso push                                                     | hecho              |
 | —    | Merge con `origin/main`: medición, avisos y demo de peluquería adentro; legado fuera                                                                               | hecho              |
 | —    | Demo `/demo/pedidos` con el sistema real de Micio's (reemplaza la de gastronomía)                                                                                  | hecho              |
+| —    | Demo `/demo/turnos` con el sistema real (secciones 1 a 5 del spec)                                                                                                 | hecho              |
+| —    | Spec de turnos, secciones 6 a 10                                                                                                                                   | esperando a Julián |
 | —    | Migraciones de Supabase (`AUDIT.md` §5)                                                                                                                            | esperando a Julián |
 | —    | Fase 1.5 (guardar el brief) y fase 2 self-service                                                                                                                  | `ROADMAP.md`       |
 

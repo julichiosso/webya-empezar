@@ -74,6 +74,6 @@ test('la demo avisa que es una demo y qué más hace el sistema real', async ({ 
 
 test('desde /demo se elige qué sistema probar', async ({ page }) => {
   await page.goto('/demo');
-  await page.getByRole('link', { name: /Turnos con bot/ }).click();
-  await expect(page).toHaveURL(/\/demo\/peluqueria$/);
+  await page.getByRole('link', { name: /Turnos con seña/ }).click();
+  await expect(page).toHaveURL(/\/demo\/turnos$/);
 });

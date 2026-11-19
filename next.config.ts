@@ -46,6 +46,8 @@ const config: NextConfig = {
       { source: '/empezar', destination: '/', permanent: false },
       // La demo de gastronomía genérica se reemplazó por la del sistema real de Micio's.
       { source: '/demo/gastronomia', destination: '/demo/pedidos', permanent: false },
+      // La demo del bot de peluquería se reemplazó por la del turnero con seña (sistema real).
+      { source: '/demo/peluqueria', destination: '/demo/turnos', permanent: false },
     ];
   },
   images: {

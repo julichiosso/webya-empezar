@@ -8,7 +8,6 @@ import { Pedidos } from '@/components/marketing/editorial/Pedidos';
 import { Pie } from '@/components/marketing/editorial/Pie';
 import { Proyectos } from '@/components/marketing/editorial/Proyectos';
 import { Turnero } from '@/components/marketing/editorial/Turnero';
-import { CTA } from '@/content/home';
 import { SEO_SITIO, jsonLdNegocio, serializarLd } from '@/content/seo';
 import { SeccionConfigurador } from '@/features/configurador/SeccionConfigurador';
 import { siteConfig } from '@/lib/site-config';
@@ -58,7 +57,7 @@ export default function Inicio() {
       ))}
       <Encabezado />
       <main id={ID_PRINCIPAL} tabIndex={-1} className="outline-none">
-        <Hero secundario={{ href: '/demo', texto: CTA.verDemo, externo: true }} />
+        <Hero demos />
         {/*
           Cada capítulo en su propio límite de Suspense: React hidrata por partes y cede el hilo entre
           una y otra, en lugar de una sola tarea larga sobre toda la página (TBT).

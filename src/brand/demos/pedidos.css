@@ -107,30 +107,7 @@
   color: #000;
 }
 
-/* Escenario de escritorio: el teléfono y el panel con el mismo alto, siempre dentro de la pantalla
-   (barra de la demo 3rem, rótulos 1.75rem y 3rem de aire). */
-.m-escenario {
-  --m-alto: clamp(28rem, calc(100svh - 7.75rem), 46rem);
-}
-.m-escenario .m-tel {
-  width: calc(var(--m-alto) / 2.1);
-  max-width: none;
-}
-.m-escenario .m-ventana {
-  height: var(--m-alto);
-}
 
-/* Adentro del teléfono no se ve barra de scroll (como en el celular); en el panel, fina. */
-.m-sin-barra {
-  scrollbar-width: none;
-}
-.m-sin-barra::-webkit-scrollbar {
-  display: none;
-}
-.m-barra-fina {
-  scrollbar-width: thin;
-  scrollbar-color: rgb(0 0 0 / 0.2) transparent;
-}
 
 /* Lo nuevo aparece desde abajo; el contador del carrito salta (DEMO_SPEC §5.5). */
 @keyframes m-item {

@@ -19,6 +19,7 @@ export const CTA = {
   hablar: 'Hablá con Julián',
   proyectos: 'Ver proyectos reales',
   verDemo: 'Ver demo',
+  verDemos: 'Ver demos',
   pestana: ' (se abre en otra pestaña)',
 } as const;
 
@@ -39,7 +40,11 @@ export const HERO = {
   titulo: ['Tu tienda, tus pedidos,', 'tus turnos.', 'Armados en serio.'],
   bajada:
     'Armo sistemas para comercios: tiendas online, pedidos para pizzerías y turneros con seña. Los usás desde el celular y hablás directo con quien los programa.',
+  /** En el celular: lo mismo en una línea, para que los botones entren en la primera pantalla. */
+  bajadaCorta: 'Pedidos, turnos y tiendas online. Hablás directo con quien los programa.',
   disponibilidad: 'Tomando proyectos nuevos',
+  probar: 'Probalo vos, ahora',
+  abrir: ' (se abre en otra pestaña)',
 } as const;
 
 export const SECCIONES = {
