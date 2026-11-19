@@ -29,7 +29,7 @@ export default function DemoGastronomiaPage() {
         encabezado={
           <>
             <Link
-              href="/empezar"
+              href="/"
               aria-label={PAGINA_DEMO.ariaLogo}
               className="inline-flex min-h-tap items-center"
             >

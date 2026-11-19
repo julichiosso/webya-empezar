@@ -13,15 +13,15 @@ export interface TextoLegal {
 }
 
 export const LEGAL_UI = {
-  volver: 'Volver a WebYa',
+  volver: 'Volver al inicio',
   contactoPrefijo: 'Escribinos a',
 } as const;
 
 export const PRIVACIDAD: TextoLegal = {
   titulo: 'Política de privacidad',
-  meta: 'Qué datos guardamos en WebYa, para qué y cómo pedir que los borremos.',
+  meta: 'Qué datos guardamos en Webya, para qué y cómo pedir que los borremos.',
   intro:
-    'WebYa usa tus datos solo para armar y mejorar tu negocio online. No los vendemos ni los compartimos con otras empresas.',
+    'Webya usa tus datos solo para armar y mejorar tu negocio online. No los vendemos ni los compartimos con otras empresas.',
   secciones: [
     {
       titulo: 'Qué datos guardamos',
@@ -60,11 +60,11 @@ export const PRIVACIDAD: TextoLegal = {
 
 export const TERMINOS: TextoLegal = {
   titulo: 'Términos de uso',
-  meta: 'Condiciones para usar WebYa.',
-  intro: 'Al usar WebYa aceptás estas condiciones. Son pocas y simples.',
+  meta: 'Condiciones para usar Webya.',
+  intro: 'Al usar Webya aceptás estas condiciones. Son pocas y simples.',
   secciones: [
     {
-      titulo: 'Qué es WebYa',
+      titulo: 'Qué es Webya',
       parrafos: [
         'Un servicio para crear el sitio y las herramientas digitales de un negocio. Hoy el rubro más avanzado es gastronomía.',
       ],
@@ -78,12 +78,14 @@ export const TERMINOS: TextoLegal = {
     {
       titulo: 'Uso permitido',
       parrafos: [
-        'No podés usar WebYa para vender cosas ilegales, engañar a otras personas ni dañar el servicio.',
+        'No podés usar Webya para vender cosas ilegales, engañar a otras personas ni dañar el servicio.',
       ],
     },
     {
       titulo: 'Precios',
-      parrafos: ['Te informamos el precio antes de que publiques. No cobramos nada sin tu acuerdo.'],
+      parrafos: [
+        'Te informamos el precio antes de que publiques. No cobramos nada sin tu acuerdo.',
+      ],
     },
     {
       titulo: 'Disponibilidad',

@@ -81,7 +81,7 @@ export const CURVA = {
 export const RADIO = { s: '0.75rem', m: '1rem', l: '1.5rem' } as const;
 
 export const FUENTE_SANS =
-  "var(--font-outfit), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+  "var(--font-geist), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
 
 /** Escala tipográfica fluida: [tamaño, interlineado, tracking]. Cuerpo ≥ 16 px (evita zoom de iOS). */
 export const TIPO = {

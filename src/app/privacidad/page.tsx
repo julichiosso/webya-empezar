@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { Encabezado, ID_PRINCIPAL } from '@/components/marketing/editorial/Encabezado';
+import { Pie } from '@/components/marketing/editorial/Pie';
 import { PaginaLegal } from '@/components/patterns/PaginaLegal';
 import { PRIVACIDAD } from '@/content/legal';
 
@@ -9,5 +11,13 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacidadPage() {
-  return <PaginaLegal texto={PRIVACIDAD} />;
+  return (
+    <>
+      <Encabezado cta="/#armar" />
+      <main id={ID_PRINCIPAL} tabIndex={-1} className="outline-none">
+        <PaginaLegal texto={PRIVACIDAD} />
+      </main>
+      <Pie />
+    </>
+  );
 }

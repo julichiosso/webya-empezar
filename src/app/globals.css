@@ -7,21 +7,13 @@
  */
 @import '../brand/tokens/tokens.css';
 @import '../brand/motion/motion.css';
+/* Animaciones de las ilustraciones (cargando, error, 404): 1 KB, mejor en la hoja global que precargada aparte. */
+@import '../brand/ilustracion/movimiento.css';
+@import '../styles/editorial.css';
 
 /* Escritorio bajo (notebooks de 720-800 px de alto): la pantalla 1 de /empezar se compacta para
    entrar entera arriba del pliegue. Se usa como `lg:bajo:…`. */
 @custom-variant bajo (@media (max-height: 820px));
-
-/* Efecto, no color: grano apenas perceptible (máscara de ruido fractal teñida con --fg). */
-:root {
-  --noise-opacity: 0.035;
-  /* Ruido fractal como máscara: el canal alfa sale del canal rojo del ruido. */
-  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1.4 0 0 0 -.2'/%3E%3C/filter%3E%3Crect width='128' height='128' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-:root[data-theme='light'] {
-  --noise-opacity: 0.06;
-}
 
 @layer base {
   html {
@@ -32,7 +24,7 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     scroll-behavior: smooth;
-    scroll-padding-top: 1.5rem;
+    scroll-padding-top: 4.5rem;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -44,23 +36,6 @@
     font-synthesis: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  /*
-   * Grano apenas perceptible. Máscara de alfa (tile de 128px) teñida con el color de texto:
-   * funciona en oscuro y en claro sin tocar el color de fondo. Es estático (no se anima)
-   * y queda detrás del contenido.
-   */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background: var(--fg);
-    opacity: var(--noise-opacity);
-    -webkit-mask-image: var(--noise);
-    mask-image: var(--noise);
   }
 
   ::selection {

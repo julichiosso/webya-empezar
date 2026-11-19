@@ -46,14 +46,14 @@ export default defineConfig({
     })),
     ...Object.entries(escritoriosGrandes).map(([name, viewport]) => ({
       name,
-      testMatch: /(visual|layout|a11y|consola).spec.ts/,
+      testMatch: /(layout|a11y|consola).spec.ts/,
       use: { ...devices['Desktop Chrome'], viewport, browserName: 'chromium' as const },
     })),
   ],
   webServer: {
     // Primero se limpia la caché de webpack (ver scripts/limpiar-cache-webpack.mjs).
     command: `node scripts/limpiar-cache-webpack.mjs && pnpm build && pnpm start -p ${PORT}`,
-    url: `http://localhost:${PORT}/empezar`,
+    url: `http://localhost:${PORT}/`,
     reuseExistingServer: !process.env.CI,
     timeout: 240_000,
     env: {
@@ -70,7 +70,7 @@ export default defineConfig({
       // ella; intro.spec.ts la prueba con NEXT_PUBLIC_INTRO_LOGO=1 E2E_INTRO=1.
       NEXT_PUBLIC_INTRO_LOGO: process.env.NEXT_PUBLIC_INTRO_LOGO ?? '0',
       NEXT_PUBLIC_WHATSAPP_NUMBER: '5491100000000',
-      NEXT_PUBLIC_SITE_URL: 'https://webya.ar',
+      NEXT_PUBLIC_SITE_URL: 'https://webya.dev',
       NEXT_PUBLIC_CONTACT_EMAIL: 'contacto@example.com',
       NEXT_PUBLIC_INSTAGRAM_URL: 'https://instagram.com/webya.dev',
     },

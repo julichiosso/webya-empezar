@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { conMuesca, ENCASTRE, GRILLA_DIBUJO } from '../grilla';
 import type { EstadoId } from './ids';
-import '../movimiento.css';
 
 /**
  * Estados con personalidad, en el lenguaje Encastre (ver ../LEEME.md): lo que falta es un hueco

@@ -293,3 +293,15 @@ export function combinacionesSeccion(s: SuperficieMedida): Combinacion[] {
     c('error sobre tarjeta', s.danger, s.superficie),
   ];
 }
+
+/**
+ * Sistema editorial (negro y blanco + un acento funcional). En CSS viven en src/styles/editorial.css
+ * como --e-*; acá están para lo que no tiene CSS (imagen Open Graph, íconos generados).
+ */
+export const EDITORIAL = {
+  tinta: '#0a0a0a',
+  blanco: '#fafafa',
+  gris: '#a1a1a1',
+  linea: '#262626',
+  lima: '#c6f135',
+} as const;

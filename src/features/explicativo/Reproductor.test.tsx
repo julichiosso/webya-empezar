@@ -71,7 +71,7 @@ describe('Reproductor del video explicativo', () => {
     );
     expect(screen.getByRole('link', { name: 'Quiero el mío' })).toHaveAttribute(
       'href',
-      '/empezar#wizard',
+      '/pizzerias#armar',
     );
     act(() => {
       vi.advanceTimersByTime(60_000);

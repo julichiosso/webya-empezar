@@ -1,7 +1,6 @@
 import { GRILLA_DIBUJO, TRAZO } from '../grilla';
 import { ESCENA_GENERICA, ESCENAS } from './escenas';
 import { esEscenaRubro } from './ids';
-import '../movimiento.css';
 
 interface IlustracionRubroProps {
   /** Id del rubro (content/rubros). Uno desconocido dibuja el genérico. */

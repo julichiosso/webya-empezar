@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 /** Headers de seguridad y CSP fija con SRI (docs/adr/0001-csp-fija-con-sri.md). */
-for (const ruta of ['/empezar', '/demo/gastronomia']) {
+for (const ruta of ['/', '/turnero', '/demo/gastronomia']) {
   test(`${ruta}: CSP fija y headers de seguridad`, async ({ request }) => {
     const res = await request.get(ruta);
     const h = res.headers();
@@ -30,9 +30,9 @@ test('la CSP no bloquea nada al usar la página', async ({ page }) => {
   page.on('console', (m) => {
     if (/Content Security Policy|Refused to/i.test(m.text())) violaciones.push(m.text());
   });
-  await page.goto('/empezar');
-  // Tocar un rubro descarga el wizard (y con él, zod y motion).
-  await page.locator('#wizard [data-rubro="comercio"]').click();
+  await page.goto('/');
+  // Usar el configurador (la isla interactiva de la home).
+  await page.locator('#armar').getByText('Tienda online', { exact: true }).click();
   await page.waitForLoadState('networkidle');
   await page.goto('/demo/gastronomia');
   await page.waitForLoadState('networkidle');

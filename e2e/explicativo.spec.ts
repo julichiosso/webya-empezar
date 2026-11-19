@@ -33,7 +33,7 @@ test('desde la demo: se abre, muestra subtítulos y capítulos, y cierra con Esc
   await expect(boton(page)).toBeFocused();
 });
 
-test('la última escena lleva al wizard y cierra el video', async ({ page }) => {
+test('la última escena lleva al configurador y cierra el video', async ({ page }) => {
   await page.goto('/demo/gastronomia');
   await hidratado(page);
   await boton(page).click();
@@ -42,7 +42,7 @@ test('la última escena lleva al wizard y cierra el video', async ({ page }) => 
     .click();
   await video(page).getByRole('link', { name: 'Quiero el mío' }).click();
   await expect(video(page)).toBeHidden();
-  await expect(page).toHaveURL(/#wizard$/);
+  await expect(page).toHaveURL(/\/pizzerias#armar$/);
 });
 
 test('desde la demo también se abre', async ({ page }) => {

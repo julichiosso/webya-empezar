@@ -1,46 +1,47 @@
+import Link from 'next/link';
 import { LEGAL_UI, type TextoLegal } from '@/content/legal';
 import { siteConfig } from '@/lib/site-config';
 
-/** Página de texto corrido (privacidad, términos): crema, una columna, volver a /empezar. */
+/**
+ * Página de texto corrido (privacidad, términos) en el sistema editorial: fondo blanco, una columna
+ * angosta para leer cómodo. La página (app) le pone el header y el pie del sitio alrededor.
+ */
 export function PaginaLegal({ texto }: { texto: TextoLegal }) {
   const mail = siteConfig.contactEmail;
   return (
-    <div className="papel min-h-svh bg-seccion-crema text-seccion-crema-fg">
-      <main className="mx-auto w-full max-w-prose px-4 py-12 lg:py-20">
-        <a
-          href="/empezar"
-          className="inline-flex min-h-tap items-center text-small underline underline-offset-4"
-        >
-          {LEGAL_UI.volver}
-        </a>
-        <h1 className="mt-6 text-display font-semibold text-balance">{texto.titulo}</h1>
-        <p className="mt-8">{texto.intro}</p>
-        {texto.secciones.map((s) => (
-          <section key={s.titulo} className="mt-8">
-            <h2 className="text-title font-semibold">{s.titulo}</h2>
-            {s.parrafos?.map((p) => (
-              <p key={p} className="mt-3">
-                {p}
-              </p>
-            ))}
-            {s.lista && (
-              <ul className="mt-3 list-disc pl-6">
-                {s.lista.map((li) => (
-                  <li key={li} className="mt-2">
-                    {li}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        ))}
-        <p className="mt-8">
-          {LEGAL_UI.contactoPrefijo}{' '}
-          <a href={`mailto:${mail}`} className="underline underline-offset-4">
-            {mail}
-          </a>
-        </p>
-      </main>
+    <div className="tono-claro">
+      <div className="e-wrap py-14 md:py-24">
+        <div className="mx-auto max-w-[68ch]">
+          <Link href="/" className="e-link e-link-alto e-chico text-ed-muted">
+            {LEGAL_UI.volver}
+          </Link>
+          <h1 className="e-h2 mt-6">{texto.titulo}</h1>
+          <p className="e-lead mt-8">{texto.intro}</p>
+          {texto.secciones.map((s) => (
+            <section key={s.titulo} className="mt-12 border-t border-ed-line pt-8">
+              <h2 className="e-h3">{s.titulo}</h2>
+              {s.parrafos?.map((p) => (
+                <p key={p} className="e-cuerpo mt-4 text-ed-muted">
+                  {p}
+                </p>
+              ))}
+              {s.lista && (
+                <ul className="e-cuerpo mt-4 list-disc space-y-2 pl-6 text-ed-muted">
+                  {s.lista.map((li) => (
+                    <li key={li}>{li}</li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          ))}
+          <p className="e-cuerpo mt-12 border-t border-ed-line pt-8">
+            {LEGAL_UI.contactoPrefijo}{' '}
+            <a href={`mailto:${mail}`} className="underline underline-offset-4">
+              {mail}
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

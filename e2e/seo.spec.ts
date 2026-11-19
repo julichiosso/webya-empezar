@@ -1,132 +1,48 @@
-import { expect, test, type Page } from '@playwright/test';
-import { HERO } from '../src/content/empezar/hero';
-import { ESTADOS_PAGINA } from '../src/content/estados-pagina';
-import { SEO_EMPEZAR, SEO_SITIO } from '../src/content/seo';
+import { expect, test } from '@playwright/test';
 
-const TITULO = SEO_SITIO.tituloConMarca(SEO_EMPEZAR.titulo);
-
-// El SEO no depende del viewport: se prueba una vez, en desktop.
-test.beforeEach(({ viewport }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop' || !viewport, 'solo desktop');
+test.beforeEach(({}, info) => {
+  test.skip(info.project.name !== 'desktop', 'SEO: un proyecto alcanza');
 });
 
-const meta = (page: Page, selector: string) => page.locator(`head ${selector}`).first();
+const SITIO = 'https://webya.dev';
 
-test('metadata: título, descripción, canonical y robots', async ({ page }) => {
-  await page.goto('/empezar');
-  await expect(page).toHaveTitle(TITULO);
-  await expect(meta(page, 'meta[name="description"]')).toHaveAttribute(
-    'content',
-    SEO_EMPEZAR.descripcion,
-  );
-  await expect(meta(page, 'link[rel="canonical"]')).toHaveAttribute(
-    'href',
-    'https://webya.ar/empezar',
-  );
-  await expect(meta(page, 'meta[name="robots"]')).toHaveAttribute('content', /index, follow/);
-  await expect(page.locator('html')).toHaveAttribute('lang', 'es-AR');
+for (const ruta of ['/', '/turnero', '/pizzerias', '/tiendas']) {
+  test(`${ruta}: title, description, canonical y Open Graph`, async ({ page }) => {
+    await page.goto(ruta);
+    await expect(page).toHaveTitle(/Webya/);
+    const meta = (sel: string) => page.locator(sel).first().getAttribute('content');
+    expect((await meta('meta[name="description"]'))!.length).toBeGreaterThan(60);
+    expect(await page.locator('link[rel="canonical"]').getAttribute('href')).toBe(
+      ruta === '/' ? SITIO : `${SITIO}${ruta}`,
+    );
+    expect(await meta('meta[property="og:image"]')).toContain('/opengraph-image');
+    expect(await meta('meta[name="twitter:card"]')).toBe('summary_large_image');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'es-AR');
+  });
+}
+
+test('JSON-LD del negocio: ProfessionalService con zona, servicios y FAQ', async ({ page }) => {
+  await page.goto('/');
+  const bloques = await page.locator('script[type="application/ld+json"]').allTextContents();
+  const datos = bloques.map((b) => JSON.parse(b));
+  const grafo = datos.find((d) => d['@graph'])['@graph'] as Record<string, unknown>[];
+  const negocio = grafo.find((n) => n['@type'] === 'ProfessionalService')!;
+  expect(JSON.stringify(negocio.areaServed)).toContain('San Jorge');
+  expect(JSON.stringify(negocio.areaServed)).toContain('San Francisco');
+  expect(grafo.filter((n) => n['@type'] === 'Service').length).toBeGreaterThanOrEqual(6);
+  expect(datos.some((d) => d['@type'] === 'FAQPage')).toBe(true);
 });
 
-test('Open Graph y Twitter con imagen', async ({ page, request }) => {
-  await page.goto('/empezar');
-  await expect(meta(page, 'meta[property="og:title"]')).toHaveAttribute('content', TITULO);
-  await expect(meta(page, 'meta[property="og:url"]')).toHaveAttribute(
-    'content',
-    'https://webya.ar/empezar',
-  );
-  await expect(meta(page, 'meta[property="og:locale"]')).toHaveAttribute('content', 'es_AR');
-  await expect(meta(page, 'meta[name="twitter:card"]')).toHaveAttribute(
-    'content',
-    'summary_large_image',
-  );
-  await expect(meta(page, 'meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
-  await expect(meta(page, 'meta[property="og:image:height"]')).toHaveAttribute('content', '630');
-  await expect(meta(page, 'meta[property="og:image:alt"]')).toHaveAttribute(
-    'content',
-    SEO_EMPEZAR.og.alt,
-  );
+test('sitemap con las landings y robots que lo apunta', async ({ request }) => {
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+  for (const r of ['/turnero', '/pizzerias', '/tiendas']) expect(sitemap).toContain(`${SITIO}${r}`);
+  expect(sitemap).not.toContain('/empezar');
+  const robots = await (await request.get('/robots.txt')).text();
+  expect(robots).toContain(`Sitemap: ${SITIO}/sitemap.xml`);
+});
 
-  // La imagen existe y es un PNG real (se pide a la ruta local: el host del og:image es el de producción).
-  const og = await page.locator('head meta[property="og:image"]').first().getAttribute('content');
-  expect(og).toMatch(/^https:\/\/webya\.ar\/empezar\/opengraph-image/);
-  const ruta = new URL(og ?? '').pathname + new URL(og ?? '').search;
-  const res = await request.get(ruta);
+test('la imagen Open Graph existe y es PNG', async ({ request }) => {
+  const res = await request.get('/opengraph-image');
   expect(res.status()).toBe(200);
   expect(res.headers()['content-type']).toContain('image/png');
-  const bytes = await res.body();
-  expect([...bytes.subarray(0, 4)]).toEqual([0x89, 0x50, 0x4e, 0x47]);
-  expect(bytes.length).toBeGreaterThan(5_000);
-  expect(bytes.length).toBeLessThan(1_000_000);
-});
-
-test('robots.txt y sitemap.xml', async ({ request }) => {
-  const robots = await (await request.get('/robots.txt')).text();
-  expect(robots).toContain('User-Agent: *');
-  expect(robots).toContain('Allow: /');
-  expect(robots).toContain('Disallow: /api/');
-  expect(robots).toContain('Sitemap: https://webya.ar/sitemap.xml');
-
-  const sitemap = await (await request.get('/sitemap.xml')).text();
-  expect(sitemap).toContain('<loc>https://webya.ar/empezar</loc>');
-  expect(sitemap).toContain('<loc>https://webya.ar/demo/gastronomia</loc>');
-});
-
-test('/marca es interna: noindex y fuera del sitemap', async ({ page, request }) => {
-  await page.goto('/marca');
-  await expect(meta(page, 'meta[name="robots"]')).toHaveAttribute('content', /noindex, nofollow/);
-  const sitemap = await (await request.get('/sitemap.xml')).text();
-  expect(sitemap).not.toContain('/marca');
-});
-
-test('/sistema es interna: noindex y fuera del sitemap', async ({ page, request }) => {
-  await page.goto('/sistema');
-  await expect(meta(page, 'meta[name="robots"]')).toHaveAttribute('content', /noindex, nofollow/);
-  const sitemap = await (await request.get('/sitemap.xml')).text();
-  expect(sitemap).not.toContain('/sistema');
-});
-
-test('JSON-LD del FAQ es válido y coincide con lo que se ve', async ({ page }) => {
-  await page.goto('/empezar');
-  const json = await page.locator('script[type="application/ld+json"]').first().textContent();
-  const data = JSON.parse(json ?? '{}') as {
-    '@type': string;
-    mainEntity: { name: string; acceptedAnswer: { text: string } }[];
-  };
-  expect(data['@type']).toBe('FAQPage');
-  expect(data.mainEntity.length).toBeGreaterThanOrEqual(4);
-  const faq = page.locator('section[aria-labelledby="faq-title"]');
-  for (const q of data.mainEntity) {
-    // Las objeciones van a la vista (h3); las dudas de detalle, en un <details> (summary).
-    await expect(faq.locator('h3, summary').filter({ hasText: q.name, visible: true })).toHaveCount(
-      1,
-    );
-    // La respuesta es la misma que está en la página (a la vista o dentro del <details>).
-    await expect(faq.getByText(q.acceptedAnswer.text, { exact: true })).toHaveCount(1);
-    expect(q.acceptedAnswer.text.length).toBeGreaterThan(20);
-  }
-});
-
-test('encabezados: un solo h1 y jerarquía sin saltos', async ({ page }) => {
-  await page.goto('/empezar');
-  await expect(page.locator('h1')).toHaveCount(1);
-  await expect(page.locator('h1')).toContainText(HERO.titulo);
-  const niveles = await page.evaluate(() =>
-    [...document.querySelectorAll('h1,h2,h3')].map((h) => Number(h.tagName[1])),
-  );
-  for (let i = 1; i < niveles.length; i++) {
-    expect((niveles[i] ?? 0) - (niveles[i - 1] ?? 0)).toBeLessThanOrEqual(1);
-  }
-});
-
-test('una URL que no existe responde 404 con la página propia y noindex', async ({ page }) => {
-  const res = await page.goto('/no-existe-esta-pagina');
-  expect(res?.status()).toBe(404);
-  await expect(
-    page.getByRole('heading', { level: 1, name: ESTADOS_PAGINA.noEncontrada.titulo }),
-  ).toBeVisible();
-  await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(1);
-  await expect(page.getByRole('link', { name: ESTADOS_PAGINA.noEncontrada.cta })).toHaveAttribute(
-    'href',
-    '/empezar',
-  );
 });

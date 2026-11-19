@@ -17,7 +17,7 @@ export interface TraspasoDemo {
 }
 
 /** Adónde lleva el CTA de la demo: el wizard, que se descarga solo porque la URL apunta a #wizard. */
-export const URL_WIZARD_DESDE_DEMO = '/empezar#wizard';
+export const URL_WIZARD_DESDE_DEMO = '/pizzerias#armar';
 
 export const CLAVE_TRASPASO_DEMO = 'webya:traspaso-demo:v1';
 

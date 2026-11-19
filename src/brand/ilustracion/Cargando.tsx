@@ -1,5 +1,4 @@
 import { circuloPunteado, GRILLA_ICONO, TRAZO } from './grilla';
-import './movimiento.css';
 
 interface CargandoProps {
   /** Lado en px (dibujado en la grilla 24, como los íconos). */

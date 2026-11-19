@@ -15,7 +15,7 @@ export default function NoEncontrada() {
       <Ilustracion id="no-encontrado" size={120} className="text-fg" />
       <h1 className="mt-8 text-title font-semibold text-balance">{TXT.titulo}</h1>
       <p className="mt-4 text-lead text-muted">{TXT.texto}</p>
-      <ButtonLink href="/empezar" className="mt-8">
+      <ButtonLink href="/" className="mt-8">
         {TXT.cta}
       </ButtonLink>
     </main>

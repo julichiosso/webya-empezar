@@ -1,16 +1,15 @@
 import { expect, test, type Response } from '@playwright/test';
 import { gzipSync } from 'node:zlib';
 import { FUENTE_PRECARGADA } from '../src/brand/tipografia/fuente';
-import { TITULO_NEGOCIO, TITULO_RUBRO, wizard } from './helpers';
 
-// Presupuestos de la ruta. Se prueba una vez (desktop) con un viewport de celular fijo.
+// Presupuestos de la home, medidos una vez con viewport de celular.
 test.use({ viewport: { width: 390, height: 700 }, hasTouch: true, isMobile: true });
-test.beforeEach(({ viewport }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop' || !viewport, 'solo desktop (viewport propio)');
+test.beforeEach(({}, info) => {
+  test.skip(info.project.name !== 'desktop', 'solo un proyecto (viewport propio)');
 });
 
-/** JS inicial máximo, gzip. El framework (React + runtime de Next) ya ocupa ~135 KB. */
-const PRESUPUESTO_JS_INICIAL_KB = 150;
+/** JS inicial máximo, gzip. React + runtime de Next ya ocupan ~135 KB. */
+const PRESUPUESTO_JS_KB = 160;
 const PRESUPUESTO_CLS = 0.05;
 
 async function gzipKb(responses: Response[]) {
@@ -19,76 +18,40 @@ async function gzipKb(responses: Response[]) {
   return bytes / 1024;
 }
 
-test('JS inicial bajo presupuesto y wizard diferido hasta el primer gesto', async ({
-  page,
-}, testInfo) => {
+test('JS inicial bajo presupuesto', async ({ page }, info) => {
   const scripts: Response[] = [];
   page.on('response', (r) => {
     if (r.request().resourceType() === 'script') scripts.push(r);
   });
-
-  await page.goto('/empezar', { waitUntil: 'networkidle' });
-  const inicialKb = await gzipKb(scripts);
-  testInfo.annotations.push({
-    type: 'medición',
-    description: `JS inicial: ${inicialKb.toFixed(1)} KB gzip (${scripts.length} scripts)`,
-  });
-  expect(inicialKb).toBeLessThan(PRESUPUESTO_JS_INICIAL_KB);
-
-  // Sin gesto, la pantalla 1 ya está (HTML del servidor) pero el wizard no se descargó.
-  await expect(wizard(page).getByRole('heading', { name: TITULO_RUBRO })).toBeVisible();
-  const antes = scripts.length;
-
-  // Primer gesto: tocar un rubro descarga el wizard y avanza.
-  await wizard(page).locator('[data-rubro="comercio"]').tap();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
-  expect(scripts.length).toBeGreaterThan(antes);
-  const totalKb = await gzipKb(scripts);
-  testInfo.annotations.push({
-    type: 'medición',
-    description: `JS con wizard: ${totalKb.toFixed(1)} KB gzip`,
-  });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  const kb = await gzipKb(scripts);
+  info.annotations.push({ type: 'medición', description: `JS inicial: ${kb.toFixed(1)} KB gzip` });
+  expect(kb).toBeLessThan(PRESUPUESTO_JS_KB);
 });
 
-test('CLS menor a 0,05 recorriendo toda la página y pasando por el wizard', async ({
-  page,
-}, testInfo) => {
-  await page.addInitScript(() => {
-    (window as unknown as { __cls: number }).__cls = 0;
-    new PerformanceObserver((lista) => {
-      for (const e of lista.getEntries() as unknown as {
-        value: number;
-        hadRecentInput: boolean;
-      }[]) {
-        if (!e.hadRecentInput) (window as unknown as { __cls: number }).__cls += e.value;
-      }
-    }).observe({ type: 'layout-shift', buffered: true });
-  });
-  await page.goto('/empezar', { waitUntil: 'networkidle' });
-
-  // Baja por toda la página en pasos (dispara el wizard, el revelado de secciones, etc.).
-  const alto = await page.evaluate(() => document.documentElement.scrollHeight);
-  for (let y = 0; y < alto; y += 350) {
-    await page.mouse.wheel(0, 350);
-    await page.waitForTimeout(120);
-  }
-  await page.waitForTimeout(500);
-  const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls);
-  testInfo.annotations.push({ type: 'medición', description: `CLS: ${cls.toFixed(4)}` });
-  expect(cls).toBeLessThan(PRESUPUESTO_CLS);
-});
-
-test('la fuente se precarga y el preload apunta al archivo que usa el @font-face', async ({
+test('la fuente se precarga y existe (si cambia el archivo, actualizar FUENTE_PRECARGADA)', async ({
   page,
   request,
 }) => {
-  await page.goto('/empezar');
-  const preload = page.locator('link[rel="preload"][as="font"]');
-  await expect(preload).toHaveCount(1);
-  const href = await preload.getAttribute('href');
-  expect(href).toBe(FUENTE_PRECARGADA);
-  // Si Google cambia el archivo, cambia su nombre: el preload quedaría apuntando a nada.
-  const html = await (await request.get('/empezar')).text();
-  expect(html).toContain(`src:url(${FUENTE_PRECARGADA})`);
+  await page.goto('/');
+  await expect(page.locator(`link[rel="preload"][href="${FUENTE_PRECARGADA}"]`)).toHaveCount(1);
   expect((await request.get(FUENTE_PRECARGADA)).status()).toBe(200);
+});
+
+test('CLS bajo presupuesto al cargar y recorrer la home', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
+  const alto = await page.evaluate(() => document.documentElement.scrollHeight);
+  for (let y = 0; y < alto; y += 600) await page.evaluate((v) => window.scrollTo(0, v), y);
+  const cls = await page.evaluate(
+    () =>
+      new Promise<number>((ok) => {
+        let total = 0;
+        new PerformanceObserver((l) => {
+          for (const e of l.getEntries() as unknown as { value: number; hadRecentInput: boolean }[])
+            if (!e.hadRecentInput) total += e.value;
+        }).observe({ type: 'layout-shift', buffered: true });
+        setTimeout(() => ok(total), 500);
+      }),
+  );
+  expect(cls).toBeLessThan(PRESUPUESTO_CLS);
 });

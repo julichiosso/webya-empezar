@@ -37,11 +37,15 @@ const config: NextConfig = {
     // Hash de cada chunk JS en el atributo `integrity`: el navegador rechaza un archivo alterado.
     sri: { algorithm: 'sha256' },
     // El CSS (Tailwind, chico) viaja dentro del HTML: saca la hoja bloqueante del camino crítico.
-    inlineCss: true,
+    inlineCss: false,
   },
   async redirects() {
-    // La raíz todavía no tiene contenido propio: el link de la bio apunta a /empezar.
-    return [{ source: '/', destination: '/empezar', permanent: false }];
+    // /empezar era la landing anterior (link de la bio de Instagram): ahora todo vive en la home.
+    // 307 (no permanente) para poder volver atrás sin caché de redirección en los navegadores.
+    return [{ source: '/empezar', destination: '/', permanent: false }];
+  },
+  images: {
+    formats: ['image/avif', 'image/webp'],
   },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];

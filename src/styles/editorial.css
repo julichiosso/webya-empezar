@@ -1,0 +1,609 @@
+/*
+ * Sistema editorial de Webya: negro y blanco, un solo acento funcional (lima) para estados.
+ * Sin sombras, sin degradados, sin blur: la profundidad sale de bordes finos, contraste y aire.
+ *
+ * Cada sección elige su tono con `.tono-oscuro` o `.tono-claro`; los componentes usan las variables
+ * --e-* y funcionan igual en los dos. El acento (--e-acento) solo aparece en hover, foco y el punto de
+ * disponibilidad.
+ */
+
+@theme inline {
+  --color-ed-bg: var(--e-bg);
+  --color-ed-fg: var(--e-fg);
+  --color-ed-muted: var(--e-muted);
+  --color-ed-line: var(--e-line);
+  --color-ed-line-strong: var(--e-line-strong);
+  --color-ed-surface: var(--e-surface);
+  --color-ed-invert: var(--e-invert);
+  --color-ed-invert-fg: var(--e-invert-fg);
+  --color-lima: #c6f135;
+  --color-tinta: #0a0a0a;
+}
+
+:root {
+  --ease-editorial: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --t-rapida: 180ms;
+  --t-media: 240ms;
+}
+
+.tono-oscuro {
+  --e-bg: #0a0a0a;
+  --e-fg: #fafafa;
+  --e-muted: #a1a1a1;
+  --e-line: #262626;
+  --e-line-strong: #3f3f3f;
+  --e-surface: #131313;
+  --e-invert: #fafafa;
+  --e-invert-fg: #0a0a0a;
+  --e-foco: #c6f135;
+  --e-punto: #c6f135;
+  color-scheme: dark;
+  background-color: var(--e-bg);
+  color: var(--e-fg);
+}
+
+.tono-claro {
+  --e-bg: #ffffff;
+  --e-fg: #0a0a0a;
+  --e-muted: #525252;
+  --e-line: #e5e5e5;
+  --e-line-strong: #a3a3a3;
+  --e-surface: #f5f5f5;
+  --e-invert: #0a0a0a;
+  --e-invert-fg: #fafafa;
+  --e-foco: #0a0a0a;
+  --e-punto: #0a0a0a;
+  color-scheme: light;
+  background-color: var(--e-bg);
+  color: var(--e-fg);
+}
+
+.tono-oscuro :focus-visible,
+.tono-claro :focus-visible {
+  outline: 2px solid var(--e-foco);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.tono-oscuro ::selection {
+  background: #c6f135;
+  color: #0a0a0a;
+}
+.tono-claro ::selection {
+  background: #0a0a0a;
+  color: #fafafa;
+}
+
+/* ---------- Contenedor y ritmo ---------- */
+
+.e-wrap {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+.e-seccion {
+  padding-block: clamp(4.5rem, 9vw, 10rem);
+  /* Lo que está lejos del viewport no se maqueta ni se pinta hasta acercarse. `auto` recuerda el alto
+     real una vez visto, así el scroll no salta. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1200px;
+}
+/* El configurador se pinta siempre: es la conversión y su barra fija necesita su geometría real. */
+.e-seccion-viva {
+  content-visibility: visible;
+}
+
+/* ---------- Tipografía ---------- */
+
+.e-display {
+  font-size: clamp(2.875rem, 1.1rem + 7.4vw, 9rem);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+  font-weight: 650;
+  text-wrap: balance;
+}
+.e-h2 {
+  font-size: clamp(2.125rem, 1.15rem + 4.2vw, 5.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  font-weight: 620;
+  text-wrap: balance;
+}
+.e-h3 {
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+.e-lead {
+  font-size: clamp(1.0625rem, 0.98rem + 0.45vw, 1.375rem);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+.e-cuerpo {
+  font-size: 1rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.e-chico {
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.e-rotulo {
+  font-size: 0.75rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.e-cifra {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.05em;
+  font-weight: 600;
+  line-height: 0.9;
+}
+
+/* ---------- Botones ---------- */
+
+.e-btn {
+  --mx: 0px;
+  --my: 0px;
+  --press: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  min-height: 3rem;
+  padding-inline: 1.375rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: translate3d(var(--mx), var(--my), 0) scale(var(--press));
+  transition:
+    transform var(--t-media) var(--ease-editorial),
+    background-color var(--t-rapida) var(--ease-editorial),
+    border-color var(--t-rapida) var(--ease-editorial),
+    color var(--t-rapida) var(--ease-editorial);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.e-btn:active {
+  --press: 0.97;
+}
+.e-btn-primario {
+  background: var(--e-invert);
+  color: var(--e-invert-fg);
+}
+.e-btn-secundario {
+  border-color: var(--e-line-strong);
+  color: var(--e-fg);
+}
+.e-btn-chico {
+  min-height: 2.75rem;
+  padding-inline: 1rem;
+  font-size: 0.875rem;
+}
+.e-btn .e-flecha {
+  transition: transform var(--t-media) var(--ease-editorial);
+}
+@media (hover: hover) {
+  .e-btn-primario:hover {
+    background: #c6f135;
+    color: #0a0a0a;
+  }
+  .e-btn-secundario:hover {
+    border-color: var(--e-fg);
+    background: var(--e-surface);
+  }
+  .e-btn:hover .e-flecha,
+  .e-link:hover .e-flecha,
+  .group:hover .e-flecha {
+    transform: translateX(3px);
+  }
+}
+.e-btn[aria-disabled='true'] {
+  cursor: not-allowed;
+  background: var(--e-surface);
+  color: var(--e-muted);
+  border-color: var(--e-line);
+}
+
+/* Enlace con subrayado que se dibuja (transform, no ancho). */
+.e-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  text-decoration: none;
+}
+.e-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0.35);
+  transform-origin: left;
+  opacity: 0.6;
+  transition:
+    transform var(--t-media) var(--ease-editorial),
+    opacity var(--t-rapida);
+}
+@media (hover: hover) {
+  .e-link:hover::after {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+/* Enlace con área táctil alta (44 px): el subrayado se ancla al texto, no al borde de la caja. */
+.e-link-alto {
+  min-height: 2.75rem;
+}
+.e-link-alto::after {
+  bottom: auto;
+  top: calc(50% + 0.75em);
+}
+
+/* En la navegación el subrayado aparece recién al pasar el mouse. */
+.e-link-nav::after {
+  transform: scaleX(0);
+}
+.e-link:focus-visible::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* Punto de disponibilidad (el único lugar donde el acento es color de marca). */
+.e-punto {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--e-punto);
+  flex: none;
+}
+.mo .e-punto::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  /* Tres latidos y queda quieto: una animación infinita por punto costaba render en todo el scroll. */
+  animation: e-latido 2.4s var(--ease-editorial) 3;
+}
+@keyframes e-latido {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* ---------- Movimiento ---------- */
+
+/* Entrada al hacer scroll: opacity + translate corto, con escalonado por --i. */
+[data-reveal] {
+  transition:
+    opacity 700ms var(--ease-editorial),
+    transform 700ms var(--ease-editorial);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.mo [data-reveal]:not(.in) {
+  opacity: 0;
+  transform: translate3d(0, 1.25rem, 0);
+}
+
+/* Titular por palabras: cada palabra sube desde su propia máscara. */
+.e-palabra {
+  display: inline-block;
+  overflow: clip;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.e-palabra > span {
+  display: inline-block;
+  transition: transform 800ms var(--ease-editorial);
+  transition-delay: calc(var(--i, 0) * 55ms);
+}
+.mo [data-words]:not(.in) .e-palabra > span {
+  transform: translate3d(0, 108%, 0);
+}
+
+/* Hero: entra al cargar, sin esperar al observer (es el LCP). */
+@keyframes e-subir {
+  from {
+    transform: translate3d(0, 108%, 0);
+  }
+}
+@keyframes e-subir-hero {
+  from {
+    opacity: 0.01;
+    transform: translate3d(0, 0.32em, 0);
+  }
+}
+@keyframes e-aparecer-hero {
+  from {
+    opacity: 0.01;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+}
+@keyframes e-aparecer {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+}
+/* Sin máscara en el hero: el titular es el LCP y tiene que contar como pintado desde el primer cuadro
+   (opacidad mínima, no cero, y sin recorte). */
+.mo .e-hero-palabras .e-palabra {
+  overflow: visible;
+}
+.mo .e-hero-palabras .e-palabra > span {
+  animation: e-subir-hero 800ms var(--ease-editorial) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+  transition: none;
+}
+/* La bajada del hero suele ser el LCP (es el bloque de texto más grande): también desde opacidad mínima. */
+.mo .e-hero-aparece {
+  animation: e-aparecer-hero 800ms var(--ease-editorial) both;
+  animation-delay: calc(300ms + var(--i, 0) * 90ms);
+}
+
+/* Líneas que se dibujan (pathLength=1). Solo trazos finos de SVG. */
+[data-draw] .e-trazo {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1400ms var(--ease-editorial);
+  transition-delay: calc(var(--i, 0) * 120ms);
+}
+.mo [data-draw]:not(.in) .e-trazo {
+  stroke-dashoffset: 1;
+}
+
+/* Regla horizontal que se extiende al entrar (scaleX). */
+.e-regla {
+  height: 1px;
+  background: var(--e-line);
+  transform-origin: left;
+  transition: transform 1100ms var(--ease-editorial);
+}
+.mo .e-regla:not(.in) {
+  transform: scaleX(0);
+}
+
+/* Marquesina: corre solo en pantalla (`.on` lo pone el observer) y nunca con reduced-motion. */
+.e-marquesina-pista {
+  display: flex;
+  width: max-content;
+}
+.mo .e-marquesina-pista {
+  animation: e-marquesina 48s linear infinite;
+  animation-play-state: paused;
+}
+.mo .on > .e-marquesina-pista {
+  animation-play-state: running;
+}
+@keyframes e-marquesina {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Carril horizontal con snap. */
+.e-carril {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(84vw, 26rem);
+  gap: 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: clamp(1rem, 4vw, 3rem);
+  padding-inline: clamp(1rem, 4vw, 3rem);
+  padding-bottom: 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--e-line-strong) transparent;
+}
+.e-carril > * {
+  scroll-snap-align: start;
+}
+@media (min-width: 90rem) {
+  .e-carril {
+    padding-inline: calc((100vw - 90rem) / 2 + 3rem);
+    scroll-padding-inline: calc((100vw - 90rem) / 2 + 3rem);
+  }
+}
+
+/* Sticky storytelling: la pantalla cambia según el paso activo (data-paso en el contenedor). */
+.e-escena {
+  transition:
+    opacity 450ms var(--ease-editorial),
+    transform 450ms var(--ease-editorial);
+}
+[data-steps] .e-escena {
+  opacity: 0;
+  transform: translate3d(0, 0.75rem, 0) scale(0.985);
+}
+[data-steps][data-paso='1'] .e-escena[data-escena='1'],
+[data-steps][data-paso='2'] .e-escena[data-escena='2'],
+[data-steps][data-paso='3'] .e-escena[data-escena='3'],
+[data-steps][data-paso='4'] .e-escena[data-escena='4'],
+[data-steps][data-paso='5'] .e-escena[data-escena='5'] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Dentro de una escena: lo que llega un instante después (notificación, burbujas, confirmación). */
+.e-notificacion,
+.e-burbuja,
+.e-aparece-tarde {
+  transition:
+    opacity 500ms var(--ease-editorial),
+    transform 500ms var(--ease-editorial);
+  transition-delay: calc(350ms + var(--i, 0) * 450ms);
+}
+.mo [data-steps]:not([data-paso='3']) [data-escena='3'] .e-notificacion {
+  opacity: 0;
+  transform: translate3d(0, -1.5rem, 0);
+}
+.mo [data-steps]:not([data-paso='4']) [data-escena='4'] .e-burbuja,
+.mo [data-steps]:not([data-paso='2']) [data-escena='2'] .e-aparece-tarde {
+  opacity: 0;
+  transform: translate3d(0, 0.5rem, 0);
+}
+
+/* Pedidos: tres estados en bucle de 12 s y la comanda que sale de la impresora. */
+.e-estado {
+  opacity: 0;
+}
+.e-estado-base {
+  opacity: 1;
+}
+.mo .e-estado {
+  animation: e-tercio 12s var(--ease-editorial) infinite both;
+  animation-delay: calc(var(--n, 0) * 4s);
+}
+@keyframes e-tercio {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0.625rem, 0);
+  }
+  4%,
+  29% {
+    opacity: 1;
+    transform: none;
+  }
+  33%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -0.625rem, 0);
+  }
+}
+.mo .e-ticket {
+  animation: e-ticket 12s var(--ease-editorial) infinite both;
+}
+@keyframes e-ticket {
+  0%,
+  68% {
+    transform: translate3d(0, -101%, 0);
+  }
+  80%,
+  96% {
+    transform: none;
+  }
+  100% {
+    transform: translate3d(0, -101%, 0);
+  }
+}
+[data-steps] .e-paso {
+  transition: opacity 300ms var(--ease-editorial);
+}
+@media (min-width: 64rem) {
+  .mo [data-steps] .e-paso {
+    opacity: 0.32;
+  }
+  .mo [data-steps][data-paso='1'] .e-paso[data-step='1'],
+  .mo [data-steps][data-paso='2'] .e-paso[data-step='2'],
+  .mo [data-steps][data-paso='3'] .e-paso[data-step='3'],
+  .mo [data-steps][data-paso='4'] .e-paso[data-step='4'],
+  .mo [data-steps][data-paso='5'] .e-paso[data-step='5'] {
+    opacity: 1;
+  }
+}
+
+/* Detalles / acordeón: el ícono + rota, el contenido aparece. */
+.e-detalle summary {
+  list-style: none;
+  cursor: pointer;
+}
+.e-detalle summary::-webkit-details-marker {
+  display: none;
+}
+.e-detalle .e-mas {
+  transition: transform var(--t-media) var(--ease-editorial);
+}
+.e-detalle[open] .e-mas {
+  transform: rotate(45deg);
+}
+.mo .e-detalle[open] .e-detalle-cuerpo {
+  animation: e-aparecer 380ms var(--ease-editorial) both;
+}
+
+/* Fila de índice con revelado al pasar el mouse (en celular se abre con el toque). */
+.e-indice-fila .e-indice-extra {
+  transition:
+    opacity var(--t-media) var(--ease-editorial),
+    transform var(--t-media) var(--ease-editorial);
+}
+@media (hover: hover) and (min-width: 64rem) {
+  .e-indice-fila .e-indice-extra {
+    opacity: 0;
+    transform: translate3d(-0.5rem, 0, 0);
+  }
+  .e-indice-fila:hover .e-indice-extra,
+  .e-indice-fila:focus-within .e-indice-extra {
+    opacity: 1;
+    transform: none;
+  }
+  .e-indice-fila .e-indice-nombre {
+    transition: transform var(--t-media) var(--ease-editorial);
+  }
+  .e-indice-fila:hover .e-indice-nombre {
+    transform: translate3d(0.75rem, 0, 0);
+  }
+}
+
+/* Tarjeta del bento: borde que se marca y flecha que avanza. */
+.e-celda {
+  transition:
+    border-color var(--t-rapida) var(--ease-editorial),
+    background-color var(--t-rapida) var(--ease-editorial);
+}
+@media (hover: hover) {
+  .e-celda:hover {
+    border-color: var(--e-fg);
+  }
+}
+
+/* Animaciones en bucle (pedidos, turnero): corren solo en pantalla. */
+.mo [data-loop] .e-bucle {
+  animation-play-state: paused;
+}
+.mo [data-loop].on .e-bucle {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .e-escena,
+  .e-btn,
+  .e-link::after,
+  [data-reveal],
+  .e-palabra > span {
+    transition: none !important;
+  }
+  .e-bucle {
+    animation: none !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

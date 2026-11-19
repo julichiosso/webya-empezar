@@ -1,6 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
 import { abrirDemo, carta } from './demo-helpers';
-import { leerLeads, TITULO_NEGOCIO, TITULO_RESULTADO, wizard } from './helpers';
 
 // Demo de Gastronomía: personalización, compartir y el CTA hasta el lead.
 const esEscritorio = (page: Page) => (page.viewportSize()?.width ?? 0) >= 1024;
@@ -52,43 +51,15 @@ test('escritorio: "Probalo en tu celular" muestra el QR', async ({ page }) => {
   await expect(page.getByRole('img', { name: /código qr/i })).toBeVisible();
 });
 
-test('"Quiero esto para mi local" abre el wizard precargado y el lead se guarda con origen demo', async ({
-  page,
-}, testInfo) => {
-  // Único por test y dentro del tope de 40 caracteres del nombre del local.
-  const negocio = `Tito ${testInfo.project.name} ${Date.now().toString(36)}`;
+test('"Quiero esto para mi local" lleva al configurador con pedidos elegido', async ({ page }) => {
   await abrirDemo(page);
   await abrirPersonalizar(page);
-  await page.getByRole('textbox', { name: 'Nombre de tu local' }).fill(negocio);
-  await page.getByText('Ciruela', { exact: true }).click();
   await page
     .getByRole('link', { name: /quiero esto para mi local|lo quiero para mi local/i })
     .first()
     .click();
-
-  await expect(page).toHaveURL(/\/empezar#wizard$/);
-  // Entra directo en la pantalla 2 con el nombre del local cargado.
-  await expect(wizard(page).getByRole('heading', { name: TITULO_NEGOCIO })).toBeVisible();
-  await expect(wizard(page).getByLabel('Nombre de tu negocio')).toHaveValue(negocio);
-  await wizard(page)
-    .getByRole('button', { name: /ver cómo me queda/i })
-    .click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
-  // Orden B: el WhatsApp se pide recién al tocar el CTA, y ahí se guarda el lead.
-  await page.getByRole('button', { name: /quiero esto para mi negocio/i }).click();
-  await wizard(page).getByLabel('Tu WhatsApp').fill('1123456789');
-  await wizard(page).getByRole('button', { name: 'Guardar y seguir' }).click();
-  await expect(wizard(page).getByRole('heading', { name: TITULO_RESULTADO })).toBeVisible();
-  // La vuelta a la demo lleva la paleta que eligió ahí.
+  await expect(page).toHaveURL(/\/pizzerias#armar$/);
   await expect(
-    wizard(page).getByRole('link', { name: /probá la demo completa/i }),
-  ).toHaveAttribute('href', /paleta=ciruela/);
-
-  await expect
-    .poll(async () => (await leerLeads()).find((l) => l.nombre_negocio === negocio))
-    .toMatchObject({
-      origen: 'demo_gastronomia',
-      rubro: 'gastronomia',
-      modulos: expect.arrayContaining(['carta_qr', 'pedidos']),
-    });
+    page.locator('#armar').getByRole('radio', { name: /Sistema de pedidos/ }),
+  ).toBeChecked();
 });

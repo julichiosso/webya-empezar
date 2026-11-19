@@ -196,7 +196,7 @@ export function Reproductor({ origen, onCerrar }: ReproductorProps) {
                 </a>
               )}
               <a
-                href="/empezar#wizard"
+                href="/pizzerias#armar"
                 onClick={() => {
                   track('explicativo_cta', { destino: 'wizard' });
                   // Desde /empezar: el link solo cambia el hash; se cierra el video para ver el wizard.

@@ -23,6 +23,10 @@ export interface EventosAnalitica {
   /** Se fue (pestaña oculta o cerrada) sin llegar al CTA. Una vez por visita. */
   /** Abrió el sitio de un cliente en "Ya crearon con WebYa". */
   cliente_abierto: { cliente: string };
+  // Configurador "Armá tu sistema" de la home.
+  configurador_tipo: { tipo: string; origen: 'tarjeta' | 'atajo' };
+  configurador_enviar: { tipo: string; rubro: string; modulos: number; canal: 'whatsapp' | 'mail' };
+  configurador_demo: { rubro: string };
   abandono_paso: { paso: string };
   lead_completado: { completo: boolean };
   modulo_alternado: { modulo: string; activo: boolean; origen: 'preview' };
