@@ -57,7 +57,7 @@ Documentadas una por una en [`.env.example`](.env.example). Resumen:
 | Variable                                      | Dónde    | Para qué                                                                                                         |
 | --------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_SITE_URL`                        | público  | Dominio canónico (canonical, Open Graph, sitemap). Default `https://webya.ar`                                    |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER`                 | público  | **TODO:** número del negocio (`5491123456789`). Sin él, el botón de WhatsApp queda deshabilitado                 |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER`                 | público  | Opcional: pisa el número por defecto (`5493406419495`, en `src/lib/site-config.ts`)                              |
 | `NEXT_PUBLIC_CONTACT_EMAIL`                   | público  | **TODO:** mail del footer                                                                                        |
 | `NEXT_PUBLIC_INSTAGRAM_URL`                   | público  | Perfil de Instagram                                                                                              |
 | `LEAD_REPOSITORY`                             | servidor | `memory` (dev/tests, por defecto) · `file` · `supabase` (Vercel; fuera de Vercel pide `ALLOW_SUPABASE_IN_DEV=1`) |

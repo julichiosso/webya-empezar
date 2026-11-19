@@ -9,7 +9,7 @@ import type { TipoId } from './servicios';
  * falte, se dibuja el mockup vectorial de `mockup`.
  */
 
-export type EstadoProyecto = 'produccion' | 'construccion';
+export type EstadoProyecto = 'produccion' | 'construccion' | 'sinUso';
 
 /** Mockups vectoriales disponibles (components/home/mockups). */
 export type MockupId = 'pedidos' | 'tienda' | 'web' | 'turnero';
@@ -88,7 +88,7 @@ export const PROYECTOS: readonly Proyecto[] = [
     ciudad: 'San Jorge',
     tipo: 'turnero',
     sistema: 'Turnero con Mercado Pago',
-    estado: 'produccion',
+    estado: 'sinUso',
     problema: 'Turnos reservados que después nadie viene a ocupar.',
     incluye: [
       'Reserva online con pago por Mercado Pago',
@@ -96,7 +96,7 @@ export const PROYECTOS: readonly Proyecto[] = [
       'Horarios configurables',
       'Panel simple para ver el día',
     ],
-    resultado: 'Los clientes reservan y pagan desde el celular, sin llamar.',
+    resultado: 'Desarrollado para la peluquería; todavía no está en uso. Pedí la demo y lo ves funcionando.',
     mockup: 'turnero',
     imagenes: [],
   },
@@ -181,6 +181,7 @@ export const PROYECTOS: readonly Proyecto[] = [
 export const ESTADO_PROYECTO: Record<EstadoProyecto, string> = {
   produccion: 'En producción',
   construccion: 'En construcción',
+  sinUso: 'Todavía sin uso',
 };
 
 export const getProyecto = (id: string) => PROYECTOS.find((p) => p.id === id);

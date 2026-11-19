@@ -169,7 +169,7 @@ export const TURNERO = {
     },
   ],
   prueba:
-    'Ya funciona en Peluquería Canina San Jorge: turnos con Mercado Pago y varios profesionales.',
+    'Lo desarrollé para Peluquería Canina San Jorge: turnos con Mercado Pago y varios profesionales.',
   cta: 'Armá tu turnero',
   verMas: 'Cómo funciona el turnero',
 } as const;

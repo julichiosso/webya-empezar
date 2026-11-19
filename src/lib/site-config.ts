@@ -5,10 +5,10 @@
 export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://webya.dev',
   /**
-   * WhatsApp de WebYa (formato 549XXXXXXXXXX). Sin número, los botones de WhatsApp no se muestran
-   * y el contacto queda por mail e Instagram.
+   * WhatsApp de Julián (formato wa.me: 54 + 9 + característica sin 0 + número sin 15). Es público
+   * (va en cada link wa.me), por eso tiene valor por defecto; NEXT_PUBLIC_WHATSAPP_NUMBER lo pisa.
    */
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '',
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5493406419495',
   contactEmail: 'studio.webya@gmail.com',
   instagramUrl: 'https://instagram.com/webya.dev',
 } as const;

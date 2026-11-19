@@ -41,21 +41,24 @@ Decisiones tomadas en modo autónomo. Cada una: qué y por qué.
 - **Dominios**: `joyeriapetrucci.com.ar` (el prompt) responde 200 y reemplaza al `.vercel.app` anterior. Peluquería
   Canina no tiene URL conocida: el caso ofrece "Pedí la demo" en lugar de un link.
 - **Abelardo "En construcción"** con link "Ver el avance" (el sitio responde y es real).
-- **Canina "En producción"**: el prompt la lista como trabajo hecho y solo marca a Abelardo como en desarrollo.
-- **Cifras**: salen del manifiesto (`resumenProyectos`), nunca a mano: 5 sistemas, 4 en producción, 4 rubros.
+- **Canina "Todavía sin uso"** (corregido por Julián el 2026-11-19: no está en producción). El caso se mantiene porque
+  el turnero es el producto estrella y el sistema existe; ofrece "Pedí la demo" y no cuenta en "funcionando en
+  producción". Las capturas reales se suman igual cuando lleguen.
+- **Cifras**: salen del manifiesto (`resumenProyectos`), nunca a mano: 5 sistemas, 3 en producción, 4 rubros.
 - **Sin testimonios** en pantalla: el manifiesto tiene el campo `testimonio` vacío y la UI no muestra nada hasta que
   haya uno real y autorizado.
 - **Sin cupos ni urgencia inventada.** "Tomando proyectos nuevos" es la única señal de disponibilidad.
 - **Marca escrita "Webya"** (como en el prompt), no "WebYa".
-- **San Francisco = San Francisco, Córdoba** en el JSON-LD (es la que está a la distancia de San Jorge). Si fuera
-  otra, se cambia en `src/content/seo.ts` (`ZONA`).
+- **San Francisco = San Francisco, Córdoba** en el JSON-LD. Confirmado por Julián el 2026-11-19.
 
 ## Fase 4 — Configurador
 
 - **Cero requests**: el botón final es un `<a href="https://wa.me/…">`. No se guarda el lead: el WhatsApp que recibe
   Julián _es_ el lead. Guardarlo con una sola request (sendBeacon) queda en `ROADMAP.md`, fase 1.5.
-- **Sin número cargado → mail.** `NEXT_PUBLIC_WHATSAPP_NUMBER` está vacía en el repo y no se inventa: sin número el
-  botón dice "por mail" y abre un `mailto:` con el mismo texto. Con el número en Vercel pasa solo a WhatsApp.
+- **WhatsApp por defecto `5493406419495`** (el +54 3406 419495 de Julián con el 9 de celular que exige wa.me para
+  Argentina). Es público, así que vive en `src/lib/site-config.ts` y funciona sin tocar Vercel;
+  `NEXT_PUBLIC_WHATSAPP_NUMBER` lo pisa. Si la variable se define con otro número, ese manda. El camino a mail
+  (`mailto:` con el mismo texto) queda solo como red de seguridad si el número quedara vacío.
 - **Módulos marcados por defecto** según el tipo (lo más pedido), para que el camino sea tipo → rubro → enviar.
 - **Nombre del negocio opcional**: mejora el mensaje sin agregar un paso obligatorio.
 - **Atajos**: cualquier enlace con `data-armar`/`data-modulo` (bento, hero, header, cierre) preselecciona.
