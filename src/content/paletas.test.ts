@@ -6,7 +6,6 @@ import {
   TEMA_CLARO,
   variablesDePaleta,
 } from '@/brand/tokens/colores';
-import { getPaletaDemo, PALETA_DEMO_POR_DEFECTO, PALETAS_DEMO } from '@/content/demos/gastronomia';
 import { AA_TEXTO, contraste, mezclar } from '@/lib/color';
 import {
   esPaletaCurada,
@@ -48,12 +47,6 @@ describe('paletas curadas (compartidas)', () => {
     expect(esPaletaCurada('ciruela')).toBe(true);
     expect(esPaletaCurada('gris')).toBe(false);
     expect(esPaletaCurada(undefined)).toBe(false);
-  });
-
-  it('la demo sigue leyendo las mismas paletas (re-export, mismos valores)', () => {
-    expect(PALETAS_DEMO).toBe(PALETAS_CURADAS);
-    expect(PALETA_DEMO_POR_DEFECTO).toBe(PALETA_CURADA_POR_DEFECTO);
-    expect(getPaletaDemo('frutilla')).toBe(getPaletaCurada('frutilla'));
   });
 
   it('se aplica con variables CSS (contenedor con scope), nunca con colores en línea', () => {

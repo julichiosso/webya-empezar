@@ -1,10 +1,12 @@
 import { PALETA_CURADA_IDS } from '@/content/paletas';
-import { COCINA_IDS } from '@/content/demos/gastronomia/types';
 import { MODULO_IDS } from '@/content/modulos';
 import { NECESIDAD_IDS, NECESIDAD_OTRA_ID } from '@/content/necesidades';
 import { esObjetivoDeRubro, RUBRO_IDS, RUBRO_OTRO_ID } from '@/content/rubros';
 import { crearEsquemasLead, type CatalogoLead } from '@/domain/leads/lead';
 import { MENSAJES_LEAD } from './leads-mensajes';
+
+/** Cocinas de la demo de gastronomía anterior: un lead viejo puede traerlas; se siguen aceptando. */
+const COCINA_IDS = ['parrilla', 'pizzeria', 'cafe'] as const;
 
 export type {
   CompletarLead,

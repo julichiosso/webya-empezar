@@ -120,3 +120,22 @@ queda lo que funciona por debajo o suma prueba real.
   `brand/tokens/colores.ts`), como hace Safari.
 - El teléfono de las demos (`components/patterns/Telefono`) ya tenía isla; el del video explicativo es SVG y no
   se tocó.
+
+## Demo del sistema de pedidos (2026-11-19)
+
+- Pedido de Julián: demos cómodas en celular y escritorio, con sus productos reales. Base: el `DEMO_SPEC.md` que
+  se extrajo del repo de Micio's (flujos, modelo, reglas, diseño). Julián eligió **rehacerla acá** (todo en el
+  navegador, sin backend), **reemplazar** la demo genérica de gastronomía y **sin fotos reales**.
+- `/demo/pedidos`: en escritorio, el celular del cliente y el panel del dueño lado a lado, del mismo alto y dentro
+  de la pantalla, con una guía de tres pasos; en celular, pantalla completa y un selector "Cliente / Dueño" con su
+  propio lugar abajo (no tapa nada). "Reiniciar" vuelve al principio.
+- Lógica real del spec, pura y con tests (`src/domain/retiro`): franjas de 15 minutos, tope por franja, salto de
+  las llenas, cálculo del retiro (20 min de cocina + 4 por pedido en cola), pausar y cambiar cupos. La noche de la
+  demo es un viernes a las 20:40 con franjas ya ocupadas, para que se vea el salto.
+- Carta: las pizzas son las reales de Micio's; bebidas, postres y precios son de ejemplo y la pantalla lo dice.
+  Dibujos en lugar de fotos. Colores, Anton, radios y animaciones del sistema real (`src/brand/demos/pedidos.css`);
+  el panel usa sus colores iOS, oscurecidos lo justo para pasar AA.
+- El WhatsApp se simula: se muestra el mensaje que arma el sistema y "Enviar (simulado)" lo confirma. La comanda se
+  ve como ticket de 80 mm y se puede imprimir.
+- Se borraron la demo de gastronomía, su contenido, el video explicativo (solo se abría desde ahí), el QR y dos
+  componentes sin uso. `/demo/gastronomia` redirige a `/demo/pedidos`.

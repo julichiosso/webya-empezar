@@ -18,7 +18,7 @@ async function auditar(page: Page) {
   ).toEqual([]);
 }
 
-for (const ruta of ['/', '/turnero', '/pizzerias', '/tiendas', '/privacidad']) {
+for (const ruta of ['/', '/turnero', '/pizzerias', '/tiendas', '/privacidad', '/demo/pedidos']) {
   test(`${ruta} sin violaciones WCAG AA`, async ({ page }) => {
     await page.goto(ruta, { waitUntil: 'networkidle' });
     await auditar(page);

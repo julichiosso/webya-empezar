@@ -14,6 +14,7 @@
 | —    | Número de WhatsApp (`5493406419495`, por defecto en `site-config.ts`)                                                                                              | hecho              |
 | —    | Secciones de relleno fuera (marquesina, cifras, rubros, cómo trabajo, preguntas) y captura real del aviso push                                                     | hecho              |
 | —    | Merge con `origin/main`: medición, avisos y demo de peluquería adentro; legado fuera                                                                               | hecho              |
+| —    | Demo `/demo/pedidos` con el sistema real de Micio's (reemplaza la de gastronomía)                                                                                  | hecho              |
 | —    | Migraciones de Supabase (`AUDIT.md` §5)                                                                                                                            | esperando a Julián |
 | —    | Fase 1.5 (guardar el brief) y fase 2 self-service                                                                                                                  | `ROADMAP.md`       |
 

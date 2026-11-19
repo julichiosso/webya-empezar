@@ -42,7 +42,11 @@ const config: NextConfig = {
   async redirects() {
     // /empezar era la landing anterior (link de la bio de Instagram): ahora todo vive en la home.
     // 307 (no permanente) para poder volver atrás sin caché de redirección en los navegadores.
-    return [{ source: '/empezar', destination: '/', permanent: false }];
+    return [
+      { source: '/empezar', destination: '/', permanent: false },
+      // La demo de gastronomía genérica se reemplazó por la del sistema real de Micio's.
+      { source: '/demo/gastronomia', destination: '/demo/pedidos', permanent: false },
+    ];
   },
   images: {
     formats: ['image/avif', 'image/webp'],

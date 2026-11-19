@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 /** Headers de seguridad y CSP fija con SRI (docs/adr/0001-csp-fija-con-sri.md). */
-for (const ruta of ['/', '/turnero', '/demo/gastronomia']) {
+for (const ruta of ['/', '/turnero', '/demo/pedidos']) {
   test(`${ruta}: CSP fija y headers de seguridad`, async ({ request }) => {
     const res = await request.get(ruta);
     const h = res.headers();
@@ -34,7 +34,7 @@ test('la CSP no bloquea nada al usar la página', async ({ page }) => {
   // Usar el configurador (la isla interactiva de la home).
   await page.locator('#armar').getByText('Tienda online', { exact: true }).click();
   await page.waitForLoadState('networkidle');
-  await page.goto('/demo/gastronomia');
+  await page.goto('/demo/pedidos');
   await page.waitForLoadState('networkidle');
   expect(violaciones).toEqual([]);
 });

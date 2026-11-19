@@ -9,7 +9,7 @@ pedidos online, tiendas, catálogos y sitios). La home vende con trabajos reales
 | `/`                                  | Home editorial: qué armo, turnero, pedidos, proyectos reales, configurador y cierre |
 | `/turnero`, `/pizzerias`, `/tiendas` | Landings por servicio (SEO local), con el configurador ya en ese servicio           |
 | `/demo/peluqueria`                   | Demo del turnero: bot de turnos, agenda y estadísticas, con datos de ejemplo        |
-| `/demo/gastronomia`                  | Demo de pedidos: carta del cliente y panel del dueño, sincronizados                 |
+| `/demo/pedidos`                      | Demo del sistema de pedidos de Micio’s: app del cliente, panel del dueño y comanda  |
 | `/privacidad`, `/terminos`           | Legales                                                                             |
 | `/empezar`                           | Redirige a `/` (es el link de la bio de Instagram)                                  |
 | `/api/eventos`, `/api/leads`         | Medición propia del embudo (sendBeacon, sin cookies) y API de leads                 |
@@ -88,5 +88,5 @@ Las variables del servidor se validan al arrancar (`src/instrumentation.ts` + `s
 1. Aplicar `supabase/migrations/` en el proyecto de Supabase (las últimas: `eventos` y `embudo_configurador`).
 2. Cargar las variables de producción (tabla de arriba).
 3. Dominio `webya.dev`: los pasos exactos están en `AUDIT.md` §5 (hoy Cloudflare apunta a otro servidor).
-4. Verificar `/`, `/turnero`, `/demo/peluqueria`, `/robots.txt`, `/sitemap.xml`, y que la consola no muestre
+4. Verificar `/`, `/turnero`, `/demo/pedidos`, `/demo/peluqueria`, `/robots.txt`, `/sitemap.xml`, y que la consola no muestre
    errores de CSP (`docs/adr/0001-csp-fija-con-sri.md`).

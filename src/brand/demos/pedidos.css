@@ -1,0 +1,171 @@
+/*
+ * Demo del sistema de pedidos (/demo/pedidos). Colores, radios y animaciones son los del sistema real
+ * de Micio's (DEMO_SPEC §5); el panel del dueño usa los suyos (estilo iOS).
+ */
+
+.m-paleta {
+  --m-oscuro: #141210;
+  --m-crema: #f7f3ea;
+  --m-crema-2: #f2ede4;
+  --m-crema-3: #faf8f4;
+  --m-lima: #c6f135;
+  --m-lima-suave: rgb(198 241 53 / 0.25);
+  --m-lima-oscuro: #3e4d00;
+  --m-gris: rgb(20 18 16 / 0.6);
+  --m-linea: rgb(20 18 16 / 0.08);
+  --m-blanco-8: rgb(255 255 255 / 0.08);
+  --m-blanco-60: rgb(255 255 255 / 0.62);
+  --m-masa: #d99a55;
+  --m-masa-borde: #b97a3c;
+  --m-salsa: #c2412b;
+  --m-queso: #f2cf74;
+  --m-vidrio: #cfe3d4;
+  --m-plato: #ece6da;
+}
+.m-app {
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  background: var(--m-oscuro);
+  color: #fff;
+}
+
+.m-titulo {
+  font-family: var(--font-anton), Impact, 'Arial Narrow', sans-serif;
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: 0.003em;
+}
+
+/* Variantes del dibujo de reemplazo (no hay fotos en la demo): el ingrediente de arriba. */
+.m-pizza-0 {
+  --m-top: #f6e3a1;
+}
+.m-pizza-1 {
+  --m-top: #d8402a;
+}
+.m-pizza-2 {
+  --m-top: #f4efe2;
+}
+.m-pizza-3 {
+  --m-top: #8e2a1c;
+}
+.m-pizza-4 {
+  --m-top: #4f7a32;
+}
+.m-pizza-5 {
+  --m-top: #b88a4a;
+}
+.m-bebida-0 {
+  --m-liquido: #3b1d12;
+}
+.m-bebida-1 {
+  --m-liquido: #cfe8f2;
+}
+.m-bebida-2 {
+  --m-liquido: #e9a93a;
+}
+.m-postre-0 {
+  --m-postre: #e2b25c;
+}
+.m-postre-1 {
+  --m-postre: #4a2a1a;
+}
+.m-postre-2 {
+  --m-postre: #c9a27a;
+}
+
+.m-panel {
+  --p-fondo: #f5f5f7;
+  --p-card: #fff;
+  --p-txt: #1d1d1f;
+  /* Grises y colores de iOS, oscurecidos lo justo para pasar AA sobre sus fondos. */
+  --p-txt-2: #5a5a5f;
+  --p-azul: #005bbf;
+  --p-verde: #34c759;
+  --p-rojo: #ff3b30;
+  --p-rojo-texto: #c0170d;
+  --p-ambar: #ff9f0a;
+  --p-linea: rgb(0 0 0 / 0.08);
+  --p-rojo-suave: rgb(255 59 48 / 0.08);
+  --p-verde-suave: rgb(52 199 89 / 0.14);
+  --p-ambar-suave: rgb(255 159 10 / 0.16);
+  --p-azul-suave: rgb(0 122 255 / 0.1);
+  background: var(--p-fondo);
+  color: var(--p-txt);
+  -webkit-font-smoothing: antialiased;
+}
+
+.m-ticket {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  background: #fff;
+  color: #000;
+}
+
+/* Escenario de escritorio: el teléfono y el panel con el mismo alto, siempre dentro de la pantalla. */
+.m-escenario {
+  --m-alto: clamp(40rem, calc(100svh - 11rem), 52rem);
+}
+.m-escenario .m-tel {
+  width: calc(var(--m-alto) / 2.1);
+  max-width: none;
+}
+.m-escenario .m-ventana {
+  height: var(--m-alto);
+}
+
+/* Lo nuevo aparece desde abajo; el contador del carrito salta (DEMO_SPEC §5.5). */
+@keyframes m-item {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@keyframes m-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+.m-aparece {
+  animation: m-item 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.m-pop {
+  animation: m-pop 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.m-tocar {
+  transition: transform 150ms ease;
+}
+.m-tocar:active {
+  transform: scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .m-aparece,
+  .m-pop {
+    animation: none;
+  }
+  .m-tocar:active {
+    transform: none;
+  }
+}
+
+/* Imprimir la comanda: solo el ticket, de 80 mm, como en la impresora térmica. */
+@media print {
+  html.m-imprimiendo body * {
+    visibility: hidden;
+  }
+  html.m-imprimiendo .m-ticket,
+  html.m-imprimiendo .m-ticket * {
+    visibility: visible;
+  }
+  html.m-imprimiendo .m-ticket {
+    position: fixed;
+    inset: 0 auto auto 0;
+    width: 80mm;
+  }
+}

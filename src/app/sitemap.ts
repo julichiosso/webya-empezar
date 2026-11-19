@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: 0.9,
     })),
-    { url: `${u}/demo/gastronomia`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${u}/demo/pedidos`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${u}/demo/peluqueria`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${u}/privacidad`, changeFrequency: 'yearly', priority: 0.2 },
     { url: `${u}/terminos`, changeFrequency: 'yearly', priority: 0.2 },

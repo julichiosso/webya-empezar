@@ -14,7 +14,7 @@ export interface EventosAnalitica {
   configurador_tipo: { tipo: string; origen: 'tarjeta' | 'atajo' };
   configurador_enviar: { tipo: string; rubro: string; modulos: number; canal: 'whatsapp' | 'mail' };
   configurador_demo: { rubro: string };
-  // Demos de rubro (/demo/<rubro>). `demo` es el rubro (p. ej. 'gastronomia').
+  // Demos de rubro (/demo/<rubro>). `demo` es el rubro (p. ej. 'pedidos').
   demo_view: { demo: string; cocina: string };
   demo_personalizada: { demo: string; campo: 'nombre' | 'paleta' | 'cocina'; valor: string };
   demo_pedido_creado: { demo: string; modalidad: string; items: number; medioPago: string };
@@ -22,11 +22,6 @@ export interface EventosAnalitica {
   demo_cta_click: { demo: string; origen: string };
   demo_qr_celular: { demo: string };
   demo_whatsapp_click: { demo: string };
-  // Video explicativo ("Mirá cómo funciona").
-  explicativo_abierto: { origen: string };
-  explicativo_capitulo: { capitulo: string };
-  explicativo_completo: { origen: string };
-  explicativo_cta: { destino: 'demo' | 'wizard' };
 }
 
 export type NombreEvento = keyof EventosAnalitica;
@@ -44,10 +39,6 @@ export const NOMBRES_EVENTO = [
   'demo_cta_click',
   'demo_qr_celular',
   'demo_whatsapp_click',
-  'explicativo_abierto',
-  'explicativo_capitulo',
-  'explicativo_completo',
-  'explicativo_cta',
 ] as const satisfies readonly NombreEvento[];
 export type Sink = <E extends NombreEvento>(evento: E, props: EventosAnalitica[E]) => void;
 

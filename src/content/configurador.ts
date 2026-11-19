@@ -16,7 +16,7 @@ export const RUBROS_CONFIG: readonly RubroConfig[] = [
   {
     id: 'gastronomia',
     nombre: 'Pizzería o comida',
-    demo: { href: '/demo/gastronomia', texto: 'Probá la demo de pedidos' },
+    demo: { href: '/demo/pedidos', texto: 'Probá la demo de pedidos' },
   },
   {
     id: 'comercio',

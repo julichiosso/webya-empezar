@@ -7,7 +7,8 @@ for (const ruta of [
   '/pizzerias',
   '/tiendas',
   '/privacidad',
-  '/demo/gastronomia',
+  '/demo/pedidos',
+  '/demo/peluqueria',
 ]) {
   test(`${ruta}: consola sin errores ni advertencias`, async ({ page }) => {
     const mensajes: string[] = [];

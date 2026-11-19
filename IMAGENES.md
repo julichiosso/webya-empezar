@@ -26,6 +26,11 @@ de publicar.
 | Abelardo Pizzería     | Carrito con envío a domicilio                                            | celular              | `abelardo-envio.png`                  |
 | Lorena (Fonosanjorge) | Sección de especialidades                                                | celular              | `lorena-especialidades.png`           |
 
+## Demo de pedidos (opcional)
+
+La demo `/demo/pedidos` usa dibujos. Si querés fotos reales de las pizzas, mandalas con el nombre del producto
+(`muzzarella.jpg`, `napolitana.jpg`…), cuadradas, de 800×800 o más; y los nombres reales de bebidas y postres.
+
 ## Además
 
 - **Logo `<webya>` en vector limpio** (SVG o AI/PDF). El actual es un calco con bordes serruchados.
