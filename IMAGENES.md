@@ -35,8 +35,8 @@ celular en `public/clientes/`) y la notificación push del turnero (`public/proy
 
 ## Además
 
-- **Logo `<webya>` en vector limpio** (SVG o AI/PDF). El actual es un calco: en tamaños grandes se notan bordes
-  serruchados. Con el vector limpio se regeneran los trazos (`scripts/optimizar-logo.mjs`).
+- **Logo**: ya no hace falta. El calco se suavizó (`public/webya-logo-limpio.svg`). Si existe el archivo original
+  de diseño (AI, Figma, PDF), igual conviene tenerlo: con él se regeneran los trazos exactos.
 - **Testimonios reales** (texto + nombre + negocio + permiso para publicarlo): el manifiesto ya tiene el campo.
 - **Demo de pedidos (opcional)**: fotos reales de las pizzas, cuadradas, 800 × 800 o más, con el nombre del
   producto (`muzzarella.jpg`, `napolitana.jpg`…).
