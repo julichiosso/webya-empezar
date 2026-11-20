@@ -1,42 +1,45 @@
 # Imágenes que faltan (para reemplazar placeholders)
 
 Todo lo que se muestra de cada proyecto sale de **un solo manifiesto**: `src/content/proyectos.ts` (campo
-`imagenes`). La foto de Julián se carga en `src/content/paginas.ts` (`NOSOTROS.foto`). Mientras una imagen falte,
-el sitio muestra un placeholder vectorial prolijo (el teléfono con el esquema del sistema, o las iniciales "JC").
+`imagenes`: `desktop`, `mobile` y `admin`). La foto de Julián se carga en `src/content/paginas.ts`
+(`NOSOTROS.foto`). Mientras una imagen falte, el sitio muestra un placeholder vectorial prolijo (el esquema del
+sistema en el teléfono, o las iniciales "JC").
 
-**Cómo mandarlas**: capturas sacadas directo en el celular, tal cual salen (PNG), como archivo o por Drive, no como
-foto de WhatsApp (las comprime). Yo las convierto a WebP/AVIF, las recorto y fijo su tamaño (sin saltos de
-layout). Sin datos personales de clientes finales a la vista (nombres, teléfonos, direcciones): si aparecen, se
-tapan antes de publicar.
+**Cómo mandarlas**: PNG tal cual salen (no fotos de la pantalla), como archivo o por Drive, no por WhatsApp (las
+comprime). Yo las convierto a WebP/AVIF y fijo su tamaño (sin saltos de layout). Sin datos personales de clientes
+finales a la vista (nombres, teléfonos, direcciones): si aparecen, se tapan antes de publicar.
 
-## Imprescindibles (hoy hay placeholder)
+## Por proyecto (casos)
 
-| Para                         | Qué                                                              | Formato y tamaño                                        | Nombre de archivo  |
-| ---------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- | ------------------ |
-| Quiénes somos (`/nosotros`)  | Foto tuya: retrato de medio cuerpo, fondo simple, luz natural    | JPG vertical 4:5, **1200 × 1500 px** o más              | `julian.jpg`       |
-| Peluquería Canina (proyecto) | La página de reservas en el celular, desde arriba (scroll largo) | Captura de celular completa, **1170 px de ancho** o más | `canina-sitio.png` |
+Las capturas de escritorio de Micio's, Petrucci y Lorena están cargadas hoy desde los sitios publicados (las tomé
+de la portada pública, 1600 × 1000). Si preferís otras, se reemplazan con estos nombres.
 
-## Para enriquecer cada proyecto (opcionales)
+| Proyecto          | Archivo                                       | Qué                                              | Tamaño      | Estado hoy                 |
+| ----------------- | --------------------------------------------- | ------------------------------------------------ | ----------- | -------------------------- |
+| Micio's Pizzería  | `micios-desktop.png`                          | Portada en la computadora                        | 1600 × 1000 | cargada (de la portada)    |
+| Micio's Pizzería  | `micios-mobile.png`                           | Portada en el celular                            | 780 × 1688  | cargada (captura larga)    |
+| Micio's Pizzería  | `micios-admin.png`                            | Panel del dueño: pedidos del día                 | 1600 × 1000 | **falta**                  |
+| Joyería Petrucci  | `petrucci-desktop.png`                        | Portada en la computadora                        | 1600 × 1000 | cargada (de la portada)    |
+| Joyería Petrucci  | `petrucci-mobile.png`                         | Portada en el celular                            | 780 × 1688  | cargada (captura larga)    |
+| Joyería Petrucci  | `petrucci-admin.png`                          | Panel: subir la foto de un producto              | 1600 × 1000 | **falta**                  |
+| Lorena Almagro    | `lorena-desktop.png`                          | Portada en la computadora                        | 1600 × 1000 | cargada (de la portada)    |
+| Lorena Almagro    | `lorena-mobile.png`                           | Portada en el celular                            | 780 × 1688  | cargada (captura larga)    |
+| Turnero (Canina)  | `canina-desktop.png`                          | Reserva en la computadora (servicio, día y hora) | 1600 × 1000 | **falta** (hay esquema)    |
+| Turnero (Canina)  | `canina-mobile.png`                           | Reserva en el celular                            | 780 × 1688  | cargada (aviso de reserva) |
+| Turnero (Canina)  | `canina-admin.png`                            | Agenda del día por profesional                   | 1600 × 1000 | **falta**                  |
+| Abelardo Pizzería | `abelardo-desktop.png`, `abelardo-mobile.png` | Cuando esté publicado                            | igual       | no se muestra todavía      |
 
-| Proyecto              | Captura                                              | Dispositivo          | Archivo esperado        |
-| --------------------- | ---------------------------------------------------- | -------------------- | ----------------------- |
-| Micio's Pizzería      | Carrito con 2–3 productos                            | celular              | `micios-carrito.png`    |
-| Micio's Pizzería      | Elegir horario de retiro (franjas de 15 min)         | celular              | `micios-franjas.png`    |
-| Micio's Pizzería      | Panel de administración (pedidos del día)            | escritorio o celular | `micios-panel.png`      |
-| Micio's Pizzería      | Foto de una comanda impresa real                     | foto vertical        | `micios-comanda.jpg`    |
-| Peluquería Canina     | Pantalla de pago de la seña (Mercado Pago)           | celular              | `canina-sena.png`       |
-| Peluquería Canina     | Agenda del día por profesional (panel)               | celular o escritorio | `canina-agenda.png`     |
-| Joyería Petrucci      | Panel: subir la foto de un producto desde el celular | celular              | `petrucci-panel.png`    |
-| Lorena (Fonosanjorge) | Sitio en la computadora (para la demo de página web) | escritorio, 1440 px  | `lorena-escritorio.png` |
-| Abelardo Pizzería     | Cuando esté publicado: la home en el celular         | celular              | `abelardo-sitio.png`    |
+**Logos de los clientes** (opcional, solo con su permiso): SVG o PNG con fondo transparente, `[slug]-logo.svg`.
 
-Ya cargadas (no hace falta mandarlas de nuevo): Micio's, Joyería Petrucci, Lorena Almagro y Abelardo (capturas de
-celular en `public/clientes/`) y la notificación push del turnero (`public/proyectos/turnero-aviso.webp`).
+## De Webya
+
+| Para                        | Qué                                                           | Formato y tamaño                           | Archivo      |
+| --------------------------- | ------------------------------------------------------------- | ------------------------------------------ | ------------ |
+| Quiénes somos (`/nosotros`) | Foto tuya: retrato de medio cuerpo, fondo simple, luz natural | JPG vertical 4:5, **1200 × 1500 px** o más | `julian.jpg` |
 
 ## Además
 
-- **Logo**: ya no hace falta. El calco se suavizó (`public/webya-logo-limpio.svg`). Si existe el archivo original
-  de diseño (AI, Figma, PDF), igual conviene tenerlo: con él se regeneran los trazos exactos.
-- **Testimonios reales** (texto + nombre + negocio + permiso para publicarlo): el manifiesto ya tiene el campo.
-- **Demo de pedidos (opcional)**: fotos reales de las pizzas, cuadradas, 800 × 800 o más, con el nombre del
-  producto (`muzzarella.jpg`, `napolitana.jpg`…).
+- **Testimonios reales** (texto + nombre + negocio + permiso para publicarlo): el manifiesto ya tiene el campo y la
+  página de cada caso los muestra solo si existen.
+- **Resultados verificables** por caso (si los hay): campo `resultado`; sin dato, el bloque no aparece.
+- **Logo**: el sitio usa tu SVG tal cual. Si existe el archivo original de diseño (AI, Figma, PDF), conviene tenerlo.
