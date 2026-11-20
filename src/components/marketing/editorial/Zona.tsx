@@ -106,7 +106,7 @@ export function ZonaMapa() {
         </div>
         <div className="col-span-12 lg:col-span-5">
           {ZONA_UI.areas.map((a) => (
-            <div key={a.nombre} className="border-t border-ed-line pt-5 pb-8">
+            <div key={a.nombre} className="pt-5 pb-8">
               <h2 className="e-h3">{a.nombre}</h2>
               <p className="e-rotulo mt-2 text-ed-muted">{a.provincia}</p>
               <ul className="e-cuerpo mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-ed-muted">
@@ -116,7 +116,7 @@ export function ZonaMapa() {
               </ul>
             </div>
           ))}
-          <p className="e-cuerpo border-t border-ed-line pt-5">{ZONA_UI.lejos}</p>
+          <p className="e-cuerpo pt-5">{ZONA_UI.lejos}</p>
           <div className="mt-6">
             <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
           </div>

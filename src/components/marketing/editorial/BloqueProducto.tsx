@@ -62,7 +62,7 @@ export function BloqueProducto({ landing }: { landing: Landing }) {
               etiqueta={B.alt}
             />
           </div>
-          <div className="mt-10 flex flex-col gap-6 border-t border-ed-line pt-8 md:flex-row md:items-center md:justify-between">
+          <div className="mt-10 flex flex-col gap-6 pt-8 md:flex-row md:items-center md:justify-between">
             <p className="e-lead max-w-[46ch]">{B.prueba}</p>
             <Ctas landing={landing} />
           </div>
@@ -87,11 +87,11 @@ export function BloqueProducto({ landing }: { landing: Landing }) {
             >
               {B.solucion}
             </p>
-            <dl className="mt-8 grid grid-cols-1 border-t border-ed-line sm:grid-cols-2">
+            <dl className="mt-8 grid grid-cols-1 sm:grid-cols-2">
               {B.puntos.map((p, i) => (
                 <div
                   key={p.titulo}
-                  className="border-b border-ed-line py-4 sm:odd:pr-6 sm:even:border-l sm:even:pl-6"
+                  className="py-4 sm:odd:pr-6 sm:even:pl-6"
                   data-reveal=""
                   style={{ '--i': i } as CSSProperties}
                 >
@@ -121,11 +121,11 @@ export function ParaQuien({ landing }: { landing: Landing }) {
     <section className="tono-oscuro e-seccion" aria-labelledby="titulo-para-quien">
       <div className="e-wrap">
         <CabezaSeccion rotulo={P.rotulo} titulo={P.titulo} idTitulo="titulo-para-quien" />
-        <ul className="mt-8 grid grid-cols-1 border-t border-ed-line sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
+        <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
           {P.rubros.map((r, i) => (
             <li
               key={r.titulo}
-              className="border-b border-ed-line py-4 sm:pr-6"
+              className="py-4 sm:pr-6"
               data-reveal=""
               style={{ '--i': i % 3 } as CSSProperties}
             >

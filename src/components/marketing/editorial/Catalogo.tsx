@@ -5,11 +5,7 @@ import { Boton } from './Boton';
 /** /tienda: la opción sin carrito, en una franja (el ancla #catalogo llega desde el bento y el menú). */
 export function Catalogo() {
   return (
-    <section
-      id={CATALOGO.id}
-      className="tono-claro scroll-mt-16 border-t border-ed-line"
-      aria-labelledby="titulo-catalogo"
-    >
+    <section id={CATALOGO.id} className="tono-claro scroll-mt-16" aria-labelledby="titulo-catalogo">
       <div className="e-wrap grid grid-cols-12 gap-x-6 gap-y-5 py-12 md:py-16">
         <p className="e-rotulo col-span-12 text-ed-muted md:col-span-3">{CATALOGO.rotulo}</p>
         <div className="col-span-12 md:col-span-6">
