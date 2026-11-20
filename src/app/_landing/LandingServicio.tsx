@@ -45,10 +45,10 @@ export function LandingServicio({
           {CTA.verDemo}
         </Boton>
       </HeroPagina>
-      <BloqueProducto landing={landing} numero={1} />
+      <BloqueProducto landing={landing} />
       {children}
-      <ParaQuien landing={landing} numero={2} />
-      <ProyectosGrilla filtro={proyectos} cabeza={{ numero: 3 }} />
+      <ParaQuien landing={landing} />
+      <ProyectosGrilla filtro={proyectos} cabeza />
       <Cierre armar={RUTAS.armarTipo(landing.tipo)} />
     </Pagina>
   );

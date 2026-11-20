@@ -43,18 +43,13 @@ function Ctas({ landing }: { landing: Landing }) {
  * El producto contado en orden: dolor → solución → puntos → prueba → acción. El turnero se cuenta en
  * pasos con el teléfono que los muestra; el resto, en dos columnas con la captura o el flujo.
  */
-export function BloqueProducto({ landing, numero = 1 }: { landing: Landing; numero?: number }) {
+export function BloqueProducto({ landing }: { landing: Landing }) {
   const B = landing.bloque;
   if (landing.tipo === 'turnero') {
     return (
       <section className="tono-claro e-seccion" aria-labelledby="titulo-producto">
         <div className="e-wrap">
-          <CabezaSeccion
-            numero={numero}
-            rotulo={B.rotulo}
-            titulo={B.titulo}
-            idTitulo="titulo-producto"
-          />
+          <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
           <div className="mt-10 md:mt-14">
             <PasosTurnero
               pasos={B.puntos.map((p) => ({
@@ -76,12 +71,7 @@ export function BloqueProducto({ landing, numero = 1 }: { landing: Landing; nume
   return (
     <section className="tono-claro e-seccion" aria-labelledby="titulo-producto">
       <div className="e-wrap">
-        <CabezaSeccion
-          numero={numero}
-          rotulo={B.rotulo}
-          titulo={B.titulo}
-          idTitulo="titulo-producto"
-        />
+        <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
         <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-10 md:mt-12">
           <div className="col-span-12 lg:col-span-6">
             <p className="e-h3 max-w-[30ch] font-medium" data-reveal="">
@@ -122,17 +112,12 @@ export function BloqueProducto({ landing, numero = 1 }: { landing: Landing; nume
 }
 
 /** "Para quién": los rubros con su lenguaje, para que cada negocio se reconozca. */
-export function ParaQuien({ landing, numero = 2 }: { landing: Landing; numero?: number }) {
+export function ParaQuien({ landing }: { landing: Landing }) {
   const P = landing.paraQuien;
   return (
     <section className="tono-oscuro e-seccion" aria-labelledby="titulo-para-quien">
       <div className="e-wrap">
-        <CabezaSeccion
-          numero={numero}
-          rotulo={P.rotulo}
-          titulo={P.titulo}
-          idTitulo="titulo-para-quien"
-        />
+        <CabezaSeccion rotulo={P.rotulo} titulo={P.titulo} idTitulo="titulo-para-quien" />
         <ul className="mt-8 grid grid-cols-1 border-t border-ed-line sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
           {P.rubros.map((r, i) => (
             <li

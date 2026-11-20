@@ -73,7 +73,6 @@ export function NosotrosPagina() {
       <section className="tono-oscuro e-seccion" aria-labelledby="titulo-proceso">
         <div className="e-wrap">
           <CabezaSeccion
-            numero={1}
             rotulo={N.proceso.rotulo}
             titulo={N.proceso.titulo}
             idTitulo="titulo-proceso"
@@ -96,11 +95,10 @@ export function NosotrosPagina() {
           </ol>
         </div>
       </section>
-      <ProyectosInicio numero={2} />
+      <ProyectosInicio />
       <section className="tono-claro e-seccion" aria-labelledby="titulo-contacto">
         <div className="e-wrap">
           <CabezaSeccion
-            numero={3}
             rotulo={N.contacto.rotulo}
             titulo={N.contacto.titulo}
             idTitulo="titulo-contacto"
@@ -132,17 +130,12 @@ export function NosotrosPagina() {
 }
 
 /** Home: quiénes somos en pocas líneas, con el retrato y el link a /nosotros. */
-export function NosotrosInicio({ numero = 3 }: { numero?: number }) {
+export function NosotrosInicio() {
   const S = SECCIONES.nosotros;
   return (
     <section id={S.id} className="tono-claro e-seccion" aria-labelledby="titulo-nosotros">
       <div className="e-wrap">
-        <CabezaSeccion
-          numero={numero}
-          rotulo={S.rotulo}
-          titulo={S.titulo}
-          idTitulo="titulo-nosotros"
-        />
+        <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-nosotros" />
         <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-6 md:mt-12">
           <Retrato className="col-span-4 sm:col-span-3 md:col-span-2 md:col-start-4" />
           <div className="col-span-12 sm:col-span-9 md:col-span-6" data-reveal="">

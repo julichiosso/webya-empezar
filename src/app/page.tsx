@@ -44,9 +44,9 @@ export default function Inicio() {
     <Pagina>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializarLd(LD) }} />
       <HeroInicio />
-      <Bento numero={1} />
-      <ProyectosInicio numero={2} />
-      <NosotrosInicio numero={3} />
+      <Bento />
+      <ProyectosInicio />
+      <NosotrosInicio />
       <Cierre />
     </Pagina>
   );

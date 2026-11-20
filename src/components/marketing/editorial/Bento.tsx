@@ -99,17 +99,12 @@ const CELDAS: readonly CeldaDef[] = [
 ];
 
 /** Bento "Qué armamos": grilla asimétrica, cada tarjeta lleva a la página de su producto. */
-export function Bento({ numero = 1 }: { numero?: number }) {
+export function Bento() {
   const S = SECCIONES.queArmo;
   return (
     <section id={S.id} className="tono-claro e-seccion" aria-labelledby="titulo-que-armamos">
       <div className="e-wrap">
-        <CabezaSeccion
-          numero={numero}
-          rotulo={S.rotulo}
-          titulo={S.titulo}
-          idTitulo="titulo-que-armamos"
-        />
+        <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-que-armamos" />
         <ul className="mt-8 grid grid-cols-2 gap-2.5 md:mt-12 md:grid-cols-12 md:gap-4">
           {CELDAS.map((c, i) => {
             const t = BENTO.celdas[c.id];

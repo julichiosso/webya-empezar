@@ -64,18 +64,13 @@ function Estado({ p }: { p: Proyecto }) {
 }
 
 /** Home: cuatro proyectos en grilla compacta (dos por fila en el celular) y el link a todos. */
-export function ProyectosInicio({ numero = 2 }: { numero?: number }) {
+export function ProyectosInicio() {
   const S = SECCIONES.proyectos;
   const lista = PROYECTOS.filter((p) => p.id !== 'abelardo').slice(0, 4);
   return (
     <section id={S.id} className="tono-oscuro e-seccion" aria-labelledby="titulo-proyectos">
       <div className="e-wrap">
-        <CabezaSeccion
-          numero={numero}
-          rotulo={S.rotulo}
-          titulo={S.titulo}
-          idTitulo="titulo-proyectos"
-        />
+        <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-proyectos" />
         <ul className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 md:mt-12 lg:grid-cols-4 lg:gap-x-5">
           {lista.map((p, i) => (
             <li key={p.id} data-reveal="" style={{ '--i': i } as CSSProperties}>
@@ -183,7 +178,7 @@ export function ProyectosGrilla({
   cabeza,
 }: {
   filtro?: (p: Proyecto) => boolean;
-  cabeza?: { numero: number };
+  cabeza?: boolean;
 }) {
   const S = SECCIONES.proyectos;
   const lista = filtro ? PROYECTOS.filter(filtro) : PROYECTOS;
@@ -196,12 +191,7 @@ export function ProyectosGrilla({
     >
       <div className="e-wrap">
         {cabeza ? (
-          <CabezaSeccion
-            numero={cabeza.numero}
-            rotulo={S.rotulo}
-            titulo={S.titulo}
-            idTitulo="titulo-proyectos"
-          />
+          <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-proyectos" />
         ) : null}
         <div
           className={cn(
