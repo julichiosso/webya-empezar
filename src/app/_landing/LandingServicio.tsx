@@ -4,6 +4,7 @@ import { Boton } from '@/components/marketing/editorial/Boton';
 import { Cierre } from '@/components/marketing/editorial/Cierre';
 import { HeroPagina } from '@/components/marketing/editorial/Hero';
 import { Pagina } from '@/components/marketing/editorial/Pagina';
+import { Vidriera } from '@/components/marketing/editorial/Vidriera';
 import { ProyectosGrilla } from '@/components/marketing/editorial/Proyectos';
 import { CTA, RUTAS } from '@/content/home';
 import type { Landing } from '@/content/landings';
@@ -39,6 +40,7 @@ export function LandingServicio({
         rotulo={landing.hero.rotulo}
         titulo={landing.hero.titulo}
         bajada={landing.hero.bajada}
+        vidriera={<Vidriera producto={landing.tipo as 'turnero' | 'pedidos' | 'tienda' | 'web'} />}
       >
         <Boton href={RUTAS.armarTipo(landing.tipo)}>{CTA.armar}</Boton>
         <Boton href={landing.demo} variante="secundario" externo icono={false}>

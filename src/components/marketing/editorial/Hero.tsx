@@ -87,37 +87,52 @@ interface HeroPaginaProps {
   bajada?: string;
   /** Botones u otro contenido debajo de la bajada. */
   children?: React.ReactNode;
+  /** A la derecha (abajo en el celular): la vidriera de trabajos hechos. */
+  vidriera?: React.ReactNode;
 }
 
 /** Hero de las páginas propias (productos, proyectos, nosotros, zona): rótulo, titular, bajada y CTA. */
-export function HeroPagina({ rotulo, titulo, bajada, children }: HeroPaginaProps) {
+export function HeroPagina({ rotulo, titulo, bajada, children, vidriera }: HeroPaginaProps) {
   return (
-    <section className="tono-oscuro" aria-labelledby="titulo-hero">
-      <div className="e-wrap pt-8 pb-10 md:pt-16 md:pb-16 lg:pt-20">
-        <p className="e-rotulo e-hero-aparece text-ed-muted" style={aparece(0)}>
-          {rotulo}
-        </p>
-        <TituloPalabras
-          as="h1"
-          id="titulo-hero"
-          lineas={titulo}
-          alCargar
-          className="e-display e-hero-compacto mt-4 max-w-[18ch] md:mt-6"
-        />
-        {bajada ? (
-          <p
-            className="e-lead e-hero-aparece mt-5 max-w-[46ch] text-ed-muted md:mt-7"
-            style={aparece(1)}
-          >
-            {bajada}
+    <section className="tono-oscuro overflow-hidden" aria-labelledby="titulo-hero">
+      <div
+        className={
+          vidriera
+            ? 'e-wrap grid grid-cols-12 gap-y-10 lg:gap-x-10 pt-8 pb-10 md:pt-14 md:pb-14 lg:items-center lg:pt-16'
+            : 'e-wrap pt-8 pb-10 md:pt-16 md:pb-16 lg:pt-20'
+        }
+      >
+        <div className={vidriera ? 'col-span-12 min-w-0 lg:col-span-6' : undefined}>
+          <p className="e-rotulo e-hero-aparece text-ed-muted" style={aparece(0)}>
+            {rotulo}
           </p>
-        ) : null}
-        {children ? (
-          <div
-            className="e-hero-aparece mt-6 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3 md:mt-8"
-            style={aparece(2)}
-          >
-            {children}
+          <TituloPalabras
+            as="h1"
+            id="titulo-hero"
+            lineas={titulo}
+            alCargar
+            className="e-display e-hero-compacto mt-4 max-w-[18ch] md:mt-6"
+          />
+          {bajada ? (
+            <p
+              className="e-lead e-hero-aparece mt-5 max-w-[46ch] text-ed-muted md:mt-7"
+              style={aparece(1)}
+            >
+              {bajada}
+            </p>
+          ) : null}
+          {children ? (
+            <div
+              className="e-hero-aparece mt-6 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3 md:mt-8"
+              style={aparece(2)}
+            >
+              {children}
+            </div>
+          ) : null}
+        </div>
+        {vidriera ? (
+          <div className="e-hero-aparece col-span-12 min-w-0 lg:col-span-6" style={aparece(3)}>
+            {vidriera}
           </div>
         ) : null}
       </div>
