@@ -17,7 +17,6 @@ interface Props {
 export function CabezaSeccion({ rotulo, titulo, bajada, idTitulo, className, children }: Props) {
   return (
     <header className={cn('grid grid-cols-12 gap-x-6 gap-y-6', className)}>
-      <div className="e-regla col-span-12" data-reveal="" aria-hidden="true" />
       <p className="e-rotulo col-span-12 text-ed-muted md:col-span-3" data-reveal="">
         {rotulo}
       </p>
