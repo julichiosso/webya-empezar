@@ -43,6 +43,11 @@ export const EXCEPCIONES_CIFRAS: { prefijo: string; motivo: string }[] = [
       'Seña del 50% y franjas de 15 minutos en las descripciones SEO: datos reales (2026-11-19).',
   },
   {
+    prefijo: 'proyectos.ts.CASOS',
+    motivo:
+      "Los mismos proyectos que PROYECTOS (los que no están en construcción): franjas de 15 minutos de Micio's.",
+  },
+  {
     prefijo: 'proyectos.ts.PROYECTOS',
     motivo:
       "Franjas de 15 minutos: función real del sistema de Micio's, confirmada por Julián (2026-11-19).",
