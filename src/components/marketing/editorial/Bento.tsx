@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { BENTO, SECCIONES } from '@/content/home';
 import { CabezaSeccion } from './CabezaSeccion';
-import { FondoMarca } from './FondoMarca';
+import { FondoGrilla } from './FondoGrilla';
 
 type CeldaId = keyof typeof BENTO.celdas;
 
@@ -107,7 +107,7 @@ export function Bento() {
       className="tono-claro e-seccion e-con-fondo"
       aria-labelledby="titulo-que-armamos"
     >
-      <FondoMarca variante="logo" />
+      <FondoGrilla />
       <div className="e-wrap">
         <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-que-armamos" />
         <ul className="mt-8 grid grid-cols-2 gap-2.5 md:mt-12 md:grid-cols-12 md:gap-4">

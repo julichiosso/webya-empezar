@@ -3,11 +3,11 @@ import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { MENSAJE_CONTACTO } from '@/content/configurador';
-import { CTA, FRASES, NOSOTROS_HOME, RUTAS, SECCIONES } from '@/content/home';
+import { CTA, NOSOTROS_HOME, RUTAS, SECCIONES } from '@/content/home';
 import { NOSOTROS } from '@/content/paginas';
 import { siteConfig } from '@/lib/site-config';
 import { CabezaSeccion } from './CabezaSeccion';
-import { FondoMarca } from './FondoMarca';
+import { FondoGrilla } from './FondoGrilla';
 import { enlaceContacto } from './contacto';
 import { ProyectosInicio } from './Proyectos';
 
@@ -59,7 +59,7 @@ export function NosotrosPagina() {
   return (
     <>
       <section className="tono-claro e-seccion e-con-fondo" aria-label={N.rotulo}>
-        <FondoMarca variante="logo" />
+        <FondoGrilla />
         <div className="e-wrap grid grid-cols-12 items-center gap-x-6 gap-y-8">
           <Retrato className="col-span-8 sm:col-span-5 lg:col-span-4" />
           <figure className="col-span-12 sm:col-span-7 lg:col-span-6 lg:col-start-6">
@@ -98,7 +98,7 @@ export function NosotrosPagina() {
       </section>
       <ProyectosInicio />
       <section className="tono-claro e-seccion e-con-fondo" aria-labelledby="titulo-contacto">
-        <FondoMarca variante="frase" frase={FRASES.rubros} />
+        <FondoGrilla />
         <div className="e-wrap">
           <CabezaSeccion
             rotulo={N.contacto.rotulo}
@@ -140,7 +140,7 @@ export function NosotrosInicio() {
       className="tono-claro e-seccion e-con-fondo"
       aria-labelledby="titulo-nosotros"
     >
-      <FondoMarca variante="frase" frase={FRASES.promesa} />
+      <FondoGrilla />
       <div className="e-wrap">
         <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-nosotros" />
         <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-6 md:mt-12">

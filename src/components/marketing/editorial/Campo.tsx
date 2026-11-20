@@ -3,14 +3,14 @@ import type { CSSProperties } from 'react';
 import { CAMPO } from '@/content/paginas';
 import { CabezaSeccion } from './CabezaSeccion';
 import { TextoBoton } from './Boton';
-import { FondoMarca } from './FondoMarca';
+import { FondoGrilla } from './FondoGrilla';
 
 /** /campo: cada problema del campo con el sistema que lo resuelve (y el link a ese producto). */
 export function SolucionesCampo() {
   const S = CAMPO.soluciones;
   return (
     <section className="tono-claro e-seccion e-con-fondo" aria-labelledby="titulo-soluciones">
-      <FondoMarca variante="logo" />
+      <FondoGrilla />
       <div className="e-wrap">
         <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-soluciones" />
         <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 md:mt-12 md:gap-4 lg:grid-cols-3">
