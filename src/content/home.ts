@@ -80,10 +80,22 @@ export const HERO = {
   /** Una sola frase que baja el lema a tierra: qué armamos y para quién. */
   bajada:
     'Armamos los turnos, los pedidos y la venta online de tu negocio, y vos lo manejás desde el celular.',
+  rubros: 'Elegí tu rubro y probalo',
+  /** Lo que aparece en cada fila al pasar el mouse. */
+  probar: 'Ver demo',
+  /** Nombre accesible de cada rubro (el link abre la demo en otra pestaña). */
+  rubroAria: (rubro: string, sistema: string) =>
+    `${rubro}: ver demo de ${sistema.toLowerCase()}, se abre en otra pestaña`,
   /** Prueba al toque, en la primera pantalla: los negocios que ya lo usan. */
   confianza: 'Funcionando en',
   y: 'y',
-  verZona: 'Ver el mapa',
+  /** Dónde atendemos: con el mini mapa, lleva a /zona. */
+  zona: {
+    titulo: '¿Sos de San Jorge, San Francisco o la zona?',
+    texto: (localidades: number | string) =>
+      `Te atendemos en persona en ${localidades} localidades. Mirá el mapa de zonas.`,
+    alt: 'Mapa chico de las dos zonas de atención: San Francisco y San Jorge con sus alrededores.',
+  },
 } as const;
 
 /**
@@ -265,36 +277,12 @@ export const FRASES = {
   rubros: 'Web · Sistemas · Automatización',
 } as const;
 
-/**
- * Escenas de la semana de un negocio: el problema de siempre y lo que cambia con el sistema. Dolor,
- * alivio y el link a la prueba. Son escenas de ejemplo, no cifras de nadie.
- */
-export const ESCENAS = {
-  rotulo: 'Tu semana',
-  titulo: 'Lo que cambia cuando tu negocio tiene su sistema.',
-  lista: [
-    {
-      cuando: 'Viernes a la noche.',
-      antes: 'Suena el teléfono, los pedidos se anotan en un papel y alguno se pierde.',
-      despues:
-        'Con pedidos online, cada pedido entra con su hora de retiro y la comanda sale sola.',
-      link: 'Pedidos online',
-      href: '/pedidos',
-    },
-    {
-      cuando: 'Sábado a la mañana.',
-      antes: 'El primer turno no vino y nadie avisó.',
-      despues: 'Con el turnero, el cliente deja la seña al reservar y el turno queda asegurado.',
-      link: 'Turnero con seña',
-      href: '/turnero',
-    },
-    {
-      cuando: 'Domingo.',
-      antes: 'El local está cerrado y alguien quiere comprarte.',
-      despues: 'Con la tienda online te compra igual, y el lunes preparás el pedido.',
-      link: 'Tienda online',
-      href: '/tienda',
-    },
+export const MANIFIESTO = {
+  etiqueta: 'Qué hacemos por tu negocio',
+  pasos: [
+    { palabra: 'Creá.', texto: 'Tu página, tu tienda o tu sistema, a la medida de tu negocio.' },
+    { palabra: 'Digitalizá.', texto: 'Los turnos, pedidos y consultas que hoy hacés a mano.' },
+    { palabra: 'Crecé.', texto: 'Tu negocio atiende todo el día, aunque esté cerrado.' },
   ],
 } as const;
 

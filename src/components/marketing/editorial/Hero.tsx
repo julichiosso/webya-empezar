@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { MENSAJE_CONTACTO } from '@/content/configurador';
-import { CTA, HERO, MARCA, RUTAS } from '@/content/home';
-import { AVISO_HERO } from '@/content/mockups';
+import { CTA, HERO, RUBROS_HOME, RUTAS } from '@/content/home';
 import { PROYECTOS } from '@/content/proyectos';
 import { Boton } from './Boton';
 import { Buscador } from './Buscador';
 import { enlaceContacto } from './contacto';
 import { WhatsApp } from './Iconos';
-import { AvisoPush, PantallaTurnero, Telefono } from './Pantallas';
+import { MiniMapaZona } from './MiniMapaZona';
 import { TituloPalabras } from './TituloPalabras';
 
 const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
@@ -17,28 +16,9 @@ const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
 const EN_PRODUCCION = PROYECTOS.filter((p) => p.estado === 'produccion');
 
 /**
- * El producto como protagonista: el turnero con la agenda del día y, encima, el aviso que le llega al
- * dueño cuando alguien reserva. Todo dibujado en el servidor: no suma JavaScript.
- */
-function ProductoHero() {
-  return (
-    <div
-      className="relative mx-auto w-full max-w-[16rem] lg:max-w-[19rem]"
-      role="img"
-      aria-label={AVISO_HERO.alt}
-    >
-      <Telefono>
-        <PantallaTurnero paso={5} />
-      </Telefono>
-      <AvisoPush />
-    </div>
-  );
-}
-
-/**
  * Hero de la home. En cinco segundos: la marca (Creá. Digitalizá. Crecé.), qué armamos y para quién,
- * qué hacer ahora (buscar, armar, escribir) y por qué confiar (negocios reales y la zona). A la
- * derecha, el producto funcionando; en el celular asoma abajo e invita a seguir.
+ * qué hacer ahora (buscar, armar, escribir) y por qué confiar (negocios reales). Al lado (abajo en el
+ * celular), "Elegí tu rubro": cada rubro abre su demo; y debajo, dónde atendemos con el mapa de zonas.
  */
 export function HeroInicio() {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
@@ -74,10 +54,7 @@ export function HeroInicio() {
               {CTA.escribinos}
             </Boton>
           </div>
-          <div
-            className="e-hero-aparece e-chico mt-6 space-y-1 text-ed-muted lg:mt-8"
-            style={aparece(4)}
-          >
+          <div className="e-hero-aparece e-chico mt-6 text-ed-muted lg:mt-8" style={aparece(4)}>
             <p>
               {HERO.confianza}{' '}
               {EN_PRODUCCION.map((p, i) => (
@@ -85,6 +62,7 @@ export function HeroInicio() {
                   {i === 0 ? null : i === EN_PRODUCCION.length - 1 ? ` ${HERO.y} ` : ', '}
                   <Link
                     href={`${RUTAS.proyectos}/${p.id}`}
+                    prefetch={false}
                     className="e-link e-link-nav text-ed-fg"
                   >
                     {p.cliente}
@@ -92,19 +70,44 @@ export function HeroInicio() {
                 </span>
               ))}
             </p>
-            <p className="flex flex-wrap items-center gap-x-3">
-              <span>{MARCA.zona}</span>
-              <Link href={RUTAS.zona} className="e-link text-ed-fg">
-                {HERO.verZona}
-              </Link>
-            </p>
           </div>
         </div>
         <div
-          className="e-hero-aparece e-hero-producto col-span-12 mt-9 min-w-0 lg:col-span-5 lg:mt-0"
+          className="e-hero-aparece col-span-12 mt-8 min-w-0 lg:col-span-5 lg:mt-0"
           style={aparece(3)}
         >
-          <ProductoHero />
+          <p className="e-rotulo text-ed-muted">{HERO.rubros}</p>
+          <ul className="mt-2">
+            {RUBROS_HOME.map((r) => (
+              <li key={r.id}>
+                <a
+                  href={r.href}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={HERO.rubroAria(r.nombre, r.sistema)}
+                  className="e-fila group relative flex min-h-12 items-center gap-4 rounded-xl py-2 active:opacity-60 lg:min-h-14"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[0.9375rem] leading-tight font-medium lg:text-[1.0625rem]">
+                      {r.nombre}
+                    </span>
+                    <span className="mt-0.5 block truncate text-[0.75rem] text-ed-muted lg:text-[0.8125rem]">
+                      {r.ejemplo}
+                    </span>
+                  </span>
+                  <span className="e-fila-rol e-chico hidden shrink-0 text-ed-muted sm:inline-grid">
+                    <span>{r.sistema}</span>
+                    <span aria-hidden="true" className="font-medium text-ed-fg">
+                      {HERO.probar}
+                    </span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-5 pb-8 lg:pb-0">
+            <MiniMapaZona />
+          </div>
         </div>
       </div>
     </section>
