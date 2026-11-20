@@ -839,35 +839,123 @@ dd {
 }
 
 /*
- * Fondos delicados de las secciones claras: dibujos en negro muy tenue (sin color, sin degradados a la
- * vista). Van en un ::before detrás del contenido; la máscara solo los desvanece hacia los bordes.
+ * Fondos vectoriales de marca (secciones claras): el wordmark en contorno de 1 px o una frase de Webya en
+ * letra hueca, enormes, recortados y muy tenues, detrás del contenido. Sin color ni degradados a la vista.
  */
-.e-fondo {
+.e-con-fondo {
   position: relative;
   isolation: isolate;
+  overflow: hidden;
 }
-.e-fondo::before {
-  content: '';
+.e-fondo-logo,
+.e-fondo-frase {
   position: absolute;
-  inset: 0;
   z-index: -1;
   pointer-events: none;
+  color: var(--e-fg);
+  opacity: 0.1;
 }
-.e-fondo-puntos::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1.5' cy='1.5' r='1.1' fill='%230a0a0a'/%3E%3C/svg%3E");
-  opacity: 0.11;
-  -webkit-mask-image: radial-gradient(ellipse 55% 70% at 88% 18%, #000 0%, transparent 72%);
-  mask-image: radial-gradient(ellipse 55% 70% at 88% 18%, #000 0%, transparent 72%);
+.e-fondo-logo {
+  top: clamp(1.5rem, 4vw, 4rem);
+  right: -5%;
+  width: min(60rem, 95%);
+  height: auto;
 }
-.e-fondo-grilla::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cpath d='M72 .5H0M.5 0v72' fill='none' stroke='%230a0a0a'/%3E%3C/svg%3E");
-  opacity: 0.06;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
-  mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+.e-fondo-frase {
+  left: clamp(1rem, 4vw, 3rem);
+  right: clamp(1rem, 4vw, 3rem);
+  bottom: clamp(0.75rem, 2vw, 2rem);
+  width: calc(100% - 2 * clamp(1rem, 4vw, 3rem));
+  height: auto;
+  max-width: 84rem;
+  margin-inline: auto;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  opacity: 0.16;
 }
-.e-fondo-curvas::before {
-  background: url('/fondos/curvas.svg') no-repeat right -8rem top -4rem / min(78rem, 140%) auto;
-  opacity: 0.09;
+.e-fondo-frase text {
+  font-family: var(--font-geist), system-ui, sans-serif;
+}
+.e-fondo-arriba {
+  top: clamp(1.5rem, 4vw, 4rem);
+  bottom: auto;
+}
+/* Con la frase abajo, la sección deja su lugar: nunca se monta sobre el contenido. */
+.e-con-fondo:has(> .e-fondo-frase:not(.e-fondo-arriba)) {
+  padding-bottom: calc(clamp(3rem, 5.5vw, 6rem) + 7vw);
+}
+.e-con-fondo:has(> .e-fondo-arriba) {
+  padding-top: calc(clamp(3rem, 5.5vw, 6rem) + 5vw);
+}
+
+/* La franja "Creá. Digitalizá. Crecé.": cada palabra arranca hueca y se llena al entrar en pantalla. */
+.e-manifiesto-palabra {
+  font-size: clamp(2.5rem, 1.6rem + 3.6vw, 5.25rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  font-weight: 600;
+  color: var(--e-fg);
+  -webkit-text-stroke: 1px var(--e-fg);
+  transition: color 900ms var(--ease-editorial);
+  transition-delay: calc(250ms + var(--i, 0) * 220ms);
+}
+.mo [data-reveal]:not(.in) .e-manifiesto-palabra {
+  color: transparent;
+}
+
+/*
+ * El gesto de los botones: un trazo de 1 px dibuja el contorno por fuera (separado 5 px) y el texto rueda
+ * hacia arriba. Los radios son la mitad de la altura con el margen (48 + 10 y 44 + 10 px).
+ */
+.e-btn {
+  position: relative;
+}
+.e-btn-trazo {
+  position: absolute;
+  inset: -5px;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  overflow: visible;
+  pointer-events: none;
+}
+.e-btn-trazo rect {
+  fill: none;
+  stroke: var(--e-fg);
+  stroke-width: 1;
+  rx: 29px;
+  ry: 29px;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 700ms var(--ease-editorial);
+}
+.e-btn-chico .e-btn-trazo rect {
+  rx: 27px;
+  ry: 27px;
+}
+.e-btn-rol {
+  display: inline-grid;
+  overflow: hidden;
+}
+.e-btn-rol > span {
+  grid-area: 1 / 1;
+  transition: transform 420ms var(--ease-editorial);
+}
+.e-btn-rol > span + span {
+  transform: translate3d(0, 110%, 0);
+}
+@media (hover: hover) {
+  .e-btn:hover .e-btn-trazo rect {
+    stroke-dashoffset: 0;
+  }
+  .e-btn:hover .e-btn-rol > span:first-child {
+    transform: translate3d(0, -110%, 0);
+  }
+  .e-btn:hover .e-btn-rol > span + span {
+    transform: none;
+  }
+}
+.e-btn:focus-visible .e-btn-trazo rect {
+  stroke-dashoffset: 0;
 }
 
 /*

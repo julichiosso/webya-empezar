@@ -15,9 +15,33 @@ interface BotonProps {
 }
 
 /**
+ * El gesto de los botones de Webya, en vector: al pasar el mouse un trazo de 1 px dibuja el contorno del
+ * botón (por fuera, separado) y el texto rueda hacia arriba. Sin sombras ni brillos; con movimiento
+ * reducido, el contorno aparece de una.
+ */
+export function TrazoBoton() {
+  return (
+    <svg aria-hidden="true" focusable="false" className="e-btn-trazo">
+      <rect width="100%" height="100%" pathLength={1} />
+    </svg>
+  );
+}
+
+/** El texto del botón dos veces, una arriba de la otra: al pasar el mouse rueda a la segunda. */
+export function TextoBoton({ children }: { children: React.ReactNode }) {
+  if (typeof children !== 'string') return <span>{children}</span>;
+  return (
+    <span className="e-btn-rol">
+      <span>{children}</span>
+      <span aria-hidden="true">{children}</span>
+    </span>
+  );
+}
+
+/**
  * Botón-enlace del sistema editorial. Dos jerarquías: principal sólido y secundario con borde fino.
- * Pill, sin sombra, brillo ni flecha. Respuesta inmediata: cambia de tono al pasar el mouse y se hunde
- * apenas al tocarlo.
+ * Pill, sin sombra, brillo ni flecha. Respuesta inmediata: el trazo y el texto al pasar el mouse, y se
+ * hunde apenas al tocarlo.
  */
 export function Boton({
   href,
@@ -36,8 +60,9 @@ export function Boton({
   );
   const contenido = (
     <>
+      <TrazoBoton />
       {icono || null}
-      <span>{children}</span>
+      <TextoBoton>{children}</TextoBoton>
     </>
   );
   if (externo || /^(https?:|mailto:)/.test(href)) {
@@ -61,5 +86,19 @@ export function Boton({
     <Link href={href} prefetch={prefetch} className={clases}>
       {contenido}
     </Link>
+  );
+}
+
+/** Botón de envío de un formulario, con el mismo gesto. */
+export function BotonForm({ texto, cargando }: { texto: string; cargando: boolean }) {
+  return (
+    <button
+      type="submit"
+      aria-disabled={cargando || undefined}
+      className="e-btn e-btn-primario shrink-0"
+    >
+      <TrazoBoton />
+      <TextoBoton>{texto}</TextoBoton>
+    </button>
   );
 }
