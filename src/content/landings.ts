@@ -248,3 +248,19 @@ export const CATALOGO = {
   texto:
     'El catálogo muestra tus productos con fotos y precios, y cada consulta te llega directo a tu WhatsApp. Es la forma más simple de empezar.',
 } as const;
+
+/**
+ * Vidriera del hero de cada página de producto: los trabajos hechos, con el del producto primero. Las
+ * capturas salen del manifiesto de proyectos; el aviso del turnero es la captura real de la notificación.
+ */
+export const VIDRIERA = {
+  etiqueta: 'Trabajos hechos',
+  aviso: { proyecto: 'canina', sistema: 'Aviso de nueva reserva' },
+  /** Ids del manifiesto (o "aviso") en el orden en que se muestran, por producto. */
+  orden: {
+    turnero: ['aviso', 'canina', 'micios', 'petrucci', 'lorena'],
+    pedidos: ['micios', 'abelardo', 'aviso', 'petrucci', 'lorena'],
+    tienda: ['petrucci', 'micios', 'lorena', 'aviso', 'abelardo'],
+    web: ['lorena', 'petrucci', 'micios', 'aviso', 'abelardo'],
+  },
+} as const;
