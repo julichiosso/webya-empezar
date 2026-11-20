@@ -208,7 +208,7 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
             />
           </div>
           <p className="e-chico mt-5 text-ed-muted">{C.aclaracion}</p>
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-ed-line pt-5">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-5">
             <a
               href={r.demo?.href ?? '/demos'}
               {...(r.demo?.href.startsWith('/demos') ? { target: '_blank', rel: 'noopener' } : {})}
@@ -231,7 +231,7 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
       </aside>
 
       {/* Celular: el botón queda a mano (abajo, con el pulgar) mientras se recorre el configurador. */}
-      <div className="sticky bottom-0 z-30 col-span-12 -mx-[clamp(1rem,4vw,3rem)] border-t border-ed-line bg-ed-bg px-[clamp(1rem,4vw,3rem)] pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
+      <div className="sticky bottom-0 z-30 col-span-12 -mx-[clamp(1rem,4vw,3rem)] bg-ed-bg px-[clamp(1rem,4vw,3rem)] pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
         <Progreso pasos={pasos} className="mb-2" />
         <p className="e-chico mb-2 truncate text-ed-muted" aria-hidden="true">
           {r.tipo
@@ -283,7 +283,7 @@ function Resumen({ estado }: { estado: EstadoConfigurador }) {
       </p>
     );
   }
-  const fila = 'grid grid-cols-[6rem_1fr] gap-4 border-t border-ed-line py-3';
+  const fila = 'grid grid-cols-[6rem_1fr] gap-4 py-3';
   return (
     <dl className="e-chico mt-5" aria-live="polite">
       <div className={fila}>

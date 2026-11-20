@@ -18,7 +18,7 @@ export function PaginaLegal({ texto }: { texto: TextoLegal }) {
           <h1 className="e-h2 mt-6">{texto.titulo}</h1>
           <p className="e-lead mt-8">{texto.intro}</p>
           {texto.secciones.map((s) => (
-            <section key={s.titulo} className="mt-12 border-t border-ed-line pt-8">
+            <section key={s.titulo} className="mt-12 pt-8">
               <h2 className="e-h3">{s.titulo}</h2>
               {s.parrafos?.map((p) => (
                 <p key={p} className="e-cuerpo mt-4 text-ed-muted">
@@ -34,7 +34,7 @@ export function PaginaLegal({ texto }: { texto: TextoLegal }) {
               )}
             </section>
           ))}
-          <p className="e-cuerpo mt-12 border-t border-ed-line pt-8">
+          <p className="e-cuerpo mt-12 pt-8">
             {LEGAL_UI.contactoPrefijo}{' '}
             <a href={`mailto:${mail}`} className="underline underline-offset-4">
               {mail}
