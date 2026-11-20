@@ -4,9 +4,11 @@ import { CTA, PROYECTOS_UI, RUTAS, SECCIONES } from '@/content/home';
 import { CASOS, ESTADO_PROYECTO, datosCasos, dominioDe, type Proyecto } from '@/content/proyectos';
 import { Boton } from './Boton';
 import { CabezaSeccion } from './CabezaSeccion';
-import { Casos, type CasoVista } from './Casos';
+import Image from 'next/image';
+import { Casos, type CasoVista, type VisualesCaso } from './Casos';
 import { Composicion } from './Composicion';
 import { FondoGrilla } from './FondoGrilla';
+import { PantallaProyecto, Telefono } from './Pantallas';
 
 /** Lo que el componente de casos necesita de cada proyecto (todo sale del manifiesto). */
 const vista = (p: Proyecto): CasoVista => ({
@@ -15,6 +17,31 @@ const vista = (p: Proyecto): CasoVista => ({
   estadoTexto: ESTADO_PROYECTO[p.estado],
   dominio: p.url ? dominioDe(p.url) : undefined,
 });
+
+/** El teléfono de la tarjeta del celular: la captura real o el esquema del sistema. */
+function Miniatura({ p }: { p: Proyecto }) {
+  const img = p.imagenes.mobile;
+  return (
+    <Telefono
+      className="max-w-none"
+      decorativo={!img}
+      barra={!img?.completa}
+      colorBarra={img?.barra}
+    >
+      {img ? (
+        <Image src={img.src} alt={img.alt} fill sizes="7rem" className="object-cover object-top" />
+      ) : (
+        <PantallaProyecto mockup={p.mockup} />
+      )}
+    </Telefono>
+  );
+}
+
+/** Las imágenes de cada caso, dibujadas acá (servidor) y pasadas ya armadas al componente interactivo. */
+const visuales = (): VisualesCaso =>
+  Object.fromEntries(
+    CASOS.map((p) => [p.id, { panel: <Composicion caso={p} />, miniatura: <Miniatura p={p} /> }]),
+  );
 
 /** La barra de datos, calculada desde el manifiesto. */
 function textoDatos() {
@@ -53,7 +80,7 @@ export function SeccionCasos({ enPagina = false }: { enPagina?: boolean }) {
           {textoDatos()}
         </p>
         <div className="mt-6 md:mt-8">
-          <Casos casos={CASOS.map(vista)} />
+          <Casos casos={CASOS.map(vista)} visuales={visuales()} />
         </div>
         <div className="mt-12 flex flex-col gap-5 rounded-[1.75rem] bg-ed-surface p-6 md:mt-16 md:flex-row md:items-center md:justify-between md:p-8">
           <p className="e-h3">{PROYECTOS_UI.proximo.titulo}</p>
