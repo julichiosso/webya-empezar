@@ -39,6 +39,7 @@ export const HEADER = {
     { href: '/pedidos', texto: 'Pedidos' },
     { href: '/tienda', texto: 'Tienda' },
     { href: '/web', texto: 'Web' },
+    { href: '/campo', texto: 'Campo' },
     { href: '/proyectos', texto: 'Proyectos' },
   ],
   demos: 'Demos',
@@ -55,6 +56,7 @@ export const HEADER = {
       { href: '/web', texto: 'Página web' },
     ],
     otros: [
+      { href: '/campo', texto: 'Campo y agro' },
       { href: '/demos', texto: 'Demos' },
       { href: '/proyectos', texto: 'Proyectos' },
       { href: '/nosotros', texto: 'Quiénes somos' },
@@ -77,6 +79,8 @@ export const HERO = {
   /** Nombre accesible de cada rubro (el link abre la demo en otra pestaña). */
   rubroAria: (rubro: string, sistema: string) =>
     `${rubro}: ver demo de ${sistema.toLowerCase()}, se abre en otra pestaña`,
+  /** Prueba al toque, en la primera pantalla: los negocios que ya lo usan. */
+  confianza: 'Funcionando en',
   verZona: 'Ver el mapa',
 } as const;
 
@@ -112,6 +116,13 @@ export const RUBROS_HOME = [
     ejemplo: 'Ropa, joyería, regalería y kioscos',
     sistema: 'Tienda online',
     href: '/demos/tienda',
+  },
+  {
+    id: 'campo',
+    nombre: 'Campo y agro',
+    ejemplo: 'Agronomías, acopios, veterinarias y contratistas',
+    sistema: 'Sistemas para el campo',
+    href: '/campo',
   },
   {
     id: 'servicios',
@@ -214,4 +225,45 @@ export const PIE = {
   privacidad: 'Privacidad',
   terminos: 'Términos',
   derechos: (anio: number | string) => `© ${anio} Webya · San Jorge, Santa Fe`,
+} as const;
+
+/** Las frases de Webya (las de la bio de Instagram): la franja de la home y los fondos vectoriales. */
+export const FRASES = {
+  lema: 'Creá. Digitalizá. Crecé.',
+  promesa: 'Tu negocio. Nuestra tecnología.',
+  rubros: 'Web · Sistemas · Automatización',
+} as const;
+
+export const MANIFIESTO = {
+  etiqueta: 'Qué hacemos por tu negocio',
+  pasos: [
+    { palabra: 'Creá.', texto: 'Tu página, tu tienda o tu sistema, a la medida de tu negocio.' },
+    { palabra: 'Digitalizá.', texto: 'Los turnos, pedidos y consultas que hoy hacés a mano.' },
+    { palabra: 'Crecé.', texto: 'Tu negocio atiende todo el día, aunque esté cerrado.' },
+  ],
+} as const;
+
+/** "Te escribimos nosotros": dejan su WhatsApp y el pedido llega al instante (API de leads). */
+export const CONTACTO_RAPIDO = {
+  titulo: 'O dejanos tu WhatsApp y te escribimos nosotros.',
+  whatsapp: 'Tu WhatsApp',
+  whatsappAyuda: 'Con código de área, como lo usás en WhatsApp.',
+  negocio: 'Tu negocio (opcional)',
+  negocioPlaceholder: 'Ej.: Agronomía del Centro',
+  mensaje: '¿Qué necesitás? (opcional)',
+  mensajePlaceholder: 'Contanos en pocas palabras',
+  enviar: 'Quiero que me escriban',
+  enviando: 'Enviando…',
+  listo: 'Listo, ya nos llegó. Te escribimos por WhatsApp.',
+  error: 'No se pudo enviar. Escribinos directo, con lo que pusiste ya escrito:',
+  errorBoton: 'Abrir WhatsApp',
+  privacidad: 'Usamos tu número solo para responderte.',
+  mensajeRespaldo: (negocio: string, texto: string) =>
+    [
+      'Hola, vengo de webya.dev.',
+      negocio ? `Mi negocio: ${negocio}.` : '',
+      texto ? `Necesito: ${texto}` : 'Quiero hablar sobre un sistema para mi negocio.',
+    ]
+      .filter(Boolean)
+      .join('\n'),
 } as const;
