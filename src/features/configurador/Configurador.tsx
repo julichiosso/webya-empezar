@@ -50,6 +50,10 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
     // Desde un caso llega también el rubro (/armar?tipo=pedidos&rubro=gastronomia).
     const rubro = parametros.get('rubro');
     if (rubro) despachar({ tipo: 'elegirRubro', valor: rubro });
+    // Y los módulos que ya sabemos que necesita (/armar?…&modulos=adopciones,socios).
+    for (const modulo of (parametros.get('modulos') ?? '').split(',').filter(Boolean).slice(0, 8)) {
+      despachar({ tipo: 'preseleccionar', modulo });
+    }
     // Señal de que ya responde: la usan los tests e2e.
     raiz.current?.setAttribute('data-hidratado', '');
   }, []);

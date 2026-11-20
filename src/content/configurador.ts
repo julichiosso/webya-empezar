@@ -49,6 +49,11 @@ export const RUBROS_CONFIG: readonly RubroConfig[] = [
     demo: { href: '/demos/web', texto: 'Ver demo de página web' },
   },
   {
+    id: 'entidades',
+    nombre: 'Protectora o entidad sin fines de lucro',
+    demo: { href: '/demos/protectora', texto: 'Ver demo para protectoras' },
+  },
+  {
     id: 'otro',
     nombre: 'Otro',
     demo: { href: '/proyectos', texto: 'Ver proyectos reales' },
@@ -65,6 +70,30 @@ export interface ModuloConfig {
 }
 
 export const MODULOS_CONFIG: readonly ModuloConfig[] = [
+  {
+    id: 'adopciones',
+    nombre: 'Vitrina y solicitudes de adopción',
+    ayuda: 'Fichas con foto y solicitudes en orden.',
+    aplica: ['medida'],
+  },
+  {
+    id: 'socios',
+    nombre: 'Socios y cuotas',
+    ayuda: 'Quién está al día, con recordatorio.',
+    aplica: ['medida'],
+  },
+  {
+    id: 'donaciones',
+    nombre: 'Donaciones y campañas',
+    ayuda: 'Campañas con barra de avance.',
+    aplica: ['medida'],
+  },
+  {
+    id: 'voluntarios',
+    nombre: 'Voluntariado con cupos',
+    ayuda: 'Cada uno se anota donde hay lugar.',
+    aplica: ['medida'],
+  },
   {
     id: 'sena',
     nombre: 'Seña del 50% al reservar',
