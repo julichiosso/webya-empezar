@@ -109,13 +109,13 @@ export const MODULOS_CONFIG: readonly ModuloConfig[] = [
   },
   {
     id: 'bot',
-    nombre: 'Bot de WhatsApp',
+    nombre: 'Respuestas automáticas por WhatsApp',
     ayuda: 'Confirma y recuerda por vos.',
     aplica: ['turnero', 'pedidos', 'medida'],
   },
   {
     id: 'panel',
-    nombre: 'Panel de administración',
+    nombre: 'Panel para el dueño',
     ayuda: 'Cargás y cambiás todo vos.',
     aplica: ['tienda', 'pedidos', 'turnero', 'catalogo', 'medida'],
   },
@@ -151,8 +151,8 @@ export const MODULOS_CONFIG: readonly ModuloConfig[] = [
   },
   {
     id: 'app',
-    nombre: 'Se instala como app',
-    ayuda: 'Un ícono más en el celular.',
+    nombre: 'Se instala en el celular',
+    ayuda: 'Queda como una aplicación más.',
     aplica: ['pedidos', 'turnero', 'tienda'],
   },
   {
@@ -169,7 +169,7 @@ export const MODULOS_CONFIG: readonly ModuloConfig[] = [
   },
   {
     id: 'dominio',
-    nombre: 'Dominio propio',
+    nombre: 'Dirección web propia',
     ayuda: 'tunegocio.com.ar',
     aplica: ['web', 'tienda', 'catalogo'],
   },
