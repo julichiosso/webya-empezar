@@ -354,32 +354,3 @@ export const ANUNCIOS = {
     },
   ],
 } as const;
-
-/**
- * Avisos al entrar (home): datos verdaderos que dan confianza, uno por vez, en una píldora tipo "isla"
- * arriba. Nada de "Fulano acaba de comprar": el número de sistemas funcionando sale del manifiesto.
- */
-export const AVISOS_ISLA = {
-  etiqueta: 'Avisos',
-  cerrar: 'Cerrar avisos',
-  items: [
-    {
-      icono: 'tilde',
-      titulo: (n: number | string) => `${n} sistemas funcionando`,
-      texto: 'En negocios de San Jorge',
-      href: '/proyectos',
-    },
-    {
-      icono: 'probar',
-      titulo: () => 'Probá un sistema real',
-      texto: 'Sin registrarte, desde el celular',
-      href: '/demos',
-    },
-    {
-      icono: 'zona',
-      titulo: () => 'Atendemos en tu zona',
-      texto: 'San Jorge, San Francisco y alrededores',
-      href: '/zona',
-    },
-  ],
-} as const;
