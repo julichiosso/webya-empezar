@@ -2,6 +2,7 @@
 // 1) Simplifica cada contorno (Ramer–Douglas–Peucker) y 2) redondea los vértices de giro suave con curvas
 // cuadráticas que pasan por los puntos medios; las esquinas marcadas (la w, los cortes) quedan rectas.
 // Uso: node scripts/suavizar-logo.mjs [tolerancia] [anguloEsquina] → escribe public/webya-logo-limpio.svg
+// (opcional: hoy el sitio usa el SVG original de Julián tal cual)
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const TOL = Number(process.argv[2] ?? 1.1);
