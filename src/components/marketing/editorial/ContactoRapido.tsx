@@ -6,10 +6,14 @@ import { MENSAJES_LEAD } from '@/content/leads-mensajes';
 import { LIMITES_BASE } from '@/domain/leads/limites';
 import { parsePhoneAR } from '@/lib/phone';
 import { enlaceContacto } from './contacto';
-import { BotonForm } from './Boton';
+import { BotonAvion } from './Boton';
 import { WhatsApp } from './Iconos';
 
 type Estado = 'quieto' | 'enviando' | 'listo' | 'error';
+
+/** Lo mínimo que se ve volar el avión antes de mostrar "Enviado" (aunque la red responda antes). */
+const VUELO_MS = 1100;
+const esperar = (ms: number) => new Promise((ok) => setTimeout(ok, ms));
 
 const CAMPO =
   'mt-1.5 block min-h-12 w-full rounded-xl border border-ed-line-strong bg-transparent px-4 text-base placeholder:text-ed-muted focus:border-ed-fg';
@@ -40,20 +44,23 @@ export function ContactoRapido() {
     const pedido = texto.trim();
     const nombre = negocio.trim();
     try {
-      const r = await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          parcial: true,
-          whatsapp,
-          nombreNegocio: nombre.length >= 2 ? nombre : undefined,
-          necesidadLibre: pedido.length >= LIMITES_BASE.necesidadLibreMin ? pedido : undefined,
-          necesidades: [],
-          modulos: [],
-          objetivos: [],
-          website: trampa,
+      const [r] = await Promise.all([
+        fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            parcial: true,
+            whatsapp,
+            nombreNegocio: nombre.length >= 2 ? nombre : undefined,
+            necesidadLibre: pedido.length >= LIMITES_BASE.necesidadLibreMin ? pedido : undefined,
+            necesidades: [],
+            modulos: [],
+            objetivos: [],
+            website: trampa,
+          }),
         }),
-      });
+        esperar(VUELO_MS),
+      ]);
       if (!r.ok) throw new Error(String(r.status));
       setEstado('listo');
     } catch {
@@ -63,9 +70,25 @@ export function ContactoRapido() {
 
   if (estado === 'listo') {
     return (
-      <p role="status" className="e-lead rounded-2xl border border-ed-line p-6">
-        {C.listo}
-      </p>
+      <div role="status" className="e-enviado flex items-start gap-4 py-6 md:py-10">
+        <svg
+          viewBox="0 0 48 48"
+          aria-hidden="true"
+          className="e-enviado-tilde size-12 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="24" cy="24" r="22" pathLength={1} />
+          <path d="m15 24.5 6.5 6.5L33.5 18" pathLength={1} />
+        </svg>
+        <div>
+          <p className="e-h2">{C.listoTitulo}</p>
+          <p className="e-lead mt-2 max-w-[36ch] text-ed-muted">{C.listo}</p>
+        </div>
+      </div>
     );
   }
 
@@ -137,13 +160,13 @@ export function ContactoRapido() {
       />
       <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="e-chico text-ed-muted">{C.privacidad}</p>
-        <BotonForm
+        <BotonAvion
           cargando={estado === 'enviando'}
           texto={estado === 'enviando' ? C.enviando : C.enviar}
         />
       </div>
       {estado === 'error' ? (
-        <div role="alert" className="mt-5 border-t border-ed-line pt-4">
+        <div role="alert" className="mt-5 pt-4">
           <p className="e-chico">{C.error}</p>
           <a
             href={respaldo}
