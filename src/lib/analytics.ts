@@ -14,7 +14,7 @@ export interface EventosAnalitica {
   configurador_tipo: { tipo: string; origen: 'tarjeta' | 'atajo' };
   configurador_enviar: { tipo: string; rubro: string; modulos: number; canal: 'whatsapp' | 'mail' };
   configurador_demo: { rubro: string };
-  // Demos de rubro (/demo/<rubro>). `demo` es el rubro (p. ej. 'pedidos').
+  // Demos de rubro (/demos/<rubro>). `demo` es el rubro (p. ej. 'pedidos').
   demo_view: { demo: string; cocina: string };
   demo_personalizada: { demo: string; campo: 'nombre' | 'paleta' | 'cocina'; valor: string };
   demo_pedido_creado: { demo: string; modalidad: string; items: number; medioPago: string };

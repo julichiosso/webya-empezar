@@ -1,14 +1,14 @@
-import { Pedidos } from '@/components/marketing/editorial/Pedidos';
+import { Catalogo } from '@/components/marketing/editorial/Catalogo';
 import { LANDINGS } from '@/content/landings';
 import { LandingServicio, metadataLanding } from '../_landing/LandingServicio';
 
-const L = LANDINGS.pizzerias;
+const L = LANDINGS.tienda;
 export const metadata = metadataLanding(L);
 
-export default function PaginaPizzerias() {
+export default function PaginaTienda() {
   return (
     <LandingServicio landing={L}>
-      <Pedidos numero={1} />
+      <Catalogo />
     </LandingServicio>
   );
 }

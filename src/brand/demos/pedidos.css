@@ -107,8 +107,6 @@
   color: #000;
 }
 
-
-
 /* Lo nuevo aparece desde abajo; el contador del carrito salta (DEMO_SPEC §5.5). */
 @keyframes m-item {
   from {

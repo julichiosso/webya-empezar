@@ -96,10 +96,12 @@ describe('demo de turnos', () => {
 
   it('a resolver: pagó sin horario y la seña de un turno cancelado; y las faltas previas', () => {
     const e = crearEstado(T0);
-    expect(e.turnos.filter(aResolver).map((t) => t.cliente).sort()).toEqual([
-      'Sofía Ramírez',
-      'Tiziano Correa',
-    ]);
+    expect(
+      e.turnos
+        .filter(aResolver)
+        .map((t) => t.cliente)
+        .sort(),
+    ).toEqual(['Sofía Ramírez', 'Tiziano Correa']);
     expect(faltasPrevias(e, de('Joaquín Medina', 2))).toHaveLength(1);
   });
 

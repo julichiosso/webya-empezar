@@ -6,12 +6,12 @@ import '@/brand/demos/turnos.css';
 export const metadata: Metadata = {
   title: PAGINA_TURNOS.titulo,
   description: PAGINA_TURNOS.descripcion,
-  alternates: { canonical: '/demo/turnos' },
+  alternates: { canonical: '/demos/turnos' },
   openGraph: {
     type: 'website',
     locale: 'es_AR',
     siteName: PAGINA_TURNOS.og.sitio,
-    url: '/demo/turnos',
+    url: '/demos/turnos',
     title: PAGINA_TURNOS.og.titulo(PAGINA_TURNOS.titulo),
     description: PAGINA_TURNOS.descripcion,
     images: [{ url: '/opengraph-image', width: 1200, height: 630 }],

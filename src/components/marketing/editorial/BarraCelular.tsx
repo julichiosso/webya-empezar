@@ -1,0 +1,39 @@
+import Link from 'next/link';
+import { MENSAJE_CONTACTO } from '@/content/configurador';
+import { BARRA_CELULAR, CTA, RUTAS } from '@/content/home';
+import { enlaceContacto } from './contacto';
+import { WhatsApp } from './Iconos';
+
+/**
+ * Barra fija abajo, solo en el celular y la tablet: "Escribinos" (WhatsApp) y "Armá tu sistema" a un
+ * toque del pulgar en cualquier página. Discreta: fondo plano y una línea fina arriba. El espacio de
+ * abajo evita que tape el final de la página.
+ */
+export function BarraCelular() {
+  const contacto = enlaceContacto(MENSAJE_CONTACTO);
+  return (
+    <>
+      <div aria-hidden="true" className="h-[calc(4.25rem+env(safe-area-inset-bottom))] lg:hidden" />
+      <nav
+        aria-label={BARRA_CELULAR.etiqueta}
+        className="tono-oscuro fixed inset-x-0 bottom-0 z-30 border-t border-ed-line px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
+      >
+        <div className="mx-auto grid max-w-[34rem] grid-cols-2 gap-2.5">
+          <a
+            href={contacto.href}
+            target="_blank"
+            rel="noopener"
+            aria-label={`${CTA.escribinos}${CTA.pestana}`}
+            className="e-btn e-btn-secundario e-btn-chico"
+          >
+            <WhatsApp />
+            <span>{CTA.escribinos}</span>
+          </a>
+          <Link href={RUTAS.armar} className="e-btn e-btn-primario e-btn-chico">
+            {CTA.armar}
+          </Link>
+        </div>
+      </nav>
+    </>
+  );
+}

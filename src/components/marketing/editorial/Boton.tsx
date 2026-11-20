@@ -1,32 +1,29 @@
 import Link from 'next/link';
 import { cn } from '@/components/ui/clases';
-import { Flecha } from './Iconos';
+import { CTA } from '@/content/home';
+import { Flecha, FlechaDiagonal } from './Iconos';
 
 interface BotonProps {
   href: string;
   children: React.ReactNode;
   variante?: 'primario' | 'secundario';
   chico?: boolean;
-  /** Preselección del configurador ("turnero", "pedidos"…). */
-  armar?: string;
-  /** Módulo que se marca al llegar al configurador. */
-  modulo?: string;
+  /** Abre en otra pestaña (las demos y WhatsApp). Lo dice el nombre accesible, no el texto visible. */
   externo?: boolean;
   icono?: React.ReactNode | false;
   className?: string;
 }
 
 /**
- * Botón-enlace del sistema editorial. Pill, sin sombra; el hover del primario es el único lugar
- * donde aparece el acento. Micro-interacciones: flecha que avanza, presión al tocar y un destello que cruza el principal al pasar el mouse.
+ * Botón-enlace del sistema editorial. Dos jerarquías: principal sólido y secundario con borde fino.
+ * Pill, sin sombra ni brillo. Micro-interacciones: la flecha avanza al pasar el mouse y el botón se
+ * hunde apenas al tocarlo (respuesta inmediata).
  */
 export function Boton({
   href,
   children,
   variante = 'primario',
   chico = false,
-  armar,
-  modulo,
   externo = false,
   icono,
   className,
@@ -40,13 +37,9 @@ export function Boton({
   const contenido = (
     <>
       <span>{children}</span>
-      {icono === false ? null : (icono ?? <Flecha />)}
+      {icono === false ? null : (icono ?? (externo ? <FlechaDiagonal /> : <Flecha />))}
     </>
   );
-  const datos = {
-    'data-armar': armar,
-    'data-modulo': modulo,
-  };
   if (externo || /^(https?:|mailto:)/.test(href)) {
     return (
       <a
@@ -54,17 +47,18 @@ export function Boton({
         className={clases}
         target={externo ? '_blank' : undefined}
         rel="noopener"
-        {...datos}
+        aria-label={
+          externo && typeof children === 'string' ? `${children}${CTA.pestana}` : undefined
+        }
       >
         {contenido}
       </a>
     );
   }
-  // Las demos son pesadas y tienen CSS propio: precargarlas desde la home solo suma bytes (y el
-  // navegador avisa que ese CSS precargado no se usó).
-  const prefetch = href.startsWith('/demo/') ? false : undefined;
+  // Las demos son pesadas y tienen CSS propio: precargarlas desde el sitio solo suma bytes.
+  const prefetch = href.startsWith('/demos/') ? false : undefined;
   return (
-    <Link href={href} prefetch={prefetch} className={clases} {...datos}>
+    <Link href={href} prefetch={prefetch} className={clases}>
       {contenido}
     </Link>
   );

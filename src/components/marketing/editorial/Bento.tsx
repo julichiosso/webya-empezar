@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { BENTO, SECCIONES } from '@/content/home';
@@ -73,68 +74,43 @@ const DIBUJOS: Record<CeldaId, React.ReactNode> = {
       <path className="e-trazo" pathLength={1} d="M6 24h108M20 44h50M20 56h70M20 68h40" />
     </>
   ),
-  panel: (
+  medida: (
     <>
-      <path className="e-trazo" pathLength={1} d="M10 24h100M10 50h100M10 76h100" />
-      <circle cx={36} cy={24} r={7} fill="currentColor" />
-      <circle cx={80} cy={50} r={7} fill="currentColor" />
-      <circle cx={52} cy={76} r={7} fill="currentColor" />
-    </>
-  ),
-  bot: (
-    <>
-      <path
-        className="e-trazo"
-        pathLength={1}
-        d="M8 12h72a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H30l-14 12V50H8z"
-      />
-      <path
-        className="e-trazo"
-        pathLength={1}
-        d="M112 44h-40a8 8 0 0 0-8 8v18a8 8 0 0 0 8 8h22l12 10V78h6a8 8 0 0 0 8-8V52a8 8 0 0 0-8-8z"
-      />
+      <path className="e-trazo" pathLength={1} d="M10 20h40v40H10zM70 40h40v40H70z" />
+      <path className="e-trazo" pathLength={1} d="M50 40h20M30 60v20h40" />
     </>
   ),
 };
 
 interface CeldaDef {
   id: CeldaId;
-  /** Tipo del configurador que preselecciona, o módulo que marca. */
-  armar?: string;
-  modulo?: string;
   clases: string;
   ancho: number;
 }
 
+/** Escritorio: el turnero ocupa dos filas; abajo, tres iguales. Celular: el turnero arriba y el resto de a dos. */
 const CELDAS: readonly CeldaDef[] = [
-  {
-    id: 'turnero',
-    armar: 'turnero',
-    clases: 'md:col-span-12 lg:col-span-7 lg:row-span-2',
-    ancho: 240,
-  },
-  { id: 'pedidos', armar: 'pedidos', clases: 'md:col-span-6 lg:col-span-5', ancho: 180 },
-  { id: 'tienda', armar: 'tienda', clases: 'md:col-span-6 lg:col-span-5', ancho: 120 },
-  { id: 'catalogo', armar: 'catalogo', clases: 'md:col-span-6 lg:col-span-3', ancho: 120 },
-  { id: 'web', armar: 'web', clases: 'md:col-span-6 lg:col-span-3', ancho: 120 },
-  { id: 'panel', modulo: 'panel', clases: 'md:col-span-6 lg:col-span-3', ancho: 120 },
-  { id: 'bot', modulo: 'bot', clases: 'md:col-span-6 lg:col-span-3', ancho: 120 },
+  { id: 'turnero', clases: 'col-span-2 md:col-span-12 lg:col-span-7 lg:row-span-2', ancho: 240 },
+  { id: 'pedidos', clases: 'md:col-span-6 lg:col-span-5', ancho: 180 },
+  { id: 'tienda', clases: 'md:col-span-6 lg:col-span-5', ancho: 120 },
+  { id: 'catalogo', clases: 'md:col-span-4', ancho: 120 },
+  { id: 'web', clases: 'md:col-span-4', ancho: 120 },
+  { id: 'medida', clases: 'col-span-2 md:col-span-4', ancho: 120 },
 ];
 
-/** Bento "Qué armo": grilla asimétrica, cada celda lleva al configurador con lo suyo ya elegido. */
+/** Bento "Qué armamos": grilla asimétrica, cada tarjeta lleva a la página de su producto. */
 export function Bento({ numero = 1 }: { numero?: number }) {
   const S = SECCIONES.queArmo;
   return (
-    <section id={S.id} className="tono-claro e-seccion" aria-labelledby="titulo-que-armo">
+    <section id={S.id} className="tono-claro e-seccion" aria-labelledby="titulo-que-armamos">
       <div className="e-wrap">
         <CabezaSeccion
           numero={numero}
           rotulo={S.rotulo}
           titulo={S.titulo}
-          bajada={S.bajada}
-          idTitulo="titulo-que-armo"
+          idTitulo="titulo-que-armamos"
         />
-        <ul className="mt-8 grid grid-cols-1 gap-3 md:mt-12 md:grid-cols-12 md:gap-4">
+        <ul className="mt-8 grid grid-cols-2 gap-2.5 md:mt-12 md:grid-cols-12 md:gap-4">
           {CELDAS.map((c, i) => {
             const t = BENTO.celdas[c.id];
             const estrella = c.id === 'turnero';
@@ -145,21 +121,19 @@ export function Bento({ numero = 1 }: { numero?: number }) {
                 data-reveal=""
                 style={{ '--i': i % 4 } as CSSProperties}
               >
-                <a
-                  href="#armar"
-                  data-armar={c.armar ?? ''}
-                  data-modulo={c.modulo}
+                <Link
+                  href={t.href}
                   className={cn(
-                    'e-celda group flex h-full flex-col justify-between gap-10 rounded-2xl border p-6 md:p-8',
+                    'e-celda group flex h-full flex-col justify-between rounded-2xl border border-ed-line active:opacity-70',
                     estrella
-                      ? 'tono-oscuro min-h-[22rem] border-ed-line lg:min-h-full'
-                      : 'min-h-[15rem] border-ed-line',
+                      ? 'tono-oscuro min-h-[15rem] gap-8 p-5 md:min-h-[20rem] md:p-8 lg:min-h-full'
+                      : 'min-h-[9.5rem] gap-4 p-4 md:min-h-[13rem] md:gap-8 md:p-7',
                   )}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <svg
                       viewBox={`0 0 ${c.ancho} 100`}
-                      className={cn('h-20 w-auto md:h-24', estrella && 'md:h-28')}
+                      className={cn('h-14 w-auto md:h-20', estrella ? 'md:h-28' : 'max-md:hidden')}
                       fill="none"
                       stroke="currentColor"
                       strokeWidth={1.5}
@@ -168,29 +142,28 @@ export function Bento({ numero = 1 }: { numero?: number }) {
                     >
                       {DIBUJOS[c.id]}
                     </svg>
-                    {'destacado' in t ? (
-                      <span className="e-rotulo flex items-center gap-2 rounded-full border border-ed-line px-3 py-2">
-                        <span className="e-punto" aria-hidden="true" />
-                        {t.destacado}
-                      </span>
-                    ) : null}
+                    <Flecha className="shrink-0 max-md:ml-auto" />
                   </div>
                   <div>
-                    <h3 className={estrella ? 'e-h2' : 'e-h3'}>{t.titulo}</h3>
+                    <h3
+                      className={
+                        estrella
+                          ? 'e-h2'
+                          : 'text-[1.0625rem] leading-tight font-semibold tracking-[-0.02em] md:text-[1.375rem]'
+                      }
+                    >
+                      {t.titulo}
+                    </h3>
                     <p
                       className={cn(
-                        'mt-3 max-w-[40ch] text-ed-muted',
-                        estrella ? 'e-lead' : 'e-cuerpo',
+                        'mt-2 max-w-[40ch] text-ed-muted',
+                        estrella ? 'e-lead' : 'text-[0.8125rem] leading-snug md:text-[0.9375rem]',
                       )}
                     >
                       {t.texto}
                     </p>
-                    <span className="e-chico mt-6 inline-flex items-center gap-2 font-medium">
-                      {BENTO.armar}
-                      <Flecha />
-                    </span>
                   </div>
-                </a>
+                </Link>
               </li>
             );
           })}

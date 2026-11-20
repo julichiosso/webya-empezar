@@ -1,16 +1,11 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import { Bento } from '@/components/marketing/editorial/Bento';
 import { Cierre } from '@/components/marketing/editorial/Cierre';
-import { Encabezado, ID_PRINCIPAL } from '@/components/marketing/editorial/Encabezado';
-import { Hero } from '@/components/marketing/editorial/Hero';
-import { Pedidos } from '@/components/marketing/editorial/Pedidos';
-import { Pie } from '@/components/marketing/editorial/Pie';
-import { Proyectos } from '@/components/marketing/editorial/Proyectos';
-import { Turnero } from '@/components/marketing/editorial/Turnero';
-import { Zona } from '@/components/marketing/editorial/Zona';
+import { HeroInicio } from '@/components/marketing/editorial/Hero';
+import { NosotrosInicio } from '@/components/marketing/editorial/Nosotros';
+import { Pagina } from '@/components/marketing/editorial/Pagina';
+import { ProyectosInicio } from '@/components/marketing/editorial/Proyectos';
 import { SEO_SITIO, jsonLdNegocio, serializarLd } from '@/content/seo';
-import { SeccionConfigurador } from '@/features/configurador/SeccionConfigurador';
 import { siteConfig } from '@/lib/site-config';
 
 export const metadata: Metadata = {
@@ -32,50 +27,27 @@ export const metadata: Metadata = {
   },
 };
 
-const LD = [
-  jsonLdNegocio({
-    url: siteConfig.url,
-    email: siteConfig.contactEmail,
-    instagram: siteConfig.instagramUrl,
-    telefono: siteConfig.whatsappNumber || undefined,
-  }),
-];
+const LD = jsonLdNegocio({
+  url: siteConfig.url,
+  email: siteConfig.contactEmail,
+  instagram: siteConfig.instagramUrl,
+  telefono: siteConfig.whatsappNumber || undefined,
+});
 
 /**
- * Home editorial. Capítulos alternando oscuro y claro: hero → qué armo (bento) → turnero (sticky) →
- * pedidos (split) → proyectos (carril) → configurador → cierre. Sin secciones de relleno: cada una
- * muestra un sistema real o lleva a armarlo. Todo de servidor salvo el configurador y el carril.
+ * Home hub: en la primera pantalla, qué hacemos, las dos acciones y la demo de cada rubro. Después, el
+ * bento que lleva a cada producto, los proyectos reales, quiénes somos y el cierre. Lo largo (cada
+ * producto, el configurador, la zona) vive en su propia página.
  */
 export default function Inicio() {
   return (
-    <>
-      {LD.map((d, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: serializarLd(d) }}
-        />
-      ))}
-      <Encabezado />
-      <main id={ID_PRINCIPAL} tabIndex={-1} className="outline-none">
-        <Hero demos />
-        {/*
-          Cada capítulo en su propio límite de Suspense: React hidrata por partes y cede el hilo entre
-          una y otra, en lugar de una sola tarea larga sobre toda la página (TBT).
-        */}
-        {[
-          <Bento key="bento" numero={1} />,
-          <Turnero key="turnero" numero={2} />,
-          <Pedidos key="pedidos" numero={3} />,
-          <Proyectos key="proyectos" numero={4} />,
-          <Zona key="zona" numero={5} />,
-          <SeccionConfigurador key="armar" numero={6} />,
-          <Cierre key="cierre" />,
-        ].map((seccion) => (
-          <Suspense key={seccion.key}>{seccion}</Suspense>
-        ))}
-      </main>
-      <Pie />
-    </>
+    <Pagina>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializarLd(LD) }} />
+      <HeroInicio />
+      <Bento numero={1} />
+      <ProyectosInicio numero={2} />
+      <NosotrosInicio numero={3} />
+      <Cierre />
+    </Pagina>
   );
 }

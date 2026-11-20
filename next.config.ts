@@ -40,14 +40,17 @@ const config: NextConfig = {
     inlineCss: false,
   },
   async redirects() {
-    // /empezar era la landing anterior (link de la bio de Instagram): ahora todo vive en la home.
-    // 307 (no permanente) para poder volver atrás sin caché de redirección en los navegadores.
+    // Rutas viejas → nuevas. Permanentes: el dominio todavía no está indexado y estas son definitivas.
     return [
+      // /empezar era la landing anterior (link de la bio de Instagram): ahora todo vive en la home.
       { source: '/empezar', destination: '/', permanent: false },
-      // La demo de gastronomía genérica se reemplazó por la del sistema real de Micio's.
-      { source: '/demo/gastronomia', destination: '/demo/pedidos', permanent: false },
-      // La demo del bot de peluquería se reemplazó por la del turnero con seña (sistema real).
-      { source: '/demo/peluqueria', destination: '/demo/turnos', permanent: false },
+      { source: '/pizzerias', destination: '/pedidos', permanent: true },
+      { source: '/tiendas', destination: '/tienda', permanent: true },
+      { source: '/demo', destination: '/demos', permanent: true },
+      // Las demos genéricas se reemplazaron por las de los sistemas reales.
+      { source: '/demo/gastronomia', destination: '/demos/pedidos', permanent: true },
+      { source: '/demo/peluqueria', destination: '/demos/turnos', permanent: true },
+      { source: '/demo/:ruta*', destination: '/demos/:ruta*', permanent: true },
     ];
   },
   images: {

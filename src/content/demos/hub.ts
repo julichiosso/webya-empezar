@@ -1,6 +1,6 @@
 import type { TipoId } from '../servicios';
 /**
- * Página para elegir demo (/demo) y la barra común de las demos. Lo que dice "el sistema real, además"
+ * Página para elegir demo (/demos) y la barra común de las demos. Lo que dice "el sistema real, además"
  * sale de los sistemas entregados (Micio's y el turnero): no se agrega nada que no exista.
  */
 
@@ -8,12 +8,13 @@ export const HUB_DEMOS = {
   titulo: 'Probá un sistema',
   bajada: 'Elegí cuál. Se abre como el sistema de verdad, con datos de ejemplo.',
   volver: 'Volver al sitio',
-  abrir: 'Abrir demo',
+  abrir: 'Ver demo',
+  rubros: 'O elegí tu rubro',
   nota: 'Cada demo muestra una parte del sistema. El que se instala en tu negocio tiene más funciones y se ajusta a cómo trabajás.',
   seo: {
     titulo: 'Demos de sistemas para negocios',
     descripcion:
-      'Probá el sistema de pedidos para pizzerías y el de turnos para peluquerías, con datos de ejemplo.',
+      'Probá el sistema de pedidos para gastronomía, el turnero con seña, una página web y una tienda armada en vivo, con datos de ejemplo.',
   },
 } as const;
 
@@ -37,8 +38,8 @@ export const DEMOS: readonly DemoInfo[] = [
   {
     id: 'pedidos',
     sistema: 'pedidos',
-    href: '/demo/pedidos',
-    rubro: 'Pizzerías y comida',
+    href: '/demos/pedidos',
+    rubro: 'Gastronomía',
     titulo: 'Pedidos online',
     texto:
       'El cliente arma el pedido desde el celular, elige a qué hora lo retira y el pedido entra al panel del local.',
@@ -51,13 +52,13 @@ export const DEMOS: readonly DemoInfo[] = [
       'Aumento de precios de una sección en un paso',
       'Se instala en el celular como una app',
     ],
-    cta: { href: '/pizzerias#armar', texto: 'Quiero esto para mi negocio' },
+    cta: { href: '/armar?tipo=pedidos', texto: 'Quiero esto para mi negocio' },
   },
   {
     id: 'turnos',
     sistema: 'turnero',
-    href: '/demo/turnos',
-    rubro: 'Peluquerías y estética',
+    href: '/demos/turnos',
+    rubro: 'Peluquería, estética y salud',
     titulo: 'Turnos con seña',
     texto: 'El cliente elige servicio, día y hora, paga la seña y el turno entra solo a tu agenda.',
     barra: 'Turnos',
@@ -69,7 +70,7 @@ export const DEMOS: readonly DemoInfo[] = [
       'Te muestra quién faltó antes y cuántas veces',
       'Números: facturación, ocupación por hora y clientes para recuperar',
     ],
-    cta: { href: '/turnero#armar', texto: 'Quiero esto para mi negocio' },
+    cta: { href: '/armar?tipo=turnero', texto: 'Quiero esto para mi negocio' },
   },
 ];
 
@@ -85,7 +86,6 @@ export const BARRA_DEMOS = {
   enUso: {
     titulo: (cliente: string) => `Conocé cómo ya lo usa ${cliente}`,
     detalle: (rubro: string, ciudad: string) => `${rubro} en ${ciudad}. En producción.`,
-    externo: ' (se abre en otra pestaña)',
   },
   aviso: {
     titulo: 'Esto es una demo',

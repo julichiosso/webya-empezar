@@ -15,12 +15,12 @@ const anton = Anton({
 export const metadata: Metadata = {
   title: PAGINA_PEDIDOS.titulo,
   description: PAGINA_PEDIDOS.descripcion,
-  alternates: { canonical: '/demo/pedidos' },
+  alternates: { canonical: '/demos/pedidos' },
   openGraph: {
     type: 'website',
     locale: 'es_AR',
     siteName: PAGINA_PEDIDOS.og.sitio,
-    url: '/demo/pedidos',
+    url: '/demos/pedidos',
     title: PAGINA_PEDIDOS.og.titulo(PAGINA_PEDIDOS.titulo),
     description: PAGINA_PEDIDOS.descripcion,
     images: [{ url: '/opengraph-image', width: 1200, height: 630 }],

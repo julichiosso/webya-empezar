@@ -23,8 +23,10 @@ export function TituloPalabras({ lineas, as: Tag = 'h2', className, alCargar = f
       aria-label={lineas.join(' ')}
       data-words={alCargar ? undefined : ''}
     >
-      {lineas.map((linea) => (
+      {lineas.map((linea, n) => (
         <span key={linea} className="block" aria-hidden="true">
+          {/* Espacio entre líneas: en el texto de la página no se pegan ("pedidos,tus"). */}
+          {n > 0 ? ' ' : null}
           {linea.split(' ').map((palabra, j, todas) => (
             <span key={`${palabra}-${j}`}>
               <span className="e-palabra">

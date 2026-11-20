@@ -1,46 +1,40 @@
 import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { enlaceContacto } from '@/components/marketing/editorial/contacto';
-import { CIERRE, CTA, MARCA } from '@/content/home';
+import { CIERRE, CTA, RUTAS } from '@/content/home';
 import { Boton } from './Boton';
 import { WhatsApp } from './Iconos';
 import { TituloPalabras } from './TituloPalabras';
 
-/** Cierre de página: titular enorme y los dos caminos (configurador o hablar directo). */
-export function Cierre() {
+/** Cierre de página: el titular y los dos caminos (armar el sistema o escribirnos). */
+export function Cierre({ armar = RUTAS.armar }: { armar?: string }) {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
     <section className="tono-oscuro border-t border-ed-line" aria-labelledby="titulo-cierre">
-      <div className="e-wrap py-[clamp(6rem,12vw,12rem)]">
-        <TituloPalabras
-          lineas={[CIERRE.titulo]}
-          id="titulo-cierre"
-          className="e-display max-w-[14ch]"
-        />
-        <div className="mt-12 grid grid-cols-12 gap-6 md:mt-16">
-          <p className="e-lead col-span-12 max-w-[40ch] text-ed-muted md:col-span-6" data-reveal="">
+      <div className="e-wrap grid grid-cols-12 gap-x-6 gap-y-8 py-[clamp(4rem,9vw,9rem)]">
+        <div className="col-span-12 lg:col-span-7">
+          <TituloPalabras
+            lineas={[CIERRE.titulo]}
+            id="titulo-cierre"
+            className="e-display e-hero-compacto"
+          />
+          <p className="e-lead mt-5 max-w-[44ch] text-ed-muted" data-reveal="">
             {CIERRE.bajada}
           </p>
-          <div
-            className="col-span-12 flex flex-col gap-3 sm:flex-row md:col-span-6 md:justify-end md:self-end"
-            data-reveal=""
-          >
-            <Boton href="#armar" armar="">
-              {CTA.armar}
-            </Boton>
-            <Boton
-              href={contacto.href}
-              variante="secundario"
-              externo
-              icono={contacto.canal === 'whatsapp' ? <WhatsApp /> : false}
-            >
-              {CTA.hablar}
-            </Boton>
-          </div>
         </div>
-        <p className="e-chico mt-16 flex items-center gap-3 border-t border-ed-line pt-6">
-          <span className="e-punto" aria-hidden="true" />
-          {MARCA.zona}
-        </p>
+        <div
+          className="col-span-12 grid grid-cols-1 gap-3 sm:flex lg:col-span-5 lg:justify-end lg:self-end"
+          data-reveal=""
+        >
+          <Boton href={armar}>{CTA.armar}</Boton>
+          <Boton
+            href={contacto.href}
+            variante="secundario"
+            externo
+            icono={contacto.canal === 'whatsapp' ? <WhatsApp /> : false}
+          >
+            {CTA.escribinos}
+          </Boton>
+        </div>
       </div>
     </section>
   );

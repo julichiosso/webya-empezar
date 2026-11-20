@@ -10,7 +10,7 @@ import type { TipoId } from './servicios';
  * falte, se dibuja el mockup vectorial de `mockup`.
  */
 
-export type EstadoProyecto = 'produccion' | 'construccion' | 'sinUso';
+export type EstadoProyecto = 'produccion' | 'proximamente';
 
 /** Mockups vectoriales disponibles (components/home/mockups). */
 export type MockupId = 'pedidos' | 'tienda' | 'web' | 'turnero';
@@ -42,14 +42,14 @@ export interface Proyecto {
   /** Nombre del sistema, como se vende. */
   sistema: string;
   estado: EstadoProyecto;
-  /** Sitio publicado (sin URL, no se muestra enlace). */
+  /** Sitio publicado. Solo si está listo para mostrarse: sin URL, no hay enlace público. */
   url?: string;
   /** El problema que resuelve el sistema, en una oración. */
   problema: string;
   /** Lo que el sistema hace hoy, punto por punto. */
   incluye: readonly string[];
-  /** Lo que se ve funcionando. */
-  resultado: string;
+  /** Qué ve el cliente del negocio cuando lo usa, en una oración. */
+  ve: string;
   mockup: MockupId;
   /** Capturas reales. La primera es la portada del caso. */
   imagenes: readonly ImagenProyecto[];
@@ -76,7 +76,7 @@ export const PROYECTOS: readonly Proyecto[] = [
       'Panel de administración, horarios y turnos',
       'Se instala como app (PWA)',
     ],
-    resultado: 'Funcionando en producción: la pizzería recibe sus pedidos con este sistema.',
+    ve: 'Arma su pedido en el celular, elige a qué hora lo retira y sabe que va a estar listo.',
     mockup: 'pedidos',
     imagenes: [
       {
@@ -95,7 +95,7 @@ export const PROYECTOS: readonly Proyecto[] = [
     ciudad: 'San Jorge',
     tipo: 'turnero',
     sistema: 'Turnero con Mercado Pago',
-    estado: 'sinUso',
+    estado: 'proximamente',
     problema: 'Turnos reservados que después nadie viene a ocupar.',
     incluye: [
       'Reserva online con pago por Mercado Pago',
@@ -103,8 +103,7 @@ export const PROYECTOS: readonly Proyecto[] = [
       'Horarios configurables',
       'Panel simple para ver el día',
     ],
-    resultado:
-      'Desarrollado para la peluquería; todavía no está en uso. Pedí la demo y lo ves funcionando.',
+    ve: 'Elige servicio, profesional y horario, paga la seña y recibe la confirmación al instante.',
     mockup: 'turnero',
     imagenes: [],
   },
@@ -124,7 +123,7 @@ export const PROYECTOS: readonly Proyecto[] = [
       'Sube las fotos de los productos desde el celular',
       'Consulta por WhatsApp en cada producto',
     ],
-    resultado: 'El dueño carga y actualiza su catálogo solo, desde el celular.',
+    ve: 'Todo el catálogo con fotos, ordenado por categoría, y la consulta por WhatsApp en cada producto.',
     mockup: 'tienda',
     imagenes: [
       {
@@ -152,7 +151,7 @@ export const PROYECTOS: readonly Proyecto[] = [
       'Cómo trabaja con cada familia',
       'Consultas por WhatsApp con el mensaje ya armado',
     ],
-    resultado: 'Publicado con dominio propio: fonosanjorge.com.ar.',
+    ve: 'Cómo trabaja la profesional, qué obras sociales cubre y un WhatsApp para consultar con un toque.',
     mockup: 'web',
     imagenes: [
       {
@@ -171,11 +170,10 @@ export const PROYECTOS: readonly Proyecto[] = [
     ciudad: 'San Jorge',
     tipo: 'pedidos',
     sistema: 'Pedidos con stock, promos y envío',
-    estado: 'construccion',
-    url: 'https://abelardo.vercel.app',
+    estado: 'proximamente',
     problema: 'Más productos, más variantes y envíos: todo tiene que cerrar con el stock real.',
     incluye: ['Control de stock', 'Promos', 'Productos personalizables', 'Envío a domicilio'],
-    resultado: 'En construcción. Se puede ver el avance.',
+    ve: 'Promos del día, productos a su gusto y envío a domicilio, con el stock siempre al día.',
     mockup: 'pedidos',
     imagenes: [
       {
@@ -191,8 +189,7 @@ export const PROYECTOS: readonly Proyecto[] = [
 
 export const ESTADO_PROYECTO: Record<EstadoProyecto, string> = {
   produccion: 'En producción',
-  construccion: 'En construcción',
-  sinUso: 'Todavía sin uso',
+  proximamente: 'Próximamente',
 };
 
 export const getProyecto = (id: string) => PROYECTOS.find((p) => p.id === id);

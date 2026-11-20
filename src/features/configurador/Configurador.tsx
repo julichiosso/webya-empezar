@@ -35,21 +35,15 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
   const primerTipo = useRef<HTMLInputElement>(null);
   const raiz = useRef<HTMLDivElement>(null);
 
-  // Atajos desde toda la página: cualquier enlace con data-armar / data-modulo preselecciona acá.
+  // Preselección desde los links del sitio: /armar?tipo=turnero (la página es estática; se lee acá).
   useEffect(() => {
-    const alTocar = (ev: MouseEvent) => {
-      const el = (ev.target as Element | null)?.closest<HTMLElement>('[data-armar], [data-modulo]');
-      if (!el) return;
-      const tipoSistema = el.dataset.armar || undefined;
-      const modulo = el.dataset.modulo || undefined;
-      if (!tipoSistema && !modulo) return;
-      despachar({ tipo: 'preseleccionar', tipoSistema, modulo });
-      if (tipoSistema) track('configurador_tipo', { tipo: tipoSistema, origen: 'atajo' });
-    };
-    document.addEventListener('click', alTocar);
-    // Señal de que ya responde (la página se hidrata por partes): la usan los tests e2e.
+    const tipoSistema = new URLSearchParams(window.location.search).get('tipo');
+    if (tipoSistema && SERVICIOS.some((s) => s.id === tipoSistema)) {
+      despachar({ tipo: 'preseleccionar', tipoSistema });
+      track('configurador_tipo', { tipo: tipoSistema, origen: 'atajo' });
+    }
+    // Señal de que ya responde: la usan los tests e2e.
     raiz.current?.setAttribute('data-hidratado', '');
-    return () => document.removeEventListener('click', alTocar);
   }, []);
 
   const r = resumen(estado);
@@ -211,8 +205,10 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
           <p className="e-chico mt-5 text-ed-muted">{C.aclaracion}</p>
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-ed-line pt-5">
             <a
-              href={r.demo?.href ?? '#proyectos'}
-              {...(r.demo?.href.startsWith('/demo') ? { target: '_blank', rel: 'noopener' } : {})}
+              href={r.demo?.href ?? '/demos'}
+              {...(r.demo?.href.startsWith('/proyectos')
+                ? {}
+                : { target: '_blank', rel: 'noopener' })}
               className="e-link e-chico font-medium"
               onClick={() => track('configurador_demo', { rubro: estado.rubro ?? '' })}
             >
@@ -317,13 +313,7 @@ function BotonEnviar({
     );
   }
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener"
-      onClick={onEnviar}
-      className={clases}
-    >
+    <a href={href} target="_blank" rel="noopener" onClick={onEnviar} className={clases}>
       {texto}
     </a>
   );

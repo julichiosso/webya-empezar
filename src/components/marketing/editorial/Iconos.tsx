@@ -56,3 +56,15 @@ export const Mail = ({ className }: IconoProps) => (
     <path d="m3.5 7 8.5 6.5L20.5 7" />
   </svg>
 );
+
+export const Menu = ({ className }: IconoProps) => (
+  <svg {...base} width={20} height={20} className={className}>
+    <path d="M4 8h16M4 16h16" />
+  </svg>
+);
+
+export const Cerrar = ({ className }: IconoProps) => (
+  <svg {...base} width={20} height={20} className={className}>
+    <path d="M6 6l12 12M18 6 6 18" />
+  </svg>
+);

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { cn } from '@/components/ui/clases';
 import { BARRA_DEMOS } from '@/content/demos/hub';
+import { CTA } from '@/content/home';
 import { dominioDe, getProyecto } from '@/content/proyectos';
 import { FlechaDiagonal } from './Iconos';
 
@@ -33,11 +34,11 @@ export function EnUso({ proyecto, className }: { proyecto: string; className?: s
           href={p.url}
           target="_blank"
           rel="noopener"
+          aria-label={`${dominioDe(p.url)}${CTA.pestana}`}
           className="e-link e-link-nav mt-1 inline-flex items-center gap-1 text-[0.75rem] font-medium"
         >
           {dominioDe(p.url)}
           <FlechaDiagonal className="size-3" />
-          <span className="sr-only">{BARRA_DEMOS.enUso.externo}</span>
         </a>
       </span>
     </div>

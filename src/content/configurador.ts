@@ -8,7 +8,7 @@ import type { TipoId } from './servicios';
 export interface RubroConfig {
   id: string;
   nombre: string;
-  /** A dónde lleva "Ver demo de mi rubro": un proyecto real (#proyecto-id) o la demo interactiva. */
+  /** A dónde lleva "Ver demo" desde el resumen: la demo interactiva de su rubro o los proyectos. */
   demo: { href: string; texto: string };
 }
 
@@ -16,37 +16,37 @@ export const RUBROS_CONFIG: readonly RubroConfig[] = [
   {
     id: 'gastronomia',
     nombre: 'Pizzería o comida',
-    demo: { href: '/demo/pedidos', texto: 'Probá la demo de pedidos' },
+    demo: { href: '/demos/pedidos', texto: 'Ver demo de pedidos' },
   },
   {
     id: 'comercio',
     nombre: 'Joyería o comercio',
-    demo: { href: '/#proyecto-petrucci', texto: 'Mirá la tienda de Joyería Petrucci' },
+    demo: { href: '/demos/tienda', texto: 'Ver demo de tienda' },
   },
   {
     id: 'salud',
     nombre: 'Salud',
-    demo: { href: '/#proyecto-lorena', texto: 'Mirá el sitio de una fonoaudióloga' },
+    demo: { href: '/demos/turnos', texto: 'Ver demo de turnos' },
   },
   {
     id: 'estetica',
     nombre: 'Peluquería o estética',
-    demo: { href: '/demo/turnos', texto: 'Probá la demo del turnero' },
+    demo: { href: '/demos/turnos', texto: 'Ver demo de turnos' },
   },
   {
     id: 'mascotas',
     nombre: 'Mascotas',
-    demo: { href: '/demo/turnos', texto: 'Probá la demo del turnero' },
+    demo: { href: '/demos/turnos', texto: 'Ver demo de turnos' },
   },
   {
     id: 'servicios',
     nombre: 'Profesional o servicios',
-    demo: { href: '/#proyecto-lorena', texto: 'Mirá el sitio de una profesional' },
+    demo: { href: '/demos/web', texto: 'Ver demo de página web' },
   },
   {
     id: 'otro',
     nombre: 'Otro',
-    demo: { href: '/#proyectos', texto: 'Mirá los proyectos reales' },
+    demo: { href: '/proyectos', texto: 'Ver proyectos reales' },
   },
 ];
 
@@ -186,16 +186,15 @@ export const modulosDe = (tipo: TipoId | null) =>
 export const CONFIGURADOR = {
   id: 'armar',
   rotulo: 'Armá tu sistema',
-  titulo: 'Elegí lo que necesitás. Le llega a Julián con un toque.',
-  bajada:
-    'Tres pasos, sin formularios. Al final se abre WhatsApp con tu pedido ya escrito: lo mandás y listo.',
+  titulo: 'Elegí lo que necesitás. Te respondemos con el presupuesto.',
+  bajada: 'Tres pasos, un toque cada uno. Al final se abre WhatsApp con tu pedido ya escrito.',
   pasos: {
     tipo: '¿Qué querés armar?',
     rubro: '¿De qué es tu negocio?',
     modulos: '¿Qué tiene que tener?',
   },
   ayudaModulos: 'Ya marcamos lo más pedido. Tocá para sumar o sacar.',
-  otroPlaceholder: 'Contame en pocas palabras',
+  otroPlaceholder: 'Contanos en pocas palabras',
   otroEtiqueta: 'Tu rubro',
   nombreEtiqueta: 'Nombre de tu negocio (opcional)',
   nombrePlaceholder: 'Ej.: Pizzería Don Pepe',
@@ -208,12 +207,12 @@ export const CONFIGURADOR = {
     modulos: 'Incluye',
     sinModulos: 'Sin extras por ahora',
   },
-  enviar: 'Mandarle mi pedido a Julián por WhatsApp',
-  enviarMail: 'Mandarle mi pedido a Julián por mail',
-  falta: 'Elegí qué querés armar para mandar el pedido.',
+  enviar: 'Enviarnos mi pedido por WhatsApp',
+  enviarMail: 'Enviarnos mi pedido por mail',
+  falta: 'Elegí qué querés armar para enviarnos el pedido.',
   aclaracion:
-    'No se crea nada solo: es el pedido que le llega a Julián. Lo arman juntos y te pasa el presupuesto sin compromiso.',
-  verDemo: 'Ver demo de mi rubro',
+    'Se abre WhatsApp con todo escrito. Te respondemos con el presupuesto, sin compromiso.',
+  verDemo: 'Ver demo',
   reiniciar: 'Empezar de nuevo',
 } as const;
 
@@ -231,7 +230,7 @@ export function mensajePedido(p: PedidoWhatsApp): string {
   const negocio = p.negocio ? limpiar(p.negocio) : '';
   const rubro = p.rubro ? limpiar(p.rubro) : '';
   const lineas = [
-    'Hola Julián, vengo de webya.dev.',
+    'Hola, vengo de webya.dev.',
     `Quiero armar: ${p.tipo}.`,
     negocio && rubro ? `Mi negocio: ${negocio} (${rubro}).` : '',
     negocio && !rubro ? `Mi negocio: ${negocio}.` : '',
@@ -239,13 +238,13 @@ export function mensajePedido(p: PedidoWhatsApp): string {
     p.modulos.length > 0
       ? `Me interesa que tenga:\n${p.modulos.map((m) => `- ${m}`).join('\n')}`
       : '',
-    '¿Me contás cómo lo armamos y cuánto sale?',
+    '¿Me cuentan cómo lo armamos y cuánto sale?',
   ];
   return lineas.filter(Boolean).join('\n');
 }
 
 /** Contacto general (header, cierre, pie): sin datos elegidos. */
 export const MENSAJE_CONTACTO =
-  'Hola Julián, vengo de webya.dev. Quiero hablar sobre un sistema para mi negocio.';
+  'Hola, vengo de webya.dev. Quiero hablar sobre un sistema para mi negocio.';
 
 export const ASUNTO_MAIL = 'Pedido desde webya.dev';

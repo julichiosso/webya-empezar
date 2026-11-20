@@ -17,14 +17,25 @@ const tarde = { inicioMin: h('16:00'), finMin: h('20:00') };
 
 describe('reservas: horarios libres', () => {
   it('un servicio de 90 min en 16 a 20 ofrece de 16:00 a 18:30, de a 30', () => {
-    const s = calcularSlots({ franjas: [tarde], duracionMin: 90, intervaloMin: 30, ocupados: [], bloqueos: [] });
+    const s = calcularSlots({
+      franjas: [tarde],
+      duracionMin: 90,
+      intervaloMin: 30,
+      ocupados: [],
+      bloqueos: [],
+    });
     expect(s[0]).toBe(h('16:00'));
     expect(s.at(-1)).toBe(h('18:30'));
     expect(s).toHaveLength(6);
   });
 
   it('no pisa turnos ni bloqueos; 16:00–16:30 y 16:30–17:00 no se pisan', () => {
-    expect(sePisan({ inicioMin: h('16:00'), finMin: h('16:30') }, { inicioMin: h('16:30'), finMin: h('17:00') })).toBe(false);
+    expect(
+      sePisan(
+        { inicioMin: h('16:00'), finMin: h('16:30') },
+        { inicioMin: h('16:30'), finMin: h('17:00') },
+      ),
+    ).toBe(false);
     const s = calcularSlots({
       franjas: [tarde],
       duracionMin: 30,
@@ -39,8 +50,23 @@ describe('reservas: horarios libres', () => {
   });
 
   it('día bloqueado entero o anticipación de hoy', () => {
-    expect(calcularSlots({ franjas: [tarde], duracionMin: 30, intervaloMin: 30, ocupados: [], bloqueos: [{ inicioMin: null, finMin: null }] })).toEqual([]);
-    const s = calcularSlots({ franjas: [tarde], duracionMin: 30, intervaloMin: 30, ocupados: [], bloqueos: [], minimoMin: h('17:10') });
+    expect(
+      calcularSlots({
+        franjas: [tarde],
+        duracionMin: 30,
+        intervaloMin: 30,
+        ocupados: [],
+        bloqueos: [{ inicioMin: null, finMin: null }],
+      }),
+    ).toEqual([]);
+    const s = calcularSlots({
+      franjas: [tarde],
+      duracionMin: 30,
+      intervaloMin: 30,
+      ocupados: [],
+      bloqueos: [],
+      minimoMin: h('17:10'),
+    });
     expect(s[0]).toBe(h('17:30'));
   });
 

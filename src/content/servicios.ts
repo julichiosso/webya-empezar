@@ -27,11 +27,11 @@ export const SERVICIOS: readonly Servicio[] = [
   },
   {
     id: 'pedidos',
-    nombre: 'Sistema de pedidos',
+    nombre: 'Pedidos online',
     frase: 'Piden desde el celular, eligen la hora de retiro y el pedido te llega ordenado.',
     descripcionSeo:
-      'Pedidos online para pizzerías y gastronomía: carrito, franjas de retiro, panel e impresión de comandas.',
-    pagina: '/pizzerias',
+      'Pedidos online para gastronomía (pizzerías, hamburgueserías, heladerías, cafés y delivery): carrito, franjas de retiro, panel e impresión de comandas.',
+    pagina: '/pedidos',
   },
   {
     id: 'tienda',
@@ -39,7 +39,7 @@ export const SERVICIOS: readonly Servicio[] = [
     frase: 'Tu catálogo con carrito y pagos. Vendés aunque el local esté cerrado.',
     descripcionSeo:
       'Tienda online con catálogo, carrito, panel para cargar productos desde el celular y consulta por WhatsApp.',
-    pagina: '/tiendas',
+    pagina: '/tienda',
   },
   {
     id: 'catalogo',
@@ -47,6 +47,7 @@ export const SERVICIOS: readonly Servicio[] = [
     frase: 'Tus productos con fotos y precios, y cada consulta llega directo a tu WhatsApp.',
     descripcionSeo:
       'Catálogo digital con fotos, categorías y consulta por WhatsApp en cada producto.',
+    pagina: '/tienda#catalogo',
   },
   {
     id: 'web',
@@ -54,11 +55,12 @@ export const SERVICIOS: readonly Servicio[] = [
     frase: 'Tu negocio en Google: quién sos, qué hacés y cómo te contactan.',
     descripcionSeo:
       'Página web profesional para comercios y profesionales, preparada para aparecer en búsquedas locales.',
+    pagina: '/web',
   },
   {
     id: 'medida',
     nombre: 'Sistema a medida',
-    frase: '¿Hay algo que hoy hacés a mano? Lo pensamos juntos y lo armamos.',
+    frase: '¿Hay algo que hoy hacés a mano? Lo pensamos con vos y lo armamos.',
     descripcionSeo:
       'Desarrollo de sistemas a medida para negocios: paneles, automatizaciones e integraciones.',
   },

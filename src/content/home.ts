@@ -1,6 +1,8 @@
 /**
- * Copy de la home (/) y piezas compartidas (header, cierre, pie). Voseo, frases cortas, sin humo.
- * Estructura de cada sección: dolor → solución → prueba → acción.
+ * Copy de la home (/) y de las piezas compartidas (header, menú, barra del celular, cierre, pie).
+ * Voz de empresa en plural ("armamos", "escribinos"), voseo, frases cortas, sin humo ni cifras.
+ * Tres verbos fijos para tres acciones: "Armá tu sistema" (configurador), "Ver demo" (demos) y
+ * "Escribinos" (WhatsApp). Si una idea ya se dijo en la página, no se repite.
  */
 
 export const MARCA = {
@@ -8,215 +10,202 @@ export const MARCA = {
   fundador: 'Julián Chiosso',
   ciudad: 'San Jorge, Santa Fe',
   zona: 'Atención en San Jorge y zona · San Francisco y alrededores',
-  zonaCorta: 'San Jorge y zona · San Francisco',
   inicio: 'Webya, inicio',
 } as const;
 
 export const CTA = {
   armar: 'Armá tu sistema',
-  armarCorto: 'Armá tu sistema',
-  demo: 'Pedí tu demo',
-  hablar: 'Hablá con Julián',
-  proyectos: 'Ver proyectos reales',
   verDemo: 'Ver demo',
-  verDemos: 'Ver demos',
-  pestana: ' (se abre en otra pestaña)',
+  escribinos: 'Escribinos',
+  /** Se suma al nombre accesible de los links que abren otra pestaña (no se ve). */
+  pestana: ', se abre en otra pestaña',
+} as const;
+
+/** A dónde lleva cada CTA (una sola fuente para todo el sitio). */
+export const RUTAS = {
+  armar: '/armar',
+  armarTipo: (tipo: string) => `/armar?tipo=${tipo}`,
+  demos: '/demos',
+  proyectos: '/proyectos',
+  nosotros: '/nosotros',
+  zona: '/zona',
 } as const;
 
 export const HEADER = {
   saltar: 'Saltar al contenido',
   navegacion: 'Principal',
   links: [
-    { href: '/#que-armo', texto: 'Qué armo' },
     { href: '/turnero', texto: 'Turnero' },
-    { href: '/pizzerias', texto: 'Pedidos' },
-    { href: '/#proyectos', texto: 'Proyectos' },
+    { href: '/pedidos', texto: 'Pedidos' },
+    { href: '/tienda', texto: 'Tienda' },
+    { href: '/web', texto: 'Web' },
+    { href: '/proyectos', texto: 'Proyectos' },
   ],
+  demos: 'Demos',
+  menu: {
+    abrir: 'Menú',
+    abrirAria: 'Abrir el menú',
+    cerrarAria: 'Cerrar el menú',
+    productos: 'Qué armamos',
+    webya: 'Webya',
+    links: [
+      { href: '/turnero', texto: 'Turnero con seña' },
+      { href: '/pedidos', texto: 'Pedidos online' },
+      { href: '/tienda', texto: 'Tienda y catálogo' },
+      { href: '/web', texto: 'Página web' },
+    ],
+    otros: [
+      { href: '/demos', texto: 'Demos' },
+      { href: '/proyectos', texto: 'Proyectos' },
+      { href: '/nosotros', texto: 'Quiénes somos' },
+      { href: '/zona', texto: 'Zona de atención' },
+    ],
+  },
+} as const;
+
+/** Barra fija del celular: los dos atajos que importan, siempre a mano. */
+export const BARRA_CELULAR = {
+  etiqueta: 'Atajos',
 } as const;
 
 export const HERO = {
-  rotulo: 'Software para negocios de San Jorge y zona',
   /** Cada línea se anima por separado. */
-  titulo: ['Tu tienda, tus pedidos,', 'tus turnos.', 'Armados en serio.'],
+  titulo: ['Turnos, pedidos y ventas online,', 'armados para tu negocio.'],
   bajada:
-    'Armo sistemas para comercios: tiendas online, pedidos para pizzerías y turneros con seña. Los usás desde el celular y hablás directo con quien los programa.',
-  /** En el celular: lo mismo en una línea, para que los botones entren en la primera pantalla. */
-  bajadaCorta: 'Pedidos, turnos y tiendas online. Hablás directo con quien los programa.',
-  disponibilidad: 'Tomando proyectos nuevos',
-  probar: 'Probalo vos, ahora',
-  abrirDemo: 'Abrir demo',
-  verZona: 'Ver en el mapa',
-  abrir: ' (se abre en otra pestaña)',
+    'Tus clientes reservan, piden o compran desde el celular. Vos lo manejás todo desde el tuyo.',
+  rubros: 'Elegí tu rubro y probalo',
+  /** Nombre accesible de cada rubro (el link abre la demo en otra pestaña). */
+  rubroAria: (rubro: string, sistema: string) =>
+    `${rubro}: ver demo de ${sistema.toLowerCase()}, se abre en otra pestaña`,
+  verZona: 'Ver el mapa',
 } as const;
+
+/**
+ * "Elegí tu rubro": cada rubro con su ejemplo y la demo que le corresponde. No es solo para pizzerías:
+ * cada negocio se reconoce en su línea.
+ */
+export const RUBROS_HOME = [
+  {
+    id: 'gastronomia',
+    nombre: 'Gastronomía',
+    ejemplo: 'Pizzerías, hamburgueserías, heladerías, panaderías, cafés y delivery',
+    sistema: 'Pedidos online',
+    href: '/demos/pedidos',
+  },
+  {
+    id: 'estetica',
+    nombre: 'Peluquería y estética',
+    ejemplo: 'Peluquerías, barberías, uñas, cosmetología y spa',
+    sistema: 'Turnos con seña',
+    href: '/demos/turnos',
+  },
+  {
+    id: 'salud',
+    nombre: 'Salud',
+    ejemplo: 'Consultorios, kinesiología, psicología, nutrición y odontología',
+    sistema: 'Turnos online',
+    href: '/demos/turnos',
+  },
+  {
+    id: 'comercio',
+    nombre: 'Comercios y tiendas',
+    ejemplo: 'Ropa, joyería, regalería, librerías, kioscos y ferreterías',
+    sistema: 'Tienda online',
+    href: '/demos/tienda',
+  },
+  {
+    id: 'servicios',
+    nombre: 'Profesionales y servicios',
+    ejemplo: 'Estudios, oficios, talleres, academias e inmobiliarias',
+    sistema: 'Página web',
+    href: '/demos/web',
+  },
+] as const;
 
 export const SECCIONES = {
   queArmo: {
-    id: 'que-armo',
-    rotulo: 'Qué armo',
-    titulo: 'Todo lo que tu negocio puede tener online.',
-    bajada:
-      'Elegí una pieza o combiná varias. Cada sistema se arma para tu rubro, no es una plantilla genérica.',
-  },
-  turnero: {
-    id: 'turnero',
-    rotulo: 'Turnero con seña',
-    titulo: 'El turno que se paga, se cumple.',
-  },
-  pedidos: {
-    id: 'pedidos',
-    rotulo: 'Sistema de pedidos',
-    titulo: 'Pedidos ordenados, aunque sea viernes a la noche.',
+    id: 'que-armamos',
+    rotulo: 'Qué armamos',
+    titulo: 'Lo que tu negocio necesita para vender online.',
   },
   proyectos: {
     id: 'proyectos',
     rotulo: 'Proyectos reales',
-    titulo: 'Negocios de acá, con su sistema.',
-    bajada: 'Trabajos reales, con nombre y apellido. Tocá cualquiera para verlo de cerca.',
+    titulo: 'Negocios de acá que ya trabajan con su sistema.',
   },
-  zona: {
-    id: 'zona',
-    rotulo: 'Dónde atiendo',
-    titulo: 'Cerca tuyo.',
-    bajada:
-      'Atiendo en San Jorge y zona, y en San Francisco y alrededores. Hablás conmigo, no con un call center.',
+  nosotros: {
+    id: 'nosotros',
+    rotulo: 'Quiénes somos',
+    titulo: 'Una persona real, de acá, que te responde.',
   },
 } as const;
 
-/** El mapa de la zona de atención (los pueblos son de referencia, para ubicarse). */
-export const ZONA_UI = {
-  mapaAlt:
-    'Mapa de la zona de atención: San Jorge y alrededores, en Santa Fe, y San Francisco y alrededores, en Córdoba.',
-  provincias: { cordoba: 'Córdoba', santaFe: 'Santa Fe' },
-  ciudades: { sanJorge: 'San Jorge', sanFrancisco: 'San Francisco' },
-  pueblos: {
-    sastre: 'Sastre',
-    mariaJuana: 'María Juana',
-    pellegrini: 'Carlos Pellegrini',
-    piamonte: 'Piamonte',
-    trebol: 'El Trébol',
-  },
-  areas: [
-    { nombre: 'San Jorge y zona', provincia: 'Santa Fe' },
-    { nombre: 'San Francisco y alrededores', provincia: 'Córdoba' },
-  ],
-  lejos: 'Si estás más lejos, escribime igual y lo vemos.',
-} as const;
-
+/** Bento "Qué armamos": cada tarjeta es un link a su página. */
 export const BENTO = {
-  armar: 'Armá esto',
   celdas: {
     turnero: {
       titulo: 'Turnero con seña',
       texto:
-        'Reservan, pagan la seña con Mercado Pago y el turno queda asegurado. Vos te enterás al instante.',
-      destacado: 'Producto estrella',
+        'Reservan, pagan la seña con Mercado Pago y el turno queda asegurado. Te llega el aviso al instante.',
+      href: '/turnero',
     },
     pedidos: {
-      titulo: 'Sistema de pedidos',
-      texto: 'Carrito, horario de retiro y la comanda impresa sola.',
+      titulo: 'Pedidos online',
+      texto: 'Carrito, hora de retiro y la comanda impresa sola.',
+      href: '/pedidos',
     },
     tienda: {
       titulo: 'Tienda online',
       texto: 'Vendés aunque el local esté cerrado.',
+      href: '/tienda',
     },
     catalogo: {
       titulo: 'Catálogo digital',
       texto: 'Fotos, precios y la consulta directo a tu WhatsApp.',
+      href: '/tienda#catalogo',
     },
     web: {
       titulo: 'Página web',
-      texto: 'Que te encuentren en Google.',
+      texto: 'Que te encuentren en Google y te escriban con un toque.',
+      href: '/web',
     },
-    panel: {
-      titulo: 'Panel de administración',
-      texto: 'Cambiás precios, fotos y horarios desde el celular.',
-    },
-    bot: {
-      titulo: 'Bot de WhatsApp',
-      texto: 'Confirma y recuerda por vos, a cualquier hora.',
+    medida: {
+      titulo: 'Sistema a medida',
+      texto: '¿Algo que hoy hacés a mano? Lo pensamos con vos y lo armamos.',
+      href: '/armar?tipo=medida',
     },
   },
 } as const;
 
-export const TURNERO = {
-  pasos: [
-    {
-      rotulo: 'El problema',
-      titulo: 'Reservan, no avisan y no vienen.',
-      texto: 'Ese hueco ya no lo llenás. Es tiempo y plata que se pierden, todas las semanas.',
-    },
-    {
-      rotulo: 'La seña',
-      titulo: 'Sin seña, no hay turno.',
-      texto:
-        'El cliente elige día, hora y profesional, y paga una seña del 50% con Mercado Pago. Recién ahí el turno queda asegurado.',
-    },
-    {
-      rotulo: 'El aviso',
-      titulo: 'Te enterás en el momento.',
-      texto:
-        'Apenas entra una reserva te llega una notificación al celular, igual que un mensaje de WhatsApp. El sistema se instala como una app.',
-    },
-    {
-      rotulo: 'El bot',
-      titulo: 'Confirma y recuerda por vos.',
-      texto:
-        'El bot le confirma la reserva al cliente y le recuerda el turno. Vos no escribís nada.',
-    },
-    {
-      rotulo: 'La agenda',
-      titulo: 'Tu semana, ordenada.',
-      texto:
-        'Agenda por profesional, horarios que configurás vos y un panel simple para ver el día de un vistazo.',
-    },
-  ],
-  prueba:
-    'Lo desarrollé para Peluquería Canina San Jorge: turnos con Mercado Pago y varios profesionales.',
-  cta: 'Armá tu turnero',
-  demo: 'Probá la demo',
-  verMas: 'Cómo funciona el turnero',
-} as const;
-
-export const PEDIDOS = {
-  dolor:
-    'Viernes, nueve de la noche: el teléfono no para, WhatsApp explota y la cocina no da abasto.',
-  solucion:
-    'Con el sistema de pedidos, cada cliente arma su pedido desde el celular y elige la hora de retiro. Vos ponés cuántos pedidos entran por franja y la cocina trabaja a su ritmo.',
-  puntos: [
-    { titulo: 'Franjas de 15 minutos', texto: 'Ponés un tope de pedidos por franja.' },
-    { titulo: 'Hora exacta de retiro', texto: 'El cliente sabe cuándo pasar.' },
-    { titulo: 'Comanda impresa', texto: 'El pedido sale por la impresora solo.' },
-    { titulo: 'Panel del dueño', texto: 'Productos, precios y horarios.' },
-  ],
-  prueba: "Así funciona hoy en Micio's Pizzería, en San Jorge.",
-  cta: 'Armá tu sistema de pedidos',
-  demo: 'Probá la demo',
-} as const;
-
 export const PROYECTOS_UI = {
+  verTodos: 'Ver todos los proyectos',
   problema: 'El problema',
-  incluye: 'Qué hace',
+  armamos: 'Qué armamos',
+  ve: 'Qué ve el cliente',
+  incluye: 'Qué incluye',
   ver: 'Ver el sitio',
-  verAvance: 'Ver el avance',
-  externo: ' (se abre en otra pestaña)',
-  pedirDemo: 'Pedí la demo',
-  probarDemo: 'Probá la demo',
-  mensajeDemo: (cliente: string) =>
-    `Hola Julián, vengo de webya.dev. Vi el proyecto de ${cliente} y quiero ver una demo para mi negocio.`,
-  deslizar: 'Deslizá para ver más',
-  anterior: 'Proyecto anterior',
-  siguiente: 'Proyecto siguiente',
+  verDemo: 'Ver demo',
   mockupAlt: (sistema: string) => `Esquema del ${sistema.toLowerCase()}`,
 } as const;
 
+/** Quiénes somos, resumido para la home (la versión completa vive en /nosotros). */
+export const NOSOTROS_HOME = {
+  texto:
+    'Webya es Julián Chiosso, desarrollador de San Jorge y Técnico Superior en Programación (UTN). Trabajamos directo con cada cliente: el que te escucha es el que programa tu sistema.',
+  link: 'Conocé cómo trabajamos',
+  fotoAlt: 'Julián Chiosso, de Webya',
+} as const;
+
 export const CIERRE = {
-  titulo: 'Tu sistema, armado por alguien de acá.',
-  bajada: 'Contame qué necesitás. Te respondo yo, no un formulario.',
+  titulo: 'Contanos qué necesitás.',
+  bajada:
+    'Armá tu sistema en tres pasos o escribinos por WhatsApp. Te respondemos con una propuesta concreta.',
 } as const;
 
 export const PIE = {
   lema: 'Sistemas para negocios que quieren trabajar en serio.',
-  servicios: 'Servicios',
+  productos: 'Qué armamos',
+  webya: 'Webya',
   contacto: 'Contacto',
   legal: 'Legal',
   whatsapp: 'WhatsApp',

@@ -89,7 +89,7 @@ export function BarraDemo({
           </button>
         ) : null}
         <Link
-          href="/demo"
+          href="/demos"
           aria-label={BARRA_DEMOS.salirAria}
           className="flex min-h-10 items-center rounded-full px-2.5 text-[0.8125rem] text-ed-muted hover:text-ed-fg"
         >

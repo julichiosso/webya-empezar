@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import type { CSSProperties } from 'react';
+import { Fragment, type CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { MOCKUPS } from '@/content/mockups';
 import { Tilde } from './Iconos';
@@ -117,7 +117,7 @@ export function Telefono({
 function BarraApp({ titulo, extra }: { titulo: string; extra?: string }) {
   return (
     <div className="flex items-center justify-between border-b border-ed-line px-4 pt-1 pb-3 text-[0.8125rem] font-semibold">
-      <span>{titulo}</span>
+      <span>{titulo}</span>{' '}
       {extra ? <span className="font-normal text-ed-muted">{extra}</span> : null}
     </div>
   );
@@ -243,22 +243,27 @@ function EscenaAgenda() {
         <div className="grid grid-cols-[2.75rem_1fr_1fr] gap-1.5 pb-2 font-semibold">
           <span />
           {A.profesionales.map((p) => (
-            <span key={p}>{p}</span>
+            <Fragment key={p}>
+              {' '}
+              <span>{p}</span>
+            </Fragment>
           ))}
         </div>
         {A.filas.map((f) => (
           <div key={f.hora} className="grid grid-cols-[2.75rem_1fr_1fr] gap-1.5 py-1">
             <span className="pt-1.5 text-ed-muted tabular-nums">{f.hora}</span>
             {[f.a, f.b].map((c, i) => (
-              <span
-                key={i}
-                className={cn(
-                  'h-8 rounded-md px-1.5 pt-1.5',
-                  c ? 'bg-ed-fg text-ed-bg' : 'border border-dashed border-ed-line',
-                )}
-              >
-                {c}
-              </span>
+              <Fragment key={i}>
+                {/* Espacio entre celdas: en el texto de la página no se pegan ("Reservado Reservado"). */}{' '}
+                <span
+                  className={cn(
+                    'h-8 rounded-md px-1.5 pt-1.5',
+                    c ? 'bg-ed-fg text-ed-bg' : 'border border-dashed border-ed-line',
+                  )}
+                >
+                  {c}
+                </span>
+              </Fragment>
             ))}
           </div>
         ))}

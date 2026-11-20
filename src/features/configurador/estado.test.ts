@@ -76,7 +76,7 @@ describe('configurador: mensaje y destino', () => {
   it('el mensaje no lleva líneas vacías ni saltos de más', () => {
     const m = mensajePedido({ tipo: 'Página web', modulos: [] });
     expect(m).toBe(
-      'Hola Julián, vengo de webya.dev.\nQuiero armar: Página web.\n¿Me contás cómo lo armamos y cuánto sale?',
+      'Hola, vengo de webya.dev.\nQuiero armar: Página web.\n¿Me cuentan cómo lo armamos y cuánto sale?',
     );
   });
 

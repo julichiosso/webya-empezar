@@ -9,16 +9,16 @@ import { SERVICIOS, type Servicio } from './servicios';
 export const SEO_SITIO = {
   nombre: 'Webya',
   /** Título de la home (sin plantilla) y por defecto. */
-  tituloInicio: 'Webya · Tiendas, pedidos y turneros para negocios de San Jorge',
+  tituloInicio: 'Webya · Turnos, pedidos y tiendas online para negocios de San Jorge y zona',
   descripcion:
-    'Sistemas para comercios de San Jorge y zona: tienda online, pedidos para pizzerías y turnero con seña por Mercado Pago. Armá el tuyo y mandalo por WhatsApp.',
+    'Sistemas para negocios de San Jorge, San Francisco y la zona: turnero con seña, pedidos online para gastronomía, tiendas y páginas web. Armá el tuyo y envianos el pedido por WhatsApp.',
   /** Plantilla de Next: cada página reemplaza "%s" por su título. */
   plantillaTitulo: '%s | Webya',
   /** El mismo formato, para los títulos de Open Graph y Twitter (que no usan la plantilla). */
   tituloConMarca: (titulo: string) => `${titulo} | Webya`,
   og: {
     alt: 'Webya: tiendas, pedidos y turneros para negocios de San Jorge y zona.',
-    titulo: 'Tu tienda, tus pedidos, tus turnos. Armados en serio.',
+    titulo: 'Turnos, pedidos y ventas online, armados para tu negocio.',
     pie: 'San Jorge y zona · San Francisco',
   },
 } as const;
@@ -66,7 +66,7 @@ function servicioLd(url: string, s: Servicio) {
     description: s.descripcionSeo,
     provider: { '@id': id(url, 'negocio') },
     areaServed: ZONA,
-    url: `${url}${s.pagina ?? '/#armar'}`,
+    url: `${url}${s.pagina ?? `/armar?tipo=${s.id}`}`,
   };
 }
 
@@ -123,7 +123,12 @@ export function jsonLdNegocio(opts: {
 }
 
 /** Página de un servicio: el Service y la miga de pan. */
-export function jsonLdServicio(url: string, s: Servicio, nombrePagina: string) {
+export function jsonLdServicio(
+  url: string,
+  s: Servicio,
+  nombrePagina: string,
+  ruta: string = s.pagina ?? '/',
+) {
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -132,7 +137,7 @@ export function jsonLdServicio(url: string, s: Servicio, nombrePagina: string) {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: SEO_SITIO.nombre, item: url },
-          { '@type': 'ListItem', position: 2, name: nombrePagina, item: `${url}${s.pagina}` },
+          { '@type': 'ListItem', position: 2, name: nombrePagina, item: `${url}${ruta}` },
         ],
       },
     ],

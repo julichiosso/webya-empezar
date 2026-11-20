@@ -1,6 +1,6 @@
-import { CTA, SECCIONES, ZONA_UI } from '@/content/home';
+import { CTA, RUTAS } from '@/content/home';
+import { ZONA as ZONA_UI } from '@/content/paginas';
 import { Boton } from './Boton';
-import { CabezaSeccion } from './CabezaSeccion';
 
 /**
  * Proyección del mapa: coordenadas reales (grados) a la grilla del SVG, a 4 px por km con la escala de
@@ -94,41 +94,31 @@ function Mapa() {
   );
 }
 
-/** Dónde atiendo: la zona en un mapa (SVG propio, sin mapas de terceros) y las dos áreas. */
-export function Zona({ numero = 5 }: { numero?: number }) {
-  const S = SECCIONES.zona;
+/** /zona: el mapa (SVG propio, sin mapas de terceros) y las localidades de cada área. */
+export function ZonaMapa() {
   return (
-    <section id={S.id} className="tono-oscuro e-seccion scroll-mt-16" aria-labelledby="titulo-zona">
-      <div className="e-wrap">
-        <CabezaSeccion
-          numero={numero}
-          rotulo={S.rotulo}
-          titulo={S.titulo}
-          bajada={S.bajada}
-          idTitulo="titulo-zona"
-        />
-        <div className="mt-8 grid grid-cols-12 gap-x-6 gap-y-6 md:mt-12 lg:items-start">
-          <div className="col-span-12 lg:order-2 lg:col-span-5 lg:col-start-8">
-            <div className="mx-auto max-w-[26rem] rounded-3xl border border-ed-line p-3 text-ed-fg sm:p-4 lg:max-w-none">
-              <Mapa />
-            </div>
+    <section className="tono-claro e-seccion" aria-label={ZONA_UI.rotulo}>
+      <div className="e-wrap grid grid-cols-12 gap-x-6 gap-y-10 lg:items-start">
+        <div className="col-span-12 lg:order-2 lg:col-span-6 lg:col-start-7">
+          <div className="mx-auto max-w-[30rem] rounded-3xl border border-ed-line p-3 text-ed-fg sm:p-4 lg:max-w-none">
+            <Mapa />
           </div>
-          <div className="col-span-12 md:col-span-9 md:col-start-4 lg:col-span-4 lg:col-start-4">
-            <ul className="space-y-2.5">
-              {ZONA_UI.areas.map((a) => (
-                <li key={a.nombre} className="flex flex-wrap items-baseline gap-x-2.5">
-                  <span className="e-punto translate-y-[-0.1em]" aria-hidden="true" />
-                  <span className="text-[1.0625rem] font-semibold">{a.nombre}</span>
-                  <span className="e-chico text-ed-muted">{a.provincia}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="e-chico mt-4 text-ed-muted">{ZONA_UI.lejos}</p>
-            <div className="mt-6">
-              <Boton href="#armar" armar="">
-                {CTA.armar}
-              </Boton>
+        </div>
+        <div className="col-span-12 lg:col-span-5">
+          {ZONA_UI.areas.map((a) => (
+            <div key={a.nombre} className="border-t border-ed-line pt-5 pb-8">
+              <h2 className="e-h3">{a.nombre}</h2>
+              <p className="e-rotulo mt-2 text-ed-muted">{a.provincia}</p>
+              <ul className="e-cuerpo mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-ed-muted">
+                {a.localidades.map((l) => (
+                  <li key={l}>{l}</li>
+                ))}
+              </ul>
             </div>
+          ))}
+          <p className="e-cuerpo border-t border-ed-line pt-5">{ZONA_UI.lejos}</p>
+          <div className="mt-6">
+            <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
           </div>
         </div>
       </div>

@@ -1,6 +1,47 @@
-# DECISIONS — Rediseño Webya
+# DECISIONS — Webya
 
-Decisiones tomadas en modo autónomo. Cada una: qué y por qué.
+Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
+
+## V2 · Fase 2 — Sistema visual
+
+- **Fuera el destello y el hover lima del botón principal.** La V2 prohíbe brillos y degradados sin excepciones; el
+  botón ahora cambia de tono al pasar el mouse y se hunde al tocarlo. El lima queda solo como anillo de foco sobre
+  fondo oscuro (funcional, para teclado).
+- **Teléfono plano.** El marco "realista" llevaba degradados de titanio, brillo de vidrio y sombras internas. Se
+  conservó la forma (isla, botones, barra de estado) con colores lisos y un borde de 1 px.
+- **Las demos conservan la interfaz del producto** (el punto verde de "Abierto", las pastillas de estado): muestran
+  el sistema que se entrega, no la estética del sitio. Sin sombras ni degradados igual.
+- **Subrayados con `text-decoration`** (no con `::after`): grosor 1 px, separación 0,32 em, color a media tinta
+  que se completa al pasar el mouse. Es lo que hace Apple y funciona en textos de varias líneas.
+
+## V2 · Fase 3 — Estructura y copy
+
+- **Home hub de cinco bloques**: hero (con "Elegí tu rubro" adentro), bento con links, proyectos, quiénes somos y
+  cierre. El selector de rubro se fusionó con el hero para cumplir dos pedidos a la vez: "en la primera pantalla
+  las demos" (ronda anterior) y "Elegí tu rubro" (V2), sin sumar una sección.
+- **Páginas propias**: `/turnero`, `/pedidos`, `/tienda` (con el catálogo en `#catalogo`), `/web`, `/proyectos`,
+  `/demos`, `/armar`, `/nosotros`, `/zona`. Redirecciones permanentes desde `/pizzerias`, `/tiendas` y `/demo/*`:
+  el dominio todavía no está indexado, así que no se pierde nada.
+- **Una plantilla para los productos** (`LandingServicio`): hero con las dos acciones → producto (dolor →
+  solución → prueba) → para quién (rubros con su lenguaje) → proyectos de ese tipo → cierre.
+- **El configurador vive en `/armar`** y toma la preselección de `?tipo=` en el cliente: la página sigue estática.
+- **Tres verbos para tres acciones**: "Armá tu sistema", "Ver demo", "Escribinos". La CTA de la barra de las
+  demos ("Quiero esto para mi negocio") se mantiene: Julián la eligió en la ronda anterior.
+- **Voz en plural en todo el sitio, con una excepción**: la presentación de `/nosotros` es una cita firmada por
+  Julián en primera persona. Mostrar a la persona es justamente lo que pide esa sección.
+- **Los mensajes de WhatsApp ya no nombran a nadie** ("Hola, vengo de webya.dev…").
+- **"Próximamente"** para Peluquería Canina (hecho, no en uso) y Abelardo (en construcción, sin link público). Cada
+  proyecto cuenta problema → qué armamos → qué ve el cliente; `resultado` pasó a `ve`.
+- **Menú del celular** como panel a pantalla completa (Escape, cierre al navegar, sin scroll de fondo) y **barra
+  inferior** con "Escribinos" y "Armá tu sistema" en todas las páginas menos `/armar`, que ya tiene la suya.
+- **Sin `Suspense` por sección**: partía el HTML y el pie quedaba antes del contenido para quien lee sin JS.
+- **Las demos siguen abriendo en otra pestaña** (lo pidió Julián en la ronda anterior); se avisa en el nombre
+  accesible del link y con la flecha diagonal, no con texto visible.
+- **Retrato de Julián**: iniciales en un cuadro hasta que pase la foto (`NOSOTROS.foto` en `content/paginas.ts`).
+
+---
+
+# V1
 
 ## Fase 1 — Auditoría y deploy
 

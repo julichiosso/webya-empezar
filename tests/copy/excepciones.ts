@@ -30,15 +30,6 @@ export const EXCEPCIONES_CIFRAS: { prefijo: string; motivo: string }[] = [
       'Seña del 50% y franjas de 15 minutos: funciones reales de los sistemas, confirmadas por Julián (2026-11-19).',
   },
   {
-    prefijo: 'home.ts.TURNERO.pasos',
-    motivo: 'Seña del 50%: dato real del turnero, confirmado por Julián (2026-11-19).',
-  },
-  {
-    prefijo: 'home.ts.PEDIDOS.puntos',
-    motivo:
-      "Franjas de 15 minutos: función real del sistema de Micio's, confirmada por Julián (2026-11-19).",
-  },
-  {
     prefijo: 'landings.ts.LANDINGS',
     motivo:
       'Seña del 50% y franjas de 15 minutos en las descripciones SEO: datos reales (2026-11-19).',
