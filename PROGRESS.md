@@ -7,7 +7,42 @@
 - [x] Fase 5 — Demos: hub `/demos`, página web y tienda en vivo
 - [x] Fase 6 — Configurador `/armar` mejorado
 - [x] Fase 7 — SEO (JSON-LD completo, sitemap) y accesibilidad
-- [ ] Fase 8 — Verificación visual (360, 390, 768, 1024, 1440, 1920), reporte final y lista de imágenes
+- [x] Fase 8 — Verificación visual (360, 390, 768, 1024, 1440, 1920), reporte final y lista de imágenes
+
+## Reporte final V2 (2026-11-19)
+
+**Qué cambió**
+
+- **Home hub** de cinco bloques (antes ~14 pantallas en el celular, ahora 5,4 con el pie): en la primera pantalla,
+  titular, "Armá tu sistema", "Ver demo" y los cinco rubros con su demo (verificado en 360 × 844).
+- **Páginas propias**: `/turnero`, `/pedidos`, `/tienda` (+ catálogo), `/web`, `/proyectos`, `/nosotros`, `/zona`
+  (mapa SVG propio con las localidades), `/armar` y `/demos`. Redirecciones desde las rutas viejas.
+- **Menú completo**, menú de celular a pantalla completa y barra fija abajo con "Escribinos" / "Armá tu sistema".
+- **Visual**: sin destellos, latidos, degradados ni sombras; teléfono plano; subrayados y tipografía estilo Apple;
+  dos jerarquías de botón; el lima solo como anillo de foco.
+- **Copy** en plural, tres CTAs fijos, sin duplicados, mensajes de WhatsApp sin nombres; discurso para
+  gastronomía, peluquería y estética, salud, comercios y servicios.
+- **Quiénes somos** con Julián (UTN) y el proceso en cuatro pasos (foto pendiente: hoy van sus iniciales).
+- **Demos**: pedidos, turnos, **página web por rubro** y **tienda en vivo** (nueva).
+- **Pantalla de carga** con el logo que se escribe en SVG, solo si la carga tarda más de 450 ms.
+- **SEO**: canonical fijo a webya.dev, metadata por página, JSON-LD con Organization, ProfessionalService,
+  Person, WebSite y Service, `areaServed` con cada localidad.
+
+**Verificación**
+
+- Unit: 743 tests en verde (44 archivos), con las guardas de capas, copy, colores y texto en JSX.
+- E2E (Playwright, 7 tamaños: iPhone SE, iPhone 15, Pixel 7, iPad Mini, 1280, 1440, 1920): 453 pasan, 90 se
+  saltean a propósito (pruebas de un solo tamaño). axe WCAG 2.2 AA sin violaciones en las 15 rutas, consola limpia
+  en todas, configurador, demos, menú, redirecciones y SEO.
+- Capturas en 360, 390, 768, 1024, 1440 y 1920 px de las 12 páginas: **0 px de desborde** en las 72.
+- Lighthouse móvil local (i3, `benchmarkIndex` ~1600): **97 / 100 / 100 / 100** con CPU 2× (antes 89–93) y
+  86 / 100 / 100 / 100 con CPU 4× (antes 74). CLS 0. El número definitivo es PageSpeed Insights sobre el deploy.
+
+**Pendiente (de Julián, no es código)**
+
+- DNS de `webya.dev` → Vercel (`AUDIT.md` §5).
+- Imágenes: foto de Julián y captura de Peluquería Canina (lista exacta en `IMAGENES.md`).
+- Logo en vector limpio, testimonios reales con permiso, migraciones de Supabase.
 
 ---
 

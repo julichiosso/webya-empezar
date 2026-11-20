@@ -91,7 +91,7 @@ export function DemoTienda() {
       <main>
         <h1 className="sr-only">{UI.titulo}</h1>
         <div className="d-escenario hidden justify-center gap-8 px-6 py-6 lg:flex xl:gap-12">
-          <div className="d-barra-fina d-ventana w-[22rem] shrink-0 overflow-y-auto pr-2">
+          <div className="d-barra-fina d-ventana relative w-[22rem] shrink-0 overflow-y-auto pr-2">
             <div className="mb-8">
               <SelectorVista
                 vista={vista}
@@ -116,7 +116,9 @@ export function DemoTienda() {
 
         <div className="flex h-[calc(100svh-2.75rem)] flex-col lg:hidden">
           <div className="relative min-h-0 flex-1">
-            <div className={cara === 'armar' ? 'h-full overflow-y-auto px-4 py-5' : 'hidden'}>
+            <div
+              className={cara === 'armar' ? 'relative h-full overflow-y-auto px-4 py-5' : 'hidden'}
+            >
               {armador(true)}
             </div>
             <div className={cara === 'ver' ? 'h-full' : 'hidden'}>{tienda}</div>
