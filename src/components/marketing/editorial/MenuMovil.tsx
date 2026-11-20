@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useId, useState } from 'react';
 import { CTA, HEADER, RUTAS } from '@/content/home';
-import { Cerrar, Flecha, Menu, WhatsApp } from './Iconos';
+import { Cerrar, Menu, WhatsApp } from './Iconos';
 
 /**
  * Menú del celular y la tablet: un botón que abre la lista completa (productos, demos, proyectos,
@@ -31,7 +31,7 @@ export function MenuMovil({ contacto }: { contacto: string }) {
   const cerrar = () => setAbierto(false);
   const M = HEADER.menu;
   const fila =
-    'flex min-h-14 items-center justify-between border-b border-ed-line text-[1.375rem] font-medium tracking-[-0.02em] active:opacity-60';
+    'flex min-h-14 items-center justify-between text-[1.375rem] font-medium tracking-[-0.02em] active:opacity-60';
 
   return (
     <div className="lg:hidden">
@@ -49,7 +49,7 @@ export function MenuMovil({ contacto }: { contacto: string }) {
       <div
         id={id}
         hidden={!abierto}
-        className="tono-oscuro fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto border-t border-ed-line"
+        className="tono-oscuro fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto"
       >
         <nav
           aria-label={HEADER.navegacion}
@@ -61,7 +61,6 @@ export function MenuMovil({ contacto }: { contacto: string }) {
               <li key={l.href}>
                 <Link href={l.href} onClick={cerrar} className={fila}>
                   {l.texto}
-                  <Flecha />
                 </Link>
               </li>
             ))}
@@ -72,7 +71,6 @@ export function MenuMovil({ contacto }: { contacto: string }) {
               <li key={l.href}>
                 <Link href={l.href} onClick={cerrar} className={fila}>
                   {l.texto}
-                  <Flecha />
                 </Link>
               </li>
             ))}
