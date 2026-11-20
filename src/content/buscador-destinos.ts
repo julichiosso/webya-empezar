@@ -8,11 +8,52 @@ export interface DestinoBusqueda {
   titulo: string;
   texto: string;
   href: string;
+  /** Si se arma con algo distinto al tipo (un rubro sobre "a medida"): el link al configurador. */
+  armar?: string;
   /** Palabras y frases cortas con las que alguien lo buscaría. */
   palabras: readonly string[];
 }
 
+const PALABRAS_ENTIDADES = [
+  'protectora',
+  'protectoras',
+  'refugio',
+  'adopcion',
+  'adoptar',
+  'perros',
+  'gatos',
+  'animales',
+  'ong',
+  'fundacion',
+  'asociacion civil',
+  'asociacion',
+  'club',
+  'cooperadora',
+  'bomberos',
+  'socios',
+  'cuotas',
+  'donaciones',
+  'donar',
+  'campana',
+  'voluntarios',
+  'voluntariado',
+  'hogar de transito',
+  'transito',
+  'castracion',
+  'castraciones',
+  'rendicion de cuentas',
+  'sin fines de lucro',
+] as const;
+
 const DESTINOS_BASE: readonly DestinoBusqueda[] = [
+  {
+    id: 'protectoras',
+    titulo: 'Sistema para protectoras y entidades',
+    texto: 'Adopciones, socios, donaciones y voluntarios, desde el celular.',
+    href: '/protectoras',
+    armar: '/armar?tipo=medida&rubro=entidades&modulos=adopciones,socios,donaciones,voluntarios',
+    palabras: PALABRAS_ENTIDADES,
+  },
   {
     id: 'turnero',
     titulo: 'Turnos con seña',
@@ -304,6 +345,13 @@ const DESTINOS_BASE: readonly DestinoBusqueda[] = [
 /** Cada sistema con su demo: quien busca "peluquería" ve el turnero y, al lado, la demo para probarlo. */
 const DEMOS_BUSQUEDA: readonly (Omit<DestinoBusqueda, 'palabras'> & { de: string })[] = [
   {
+    id: 'demo-protectora',
+    de: 'protectoras',
+    titulo: 'Ver demo para protectoras',
+    texto: 'Adoptá, asociate y doná; y mirá cómo lo gestiona el equipo.',
+    href: '/demos/protectora',
+  },
+  {
     id: 'demo-turnos',
     de: 'turnero',
     titulo: 'Ver demo de turnos',
@@ -392,4 +440,12 @@ export const RUBRO_POR_PALABRA: Readonly<Record<string, string>> = {
   contador: 'servicios',
   taller: 'servicios',
   academia: 'servicios',
+  protectora: 'entidades',
+  refugio: 'entidades',
+  ong: 'entidades',
+  fundacion: 'entidades',
+  club: 'entidades',
+  cooperadora: 'entidades',
+  bomberos: 'entidades',
+  adopcion: 'entidades',
 };

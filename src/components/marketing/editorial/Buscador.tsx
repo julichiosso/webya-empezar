@@ -82,7 +82,9 @@ export function Buscador() {
     if (consulta.length < 2) return [];
     const encontrados = indice ? indice.buscar(indice.DESTINOS_BUSQUEDA, consulta, 4) : [];
     const rubro = indice ? indice.detectarRubro(consulta, indice.RUBRO_POR_PALABRA) : null;
-    const armable = indice ? encontrados.find((d) => indice.ARMABLES.includes(d.id)) : undefined;
+    const armable = indice
+      ? encontrados.find((d) => d.armar || indice.ARMABLES.includes(d.id))
+      : undefined;
     return [
       ...encontrados,
       ...(armable
@@ -91,7 +93,7 @@ export function Buscador() {
               id: `armar-${armable.id}`,
               titulo: B.armar(armable.titulo),
               texto: B.armarTexto,
-              href: indice!.hrefArmar(armable.id, rubro),
+              href: armable.armar ?? indice!.hrefArmar(armable.id, rubro),
               rubro: rubro ?? '',
             },
           ]
