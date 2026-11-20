@@ -22,12 +22,15 @@ const CAMPO =
  * "Te escribimos nosotros": la persona deja su WhatsApp (y, si quiere, el negocio y qué necesita) y el
  * pedido entra al sistema de leads con una sola request (validación, rate limit y trampa anti-spam en el
  * servidor; aviso al instante a Webya). Si algo falla, el mismo texto sale por WhatsApp: nunca se pierde.
+ * `inicial` precarga el negocio y el pedido (el plan B del configurador).
  */
-export function ContactoRapido() {
+export function ContactoRapido({
+  inicial,
+}: { inicial?: { negocio?: string; texto?: string } } = {}) {
   const id = useId();
   const [whatsapp, setWhatsapp] = useState('');
-  const [negocio, setNegocio] = useState('');
-  const [texto, setTexto] = useState('');
+  const [negocio, setNegocio] = useState(inicial?.negocio ?? '');
+  const [texto, setTexto] = useState(inicial?.texto ?? '');
   const [trampa, setTrampa] = useState('');
   const [estado, setEstado] = useState<Estado>('quieto');
   const [error, setError] = useState('');

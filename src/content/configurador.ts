@@ -222,6 +222,15 @@ export const CONFIGURADOR = {
   /** Progreso de los tres pasos (barra del resumen y del celular). */
   progreso: (hechos: number) => `${hechos} de tres pasos listos`,
   reiniciar: 'Empezar de nuevo',
+  /** Plan B: si WhatsApp no se abrió (navegador de Instagram, computadora sin WhatsApp). */
+  planB: {
+    titulo: '¿No se abrió WhatsApp?',
+    texto: 'Copiá el mensaje y mandalo vos, o mandalo por mail. También podés dejarnos tu número.',
+    mensajeEtiqueta: 'Tu pedido, listo para copiar',
+    copiar: 'Copiar mensaje',
+    copiado: 'Copiado. Pegalo en WhatsApp o en un mail.',
+    mail: 'Enviarnos por mail',
+  },
 } as const;
 
 export interface PedidoWhatsApp {

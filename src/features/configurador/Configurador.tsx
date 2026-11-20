@@ -1,11 +1,14 @@
 'use client';
 
-import { useEffect, useReducer, useRef } from 'react';
-import { CONFIGURADOR, RUBROS_CONFIG, modulosDe } from '@/content/configurador';
+import { useEffect, useReducer, useRef, useState } from 'react';
+import { ASUNTO_MAIL, CONFIGURADOR, RUBROS_CONFIG, modulosDe } from '@/content/configurador';
 import { TrazoBoton } from '@/components/marketing/editorial/Boton';
+import { ContactoRapido } from '@/components/marketing/editorial/ContactoRapido';
 import { enlaceContacto } from '@/components/marketing/editorial/contacto';
+import { TecladoAbierto } from '@/components/marketing/editorial/TecladoAbierto';
 import { SERVICIOS, type TipoId } from '@/content/servicios';
 import { track } from '@/lib/analytics';
+import { siteConfig } from '@/lib/site-config';
 import { ESTADO_INICIAL, mensajeDe, reducir, resumen, type EstadoConfigurador } from './estado';
 
 const C = CONFIGURADOR;
@@ -59,8 +62,16 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
   // El canal se sabe antes de elegir nada (depende solo de si hay número cargado).
   const textoEnviar = enlaceContacto('').canal === 'mail' ? C.enviarMail : C.enviar;
 
+  const [enviado, setEnviado] = useState(false);
+  const planB = useRef<HTMLDivElement>(null);
+
   const enviar = () => {
     if (!destino) return;
+    setEnviado(true);
+    // En el celular, al volver de WhatsApp el plan B queda a la vista.
+    setTimeout(() => {
+      if (window.innerWidth < 1024) planB.current?.scrollIntoView({ block: 'start' });
+    }, 600);
     track('configurador_enviar', {
       tipo: estado.tipo ?? '',
       rubro: estado.rubro ?? '',
@@ -71,6 +82,7 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
 
   return (
     <div ref={raiz} className="grid grid-cols-12 gap-x-6 gap-y-12">
+      <TecladoAbierto />
       <form
         className="col-span-12 space-y-14 lg:col-span-7"
         onSubmit={(e) => e.preventDefault()}
@@ -212,6 +224,15 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
             />
           </div>
           <p className="e-chico mt-5 text-ed-muted">{C.aclaracion}</p>
+          {enviado && mensaje ? (
+            <div ref={planB} className="scroll-mt-24">
+              <PlanB
+                mensaje={mensaje}
+                negocio={estado.negocio}
+                resumen={[r.tipo, r.rubro, ...r.modulos].filter(Boolean).join(' · ')}
+              />
+            </div>
+          ) : null}
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-5">
             <a
               href={r.demo?.href ?? '/demos'}
@@ -235,7 +256,7 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
       </aside>
 
       {/* Celular: el botón queda a mano (abajo, con el pulgar) mientras se recorre el configurador. */}
-      <div className="sticky bottom-0 z-30 col-span-12 -mx-[clamp(1rem,4vw,3rem)] bg-ed-bg px-[clamp(1rem,4vw,3rem)] pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
+      <div className="e-config-barra sticky bottom-0 z-30 col-span-12 -mx-[clamp(1rem,4vw,3rem)] bg-ed-bg px-[clamp(1rem,4vw,3rem)] pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
         <Progreso pasos={pasos} className="mb-2" />
         <p className="e-chico mb-2 truncate text-ed-muted" aria-hidden="true">
           {r.tipo
@@ -349,5 +370,62 @@ function BotonEnviar({
       <TrazoBoton />
       {texto}
     </a>
+  );
+}
+
+/**
+ * Plan B, después de tocar "Enviarnos mi pedido": el mensaje para copiar, el mail y "te escribimos
+ * nosotros" (deja su número y el pedido entra al sistema de contactos). No sabemos si WhatsApp se abrió:
+ * se ofrece siempre, sin suponer que falló.
+ */
+function PlanB({
+  mensaje,
+  negocio,
+  resumen,
+}: {
+  mensaje: string;
+  negocio: string;
+  resumen: string;
+}) {
+  const [copiado, setCopiado] = useState(false);
+  const area = useRef<HTMLTextAreaElement>(null);
+  const P = C.planB;
+  const mail = `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(ASUNTO_MAIL)}&body=${encodeURIComponent(mensaje)}`;
+  const copiar = async () => {
+    try {
+      await navigator.clipboard.writeText(mensaje);
+    } catch {
+      // Sin permiso de portapapeles: queda seleccionado para copiar a mano.
+      area.current?.select();
+    }
+    setCopiado(true);
+  };
+  return (
+    <div className="mt-8 border-t border-ed-line pt-6">
+      <h4 className="font-semibold">{P.titulo}</h4>
+      <p className="e-chico mt-1 text-ed-muted">{P.texto}</p>
+      <textarea
+        ref={area}
+        readOnly
+        aria-label={P.mensajeEtiqueta}
+        value={mensaje}
+        rows={5}
+        className="mt-4 w-full resize-none rounded-xl bg-ed-surface p-3 text-base leading-snug"
+      />
+      <div className="mt-3 flex flex-wrap gap-3">
+        <button type="button" onClick={copiar} className="e-btn e-btn-secundario e-btn-chico">
+          {P.copiar}
+        </button>
+        <a href={mail} className="e-btn e-btn-secundario e-btn-chico">
+          {P.mail}
+        </a>
+      </div>
+      <p aria-live="polite" className="e-chico mt-2 min-h-5 text-ed-muted">
+        {copiado ? P.copiado : ''}
+      </p>
+      <div className="mt-4">
+        <ContactoRapido inicial={{ negocio, texto: resumen }} />
+      </div>
+    </div>
   );
 }
