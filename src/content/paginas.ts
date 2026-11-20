@@ -119,3 +119,63 @@ export const ARMAR = {
       'Elegí qué querés armar, tu rubro y lo que tiene que tener. Envianos el pedido por WhatsApp y te respondemos con el presupuesto, sin compromiso.',
   },
 } as const;
+
+export const CAMPO = {
+  seo: {
+    titulo: 'Sistemas para el campo y el agro en San Jorge y zona',
+    descripcion:
+      'Turnos de descarga para acopios, pedidos de insumos, catálogos de maquinaria y páginas para contratistas rurales. Sistemas para el campo de San Jorge, San Francisco y la zona.',
+  },
+  rotulo: 'Campo y agro',
+  titulo: ['Sistemas para el campo,', 'pensados desde acá.'],
+  bajada:
+    'Agronomías, acopios, veterinarias rurales, contratistas y talleres de maquinaria: ordenamos lo que hoy se resuelve por teléfono, papel y WhatsApp.',
+  soluciones: {
+    rotulo: 'Qué armamos para el campo',
+    titulo: 'Lo que hoy se anota en un cuaderno, en el celular.',
+    items: [
+      {
+        titulo: 'Turnos de descarga',
+        texto:
+          'En cosecha, cada camión con su horario para descargar en la planta o el acopio. Menos fila en la ruta.',
+        href: '/turnero',
+        producto: 'Turnero',
+      },
+      {
+        titulo: 'Pedidos de insumos',
+        texto:
+          'El productor pide semillas, fertilizantes o repuestos desde el celular y el pedido llega ordenado.',
+        href: '/pedidos',
+        producto: 'Pedidos online',
+      },
+      {
+        titulo: 'Maquinaria y repuestos',
+        texto:
+          'Equipos usados, repuestos y precios a la vista, con la consulta directa a tu WhatsApp.',
+        href: '/tienda',
+        producto: 'Catálogo',
+      },
+      {
+        titulo: 'Contratistas rurales',
+        texto:
+          'Siembra, pulverización, cosecha o fletes: qué hacés, en qué zona y cómo te contratan.',
+        href: '/web',
+        producto: 'Página web',
+      },
+      {
+        titulo: 'Veterinaria rural',
+        texto: 'Visitas al campo y consultas con agenda propia y el aviso al celular.',
+        href: '/turnero',
+        producto: 'Turnero',
+      },
+      {
+        titulo: 'A medida',
+        texto:
+          'Stock del galpón, órdenes de trabajo o registro de lotes: lo que hoy vive en una planilla.',
+        href: '/armar?tipo=medida',
+        producto: 'Sistema a medida',
+      },
+    ],
+  },
+  nota: 'Se arman sobre los mismos sistemas que ya funcionan en negocios de la zona, adaptados a cómo trabaja el campo.',
+} as const;
