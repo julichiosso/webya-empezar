@@ -1,4 +1,17 @@
-# PROGRESS — Rediseño Webya
+# PROGRESS — Webya V2 (de "bueno" a "abismal")
+
+- [x] Fase 1 — Auditoría V2 (`AUDIT_V2.md`)
+- [ ] Fase 2 — Sistema visual: sin sombras, brillos ni degradados; tipografía y subrayados estilo Apple
+- [ ] Fase 3 — Home corta (hub) + páginas propias + menú completo + barra inferior en celular + copy en "nosotros"
+- [ ] Fase 4 — Velocidad y pantalla de carga con el logo vectorial
+- [ ] Fase 5 — Demos: hub `/demos`, página web y tienda en vivo
+- [ ] Fase 6 — Configurador `/armar` mejorado
+- [ ] Fase 7 — SEO (JSON-LD completo, sitemap) y accesibilidad
+- [ ] Fase 8 — Verificación visual (360, 390, 768, 1024, 1440, 1920), reporte final y lista de imágenes
+
+---
+
+# PROGRESS — Rediseño Webya (V1)
 
 | Fase | Qué                                                                                                                                                                | Estado             |
 | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
