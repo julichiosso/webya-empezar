@@ -4,7 +4,7 @@
 - [x] Fase 2 — Sistema visual: sin sombras, brillos ni degradados; tipografía y subrayados estilo Apple
 - [x] Fase 3 — Home corta (hub) + páginas propias + menú completo + barra inferior en celular + copy en "nosotros"
 - [x] Fase 4 — Velocidad y pantalla de carga con el logo vectorial
-- [ ] Fase 5 — Demos: hub `/demos`, página web y tienda en vivo
+- [x] Fase 5 — Demos: hub `/demos`, página web y tienda en vivo
 - [ ] Fase 6 — Configurador `/armar` mejorado
 - [ ] Fase 7 — SEO (JSON-LD completo, sitemap) y accesibilidad
 - [ ] Fase 8 — Verificación visual (360, 390, 768, 1024, 1440, 1920), reporte final y lista de imágenes

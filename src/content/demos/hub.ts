@@ -19,7 +19,7 @@ export const HUB_DEMOS = {
 } as const;
 
 export interface DemoInfo {
-  id: 'pedidos' | 'turnos';
+  id: 'pedidos' | 'turnos' | 'web' | 'tienda';
   /** El tipo de sistema que muestra (los proyectos sin sitio publicado enlazan a su demo). */
   sistema: TipoId;
   href: string;
@@ -71,6 +71,43 @@ export const DEMOS: readonly DemoInfo[] = [
       'Números: facturación, ocupación por hora y clientes para recuperar',
     ],
     cta: { href: '/armar?tipo=turnero', texto: 'Quiero esto para mi negocio' },
+  },
+  {
+    id: 'web',
+    sistema: 'web',
+    href: '/demos/web',
+    rubro: 'Profesionales, salud y comercios',
+    titulo: 'Página web',
+    texto:
+      'La misma página para cada rubro: cambiá de negocio, mirala en el celular y en la compu y tocá WhatsApp.',
+    barra: 'Página web',
+    enUso: 'lorena',
+    ademas: [
+      'Dominio propio y mail con tu nombre',
+      'Preparada para aparecer en Google en tu zona',
+      'Textos y fotos de tu negocio, escritos con vos',
+      'Formulario o WhatsApp con el mensaje armado',
+      'Cambios simples cuando los necesites',
+    ],
+    cta: { href: '/armar?tipo=web', texto: 'Quiero esto para mi negocio' },
+  },
+  {
+    id: 'tienda',
+    sistema: 'tienda',
+    href: '/demos/tienda',
+    rubro: 'Comercios y tiendas',
+    titulo: 'Tienda en vivo',
+    texto: 'Poné tu nombre, tus colores y tres productos, y mirá tu tienda armada al instante.',
+    barra: 'Tienda online',
+    enUso: 'petrucci',
+    ademas: [
+      'Catálogo completo por categorías, sin límite de productos',
+      'Panel para cargar productos y fotos desde el celular',
+      'Pagos con Mercado Pago o pedido por WhatsApp',
+      'Stock, promos y envíos',
+      'Dominio propio y preparada para Google',
+    ],
+    cta: { href: '/armar?tipo=tienda', texto: 'Quiero esto para mi negocio' },
   },
 ];
 

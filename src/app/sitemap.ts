@@ -24,6 +24,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     pagina('/demos', 0.6),
     pagina('/demos/pedidos', 0.5),
     pagina('/demos/turnos', 0.5),
+    pagina('/demos/web', 0.5),
+    pagina('/demos/tienda', 0.5),
     pagina('/privacidad', 0.2, 'yearly'),
     pagina('/terminos', 0.2, 'yearly'),
   ];

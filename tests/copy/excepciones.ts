@@ -21,6 +21,14 @@ export const EXCEPCIONES_CIFRAS: { prefijo: string; motivo: string }[] = [
       'Demo de pedidos: horarios, tamaños (1/2 XL) y precios de ejemplo, rotulados así en pantalla.',
   },
   {
+    prefijo: 'demos/web/',
+    motivo: 'Demo de página web: horarios de atención de los negocios de ejemplo.',
+  },
+  {
+    prefijo: 'demos/tienda/',
+    motivo: 'Demo de tienda: precios de los productos de ejemplo, rotulados como vista previa.',
+  },
+  {
     prefijo: 'mockups.ts',
     motivo: 'Datos de ejemplo de las mini pantallas (horarios, cantidades): no son promesas.',
   },

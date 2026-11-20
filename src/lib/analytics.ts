@@ -16,7 +16,11 @@ export interface EventosAnalitica {
   configurador_demo: { rubro: string };
   // Demos de rubro (/demos/<rubro>). `demo` es el rubro (p. ej. 'pedidos').
   demo_view: { demo: string; cocina: string };
-  demo_personalizada: { demo: string; campo: 'nombre' | 'paleta' | 'cocina'; valor: string };
+  demo_personalizada: {
+    demo: string;
+    campo: 'nombre' | 'paleta' | 'cocina' | 'rubro' | 'producto' | 'logo';
+    valor: string;
+  };
   demo_pedido_creado: { demo: string; modalidad: string; items: number; medioPago: string };
   demo_estado_avanzado: { demo: string; estado: string };
   demo_cta_click: { demo: string; origen: string };

@@ -2,6 +2,24 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## V2 · Fase 5 — Demos
+
+- **Cuatro demos en `/demos`**, cada una con la misma barra (es una demo, qué más hace el sistema real,
+  reiniciar, volver) y el proyecto real que ya lo usa: pedidos (Micio's), turnos, página web (Lorena Almagro) y
+  tienda (Joyería Petrucci). El hub también deja elegir por rubro.
+- **Página web**: una sola plantilla con el contenido de cinco rubros, para mostrar que la estructura es la misma
+  y lo que cambia es el negocio. La estructura sale de los sitios entregados; los textos son propios y los
+  negocios, genéricos ("Tu consultorio", "Tu peluquería"…), igual que en la demo de turnos. Se mira en celular
+  o computadora (container queries: la misma página se acomoda sola).
+- **Tienda en vivo**: rubro → nombre, color y logo → hasta tres productos (nombre, precio y foto de prueba o
+  una propia) → la tienda armada al instante, con inicio, ficha y carrito. "Quiero esta tienda" abre WhatsApp con
+  el resumen. Se dice en pantalla que es una vista previa y que la tienda real se arma con el cliente: no se
+  promete creación automática.
+- **Las fotos que se suben no salen del navegador** (`URL.createObjectURL`, se liberan al salir). La CSP ya
+  permite `blob:` en imágenes. Las fotos de prueba son dibujos SVG propios (sin stock).
+- **Los botones de WhatsApp de la página y la tienda de ejemplo no abren WhatsApp**: muestran qué harían en el
+  sitio real. Solo "Quiero esta tienda" (la acción de verdad) abre el chat.
+
 ## V2 · Fase 4 — Velocidad y pantalla de carga
 
 - **Herramientas instaladas** (solo desarrollo, de npm oficial):
