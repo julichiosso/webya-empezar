@@ -38,3 +38,15 @@ test('lo que se escribe nunca se ejecuta y siempre se puede mandar por WhatsApp'
   await expect(page.locator('img[src="x"]')).toHaveCount(0);
   expect(dialogo).toBe(false);
 });
+
+test('con un error de tipeo sugiere el sistema, su demo y el configurador con el rubro elegido', async ({
+  page,
+}) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
+  const caja = page.getByRole('combobox', { name: BUSCADOR.etiqueta });
+  await caja.fill('turnos para mi peluqeria');
+  const lista = page.getByRole('listbox');
+  await expect(lista.getByRole('option').nth(1)).toContainText('Ver demo de turnos');
+  await lista.getByRole('option', { name: /Armá tu sistema/ }).click();
+  await expect(page).toHaveURL(/\/armar\?tipo=turnero&rubro=estetica$/);
+});
