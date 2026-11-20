@@ -19,7 +19,9 @@ test('"te escribimos nosotros": el número queda guardado como lead y avisa que 
   await form.getByRole('textbox', { name: CONTACTO_RAPIDO.negocio }).fill('Agronomía Prueba');
   await form.getByRole('textbox', { name: CONTACTO_RAPIDO.mensaje }).fill('Turnos de descarga');
   await form.getByRole('button', { name: CONTACTO_RAPIDO.enviar }).click();
-  await expect(page.getByRole('status').filter({ hasText: CONTACTO_RAPIDO.listo })).toBeVisible();
+  await expect(
+    page.getByRole('status').filter({ hasText: CONTACTO_RAPIDO.listoTitulo }),
+  ).toBeVisible();
 
   const lead = (await leerLeads()).find((l) => l.whatsapp === `+549${n}`) as
     { nombre_negocio: string | null; necesidad_libre: string | null } | undefined;
