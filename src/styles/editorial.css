@@ -1367,46 +1367,6 @@ html:not(.mo) .e-vidriera {
 }
 
 /*
- * Avisos tipo isla: la píldora sube y se abre (escala y opacidad), el ícono se dibuja y el texto aparece
- * apenas después. Al cerrarse, vuelve a bajar. Con movimiento reducido aparece y desaparece sin moverse.
- */
-.e-isla {
-  outline: 1px solid rgb(255 255 255 / 0.12);
-  opacity: 0;
-  transform: translate3d(0, 0.75rem, 0) scale(0.7, 0.85);
-  transition:
-    transform 640ms cubic-bezier(0.32, 0.72, 0, 1),
-    opacity 280ms ease-out;
-}
-.e-isla[data-visible] {
-  opacity: 1;
-  transform: none;
-}
-.e-isla-texto {
-  opacity: 0;
-  transition: opacity 360ms ease-out 180ms;
-}
-.e-isla[data-visible] .e-isla-texto {
-  opacity: 1;
-}
-.e-isla-icono > * {
-  stroke-dasharray: 1 1;
-  stroke-dashoffset: 1;
-}
-.e-isla[data-visible] .e-isla-icono > * {
-  animation: e-avion-dibuja 800ms cubic-bezier(0.65, 0, 0.35, 1) 200ms forwards;
-}
-.e-isla[data-visible] .e-isla-icono > * + * {
-  animation-delay: 650ms;
-  animation-duration: 450ms;
-}
-@media (prefers-reduced-motion: reduce) {
-  .e-isla-icono > * {
-    stroke-dashoffset: 0;
-  }
-}
-
-/*
  * Mapa de /zona (fondo claro): zonas en dos tonos planos (sin borde), límite provincial continuo y tenue,
  * rutas finas, localidades con jerarquía (las dos ciudades más grandes). La localidad elegida se marca.
  * En el celular solo se leen las dos ciudades; el resto, al elegirlas.
@@ -1500,6 +1460,12 @@ html:not(.mo) .e-vidriera {
     font-size: clamp(4.5rem, 0.5rem + 6.6vw, 8rem);
   }
 }
+/* Laptops bajas (720–800 px de alto): el lema se achica con el alto para que todo entre sin scrollear. */
+@media (min-width: 64rem) and (max-height: 50rem) {
+  .e-lema {
+    font-size: 10.5vh;
+  }
+}
 .mo .e-lema .e-palabra > span {
   animation-delay: calc(var(--i, 0) * 150ms);
 }
@@ -1574,4 +1540,87 @@ html:not(.mo) .e-vidriera {
 }
 .mo .e-buscador-ejemplo {
   animation: e-ejemplo-entra 420ms var(--ease-editorial) both;
+}
+
+/*
+ * Sugerencias del celular: una línea, una acción y la X. Plana, borde de 1 px, arriba de la barra de
+ * atajos (nunca la tapa). Entra desde abajo, corta.
+ */
+.e-sugerencia {
+  position: fixed;
+  z-index: 29;
+  inset-inline: 0.75rem;
+  bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 34rem;
+  margin-inline: auto;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--e-line-strong);
+  border-radius: 1rem;
+  background: var(--e-bg);
+  color: var(--e-fg);
+  animation: e-sugerencia-entra 360ms var(--ease-editorial) both;
+}
+.e-sugerencia-marca {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.625rem;
+  background: var(--e-fg);
+  color: var(--e-bg);
+}
+@keyframes e-sugerencia-entra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
+  }
+}
+
+/* La barra de atajos se corre mientras se escribe: no tapa el campo ni el teclado. */
+.e-barra-celular {
+  transition: transform 260ms var(--ease-editorial);
+}
+html[data-teclado] .e-barra-celular {
+  transform: translate3d(0, 110%, 0);
+}
+
+/* Progreso de lectura en el celular: una línea de 2 px arriba, sin JavaScript (scroll-driven). */
+@supports (animation-timeline: scroll()) {
+  @media (max-width: 63.99rem) and (prefers-reduced-motion: no-preference) {
+    .e-progreso-lectura {
+      position: fixed;
+      inset-inline: 0;
+      top: 0;
+      z-index: 40;
+      height: 2px;
+      background: var(--e-fg);
+      transform-origin: 0 50%;
+      animation: e-progreso-lectura linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+@keyframes e-progreso-lectura {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Escenas en el celular: una por bloque, con aire entre una y otra (sin imán: con alturas cortas salta). */
+@media (max-width: 47.99rem) {
+  .e-escena-item + .e-escena-item {
+    margin-top: 3.5rem;
+  }
+}
+
+/* La barra del configurador en el celular sube con el teclado (iOS y Android) y respeta el safe-area. */
+.e-config-barra {
+  bottom: var(--teclado, 0px);
 }
