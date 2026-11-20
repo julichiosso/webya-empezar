@@ -25,6 +25,7 @@ export const CTA = {
 export const RUTAS = {
   armar: '/armar',
   armarTipo: (tipo: string) => `/armar?tipo=${tipo}`,
+  armarCaso: (tipo: string, rubro: string) => `/armar?tipo=${tipo}&rubro=${rubro}`,
   demos: '/demos',
   proyectos: '/proyectos',
   nosotros: '/nosotros',
@@ -143,8 +144,9 @@ export const SECCIONES = {
   },
   proyectos: {
     id: 'proyectos',
-    rotulo: 'Proyectos reales',
-    titulo: 'Negocios de acá que ya trabajan con su sistema.',
+    rotulo: 'Proyectos',
+    titulo: 'Negocios de acá, con su sistema funcionando.',
+    bajada: 'Lo que armamos para negocios de la zona y cómo se usa todos los días.',
   },
   nosotros: {
     id: 'nosotros',
@@ -192,13 +194,40 @@ export const BENTO = {
 
 export const PROYECTOS_UI = {
   verTodos: 'Ver todos los proyectos',
-  verProyecto: 'Ver el proyecto',
-  problema: 'El problema',
-  armamos: 'Qué armamos',
-  ve: 'Qué ve el cliente',
-  incluye: 'Qué incluye',
+  verCaso: 'Ver el caso completo',
+  verSitio: 'Ver sitio',
+  desafio: 'El desafío',
+  armamos: 'Lo que armamos',
+  ve: 'Lo que ve el cliente',
+  uso: 'Cómo se usa',
+  resultado: 'Resultado',
   ver: 'Ver el sitio',
   verDemo: 'Ver demo',
+  /** Barra de datos: los números salen del manifiesto, nunca se escriben a mano. */
+  datos: (casos: number | string, enProduccion: number | string, rubros: string, lugar: string) =>
+    `${casos} casos · ${enProduccion} en producción · ${rubros} · ${lugar}`,
+  filtros: {
+    aria: 'Filtrar por tipo de sistema',
+    todos: 'Todos',
+    tipos: { pedidos: 'Pedidos', turnero: 'Turnos', tienda: 'Tienda', web: 'Web' },
+  },
+  indice: 'Casos',
+  abrir: 'Ver más',
+  cerrar: 'Ver menos',
+  vacio: 'Todavía no hay casos de este tipo.',
+  proximo: {
+    titulo: '¿Tu negocio es el próximo?',
+  },
+  caso: {
+    volver: 'Todos los proyectos',
+    anterior: 'Caso anterior',
+    siguiente: 'Caso siguiente',
+    cierre: '¿Querés algo así para tu negocio?',
+    cierreBajada: 'Lo armamos a la medida de cómo trabajás. Contanos y te pasamos una propuesta.',
+    mensaje: (cliente: string) =>
+      `Hola, vengo de webya.dev. Vi el caso de ${cliente} y quiero algo parecido para mi negocio.`,
+    seoTitulo: (cliente: string, sistema: string) => `${cliente}: ${sistema.toLowerCase()}`,
+  },
   mockupAlt: (sistema: string) => `Esquema del ${sistema.toLowerCase()}`,
 } as const;
 
