@@ -10,11 +10,18 @@ const SITIOS = [
 ];
 
 const navegador = await chromium.launch();
-const pagina = await navegador.newPage({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 1 });
+const pagina = await navegador.newPage({
+  viewport: { width: 1600, height: 1000 },
+  deviceScaleFactor: 1,
+});
 for (const s of SITIOS) {
   await pagina.goto(s.url, { waitUntil: 'networkidle', timeout: 60_000 });
   await pagina.waitForTimeout(1500);
-  await pagina.screenshot({ path: `public/clientes/${s.id}-escritorio.jpg`, type: 'jpeg', quality: 82 });
+  await pagina.screenshot({
+    path: `public/clientes/${s.id}-escritorio.jpg`,
+    type: 'jpeg',
+    quality: 82,
+  });
   // eslint-disable-next-line no-console -- herramienta de línea de comandos: el reporte es la salida
   console.log(`${s.id}: listo`);
 }
