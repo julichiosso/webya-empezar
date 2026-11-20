@@ -258,19 +258,23 @@ dd {
 }
 
 /*
- * Enlaces estilo Apple: subrayado fino y separado del texto, a media tinta en reposo; al pasar el mouse
- * se completa (el color del subrayado se anima). Los de navegación no se subrayan hasta el hover.
+ * Enlaces: subrayado fino a media tinta. Al pasar el mouse se retira hacia la derecha y se vuelve a dibujar
+ * desde la izquierda, ya entero. Los de navegación aparecen desde la izquierda. Es una línea de 1 px
+ * dibujada con background (se anima su tamaño), no un adorno.
  */
 .e-link {
+  --sub-y: 100%;
+  --sub-color: color-mix(in srgb, currentColor 38%, transparent);
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.32em;
-  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  padding-bottom: 0.12em;
+  text-decoration: none;
+  background-image: linear-gradient(var(--sub-color), var(--sub-color));
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: 0 var(--sub-y);
   transition:
-    text-decoration-color var(--t-media) var(--ease-editorial),
     color var(--t-rapida) var(--ease-editorial),
     opacity var(--t-rapida);
 }
@@ -278,20 +282,47 @@ dd {
   opacity: 0.6;
   transition-duration: 60ms;
 }
+@keyframes e-subrayado {
+  0% {
+    background-size: 100% 1px;
+    background-position: 100% var(--sub-y);
+  }
+  42% {
+    background-size: 0% 1px;
+    background-position: 100% var(--sub-y);
+  }
+  43% {
+    background-size: 0% 1px;
+    background-position: 0 var(--sub-y);
+  }
+  100% {
+    background-size: 100% 1px;
+    background-position: 0 var(--sub-y);
+  }
+}
 @media (hover: hover) {
   .e-link:hover {
-    text-decoration-color: currentColor;
+    --sub-color: currentColor;
+    animation: e-subrayado 760ms var(--ease-editorial);
   }
 }
 .e-link:focus-visible {
-  text-decoration-color: currentColor;
+  --sub-color: currentColor;
 }
-/* Enlace con área táctil alta (44 px). */
+/* Enlace con área táctil alta (44 px): el subrayado va pegado al texto, no al borde de la caja. */
 .e-link-alto {
+  --sub-y: calc(50% + 0.8em);
   min-height: 2.75rem;
 }
 .e-link-nav {
-  text-decoration-color: transparent;
+  background-size: 0% 1px;
+  transition: background-size 480ms var(--ease-editorial);
+}
+@media (hover: hover) {
+  .e-link-nav:hover {
+    animation: none;
+    background-size: 100% 1px;
+  }
 }
 
 /* Punto neutro (separador de estado). Sin color de acento ni animación. */
@@ -897,19 +928,31 @@ dd {
   padding-top: calc(clamp(3rem, 5.5vw, 6rem) + 5vw);
 }
 
-/* La franja "Creá. Digitalizá. Crecé.": cada palabra arranca hueca y se llena al entrar en pantalla. */
+/*
+ * La franja "Creá. Digitalizá. Crecé.": cada palabra está en contorno y la tinta la recorre de izquierda a
+ * derecha (clip-path sobre una copia llena), una después de otra.
+ */
 .e-manifiesto-palabra {
+  position: relative;
   font-size: clamp(2.5rem, 1.6rem + 3.6vw, 5.25rem);
   line-height: 1;
   letter-spacing: -0.05em;
   font-weight: 600;
-  color: var(--e-fg);
-  -webkit-text-stroke: 1px var(--e-fg);
-  transition: color 900ms var(--ease-editorial);
-  transition-delay: calc(250ms + var(--i, 0) * 220ms);
-}
-.mo [data-reveal]:not(.in) .e-manifiesto-palabra {
   color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--e-fg) 30%, transparent);
+}
+.e-manifiesto-palabra::after {
+  content: attr(data-texto);
+  position: absolute;
+  inset: 0;
+  color: var(--e-fg);
+  -webkit-text-stroke: 0;
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.18, 1);
+  transition-delay: calc(150ms + var(--i, 0) * 260ms);
+}
+.mo [data-reveal]:not(.in) .e-manifiesto-palabra::after {
+  clip-path: inset(0 100% 0 0);
 }
 
 /*
@@ -929,7 +972,7 @@ dd {
 }
 .e-btn-trazo rect {
   fill: none;
-  stroke: var(--e-fg);
+  stroke: color-mix(in srgb, var(--e-fg) 45%, transparent);
   stroke-width: 1;
   rx: 29px;
   ry: 29px;
@@ -1015,63 +1058,287 @@ html:not(.mo) .e-vidriera {
   }
 }
 
-/*
- * Avioncito del botón Enviar: planea apenas en reposo, se levanta al pasar el mouse y, mientras se envía,
- * sale volando por arriba a la derecha y vuelve a entrar por abajo. Solo transform y opacity.
- */
-.e-avion-caja {
-  display: inline-grid;
-  place-items: center;
-  overflow: hidden;
-  width: 1.25rem;
-  height: 1.25rem;
-}
-.e-avion {
-  transition: transform 420ms var(--ease-editorial);
-}
-.mo .e-avion {
-  animation: e-planeo 3.2s ease-in-out infinite;
-}
-@keyframes e-planeo {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(1px, -1.5px, 0);
-  }
-}
-@media (hover: hover) {
-  .e-btn:hover .e-avion {
-    animation: none;
-    transform: translate3d(2px, -2px, 0) rotate(-6deg);
-  }
-}
-.e-btn[data-enviando] .e-avion {
-  animation: e-vuelo 950ms cubic-bezier(0.6, 0, 0.4, 1) infinite;
-}
-@keyframes e-vuelo {
-  0% {
-    transform: none;
-    opacity: 1;
-  }
-  45% {
-    transform: translate3d(16px, -16px, 0) scale(0.7);
-    opacity: 0;
-  }
-  46% {
-    transform: translate3d(-16px, 16px, 0) scale(0.7);
-    opacity: 0;
-  }
-  100% {
-    transform: none;
-    opacity: 1;
-  }
-}
 /* Mientras envía, el botón conserva su color (el avión es el que avisa que está trabajando). */
 .e-btn-primario[data-enviando] {
   background: var(--e-invert);
   color: var(--e-invert-fg);
   border-color: transparent;
   cursor: progress;
+}
+
+/* El link para saltar al contenido no ocupa lugar: aparece arriba solo con el teclado. */
+.e-saltar {
+  position: absolute;
+}
+
+/*
+ * Filas que se eligen (rubros del hero): al pasar el mouse una superficie las llena de izquierda a derecha
+ * y la etiqueta rueda a "Ver demo".
+ */
+.e-fila {
+  isolation: isolate;
+  margin-inline: -0.75rem;
+  padding-inline: 0.75rem;
+}
+.e-fila::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--e-surface);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 560ms var(--ease-editorial);
+}
+.e-fila-rol {
+  overflow: hidden;
+  text-align: right;
+}
+.e-fila-rol > span {
+  grid-area: 1 / 1;
+  transition: transform 460ms var(--ease-editorial);
+}
+.e-fila-rol > span + span {
+  transform: translate3d(0, 110%, 0);
+}
+@keyframes e-redibujo {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (hover: hover) {
+  .e-fila:hover::before {
+    transform: none;
+  }
+  .e-fila:hover .e-fila-rol > span:first-child {
+    transform: translate3d(0, -110%, 0);
+  }
+  .e-fila:hover .e-fila-rol > span + span {
+    transform: none;
+  }
+  /* Tarjetas con título que rueda (campo). */
+  .group:hover .e-btn-rol > span:first-child {
+    transform: translate3d(0, -110%, 0);
+  }
+  .group:hover .e-btn-rol > span + span {
+    transform: none;
+  }
+  /* Bento: al pasar el mouse, el dibujo de la tarjeta se vuelve a trazar. */
+  .e-celda:hover .e-trazo {
+    animation: e-redibujo 1.1s var(--ease-editorial) both;
+  }
+}
+
+/*
+ * Avión del botón Enviar. Al pasar el mouse se dibuja entero (cuerpo y después el pliegue del ala).
+ * Mientras envía: despega dejando una estela que se traza detrás, sale de cuadro y se vuelve a dibujar.
+ */
+.e-avion-caja {
+  display: inline-grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.e-avion {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.e-avion-cuerpo {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 520ms var(--ease-editorial);
+}
+.e-avion-cuerpo path,
+.e-avion-estela {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+}
+.e-avion-estela {
+  stroke-dashoffset: 1;
+  stroke-width: 1;
+  opacity: 0;
+}
+@keyframes e-avion-dibuja {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (hover: hover) {
+  :is(.e-btn, .e-avion-boton):hover .e-avion-cuerpo {
+    transform: translate3d(1px, -1px, 0) rotate(-8deg);
+  }
+  :is(.e-btn, .e-avion-boton):hover .e-avion-cuerpo path {
+    animation: e-avion-dibuja 760ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  }
+  :is(.e-btn, .e-avion-boton):hover .e-avion-cuerpo path + path {
+    animation-delay: 380ms;
+    animation-duration: 420ms;
+  }
+}
+[data-enviando] .e-avion-cuerpo {
+  animation: e-avion-despega 1.7s cubic-bezier(0.55, 0, 0.35, 1) infinite;
+}
+[data-enviando] .e-avion-cuerpo path {
+  animation: e-avion-redibuja 1.7s linear infinite;
+}
+[data-enviando] .e-avion-estela {
+  animation: e-avion-estela 1.7s ease-out infinite;
+}
+@keyframes e-avion-despega {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  40% {
+    transform: translate3d(26px, -18px, 0) rotate(-12deg) scale(0.8);
+    opacity: 0;
+  }
+  41%,
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes e-avion-redibuja {
+  0%,
+  41% {
+    stroke-dashoffset: 0;
+  }
+  42% {
+    stroke-dashoffset: 1;
+  }
+  88%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes e-avion-estela {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0.55;
+  }
+  38% {
+    stroke-dashoffset: 0;
+    opacity: 0.55;
+  }
+  60%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+/*
+ * Vitrina de proyectos: las escenas se cruzan con un fundido y un leve acercamiento (como un cambio de
+ * diapositiva de Apple); el texto del activo aparece de abajo.
+ */
+.e-escena-vitrina {
+  opacity: 0;
+  transform: scale(0.96) translate3d(0, 2%, 0);
+  transition:
+    opacity 700ms var(--ease-editorial),
+    transform 900ms var(--ease-editorial);
+}
+.e-escena-vitrina[data-activo] {
+  opacity: 1;
+  transform: none;
+}
+.mo .e-escena-vitrina .e-vidriera-recorre {
+  animation: e-recorre 26s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+.e-escena-vitrina:not([data-activo]) .e-vidriera-recorre {
+  animation-play-state: paused;
+}
+.e-pantalla-vitrina {
+  outline: 1px solid var(--e-line-strong);
+}
+.e-aparece-vitrina {
+  animation: e-aparecer 600ms var(--ease-editorial) both;
+}
+@keyframes e-anillo {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.e-anillo {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  animation: e-anillo 6s linear forwards;
+}
+
+/* Barra de anuncios: la novedad que entra sube desde abajo; la que se va sigue hacia arriba. */
+.e-anuncio {
+  opacity: 0;
+  transform: translate3d(0, 100%, 0);
+  transition:
+    opacity 600ms var(--ease-editorial),
+    transform 700ms var(--ease-editorial);
+}
+.e-anuncio[data-estado='activo'] {
+  opacity: 1;
+  transform: none;
+}
+.e-anuncio[data-estado='sale'] {
+  opacity: 0;
+  transform: translate3d(0, -100%, 0);
+}
+
+/*
+ * Envío solo con el avión: un círculo invisible de 48 px (área táctil) que apenas se marca al pasar el
+ * mouse. El avión se dibuja, despega y, al confirmarse, aparece "Enviado" con un tilde que se traza.
+ */
+.e-avion-boton {
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  color: var(--e-fg);
+  cursor: pointer;
+  transition: background-color var(--t-rapida) var(--ease-editorial);
+}
+.e-avion-boton .e-avion-caja {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.e-avion-boton[data-enviando] {
+  cursor: progress;
+}
+@media (hover: hover) {
+  .e-avion-boton:hover {
+    background-color: var(--e-surface);
+  }
+}
+.e-avion-boton:active {
+  transform: scale(0.94);
+}
+.e-enviado {
+  animation: e-aparecer 600ms var(--ease-editorial) both;
+}
+.e-enviado-tilde circle,
+.e-enviado-tilde path {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  animation: e-avion-dibuja 700ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+.e-enviado-tilde path {
+  animation-delay: 450ms;
+  animation-duration: 450ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .e-enviado-tilde circle,
+  .e-enviado-tilde path {
+    stroke-dashoffset: 0;
+  }
 }
