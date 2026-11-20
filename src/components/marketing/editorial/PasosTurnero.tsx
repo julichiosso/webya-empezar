@@ -20,7 +20,16 @@ const CADA_MS = 4500;
  * Avanza solo mientras está a la vista (con una barrita que se llena); si la persona toca un paso, se
  * queda ahí. Con movimiento reducido no avanza solo. Sin JS se ve el primer paso.
  */
-export function PasosTurnero({ pasos, etiqueta }: { pasos: readonly Paso[]; etiqueta: string }) {
+export function PasosTurnero({
+  pasos,
+  etiqueta,
+  pantallas,
+}: {
+  pasos: readonly Paso[];
+  etiqueta: string;
+  /** Otras pantallas, una por paso (por defecto, las del turnero con el aviso de la seña). */
+  pantallas?: readonly React.ReactNode[];
+}) {
   const [activo, setActivo] = useState(1);
   const [tocado, setTocado] = useState(false);
   const [aLaVista, setALaVista] = useState(false);
@@ -99,9 +108,17 @@ export function PasosTurnero({ pasos, etiqueta }: { pasos: readonly Paso[]; etiq
       <div className="flex justify-center lg:col-span-5 lg:col-start-8">
         <div className="relative w-full max-w-[13rem] md:max-w-[16rem]">
           <Telefono etiqueta={etiqueta}>
-            <PantallasTurneroApiladas />
+            {pantallas ? (
+              pantallas.map((p, i) => (
+                <div key={i} className="e-escena absolute inset-0" data-escena={i + 1}>
+                  {p}
+                </div>
+              ))
+            ) : (
+              <PantallasTurneroApiladas />
+            )}
           </Telefono>
-          {activo === PASO_SENA ? <AvisoPush key={activo} /> : null}
+          {!pantallas && activo === PASO_SENA ? <AvisoPush key={activo} /> : null}
         </div>
       </div>
     </div>
