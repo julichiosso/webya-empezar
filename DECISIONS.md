@@ -2,6 +2,37 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## V2 · Casos de éxito y fondos técnicos
+
+- **Fondos de las secciones claras: grilla técnica** (1 px cada 72 px con una marca "+" en cada intersección, como
+  un plano, muy tenue y desvanecida hacia los bordes). Reemplaza al logo en contorno y a las frases, que Julián no
+  quería de fondo. "Tu negocio. Nuestra tecnología." pasó al pie, en grande, con "Creá. Digitalizá. Crecé.".
+- **Proyectos → casos**: el manifiesto (`src/content/proyectos.ts`, no `/content/projects.ts`: se mantiene el
+  nombre del repo) ahora cuenta cada caso: desafío, lo que armamos, qué ve el cliente, cómo se usa (tres pasos),
+  etiquetas, rubro del configurador, `resultado` y `testimonio` opcionales, e imágenes `desktop`/`mobile`/`admin`.
+  La home, `/proyectos`, los filtros, la barra de datos, las páginas de caso, las vidrieras y el sitemap salen de
+  ahí: sumar un cliente es agregar un objeto.
+- **Barra de datos calculada** (`datosCasos`): casos, cuántos en producción, rubros y localidad. Ningún número
+  escrito a mano.
+- **Escritorio**: índice como pestañas (flechas, Inicio/Fin, foco visible) con un indicador que se desliza; al
+  pasar el mouse o con el foco cambia el panel (fundido de 180 ms, todas las composiciones con la misma proporción:
+  no salta) y al hacer clic se abre el caso. Sin auto-rotación. Inactivos en `ed-muted` (contraste ≈ 8:1).
+- **Celular**: tarjetas apiladas (no carrusel) con el teléfono encuadrado, nombre, rubro, etiquetas y estado; un
+  toque las expande con el desafío, lo que armamos y "Ver el caso completo". Filtros como chips con scroll.
+- **Composición escritorio + celular** con marcos planos (borde de 1 px, sin sombras) y las capturas ancladas
+  arriba: la cabecera de cada sitio nunca se recorta. Las capturas de escritorio de Micio's, Petrucci y Lorena se
+  tomaron de las portadas públicas de esos sitios (son trabajos de Webya) hasta tener las de Julián.
+- **Peluquería Canina como producto**: el caso se llama "Turnero con seña", con el estado "Disponible para tu
+  negocio" y "Armado para Peluquería Canina San Jorge"; nada de "Todavía sin uso" ni uso inventado. **Abelardo**
+  (en construcción) no aparece en la home, no tiene página ni link público.
+- **Páginas `/proyectos/[slug]`** estáticas: cabecera, composición, desafío, lo que armamos, cómo se usa,
+  resultado y testimonio solo si existen, cierre con "Armá tu sistema" (`/armar?tipo=…&rubro=…`, el configurador
+  ahora lee también el rubro) y "Escribinos" con el caso en el mensaje, y navegación anterior/siguiente.
+  JSON-LD `CreativeWork` creado por la organización.
+- **Sin numeración en la cabeza de la sección** ("04 · Proyectos" en el prompt): Julián ya había pedido sacarla de
+  todas las secciones. Los números sí están en el índice, donde ordenan los casos.
+- **Sin flechas en los botones** ("Ver el caso completo →" en el prompt): Julián pidió sacarlas.
+
 ## V2 · Ronda de animaciones y limpieza visual
 
 - **Espacio vacío arriba del header**: lo causaba el link oculto "Saltar al contenido", que con la regla nueva
