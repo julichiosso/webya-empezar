@@ -2,21 +2,71 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## V3 · Cierre: impacto en 5 segundos (2026-11-20)
+
+- **Contactos sin Supabase nuevo**: Julián ya tiene proyectos grandes en Supabase y no quiere otro. La base pasa a
+  **Neon (Postgres)** creado desde Vercel → Storage, que carga `DATABASE_URL` solo. No se reusa un proyecto de
+  Supabase existente: su clave maestra tendría que vivir en la web de Webya y, filtrada, expondría todo lo demás.
+  El repositorio de Supabase queda como alternativa (mismo contrato `LeadRepository`).
+- **Las tablas se crean solas** (`server/repositories/postgres-esquema.ts`, todo `if not exists`): cero migraciones a
+  mano. Vistas para leer en la consola de Neon: `contactos` (en hora de Argentina) y `embudo_diario`.
+- **Ningún contacto se pierde**: si la base falla o no está, el aviso de Telegram/mail sale en el momento con todos
+  los datos y la persona ve "Enviado". Solo si tampoco hay aviso posible responde error y el formulario ofrece
+  WhatsApp con lo escrito. Telegram es la bandeja de entrada; la base es el archivo.
+- **Una variable menos**: sin `IP_HASH_SALT`, la sal se deriva (sha256) de un secreto que ya está en el servidor
+  (`DATABASE_URL`, la clave de Supabase o el token de Telegram).
+- **Una variable faltante ya no tumba el sitio**: `instrumentation.ts` validaba y lanzaba error al arrancar, con lo
+  que TODAS las páginas daban 500. Ahora lo deja en el log; solo la API de contactos responde error.
+- **El lema es el H1**: "Creá. Digitalizá. Crecé." tal cual Instagram (tildes y puntos), una palabra por línea, peso
+  700, 150 ms entre palabras. La franja que lo repetía debajo del hero se reemplazó por **escenas de la semana**
+  (dolor → alivio → link), sin horarios en cifras (el test de copy no admite números que no salgan de datos).
+  El lema se repite en la pantalla de carga (después del logo), el pie, el título de la home, Open Graph y el
+  manifiesto web.
+- **Producto como protagonista**: el hero muestra el turnero con la agenda y el aviso "Nueva reserva · Sábado 10:00 ·
+  Seña acreditada" entrando. Dibujado en el servidor (cero JS). El mismo aviso entra en `/turnero` cuando el paso
+  activo es la seña.
+- **En el celular, las dos acciones viven solo en la barra fija** (pulgar): repetirlas en el hero las mostraba dos
+  veces en la misma pantalla. En escritorio están en el hero.
+- **Laptops bajas (≤ 800 px de alto)**: el lema se achica con el alto (10,5vh) para que lema, frase, buscador y
+  acciones entren sin scrollear en 1280×720.
+- **Buscador por intención**: tolera errores de tipeo (distancia de edición con transposición, 1 error en palabras
+  de 5–7 letras, 2 desde 8; las cortas exactas), muestra la demo al lado de cada sistema y suma "Armá tu sistema"
+  con el tipo y el rubro ya elegidos (`/armar?tipo=turnero&rubro=estetica`). Sin librerías ni requests. El ejemplo
+  que rota en el campo es decorativo (aria-hidden): el campo tiene su etiqueta visible.
+- **Sugerencias del celular en lugar de avisos por reloj**: aparecen por la sección que se mira
+  (IntersectionObserver), una a la vez, tres por visita, ninguna se repite, nunca mientras se escribe, se van solas
+  y tienen X. Arriba de la barra de atajos (nunca la tapan). Se cargan diferidas, solo en celular/tablet y no con
+  movimiento reducido. Los tests automatizados no las ven salvo `sugerencias.spec.ts`.
+- **Scroll narrativo, con medida**: barra de progreso de 2 px con `animation-timeline: scroll()` (cero JS, solo si el
+  navegador lo soporta). Se probó `scroll-snap` en las escenas y se sacó: con bloques cortos dejaba huecos blancos
+  enormes en el celular.
+- **Configurador**: se mantuvo en una pantalla con tres pasos de un toque, progreso y barra fija (no un stepper de
+  tres pantallas: sumaba toques sin ganar claridad). Se sumó el **plan B** después de "Enviarnos mi pedido": el
+  mensaje para copiar, mandarlo por mail y "te escribimos nosotros" (deja su número y entra al sistema de
+  contactos). La barra fija sube con el teclado (`visualViewport` → `--teclado`); la barra de atajos se corre.
+- **Demos**: terminan en "Quiero este sistema" con tipo y rubro elegidos.
+- **Medición**: `buscador_elegido` (destino, nunca lo escrito), `whatsapp_click` (sección, nunca el mensaje) y
+  `sugerencia` (vista/toque/cerrada). Sin cookies.
+- **Herramientas**: no se instaló un MCP de navegador; Playwright (ya en el repo) saca las capturas y corre axe.
+  Única dependencia nueva de runtime: `@neondatabase/serverless` (solo servidor, 0 KB en el navegador).
+- **Bug de esta máquina (Windows)**: compilar desde `c:\…` con la unidad en minúscula hace que webpack meta dos
+  copias del router de Next ("invariant expected layout router to be mounted" en todas las páginas). Se compila
+  desde `C:\…`. Vercel compila en Linux y no lo sufre.
+
 ## V2 · /zona: San Francisco y San Jorge
 
 - **Titular con las dos ciudades** ("San Francisco y San Jorge.") en lugar de "Cerca tuyo.": es lo que la gente
   busca y lo que posiciona. Debajo, "Y toda la zona" y una línea de datos que sale del manifiesto
-  (`2 zonas · 20 localidades · En persona o por WhatsApp`).
+  (`2 zonas · 12 localidades · En persona o por WhatsApp`).
 - **Manifiesto de la zona** (`src/content/zona.ts`): cada localidad con provincia, zona, coordenadas y si es
   principal. De ahí salen el mapa, las listas, el contador, el JSON-LD (`areaServed` con cada `City`, su provincia y
   sus coordenadas) y las palabras del buscador.
 - **Coordenadas oficiales**: API Georef (datos.gob.ar, IGN), con `scripts/zona-localidades.mjs`, que además mide
   la distancia real (haversine) a la ciudad principal. San Francisco – San Jorge: 57 km en línea recta.
-- **Alrededores de San Francisco ampliados con criterio de distancia** (50 km o menos; la zona de San Jorge llega
-  a 37 km): se sumaron Quebracho Herrado (19 km), Colonia Iturraspe (24), Colonia Marina (33) y Colonia
-  Prosperidad (35). Se mantuvieron Frontera, Josefina, Devoto, Freyre y Porteña (46). **Para que Julián
-  confirme**: quedaron afuera Brinkmann (62 km), Colonia Vignaud (66), Alicia (68), Las Varillas (78), Morteros (80)
-  y Sacanta (95). Sumarlas es agregar una línea al manifiesto.
+- **Lista final elegida por Julián (12 localidades)**: San Francisco, Frontera, Devoto, Freyre y Porteña; San Jorge,
+  Sastre, María Juana, Carlos Pellegrini, Piamonte, Cañada Rosquín y El Trébol. Sacó Crispi, Traill, Landeta,
+  Josefina, Quebracho Herrado y las colonias Marina, Iturraspe y Prosperidad (verificadas; sumarlas es una línea en
+  el manifiesto) y las secciones de abajo del mapa.
 - **Mapa propio, con geografía real y sin librerías de mapas**: `scripts/mapa-zona.mjs` toma el límite entre Santa
   Fe y Córdoba del **IGN** (servicio WFS `ign:provincia`, CC BY 4.0) y las rutas nacionales 19, 34 y 158 y la
   provincial 13 de **OpenStreetMap** (Overpass API, © colaboradores de OpenStreetMap, ODbL), los recorta al
