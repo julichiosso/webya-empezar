@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import type { Vista } from '@/lib/mapa';
 import { cn } from '@/components/ui/clases';
 import { CTA } from '@/content/home';
 import { ZONA as Z } from '@/content/paginas';
@@ -21,6 +22,8 @@ export interface PuntoMapa {
 export interface GeometriaMapa {
   ancho: number;
   alto: number;
+  /** Encuadre justo a las localidades (con lugar para los nombres): el mapa usa todo el ancho. */
+  vista: Vista;
   limite: string;
   rutas: readonly { ref: string; d: string; rotulo: readonly [number, number] }[];
   zonas: Record<ZonaId, string>;
@@ -59,10 +62,10 @@ export function MapaZona({
       <div className="col-span-12 lg:col-span-6">
         <div className="lg:sticky lg:top-24">
           <svg
-            viewBox={`0 0 ${geo.ancho} ${geo.alto}`}
+            viewBox={`${geo.vista.x} ${geo.vista.y} ${geo.vista.w} ${geo.vista.h}`}
             role="img"
             aria-label={geo.alt}
-            className="mx-auto block h-auto max-h-[70svh] w-full lg:max-h-[82vh]"
+            className="mx-auto block h-auto max-h-[80svh] w-full lg:max-h-[82vh]"
           >
             {/* Las dos zonas: relleno plano en dos tonos, con la forma real de sus localidades. */}
             <path d={geo.zonas['san-francisco']} className="e-mapa-zona-a" />
@@ -78,10 +81,19 @@ export function MapaZona({
                 </text>
               </g>
             ))}
-            <text x={18} y={geo.alto - 22} className="e-mapa-provincia">
+            <text
+              x={geo.vista.x + 14}
+              y={geo.vista.y + geo.vista.h - 16}
+              className="e-mapa-provincia"
+            >
               {Z.provincias.cordoba}
             </text>
-            <text x={geo.ancho - 18} y={34} textAnchor="end" className="e-mapa-provincia">
+            <text
+              x={geo.vista.x + geo.vista.w - 14}
+              y={geo.vista.y + 28}
+              textAnchor="end"
+              className="e-mapa-provincia"
+            >
               {Z.provincias.santaFe}
             </text>
 

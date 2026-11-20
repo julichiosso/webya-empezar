@@ -11,7 +11,7 @@ import {
   localidadesDe,
   principalDe,
 } from '@/content/zona';
-import { distanciaKm, proyectar, zonaSuave } from '@/lib/mapa';
+import { distanciaKm, encuadre, proyectar, zonaSuave } from '@/lib/mapa';
 import { Boton } from './Boton';
 import { enlaceContacto } from './contacto';
 import { WhatsApp } from './Iconos';
@@ -96,6 +96,11 @@ function geometria(): { geo: GeometriaMapa; puntos: PuntoMapa[] } {
     geo: {
       ancho: P.ancho,
       alto: P.alto,
+      vista: encuadre(
+        puntos.map((p) => [p.x, p.y] as const),
+        { x: 150, y: 70 },
+        P,
+      ),
       limite: MAPA_LIMITE,
       rutas: MAPA_RUTAS,
       zonas,
