@@ -1,7 +1,8 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { DESTINOS_BUSQUEDA, LARGO_BUSQUEDA } from '@/content/buscador';
-import { buscar, limpiarConsulta, normalizar } from './busqueda';
+import { DESTINOS_BUSQUEDA, LARGO_BUSQUEDA, RUBRO_POR_PALABRA } from '@/content/buscador';
+import { RUBROS_CONFIG } from '@/content/configurador';
+import { buscar, detectarRubro, distancia, limpiarConsulta, normalizar } from './busqueda';
 
 const primero = (q: string) => buscar(DESTINOS_BUSQUEDA, q)[0]?.id;
 
@@ -42,5 +43,41 @@ describe('buscador del hero', () => {
   it('como mucho cinco sugerencias, la mejor primero', () => {
     const r = buscar(DESTINOS_BUSQUEDA, 'turnos pedidos tienda web campo stock precio demo');
     expect(r.length).toBeLessThanOrEqual(5);
+  });
+});
+
+describe('búsqueda por intención: errores de tipeo, demos y rubro', () => {
+  it('tolera errores de tipeo comunes', () => {
+    expect(primero('peluqeria')).toBe('turnero');
+    expect(primero('pizeria')).toBe('pedidos');
+    expect(primero('turnso')).toBe('turnero');
+    expect(primero('hamburgesas')).toBe('pedidos');
+  });
+
+  it('las palabras cortas no se confunden por un error de tipeo', () => {
+    expect(distancia('bar', 'mar', 0)).toBe(1);
+    expect(primero('xyz')).toBeUndefined();
+  });
+
+  it('junto al sistema aparece su demo', () => {
+    const ids = buscar(DESTINOS_BUSQUEDA, 'peluquería').map((d) => d.id);
+    expect(ids.slice(0, 2)).toEqual(['turnero', 'demo-turnos']);
+  });
+
+  it('detecta el rubro aunque esté mal escrito', () => {
+    expect(detectarRubro('turnos para mi peluqeria', RUBRO_POR_PALABRA)).toBe('estetica');
+    expect(detectarRubro('pedidos de mi pizzerías', RUBRO_POR_PALABRA)).toBe('gastronomia');
+    expect(detectarRubro('quiero vender ropa', RUBRO_POR_PALABRA)).toBe('comercio');
+    expect(detectarRubro('quiero algo', RUBRO_POR_PALABRA)).toBeNull();
+  });
+
+  it('cada rubro del mapa existe en el configurador', () => {
+    const ids = new Set(RUBROS_CONFIG.map((r) => r.id));
+    for (const r of Object.values(RUBRO_POR_PALABRA)) expect(ids.has(r), r).toBe(true);
+  });
+
+  it('distancia corta apenas supera el máximo', () => {
+    expect(distancia('turnos', 'turnso', 1)).toBe(1);
+    expect(distancia('a', 'abcdef', 2)).toBe(3);
   });
 });
