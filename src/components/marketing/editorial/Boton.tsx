@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { cn } from '@/components/ui/clases';
 import { CTA } from '@/content/home';
-import { Flecha, FlechaDiagonal } from './Iconos';
 
 interface BotonProps {
   href: string;
@@ -10,14 +9,15 @@ interface BotonProps {
   chico?: boolean;
   /** Abre en otra pestaña (las demos y WhatsApp). Lo dice el nombre accesible, no el texto visible. */
   externo?: boolean;
+  /** Ícono a la izquierda del texto (WhatsApp). Los botones no llevan flecha. */
   icono?: React.ReactNode | false;
   className?: string;
 }
 
 /**
  * Botón-enlace del sistema editorial. Dos jerarquías: principal sólido y secundario con borde fino.
- * Pill, sin sombra ni brillo. Micro-interacciones: la flecha avanza al pasar el mouse y el botón se
- * hunde apenas al tocarlo (respuesta inmediata).
+ * Pill, sin sombra, brillo ni flecha. Respuesta inmediata: cambia de tono al pasar el mouse y se hunde
+ * apenas al tocarlo.
  */
 export function Boton({
   href,
@@ -36,8 +36,8 @@ export function Boton({
   );
   const contenido = (
     <>
+      {icono || null}
       <span>{children}</span>
-      {icono === false ? null : (icono ?? (externo ? <FlechaDiagonal /> : <Flecha />))}
     </>
   );
   if (externo || /^(https?:|mailto:)/.test(href)) {
