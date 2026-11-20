@@ -3,20 +3,22 @@ import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { BARRA_CELULAR, CTA, RUTAS } from '@/content/home';
 import { enlaceContacto } from './contacto';
 import { WhatsApp } from './Iconos';
+import { TecladoAbierto } from './TecladoAbierto';
 
 /**
  * Barra fija abajo, solo en el celular y la tablet: "Escribinos" (WhatsApp) y "Armá tu sistema" a un
  * toque del pulgar en cualquier página. Discreta: fondo plano y una línea fina arriba. El espacio de
- * abajo evita que tape el final de la página.
+ * abajo evita que tape el final de la página. Mientras se escribe en un campo, se corre.
  */
 export function BarraCelular() {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
     <>
       <div aria-hidden="true" className="h-[calc(4.25rem+env(safe-area-inset-bottom))] lg:hidden" />
+      <TecladoAbierto />
       <nav
         aria-label={BARRA_CELULAR.etiqueta}
-        className="tono-oscuro fixed inset-x-0 bottom-0 z-30 bg-ed-surface px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
+        className="e-barra-celular tono-oscuro fixed inset-x-0 bottom-0 z-30 bg-ed-surface px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
       >
         <div className="mx-auto grid max-w-[34rem] grid-cols-2 gap-2.5">
           <a
