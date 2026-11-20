@@ -7,7 +7,7 @@ export function Catalogo() {
   return (
     <section
       id={CATALOGO.id}
-      className="tono-claro e-fondo e-fondo-curvas scroll-mt-16 border-t border-ed-line"
+      className="tono-claro scroll-mt-16 border-t border-ed-line"
       aria-labelledby="titulo-catalogo"
     >
       <div className="e-wrap grid grid-cols-12 gap-x-6 gap-y-5 py-12 md:py-16">

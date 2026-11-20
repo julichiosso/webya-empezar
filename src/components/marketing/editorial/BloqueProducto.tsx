@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
-import { CTA, RUTAS } from '@/content/home';
+import { CTA, FRASES, RUTAS } from '@/content/home';
 import type { Landing } from '@/content/landings';
 import { getProyecto } from '@/content/proyectos';
 import { Boton } from './Boton';
 import { CabezaSeccion } from './CabezaSeccion';
+import { FondoMarca } from './FondoMarca';
 import { FlujoPedidos, Telefono } from './Pantallas';
 import { PasosTurnero } from './PasosTurnero';
 
@@ -47,10 +48,8 @@ export function BloqueProducto({ landing }: { landing: Landing }) {
   const B = landing.bloque;
   if (landing.tipo === 'turnero') {
     return (
-      <section
-        className="tono-claro e-seccion e-fondo e-fondo-puntos"
-        aria-labelledby="titulo-producto"
-      >
+      <section className="tono-claro e-seccion e-con-fondo" aria-labelledby="titulo-producto">
+        <FondoMarca variante="frase" frase={FRASES.promesa} />
         <div className="e-wrap">
           <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
           <div className="mt-10 md:mt-14">
@@ -72,10 +71,8 @@ export function BloqueProducto({ landing }: { landing: Landing }) {
     );
   }
   return (
-    <section
-      className="tono-claro e-seccion e-fondo e-fondo-puntos"
-      aria-labelledby="titulo-producto"
-    >
+    <section className="tono-claro e-seccion e-con-fondo" aria-labelledby="titulo-producto">
+      <FondoMarca variante="frase" frase={FRASES.promesa} />
       <div className="e-wrap">
         <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
         <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-10 md:mt-12">

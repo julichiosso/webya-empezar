@@ -3,9 +3,10 @@ import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { DEMOS } from '@/content/demos/hub';
-import { CTA, PROYECTOS_UI, RUTAS, SECCIONES } from '@/content/home';
+import { CTA, FRASES, PROYECTOS_UI, RUTAS, SECCIONES } from '@/content/home';
 import { ESTADO_PROYECTO, PROYECTOS, dominioDe, type Proyecto } from '@/content/proyectos';
 import { CabezaSeccion } from './CabezaSeccion';
+import { FondoMarca } from './FondoMarca';
 import { Flecha, FlechaDiagonal } from './Iconos';
 import { PantallaProyecto, Telefono } from './Pantallas';
 
@@ -186,9 +187,10 @@ export function ProyectosGrilla({
   return (
     <section
       id={S.id}
-      className="tono-claro e-seccion e-fondo e-fondo-grilla scroll-mt-16"
+      className="tono-claro e-seccion e-con-fondo scroll-mt-16"
       aria-labelledby={cabeza ? 'titulo-proyectos' : undefined}
     >
+      <FondoMarca variante="frase" frase={FRASES.lema} className="e-fondo-arriba" />
       <div className="e-wrap">
         {cabeza ? (
           <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-proyectos" />

@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { BENTO, SECCIONES } from '@/content/home';
 import { CabezaSeccion } from './CabezaSeccion';
+import { FondoMarca } from './FondoMarca';
 import { Flecha } from './Iconos';
 
 type CeldaId = keyof typeof BENTO.celdas;
@@ -104,9 +105,10 @@ export function Bento() {
   return (
     <section
       id={S.id}
-      className="tono-claro e-seccion e-fondo e-fondo-puntos"
+      className="tono-claro e-seccion e-con-fondo"
       aria-labelledby="titulo-que-armamos"
     >
+      <FondoMarca variante="logo" />
       <div className="e-wrap">
         <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-que-armamos" />
         <ul className="mt-8 grid grid-cols-2 gap-2.5 md:mt-12 md:grid-cols-12 md:gap-4">
@@ -123,7 +125,7 @@ export function Bento() {
                 <Link
                   href={t.href}
                   className={cn(
-                    'e-celda group flex h-full flex-col justify-between rounded-2xl border border-ed-line active:opacity-70',
+                    'e-celda group flex h-full flex-col justify-between rounded-2xl border border-ed-line bg-ed-bg active:opacity-70',
                     estrella
                       ? 'tono-oscuro min-h-[15rem] gap-8 p-5 md:min-h-[20rem] md:p-8 lg:min-h-full'
                       : 'min-h-[9.5rem] gap-4 p-4 md:min-h-[13rem] md:gap-8 md:p-7',
