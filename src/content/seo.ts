@@ -2,7 +2,7 @@
  * Textos de SEO y de compartir: títulos, descripciones, imagen Open Graph y datos estructurados.
  * Lo que se ve en la pestaña, en Google y en la vista previa de WhatsApp/Instagram.
  */
-import { MARCA } from './home';
+import { LEMA, MARCA } from './home';
 import { NOSOTROS } from './paginas';
 import { LOCALIDADES } from './zona';
 import { SERVICIOS, type Servicio } from './servicios';
@@ -11,7 +11,7 @@ import { SERVICIOS, type Servicio } from './servicios';
 export const SEO_SITIO = {
   nombre: 'Webya',
   /** Título de la home (sin plantilla) y por defecto. */
-  tituloInicio: 'Webya · Turnos, pedidos y tiendas online para negocios de San Jorge y zona',
+  tituloInicio: `Webya · ${LEMA.join(' ')} Turnos, pedidos y tiendas online en San Jorge y zona`,
   descripcion:
     'Sistemas para negocios de San Jorge, San Francisco y la zona: turnero con seña, pedidos online para gastronomía, tiendas y páginas web. Armá el tuyo y envianos el pedido por WhatsApp.',
   /** Plantilla de Next: cada página reemplaza "%s" por su título. */
@@ -19,8 +19,8 @@ export const SEO_SITIO = {
   /** El mismo formato, para los títulos de Open Graph y Twitter (que no usan la plantilla). */
   tituloConMarca: (titulo: string) => `${titulo} | Webya`,
   og: {
-    alt: 'Webya: tiendas, pedidos y turneros para negocios de San Jorge y zona.',
-    titulo: 'Turnos, pedidos y ventas online, armados para tu negocio.',
+    alt: `Webya: ${LEMA.join(' ')} Turnos, pedidos y tiendas online para negocios de San Jorge y zona.`,
+    titulo: LEMA.join(' '),
     pie: 'San Jorge y zona · San Francisco',
   },
 } as const;
