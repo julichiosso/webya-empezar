@@ -15,10 +15,10 @@ export const ID_PRINCIPAL = 'contenido';
  */
 export function Encabezado() {
   return (
-    <header className="tono-oscuro sticky top-0 z-40 border-b border-ed-line">
+    <header className="tono-oscuro sticky top-0 z-40">
       <a
         href={`#${ID_PRINCIPAL}`}
-        className="e-btn e-btn-primario e-btn-chico absolute top-2 left-4 z-50 -translate-y-24 focus:translate-y-0"
+        className="e-saltar e-btn e-btn-primario e-btn-chico top-2 left-4 z-50 -translate-y-24 focus:translate-y-0"
       >
         {HEADER.saltar}
       </a>
