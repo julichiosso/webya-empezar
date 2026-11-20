@@ -1,3 +1,4 @@
+import { Anuncios } from './Anuncios';
 import { BarraCelular } from './BarraCelular';
 import { Encabezado, ID_PRINCIPAL } from './Encabezado';
 import { Pie } from './Pie';
@@ -9,6 +10,7 @@ import { Pie } from './Pie';
 export function Pagina({ children, barra = true }: { children: React.ReactNode; barra?: boolean }) {
   return (
     <>
+      <Anuncios />
       <Encabezado />
       <main id={ID_PRINCIPAL} tabIndex={-1} className="outline-none">
         {children}
