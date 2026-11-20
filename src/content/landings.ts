@@ -50,7 +50,7 @@ export const LANDINGS = {
       rotulo: 'Turnero con seña',
       titulo: ['Turnos con seña.', 'Clientes que vienen.'],
       bajada:
-        'El cliente reserva y paga la seña con Mercado Pago. Vos recibís el aviso al instante y el bot le recuerda el turno.',
+        'El cliente reserva y paga la seña con Mercado Pago. A vos te llega el aviso al celular y al cliente, un recordatorio del turno.',
     },
     bloque: {
       rotulo: 'Cómo funciona',
@@ -76,7 +76,8 @@ export const LANDINGS = {
         {
           rotulo: 'El bot',
           titulo: 'Confirma y recuerda por vos.',
-          texto: 'El bot le confirma la reserva al cliente y le recuerda el turno.',
+          texto:
+            'Al cliente le llega un mensaje que confirma la reserva y otro que le recuerda el turno.',
         },
         {
           rotulo: 'La agenda',
@@ -221,7 +222,7 @@ export const LANDINGS = {
         { titulo: 'Preparada para Google', texto: 'Para que te encuentren en tu zona.' },
         { titulo: 'WhatsApp a un toque', texto: 'Con el mensaje ya armado.' },
         { titulo: 'Rápida en el celular', texto: 'Carga al instante, aun con mala señal.' },
-        { titulo: 'Dominio propio', texto: 'tunegocio.com.ar, con tu mail.' },
+        { titulo: 'Dirección propia', texto: 'tunegocio.com.ar, con tu mail.' },
       ],
       prueba: 'Así es el sitio de Lorena Almagro, fonoaudióloga en San Jorge.',
       alt: 'Sitio de Fonosanjorge en el celular: presentación de la fonoaudióloga y sus especialidades.',
