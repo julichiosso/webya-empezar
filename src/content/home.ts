@@ -252,7 +252,7 @@ export const CONTACTO_RAPIDO = {
   negocioPlaceholder: 'Ej.: Agronomía del Centro',
   mensaje: '¿Qué necesitás? (opcional)',
   mensajePlaceholder: 'Contanos en pocas palabras',
-  enviar: 'Quiero que me escriban',
+  enviar: 'Enviar',
   enviando: 'Enviando…',
   listo: 'Listo, ya nos llegó. Te escribimos por WhatsApp.',
   error: 'No se pudo enviar. Escribinos directo, con lo que pusiste ya escrito:',
