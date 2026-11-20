@@ -2,8 +2,8 @@ import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { CAMPO } from '@/content/paginas';
 import { CabezaSeccion } from './CabezaSeccion';
+import { TextoBoton } from './Boton';
 import { FondoMarca } from './FondoMarca';
-import { Flecha } from './Iconos';
 
 /** /campo: cada problema del campo con el sistema que lo resuelve (y el link a ese producto). */
 export function SolucionesCampo() {
@@ -21,11 +21,10 @@ export function SolucionesCampo() {
                 className="e-celda group flex h-full flex-col rounded-2xl border border-ed-line bg-ed-bg p-5 active:opacity-70 md:p-7"
               >
                 <span className="e-rotulo text-ed-muted">{x.producto}</span>
-                <span className="e-h3 mt-3">{x.titulo}</span>
-                <span className="e-cuerpo mt-2 text-ed-muted">{x.texto}</span>
-                <span aria-hidden="true" className="mt-auto self-end pt-4">
-                  <Flecha />
+                <span className="e-h3 mt-3">
+                  <TextoBoton>{x.titulo}</TextoBoton>
                 </span>
+                <span className="e-cuerpo mt-2 text-ed-muted">{x.texto}</span>
               </Link>
             </li>
           ))}
