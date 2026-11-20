@@ -1,107 +1,83 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
-import { cn } from '@/components/ui/clases';
-import { DEMOS } from '@/content/demos/hub';
-import { CTA, FRASES, PROYECTOS_UI, RUTAS, SECCIONES } from '@/content/home';
-import { ESTADO_PROYECTO, PROYECTOS, dominioDe, type Proyecto } from '@/content/proyectos';
+import { CTA, PROYECTOS_UI, RUTAS, SECCIONES } from '@/content/home';
+import { CASOS, ESTADO_PROYECTO, datosCasos, dominioDe, type Proyecto } from '@/content/proyectos';
+import { Boton } from './Boton';
 import { CabezaSeccion } from './CabezaSeccion';
-import { FondoMarca } from './FondoMarca';
-import { PantallaProyecto, Telefono } from './Pantallas';
-import { VitrinaProyectos } from './VitrinaProyectos';
+import { Casos, type CasoVista } from './Casos';
+import { Composicion } from './Composicion';
+import { FondoGrilla } from './FondoGrilla';
 
-/** La captura real en el teléfono o, mientras falte, el esquema vectorial del manifiesto. */
-function Visual({ p, chico = false }: { p: Proyecto; chico?: boolean }) {
-  const img = p.imagenes[0];
-  return (
-    <div
-      className={cn(
-        'relative overflow-hidden rounded-2xl border border-ed-line bg-ed-surface',
-        chico ? 'aspect-[4/5]' : 'aspect-[4/3]',
-      )}
-    >
-      <div
-        className={cn(
-          'absolute left-1/2 -translate-x-1/2',
-          chico ? 'top-5 w-[62%]' : 'top-6 w-[46%]',
-        )}
-      >
-        <Telefono
-          className="max-w-none"
-          etiqueta={img ? undefined : PROYECTOS_UI.mockupAlt(p.sistema)}
-          decorativo={!img}
-          colorBarra={img?.barra}
-        >
-          {img ? (
-            <Image
-              src={img.src}
-              alt={chico ? '' : img.alt}
-              fill
-              sizes={chico ? '(min-width: 1024px) 11rem, 40vw' : '(min-width: 768px) 16rem, 52vw'}
-              className="object-cover object-top"
-            />
-          ) : (
-            <PantallaProyecto mockup={p.mockup} />
-          )}
-        </Telefono>
-      </div>
-    </div>
-  );
+/** Lo que el componente de casos necesita de cada proyecto (todo sale del manifiesto). */
+const vista = (p: Proyecto): CasoVista => ({
+  ...p,
+  href: `${RUTAS.proyectos}/${p.id}`,
+  estadoTexto: ESTADO_PROYECTO[p.estado],
+  dominio: p.url ? dominioDe(p.url) : undefined,
+});
+
+/** La barra de datos, calculada desde el manifiesto. */
+function textoDatos() {
+  const d = datosCasos();
+  return PROYECTOS_UI.datos(d.casos, d.enProduccion, d.rubros.join(', '), d.ciudades.join(', '));
 }
 
-function Estado({ p }: { p: Proyecto }) {
-  return (
-    <span className="e-rotulo inline-flex items-center gap-2 text-ed-muted">
-      <span
-        aria-hidden="true"
-        className={cn(
-          'size-1.5 rounded-full',
-          p.estado === 'produccion' ? 'bg-ed-fg' : 'border border-ed-line-strong',
-        )}
-      />
-      {ESTADO_PROYECTO[p.estado]}
-    </span>
-  );
-}
-
-/** Home: la vitrina de proyectos (nombres y un escenario que cambia) y el link a todos. */
-export function ProyectosInicio() {
+/**
+ * Casos de éxito: encabezado, barra de datos real, el índice con su panel (escritorio) o las tarjetas
+ * (celular) y el cierre "¿Tu negocio es el próximo?". En la home y en /proyectos (ahí el título es el h1
+ * de la página y no hace falta el link a todos).
+ */
+export function SeccionCasos({ enPagina = false }: { enPagina?: boolean }) {
   const S = SECCIONES.proyectos;
-  const items = PROYECTOS.filter((p) => p.id !== 'abelardo').map((p) => ({
-    id: p.id,
-    cliente: p.cliente,
-    rubro: p.rubro,
-    sistema: p.sistema,
-    estado: ESTADO_PROYECTO[p.estado],
-    ve: p.ve,
-    href: `${RUTAS.proyectos}#proyecto-${p.id}`,
-    img: p.imagenes[0],
-    mockup: p.mockup,
-  }));
   return (
-    <section id={S.id} className="tono-oscuro e-seccion" aria-labelledby="titulo-proyectos">
+    <section
+      id={S.id}
+      className="tono-oscuro e-seccion"
+      style={enPagina ? { paddingTop: 0 } : undefined}
+      aria-labelledby={enPagina ? undefined : 'titulo-proyectos'}
+    >
       <div className="e-wrap">
-        <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-proyectos" />
-        <div className="mt-8 md:mt-14">
-          <VitrinaProyectos
-            items={items}
-            etiqueta={S.rotulo}
-            verProyecto={PROYECTOS_UI.verProyecto}
+        {enPagina ? null : (
+          <CabezaSeccion
+            rotulo={S.rotulo}
+            titulo={S.titulo}
+            bajada={S.bajada}
+            idTitulo="titulo-proyectos"
           />
+        )}
+        <p
+          className={
+            enPagina ? 'e-chico text-ed-muted' : 'e-chico mt-6 text-ed-muted md:col-start-4'
+          }
+        >
+          {textoDatos()}
+        </p>
+        <div className="mt-6 md:mt-8">
+          <Casos casos={CASOS.map(vista)} />
         </div>
-        <Link href={RUTAS.proyectos} className="e-link e-cuerpo mt-10 font-medium">
-          {PROYECTOS_UI.verTodos}
-        </Link>
+        <div className="mt-12 flex flex-col gap-5 rounded-[1.75rem] bg-ed-surface p-6 md:mt-16 md:flex-row md:items-center md:justify-between md:p-8">
+          <p className="e-h3">{PROYECTOS_UI.proximo.titulo}</p>
+          <div className="grid grid-cols-1 gap-3 sm:flex">
+            <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
+            {enPagina ? null : (
+              <Boton href={RUTAS.proyectos} variante="secundario">
+                {PROYECTOS_UI.verTodos}
+              </Boton>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-/** Tarjeta completa: problema → qué armamos → qué ve el cliente, y el link al sitio o a la demo. */
-function Tarjeta({ p, i, nivel }: { p: Proyecto; i: number; nivel: 'h2' | 'h3' }) {
-  const Titulo = nivel;
-  const demo = DEMOS.find((d) => d.sistema === p.tipo);
-  const fila = 'pt-3';
+/** Home: la sección de casos. */
+export function ProyectosInicio() {
+  return <SeccionCasos />;
+}
+
+/** Tarjeta de un caso en las páginas de producto: composición, desafío, lo que armamos y el caso. */
+function Tarjeta({ p, i }: { p: Proyecto; i: number }) {
   return (
     <article
       id={`proyecto-${p.id}`}
@@ -110,92 +86,47 @@ function Tarjeta({ p, i, nivel }: { p: Proyecto; i: number; nivel: 'h2' | 'h3' }
       data-reveal=""
       style={{ '--i': i % 3 } as CSSProperties}
     >
-      <Visual p={p} />
-      <div className="mt-4 flex items-center justify-between gap-4">
-        <p className="e-rotulo text-ed-muted">
-          {p.rubro} · {p.ciudad}
-        </p>
-        <Estado p={p} />
+      <div className="rounded-[1.5rem] bg-ed-surface p-5">
+        <Composicion caso={p} tamanos="(min-width: 768px) 24rem, 88vw" />
       </div>
-      <Titulo id={`titulo-proyecto-${p.id}`} className="e-h3 mt-3">
+      <p className="e-chico mt-4 text-ed-muted">
+        {p.rubro} · {p.ciudad} · {ESTADO_PROYECTO[p.estado]}
+      </p>
+      <h3 id={`titulo-proyecto-${p.id}`} className="e-h3 mt-2">
         {p.cliente}
-      </Titulo>
-      <p className="e-chico mt-1 text-ed-muted">{p.sistema}</p>
-      <dl className="e-chico mt-5 space-y-3">
-        <div className={fila}>
-          <dt className="font-medium">{PROYECTOS_UI.problema}</dt>
-          <dd className="mt-0.5 text-ed-muted">{p.problema}</dd>
-        </div>
-        <div className={fila}>
-          <dt className="font-medium">{PROYECTOS_UI.armamos}</dt>
-          <dd className="mt-0.5 text-ed-muted">{p.incluye.join(' · ')}</dd>
-        </div>
-        <div className={fila}>
-          <dt className="font-medium">{PROYECTOS_UI.ve}</dt>
-          <dd className="mt-0.5 text-ed-muted">{p.ve}</dd>
-        </div>
-      </dl>
+      </h3>
+      <p className="e-cuerpo mt-2 text-ed-muted">{p.desafio}</p>
       <div className="mt-auto pt-5">
-        {p.url && p.estado === 'produccion' ? (
-          <a
-            href={p.url}
-            target="_blank"
-            rel="noopener"
-            aria-label={`${PROYECTOS_UI.ver} ${dominioDe(p.url)}${CTA.pestana}`}
-            className="e-link e-cuerpo font-medium"
-          >
-            {PROYECTOS_UI.ver}
-            <span className="text-ed-muted">{dominioDe(p.url)}</span>
-          </a>
-        ) : demo ? (
-          <a
-            href={demo.href}
-            target="_blank"
-            rel="noopener"
-            aria-label={`${PROYECTOS_UI.verDemo}${CTA.pestana}`}
-            className="e-link e-cuerpo font-medium"
-          >
-            {PROYECTOS_UI.verDemo}
-          </a>
-        ) : null}
+        <Link href={`${RUTAS.proyectos}/${p.id}`} className="e-link e-cuerpo font-medium">
+          {PROYECTOS_UI.verCaso}
+        </Link>
       </div>
     </article>
   );
 }
 
-/**
- * Grilla de proyectos completos. En /proyectos va sola (títulos h2); en las páginas de producto, con su
- * cabeza de sección y solo los de ese tipo.
- */
+/** Páginas de producto: los casos de ese tipo, con su cabeza de sección. */
 export function ProyectosGrilla({
   filtro,
-  cabeza,
 }: {
   filtro?: (p: Proyecto) => boolean;
   cabeza?: boolean;
 }) {
   const S = SECCIONES.proyectos;
-  const lista = filtro ? PROYECTOS.filter(filtro) : PROYECTOS;
+  const lista = filtro ? CASOS.filter(filtro) : CASOS;
   if (lista.length === 0) return null;
   return (
     <section
       id={S.id}
       className="tono-claro e-seccion e-con-fondo scroll-mt-16"
-      aria-labelledby={cabeza ? 'titulo-proyectos' : undefined}
+      aria-labelledby="titulo-proyectos"
     >
-      <FondoMarca variante="frase" frase={FRASES.lema} className="e-fondo-arriba" />
+      <FondoGrilla />
       <div className="e-wrap">
-        {cabeza ? (
-          <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-proyectos" />
-        ) : null}
-        <div
-          className={cn(
-            'grid grid-cols-1 gap-x-6 gap-y-14 md:grid-cols-2 xl:grid-cols-3',
-            cabeza && 'mt-8 md:mt-12',
-          )}
-        >
+        <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-proyectos" />
+        <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-14 md:mt-12 md:grid-cols-2 xl:grid-cols-3">
           {lista.map((p, i) => (
-            <Tarjeta key={p.id} p={p} i={i} nivel={cabeza ? 'h3' : 'h2'} />
+            <Tarjeta key={p.id} p={p} i={i} />
           ))}
         </div>
       </div>
