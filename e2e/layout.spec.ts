@@ -41,17 +41,24 @@ for (const ruta of RUTAS) {
   });
 }
 
-test('la home entra en la primera pantalla: las dos acciones y el buscador', async ({ page }) => {
+test('la home entra en la primera pantalla: el lema, las dos acciones y el buscador', async ({
+  page,
+}) => {
   await page.goto('/', { waitUntil: 'networkidle' });
   const vh = page.viewportSize()!.height;
-  const hero = page.locator('#titulo-hero').locator('xpath=ancestor::section');
-  for (const nombre of ['Armá tu sistema', 'Ver demo']) {
-    const caja = await hero
+  await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(
+    'Creá. Digitalizá. Crecé.',
+  );
+  // En escritorio están en el hero; en el celular, en la barra fija de abajo. Siempre a la vista.
+  for (const nombre of ['Armá tu sistema', 'Escribinos']) {
+    const caja = await page
       .getByRole('link', { name: new RegExp(`^${nombre}`) })
+      .filter({ visible: true })
       .first()
       .boundingBox();
     expect(caja!.y + caja!.height, nombre).toBeLessThanOrEqual(vh);
   }
+  const hero = page.locator('#titulo-hero').locator('xpath=ancestor::section');
   const buscador = await hero.getByRole('combobox').boundingBox();
   expect(buscador!.y, 'buscador').toBeLessThan(vh);
 });
