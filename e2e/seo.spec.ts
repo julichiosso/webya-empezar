@@ -6,7 +6,18 @@ test.beforeEach(({}, info) => {
 
 const SITIO = 'https://webya.dev';
 
-for (const ruta of ['/', '/turnero', '/pizzerias', '/tiendas']) {
+for (const ruta of [
+  '/',
+  '/turnero',
+  '/pedidos',
+  '/tienda',
+  '/web',
+  '/proyectos',
+  '/nosotros',
+  '/zona',
+  '/armar',
+  '/demos',
+]) {
   test(`${ruta}: title, description, canonical y Open Graph`, async ({ page }) => {
     await page.goto(ruta);
     await expect(page).toHaveTitle(/Webya/);
@@ -21,7 +32,9 @@ for (const ruta of ['/', '/turnero', '/pizzerias', '/tiendas']) {
   });
 }
 
-test('JSON-LD del negocio: ProfessionalService con zona, servicios y FAQ', async ({ page }) => {
+test('JSON-LD: organización, negocio con toda la zona, Julián y un Service por producto', async ({
+  page,
+}) => {
   await page.goto('/');
   const bloques = await page.locator('script[type="application/ld+json"]').allTextContents();
   const datos = bloques.map((b) => JSON.parse(b));
@@ -29,12 +42,18 @@ test('JSON-LD del negocio: ProfessionalService con zona, servicios y FAQ', async
   const negocio = grafo.find((n) => n['@type'] === 'ProfessionalService')!;
   expect(JSON.stringify(negocio.areaServed)).toContain('San Jorge');
   expect(JSON.stringify(negocio.areaServed)).toContain('San Francisco');
+  expect(JSON.stringify(negocio.areaServed)).toContain('Sastre');
   expect(grafo.filter((n) => n['@type'] === 'Service').length).toBeGreaterThanOrEqual(6);
+  expect(grafo.some((n) => n['@type'] === 'Organization')).toBe(true);
+  const persona = grafo.find((n) => n['@type'] === 'Person')!;
+  expect(persona.name).toBe('Julián Chiosso');
 });
 
 test('sitemap con las landings y robots que lo apunta', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
-  for (const r of ['/turnero', '/pizzerias', '/tiendas']) expect(sitemap).toContain(`${SITIO}${r}`);
+  for (const r of ['/turnero', '/pedidos', '/tienda', '/web', '/proyectos', '/nosotros', '/zona'])
+    expect(sitemap).toContain(`${SITIO}${r}`);
+  expect(sitemap).not.toContain('/pizzerias');
   expect(sitemap).not.toContain('/empezar');
   const robots = await (await request.get('/robots.txt')).text();
   expect(robots).toContain(`Sitemap: ${SITIO}/sitemap.xml`);
@@ -44,4 +63,20 @@ test('la imagen Open Graph existe y es PNG', async ({ request }) => {
   const res = await request.get('/opengraph-image');
   expect(res.status()).toBe(200);
   expect(res.headers()['content-type']).toContain('image/png');
+});
+
+test('cada página tiene un solo h1 y ningún link dice "(se abre en otra pestaña)" a la vista', async ({
+  page,
+}) => {
+  for (const ruta of ['/', '/turnero', '/proyectos', '/nosotros', '/demos']) {
+    await page.goto(ruta);
+    await expect(page.locator('h1')).toHaveCount(1);
+    const visibles = await page
+      .locator('a')
+      .evaluateAll(
+        (as) =>
+          as.filter((a) => /se abre en otra pesta/i.test((a as HTMLElement).innerText)).length,
+      );
+    expect(visibles, ruta).toBe(0);
+  }
 });

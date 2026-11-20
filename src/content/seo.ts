@@ -3,6 +3,7 @@
  * Lo que se ve en la pestaña, en Google y en la vista previa de WhatsApp/Instagram.
  */
 import { MARCA } from './home';
+import { NOSOTROS, ZONA as ZONA_PAGINA } from './paginas';
 import { SERVICIOS, type Servicio } from './servicios';
 
 /** Del sitio entero (app/layout.tsx). */
@@ -41,19 +42,14 @@ export const SEO_MARCA = {
   titulo: 'Marca',
 } as const;
 
-/** Zona de atención para schema.org. */
-const ZONA = [
-  {
+/** Zona de atención para schema.org: cada localidad de /zona, con su provincia. */
+const ZONA_LD = ZONA_PAGINA.areas.flatMap((a) =>
+  a.localidades.map((l) => ({
     '@type': 'City',
-    name: 'San Jorge',
-    containedInPlace: { '@type': 'State', name: 'Santa Fe' },
-  },
-  {
-    '@type': 'City',
-    name: 'San Francisco',
-    containedInPlace: { '@type': 'State', name: 'Córdoba' },
-  },
-] as const;
+    name: l,
+    containedInPlace: { '@type': 'State', name: a.provincia },
+  })),
+);
 
 const id = (url: string, frag: string) => `${url}/#${frag}`;
 
@@ -65,12 +61,15 @@ function servicioLd(url: string, s: Servicio) {
     serviceType: s.nombre,
     description: s.descripcionSeo,
     provider: { '@id': id(url, 'negocio') },
-    areaServed: ZONA,
+    areaServed: ZONA_LD,
     url: `${url}${s.pagina ?? `/armar?tipo=${s.id}`}`,
   };
 }
 
-/** Grafo del negocio: ProfessionalService (LocalBusiness), sitio y un Service por servicio. */
+/**
+ * Grafo del sitio: la organización (Webya), el negocio local (ProfessionalService, con dirección y zona),
+ * la persona detrás (Julián), el sitio y un Service por producto. Todo enlazado por @id.
+ */
 export function jsonLdNegocio(opts: {
   url: string;
   email: string;
@@ -78,9 +77,21 @@ export function jsonLdNegocio(opts: {
   telefono?: string;
 }) {
   const { url } = opts;
+  const telefono = opts.telefono ? { telephone: `+${opts.telefono}` } : {};
   return {
     '@context': 'https://schema.org',
     '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': id(url, 'organizacion'),
+        name: SEO_SITIO.nombre,
+        url,
+        logo: `${url}/icon.svg`,
+        email: opts.email,
+        ...telefono,
+        founder: { '@id': id(url, 'julian') },
+        sameAs: [opts.instagram],
+      },
       {
         '@type': 'ProfessionalService',
         '@id': id(url, 'negocio'),
@@ -90,15 +101,16 @@ export function jsonLdNegocio(opts: {
         image: `${url}/opengraph-image`,
         description: SEO_SITIO.descripcion,
         email: opts.email,
-        ...(opts.telefono ? { telephone: `+${opts.telefono}` } : {}),
-        founder: { '@type': 'Person', name: MARCA.fundador },
+        ...telefono,
+        parentOrganization: { '@id': id(url, 'organizacion') },
+        founder: { '@id': id(url, 'julian') },
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'San Jorge',
           addressRegion: 'Santa Fe',
           addressCountry: 'AR',
         },
-        areaServed: ZONA,
+        areaServed: ZONA_LD,
         sameAs: [opts.instagram],
         hasOfferCatalog: {
           '@type': 'OfferCatalog',
@@ -110,12 +122,22 @@ export function jsonLdNegocio(opts: {
         },
       },
       {
+        '@type': 'Person',
+        '@id': id(url, 'julian'),
+        name: MARCA.fundador,
+        jobTitle: NOSOTROS.cargo,
+        url: `${url}/nosotros`,
+        alumniOf: { '@type': 'CollegeOrUniversity', name: 'Universidad Tecnológica Nacional' },
+        worksFor: { '@id': id(url, 'organizacion') },
+        homeLocation: { '@type': 'City', name: 'San Jorge' },
+      },
+      {
         '@type': 'WebSite',
         '@id': id(url, 'sitio'),
         url,
         name: SEO_SITIO.nombre,
         inLanguage: 'es-AR',
-        publisher: { '@id': id(url, 'negocio') },
+        publisher: { '@id': id(url, 'organizacion') },
       },
       ...SERVICIOS.map((s) => servicioLd(url, s)),
     ],

@@ -157,6 +157,7 @@ export const DEMO_TIENDA_UI = {
   tienda: {
     todos: 'Todo',
     agregar: 'Agregar',
+    verProducto: 'Ver producto',
     agregarCarrito: 'Agregar al carrito',
     consultar: 'Consultar por WhatsApp',
     carrito: 'Carrito',

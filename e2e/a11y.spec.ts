@@ -21,12 +21,19 @@ async function auditar(page: Page) {
 for (const ruta of [
   '/',
   '/turnero',
-  '/pizzerias',
-  '/tiendas',
+  '/pedidos',
+  '/tienda',
+  '/web',
+  '/proyectos',
+  '/nosotros',
+  '/zona',
+  '/armar',
   '/privacidad',
-  '/demo',
-  '/demo/pedidos',
-  '/demo/turnos',
+  '/demos',
+  '/demos/pedidos',
+  '/demos/turnos',
+  '/demos/web',
+  '/demos/tienda',
 ]) {
   test(`${ruta} sin violaciones WCAG AA`, async ({ page }) => {
     await page.goto(ruta, { waitUntil: 'networkidle' });
@@ -35,11 +42,20 @@ for (const ruta of [
 }
 
 test('configurador con todo elegido sin violaciones', async ({ page }) => {
-  await page.goto('/#armar', { waitUntil: 'networkidle' });
+  await page.goto('/armar', { waitUntil: 'networkidle' });
   const armar = page.locator('#armar');
   await armar.locator('[data-hidratado]').waitFor({ state: 'attached' });
-  await armar.getByText('Sistema de pedidos', { exact: true }).click();
+  await armar.getByText('Pedidos online', { exact: true }).click();
   await armar.getByText('Otro', { exact: true }).click();
   await armar.getByRole('textbox', { name: 'Tu rubro' }).fill('Heladería');
+  await auditar(page);
+});
+
+test('menú del celular abierto sin violaciones', async ({ page }, info) => {
+  test.skip(info.project.name === 'desktop', 'el menú es del celular y la tablet');
+  await page.goto('/', { waitUntil: 'networkidle' });
+  const boton = page.getByRole('button', { name: 'Abrir el menú' });
+  test.skip(!(await boton.isVisible()), 'en este ancho el menú está en el header');
+  await boton.click();
   await auditar(page);
 });

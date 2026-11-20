@@ -258,6 +258,7 @@ function Progreso({ pasos, className }: { pasos: readonly boolean[]; className?:
   return (
     <div
       role="progressbar"
+      aria-label={C.progresoEtiqueta}
       aria-valuemin={0}
       aria-valuemax={pasos.length}
       aria-valuenow={hechos}

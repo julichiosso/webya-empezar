@@ -144,6 +144,7 @@ export function Tienda({
                   <button
                     type="button"
                     onClick={() => setPantalla({ tipo: 'producto', id: p.id })}
+                    aria-label={p.nombre || T.verProducto}
                     className="block aspect-square overflow-hidden rounded-xl border border-neutral-200"
                   >
                     <FotoProducto foto={p.foto} propia={p.propia} />

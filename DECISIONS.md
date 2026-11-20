@@ -2,6 +2,21 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## V2 · Fase 7 — SEO y accesibilidad
+
+- **Dominio canónico fijo en el código** (`https://webya.dev` en `site-config.ts`), no en una variable de entorno:
+  si en Vercel quedaba `NEXT_PUBLIC_SITE_URL` con el dominio de preview, el canonical y el JSON-LD apuntaban a
+  `*.vercel.app`. Los links internos ya eran relativos.
+- **JSON-LD de la home**: `Organization` + `ProfessionalService` (dirección y zona) + `Person` (Julián, UTN) +
+  `WebSite` + un `Service` por producto, enlazados por `@id`. `areaServed` lista cada localidad de `/zona`, con
+  su provincia (una sola fuente: `content/paginas.ts`). Cada página de producto suma su `Service` y la miga de pan.
+- **Metadata por página** con una sola función (`metadataPagina`): título con plantilla, descripción, canonical,
+  Open Graph y Twitter. Sitemap con todas las páginas públicas y las demos (prioridad baja).
+- **Accesibilidad**: axe (WCAG 2.2 AA) en las 15 rutas y en 7 tamaños de pantalla, más el menú del celular
+  abierto y el configurador completo. Arreglado: nombre accesible de la barra de progreso y de las fotos de la
+  tienda. Los links que abren otra pestaña lo dicen en su nombre accesible, no en texto visible (lo verifica un
+  test).
+
 ## V2 · Fase 6 — Configurador
 
 - **`/armar`, una sola vista**: tres pasos, resumen en vivo y una barra de progreso de tres segmentos (en el

@@ -1,20 +1,23 @@
 # Webya · webya.dev
 
 Sitio de Webya (Julián Chiosso, San Jorge, Santa Fe): sistemas para negocios de la zona (turnero con seña,
-pedidos online, tiendas, catálogos y sitios). La home vende con trabajos reales y termina en el configurador
-"Armá tu sistema", que manda el pedido ya escrito por WhatsApp.
+pedidos online, tiendas, catálogos y páginas web). La home es un hub corto que manda a cada producto, a las demos
+y al configurador "Armá tu sistema", que envía el pedido ya escrito por WhatsApp.
 
-| Ruta                                 | Qué es                                                                              |
-| ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `/`                                  | Home editorial: qué armo, turnero, pedidos, proyectos reales, configurador y cierre |
-| `/turnero`, `/pizzerias`, `/tiendas` | Landings por servicio (SEO local), con el configurador ya en ese servicio           |
-| `/demo/turnos`                       | Demo del turnero con seña: reserva y pago simulado del cliente, panel del dueño     |
-| `/demo/pedidos`                      | Demo del sistema de pedidos de Micio’s: app del cliente, panel del dueño y comanda  |
-| `/privacidad`, `/terminos`           | Legales                                                                             |
-| `/empezar`                           | Redirige a `/` (es el link de la bio de Instagram)                                  |
-| `/api/eventos`, `/api/leads`         | Medición propia del embudo (sendBeacon, sin cookies) y API de leads                 |
+| Ruta                                          | Qué es                                                                        |
+| --------------------------------------------- | ----------------------------------------------------------------------------- |
+| `/`                                           | Home hub: hero con demos por rubro, qué armamos, proyectos, quiénes somos     |
+| `/turnero`, `/pedidos`, `/tienda`, `/web`     | Páginas de producto (SEO local): dolor, solución, para quién, proyectos       |
+| `/proyectos`, `/nosotros`, `/zona`            | Proyectos reales, quiénes somos (Julián y el proceso), zona con mapa          |
+| `/armar`                                      | Configurador "Armá tu sistema" (`?tipo=turnero` llega con el sistema elegido) |
+| `/demos`                                      | Elegir demo, por sistema o por rubro                                          |
+| `/demos/pedidos`, `/demos/turnos`             | Demos de los sistemas reales: app del cliente y panel del dueño               |
+| `/demos/web`, `/demos/tienda`                 | Página web por rubro y "creá tu tienda en vivo"                               |
+| `/privacidad`, `/terminos`                    | Legales                                                                       |
+| `/empezar`, `/pizzerias`, `/tiendas`, `/demo` | Redirecciones a las rutas nuevas                                              |
+| `/api/eventos`, `/api/leads`                  | Medición propia del embudo (sendBeacon, sin cookies) y API de leads           |
 
-Estado y decisiones: [`AUDIT.md`](AUDIT.md) (auditoría y pasos del deploy), [`DECISIONS.md`](DECISIONS.md),
+Estado y decisiones: [`AUDIT_V2.md`](AUDIT_V2.md) (segunda ronda), [`AUDIT.md`](AUDIT.md) (auditoría y pasos del deploy), [`DECISIONS.md`](DECISIONS.md),
 [`PROGRESS.md`](PROGRESS.md), [`ROADMAP.md`](ROADMAP.md) (fase 2 self-service) e [`IMAGENES.md`](IMAGENES.md)
 (capturas que faltan). `docs/` guarda la historia de etapas anteriores.
 
@@ -88,5 +91,5 @@ Las variables del servidor se validan al arrancar (`src/instrumentation.ts` + `s
 1. Aplicar `supabase/migrations/` en el proyecto de Supabase (las últimas: `eventos` y `embudo_configurador`).
 2. Cargar las variables de producción (tabla de arriba).
 3. Dominio `webya.dev`: los pasos exactos están en `AUDIT.md` §5 (hoy Cloudflare apunta a otro servidor).
-4. Verificar `/`, `/turnero`, `/demo/pedidos`, `/demo/turnos`, `/robots.txt`, `/sitemap.xml`, y que la consola no muestre
+4. Verificar `/`, `/turnero`, `/armar`, `/demos/pedidos`, `/demos/tienda`, `/robots.txt`, `/sitemap.xml`, y que la consola no muestre
    errores de CSP (`docs/adr/0001-csp-fija-con-sri.md`).

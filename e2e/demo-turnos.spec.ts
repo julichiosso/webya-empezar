@@ -16,7 +16,7 @@ import {
 const escritorio = (page: Page) => (page.viewportSize()?.width ?? 0) >= 1024;
 
 async function reservarYPagar(page: Page, resultado: string) {
-  await page.goto('/demo/turnos');
+  await page.goto('/demos/turnos');
   await page.getByRole('button', { name: BARRA_DEMOS.aviso.cerrar }).click();
   await page.getByRole('button', { name: /^Corte Lavado/ }).click();
   await page.getByRole('button', { name: /Cualquiera/ }).click();
@@ -66,7 +66,7 @@ test('si el pago no sale, el horario queda guardado con su contador', async ({ p
 });
 
 test('el cobro deja anotar lo que pagó y con qué medio', async ({ page }) => {
-  await page.goto('/demo/turnos');
+  await page.goto('/demos/turnos');
   await page.getByRole('button', { name: BARRA_DEMOS.aviso.cerrar }).click();
   if (!escritorio(page)) await page.getByRole('button', { name: VISTAS_TURNOS.duenio }).click();
   await page
@@ -83,5 +83,5 @@ test('el cobro deja anotar lo que pagó y con qué medio', async ({ page }) => {
 
 test('/demo/peluqueria lleva a la demo de turnos', async ({ page }) => {
   await page.goto('/demo/peluqueria');
-  await expect(page).toHaveURL(/\/demo\/turnos$/);
+  await expect(page).toHaveURL(/\/demos\/turnos$/);
 });

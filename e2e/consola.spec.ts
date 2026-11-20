@@ -4,12 +4,19 @@ import { expect, test } from '@playwright/test';
 for (const ruta of [
   '/',
   '/turnero',
-  '/pizzerias',
-  '/tiendas',
+  '/pedidos',
+  '/tienda',
+  '/web',
+  '/proyectos',
+  '/nosotros',
+  '/zona',
+  '/armar',
   '/privacidad',
-  '/demo',
-  '/demo/pedidos',
-  '/demo/turnos',
+  '/demos',
+  '/demos/pedidos',
+  '/demos/turnos',
+  '/demos/web',
+  '/demos/tienda',
 ]) {
   test(`${ruta}: consola sin errores ni advertencias`, async ({ page }) => {
     const mensajes: string[] = [];

@@ -213,6 +213,7 @@ export const CONFIGURADOR = {
   aclaracion:
     'Se abre WhatsApp con todo escrito. Te respondemos con el presupuesto, sin compromiso.',
   verDemo: 'Ver demo',
+  progresoEtiqueta: 'Avance de tu pedido',
   /** Progreso de los tres pasos (barra del resumen y del celular). */
   progreso: (hechos: number) => `${hechos} de tres pasos listos`,
   reiniciar: 'Empezar de nuevo',

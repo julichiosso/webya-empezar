@@ -15,7 +15,7 @@ async function entrar(page: Page, ruta: string) {
 const escritorio = (page: Page) => (page.viewportSize()?.width ?? 0) >= 1024;
 
 async function pedir(page: Page) {
-  await entrar(page, '/demo/pedidos');
+  await entrar(page, '/demos/pedidos');
   await page
     .getByRole('button', { name: /Muzzarella/ })
     .first()
@@ -50,7 +50,7 @@ test('el pedido del cliente entra al panel y sale la comanda', async ({ page }) 
 });
 
 test('cerrar el local desde el panel se ve en la app del cliente', async ({ page }) => {
-  await entrar(page, '/demo/pedidos');
+  await entrar(page, '/demos/pedidos');
   if (!escritorio(page)) await page.getByRole('button', { name: VISTAS.duenio }).click();
   await page.getByRole('switch', { name: PANEL.localAbierto }).click();
   if (!escritorio(page)) await page.getByRole('button', { name: VISTAS.cliente }).click();
@@ -59,11 +59,11 @@ test('cerrar el local desde el panel se ve en la app del cliente', async ({ page
 
 test('/demo/gastronomia lleva a la demo nueva', async ({ page }) => {
   await page.goto('/demo/gastronomia');
-  await expect(page).toHaveURL(/\/demo\/pedidos$/);
+  await expect(page).toHaveURL(/\/demos\/pedidos$/);
 });
 
 test('la demo avisa que es una demo y qué más hace el sistema real', async ({ page }) => {
-  await page.goto('/demo/pedidos');
+  await page.goto('/demos/pedidos');
   const aviso = page.getByRole('region', { name: BARRA_DEMOS.aviso.titulo });
   await expect(aviso).toContainText(BARRA_DEMOS.aviso.ademas);
   await page.getByRole('button', { name: BARRA_DEMOS.aviso.cerrar }).click();
@@ -72,8 +72,11 @@ test('la demo avisa que es una demo y qué más hace el sistema real', async ({ 
   await expect(aviso).toBeVisible();
 });
 
-test('desde /demo se elige qué sistema probar', async ({ page }) => {
-  await page.goto('/demo');
-  await page.getByRole('link', { name: /Turnos con seña/ }).click();
-  await expect(page).toHaveURL(/\/demo\/turnos$/);
+test('desde /demos se elige qué sistema probar', async ({ page }) => {
+  await page.goto('/demos');
+  await page
+    .getByRole('link', { name: /Turnos con seña/ })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/demos\/turnos$/);
 });
