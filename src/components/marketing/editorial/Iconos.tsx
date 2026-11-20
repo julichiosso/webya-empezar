@@ -68,3 +68,11 @@ export const Cerrar = ({ className }: IconoProps) => (
     <path d="M6 6l12 12M18 6 6 18" />
   </svg>
 );
+
+/** Avión de papel (Enviar): el trazo de línea, con el pliegue del ala. */
+export const Avion = ({ className }: IconoProps) => (
+  <svg {...base} width={18} height={18} strokeLinejoin="round" className={className}>
+    <path d="M20.5 3.5 3.5 10.6l6.6 2.7 2.8 6.7z" />
+    <path d="m20.5 3.5-10.4 9.8" />
+  </svg>
+);
