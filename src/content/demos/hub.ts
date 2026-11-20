@@ -52,7 +52,7 @@ export const DEMOS: readonly DemoInfo[] = [
       'Aumento de precios de una sección en un paso',
       'Se instala en el celular como una app',
     ],
-    cta: { href: '/armar?tipo=pedidos', texto: 'Quiero esto para mi negocio' },
+    cta: { href: '/armar?tipo=pedidos&rubro=gastronomia', texto: 'Quiero este sistema' },
   },
   {
     id: 'turnos',
@@ -70,7 +70,7 @@ export const DEMOS: readonly DemoInfo[] = [
       'Te muestra quién faltó antes y cuántas veces',
       'Números: facturación, ocupación por hora y clientes para recuperar',
     ],
-    cta: { href: '/armar?tipo=turnero', texto: 'Quiero esto para mi negocio' },
+    cta: { href: '/armar?tipo=turnero&rubro=estetica', texto: 'Quiero este sistema' },
   },
   {
     id: 'web',
@@ -89,7 +89,7 @@ export const DEMOS: readonly DemoInfo[] = [
       'Formulario o WhatsApp con el mensaje armado',
       'Cambios simples cuando los necesites',
     ],
-    cta: { href: '/armar?tipo=web', texto: 'Quiero esto para mi negocio' },
+    cta: { href: '/armar?tipo=web', texto: 'Quiero este sistema' },
   },
   {
     id: 'tienda',
@@ -107,7 +107,7 @@ export const DEMOS: readonly DemoInfo[] = [
       'Stock, promos y envíos',
       'Dirección web propia y preparada para Google',
     ],
-    cta: { href: '/armar?tipo=tienda', texto: 'Quiero esto para mi negocio' },
+    cta: { href: '/armar?tipo=tienda', texto: 'Quiero este sistema' },
   },
 ];
 
