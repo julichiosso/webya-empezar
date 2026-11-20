@@ -7,8 +7,8 @@ import { CTA, FRASES, PROYECTOS_UI, RUTAS, SECCIONES } from '@/content/home';
 import { ESTADO_PROYECTO, PROYECTOS, dominioDe, type Proyecto } from '@/content/proyectos';
 import { CabezaSeccion } from './CabezaSeccion';
 import { FondoMarca } from './FondoMarca';
-import { Flecha, FlechaDiagonal } from './Iconos';
 import { PantallaProyecto, Telefono } from './Pantallas';
+import { VitrinaProyectos } from './VitrinaProyectos';
 
 /** La captura real en el teléfono o, mientras falte, el esquema vectorial del manifiesto. */
 function Visual({ p, chico = false }: { p: Proyecto; chico?: boolean }) {
@@ -64,38 +64,33 @@ function Estado({ p }: { p: Proyecto }) {
   );
 }
 
-/** Home: cuatro proyectos en grilla compacta (dos por fila en el celular) y el link a todos. */
+/** Home: la vitrina de proyectos (nombres y un escenario que cambia) y el link a todos. */
 export function ProyectosInicio() {
   const S = SECCIONES.proyectos;
-  const lista = PROYECTOS.filter((p) => p.id !== 'abelardo').slice(0, 4);
+  const items = PROYECTOS.filter((p) => p.id !== 'abelardo').map((p) => ({
+    id: p.id,
+    cliente: p.cliente,
+    rubro: p.rubro,
+    sistema: p.sistema,
+    estado: ESTADO_PROYECTO[p.estado],
+    ve: p.ve,
+    href: `${RUTAS.proyectos}#proyecto-${p.id}`,
+    img: p.imagenes[0],
+    mockup: p.mockup,
+  }));
   return (
     <section id={S.id} className="tono-oscuro e-seccion" aria-labelledby="titulo-proyectos">
       <div className="e-wrap">
         <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-proyectos" />
-        <ul className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 md:mt-12 lg:grid-cols-4 lg:gap-x-5">
-          {lista.map((p, i) => (
-            <li key={p.id} data-reveal="" style={{ '--i': i } as CSSProperties}>
-              <Link
-                href={`${RUTAS.proyectos}#proyecto-${p.id}`}
-                className="group block active:opacity-70"
-              >
-                <Visual p={p} chico />
-                <span className="mt-3 block">
-                  <Estado p={p} />
-                </span>
-                <span className="mt-1.5 block text-[0.9375rem] leading-tight font-semibold underline decoration-transparent decoration-1 underline-offset-4 transition-colors group-hover:decoration-current md:text-[1.0625rem]">
-                  {p.cliente}
-                </span>
-                <span className="mt-0.5 block text-[0.8125rem] leading-snug text-ed-muted">
-                  {p.sistema}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <Link href={RUTAS.proyectos} className="e-link e-cuerpo mt-8 font-medium">
+        <div className="mt-8 md:mt-14">
+          <VitrinaProyectos
+            items={items}
+            etiqueta={S.rotulo}
+            verProyecto={PROYECTOS_UI.verProyecto}
+          />
+        </div>
+        <Link href={RUTAS.proyectos} className="e-link e-cuerpo mt-10 font-medium">
           {PROYECTOS_UI.verTodos}
-          <Flecha />
         </Link>
       </div>
     </section>
@@ -106,7 +101,7 @@ export function ProyectosInicio() {
 function Tarjeta({ p, i, nivel }: { p: Proyecto; i: number; nivel: 'h2' | 'h3' }) {
   const Titulo = nivel;
   const demo = DEMOS.find((d) => d.sistema === p.tipo);
-  const fila = 'border-t border-ed-line pt-3';
+  const fila = 'pt-3';
   return (
     <article
       id={`proyecto-${p.id}`}
@@ -151,7 +146,6 @@ function Tarjeta({ p, i, nivel }: { p: Proyecto; i: number; nivel: 'h2' | 'h3' }
           >
             {PROYECTOS_UI.ver}
             <span className="text-ed-muted">{dominioDe(p.url)}</span>
-            <FlechaDiagonal />
           </a>
         ) : demo ? (
           <a
@@ -162,7 +156,6 @@ function Tarjeta({ p, i, nivel }: { p: Proyecto; i: number; nivel: 'h2' | 'h3' }
             className="e-link e-cuerpo font-medium"
           >
             {PROYECTOS_UI.verDemo}
-            <FlechaDiagonal />
           </a>
         ) : null}
       </div>
