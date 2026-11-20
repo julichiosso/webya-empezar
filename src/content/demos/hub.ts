@@ -118,6 +118,10 @@ export const BARRA_DEMOS = {
   info: 'Qué más hace',
   infoAria: 'Qué más hace el sistema real',
   reiniciar: 'Reiniciar la demo',
+  escribinos: 'Escribinos',
+  escribinosAria: 'Escribinos por WhatsApp, se abre en otra pestaña',
+  mensaje: (sistema: string) =>
+    `Hola, vengo de webya.dev. Probé la demo de ${sistema.toLowerCase()} y quiero algo así para mi negocio.`,
   salir: 'Demos',
   salirAria: 'Volver a la lista de demos',
   enUso: {

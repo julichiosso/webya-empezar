@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 import { BARRA_DEMOS, getDemo, type DemoInfo } from '@/content/demos/hub';
 import { track } from '@/lib/analytics';
+import { enlaceContacto } from './contacto';
 import { EnUso } from './EnUso';
-import { Flecha } from './Iconos';
+import { Flecha, WhatsApp } from './Iconos';
 
 /**
  * Barra fina de arriba de cada demo: dice que es una demo, abre "qué más hace el sistema real",
@@ -58,6 +59,7 @@ export function BarraDemo({
   }, [abierto]);
 
   const cta = () => track('demo_cta_click', { demo, origen: 'barra' });
+  const whatsapp = enlaceContacto(BARRA_DEMOS.mensaje(d.barra)).href;
 
   return (
     <div ref={caja} className="tono-oscuro sticky top-0 z-40 border-b border-ed-line bg-ed-bg">
@@ -88,6 +90,17 @@ export function BarraDemo({
             <Reinicio />
           </button>
         ) : null}
+        <a
+          href={whatsapp}
+          target="_blank"
+          rel="noopener"
+          aria-label={BARRA_DEMOS.escribinosAria}
+          onClick={() => track('demo_whatsapp_click', { demo })}
+          className="flex min-h-10 items-center gap-1.5 rounded-full px-2.5 text-[0.8125rem] text-ed-muted hover:text-ed-fg"
+        >
+          <WhatsApp />
+          <span className="hidden sm:inline">{BARRA_DEMOS.escribinos}</span>
+        </a>
         <Link
           href="/demos"
           aria-label={BARRA_DEMOS.salirAria}
