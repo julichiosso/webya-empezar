@@ -13,7 +13,7 @@ import { TituloPalabras } from './TituloPalabras';
 export function Cierre({ armar = RUTAS.armar }: { armar?: string }) {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
-    <section className="tono-oscuro border-t border-ed-line" aria-labelledby="titulo-cierre">
+    <section className="tono-oscuro" aria-labelledby="titulo-cierre">
       <div className="e-wrap grid grid-cols-12 gap-y-10 py-[clamp(4rem,8vw,8rem)] lg:gap-x-12">
         <div className="col-span-12 min-w-0 lg:col-span-5">
           <TituloPalabras

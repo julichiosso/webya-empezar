@@ -12,7 +12,7 @@ const LINK = 'e-link e-link-nav e-link-alto text-ed-muted hover:text-ed-fg';
 export function Pie() {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
-    <footer className="tono-oscuro border-t border-ed-line">
+    <footer className="tono-oscuro">
       <div className="e-wrap grid grid-cols-12 gap-x-6 gap-y-10 py-14 md:py-20">
         <div className="col-span-12 lg:col-span-4">
           <p className="e-h3 max-w-[22ch] font-medium">{PIE.lema}</p>
