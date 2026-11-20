@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { cn } from '@/components/ui/clases';
 import { CTA } from '@/content/home';
+import { Avion } from './Iconos';
 
 interface BotonProps {
   href: string;
@@ -89,16 +90,20 @@ export function Boton({
   );
 }
 
-/** Botón de envío de un formulario, con el mismo gesto. */
+/** Botón de envío de un formulario: el mismo gesto y el avioncito que sale volando mientras envía. */
 export function BotonForm({ texto, cargando }: { texto: string; cargando: boolean }) {
   return (
     <button
       type="submit"
       aria-disabled={cargando || undefined}
+      data-enviando={cargando || undefined}
       className="e-btn e-btn-primario shrink-0"
     >
       <TrazoBoton />
       <TextoBoton>{texto}</TextoBoton>
+      <span aria-hidden="true" className="e-avion-caja">
+        <Avion className="e-avion" />
+      </span>
     </button>
   );
 }
