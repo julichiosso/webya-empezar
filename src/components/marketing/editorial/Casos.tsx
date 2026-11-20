@@ -1,22 +1,32 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
+import {
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react';
 import { cn } from '@/components/ui/clases';
 import { CTA, PROYECTOS_UI as UI } from '@/content/home';
 import type { Proyecto } from '@/content/proyectos';
 import type { TipoId } from '@/content/servicios';
 import { TextoBoton, TrazoBoton } from './Boton';
-import { Composicion } from './Composicion';
-import { PantallaProyecto, Telefono } from './Pantallas';
 
 export interface CasoVista extends Proyecto {
   href: string;
   estadoTexto: string;
   dominio?: string;
 }
+
+/**
+ * Las imágenes de cada caso, ya dibujadas en el servidor (composición del panel y teléfono de la tarjeta):
+ * así los teléfonos y esquemas no viajan en el JavaScript de la página.
+ */
+export type VisualesCaso = Record<string, { panel: ReactNode; miniatura: ReactNode }>;
 
 type Filtro = 'todos' | TipoId;
 
@@ -83,7 +93,13 @@ function Armamos({ caso, cuantos = 4 }: { caso: CasoVista; cuantos?: number }) {
  * al pasar el mouse o con el foco cambia el panel (fundido corto), al hacer clic se abre el caso. Celular:
  * tarjetas apiladas que se expanden al tocarlas. Los filtros por tipo cambian las dos vistas.
  */
-export function Casos({ casos }: { casos: readonly CasoVista[] }) {
+export function Casos({
+  casos,
+  visuales,
+}: {
+  casos: readonly CasoVista[];
+  visuales: VisualesCaso;
+}) {
   const router = useRouter();
   const base = useId();
   const [filtro, setFiltro] = useState<Filtro>('todos');
@@ -220,7 +236,7 @@ export function Casos({ casos }: { casos: readonly CasoVista[] }) {
                     data-activo={c.id === activo.id || undefined}
                     className={cn('e-capa-caso', i > 0 && 'absolute inset-0')}
                   >
-                    <Composicion caso={c} />
+                    {visuales[c.id]?.panel}
                   </div>
                 ))}
               </div>
@@ -251,30 +267,12 @@ export function Casos({ casos }: { casos: readonly CasoVista[] }) {
       {/* ---------- Celular y tablet: tarjetas apiladas que se expanden ---------- */}
       <ul className="mt-6 space-y-3 lg:hidden">
         {visibles.map((c) => {
-          const img = c.imagenes.mobile;
           return (
             <li key={c.id}>
               <details className="e-tarjeta-caso group rounded-[1.5rem] bg-ed-surface">
                 <summary className="flex min-h-11 cursor-pointer list-none gap-4 p-4 [&::-webkit-details-marker]:hidden">
                   <span className="relative w-[5.5rem] shrink-0 sm:w-[7rem]">
-                    <Telefono
-                      className="max-w-none"
-                      decorativo={!img}
-                      barra={!img?.completa}
-                      colorBarra={img?.barra}
-                    >
-                      {img ? (
-                        <Image
-                          src={img.src}
-                          alt={img.alt}
-                          fill
-                          sizes="7rem"
-                          className="object-cover object-top"
-                        />
-                      ) : (
-                        <PantallaProyecto mockup={c.mockup} />
-                      )}
-                    </Telefono>
+                    {visuales[c.id]?.miniatura}
                   </span>
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="e-chico text-ed-muted">
