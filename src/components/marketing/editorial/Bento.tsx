@@ -4,7 +4,6 @@ import { cn } from '@/components/ui/clases';
 import { BENTO, SECCIONES } from '@/content/home';
 import { CabezaSeccion } from './CabezaSeccion';
 import { FondoMarca } from './FondoMarca';
-import { Flecha } from './Iconos';
 
 type CeldaId = keyof typeof BENTO.celdas;
 
@@ -143,7 +142,6 @@ export function Bento() {
                     >
                       {DIBUJOS[c.id]}
                     </svg>
-                    <Flecha className="shrink-0 max-md:ml-auto" />
                   </div>
                   <div>
                     <h3
