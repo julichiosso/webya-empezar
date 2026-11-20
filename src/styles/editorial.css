@@ -1338,3 +1338,133 @@ html:not(.mo) .e-vidriera {
 .e-tarjeta-caso[open] > div {
   animation: e-aparecer 320ms var(--ease-editorial) both;
 }
+
+/* Buscador del hero: sin anillo; al escribir, el campo se aclara apenas. Las sugerencias entran de arriba. */
+.e-buscador {
+  transition: background-color var(--t-rapida) var(--ease-editorial);
+}
+.e-buscador:focus-within {
+  background-color: color-mix(in srgb, var(--e-surface) 70%, var(--e-fg) 6%);
+}
+.e-sugerencias {
+  animation: e-aparecer 220ms var(--ease-editorial) both;
+}
+
+/*
+ * Avisos tipo isla: la píldora sube y se abre (escala y opacidad), el ícono se dibuja y el texto aparece
+ * apenas después. Al cerrarse, vuelve a bajar. Con movimiento reducido aparece y desaparece sin moverse.
+ */
+.e-isla {
+  outline: 1px solid rgb(255 255 255 / 0.12);
+  opacity: 0;
+  transform: translate3d(0, 0.75rem, 0) scale(0.7, 0.85);
+  transition:
+    transform 640ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 280ms ease-out;
+}
+.e-isla[data-visible] {
+  opacity: 1;
+  transform: none;
+}
+.e-isla-texto {
+  opacity: 0;
+  transition: opacity 360ms ease-out 180ms;
+}
+.e-isla[data-visible] .e-isla-texto {
+  opacity: 1;
+}
+.e-isla-icono > * {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+}
+.e-isla[data-visible] .e-isla-icono > * {
+  animation: e-avion-dibuja 800ms cubic-bezier(0.65, 0, 0.35, 1) 200ms forwards;
+}
+.e-isla[data-visible] .e-isla-icono > * + * {
+  animation-delay: 650ms;
+  animation-duration: 450ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .e-isla-icono > * {
+    stroke-dashoffset: 0;
+  }
+}
+
+/*
+ * Mapa de /zona (fondo claro): zonas en dos tonos planos (sin borde), límite provincial continuo y tenue,
+ * rutas finas, localidades con jerarquía (las dos ciudades más grandes). La localidad elegida se marca.
+ * En el celular solo se leen las dos ciudades; el resto, al elegirlas.
+ */
+.e-mapa-zona-a {
+  fill: color-mix(in srgb, var(--e-fg) 7%, transparent);
+}
+.e-mapa-zona-b {
+  fill: color-mix(in srgb, var(--e-fg) 12%, transparent);
+}
+.e-mapa-limite {
+  fill: none;
+  stroke: var(--e-fg);
+  stroke-opacity: 0.4;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+.e-mapa-ruta {
+  fill: none;
+  stroke: var(--e-fg);
+  stroke-opacity: 0.2;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+.e-mapa-ruta-nombre {
+  fill: var(--e-muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.e-mapa-provincia {
+  fill: var(--e-muted);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+}
+.e-mapa-union {
+  fill: none;
+  stroke: var(--e-fg);
+  stroke-width: 1.4;
+}
+.e-mapa-distancia {
+  fill: var(--e-muted);
+  font-size: 12px;
+}
+.e-mapa-punto {
+  cursor: pointer;
+}
+.e-mapa-punto-dot {
+  fill: var(--e-fg);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 260ms var(--ease-editorial);
+}
+.e-mapa-nombre {
+  fill: var(--e-muted);
+  font-size: 15px;
+  transition: fill var(--t-rapida);
+}
+.e-mapa-principal .e-mapa-nombre {
+  fill: var(--e-fg);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.e-mapa-activo .e-mapa-punto-dot {
+  transform: scale(1.6);
+}
+.e-mapa-activo .e-mapa-nombre {
+  fill: var(--e-fg);
+  font-weight: 600;
+}
+@media (max-width: 47.99rem) {
+  .e-mapa-punto:not(.e-mapa-principal):not(.e-mapa-activo) .e-mapa-nombre,
+  .e-mapa-ruta-nombre,
+  .e-mapa-distancia {
+    display: none;
+  }
+}
