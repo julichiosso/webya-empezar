@@ -16,7 +16,7 @@ export function BarraCelular() {
       <div aria-hidden="true" className="h-[calc(4.25rem+env(safe-area-inset-bottom))] lg:hidden" />
       <nav
         aria-label={BARRA_CELULAR.etiqueta}
-        className="tono-oscuro fixed inset-x-0 bottom-0 z-30 border-t border-ed-line px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
+        className="tono-oscuro fixed inset-x-0 bottom-0 z-30 bg-ed-surface px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
       >
         <div className="mx-auto grid max-w-[34rem] grid-cols-2 gap-2.5">
           <a
