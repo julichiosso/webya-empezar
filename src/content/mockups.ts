@@ -84,3 +84,12 @@ export const MOCKUPS = {
     whatsapp: 'Pedir turno por WhatsApp',
   },
 } as const;
+
+/** El hero de la home: el aviso que le llega al dueño cuando alguien reserva (datos de ejemplo). */
+export const AVISO_HERO = {
+  alt: 'Un turnero funcionando en el celular: la agenda del día y el aviso de una reserva nueva con la seña acreditada.',
+  app: 'Turnero',
+  cuando: 'ahora',
+  titulo: 'Nueva reserva',
+  texto: 'Sábado 10:00 · Seña acreditada',
+} as const;

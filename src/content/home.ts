@@ -71,19 +71,18 @@ export const BARRA_CELULAR = {
   etiqueta: 'Atajos',
 } as const;
 
+/** La línea de marca de Webya, tal cual se publica en Instagram: tres palabras, una por línea. */
+export const LEMA = ['Creá.', 'Digitalizá.', 'Crecé.'] as const;
+
 export const HERO = {
-  /** Cada línea se anima por separado. */
-  titulo: ['Turnos, pedidos y ventas online,', 'armados para tu negocio.'],
+  /** El lema es el H1: cada palabra entra en secuencia y queda fija. */
+  titulo: LEMA,
+  /** Una sola frase que baja el lema a tierra: qué armamos y para quién. */
   bajada:
-    'Tus clientes reservan, piden o compran desde el celular. Vos lo manejás todo desde el tuyo.',
-  rubros: 'Elegí tu rubro y probalo',
-  /** Lo que aparece en cada fila al pasar el mouse. */
-  probar: 'Ver demo',
-  /** Nombre accesible de cada rubro (el link abre la demo en otra pestaña). */
-  rubroAria: (rubro: string, sistema: string) =>
-    `${rubro}: ver demo de ${sistema.toLowerCase()}, se abre en otra pestaña`,
+    'Armamos los turnos, los pedidos y la venta online de tu negocio, y vos lo manejás desde el celular.',
   /** Prueba al toque, en la primera pantalla: los negocios que ya lo usan. */
   confianza: 'Funcionando en',
+  y: 'y',
   verZona: 'Ver el mapa',
 } as const;
 
@@ -246,7 +245,7 @@ export const CIERRE = {
 } as const;
 
 export const PIE = {
-  lema: 'Sistemas para negocios que quieren trabajar en serio.',
+  lema: LEMA.join(' '),
   productos: 'Qué armamos',
   webya: 'Webya',
   contacto: 'Contacto',
@@ -261,17 +260,41 @@ export const PIE = {
 
 /** Las frases de Webya (las de la bio de Instagram): la franja de la home y los fondos vectoriales. */
 export const FRASES = {
-  lema: 'Creá. Digitalizá. Crecé.',
+  lema: LEMA.join(' '),
   promesa: 'Tu negocio. Nuestra tecnología.',
   rubros: 'Web · Sistemas · Automatización',
 } as const;
 
-export const MANIFIESTO = {
-  etiqueta: 'Qué hacemos por tu negocio',
-  pasos: [
-    { palabra: 'Creá.', texto: 'Tu página, tu tienda o tu sistema, a la medida de tu negocio.' },
-    { palabra: 'Digitalizá.', texto: 'Los turnos, pedidos y consultas que hoy hacés a mano.' },
-    { palabra: 'Crecé.', texto: 'Tu negocio atiende todo el día, aunque esté cerrado.' },
+/**
+ * Escenas de la semana de un negocio: el problema de siempre y lo que cambia con el sistema. Dolor,
+ * alivio y el link a la prueba. Son escenas de ejemplo, no cifras de nadie.
+ */
+export const ESCENAS = {
+  rotulo: 'Tu semana',
+  titulo: 'Lo que cambia cuando tu negocio tiene su sistema.',
+  lista: [
+    {
+      cuando: 'Viernes a la noche.',
+      antes: 'Suena el teléfono, los pedidos se anotan en un papel y alguno se pierde.',
+      despues:
+        'Con pedidos online, cada pedido entra con su hora de retiro y la comanda sale sola.',
+      link: 'Pedidos online',
+      href: '/pedidos',
+    },
+    {
+      cuando: 'Sábado a la mañana.',
+      antes: 'El primer turno no vino y nadie avisó.',
+      despues: 'Con el turnero, el cliente deja la seña al reservar y el turno queda asegurado.',
+      link: 'Turnero con seña',
+      href: '/turnero',
+    },
+    {
+      cuando: 'Domingo.',
+      antes: 'El local está cerrado y alguien quiere comprarte.',
+      despues: 'Con la tienda online te compra igual, y el lunes preparás el pedido.',
+      link: 'Tienda online',
+      href: '/tienda',
+    },
   ],
 } as const;
 
