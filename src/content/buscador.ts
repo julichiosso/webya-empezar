@@ -13,7 +13,7 @@ export interface DestinoBusqueda {
   palabras: readonly string[];
 }
 
-export const DESTINOS_BUSQUEDA: readonly DestinoBusqueda[] = [
+const DESTINOS_BASE: readonly DestinoBusqueda[] = [
   {
     id: 'turnero',
     titulo: 'Turnos con seña',
@@ -302,13 +302,119 @@ export const DESTINOS_BUSQUEDA: readonly DestinoBusqueda[] = [
   },
 ];
 
+/** Cada sistema con su demo: quien busca "peluquería" ve el turnero y, al lado, la demo para probarlo. */
+const DEMOS_BUSQUEDA: readonly (Omit<DestinoBusqueda, 'palabras'> & { de: string })[] = [
+  {
+    id: 'demo-turnos',
+    de: 'turnero',
+    titulo: 'Ver demo de turnos',
+    texto: 'Probá cómo reserva un cliente y cómo te llega el aviso.',
+    href: '/demos/turnos',
+  },
+  {
+    id: 'demo-pedidos',
+    de: 'pedidos',
+    titulo: 'Ver demo de pedidos',
+    texto: 'Hacé un pedido de prueba y mirá cómo llega la comanda.',
+    href: '/demos/pedidos',
+  },
+  {
+    id: 'demo-tienda',
+    de: 'tienda',
+    titulo: 'Ver demo de tienda',
+    texto: 'Elegí tu rubro y tus colores, y mirá tu tienda armada.',
+    href: '/demos/tienda',
+  },
+  {
+    id: 'demo-web',
+    de: 'web',
+    titulo: 'Ver demo de página web',
+    texto: 'Una página de ejemplo para tu rubro, lista para recorrer.',
+    href: '/demos/web',
+  },
+];
+
+export const DESTINOS_BUSQUEDA: readonly DestinoBusqueda[] = DESTINOS_BASE.flatMap((d) => {
+  const demo = DEMOS_BUSQUEDA.find((x) => x.de === d.id);
+  return demo ? [d, { ...demo, palabras: d.palabras }] : [d];
+});
+
+/** Los destinos que se pueden armar en el configurador: su id es el tipo de sistema de /armar. */
+export const ARMABLES: readonly string[] = [
+  'turnero',
+  'pedidos',
+  'tienda',
+  'catalogo',
+  'web',
+  'medida',
+];
+
+/** Palabra → rubro del configurador (RUBROS_CONFIG): así /armar llega con el rubro ya elegido. */
+export const RUBRO_POR_PALABRA: Readonly<Record<string, string>> = {
+  pizzeria: 'gastronomia',
+  hamburgueseria: 'gastronomia',
+  heladeria: 'gastronomia',
+  panaderia: 'gastronomia',
+  confiteria: 'gastronomia',
+  cafeteria: 'gastronomia',
+  rotiseria: 'gastronomia',
+  restaurante: 'gastronomia',
+  delivery: 'gastronomia',
+  comida: 'gastronomia',
+  peluqueria: 'estetica',
+  barberia: 'estetica',
+  estetica: 'estetica',
+  manicura: 'estetica',
+  unas: 'estetica',
+  consultorio: 'salud',
+  kinesiologia: 'salud',
+  psicologia: 'salud',
+  nutricion: 'salud',
+  odontologia: 'salud',
+  dentista: 'salud',
+  medico: 'salud',
+  veterinaria: 'mascotas',
+  mascotas: 'mascotas',
+  ropa: 'comercio',
+  joyeria: 'comercio',
+  regaleria: 'comercio',
+  kiosco: 'comercio',
+  ferreteria: 'comercio',
+  tienda: 'comercio',
+  campo: 'campo',
+  agronomia: 'campo',
+  acopio: 'campo',
+  estudio: 'servicios',
+  abogado: 'servicios',
+  contador: 'servicios',
+  taller: 'servicios',
+  academia: 'servicios',
+};
+
 export const BUSCADOR = {
   etiqueta: '¿Qué necesita tu negocio?',
-  placeholder: 'Escribí lo que necesitás, por ejemplo: turnos',
-  ejemplos: ['turnos para mi peluquería', 'pedidos para mi pizzería', 'vender ropa', 'cuánto sale'],
+  placeholder: 'Escribí lo que necesitás',
+  /** Rotan en el campo vacío, como ejemplos de cómo escribir. */
+  ejemplosRotan: [
+    'Quiero recibir pedidos de mi pizzería',
+    'Necesito que no se me pierdan los turnos',
+    'Quiero vender online mis productos',
+    'Necesito una página para mi consultorio',
+  ],
+  /** Atajos: los cinco pedidos más comunes. */
+  ejemplos: [
+    'turnos para mi peluquería',
+    'pedidos para mi pizzería',
+    'vender online',
+    'página para mi consultorio',
+    'cuánto sale',
+  ],
   ejemplosEtiqueta: 'Probá con',
   sugerencias: 'Sugerencias',
   limpiar: 'Borrar',
+  /** Armar ese sistema en /armar, con el tipo (y el rubro, si lo nombró) ya elegidos. */
+  armar: (sistema: string) => `Armá tu sistema: ${sistema.toLowerCase()}`,
+  armarTexto: 'Ya va elegido. Sumás lo que quieras y nos lo mandás.',
   /** Siempre al final: lo que escribió, directo a WhatsApp. */
   escribinos: (texto: string) => `Contanos «${texto}» por WhatsApp`,
   escribinosTexto: 'Te respondemos nosotros.',
