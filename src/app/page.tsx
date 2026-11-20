@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Bento } from '@/components/marketing/editorial/Bento';
 import { Cierre } from '@/components/marketing/editorial/Cierre';
 import { HeroInicio } from '@/components/marketing/editorial/Hero';
+import { Manifiesto } from '@/components/marketing/editorial/Manifiesto';
 import { NosotrosInicio } from '@/components/marketing/editorial/Nosotros';
 import { Pagina } from '@/components/marketing/editorial/Pagina';
 import { ProyectosInicio } from '@/components/marketing/editorial/Proyectos';
@@ -44,6 +45,7 @@ export default function Inicio() {
     <Pagina>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializarLd(LD) }} />
       <HeroInicio />
+      <Manifiesto />
       <Bento />
       <ProyectosInicio />
       <NosotrosInicio />
