@@ -1,6 +1,8 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { getEnv } from '../env';
 import { crearBurstLimiter } from '../rate-limit';
+import { getLeadRepository } from '../repositories';
+import { PostgresLeadRepository } from '../repositories/postgres';
 import type { EventoRepository, EventosDeps, FilaEvento } from './handler';
 
 /** La tabla todavía no existe (migración eventos): el embudo se apaga sin molestar a nadie. */
@@ -26,20 +28,27 @@ class SupabaseEventoRepository implements EventoRepository {
 /** Fuera de producción no se guarda nada: el embudo se prueba con los tests de la API. */
 const sinGuardar: EventoRepository = { guardar: async () => undefined };
 
+/** Los eventos van a la misma base que los contactos (Supabase o Neon); sin base, a ningún lado. */
+function repositorioEventos(env: ReturnType<typeof getEnv>): EventoRepository {
+  if (env.LEAD_REPOSITORY === 'supabase') {
+    return new SupabaseEventoRepository(
+      createClient(env.SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      }),
+    );
+  }
+  const leads = env.LEAD_REPOSITORY === 'postgres' ? getLeadRepository() : null;
+  if (leads instanceof PostgresLeadRepository) return { guardar: (e) => leads.guardarEvento(e) };
+  return sinGuardar;
+}
+
 let deps: EventosDeps | undefined;
 
 export function getEventosDeps(): EventosDeps {
   if (deps) return deps;
   const env = getEnv();
   deps = {
-    repo:
-      env.LEAD_REPOSITORY === 'supabase'
-        ? new SupabaseEventoRepository(
-            createClient(env.SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
-              auth: { persistSession: false, autoRefreshToken: false },
-            }),
-          )
-        : sinGuardar,
+    repo: repositorioEventos(env),
     // Una visita manda pocos eventos, pero detrás de una IP puede haber un barrio entero.
     burst: crearBurstLimiter(env.RATE_LIMIT_BURST_PER_MINUTE * 6, 60_000),
     salt: env.IP_HASH_SALT,
