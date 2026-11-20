@@ -19,7 +19,7 @@ export const HUB_DEMOS = {
 } as const;
 
 export interface DemoInfo {
-  id: 'pedidos' | 'turnos' | 'web' | 'tienda';
+  id: 'pedidos' | 'turnos' | 'web' | 'tienda' | 'protectora';
   /** El tipo de sistema que muestra (los proyectos sin sitio publicado enlazan a su demo). */
   sistema: TipoId;
   href: string;
@@ -108,6 +108,24 @@ export const DEMOS: readonly DemoInfo[] = [
       'Dirección web propia y preparada para Google',
     ],
     cta: { href: '/armar?tipo=tienda', texto: 'Quiero este sistema' },
+  },
+  {
+    id: 'protectora',
+    sistema: 'medida',
+    href: '/demos/protectora',
+    rubro: 'Protectoras, clubes y entidades',
+    titulo: 'Protectoras y entidades',
+    texto:
+      'Adoptar, hacerse socio, donar y anotarse como voluntario; y del otro lado, cómo lo gestiona el equipo.',
+    barra: 'Protectoras',
+    ademas: [
+      'Se arma con el nombre, los colores y los módulos de cada organización',
+      'Carga de animales con foto desde el celular',
+      'Turnos con cupo para entrevistas, voluntariado y castraciones',
+      'Cobro con Mercado Pago para cuotas y donaciones',
+      'Aviso al celular del equipo con cada solicitud',
+    ],
+    cta: { href: '/armar?tipo=medida&rubro=entidades', texto: 'Quiero este sistema' },
   },
 ];
 
