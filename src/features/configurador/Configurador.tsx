@@ -36,13 +36,17 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
   const primerTipo = useRef<HTMLInputElement>(null);
   const raiz = useRef<HTMLDivElement>(null);
 
-  // Preselección desde los links del sitio: /armar?tipo=turnero (la página es estática; se lee acá).
+  // Preselección desde los links del sitio: /armar?tipo=turnero&rubro=… (la página es estática).
   useEffect(() => {
-    const tipoSistema = new URLSearchParams(window.location.search).get('tipo');
+    const parametros = new URLSearchParams(window.location.search);
+    const tipoSistema = parametros.get('tipo');
     if (tipoSistema && SERVICIOS.some((s) => s.id === tipoSistema)) {
       despachar({ tipo: 'preseleccionar', tipoSistema });
       track('configurador_tipo', { tipo: tipoSistema, origen: 'atajo' });
     }
+    // Desde un caso llega también el rubro (/armar?tipo=pedidos&rubro=gastronomia).
+    const rubro = parametros.get('rubro');
+    if (rubro) despachar({ tipo: 'elegirRubro', valor: rubro });
     // Señal de que ya responde: la usan los tests e2e.
     raiz.current?.setAttribute('data-hidratado', '');
   }, []);
