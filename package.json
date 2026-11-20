@@ -20,6 +20,7 @@
     "marca:exportar": "node scripts/exportar-marca.mjs"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.1",
     "@supabase/supabase-js": "^2.118.0",
     "next": "^16.4.6",
     "react": "^19.3.1",
