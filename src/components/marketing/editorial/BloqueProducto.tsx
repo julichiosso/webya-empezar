@@ -47,7 +47,10 @@ export function BloqueProducto({ landing }: { landing: Landing }) {
   const B = landing.bloque;
   if (landing.tipo === 'turnero') {
     return (
-      <section className="tono-claro e-seccion" aria-labelledby="titulo-producto">
+      <section
+        className="tono-claro e-seccion e-fondo e-fondo-puntos"
+        aria-labelledby="titulo-producto"
+      >
         <div className="e-wrap">
           <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
           <div className="mt-10 md:mt-14">
@@ -69,7 +72,10 @@ export function BloqueProducto({ landing }: { landing: Landing }) {
     );
   }
   return (
-    <section className="tono-claro e-seccion" aria-labelledby="titulo-producto">
+    <section
+      className="tono-claro e-seccion e-fondo e-fondo-puntos"
+      aria-labelledby="titulo-producto"
+    >
       <div className="e-wrap">
         <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
         <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-10 md:mt-12">

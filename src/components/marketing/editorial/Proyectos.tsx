@@ -186,7 +186,7 @@ export function ProyectosGrilla({
   return (
     <section
       id={S.id}
-      className="tono-claro e-seccion scroll-mt-16"
+      className="tono-claro e-seccion e-fondo e-fondo-grilla scroll-mt-16"
       aria-labelledby={cabeza ? 'titulo-proyectos' : undefined}
     >
       <div className="e-wrap">

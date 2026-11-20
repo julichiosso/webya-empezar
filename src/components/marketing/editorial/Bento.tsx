@@ -102,7 +102,11 @@ const CELDAS: readonly CeldaDef[] = [
 export function Bento() {
   const S = SECCIONES.queArmo;
   return (
-    <section id={S.id} className="tono-claro e-seccion" aria-labelledby="titulo-que-armamos">
+    <section
+      id={S.id}
+      className="tono-claro e-seccion e-fondo e-fondo-puntos"
+      aria-labelledby="titulo-que-armamos"
+    >
       <div className="e-wrap">
         <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-que-armamos" />
         <ul className="mt-8 grid grid-cols-2 gap-2.5 md:mt-12 md:grid-cols-12 md:gap-4">

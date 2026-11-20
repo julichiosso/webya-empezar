@@ -818,16 +818,11 @@ dd {
   width: min(56vw, 15rem);
   height: auto;
 }
-.carga-letra,
-.carga-corchete {
+.carga-letra {
   stroke: currentColor;
   stroke-dasharray: 1 1;
   stroke-dashoffset: 1;
   stroke-linejoin: miter;
-  animation: carga-trazo 900ms cubic-bezier(0.65, 0, 0.35, 1) calc(450ms + var(--i, 0) * 90ms)
-    forwards;
-}
-.carga-letra {
   stroke-width: 6;
   fill: currentColor;
   fill-opacity: 0;
@@ -835,15 +830,90 @@ dd {
     carga-trazo 900ms cubic-bezier(0.65, 0, 0.35, 1) calc(450ms + var(--i, 0) * 90ms) forwards,
     carga-relleno 400ms ease-out calc(1250ms + var(--i, 0) * 90ms) forwards;
 }
-.carga-corchete {
-  fill: none;
-  stroke-width: 40;
-}
 @media (prefers-reduced-motion: reduce) {
-  .carga-letra,
-  .carga-corchete {
+  .carga-letra {
     animation: none;
     stroke-dashoffset: 0;
     fill-opacity: 1;
+  }
+}
+
+/*
+ * Fondos delicados de las secciones claras: dibujos en negro muy tenue (sin color, sin degradados a la
+ * vista). Van en un ::before detrás del contenido; la máscara solo los desvanece hacia los bordes.
+ */
+.e-fondo {
+  position: relative;
+  isolation: isolate;
+}
+.e-fondo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.e-fondo-puntos::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1.5' cy='1.5' r='1.1' fill='%230a0a0a'/%3E%3C/svg%3E");
+  opacity: 0.11;
+  -webkit-mask-image: radial-gradient(ellipse 55% 70% at 88% 18%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 55% 70% at 88% 18%, #000 0%, transparent 72%);
+}
+.e-fondo-grilla::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cpath d='M72 .5H0M.5 0v72' fill='none' stroke='%230a0a0a'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}
+.e-fondo-curvas::before {
+  background: url('/fondos/curvas.svg') no-repeat right -8rem top -4rem / min(78rem, 140%) auto;
+  opacity: 0.09;
+}
+
+/*
+ * Vidriera de los heros de producto: la pista desfila despacio (una vuelta = −50 %, las dos mitades son
+ * iguales) y cada captura se recorre sola de arriba a abajo, con pausas arriba y abajo. Solo transform.
+ * Fuera de pantalla se pausa (data-loop); al pasar el mouse, también. Sin movimiento: se desliza a mano.
+ */
+@keyframes e-desfile {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes e-recorre {
+  0%,
+  12% {
+    transform: none;
+  }
+  55%,
+  67% {
+    transform: translate3d(0, var(--bajar, 0), 0);
+  }
+  100% {
+    transform: none;
+  }
+}
+.mo .e-vidriera-pista {
+  animation: e-desfile 80s linear infinite;
+}
+.mo .e-vidriera-recorre {
+  animation: e-recorre 24s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+.e-vidriera figure:nth-child(2n) .e-vidriera-recorre {
+  animation-delay: -8s;
+}
+.e-vidriera figure:nth-child(3n) .e-vidriera-recorre {
+  animation-delay: -16s;
+}
+.mo .e-vidriera[data-loop].on:hover .e-bucle {
+  animation-play-state: paused;
+}
+html:not(.mo) .e-vidriera {
+  overflow-x: auto;
+}
+@media (min-width: 64rem) {
+  .e-vidriera {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   }
 }

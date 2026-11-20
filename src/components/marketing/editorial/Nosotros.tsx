@@ -58,7 +58,7 @@ export function NosotrosPagina() {
   ];
   return (
     <>
-      <section className="tono-claro e-seccion" aria-label={N.rotulo}>
+      <section className="tono-claro e-seccion e-fondo e-fondo-curvas" aria-label={N.rotulo}>
         <div className="e-wrap grid grid-cols-12 items-center gap-x-6 gap-y-8">
           <Retrato className="col-span-8 sm:col-span-5 lg:col-span-4" />
           <figure className="col-span-12 sm:col-span-7 lg:col-span-6 lg:col-start-6">
@@ -96,7 +96,10 @@ export function NosotrosPagina() {
         </div>
       </section>
       <ProyectosInicio />
-      <section className="tono-claro e-seccion" aria-labelledby="titulo-contacto">
+      <section
+        className="tono-claro e-seccion e-fondo e-fondo-grilla"
+        aria-labelledby="titulo-contacto"
+      >
         <div className="e-wrap">
           <CabezaSeccion
             rotulo={N.contacto.rotulo}
@@ -133,7 +136,11 @@ export function NosotrosPagina() {
 export function NosotrosInicio() {
   const S = SECCIONES.nosotros;
   return (
-    <section id={S.id} className="tono-claro e-seccion" aria-labelledby="titulo-nosotros">
+    <section
+      id={S.id}
+      className="tono-claro e-seccion e-fondo e-fondo-curvas"
+      aria-labelledby="titulo-nosotros"
+    >
       <div className="e-wrap">
         <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-nosotros" />
         <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-6 md:mt-12">
