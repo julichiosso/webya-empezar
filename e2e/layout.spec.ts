@@ -41,7 +41,7 @@ for (const ruta of RUTAS) {
   });
 }
 
-test('la home entra en la primera pantalla: acciones y demos por rubro', async ({ page }) => {
+test('la home entra en la primera pantalla: las dos acciones y el buscador', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
   const vh = page.viewportSize()!.height;
   const hero = page.locator('#titulo-hero').locator('xpath=ancestor::section');
@@ -52,8 +52,8 @@ test('la home entra en la primera pantalla: acciones y demos por rubro', async (
       .boundingBox();
     expect(caja!.y + caja!.height, nombre).toBeLessThanOrEqual(vh);
   }
-  const primerRubro = await hero.getByRole('link', { name: /^Gastronomía/ }).boundingBox();
-  expect(primerRubro!.y).toBeLessThan(vh);
+  const buscador = await hero.getByRole('combobox').boundingBox();
+  expect(buscador!.y, 'buscador').toBeLessThan(vh);
 });
 
 test('la zona aparece una sola vez en la home, con el link al mapa', async ({ page }) => {
