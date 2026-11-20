@@ -1,5 +1,20 @@
 # ROADMAP — De "Armá tu sistema" a crear el sistema desde la plataforma
 
+## Después de la V3 (alcance congelado el 2026-11-20)
+
+Ideas que quedaron afuera a propósito, para no abrir frentes antes de publicar:
+
+1. **Panel privado `/panel`** para ver y marcar contactos desde el celular (nuevo, contactado, cliente). Hoy alcanza
+   con Telegram + la vista `contactos` de Neon. Necesita login (link por mail solo para el mail de Julián) y suma
+   superficie de ataque: hacerlo bien, con tests de acceso.
+2. **Guardar el pedido del configurador aunque no se mande** (`sendBeacon` con lo elegido, sin datos personales),
+   para medir abandono por paso. El embudo ya cuenta tipo y envío.
+3. **Demo de campo** interactiva (hoy `/campo` muestra soluciones y lleva a escribir): esperar al primer cliente
+   del agro para modelarla con datos reales.
+4. **Celular que acompaña el scroll en `/turnero`** (sticky en móvil, cambia de estado por paso). Hoy los pasos
+   avanzan solos a la vista; el sticky en pantallas chicas tapa el texto.
+5. **Lighthouse en CI** contra el deploy de Vercel (la máquina local no es confiable para medir).
+
 ## Dónde estamos (fase 1, hecha)
 
 Auditado el repo: **no existe** alta self-service de negocios. No hay tenants, usuarios, auth, panel persistente ni
