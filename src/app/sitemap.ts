@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     pagina('/', 1),
     ...Object.values(LANDINGS).map((l) => pagina(l.ruta, 0.9)),
+    pagina('/campo', 0.9),
     pagina('/proyectos', 0.8),
     pagina('/armar', 0.8),
     pagina('/nosotros', 0.7),
