@@ -50,6 +50,13 @@ export const PRIVACIDAD: TextoLegal = {
       ],
     },
     {
+      titulo: 'Sistemas para protectoras y entidades',
+      parrafos: [
+        'En los sistemas que armamos para protectoras, clubes y otras entidades, la organización es la responsable de los datos de sus adoptantes, socios y voluntarios (Ley de Protección de Datos Personales). Webya los trata solo por cuenta de ella y para hacer funcionar el sistema.',
+        'Cada formulario explica para qué se usan los datos, pide solo lo necesario y pide consentimiento. La parte pública muestra animales y campañas, nunca datos de personas: esos datos los ve solo el equipo autorizado de la organización. Para ver, corregir o borrar tus datos, escribile a la organización o a nosotros.',
+      ],
+    },
+    {
       titulo: 'Cookies',
       parrafos: [
         'Guardamos en tu navegador solo lo necesario para recordar tu borrador y tu preferencia de tema. No usamos cookies de publicidad.',
