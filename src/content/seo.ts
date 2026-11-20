@@ -3,7 +3,8 @@
  * Lo que se ve en la pestaña, en Google y en la vista previa de WhatsApp/Instagram.
  */
 import { MARCA } from './home';
-import { NOSOTROS, ZONA as ZONA_PAGINA } from './paginas';
+import { NOSOTROS } from './paginas';
+import { LOCALIDADES } from './zona';
 import { SERVICIOS, type Servicio } from './servicios';
 
 /** Del sitio entero (app/layout.tsx). */
@@ -43,13 +44,16 @@ export const SEO_MARCA = {
 } as const;
 
 /** Zona de atención para schema.org: cada localidad de /zona, con su provincia. */
-const ZONA_LD = ZONA_PAGINA.areas.flatMap((a) =>
-  a.localidades.map((l) => ({
-    '@type': 'City',
-    name: l,
-    containedInPlace: { '@type': 'State', name: a.provincia },
-  })),
-);
+const ZONA_LD = LOCALIDADES.map((l) => ({
+  '@type': 'City',
+  name: l.nombre,
+  geo: { '@type': 'GeoCoordinates', latitude: l.lat, longitude: l.lng },
+  containedInPlace: {
+    '@type': 'State',
+    name: l.provincia,
+    containedInPlace: { '@type': 'Country', name: 'Argentina' },
+  },
+}));
 
 const id = (url: string, frag: string) => `${url}/#${frag}`;
 
