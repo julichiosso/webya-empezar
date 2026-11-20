@@ -1,10 +1,15 @@
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
-import { CTA, HERO, MARCA, RUBROS_HOME, RUTAS } from '@/content/home';
+import { MENSAJE_CONTACTO } from '@/content/configurador';
+import { CTA, HERO, MARCA, RUTAS } from '@/content/home';
+import { AVISO_HERO } from '@/content/mockups';
+import { PROYECTOS } from '@/content/proyectos';
 import { AvisosDiferidos } from './AvisosDiferidos';
 import { Boton } from './Boton';
 import { Buscador } from './Buscador';
-import { PROYECTOS } from '@/content/proyectos';
+import { enlaceContacto } from './contacto';
+import { Tilde, WhatsApp } from './Iconos';
+import { PantallaTurnero, Telefono } from './Pantallas';
 import { TituloPalabras } from './TituloPalabras';
 
 const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
@@ -13,100 +18,111 @@ const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
 const EN_PRODUCCION = PROYECTOS.filter((p) => p.estado === 'produccion');
 
 /**
- * Hero de la home: una idea, dos CTA y, al lado (abajo en el celular), "Elegí tu rubro": cada rubro
- * abre su demo. Todo entra en la primera pantalla. Debajo, una sola franja con la zona de atención.
+ * El producto como protagonista: el turnero con la agenda del día y, encima, el aviso que le llega al
+ * dueño cuando alguien reserva. Todo dibujado en el servidor: no suma JavaScript.
+ */
+function ProductoHero() {
+  const P = AVISO_HERO;
+  return (
+    <div
+      className="relative mx-auto w-full max-w-[16rem] lg:max-w-[19rem]"
+      role="img"
+      aria-label={P.alt}
+    >
+      <Telefono>
+        <PantallaTurnero paso={5} />
+      </Telefono>
+      <div aria-hidden="true" className="e-push tono-claro">
+        <span className="e-push-icono">
+          <Tilde />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="flex justify-between gap-2 text-ed-muted">
+            <span>{P.app}</span>
+            <span>{P.cuando}</span>
+          </span>
+          <span className="block font-semibold">{P.titulo}</span>
+          <span className="block truncate">{P.texto}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Hero de la home. En cinco segundos: la marca (Creá. Digitalizá. Crecé.), qué armamos y para quién,
+ * qué hacer ahora (buscar, armar, escribir) y por qué confiar (negocios reales y la zona). A la
+ * derecha, el producto funcionando; en el celular asoma abajo e invita a seguir.
  */
 export function HeroInicio() {
+  const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
-    <section className="tono-oscuro" aria-labelledby="titulo-hero">
+    <section className="tono-oscuro overflow-hidden" aria-labelledby="titulo-hero">
       <AvisosDiferidos enProduccion={EN_PRODUCCION.length} />
-      <div className="e-wrap grid grid-cols-12 gap-x-6 pt-7 pb-7 lg:items-center lg:gap-x-12 lg:pt-16 lg:pb-14">
-        <div className="col-span-12 lg:col-span-7">
+      <div className="e-wrap grid grid-cols-12 pt-7 lg:items-center lg:gap-x-12 lg:pt-14 lg:pb-12">
+        <div className="col-span-12 min-w-0 lg:col-span-7">
           <TituloPalabras
             as="h1"
             id="titulo-hero"
             lineas={HERO.titulo}
             alCargar
-            className="e-display e-hero-compacto max-w-[17ch]"
+            className="e-lema"
           />
           <p
             // Sin animación de entrada: es el LCP de la home y se pinta en el primer cuadro.
-            className="e-lead mt-4 max-w-[40ch] text-ed-muted lg:mt-6"
+            className="e-lead mt-5 max-w-[38ch] text-ed-muted lg:mt-7"
           >
             {HERO.bajada}
           </p>
-          <div className="flex flex-col">
-            <div
-              className="e-hero-aparece relative z-20 order-2 mt-6 max-w-[34rem] lg:order-1 lg:mt-8"
-              style={aparece(2)}
+          <div
+            className="e-hero-aparece relative z-20 mt-6 max-w-[34rem] lg:mt-8"
+            style={aparece(2)}
+          >
+            <Buscador />
+          </div>
+          {/* En el celular y la tablet las dos acciones viven en la barra fija de abajo, a mano del pulgar. */}
+          <div className="e-hero-aparece mt-6 hidden gap-3 lg:flex" style={aparece(3)}>
+            <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
+            <Boton
+              href={contacto.href}
+              variante="secundario"
+              externo
+              icono={contacto.canal === 'whatsapp' ? <WhatsApp /> : false}
             >
-              <Buscador />
-            </div>
-            <div
-              className="e-hero-aparece order-1 mt-5 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3 lg:order-2 lg:mt-7"
-              style={aparece(3)}
-            >
-              <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
-              <Boton href={RUTAS.demos} variante="secundario" externo icono={false}>
-                {CTA.verDemo}
-              </Boton>
-            </div>
+              {CTA.escribinos}
+            </Boton>
+          </div>
+          <div
+            className="e-hero-aparece e-chico mt-6 space-y-1 text-ed-muted lg:mt-8"
+            style={aparece(4)}
+          >
+            <p>
+              {HERO.confianza}{' '}
+              {EN_PRODUCCION.map((p, i) => (
+                <span key={p.id}>
+                  {i === 0 ? null : i === EN_PRODUCCION.length - 1 ? ` ${HERO.y} ` : ', '}
+                  <Link
+                    href={`${RUTAS.proyectos}/${p.id}`}
+                    className="e-link e-link-nav text-ed-fg"
+                  >
+                    {p.cliente}
+                  </Link>
+                </span>
+              ))}
+            </p>
+            <p className="flex flex-wrap items-center gap-x-3">
+              <span>{MARCA.zona}</span>
+              <Link href={RUTAS.zona} className="e-link text-ed-fg">
+                {HERO.verZona}
+              </Link>
+            </p>
           </div>
         </div>
-        <div className="e-hero-aparece col-span-12 mt-7 lg:col-span-5 lg:mt-0" style={aparece(3)}>
-          <p className="e-rotulo text-ed-muted">{HERO.rubros}</p>
-          <ul className="mt-2">
-            {RUBROS_HOME.map((r) => (
-              <li key={r.id} className="">
-                <a
-                  href={r.href}
-                  target="_blank"
-                  rel="noopener"
-                  aria-label={HERO.rubroAria(r.nombre, r.sistema)}
-                  className="e-fila group relative flex min-h-12 items-center gap-4 rounded-xl py-2 active:opacity-60 lg:min-h-16"
-                >
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[0.9375rem] leading-tight font-medium lg:text-[1.0625rem]">
-                      {r.nombre}
-                    </span>
-                    <span className="mt-0.5 block truncate text-[0.75rem] text-ed-muted lg:text-[0.8125rem]">
-                      {r.ejemplo}
-                    </span>
-                  </span>
-                  <span className="e-fila-rol e-chico hidden shrink-0 text-ed-muted sm:inline-grid">
-                    <span>{r.sistema}</span>
-                    <span aria-hidden="true" className="font-medium text-ed-fg">
-                      {HERO.probar}
-                    </span>
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className="e-wrap">
-        <div className="e-chico flex flex-col gap-2 py-4 text-ed-muted lg:flex-row lg:items-center lg:justify-between">
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span>{MARCA.zona}</span>
-            <Link href={RUTAS.zona} className="e-link text-ed-fg">
-              {HERO.verZona}
-            </Link>
-          </p>
-          <p>
-            {HERO.confianza}{' '}
-            {EN_PRODUCCION.map((p, i) => (
-              <span key={p.id}>
-                {i > 0 ? ' · ' : null}
-                <Link
-                  href={`${RUTAS.proyectos}#proyecto-${p.id}`}
-                  className="e-link e-link-nav text-ed-fg"
-                >
-                  {p.cliente}
-                </Link>
-              </span>
-            ))}
-          </p>
+        <div
+          className="e-hero-aparece e-hero-producto col-span-12 mt-9 min-w-0 lg:col-span-5 lg:mt-0"
+          style={aparece(3)}
+        >
+          <ProductoHero />
         </div>
       </div>
     </section>
