@@ -2,6 +2,30 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## V2 · Ronda de animaciones y limpieza visual
+
+- **Espacio vacío arriba del header**: lo causaba el link oculto "Saltar al contenido", que con la regla nueva
+  `.e-btn { position: relative }` volvía al flujo (45 px). Ahora tiene `.e-saltar` (absoluto).
+- **Barra de anuncios** arriba de todo, en todas las páginas: una novedad por vez, que sube y se va (pausa con
+  el mouse o el foco, quieta con movimiento reducido, las ocultas son `inert`). Sin viñetas ni etiquetas. El
+  descuento del primer mes lo pidió Julián; el texto no dice porcentaje hasta que él lo defina.
+- **Sin líneas horizontales** en el sitio: fuera las reglas de las secciones, los separadores de listas, el
+  borde del header y del pie. La separación sale del espacio y de las superficies. Las demos conservan la
+  interfaz de su producto.
+- **Sin flechas** en links, listas y tarjetas. Cada cosa tiene su propio gesto al pasar el mouse:
+  - links: el subrayado se retira hacia la derecha y se vuelve a dibujar desde la izquierda;
+  - rubros del hero: una superficie llena la fila de izquierda a derecha y la etiqueta rueda a "Ver demo";
+  - tarjetas del bento: su dibujo se vuelve a trazar;
+  - tarjetas de campo y botones: el texto rueda.
+- **"Creá. Digitalizá. Crecé."**: la tinta recorre cada palabra de izquierda a derecha (clip-path sobre una
+  copia llena) en lugar del cambio de color de contorno a lleno, que se veía gris a mitad de camino.
+- **Proyectos en la home: vitrina interactiva** en lugar de cuatro teléfonos iguales. Los nombres en grande a
+  un lado y un solo escenario con la pantalla del activo (sin marco de teléfono), que cambia con fundido y
+  acercamiento y se recorre sola. Avanza sola con un anillo vectorial que marca el tiempo; al pasar el mouse o
+  tocar un nombre se queda en ese.
+- **Avión del botón Enviar**: se dibuja entero, trazo a trazo, al pasar el mouse (cuerpo y después el pliegue
+  del ala); mientras envía despega dejando una estela que se traza detrás y se vuelve a dibujar en su lugar.
+
 ## V2 · Ajustes después de la revisión de Julián
 
 - **Título**: "Técnico Universitario en Programación (UTN)" (la carrera es la Tecnicatura Universitaria en
