@@ -1,6 +1,7 @@
 import { getEnv, type ServerEnv } from '../env';
 import { FileLeadRepository } from './file';
 import { MemoryLeadRepository } from './memory';
+import { consultaNeon, PostgresLeadRepository } from './postgres';
 import { SupabaseLeadRepository } from './supabase';
 import type { LeadRepository } from './types';
 
@@ -12,6 +13,8 @@ export function crearRepositorio(env: ServerEnv): LeadRepository {
     case 'supabase':
       // env.ts ya garantizó que ambas variables existen.
       return new SupabaseLeadRepository(env.SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!);
+    case 'postgres':
+      return new PostgresLeadRepository(consultaNeon(env.DATABASE_URL!));
     case 'memory':
       return new MemoryLeadRepository();
     case 'file':
