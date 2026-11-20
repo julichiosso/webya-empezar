@@ -879,53 +879,25 @@ dd {
 }
 
 /*
- * Fondos vectoriales de marca (secciones claras): el wordmark en contorno de 1 px o una frase de Webya en
- * letra hueca, enormes, recortados y muy tenues, detrás del contenido. Sin color ni degradados a la vista.
+ * Fondo técnico de las secciones claras: grilla de 1 px cada 72 px con una marca "+" en cada intersección,
+ * como un plano. Muy tenue, sin color; una máscara la desvanece hacia los bordes (no se ve un degradado,
+ * solo se apaga la grilla).
  */
 .e-con-fondo {
   position: relative;
   isolation: isolate;
   overflow: hidden;
 }
-.e-fondo-logo,
-.e-fondo-frase {
+.e-fondo-grilla {
   position: absolute;
+  inset: 0;
   z-index: -1;
   pointer-events: none;
-  color: var(--e-fg);
-  opacity: 0.1;
-}
-.e-fondo-logo {
-  top: clamp(1.5rem, 4vw, 4rem);
-  right: -5%;
-  width: min(60rem, 95%);
-  height: auto;
-}
-.e-fondo-frase {
-  left: clamp(1rem, 4vw, 3rem);
-  right: clamp(1rem, 4vw, 3rem);
-  bottom: clamp(0.75rem, 2vw, 2rem);
-  width: calc(100% - 2 * clamp(1rem, 4vw, 3rem));
-  height: auto;
-  max-width: 84rem;
-  margin-inline: auto;
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  opacity: 0.16;
-}
-.e-fondo-frase text {
-  font-family: var(--font-geist), system-ui, sans-serif;
-}
-.e-fondo-arriba {
-  top: clamp(1.5rem, 4vw, 4rem);
-  bottom: auto;
-}
-/* Con la frase abajo, la sección deja su lugar: nunca se monta sobre el contenido. */
-.e-con-fondo:has(> .e-fondo-frase:not(.e-fondo-arriba)) {
-  padding-bottom: calc(clamp(3rem, 5.5vw, 6rem) + 7vw);
-}
-.e-con-fondo:has(> .e-fondo-arriba) {
-  padding-top: calc(clamp(3rem, 5.5vw, 6rem) + 5vw);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cpath d='M0 .5h72M.5 0v72' fill='none' stroke='%230a0a0a' stroke-opacity='.45'/%3E%3Cpath d='M.5 -4.5v10M-4.5 .5h10' fill='none' stroke='%230a0a0a' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-position: -0.5px -0.5px;
+  opacity: 0.09;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, #000 0%, transparent 78%);
 }
 
 /*
@@ -1341,4 +1313,28 @@ html:not(.mo) .e-vidriera {
   .e-enviado-tilde path {
     stroke-dashoffset: 0;
   }
+}
+
+/*
+ * Casos: las composiciones se cruzan con un fundido corto (180 ms, sin saltos: todas tienen la misma
+ * proporción), el texto del activo entra apenas y el indicador del índice se desliza a la fila elegida.
+ */
+.e-capa-caso {
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+.e-capa-caso[data-activo] {
+  opacity: 1;
+}
+.e-texto-caso {
+  animation: e-aparecer 260ms var(--ease-editorial) both;
+}
+.e-indicador-caso {
+  top: 0;
+  transition:
+    transform 420ms var(--ease-editorial),
+    height 420ms var(--ease-editorial);
+}
+.e-tarjeta-caso[open] > div {
+  animation: e-aparecer 320ms var(--ease-editorial) both;
 }
