@@ -3,16 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { cn } from '@/components/ui/clases';
-import {
-  ARMABLES,
-  BUSCADOR as B,
-  DESTINOS_BUSQUEDA,
-  LARGO_BUSQUEDA,
-  RUBRO_POR_PALABRA,
-} from '@/content/buscador';
-import { RUTAS } from '@/content/home';
+import { BUSCADOR as B, LARGO_BUSQUEDA } from '@/content/buscador';
 import { track } from '@/lib/analytics';
-import { buscar, detectarRubro, limpiarConsulta } from '@/lib/busqueda';
+import { limpiarConsulta } from '@/lib/busqueda';
+import type * as Indice from './buscador-indice';
+
+type IndiceBuscador = typeof Indice;
 import { enlaceContacto } from './contacto';
 import { Cerrar, WhatsApp } from './Iconos';
 
@@ -57,6 +53,19 @@ export function Buscador() {
   const [activo, setActivo] = useState(0);
   const [enFoco, setEnFoco] = useState(false);
   const [ejemplo, setEjemplo] = useState(0);
+  const [indice, setIndice] = useState<IndiceBuscador | null>(null);
+  const pedido = useRef(false);
+
+  /** El índice se pide la primera vez que se acerca o toca el campo (y llega antes de terminar de escribir). */
+  const cargarIndice = () => {
+    if (pedido.current) return;
+    pedido.current = true;
+    import('./buscador-indice')
+      .then((m) => setIndice(m))
+      .catch(() => {
+        pedido.current = false;
+      });
+  };
 
   // Con el campo vacío y sin foco, rotan ejemplos de cómo escribir. Quieto si se pidió menos movimiento.
   useEffect(() => {
@@ -71,9 +80,9 @@ export function Buscador() {
   const consulta = texto.trim();
   const opciones = useMemo<Opcion[]>(() => {
     if (consulta.length < 2) return [];
-    const encontrados = buscar(DESTINOS_BUSQUEDA, consulta, 4);
-    const rubro = detectarRubro(consulta, RUBRO_POR_PALABRA);
-    const armable = encontrados.find((d) => ARMABLES.includes(d.id));
+    const encontrados = indice ? indice.buscar(indice.DESTINOS_BUSQUEDA, consulta, 4) : [];
+    const rubro = indice ? indice.detectarRubro(consulta, indice.RUBRO_POR_PALABRA) : null;
+    const armable = indice ? encontrados.find((d) => indice.ARMABLES.includes(d.id)) : undefined;
     return [
       ...encontrados,
       ...(armable
@@ -82,7 +91,7 @@ export function Buscador() {
               id: `armar-${armable.id}`,
               titulo: B.armar(armable.titulo),
               texto: B.armarTexto,
-              href: rubro ? RUTAS.armarCaso(armable.id, rubro) : RUTAS.armarTipo(armable.id),
+              href: indice!.hrefArmar(armable.id, rubro),
               rubro: rubro ?? '',
             },
           ]
@@ -95,7 +104,7 @@ export function Buscador() {
         externo: true,
       },
     ];
-  }, [consulta]);
+  }, [consulta, indice]);
   const mostrar = abierto && opciones.length > 0;
 
   const ir = (o: Opcion | undefined) => {
@@ -145,11 +154,14 @@ export function Buscador() {
             value={texto}
             placeholder={enFoco ? B.placeholder : ''}
             onChange={(e) => {
+              cargarIndice();
               setTexto(limpiarConsulta(e.target.value, LARGO_BUSQUEDA));
               setActivo(0);
               setAbierto(true);
             }}
+            onPointerEnter={cargarIndice}
             onFocus={() => {
+              cargarIndice();
               setEnFoco(true);
               setAbierto(true);
               // En el celular, el buscador sube para dejar lugar a las sugerencias.

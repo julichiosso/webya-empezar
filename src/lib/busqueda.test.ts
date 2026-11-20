@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { DESTINOS_BUSQUEDA, LARGO_BUSQUEDA, RUBRO_POR_PALABRA } from '@/content/buscador';
+import { LARGO_BUSQUEDA } from '@/content/buscador';
+import { DESTINOS_BUSQUEDA, RUBRO_POR_PALABRA } from '@/content/buscador-destinos';
 import { RUBROS_CONFIG } from '@/content/configurador';
 import { buscar, detectarRubro, distancia, limpiarConsulta, normalizar } from './busqueda';
 

@@ -16,6 +16,8 @@ test('flechas para elegir y Escape para cerrar', async ({ page }, info) => {
   await page.goto('/', { waitUntil: 'networkidle' });
   const caja = page.getByRole('combobox', { name: BUSCADOR.etiqueta });
   await caja.fill('pizzeria');
+  // El índice llega con el primer toque: se espera la primera sugerencia, como haría una persona.
+  await expect(page.getByRole('option').first()).toContainText('Pedidos');
   await caja.press('ArrowDown');
   await expect(page.getByRole('option').nth(1)).toHaveAttribute('aria-selected', 'true');
   await caja.press('Escape');
