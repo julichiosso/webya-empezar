@@ -77,3 +77,29 @@ export function zonaSuave(puntos: readonly Punto[], margen: number, vueltas = 4)
   const r = (n: number) => Math.round(n * 10) / 10;
   return `${anillo.map((q, i) => `${i ? 'L' : 'M'}${r(q[0])} ${r(q[1])}`).join('')}Z`;
 }
+
+/** Rectángulo de vista (viewBox) de un mapa. */
+export interface Vista {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/**
+ * El encuadre justo para unos puntos: su caja más un margen (para nombres y zonas), sin salirse del mapa.
+ * Así el mapa usa todo el ancho del celular en lo que importa, en lugar de mostrar campo vacío.
+ */
+export function encuadre(
+  puntos: readonly (readonly [number, number])[],
+  margen: { x: number; y: number },
+  limites: { ancho: number; alto: number },
+): Vista {
+  const xs = puntos.map((p) => p[0]);
+  const ys = puntos.map((p) => p[1]);
+  const x = Math.max(0, Math.min(...xs) - margen.x);
+  const y = Math.max(0, Math.min(...ys) - margen.y);
+  const w = Math.min(limites.ancho, Math.max(...xs) + margen.x) - x;
+  const h = Math.min(limites.alto, Math.max(...ys) + margen.y) - y;
+  return { x: Math.round(x), y: Math.round(y), w: Math.round(w), h: Math.round(h) };
+}

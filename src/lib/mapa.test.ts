@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { MAPA_PROYECCION as P } from '@/config/zona-geo';
 import { LOCALIDADES, principalDe } from '@/content/zona';
-import { distanciaKm, envolvente, proyectar, zonaSuave } from './mapa';
+import { distanciaKm, encuadre, envolvente, proyectar, zonaSuave } from './mapa';
 
 describe('mapa de la zona', () => {
   it('todas las localidades caen dentro del encuadre, con lugar para el nombre', () => {
@@ -32,5 +32,19 @@ describe('mapa de la zona', () => {
     const d = zonaSuave(h, 5);
     expect(d.startsWith('M')).toBe(true);
     expect(d.endsWith('Z')).toBe(true);
+  });
+});
+
+describe('encuadre', () => {
+  it('abraza los puntos con su margen y no se sale del mapa', () => {
+    const v = encuadre(
+      [
+        [100, 200],
+        [300, 500],
+      ],
+      { x: 50, y: 40 },
+      { ancho: 320, alto: 1000 },
+    );
+    expect(v).toEqual({ x: 50, y: 160, w: 270, h: 380 });
   });
 });
