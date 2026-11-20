@@ -80,3 +80,12 @@ test('cada página tiene un solo h1 y ningún link dice "(se abre en otra pesta�
     expect(visibles, ruta).toBe(0);
   }
 });
+
+test('manifiesto web con nombre, colores e íconos', async ({ request }) => {
+  const r = await request.get('/manifest.webmanifest');
+  expect(r.ok()).toBe(true);
+  const m = await r.json();
+  expect(m.name).toBe('Webya');
+  expect(m.theme_color).toMatch(/^#/);
+  expect(m.icons.length).toBeGreaterThan(0);
+});
