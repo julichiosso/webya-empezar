@@ -56,49 +56,29 @@ export const NOSOTROS = {
 
 export const ZONA = {
   seo: {
-    titulo: 'Zona de atención: San Jorge y zona, San Francisco y alrededores',
+    titulo: 'Webya · Sistemas, tiendas y turnos en San Francisco y San Jorge',
     descripcion:
-      'Atendemos negocios de San Jorge y la zona (Santa Fe) y de San Francisco y alrededores (Córdoba). Si estás más lejos, trabajamos a distancia.',
+      'Sistemas, tiendas online y turnos para negocios de San Francisco (Córdoba), San Jorge (Santa Fe) y toda la zona. Atendemos en persona o por WhatsApp.',
   },
-  rotulo: 'Zona de atención',
-  titulo: ['Cerca tuyo.'],
-  bajada:
-    'Atendemos en San Jorge y zona, y en San Francisco y alrededores. Nos juntamos en persona o lo resolvemos por WhatsApp, como te quede mejor.',
-  mapaAlt:
-    'Mapa de la zona de atención: San Jorge y alrededores, en Santa Fe, y San Francisco y alrededores, en Córdoba.',
-  provincias: { cordoba: 'Córdoba', santaFe: 'Santa Fe' },
-  ciudades: { sanJorge: 'San Jorge', sanFrancisco: 'San Francisco' },
-  pueblos: {
-    sastre: 'Sastre',
-    mariaJuana: 'María Juana',
-    pellegrini: 'Carlos Pellegrini',
-    piamonte: 'Piamonte',
-    trebol: 'El Trébol',
+  titulo: ['San Francisco', 'y San Jorge.'],
+  bajada: 'Y toda la zona. Sistemas, tiendas y turnos para los negocios de la región.',
+  /** Los números salen del manifiesto de la zona (nunca a mano). */
+  datos: (zonas: number | string, localidades: number | string) =>
+    `${zonas} zonas · ${localidades} localidades · En persona o por WhatsApp`,
+  mapaAlt: (localidades: string) =>
+    `Mapa de la zona de atención, con el límite entre Santa Fe y Córdoba, las rutas principales y las localidades donde atendemos: ${localidades}.`,
+  provincias: { cordoba: 'CÓRDOBA', santaFe: 'SANTA FE' },
+  distancia: (km: number | string) => `${km} km en línea recta`,
+  lista: {
+    ayuda: 'Tocá una localidad para verla en el mapa.',
+    aria: (zona: string) => `Localidades de ${zona}`,
   },
-  areas: [
-    {
-      nombre: 'San Jorge y zona',
-      provincia: 'Santa Fe',
-      localidades: [
-        'San Jorge',
-        'Sastre',
-        'Crispi',
-        'Traill',
-        'María Juana',
-        'Carlos Pellegrini',
-        'Piamonte',
-        'Landeta',
-        'Cañada Rosquín',
-        'El Trébol',
-      ],
-    },
-    {
-      nombre: 'San Francisco y alrededores',
-      provincia: 'Córdoba',
-      localidades: ['San Francisco', 'Frontera', 'Josefina', 'Devoto', 'Freyre', 'Porteña'],
-    },
-  ],
-  lejos: '¿Estás más lejos? Trabajamos a distancia igual: escribinos y lo vemos.',
+  seleccion: {
+    texto: (localidad: string) => `${localidad}: atendemos en persona o por WhatsApp.`,
+    link: 'Escribinos',
+    mensaje: (localidad: string) =>
+      `Hola, soy de ${localidad} y quiero armar un sistema para mi negocio.`,
+  },
 } as const;
 
 export const PROYECTOS_PAGINA = {
