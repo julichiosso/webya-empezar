@@ -1,10 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { cn } from '@/components/ui/clases';
-import { BUSCADOR as B, DESTINOS_BUSQUEDA, LARGO_BUSQUEDA } from '@/content/buscador';
-import { buscar, limpiarConsulta } from '@/lib/busqueda';
+import {
+  ARMABLES,
+  BUSCADOR as B,
+  DESTINOS_BUSQUEDA,
+  LARGO_BUSQUEDA,
+  RUBRO_POR_PALABRA,
+} from '@/content/buscador';
+import { RUTAS } from '@/content/home';
+import { track } from '@/lib/analytics';
+import { buscar, detectarRubro, limpiarConsulta } from '@/lib/busqueda';
 import { enlaceContacto } from './contacto';
 import { Cerrar, WhatsApp } from './Iconos';
 
@@ -14,6 +22,7 @@ interface Opcion {
   texto: string;
   href: string;
   externo?: boolean;
+  rubro?: string;
 }
 
 function Lupa() {
@@ -46,13 +55,38 @@ export function Buscador() {
   const [texto, setTexto] = useState('');
   const [abierto, setAbierto] = useState(false);
   const [activo, setActivo] = useState(0);
+  const [enFoco, setEnFoco] = useState(false);
+  const [ejemplo, setEjemplo] = useState(0);
+
+  // Con el campo vacío y sin foco, rotan ejemplos de cómo escribir. Quieto si se pidió menos movimiento.
+  useEffect(() => {
+    if (texto || enFoco) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = setInterval(() => {
+      if (!document.hidden) setEjemplo((i) => (i + 1) % B.ejemplosRotan.length);
+    }, 3200);
+    return () => clearInterval(t);
+  }, [texto, enFoco]);
 
   const consulta = texto.trim();
   const opciones = useMemo<Opcion[]>(() => {
     if (consulta.length < 2) return [];
-    const encontrados = buscar(DESTINOS_BUSQUEDA, consulta);
+    const encontrados = buscar(DESTINOS_BUSQUEDA, consulta, 4);
+    const rubro = detectarRubro(consulta, RUBRO_POR_PALABRA);
+    const armable = encontrados.find((d) => ARMABLES.includes(d.id));
     return [
       ...encontrados,
+      ...(armable
+        ? [
+            {
+              id: `armar-${armable.id}`,
+              titulo: B.armar(armable.titulo),
+              texto: B.armarTexto,
+              href: rubro ? RUTAS.armarCaso(armable.id, rubro) : RUTAS.armarTipo(armable.id),
+              rubro: rubro ?? '',
+            },
+          ]
+        : []),
       {
         id: 'escribinos',
         titulo: B.escribinos(consulta),
@@ -67,6 +101,7 @@ export function Buscador() {
   const ir = (o: Opcion | undefined) => {
     if (!o) return;
     setAbierto(false);
+    track('buscador_elegido', { destino: o.id, rubro: o.rubro ?? '' });
     if (o.externo) window.open(o.href, '_blank', 'noopener');
     else router.push(o.href);
   };
@@ -91,7 +126,7 @@ export function Buscador() {
         <label htmlFor={`${id}-caja`} className="e-rotulo mb-2.5 block text-ed-muted">
           {B.etiqueta}
         </label>
-        <div className="e-buscador flex min-h-14 items-center gap-3 rounded-2xl bg-ed-surface px-4">
+        <div className="e-buscador relative flex min-h-14 items-center gap-3 rounded-2xl bg-ed-surface px-4">
           <Lupa />
           <input
             ref={caja}
@@ -108,22 +143,36 @@ export function Buscador() {
             enterKeyHint="search"
             maxLength={LARGO_BUSQUEDA}
             value={texto}
-            placeholder={B.placeholder}
+            placeholder={enFoco ? B.placeholder : ''}
             onChange={(e) => {
               setTexto(limpiarConsulta(e.target.value, LARGO_BUSQUEDA));
               setActivo(0);
               setAbierto(true);
             }}
             onFocus={() => {
+              setEnFoco(true);
               setAbierto(true);
               // En el celular, el buscador sube para dejar lugar a las sugerencias.
               if (window.innerWidth < 1024)
                 caja.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
             }}
-            onBlur={() => setTimeout(() => setAbierto(false), 120)}
+            onBlur={() => {
+              setEnFoco(false);
+              setTimeout(() => setAbierto(false), 120);
+            }}
             onKeyDown={teclas}
             className="min-w-0 flex-1 scroll-mt-24 bg-transparent py-3 text-base placeholder:text-ed-muted focus:outline-none [&::-webkit-search-cancel-button]:hidden"
           />
+          {!texto && !enFoco ? (
+            // El ejemplo que rota: decorativo (el campo ya tiene su etiqueta), no recibe toques.
+            <span
+              key={ejemplo}
+              aria-hidden="true"
+              className="e-buscador-ejemplo pointer-events-none absolute inset-y-0 right-4 left-12 flex items-center truncate text-base text-ed-muted"
+            >
+              {B.ejemplosRotan[ejemplo]}
+            </span>
+          ) : null}
           {texto ? (
             <button
               type="button"

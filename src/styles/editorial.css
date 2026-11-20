@@ -1564,3 +1564,14 @@ html:not(.mo) .e-vidriera {
     margin-top: 0;
   }
 }
+
+/* Buscador: el ejemplo que rota entra desde abajo, corto y sin rebote. */
+@keyframes e-ejemplo-entra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.5rem, 0);
+  }
+}
+.mo .e-buscador-ejemplo {
+  animation: e-ejemplo-entra 420ms var(--ease-editorial) both;
+}
