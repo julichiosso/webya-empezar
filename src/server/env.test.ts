@@ -108,6 +108,17 @@ describe('loadEnv', () => {
     expect(env.DATABASE_URL).toContain('neon.tech');
   });
 
+  it('con Neon y Supabase cargados a la vez, usa Neon', () => {
+    const env = loadEnv({
+      NODE_ENV: 'production',
+      VERCEL: '1',
+      DATABASE_URL: 'postgresql://u:p@ep-x.neon.tech/neondb',
+      SUPABASE_URL: 'https://viejo.supabase.co',
+      SUPABASE_SERVICE_ROLE_KEY: 'clave-vieja-de-supabase-larga',
+    });
+    expect(env.LEAD_REPOSITORY).toBe('postgres');
+  });
+
   it('acepta POSTGRES_URL si es la que cargó Vercel', () => {
     const env = loadEnv({
       NODE_ENV: 'production',

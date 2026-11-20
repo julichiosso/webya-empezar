@@ -86,7 +86,9 @@ export function loadEnv(source: Record<string, string | undefined> = process.env
   // haya credenciales en el .env: probar el formulario no tiene que escribir en la base real por
   // accidente. Pasó con un `next start` local para medir: los E2E mandaron leads a la base real.
   // En Vercel sin base, 'memory': el contacto no se guarda, pero el aviso lo lleva completo.
-  const porDefectoDesplegado = tieneSupabase ? 'supabase' : databaseUrl ? 'postgres' : 'memory';
+  // Neon primero: es la base elegida. Supabase queda como alternativa si no hay Neon (unas claves viejas
+  // de Supabase cargadas en Vercel no pueden ganarle a la base que sí está conectada).
+  const porDefectoDesplegado = databaseUrl ? 'postgres' : tieneSupabase ? 'supabase' : 'memory';
   const repositorio =
     e.LEAD_REPOSITORY ?? (desplegado ? porDefectoDesplegado : produccion ? 'file' : 'memory');
 
