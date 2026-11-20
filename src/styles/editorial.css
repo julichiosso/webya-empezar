@@ -1369,7 +1369,7 @@ html:not(.mo) .e-vidriera {
 /*
  * Mapa de /zona (fondo claro): zonas en dos tonos planos (sin borde), límite provincial continuo y tenue,
  * rutas finas, localidades con jerarquía (las dos ciudades más grandes). La localidad elegida se marca.
- * En el celular solo se leen las dos ciudades; el resto, al elegirlas.
+ * Encuadre justo a las localidades: en el celular se leen todas.
  */
 .e-mapa-zona-a {
   fill: color-mix(in srgb, var(--e-fg) 7%, transparent);
@@ -1437,11 +1437,13 @@ html:not(.mo) .e-vidriera {
   fill: var(--e-fg);
   font-weight: 600;
 }
+/* En el celular el mapa viene encuadrado a las localidades: se leen todas. Las rutas, sin nombre. */
 @media (max-width: 47.99rem) {
-  .e-mapa-punto:not(.e-mapa-principal):not(.e-mapa-activo) .e-mapa-nombre,
-  .e-mapa-ruta-nombre,
-  .e-mapa-distancia {
+  .e-mapa-ruta-nombre {
     display: none;
+  }
+  .e-mapa-nombre {
+    font-size: 17px;
   }
 }
 
@@ -1468,14 +1470,6 @@ html:not(.mo) .e-vidriera {
 }
 .mo .e-lema .e-palabra > span {
   animation-delay: calc(var(--i, 0) * 150ms);
-}
-
-/* El producto en el hero: en el celular asoma la parte de arriba del teléfono e invita a scrollear. */
-@media (max-width: 63.99rem) {
-  .e-hero-producto {
-    height: clamp(13rem, 56vw, 19rem);
-    overflow: hidden;
-  }
 }
 
 /* El aviso que le llega al dueño: plano, borde de 1 px, entra desde arriba de la pantalla del teléfono. */
@@ -1516,19 +1510,6 @@ html:not(.mo) .e-vidriera {
 }
 .mo .e-push {
   animation: e-push-entra 600ms var(--ease-editorial) 1.5s both;
-}
-
-/* Escenas de la semana: el "cuándo" con la tinta que lo recorre, a un tamaño que entra en tres columnas. */
-.e-manifiesto-palabra.e-escena-cuando {
-  font-size: clamp(2.25rem, 1.3rem + 2.2vw, 3.25rem);
-}
-.e-escena-item + .e-escena-item {
-  margin-top: 2.75rem;
-}
-@media (min-width: 48rem) {
-  .e-escena-item + .e-escena-item {
-    margin-top: 0;
-  }
 }
 
 /* Buscador: el ejemplo que rota entra desde abajo, corto y sin rebote. */
@@ -1613,14 +1594,91 @@ html[data-teclado] .e-barra-celular {
   }
 }
 
-/* Escenas en el celular: una por bloque, con aire entre una y otra (sin imán: con alturas cortas salta). */
-@media (max-width: 47.99rem) {
-  .e-escena-item + .e-escena-item {
-    margin-top: 3.5rem;
-  }
-}
-
 /* La barra del configurador en el celular sube con el teclado (iOS y Android) y respeta el safe-area. */
 .e-config-barra {
   bottom: var(--teclado, 0px);
+}
+
+/* Mini mapa de zonas del hero (fondo oscuro): dos tonos planos, el límite tenue y los puntos. */
+.e-mini-zona-a {
+  fill: color-mix(in srgb, var(--e-fg) 26%, transparent);
+}
+.e-mini-zona-b {
+  fill: color-mix(in srgb, var(--e-fg) 40%, transparent);
+}
+.e-mini-zona-nombre {
+  fill: var(--e-fg);
+  font-size: 62px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.e-mini-zona-limite {
+  fill: none;
+  stroke: var(--e-fg);
+  stroke-opacity: 0.35;
+  stroke-width: 3;
+}
+.e-mini-zona-punto {
+  fill: var(--e-fg);
+}
+.e-mini-zona .e-link-texto {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 320ms var(--ease-editorial);
+}
+.e-mini-zona:hover .e-link-texto,
+.e-mini-zona:focus-visible .e-link-texto {
+  background-size: 100% 1px;
+}
+
+/*
+ * Celular: el scroll mueve las piezas (scroll-driven, sin JavaScript). Cada bloque sube y se asienta a
+ * medida que entra, atado al dedo: si la persona vuelve, retrocede. Los teléfonos llegan con un giro
+ * mínimo. Solo transform y opacity; nada con movimiento reducido ni en navegadores sin soporte (ahí queda
+ * la entrada de siempre).
+ */
+@supports (animation-timeline: view()) {
+  @media (max-width: 63.99rem) and (prefers-reduced-motion: no-preference) {
+    .mo [data-reveal] {
+      transition: none;
+      animation: e-scroll-entra linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 26%;
+    }
+    .mo .e-tel {
+      animation: e-scroll-tel linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 38%;
+    }
+    .mo .e-celda {
+      animation: e-scroll-celda linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 30%;
+    }
+  }
+}
+@keyframes e-scroll-entra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 2.5rem, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes e-scroll-tel {
+  from {
+    transform: translate3d(0, 3rem, 0) scale(0.9) rotate(-2.5deg);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes e-scroll-celda {
+  from {
+    transform: scale(0.94);
+  }
+  to {
+    transform: none;
+  }
 }
