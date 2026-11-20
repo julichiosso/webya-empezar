@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 import { BARRA_DEMOS, getDemo, type DemoInfo } from '@/content/demos/hub';
 import { track } from '@/lib/analytics';
+import { TextoBoton, TrazoBoton } from './Boton';
 import { enlaceContacto } from './contacto';
 import { EnUso } from './EnUso';
 import { WhatsApp } from './Iconos';
@@ -110,7 +111,8 @@ export function BarraDemo({
         </Link>
         <span className="hidden md:block">
           <a href={d.cta.href} onClick={cta} className="e-btn e-btn-primario e-btn-chico">
-            {d.cta.texto}
+            <TrazoBoton />
+            <TextoBoton>{d.cta.texto}</TextoBoton>
           </a>
         </span>
       </div>
@@ -135,7 +137,8 @@ export function BarraDemo({
           {d.enUso ? <EnUso proyecto={d.enUso} className="mt-5" /> : null}
           <div className="mt-5 flex items-center gap-3">
             <a href={d.cta.href} onClick={cta} className="e-btn e-btn-primario e-btn-chico">
-              {d.cta.texto}
+              <TrazoBoton />
+              <TextoBoton>{d.cta.texto}</TextoBoton>
             </a>
             <button
               type="button"

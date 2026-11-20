@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useRef } from 'react';
 import { CONFIGURADOR, RUBROS_CONFIG, modulosDe } from '@/content/configurador';
+import { TrazoBoton } from '@/components/marketing/editorial/Boton';
 import { enlaceContacto } from '@/components/marketing/editorial/contacto';
 import { SERVICIOS, type TipoId } from '@/content/servicios';
 import { track } from '@/lib/analytics';
@@ -210,9 +211,7 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-ed-line pt-5">
             <a
               href={r.demo?.href ?? '/demos'}
-              {...(r.demo?.href.startsWith('/proyectos')
-                ? {}
-                : { target: '_blank', rel: 'noopener' })}
+              {...(r.demo?.href.startsWith('/demos') ? { target: '_blank', rel: 'noopener' } : {})}
               className="e-link e-chico font-medium"
               onClick={() => track('configurador_demo', { rubro: estado.rubro ?? '' })}
             >
@@ -336,12 +335,14 @@ function BotonEnviar({
   if (!href) {
     return (
       <button type="button" aria-disabled="true" onClick={alFaltar} className={clases}>
+        <TrazoBoton />
         {texto}
       </button>
     );
   }
   return (
     <a href={href} target="_blank" rel="noopener" onClick={onEnviar} className={clases}>
+      <TrazoBoton />
       {texto}
     </a>
   );
