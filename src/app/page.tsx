@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Bento } from '@/components/marketing/editorial/Bento';
 import { Cierre } from '@/components/marketing/editorial/Cierre';
+import { Escenas } from '@/components/marketing/editorial/Escenas';
 import { HeroInicio } from '@/components/marketing/editorial/Hero';
-import { Manifiesto } from '@/components/marketing/editorial/Manifiesto';
 import { NosotrosInicio } from '@/components/marketing/editorial/Nosotros';
 import { Pagina } from '@/components/marketing/editorial/Pagina';
 import { ProyectosInicio } from '@/components/marketing/editorial/Proyectos';
@@ -36,8 +36,9 @@ const LD = jsonLdNegocio({
 });
 
 /**
- * Home hub: en la primera pantalla, qué hacemos, las dos acciones y la demo de cada rubro. Después, el
- * bento que lleva a cada producto, los proyectos reales, quiénes somos y el cierre. Lo largo (cada
+ * Home hub: en la primera pantalla, la marca, qué armamos, el buscador y las dos acciones. Después, las
+ * escenas de la semana, el bento que lleva a cada producto, los proyectos reales, quiénes somos y el
+ * cierre. Lo largo (cada
  * producto, el configurador, la zona) vive en su propia página.
  */
 export default function Inicio() {
@@ -45,7 +46,7 @@ export default function Inicio() {
     <Pagina>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializarLd(LD) }} />
       <HeroInicio />
-      <Manifiesto />
+      <Escenas />
       <Bento />
       <ProyectosInicio />
       <NosotrosInicio />
