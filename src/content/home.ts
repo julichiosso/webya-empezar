@@ -191,7 +191,7 @@ export const PROYECTOS_UI = {
 /** Quiénes somos, resumido para la home (la versión completa vive en /nosotros). */
 export const NOSOTROS_HOME = {
   texto:
-    'Webya es Julián Chiosso, desarrollador de San Jorge y Técnico Superior en Programación (UTN). Trabajamos directo con cada cliente: el que te escucha es el que programa tu sistema.',
+    'Webya es Julián Chiosso, desarrollador de San Jorge y Técnico Universitario en Programación (UTN). Trabajamos directo con cada cliente: el que te escucha es el que programa tu sistema.',
   link: 'Conocé cómo trabajamos',
   fotoAlt: 'Julián Chiosso, de Webya',
 } as const;

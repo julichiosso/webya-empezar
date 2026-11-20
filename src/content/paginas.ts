@@ -7,14 +7,14 @@ export const NOSOTROS = {
   seo: {
     titulo: 'Quiénes somos',
     descripcion:
-      'Webya es Julián Chiosso, desarrollador de San Jorge y Técnico Superior en Programación (UTN). Trabajamos directo con cada negocio, de la primera charla al soporte.',
+      'Webya es Julián Chiosso, desarrollador de San Jorge y Técnico Universitario en Programación (UTN). Trabajamos directo con cada negocio, de la primera charla al soporte.',
   },
   rotulo: 'Quiénes somos',
   titulo: ['Detrás de Webya', 'hay una persona de acá.'],
   presentacion:
-    'Soy Julián Chiosso, desarrollador de San Jorge y Técnico Superior en Programación (UTN). Armo sistemas para negocios de la zona y trabajo directo con cada cliente: el que te escucha es el que programa tu sistema.',
+    'Soy Julián Chiosso, desarrollador de San Jorge y Técnico Universitario en Programación (UTN). Armo sistemas para negocios de la zona y trabajo directo con cada cliente: el que te escucha es el que programa tu sistema.',
   firma: 'Julián Chiosso',
-  cargo: 'Desarrollador · Técnico Superior en Programación (UTN)',
+  cargo: 'Desarrollador · Técnico Universitario en Programación (UTN)',
   fotoAlt: 'Julián Chiosso, de Webya',
   /**
    * Foto de Julián. Mientras no esté (null), se muestran sus iniciales. Para cargarla: subir
