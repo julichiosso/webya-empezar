@@ -66,11 +66,14 @@ test('la home entra en la primera pantalla: el lema, las dos acciones y el busca
   expect(buscador!.y, 'buscador').toBeLessThan(vh);
 });
 
-test('la zona aparece una sola vez en la home, con el link al mapa', async ({ page }) => {
+test('la home muestra dónde atendemos con el mapa de zonas, que lleva a /zona', async ({
+  page,
+}) => {
   await page.goto('/');
-  const zona = 'Atención en San Jorge y zona · San Francisco y alrededores';
-  await expect(page.getByText(zona)).toHaveCount(1);
-  await page.getByRole('link', { name: 'Ver el mapa' }).click();
+  const zona = page.getByRole('link', { name: /¿Sos de San Jorge, San Francisco o la zona\?/ });
+  await expect(zona).toHaveCount(1);
+  await expect(zona.getByRole('img', { name: /Mapa chico de las dos zonas/ })).toBeVisible();
+  await zona.click();
   await expect(page).toHaveURL(/\/zona$/);
   await expect(page.getByRole('img', { name: /Mapa de la zona/ })).toBeVisible();
 });
