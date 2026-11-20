@@ -60,11 +60,20 @@
   color: var(--e-fg);
 }
 
-.tono-oscuro :focus-visible,
-.tono-claro :focus-visible {
+.tono-oscuro :focus-visible:not(input, textarea, select),
+.tono-claro :focus-visible:not(input, textarea, select) {
   outline: 2px solid var(--e-foco);
   outline-offset: 3px;
   border-radius: 2px;
+}
+/*
+ * Campos de texto: sin anillo de foco. El foco se ve en el propio borde, que pasa de gris a blanco (o negro
+ * en lo claro): sobrio y con contraste suficiente.
+ */
+.tono-oscuro :is(input, textarea, select):focus-visible,
+.tono-claro :is(input, textarea, select):focus-visible {
+  outline: none;
+  border-color: var(--e-fg);
 }
 
 .tono-oscuro ::selection {
@@ -1004,4 +1013,65 @@ html:not(.mo) .e-vidriera {
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
     mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   }
+}
+
+/*
+ * Avioncito del botón Enviar: planea apenas en reposo, se levanta al pasar el mouse y, mientras se envía,
+ * sale volando por arriba a la derecha y vuelve a entrar por abajo. Solo transform y opacity.
+ */
+.e-avion-caja {
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.e-avion {
+  transition: transform 420ms var(--ease-editorial);
+}
+.mo .e-avion {
+  animation: e-planeo 3.2s ease-in-out infinite;
+}
+@keyframes e-planeo {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(1px, -1.5px, 0);
+  }
+}
+@media (hover: hover) {
+  .e-btn:hover .e-avion {
+    animation: none;
+    transform: translate3d(2px, -2px, 0) rotate(-6deg);
+  }
+}
+.e-btn[data-enviando] .e-avion {
+  animation: e-vuelo 950ms cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+@keyframes e-vuelo {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  45% {
+    transform: translate3d(16px, -16px, 0) scale(0.7);
+    opacity: 0;
+  }
+  46% {
+    transform: translate3d(-16px, 16px, 0) scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+/* Mientras envía, el botón conserva su color (el avión es el que avisa que está trabajando). */
+.e-btn-primario[data-enviando] {
+  background: var(--e-invert);
+  color: var(--e-invert-fg);
+  border-color: transparent;
+  cursor: progress;
 }
