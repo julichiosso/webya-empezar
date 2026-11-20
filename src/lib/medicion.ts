@@ -35,5 +35,22 @@ export function iniciarMedicion(): () => void {
     return v ? [[k, v]] : [];
   });
   track('pagina_vista', { ruta: window.location.pathname, ...Object.fromEntries(utm) });
-  return quitar;
+
+  // Cualquier link a WhatsApp: se registra dónde estaba (la sección), nunca el mensaje.
+  const alTocar = (e: MouseEvent) => {
+    const a = e.target instanceof Element ? e.target.closest('a[href*="wa.me"]') : null;
+    if (!a) return;
+    const zona = a.closest('section[aria-labelledby], nav[aria-label], footer, aside');
+    const donde =
+      zona?.getAttribute('aria-labelledby') ??
+      zona?.getAttribute('aria-label') ??
+      zona?.tagName.toLowerCase() ??
+      'pagina';
+    track('whatsapp_click', { donde: donde.slice(0, 40) });
+  };
+  document.addEventListener('click', alTocar, { capture: true });
+  return () => {
+    quitar();
+    document.removeEventListener('click', alTocar, { capture: true });
+  };
 }
