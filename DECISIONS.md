@@ -2,6 +2,43 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## Protectoras y entidades (2026-11-20)
+
+- **Rubro, no tipo nuevo**: protectoras va como rubro `entidades` sobre el sistema "a medida" (no se tocó `TipoId`,
+  que alimenta bento, landings y JSON-LD). El configurador recibe `?tipo=medida&rubro=entidades&modulos=…`.
+- **Organización ficticia "Refugio Ventarrón"**: se buscó el nombre y no aparece ninguna organización real. Se
+  descartó "Huellas del Sur" por ser un nombre genérico que puede existir en redes, y cualquier nombre cercano
+  a la protectora de referencia de San Francisco. **Nada de la referencia se usa ni se nombra** (ni en proyectos):
+  queda pendiente que Julián confirme si es cliente y si autoriza mostrarla.
+- **Módulos con estado honesto**: "Base lista" solo para lo que se arma sobre piezas que ya funcionan en clientes
+  (catálogo con fotos desde el celular, turnos con cupo, tienda, Mercado Pago, aviso al celular, respuestas por
+  WhatsApp, panel). Socios y cuotas, donaciones y campañas, apadrinamiento, tránsito y rendición de cuentas van
+  "A medida". El débito automático, explícitamente a medida.
+- **Identidad cálida solo dentro de la demo** (`brand/demos/protectora.css`: crema, tinta cálida, terracota; títulos
+  con la serif del sistema, sin descargar fuentes). El sitio sigue en blanco y negro.
+- **Ilustraciones propias en SVG** (perro y gato sentados), sin fotos de animales reales.
+- **Privacidad en la demo**: la vista pública nunca muestra personas; la solicitud pide consentimiento; los
+  recordatorios abren `wa.me/?text=` **sin número** (WhatsApp deja elegir el contacto: la demo no le escribe a
+  nadie). Nueva sección en `/privacidad` (responsable: la organización; Webya, por cuenta de ella). **Revisar con
+  un profesional.**
+- **Imagen para redes**: la ficha se dibuja en SVG y se convierte a PNG en el navegador (canvas), sin subir nada.
+- **La landing vive en `features/demo/protectora`**: usa las ilustraciones de la demo y las capas no permiten que
+  `components/marketing` importe de `features`. `PasosTurnero` ahora acepta otras pantallas (se reutiliza).
+- **Sin precios ni descuentos para organizaciones**: bloque "Escribinos y armamos una propuesta acorde".
+
+## V3 · Ajustes de Julián (2026-11-20)
+
+- **Hero**: Julián prefirió los rubros al costado antes que el celular con el turnero. Volvieron los rubros (ahora
+  con "Protectoras y entidades") y la franja "Creá. Digitalizá. Crecé." debajo del hero (las escenas de la semana
+  se sacaron). El lema sigue como titular.
+- **Dónde atendemos, visible**: mini mapa real de las dos zonas (servidor, 0 JS) con "¿Sos de San Jorge, San
+  Francisco o la zona?" y la cantidad de localidades del manifiesto; todo el bloque lleva a `/zona`.
+- **/zona en el celular**: el mapa se encuadra a las localidades (`encuadre()` en `lib/mapa.ts`) y se leen todas.
+- **Scroll en el celular**: cada bloque sube y se asienta atado al dedo (`animation-timeline: view()`, sin JS,
+  sin efecto con movimiento reducido); los teléfonos llegan con un giro mínimo.
+- **Presupuesto de JS**: el índice del buscador se descarga al primer toque del campo, y los links secundarios
+  del hero (mini mapa, casos) no se precargan.
+
 ## V3 · Cierre: impacto en 5 segundos (2026-11-20)
 
 - **Contactos sin Supabase nuevo**: Julián ya tiene proyectos grandes en Supabase y no quiere otro. La base pasa a
