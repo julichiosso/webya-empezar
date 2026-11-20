@@ -14,9 +14,24 @@ Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda 
   opcional; el sitio usa el archivo original.
 - **Botones sin flechas**: el botón es texto (y el ícono de WhatsApp cuando corresponde). Las flechas quedan solo
   en links de texto y filas de listas, donde indican que se navega.
-- **Fondos delicados en las secciones claras**: puntos finos (qué armamos, producto), grilla de líneas
-  (proyectos, contacto) y curvas de nivel (quiénes somos, catálogo). Negro al 6–11 %, sin color; una máscara los
-  desvanece hacia los bordes. Las curvas son un SVG propio generado (`scripts/fondos.mjs`, 12,8 KB).
+- **Fondos de marca en las secciones claras**: el wordmark de Webya en contorno de 1 px (se dibuja al entrar en
+  pantalla) o una de las frases de Webya en letra hueca ("Creá. Digitalizá. Crecé.", "Tu negocio. Nuestra
+  tecnología.", "Web · Sistemas · Automatización", las de la bio de Instagram). Son SVG: la frase se ajusta
+  exacto al ancho (`textLength`), nunca se corta. Negro al 10–16 %, sin color. Reemplazan a los puntos, la
+  grilla y las curvas de la ronda anterior, que no decían nada de Webya.
+- **Franja "Creá. Digitalizá. Crecé."** en la home, debajo del hero: cada palabra arranca hueca y se llena al
+  entrar en pantalla.
+- **Botones con gesto vectorial**: al pasar el mouse, un trazo de 1 px dibuja el contorno del botón por fuera
+  y el texto rueda hacia arriba. En todos los botones del sitio, las demos y el configurador.
+- **Campo y agro** (`/campo`, en el menú, el hero, el pie y el configurador): turnos de descarga, pedidos de
+  insumos, maquinaria y repuestos, contratistas, veterinaria rural y a medida. Cada caso lleva al producto que
+  lo resuelve. No se inventan clientes del agro: la página dice que se arman sobre los sistemas que ya andan.
+- **"Te escribimos nosotros"** en el cierre de todas las páginas: WhatsApp (obligatorio), negocio y qué
+  necesita. Una sola request a `/api/leads` (lead parcial: validación, rate limit, trampa anti-spam y aviso al
+  instante por Telegram o mail, ya existentes). Si falla, el mismo texto sale por WhatsApp. No manda `origen`:
+  sumar uno nuevo pide una migración de Supabase (queda como pendiente).
+- **Prueba al toque en la primera pantalla**: "Funcionando en Micio's Pizzería · Joyería Petrucci · Lorena
+  Almagro", con link a cada proyecto.
 - **Vidriera en el hero de cada producto**: los trabajos hechos en teléfonos que desfilan despacio, con el del
   producto primero; cada captura se recorre sola de arriba a abajo. Solo transform, pausa fuera de pantalla y al
   pasar el mouse; con movimiento reducido queda quieta y se desliza a mano.
