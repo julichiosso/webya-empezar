@@ -109,3 +109,22 @@ test('/empezar (link viejo de Instagram) lleva a la home', async ({ page }) => {
   await page.goto('/empezar');
   await expect(page).toHaveURL(/\/$/);
 });
+
+test('plan B: después de enviar se puede copiar el mensaje, mandarlo por mail o dejar el número', async ({
+  page,
+  context,
+}) => {
+  await abrir(page, '/armar?tipo=turnero&rubro=estetica');
+  // WhatsApp se abre en otra pestaña: se cierra apenas aparece y se vuelve al configurador.
+  context.on('page', (p) => p.close().catch(() => undefined));
+  await botonEnviar(page).click();
+  const planB = armar(page).getByRole('heading', { name: '¿No se abrió WhatsApp?' });
+  await expect(planB).toBeVisible();
+  const mensaje = armar(page).getByRole('textbox', { name: 'Tu pedido, listo para copiar' });
+  await expect(mensaje).toHaveValue(/Quiero armar: Turnero con seña\./);
+  const mail = armar(page).getByRole('link', { name: 'Enviarnos por mail' });
+  expect(await mail.getAttribute('href')).toMatch(
+    /^mailto:.+body=Hola%2C%20vengo%20de%20webya\.dev/,
+  );
+  await expect(armar(page).getByRole('textbox', { name: /WhatsApp/ })).toBeVisible();
+});
