@@ -2,6 +2,22 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## V2 · Ajustes después de la revisión de Julián
+
+- **Título**: "Técnico Universitario en Programación (UTN)" (la carrera es la Tecnicatura Universitaria en
+  Programación), en el sitio y en el JSON-LD.
+- **Sin numeración "01 /" en las secciones**: era una etiqueta decorativa que no informa (la V2 pide sacarlas).
+- **Rubros del hero sin cortar**: ejemplos más cortos, que entran completos en 360 px.
+- **Logo limpio**: el SVG que mandó Julián es el mismo calco que ya usaba el sitio (bordes en escalera). Lo
+  suavicé con `scripts/suavizar-logo.mjs`: simplifica cada contorno (Ramer–Douglas–Peucker), redondea con
+  curvas los giros suaves y deja rectas las esquinas marcadas; descarta los restos de pocos píxeles del calco.
+  Resultado en `public/webya-logo-limpio.svg` (1,5 KB, antes 7,9 KB) y en los trazos del header, el pie, la
+  pantalla de carga, el favicon y las imágenes OG y de Apple. El calco original queda en `public/webya-logo.svg`.
+- **Cada demo con "Escribinos"** (WhatsApp con un mensaje que dice qué demo probó) además de "Quiero esto para mi
+  negocio", como pide la V2.
+- **CSS en línea, medido y descartado otra vez**: bajó el FCP pero el LCP no mejoró y duplica el CSS en el payload
+  de React. Sí se sacó la animación de entrada de la bajada del hero, que es el elemento LCP.
+
 ## V2 · Fase 7 — SEO y accesibilidad
 
 - **Dominio canónico fijo en el código** (`https://webya.dev` en `site-config.ts`), no en una variable de entorno:
