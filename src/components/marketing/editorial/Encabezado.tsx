@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LogoCorchetes } from '@/brand/logo/LogoCorchetes';
+import { LogoWebya } from '@/brand/logo/LogoWebya';
 import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { CTA, HEADER, MARCA, RUTAS } from '@/content/home';
 import { Boton } from './Boton';
@@ -28,7 +28,7 @@ export function Encabezado() {
           aria-label={MARCA.inicio}
           className="-m-2 inline-flex min-h-11 items-center p-2"
         >
-          <LogoCorchetes decorativo className="h-[1.375rem] w-auto" />
+          <LogoWebya decorativo className="h-6 w-auto" />
         </Link>
         <nav aria-label={HEADER.navegacion} className="hidden lg:block">
           <ul className="flex items-center gap-7">

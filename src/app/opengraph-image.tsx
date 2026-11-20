@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { LOGO_CORCHETES_VIEWBOX } from '@/brand/logo/LogoCorchetes';
+import { LOGO_ENCUADRE } from '@/brand/logo/LogoWebya';
 import { LOGO_TRAZOS } from '@/brand/logo/trazos';
 import { EDITORIAL } from '@/brand/tokens/colores';
 import { SEO_SITIO } from '@/content/seo';
@@ -35,15 +35,11 @@ export default async function Image() {
         fontFamily: 'Geist',
       }}
     >
-      <svg viewBox={LOGO_CORCHETES_VIEWBOX} width={258} height={60}>
+      <svg viewBox={LOGO_ENCUADRE} width={200} height={60}>
         <g fill={blanco} fillRule="evenodd">
           {LOGO_TRAZOS.map((t) => (
             <path key={t.letra} d={t.d} />
           ))}
-        </g>
-        <g fill="none" stroke={blanco} strokeWidth={40}>
-          <polyline points="100,58 40,135 100,212" />
-          <polyline points="1105,58 1165,135 1105,212" />
         </g>
       </svg>
       <div

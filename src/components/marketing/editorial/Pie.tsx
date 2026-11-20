@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LogoCorchetes } from '@/brand/logo/LogoCorchetes';
+import { LogoWebya } from '@/brand/logo/LogoWebya';
 import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { enlaceContacto } from '@/components/marketing/editorial/contacto';
 import { CTA, HEADER, PIE } from '@/content/home';
@@ -96,7 +96,7 @@ export function Pie() {
         </div>
       </div>
       <div className="e-wrap" aria-hidden="true">
-        <LogoCorchetes decorativo className="h-auto w-[min(100%,34rem)]" />
+        <LogoWebya decorativo className="h-auto w-[min(100%,34rem)]" />
       </div>
       <div className="e-wrap py-8">
         <p className="e-chico text-ed-muted">{PIE.derechos(new Date().getFullYear())}</p>

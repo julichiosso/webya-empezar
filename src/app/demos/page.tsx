@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { LogoCorchetes } from '@/brand/logo/LogoCorchetes';
+import { LogoWebya } from '@/brand/logo/LogoWebya';
 import { Flecha } from '@/components/marketing/editorial/Iconos';
 import { DEMOS, HUB_DEMOS } from '@/content/demos/hub';
 import { RUBROS_HOME } from '@/content/home';
@@ -21,7 +21,7 @@ export default function Demos() {
     <div className="tono-oscuro min-h-svh bg-ed-bg text-ed-fg">
       <header className="flex h-12 items-center justify-between border-b border-ed-line px-4 md:px-6">
         <Link href="/" aria-label={HUB_DEMOS.volver} className="flex min-h-11 items-center">
-          <LogoCorchetes decorativo className="h-5 w-auto" />
+          <LogoWebya decorativo className="h-5 w-auto" />
         </Link>
         <Link href="/" className="e-link e-link-nav e-chico text-ed-muted hover:text-ed-fg">
           {HUB_DEMOS.volver}
