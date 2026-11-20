@@ -1,126 +1,125 @@
+import type { CSSProperties } from 'react';
+import { MAPA_LIMITE, MAPA_PROYECCION as P, MAPA_RUTAS } from '@/config/zona-geo';
+import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { CTA, RUTAS } from '@/content/home';
-import { ZONA as ZONA_UI } from '@/content/paginas';
+import { ZONA as Z } from '@/content/paginas';
+import {
+  LOCALIDADES,
+  ORDEN_ZONAS,
+  ZONAS,
+  datosZona,
+  localidadesDe,
+  principalDe,
+} from '@/content/zona';
+import { distanciaKm, proyectar, zonaSuave } from '@/lib/mapa';
 import { Boton } from './Boton';
+import { enlaceContacto } from './contacto';
+import { WhatsApp } from './Iconos';
+import { MapaZona, type GeometriaMapa, type PuntoMapa } from './MapaZona';
+import { TituloPalabras } from './TituloPalabras';
 
-/**
- * Proyección del mapa: coordenadas reales (grados) a la grilla del SVG, a 4 px por km con la escala de
- * esta latitud (1° de longitud ≈ 94,6 km, 1° de latitud ≈ 111 km). Origen arriba a la izquierda.
- */
-const x = (lon: number) => (lon + 62.45) * 94.6 * 4;
-const y = (lat: number) => (-31.2 - lat) * 111 * 4;
-const KM = 4;
+const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
 
-const SAN_JORGE = { x: x(-61.86), y: y(-31.896) };
-const SAN_FRANCISCO = { x: x(-62.083), y: y(-31.428) };
-
-/** Pueblos de referencia (solo ubicación, para orientarse). */
-const PUEBLOS: readonly { id: keyof typeof ZONA_UI.pueblos; lat: number; lon: number }[] = [
-  { id: 'sastre', lat: -31.767, lon: -61.829 },
-  { id: 'mariaJuana', lat: -31.675, lon: -61.755 },
-  { id: 'pellegrini', lat: -32.049, lon: -61.792 },
-  { id: 'piamonte', lat: -32.145, lon: -61.98 },
-  { id: 'trebol', lat: -32.2, lon: -61.701 },
-];
-
-function Mapa() {
+/** Hero de /zona: las dos ciudades, enormes, y los datos reales de la zona. */
+export function HeroZona() {
+  const d = datosZona();
+  const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
-    <svg
-      viewBox="0 40 400 440"
-      role="img"
-      aria-label={ZONA_UI.mapaAlt}
-      className="h-auto w-full"
-      data-reveal=""
-    >
-      <defs>
-        <pattern id="zona-puntos" width="16" height="16" patternUnits="userSpaceOnUse">
-          <circle cx="1" cy="1" r="1" fill="currentColor" opacity="0.14" />
-        </pattern>
-      </defs>
-      <rect y="40" width="400" height="440" fill="url(#zona-puntos)" />
-
-      {/* Límite entre Córdoba y Santa Fe (aproximado). */}
-      <path
-        d={`M${x(-62.07)} 40 L${x(-62.055)} 200 L${x(-62.04)} 480`}
-        fill="none"
-        stroke="currentColor"
-        strokeOpacity="0.35"
-        strokeDasharray="2 6"
-        strokeWidth="1.5"
-      />
-      <text
-        x="18"
-        y="458"
-        className="fill-current text-[11px] tracking-[0.2em] uppercase"
-        opacity="0.5"
-      >
-        {ZONA_UI.provincias.cordoba}
-      </text>
-      <text
-        x="382"
-        y="66"
-        textAnchor="end"
-        className="fill-current text-[11px] tracking-[0.2em] uppercase"
-        opacity="0.5"
-      >
-        {ZONA_UI.provincias.santaFe}
-      </text>
-
-      {/* Lo que cubre cada zona. */}
-      <circle cx={SAN_JORGE.x} cy={SAN_JORGE.y} r={30 * KM} className="e-zona-area" />
-      <circle cx={SAN_FRANCISCO.x} cy={SAN_FRANCISCO.y} r={20 * KM} className="e-zona-area" />
-
-      {PUEBLOS.map((p) => (
-        <g key={p.id} opacity="0.75">
-          <circle cx={x(p.lon)} cy={y(p.lat)} r="2.5" fill="currentColor" />
-          <text x={x(p.lon) + 7} y={y(p.lat) + 4} className="fill-current text-[11px]">
-            {ZONA_UI.pueblos[p.id]}
-          </text>
-        </g>
-      ))}
-
-      {[
-        { ...SAN_JORGE, nombre: ZONA_UI.ciudades.sanJorge, dx: 12 },
-        { ...SAN_FRANCISCO, nombre: ZONA_UI.ciudades.sanFrancisco, dx: 12 },
-      ].map((c) => (
-        <g key={c.nombre}>
-          <circle cx={c.x} cy={c.y} r="6" className="fill-current" />
-          <circle cx={c.x} cy={c.y} r="6" fill="none" stroke="var(--e-bg)" strokeWidth="2" />
-          <text x={c.x + c.dx} y={c.y - 10} className="fill-current text-[15px] font-semibold">
-            {c.nombre}
-          </text>
-        </g>
-      ))}
-    </svg>
+    <section className="tono-oscuro" aria-labelledby="titulo-hero">
+      <div className="e-wrap pt-10 pb-12 md:pt-20 md:pb-20">
+        <TituloPalabras
+          as="h1"
+          id="titulo-hero"
+          lineas={Z.titulo}
+          alCargar
+          className="e-display max-w-[14ch]"
+        />
+        <p
+          className="e-lead e-hero-aparece mt-6 max-w-[40ch] text-ed-muted md:mt-8"
+          style={aparece(1)}
+        >
+          {Z.bajada}
+        </p>
+        <p className="e-hero-aparece e-chico mt-4 text-ed-muted" style={aparece(2)}>
+          {Z.datos(d.zonas, d.localidades)}
+        </p>
+        <div
+          className="e-hero-aparece mt-7 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3"
+          style={aparece(3)}
+        >
+          <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
+          <Boton
+            href={contacto.href}
+            variante="secundario"
+            externo
+            icono={contacto.canal === 'whatsapp' ? <WhatsApp /> : false}
+          >
+            {CTA.escribinos}
+          </Boton>
+        </div>
+      </div>
+    </section>
   );
 }
 
-/** /zona: el mapa (SVG propio, sin mapas de terceros) y las localidades de cada área. */
-export function ZonaMapa() {
+/** Todo lo que el mapa necesita, calculado acá (servidor) desde el manifiesto y los trazados generados. */
+function geometria(): { geo: GeometriaMapa; puntos: PuntoMapa[] } {
+  const punto = (lat: number, lng: number) => proyectar(P, lat, lng);
+  const puntos = LOCALIDADES.map((l) => {
+    const [x, y] = punto(l.lat, l.lng);
+    return {
+      slug: l.slug,
+      nombre: l.nombre,
+      zona: l.zona,
+      principal: l.principal,
+      etiqueta: l.etiqueta,
+      x,
+      y,
+      whatsapp: enlaceContacto(Z.seleccion.mensaje(l.nombre)).href,
+    };
+  });
+  const zonas = Object.fromEntries(
+    ORDEN_ZONAS.map((z) => [
+      z,
+      zonaSuave(
+        localidadesDe(z).map((l) => punto(l.lat, l.lng)),
+        26,
+      ),
+    ]),
+  ) as GeometriaMapa['zonas'];
+  const sf = principalDe('san-francisco');
+  const sj = principalDe('san-jorge');
+  const a = punto(sf.lat, sf.lng);
+  const b = punto(sj.lat, sj.lng);
+  return {
+    puntos,
+    geo: {
+      ancho: P.ancho,
+      alto: P.alto,
+      limite: MAPA_LIMITE,
+      rutas: MAPA_RUTAS,
+      zonas,
+      union: {
+        d: `M${a[0]} ${a[1]}L${b[0]} ${b[1]}`,
+        medio: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2],
+        km: Math.round(distanciaKm(sf, sj)),
+      },
+      alt: Z.mapaAlt(LOCALIDADES.map((l) => l.nombre).join(', ')),
+    },
+  };
+}
+
+/** El mapa y las listas de localidades, conectados. */
+export function SeccionMapaZona() {
+  const { geo, puntos } = geometria();
   return (
-    <section className="tono-claro e-seccion" aria-label={ZONA_UI.rotulo}>
-      <div className="e-wrap grid grid-cols-12 gap-x-6 gap-y-10 lg:items-start">
-        <div className="col-span-12 lg:order-2 lg:col-span-6 lg:col-start-7">
-          <div className="mx-auto max-w-[30rem] rounded-3xl border border-ed-line p-3 text-ed-fg sm:p-4 lg:max-w-none">
-            <Mapa />
-          </div>
-        </div>
-        <div className="col-span-12 lg:col-span-5">
-          {ZONA_UI.areas.map((a) => (
-            <div key={a.nombre} className="pt-5 pb-8">
-              <h2 className="e-h3">{a.nombre}</h2>
-              <p className="e-rotulo mt-2 text-ed-muted">{a.provincia}</p>
-              <ul className="e-cuerpo mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-ed-muted">
-                {a.localidades.map((l) => (
-                  <li key={l}>{l}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-          <p className="e-cuerpo pt-5">{ZONA_UI.lejos}</p>
-          <div className="mt-6">
-            <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
-          </div>
-        </div>
+    <section className="tono-claro e-seccion" aria-label={Z.lista.ayuda}>
+      <div className="e-wrap">
+        <MapaZona
+          geo={geo}
+          puntos={puntos}
+          zonas={ORDEN_ZONAS.map((id) => ({ id, ...ZONAS[id] }))}
+        />
       </div>
     </section>
   );
