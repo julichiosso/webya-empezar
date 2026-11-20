@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Fragment, type CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
-import { MOCKUPS } from '@/content/mockups';
+import { AVISO_HERO, MOCKUPS } from '@/content/mockups';
 import { Tilde } from './Iconos';
 
 /**
@@ -466,4 +466,27 @@ export function PantallaProyecto({ mockup }: { mockup: 'pedidos' | 'tienda' | 'w
   if (mockup === 'tienda') return <PantallaTienda />;
   if (mockup === 'web') return <PantallaWeb />;
   return <EstadoFranja />;
+}
+
+/**
+ * El aviso que le llega al dueño cuando alguien reserva y paga la seña: plano, borde de 1 px, entra sobre
+ * la pantalla del teléfono (el contenedor tiene que ser `relative`). Decorativo: el conjunto lleva su alt.
+ */
+export function AvisoPush() {
+  const P = AVISO_HERO;
+  return (
+    <div aria-hidden="true" className="e-push tono-claro">
+      <span className="e-push-icono">
+        <Tilde />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="flex justify-between gap-2 text-ed-muted">
+          <span>{P.app}</span>
+          <span>{P.cuando}</span>
+        </span>
+        <span className="block font-semibold">{P.titulo}</span>
+        <span className="block truncate">{P.texto}</span>
+      </span>
+    </div>
+  );
 }

@@ -2,7 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/components/ui/clases';
-import { PantallasTurneroApiladas, Telefono } from './Pantallas';
+import { AvisoPush, PantallasTurneroApiladas, Telefono } from './Pantallas';
+
+/** En este paso (la seña acreditada) entra el aviso al celular del dueño. */
+const PASO_SENA = 2;
 
 interface Paso {
   rotulo: string;
@@ -94,9 +97,12 @@ export function PasosTurnero({ pasos, etiqueta }: { pasos: readonly Paso[]; etiq
         })}
       </ol>
       <div className="flex justify-center lg:col-span-5 lg:col-start-8">
-        <Telefono etiqueta={etiqueta} className="max-w-[13rem] md:max-w-[16rem]">
-          <PantallasTurneroApiladas />
-        </Telefono>
+        <div className="relative w-full max-w-[13rem] md:max-w-[16rem]">
+          <Telefono etiqueta={etiqueta}>
+            <PantallasTurneroApiladas />
+          </Telefono>
+          {activo === PASO_SENA ? <AvisoPush key={activo} /> : null}
+        </div>
       </div>
     </div>
   );
