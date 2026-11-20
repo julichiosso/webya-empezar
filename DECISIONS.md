@@ -8,11 +8,18 @@ Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda 
   Programación), en el sitio y en el JSON-LD.
 - **Sin numeración "01 /" en las secciones**: era una etiqueta decorativa que no informa (la V2 pide sacarlas).
 - **Rubros del hero sin cortar**: ejemplos más cortos, que entran completos en 360 px.
-- **Logo limpio**: el SVG que mandó Julián es el mismo calco que ya usaba el sitio (bordes en escalera). Lo
-  suavicé con `scripts/suavizar-logo.mjs`: simplifica cada contorno (Ramer–Douglas–Peucker), redondea con
-  curvas los giros suaves y deja rectas las esquinas marcadas; descarta los restos de pocos píxeles del calco.
-  Resultado en `public/webya-logo-limpio.svg` (1,5 KB, antes 7,9 KB) y en los trazos del header, el pie, la
-  pantalla de carga, el favicon y las imágenes OG y de Apple. El calco original queda en `public/webya-logo.svg`.
+- **Logo: el SVG de Julián, tal cual y sin corchetes** ("sin piquitos"). `LogoWebya` dibuja solo la palabra, con
+  el encuadre ajustado a las letras, en el header, el pie, la pantalla de carga (se escriben las cinco letras), el
+  favicon y la imagen para compartir. El suavizado automático (`scripts/suavizar-logo.mjs`) queda como herramienta
+  opcional; el sitio usa el archivo original.
+- **Botones sin flechas**: el botón es texto (y el ícono de WhatsApp cuando corresponde). Las flechas quedan solo
+  en links de texto y filas de listas, donde indican que se navega.
+- **Fondos delicados en las secciones claras**: puntos finos (qué armamos, producto), grilla de líneas
+  (proyectos, contacto) y curvas de nivel (quiénes somos, catálogo). Negro al 6–11 %, sin color; una máscara los
+  desvanece hacia los bordes. Las curvas son un SVG propio generado (`scripts/fondos.mjs`, 12,8 KB).
+- **Vidriera en el hero de cada producto**: los trabajos hechos en teléfonos que desfilan despacio, con el del
+  producto primero; cada captura se recorre sola de arriba a abajo. Solo transform, pausa fuera de pantalla y al
+  pasar el mouse; con movimiento reducido queda quieta y se desliza a mano.
 - **Cada demo con "Escribinos"** (WhatsApp con un mensaje que dice qué demo probó) además de "Quiero esto para mi
   negocio", como pide la V2.
 - **CSS en línea, medido y descartado otra vez**: bajó el FCP pero el LCP no mejoró y duplica el CSS en el payload
