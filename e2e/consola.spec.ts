@@ -8,6 +8,8 @@ for (const ruta of [
   '/tienda',
   '/web',
   '/proyectos',
+  '/proyectos/micios',
+  '/proyectos/canina',
   '/nosotros',
   '/zona',
   '/armar',
