@@ -53,3 +53,29 @@ Escenas (dolor → alivio):
 1. **¿No se abrió WhatsApp?**
 2. ¿Se trabó WhatsApp?
 3. ¿Preferís otro camino?
+
+## Protectoras y entidades
+
+Hero:
+
+1. **Cada animal tiene su historia. Que no se pierda entre mensajes.**
+2. Menos tiempo en el celular. Más tiempo con los animales.
+3. Tu protectora, ordenada desde el celular.
+
+Problema:
+
+1. **Lo que se pierde entre un mensaje y otro.**
+2. Mensajes, cuadernos y grupos: así no se puede.
+3. El tiempo que se va en contestar.
+
+Adopción:
+
+1. **De la ficha al final feliz, en orden.**
+2. Una adopción, paso a paso.
+3. Del "me gusta" al "ya está en casa".
+
+Para quién:
+
+1. **Para las organizaciones que se sostienen con su gente.**
+2. Protectoras, clubes y entidades de la zona.
+3. Para los que hacen todo a pulmón.
