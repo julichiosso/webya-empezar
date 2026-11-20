@@ -19,6 +19,8 @@ for (const ruta of [
   '/demos/turnos',
   '/demos/web',
   '/demos/tienda',
+  '/protectoras',
+  '/demos/protectora',
 ]) {
   test(`${ruta}: consola sin errores ni advertencias`, async ({ page }) => {
     const mensajes: string[] = [];
