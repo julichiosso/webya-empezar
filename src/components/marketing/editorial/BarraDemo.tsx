@@ -6,7 +6,7 @@ import { BARRA_DEMOS, getDemo, type DemoInfo } from '@/content/demos/hub';
 import { track } from '@/lib/analytics';
 import { enlaceContacto } from './contacto';
 import { EnUso } from './EnUso';
-import { Flecha, WhatsApp } from './Iconos';
+import { WhatsApp } from './Iconos';
 
 /**
  * Barra fina de arriba de cada demo: dice que es una demo, abre "qué más hace el sistema real",
@@ -111,7 +111,6 @@ export function BarraDemo({
         <span className="hidden md:block">
           <a href={d.cta.href} onClick={cta} className="e-btn e-btn-primario e-btn-chico">
             {d.cta.texto}
-            <Flecha />
           </a>
         </span>
       </div>
