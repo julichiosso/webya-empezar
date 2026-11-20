@@ -9,7 +9,6 @@ import { siteConfig } from '@/lib/site-config';
 import { CabezaSeccion } from './CabezaSeccion';
 import { FondoMarca } from './FondoMarca';
 import { enlaceContacto } from './contacto';
-import { Flecha } from './Iconos';
 import { ProyectosInicio } from './Proyectos';
 
 /** Retrato de Julián o, mientras falte la foto, sus iniciales en un cuadro prolijo. */
@@ -79,11 +78,11 @@ export function NosotrosPagina() {
             titulo={N.proceso.titulo}
             idTitulo="titulo-proceso"
           />
-          <ol className="mt-8 grid grid-cols-1 border-t border-ed-line sm:grid-cols-2 md:mt-12 lg:grid-cols-4">
+          <ol className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:mt-12 lg:grid-cols-4">
             {N.proceso.pasos.map((p, i) => (
               <li
                 key={p.titulo}
-                className="border-b border-ed-line py-5 sm:pr-6 lg:border-b-0"
+                className="py-5 sm:pr-6"
                 data-reveal=""
                 style={{ '--i': i } as CSSProperties}
               >
@@ -150,7 +149,6 @@ export function NosotrosInicio() {
             <p className="e-lead max-w-[46ch]">{NOSOTROS_HOME.texto}</p>
             <Link href={RUTAS.nosotros} className="e-link e-cuerpo mt-6 font-medium">
               {NOSOTROS_HOME.link}
-              <Flecha />
             </Link>
           </div>
         </div>
