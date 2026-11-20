@@ -39,6 +39,11 @@ export const RUBROS_CONFIG: readonly RubroConfig[] = [
     demo: { href: '/demos/turnos', texto: 'Ver demo de turnos' },
   },
   {
+    id: 'campo',
+    nombre: 'Campo y agro',
+    demo: { href: '/campo', texto: 'Ver sistemas para el campo' },
+  },
+  {
     id: 'servicios',
     nombre: 'Profesional o servicios',
     demo: { href: '/demos/web', texto: 'Ver demo de página web' },
