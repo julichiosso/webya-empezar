@@ -108,7 +108,6 @@ export function Telefono({
             <span className="e-tel-lente" />
           </span>
           <span aria-hidden="true" className="e-tel-inicio" />
-          <span aria-hidden="true" className="e-tel-reflejo" />
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import { CTA, SECCIONES, ZONA_UI } from '@/content/home';
 import { Boton } from './Boton';
 import { CabezaSeccion } from './CabezaSeccion';
@@ -82,16 +81,9 @@ function Mapa() {
       {[
         { ...SAN_JORGE, nombre: ZONA_UI.ciudades.sanJorge, dx: 12 },
         { ...SAN_FRANCISCO, nombre: ZONA_UI.ciudades.sanFrancisco, dx: 12 },
-      ].map((c, i) => (
+      ].map((c) => (
         <g key={c.nombre}>
-          <circle
-            cx={c.x}
-            cy={c.y}
-            r="14"
-            className="e-zona-pulso"
-            style={{ '--i': i } as CSSProperties}
-          />
-          <circle cx={c.x} cy={c.y} r="6" className="fill-lima" />
+          <circle cx={c.x} cy={c.y} r="6" className="fill-current" />
           <circle cx={c.x} cy={c.y} r="6" fill="none" stroke="var(--e-bg)" strokeWidth="2" />
           <text x={c.x + c.dx} y={c.y - 10} className="fill-current text-[15px] font-semibold">
             {c.nombre}
