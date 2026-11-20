@@ -255,12 +255,11 @@ export const CATALOGO = {
  */
 export const VIDRIERA = {
   etiqueta: 'Trabajos hechos',
-  aviso: { proyecto: 'canina', sistema: 'Aviso de nueva reserva' },
-  /** Ids del manifiesto (o "aviso") en el orden en que se muestran, por producto. */
+  /** Ids del manifiesto en el orden en que se muestran, por producto (los que están en construcción no). */
   orden: {
-    turnero: ['aviso', 'canina', 'micios', 'petrucci', 'lorena'],
-    pedidos: ['micios', 'abelardo', 'aviso', 'petrucci', 'lorena'],
-    tienda: ['petrucci', 'micios', 'lorena', 'aviso', 'abelardo'],
-    web: ['lorena', 'petrucci', 'micios', 'aviso', 'abelardo'],
+    turnero: ['canina', 'micios', 'petrucci', 'lorena'],
+    pedidos: ['micios', 'canina', 'petrucci', 'lorena'],
+    tienda: ['petrucci', 'micios', 'lorena', 'canina'],
+    web: ['lorena', 'petrucci', 'micios', 'canina'],
   },
 } as const;
