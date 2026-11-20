@@ -10,7 +10,7 @@ import { dominioDe, getProyecto } from '@/content/proyectos';
  */
 export function EnUso({ proyecto, className }: { proyecto: string; className?: string }) {
   const p = getProyecto(proyecto);
-  const img = p?.imagenes[0];
+  const img = p?.imagenes.mobile;
   if (!p?.url || !img) return null;
   return (
     <div

@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
-import { CTA, FRASES, RUTAS } from '@/content/home';
+import { CTA, RUTAS } from '@/content/home';
 import type { Landing } from '@/content/landings';
 import { getProyecto } from '@/content/proyectos';
 import { Boton } from './Boton';
 import { CabezaSeccion } from './CabezaSeccion';
-import { FondoMarca } from './FondoMarca';
+import { FondoGrilla } from './FondoGrilla';
 import { FlujoPedidos, Telefono } from './Pantallas';
 import { PasosTurnero } from './PasosTurnero';
 
@@ -14,7 +14,7 @@ const PRUEBA: Partial<Record<Landing['tipo'], string>> = { tienda: 'petrucci', w
 
 function Visual({ landing }: { landing: Landing }) {
   if (landing.tipo === 'pedidos') return <FlujoPedidos />;
-  const img = getProyecto(PRUEBA[landing.tipo] ?? '')?.imagenes[0];
+  const img = getProyecto(PRUEBA[landing.tipo] ?? '')?.imagenes.mobile;
   if (!img) return null;
   return (
     <Telefono decorativo={false} colorBarra={img.barra}>
@@ -49,7 +49,7 @@ export function BloqueProducto({ landing }: { landing: Landing }) {
   if (landing.tipo === 'turnero') {
     return (
       <section className="tono-claro e-seccion e-con-fondo" aria-labelledby="titulo-producto">
-        <FondoMarca variante="frase" frase={FRASES.promesa} />
+        <FondoGrilla />
         <div className="e-wrap">
           <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
           <div className="mt-10 md:mt-14">
@@ -72,7 +72,7 @@ export function BloqueProducto({ landing }: { landing: Landing }) {
   }
   return (
     <section className="tono-claro e-seccion e-con-fondo" aria-labelledby="titulo-producto">
-      <FondoMarca variante="frase" frase={FRASES.promesa} />
+      <FondoGrilla />
       <div className="e-wrap">
         <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
         <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-10 md:mt-12">

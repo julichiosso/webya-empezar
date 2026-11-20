@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import { VIDRIERA } from '@/content/landings';
-import { MOCKUPS } from '@/content/mockups';
 import { ESTADO_PROYECTO, getProyecto, type ImagenProyecto } from '@/content/proyectos';
 import { PantallaProyecto, Telefono } from './Pantallas';
 
@@ -23,30 +22,16 @@ const PANTALLA = 2;
 
 function piezas(producto: Producto): Pieza[] {
   return VIDRIERA.orden[producto].flatMap((id): Pieza[] => {
-    if (id === 'aviso') {
-      const p = getProyecto(VIDRIERA.aviso.proyecto);
-      const a = MOCKUPS.turnero.aviso;
-      if (!p) return [];
-      return [
-        {
-          id,
-          cliente: p.cliente,
-          sistema: VIDRIERA.aviso.sistema,
-          estado: ESTADO_PROYECTO[p.estado],
-          img: { src: a.src, ancho: a.ancho, alto: a.alto, alt: a.alt },
-          completa: true,
-        },
-      ];
-    }
     const p = getProyecto(id);
-    if (!p) return [];
+    if (!p || p.estado === 'construccion') return [];
     return [
       {
         id,
         cliente: p.cliente,
         sistema: p.sistema,
         estado: ESTADO_PROYECTO[p.estado],
-        img: p.imagenes[0],
+        img: p.imagenes.mobile,
+        completa: p.imagenes.mobile?.completa,
         mockup: p.mockup,
       },
     ];
