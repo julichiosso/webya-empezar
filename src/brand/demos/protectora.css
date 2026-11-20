@@ -1,0 +1,96 @@
+/*
+ * Demo para protectoras (/demos/protectora): identidad propia de la organización ficticia, cálida y
+ * sobria, para mostrar que el sistema toma la marca de cada entidad. Vive solo dentro de la demo: el sitio
+ * de Webya sigue en blanco y negro. Sin sombras ni degradados. Contrastes de texto ajustados a AA.
+ */
+.pr-paleta {
+  --pr-fondo: #fbf7f1;
+  --pr-papel: #ffffff;
+  --pr-tinta: #2b2420;
+  --pr-tinta-2: #5f544c;
+  --pr-linea: #e8dfd3;
+  --pr-acento: #a84a22;
+  --pr-acento-hover: #8f3e1c;
+  --pr-acento-suave: #f6e6da;
+  --pr-ok: #2f6b3f;
+  --pr-ok-suave: #e4efe5;
+  --pr-arena: #ecdcc4;
+  --pr-salvia: #d8e4d5;
+  --pr-terracota: #f0d2c2;
+  --pr-cielo: #d6e5ee;
+  --pr-serif: ui-serif, Georgia, 'Times New Roman', serif;
+  background: var(--pr-fondo);
+  color: var(--pr-tinta);
+}
+.pr-titulo {
+  font-family: var(--pr-serif);
+  letter-spacing: -0.01em;
+}
+.pr-boton {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  background: var(--pr-acento);
+  padding-inline: 1.25rem;
+  color: #fff;
+  font-weight: 600;
+  transition: background-color 160ms ease;
+}
+.pr-boton:hover {
+  background: var(--pr-acento-hover);
+}
+.pr-boton[aria-disabled='true'] {
+  opacity: 0.5;
+}
+.pr-boton-2 {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--pr-linea);
+  background: var(--pr-papel);
+  padding-inline: 1.25rem;
+  font-weight: 600;
+}
+.pr-campo {
+  width: 100%;
+  min-height: 3rem;
+  border-radius: 0.875rem;
+  border: 1px solid var(--pr-linea);
+  background: var(--pr-papel);
+  padding: 0.625rem 0.875rem;
+  font-size: 1rem;
+}
+.pr-campo:focus-visible {
+  outline: 2px solid var(--pr-acento);
+  outline-offset: 1px;
+}
+.pr-barra {
+  height: 0.5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--pr-linea);
+}
+.pr-barra > span {
+  display: block;
+  height: 100%;
+  background: var(--pr-acento);
+  transform-origin: 0 50%;
+  transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.pr-tono-arena {
+  background: var(--pr-arena);
+}
+.pr-tono-salvia {
+  background: var(--pr-salvia);
+}
+.pr-tono-terracota {
+  background: var(--pr-terracota);
+}
+.pr-tono-cielo {
+  background: var(--pr-cielo);
+}
