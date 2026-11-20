@@ -233,7 +233,7 @@ export function Buscador() {
                 setAbierto(true);
                 caja.current?.focus();
               }}
-              className="min-h-9 rounded-full bg-ed-surface px-3 text-[0.8125rem] text-ed-muted transition-colors hover:text-ed-fg"
+              className="min-h-11 rounded-full bg-ed-surface px-3.5 text-[0.8125rem] text-ed-muted transition-colors hover:text-ed-fg lg:min-h-8 lg:px-3"
             >
               {ej}
             </button>

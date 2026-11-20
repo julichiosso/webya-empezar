@@ -4,12 +4,11 @@ import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { CTA, HERO, MARCA, RUTAS } from '@/content/home';
 import { AVISO_HERO } from '@/content/mockups';
 import { PROYECTOS } from '@/content/proyectos';
-import { AvisosDiferidos } from './AvisosDiferidos';
 import { Boton } from './Boton';
 import { Buscador } from './Buscador';
 import { enlaceContacto } from './contacto';
-import { Tilde, WhatsApp } from './Iconos';
-import { PantallaTurnero, Telefono } from './Pantallas';
+import { WhatsApp } from './Iconos';
+import { AvisoPush, PantallaTurnero, Telefono } from './Pantallas';
 import { TituloPalabras } from './TituloPalabras';
 
 const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
@@ -22,29 +21,16 @@ const EN_PRODUCCION = PROYECTOS.filter((p) => p.estado === 'produccion');
  * dueño cuando alguien reserva. Todo dibujado en el servidor: no suma JavaScript.
  */
 function ProductoHero() {
-  const P = AVISO_HERO;
   return (
     <div
       className="relative mx-auto w-full max-w-[16rem] lg:max-w-[19rem]"
       role="img"
-      aria-label={P.alt}
+      aria-label={AVISO_HERO.alt}
     >
       <Telefono>
         <PantallaTurnero paso={5} />
       </Telefono>
-      <div aria-hidden="true" className="e-push tono-claro">
-        <span className="e-push-icono">
-          <Tilde />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="flex justify-between gap-2 text-ed-muted">
-            <span>{P.app}</span>
-            <span>{P.cuando}</span>
-          </span>
-          <span className="block font-semibold">{P.titulo}</span>
-          <span className="block truncate">{P.texto}</span>
-        </span>
-      </div>
+      <AvisoPush />
     </div>
   );
 }
@@ -58,8 +44,7 @@ export function HeroInicio() {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
     <section className="tono-oscuro overflow-hidden" aria-labelledby="titulo-hero">
-      <AvisosDiferidos enProduccion={EN_PRODUCCION.length} />
-      <div className="e-wrap grid grid-cols-12 pt-7 lg:items-center lg:gap-x-12 lg:pt-14 lg:pb-12">
+      <div className="e-wrap grid grid-cols-12 pt-7 lg:items-center lg:gap-x-12 lg:pt-10 lg:pb-12">
         <div className="col-span-12 min-w-0 lg:col-span-7">
           <TituloPalabras
             as="h1"
@@ -70,18 +55,15 @@ export function HeroInicio() {
           />
           <p
             // Sin animación de entrada: es el LCP de la home y se pinta en el primer cuadro.
-            className="e-lead mt-5 max-w-[38ch] text-ed-muted lg:mt-7"
+            className="e-lead mt-5 max-w-[38ch] text-ed-muted"
           >
             {HERO.bajada}
           </p>
-          <div
-            className="e-hero-aparece relative z-20 mt-6 max-w-[34rem] lg:mt-8"
-            style={aparece(2)}
-          >
+          <div className="e-hero-aparece relative z-20 mt-6 max-w-[34rem]" style={aparece(2)}>
             <Buscador />
           </div>
           {/* En el celular y la tablet las dos acciones viven en la barra fija de abajo, a mano del pulgar. */}
-          <div className="e-hero-aparece mt-6 hidden gap-3 lg:flex" style={aparece(3)}>
+          <div className="e-hero-aparece mt-5 hidden gap-3 lg:flex" style={aparece(3)}>
             <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
             <Boton
               href={contacto.href}
