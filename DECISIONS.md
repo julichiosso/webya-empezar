@@ -2,6 +2,63 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## V2 · /zona: San Francisco y San Jorge
+
+- **Titular con las dos ciudades** ("San Francisco y San Jorge.") en lugar de "Cerca tuyo.": es lo que la gente
+  busca y lo que posiciona. Debajo, "Y toda la zona" y una línea de datos que sale del manifiesto
+  (`2 zonas · 20 localidades · En persona o por WhatsApp`).
+- **Manifiesto de la zona** (`src/content/zona.ts`): cada localidad con provincia, zona, coordenadas y si es
+  principal. De ahí salen el mapa, las listas, el contador, el JSON-LD (`areaServed` con cada `City`, su provincia y
+  sus coordenadas) y las palabras del buscador.
+- **Coordenadas oficiales**: API Georef (datos.gob.ar, IGN), con `scripts/zona-localidades.mjs`, que además mide
+  la distancia real (haversine) a la ciudad principal. San Francisco – San Jorge: 57 km en línea recta.
+- **Alrededores de San Francisco ampliados con criterio de distancia** (50 km o menos; la zona de San Jorge llega
+  a 37 km): se sumaron Quebracho Herrado (19 km), Colonia Iturraspe (24), Colonia Marina (33) y Colonia
+  Prosperidad (35). Se mantuvieron Frontera, Josefina, Devoto, Freyre y Porteña (46). **Para que Julián
+  confirme**: quedaron afuera Brinkmann (62 km), Colonia Vignaud (66), Alicia (68), Las Varillas (78), Morteros (80)
+  y Sacanta (95). Sumarlas es agregar una línea al manifiesto.
+- **Mapa propio, con geografía real y sin librerías de mapas**: `scripts/mapa-zona.mjs` toma el límite entre Santa
+  Fe y Córdoba del **IGN** (servicio WFS `ign:provincia`, CC BY 4.0) y las rutas nacionales 19, 34 y 158 y la
+  provincial 13 de **OpenStreetMap** (Overpass API, © colaboradores de OpenStreetMap, ODbL), los recorta al
+  encuadre, los simplifica y los proyecta (equirectangular con la escala de la latitud media). El resultado es
+  `src/config/zona-geo.ts` (11 KB, muy por debajo de 60 KB). Las localidades se proyectan con la misma fórmula
+  (`lib/mapa.ts`, con tests).
+- **Zonas como forma real, no círculos**: la envolvente convexa de las localidades de cada zona, agrandada y
+  suavizada, en dos tonos planos sin borde. Nada se corta: un test verifica que todas las localidades entran en
+  el encuadre con lugar para su nombre.
+- **Mapa y listas conectados**: pasar el mouse, enfocar o tocar una localidad la marca en los dos lados y muestra
+  "Atendemos en persona o por WhatsApp. Escribinos", con el mensaje "Hola, soy de [localidad]…". En el celular solo
+  se leen las dos ciudades en el mapa y el resto al elegirlas; toda la información está también como texto.
+  La línea San Francisco – San Jorge se dibuja una vez al entrar en pantalla.
+- **Separadores finos en las listas de /zona**: este prompt los pide para dar estructura sin cajas (en el resto
+  del sitio se sacaron las líneas).
+- **Sin páginas por localidad**: serían contenido duplicado (doorway pages) y bajan el SEO. Una sola página
+  fuerte, con todas las localidades como texto real.
+- **Componente del mapa sin `dynamic`**: ya es una isla chica (los trazados vienen calculados del servidor); un
+  `dynamic` no bajaba el JS inicial y sumaba un salto de carga.
+- **Imagen para compartir de /zona** generada con el mismo mapa (`app/zona/opengraph-image.tsx`).
+
+## V2 · Buscador, avisos y lenguaje simple
+
+- **Textos para dueños de negocio de la zona, de cualquier edad**: fuera "PWA", "app instalable",
+  "multi-profesional", "dominio propio", "bot" y "panel de administración". Quedan "se instala en el celular como
+  una aplicación", "varios profesionales", "dirección web propia", "respuestas automáticas por WhatsApp" y
+  "panel para el dueño". Los nombres de producto ("Pedidos online", "Tienda online") se mantienen: son los que la
+  gente busca.
+- **Buscador en el hero** ("¿Qué necesita tu negocio?"): la persona escribe con sus palabras ("turnos para mi
+  peluquería", "vender ropa", "cuánto sale", "acopio") y aparecen sugerencias mientras escribe. Combobox accesible
+  (flechas, Enter, Escape), ejemplos para tocar, y la última opción siempre lleva lo escrito a WhatsApp.
+  Seguridad: la búsqueda es local (sin red ni dependencias, `lib/busqueda.ts` con tests), lo escrito se limpia de
+  caracteres de control y se recorta a 80, React lo muestra como texto (nunca HTML) y el link de WhatsApp lo
+  codifica. Un test e2e pega una etiqueta con `onerror` y verifica que no se ejecuta nada.
+- **En el celular los botones van antes del buscador**: "Armá tu sistema" y "Ver demo" siguen en la primera
+  pantalla; el buscador sube solo al tocarlo, para dejar lugar a las sugerencias.
+- **Avisos al entrar, estilo "isla" del iPhone**: una píldora negra abajo al centro (arriba de la barra en el
+  celular) con tres datos verdaderos, uno por vez: cuántos sistemas funcionan (sale del manifiesto), que se puede
+  probar un sistema real y la zona. Nada de "Fulano acaba de comprar". Una vez por visita, se frena con el mouse,
+  se cierra con una cruz y se anuncia sin interrumpir a lectores de pantalla. Los navegadores automatizados no
+  los ven (`navigator.webdriver`), así no tapan nada en los tests.
+
 ## V2 · Casos de éxito y fondos técnicos
 
 - **Fondos de las secciones claras: grilla técnica** (1 px cada 72 px con una marca "+" en cada intersección, como
