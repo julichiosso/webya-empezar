@@ -24,8 +24,8 @@ export function HeroInicio() {
             className="e-display e-hero-compacto max-w-[17ch]"
           />
           <p
-            className="e-lead e-hero-aparece mt-4 max-w-[40ch] text-ed-muted lg:mt-6"
-            style={aparece(1)}
+            // Sin animación de entrada: es el LCP de la home y se pinta en el primer cuadro.
+            className="e-lead mt-4 max-w-[40ch] text-ed-muted lg:mt-6"
           >
             {HERO.bajada}
           </p>
