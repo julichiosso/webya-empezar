@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { LogoWebya } from '@/brand/logo/LogoWebya';
-import { Flecha } from '@/components/marketing/editorial/Iconos';
 import { DEMOS, HUB_DEMOS } from '@/content/demos/hub';
 import { RUBROS_HOME } from '@/content/home';
 import { metadataPagina } from '../_landing/metadata';
@@ -19,7 +18,7 @@ export const metadata: Metadata = metadataPagina({
 export default function Demos() {
   return (
     <div className="tono-oscuro min-h-svh bg-ed-bg text-ed-fg">
-      <header className="flex h-12 items-center justify-between border-b border-ed-line px-4 md:px-6">
+      <header className="flex h-12 items-center justify-between px-4 md:px-6">
         <Link href="/" aria-label={HUB_DEMOS.volver} className="flex min-h-11 items-center">
           <LogoWebya decorativo className="h-5 w-auto" />
         </Link>
@@ -43,16 +42,15 @@ export default function Demos() {
                 <span className="e-chico mt-2 text-ed-muted">{d.texto}</span>
                 <span className="e-chico mt-5 inline-flex items-center gap-2 font-medium md:mt-auto md:pt-6">
                   {HUB_DEMOS.abrir}
-                  <Flecha />
                 </span>
               </Link>
             </li>
           ))}
         </ul>
         <h2 className="e-rotulo mt-10 text-ed-muted md:mt-14">{HUB_DEMOS.rubros}</h2>
-        <ul className="mt-3 border-t border-ed-line">
+        <ul className="mt-3">
           {RUBROS_HOME.map((r) => (
-            <li key={r.id} className="border-b border-ed-line">
+            <li key={r.id} className="">
               <Link
                 href={r.href}
                 prefetch={false}
@@ -65,7 +63,6 @@ export default function Demos() {
                 <span className="e-chico hidden text-ed-muted group-hover:text-ed-fg sm:block">
                   {r.sistema}
                 </span>
-                <Flecha className="text-ed-muted group-hover:text-ed-fg" />
               </Link>
             </li>
           ))}

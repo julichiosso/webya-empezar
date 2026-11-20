@@ -3,7 +3,6 @@ import { cn } from '@/components/ui/clases';
 import { BARRA_DEMOS } from '@/content/demos/hub';
 import { CTA } from '@/content/home';
 import { dominioDe, getProyecto } from '@/content/proyectos';
-import { FlechaDiagonal } from './Iconos';
 
 /**
  * "Conocé cómo ya lo usa…": la demo muestra el producto; el cliente real va aparte, con su captura. El
@@ -38,7 +37,6 @@ export function EnUso({ proyecto, className }: { proyecto: string; className?: s
           className="e-link e-link-nav mt-1 inline-flex items-center gap-1 text-[0.75rem] font-medium"
         >
           {dominioDe(p.url)}
-          <FlechaDiagonal className="size-3" />
         </a>
       </span>
     </div>
