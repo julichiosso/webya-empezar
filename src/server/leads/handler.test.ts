@@ -321,33 +321,68 @@ const repoNoUsado: LeadRepository = {
   renovarParcial: async () => null,
 };
 
-describe('POST /api/leads — falla del repositorio', () => {
-  it('responde 500 genérico, sin exponer el error interno', async () => {
-    const roto: LeadRepository = {
-      ...repoNoUsado,
-      contarRecientesPorIp: async () => 0,
-      crear: async () => {
-        throw new Error('connection to db.supabase.co:5432 refused (password=hunter2)');
-      },
-    };
+describe('POST /api/leads — falla de la base: el contacto llega igual', () => {
+  const roto: LeadRepository = {
+    ...repoNoUsado,
+    contarRecientesPorIp: async () => 0,
+    crear: async () => {
+      throw new Error('connection to db.neon.tech:5432 refused (password=hunter2)');
+    },
+    crearParcial: async () => {
+      throw new Error('boom');
+    },
+  };
+
+  it('si no se pudo guardar, avisa en el momento con todos los datos y responde 201', async () => {
+    const res = await handleCreateLead(peticion(valido), { ...deps, repo: roto });
+    expect(res.status).toBe(201);
+    expect(notifier.nuevoLead).toHaveBeenCalledOnce();
+    expect(notifier.nuevoLead.mock.calls[0]![0]).toMatchObject({
+      nombre_negocio: 'Peluquería Luna',
+      whatsapp: '+5491123456789',
+    });
+  });
+
+  it('igual con el lead parcial (solo WhatsApp): avisa y devuelve el token', async () => {
+    const res = await handleCreateLead(
+      peticion({ parcial: true, whatsapp: valido.whatsapp, website: '' }),
+      { ...deps, repo: roto },
+    );
+    expect(res.status).toBe(201);
+    expect((await res.json()).token).toBeTruthy();
+    expect(notifier.nuevoLeadParcial).toHaveBeenCalledOnce();
+  });
+
+  it('si tampoco sale el aviso, 500 genérico sin exponer nada (la persona ve el plan B)', async () => {
+    notifier.nuevoLead.mockRejectedValue(new Error('Telegram respondió 401'));
     const res = await handleCreateLead(peticion(valido), { ...deps, repo: roto });
     expect(res.status).toBe(500);
     const texto = await res.text();
     expect(JSON.parse(texto).error.code).toBe('INTERNAL_ERROR');
-    expect(texto).not.toMatch(/supabase|hunter2|password|5432|stack/i);
+    expect(texto).not.toMatch(/neon|hunter2|password|5432|telegram|stack/i);
+  });
+
+  it('si el único aviso es la consola, no cuenta como respaldo: 500', async () => {
+    const soloConsola = { ...notifier, entrega: false } as const;
+    const res = await handleCreateLead(peticion(valido), {
+      ...deps,
+      repo: roto,
+      notifier: soloConsola,
+    });
+    expect(res.status).toBe(500);
     expect(notifier.nuevoLead).not.toHaveBeenCalled();
   });
 
-  it('también es 500 genérico si falla la consulta del rate limit', async () => {
-    const roto: LeadRepository = {
+  it('si falla el conteo del rate limit, sigue (queda el freno de ráfagas) y guarda', async () => {
+    const conteoRoto: LeadRepository = {
       ...repoNoUsado,
       contarRecientesPorIp: async () => {
         throw new Error('boom interno');
       },
       crear: async () => ({ id: 'x' }),
     };
-    const res = await handleCreateLead(peticion(valido), { ...deps, repo: roto });
-    expect(res.status).toBe(500);
+    const res = await handleCreateLead(peticion(valido), { ...deps, repo: conteoRoto });
+    expect(res.status).toBe(201);
     expect(await res.text()).not.toContain('boom');
   });
 });

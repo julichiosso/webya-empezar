@@ -95,6 +95,40 @@ async function avisar(
   else await segura();
 }
 
+/**
+ * Guarda y, si la base falla (caída, pausada, sin configurar bien), manda el aviso en el momento con
+ * todos los datos: el contacto llega igual. Solo si tampoco hay aviso posible, el error sube y la
+ * persona ve el plan B (WhatsApp con lo que escribió).
+ */
+async function guardarConRespaldo(
+  deps: Pick<HandlerDeps, 'notifier'>,
+  guardar: () => Promise<{ id: string }>,
+  avisoDirecto: (id: string) => Promise<void>,
+): Promise<{ id: string; guardado: boolean }> {
+  try {
+    return { ...(await guardar()), guardado: true };
+  } catch (e) {
+    console.error(
+      '[leads] no se pudo guardar, va solo por aviso',
+      e instanceof Error ? e.message : 'error',
+    );
+    if (deps.notifier.entrega === false) throw e;
+    const id = randomUUID();
+    await avisoDirecto(id);
+    return { id, guardado: false };
+  }
+}
+
+/** El conteo para el rate limit no puede tumbar un contacto: si la base no responde, sigue el burst. */
+async function excedeSinTumbar(...args: Parameters<typeof excedeLimiteDeLeads>): Promise<boolean> {
+  try {
+    return await excedeLimiteDeLeads(...args);
+  } catch (e) {
+    console.error('[leads] no se pudo contar por IP', e instanceof Error ? e.message : 'error');
+    return false;
+  }
+}
+
 const nullSiVacio = (v: string | undefined) => (v && v.length > 0 ? v : null);
 
 /** Primer mensaje de cada campo (lo que muestra el formulario al lado del campo). */
@@ -179,7 +213,7 @@ export async function handleCreateLead(request: Request, deps: HandlerDeps): Pro
       return error(429, 'RATE_LIMITED', { headers: { 'Retry-After': '60' } });
     }
     if (
-      await excedeLimiteDeLeads(
+      await excedeSinTumbar(
         deps.repo,
         ipHash,
         deps.env.RATE_LIMIT_MAX,
@@ -231,9 +265,13 @@ export async function handleCreateLead(request: Request, deps: HandlerDeps): Pro
       user_agent: userAgent(request),
     };
 
-    const { id } = await deps.repo.crear(lead);
+    const { id, guardado } = await guardarConRespaldo(
+      deps,
+      () => deps.repo.crear(lead),
+      (id) => deps.notifier.nuevoLead({ ...lead, id }),
+    );
 
-    await avisar(deps, 'nuevo lead', () => deps.notifier.nuevoLead({ ...lead, id }));
+    if (guardado) await avisar(deps, 'nuevo lead', () => deps.notifier.nuevoLead({ ...lead, id }));
 
     return respuesta(201, { ok: true, id });
   } catch (e) {
@@ -295,30 +333,32 @@ async function crearParcial(
   };
   delete cambios.ip_hash;
   delete cambios.user_agent;
-  const previo = await deps.repo.renovarParcial(
-    lead.whatsapp,
-    ipHash,
-    new Date(ahora.getTime() - VENTANA_REENVIO_MS),
-    cambios,
-  );
+  const previo = await deps.repo
+    .renovarParcial(lead.whatsapp, ipHash, new Date(ahora.getTime() - VENTANA_REENVIO_MS), cambios)
+    .catch(() => null);
   if (previo) return respuesta(201, { ok: true, id: previo.id, token });
 
-  const { id } = await deps.repo.crearParcial(lead);
-
-  await avisar(deps, 'lead parcial', () =>
-    deps.notifier.nuevoLeadParcial({
-      id,
-      whatsapp: lead.whatsapp,
-      necesidades: lead.necesidades,
-      necesidad_libre: lead.necesidad_libre,
-      rubro: lead.rubro,
-      rubro_otro: lead.rubro_otro,
-      modulos: lead.modulos,
-      nombre_negocio: lead.nombre_negocio,
-      ciudad: lead.ciudad,
-      origen: lead.origen,
-    }),
+  const datosAviso = (id: string) => ({
+    id,
+    whatsapp: lead.whatsapp,
+    necesidades: lead.necesidades,
+    necesidad_libre: lead.necesidad_libre,
+    rubro: lead.rubro,
+    rubro_otro: lead.rubro_otro,
+    modulos: lead.modulos,
+    nombre_negocio: lead.nombre_negocio,
+    ciudad: lead.ciudad,
+    origen: lead.origen,
+  });
+  const { id, guardado } = await guardarConRespaldo(
+    deps,
+    () => deps.repo.crearParcial(lead),
+    (id) => deps.notifier.nuevoLeadParcial(datosAviso(id)),
   );
+
+  if (guardado) {
+    await avisar(deps, 'lead parcial', () => deps.notifier.nuevoLeadParcial(datosAviso(id)));
+  }
 
   return respuesta(201, { ok: true, id, token });
 }

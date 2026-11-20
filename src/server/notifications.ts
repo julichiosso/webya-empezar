@@ -20,6 +20,8 @@ export type LeadParcialNotificacion = Pick<
   Partial<Pick<LeadRow, 'nombre_negocio' | 'ciudad' | 'origen'>>;
 
 export interface NotificationService {
+  /** false si el aviso no le llega a nadie (solo la consola): ahí no sirve de respaldo de la base. */
+  readonly entrega?: boolean;
   nuevoLead(lead: LeadNotificacion): Promise<void>;
   /** Alguien dejó solo su WhatsApp: conviene escribirle rápido, aunque no complete el resto. */
   nuevoLeadParcial(lead: LeadParcialNotificacion): Promise<void>;
@@ -118,6 +120,8 @@ export class CanalesNotificationService implements NotificationService {
  * libre de la persona. El lead queda guardado, pero nadie se entera: env.ts lo avisa al arrancar.
  */
 export class ConsoleNotificationService implements NotificationService {
+  readonly entrega = false;
+
   async nuevoLead(lead: LeadNotificacion): Promise<void> {
     console.warn(
       `[leads] nuevo lead ${lead.id} (${lead.rubro}), módulos: ${lead.modulos.join(', ')}`,
