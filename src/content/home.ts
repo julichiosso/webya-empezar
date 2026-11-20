@@ -76,6 +76,8 @@ export const HERO = {
   bajada:
     'Tus clientes reservan, piden o compran desde el celular. Vos lo manejás todo desde el tuyo.',
   rubros: 'Elegí tu rubro y probalo',
+  /** Lo que aparece en cada fila al pasar el mouse. */
+  probar: 'Ver demo',
   /** Nombre accesible de cada rubro (el link abre la demo en otra pestaña). */
   rubroAria: (rubro: string, sistema: string) =>
     `${rubro}: ver demo de ${sistema.toLowerCase()}, se abre en otra pestaña`,
@@ -190,6 +192,7 @@ export const BENTO = {
 
 export const PROYECTOS_UI = {
   verTodos: 'Ver todos los proyectos',
+  verProyecto: 'Ver el proyecto',
   problema: 'El problema',
   armamos: 'Qué armamos',
   ve: 'Qué ve el cliente',
@@ -254,7 +257,8 @@ export const CONTACTO_RAPIDO = {
   mensajePlaceholder: 'Contanos en pocas palabras',
   enviar: 'Enviar',
   enviando: 'Enviando…',
-  listo: 'Listo, ya nos llegó. Te escribimos por WhatsApp.',
+  listoTitulo: 'Enviado.',
+  listo: 'Nos ponemos en contacto con vos por WhatsApp a la brevedad.',
   error: 'No se pudo enviar. Escribinos directo, con lo que pusiste ya escrito:',
   errorBoton: 'Abrir WhatsApp',
   privacidad: 'Usamos tu número solo para responderte.',
@@ -266,4 +270,35 @@ export const CONTACTO_RAPIDO = {
     ]
       .filter(Boolean)
       .join('\n'),
+} as const;
+
+/**
+ * Barra de anuncios (arriba de todo, en todas las páginas): una línea por vez, sin etiquetas.
+ * El descuento del primer mes lo pidió Julián; el porcentaje se suma acá cuando lo defina.
+ */
+export const ANUNCIOS = {
+  etiqueta: 'Novedades',
+  items: [
+    {
+      texto: 'Primer mes con descuento para negocios que arrancan con Webya.',
+      corto: 'Primer mes con descuento.',
+      link: 'Consultá',
+      destino: 'whatsapp',
+      mensaje: 'Hola, vengo de webya.dev. Quiero saber del descuento del primer mes.',
+    },
+    {
+      texto: 'Probá cualquier sistema en vivo antes de decidir.',
+      corto: 'Probalo en vivo antes de decidir.',
+      link: 'Ver demos',
+      destino: '/demos',
+      mensaje: '',
+    },
+    {
+      texto: 'Ahora también armamos sistemas para el campo y el agro.',
+      corto: 'Sistemas para el campo y el agro.',
+      link: 'Conocé más',
+      destino: '/campo',
+      mensaje: '',
+    },
+  ],
 } as const;
