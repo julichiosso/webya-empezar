@@ -9,6 +9,7 @@ y al configurador "Armá tu sistema", que envía el pedido ya escrito por WhatsA
 | `/`                                           | Home hub: hero con demos por rubro, qué armamos, proyectos, quiénes somos     |
 | `/turnero`, `/pedidos`, `/tienda`, `/web`     | Páginas de producto (SEO local): dolor, solución, para quién, proyectos       |
 | `/proyectos`, `/nosotros`, `/zona`            | Proyectos reales, quiénes somos (Julián y el proceso), zona con mapa          |
+| `/campo`                                      | Sistemas para el campo y el agro                                              |
 | `/armar`                                      | Configurador "Armá tu sistema" (`?tipo=turnero` llega con el sistema elegido) |
 | `/demos`                                      | Elegir demo, por sistema o por rubro                                          |
 | `/demos/pedidos`, `/demos/turnos`             | Demos de los sistemas reales: app del cliente y panel del dueño               |
