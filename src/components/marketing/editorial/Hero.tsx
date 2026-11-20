@@ -3,7 +3,6 @@ import type { CSSProperties } from 'react';
 import { CTA, HERO, MARCA, RUBROS_HOME, RUTAS } from '@/content/home';
 import { Boton } from './Boton';
 import { PROYECTOS } from '@/content/proyectos';
-import { FlechaDiagonal } from './Iconos';
 import { TituloPalabras } from './TituloPalabras';
 
 const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
@@ -45,15 +44,15 @@ export function HeroInicio() {
         </div>
         <div className="e-hero-aparece col-span-12 mt-7 lg:col-span-5 lg:mt-0" style={aparece(3)}>
           <p className="e-rotulo text-ed-muted">{HERO.rubros}</p>
-          <ul className="mt-2 border-t border-ed-line">
+          <ul className="mt-2">
             {RUBROS_HOME.map((r) => (
-              <li key={r.id} className="border-b border-ed-line">
+              <li key={r.id} className="">
                 <a
                   href={r.href}
                   target="_blank"
                   rel="noopener"
                   aria-label={HERO.rubroAria(r.nombre, r.sistema)}
-                  className="group flex min-h-12 items-center gap-4 py-2 transition-opacity active:opacity-60 lg:min-h-16"
+                  className="e-fila group relative flex min-h-12 items-center gap-4 rounded-xl py-2 active:opacity-60 lg:min-h-16"
                 >
                   <span className="min-w-0 flex-1">
                     <span className="block text-[0.9375rem] leading-tight font-medium lg:text-[1.0625rem]">
@@ -63,10 +62,12 @@ export function HeroInicio() {
                       {r.ejemplo}
                     </span>
                   </span>
-                  <span className="e-chico hidden shrink-0 text-ed-muted transition-colors group-hover:text-ed-fg sm:block">
-                    {r.sistema}
+                  <span className="e-fila-rol e-chico hidden shrink-0 text-ed-muted sm:inline-grid">
+                    <span>{r.sistema}</span>
+                    <span aria-hidden="true" className="font-medium text-ed-fg">
+                      {HERO.probar}
+                    </span>
                   </span>
-                  <FlechaDiagonal className="shrink-0 text-ed-muted transition-colors group-hover:text-ed-fg" />
                 </a>
               </li>
             ))}
@@ -74,7 +75,7 @@ export function HeroInicio() {
         </div>
       </div>
       <div className="e-wrap">
-        <div className="e-chico flex flex-col gap-2 border-t border-ed-line py-4 text-ed-muted lg:flex-row lg:items-center lg:justify-between">
+        <div className="e-chico flex flex-col gap-2 py-4 text-ed-muted lg:flex-row lg:items-center lg:justify-between">
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span>{MARCA.zona}</span>
             <Link href={RUTAS.zona} className="e-link text-ed-fg">
