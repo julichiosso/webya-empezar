@@ -1,3 +1,34 @@
+# PROGRESS — V3 (cierre) y protectoras
+
+## V3 — Cierre (2026-11-20)
+
+- [x] Auditoría del repo (`AUDIT_V3.md`)
+- [x] Contactos a prueba de fallas: Neon desde Vercel, tablas que se crean solas, aviso aunque falle la base
+- [x] "Creá. Digitalizá. Crecé." como titular, en carga, pie, título y Open Graph
+- [x] Hero: rubros al costado (pedido de Julián) y mini mapa de zonas con link a `/zona`
+- [x] Buscador por intención: errores de tipeo, demo al lado, configurador con tipo y rubro, índice diferido
+- [x] Celular: sugerencias por sección (1 a la vez, 3 por visita, no vuelven), barra que se corre al escribir,
+      progreso de lectura, scroll que mueve las piezas
+- [x] Turnero: aviso "Nueva reserva" entrando al celular en el paso de la seña
+- [x] Configurador: plan B (copiar, mail, te escribimos) y barra que sube con el teclado
+- [x] Demos terminan en "Quiero este sistema" con rubro elegido
+- [x] Manifiesto web; `/zona` con el mapa encuadrado y todas las localidades en el celular
+- [x] Documentos: `DECISIONS`, `COPY_ALTERNATIVAS`, `ROADMAP`, `RELEASE_CHECKLIST`
+- [ ] Lighthouse móvil ≥ 95 medido en el deploy (PageSpeed Insights): la máquina local no es confiable
+- [ ] Prueba en iPhone y Android reales (ver `RELEASE_CHECKLIST.md`)
+
+## Protectoras y entidades (2026-11-20)
+
+- [x] `AUDIT_PROTECTORAS.md`
+- [x] Landing `/protectoras` (hero, problema, adopción en el celular, módulos con estado, para quién, cómo
+      trabajamos, datos y condiciones, cierre) con JSON-LD `Service` + `areaServed` y sitemap
+- [x] Demo `/demos/protectora` ("Refugio Ventarrón", ficticia): adoptar, socio con carnet, donar con barra,
+      voluntariado con cupo, administración con aviso, carga de animal, socios con recordatorio, cuentas, imagen
+      para redes, Reiniciar y "Quiero este sistema"
+- [x] Integración: buscador, configurador (rubro y módulos), hub de demos, rubros de la home, menú, sugerencias,
+      privacidad
+- [x] E2E de cada flujo en celular (iPhone 15) y escritorio, consola y accesibilidad
+
 # PROGRESS — Webya V2 (de "bueno" a "abismal")
 
 - [x] Fase 1 — Auditoría V2 (`AUDIT_V2.md`)
