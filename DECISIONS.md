@@ -2,6 +2,26 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## V2 · Fase 4 — Velocidad y pantalla de carga
+
+- **Herramientas instaladas** (solo desarrollo, de npm oficial):
+  - `svgo` 4.1: optimiza los trazos del logo que van en línea en cada página (`scripts/optimizar-logo.mjs`,
+    3.696 → 1.996 caracteres por logo; el header y el pie lo llevan, así que son ~3,4 KB menos de HTML).
+  - `@next/bundle-analyzer` 16.4.6: `ANALYZE=true pnpm build` muestra qué pesa en cada bundle.
+  - **No instalé un MCP de navegador**: Playwright ya está en el repo y alcanza para ver el sitio. Sumé
+    `scripts/capturas.mjs` (capturas en cualquier ancho, mide alto y desborde) y `scripts/probar-carga.mjs`.
+    Un MCP nuevo pide reiniciar la sesión y no agrega nada a esto.
+  - Lighthouse se corre con `npx lighthouse` cuando hace falta (no se agrega al repo: pesa mucho). El número que
+    vale es el de PageSpeed Insights sobre el deploy: esta máquina (i3) da números bajos y variables.
+- **Pantalla de carga solo si tarda**: arranca invisible y aparece a los 450 ms por CSS. La inicial se va cuando
+  el documento terminó de llegar (`.listo`, que pone el script de movimiento en `DOMContentLoaded`); si la página
+  llega antes, nunca se ve. Sin JS no aparece (regla en `<noscript>`). Las navegaciones que no estaban precargadas
+  (las demos) usan la misma pieza en `app/loading.tsx`.
+- **El logo se escribe con SVG puro**: cada letra y cada corchete con `pathLength=1` y `stroke-dashoffset`, y
+  después el relleno. Con movimiento reducido aparece quieto.
+- **Respuesta inmediata al tocar**: botones que se hunden (80 ms), links y tarjetas que bajan la opacidad en
+  `:active`. Prefetch por defecto de Next en todos los links internos salvo las demos (pesadas, CSS propio).
+
 ## V2 · Fase 2 — Sistema visual
 
 - **Fuera el destello y el hover lima del botón principal.** La V2 prohíbe brillos y degradados sin excepciones; el

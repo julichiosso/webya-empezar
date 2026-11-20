@@ -1,3 +1,4 @@
+import bundleAnalyzer from '@next/bundle-analyzer';
 import type { NextConfig } from 'next';
 
 const desarrollo = process.env.NODE_ENV === 'development';
@@ -61,4 +62,7 @@ const config: NextConfig = {
   },
 };
 
-export default config;
+/** `ANALYZE=true pnpm build` abre el mapa de cada bundle (qué pesa y por qué). */
+const conAnalisis = bundleAnalyzer({ enabled: process.env.ANALYZE === 'true' });
+
+export default conAnalisis(config);

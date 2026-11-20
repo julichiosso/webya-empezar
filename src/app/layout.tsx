@@ -3,10 +3,11 @@ import { Geist } from 'next/font/google';
 import { ViewTransition } from 'react';
 import { preload } from 'react-dom';
 import { FUENTE_PRECARGADA } from '@/brand/tipografia/fuente';
+import { Carga } from '@/components/marketing/Carga';
 import { Medicion } from '@/components/marketing/Medicion';
 import { EDITORIAL } from '@/brand/tokens/colores';
 import { SEO_SITIO } from '@/content/seo';
-import { SCRIPT_MOVIMIENTO } from '@/lib/motion/script';
+import { ESTILO_SIN_JS, SCRIPT_MOVIMIENTO } from '@/lib/motion/script';
 import { siteConfig } from '@/lib/site-config';
 import './globals.css';
 
@@ -47,6 +48,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_MOVIMIENTO }} />
       </head>
       <body>
+        {/* Pantalla de carga: solo se ve si el documento tarda más de ~450 ms en llegar. */}
+        <Carga inicial />
+        <noscript>
+          <style>{ESTILO_SIN_JS}</style>
+        </noscript>
         {/* Navegaciones entre páginas con View Transitions donde el navegador las soporte. */}
         <ViewTransition>{children}</ViewTransition>
         {/* Embudo propio: un sendBeacon a /api/eventos por página vista y por paso (sin cookies). */}

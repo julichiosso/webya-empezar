@@ -778,3 +778,72 @@ dd {
   stroke-width: 1.25;
   stroke-dasharray: 4 5;
 }
+
+/*
+ * Pantalla de carga: aparece recién si la carga tarda (demora de 450 ms) y el logo se escribe trazo a
+ * trazo; después se rellena. La inicial se va cuando el documento terminó de llegar (.listo en <html>).
+ */
+@keyframes carga-aparece {
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@keyframes carga-trazo {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes carga-relleno {
+  to {
+    fill-opacity: 1;
+  }
+}
+.carga {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: #0a0a0a;
+  color: #fafafa;
+  opacity: 0;
+  visibility: hidden;
+  animation: carga-aparece 220ms ease-out 450ms forwards;
+}
+.listo .carga-inicial {
+  display: none;
+}
+.carga-logo {
+  width: min(56vw, 15rem);
+  height: auto;
+}
+.carga-letra,
+.carga-corchete {
+  stroke: currentColor;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  stroke-linejoin: miter;
+  animation: carga-trazo 900ms cubic-bezier(0.65, 0, 0.35, 1) calc(450ms + var(--i, 0) * 90ms)
+    forwards;
+}
+.carga-letra {
+  stroke-width: 6;
+  fill: currentColor;
+  fill-opacity: 0;
+  animation:
+    carga-trazo 900ms cubic-bezier(0.65, 0, 0.35, 1) calc(450ms + var(--i, 0) * 90ms) forwards,
+    carga-relleno 400ms ease-out calc(1250ms + var(--i, 0) * 90ms) forwards;
+}
+.carga-corchete {
+  fill: none;
+  stroke-width: 40;
+}
+@media (prefers-reduced-motion: reduce) {
+  .carga-letra,
+  .carga-corchete {
+    animation: none;
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+}

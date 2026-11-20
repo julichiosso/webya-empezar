@@ -115,8 +115,14 @@ const svgs = [
       ocupacion: TEJA.ocupacion,
     }),
   },
-  { archivo: 'docs/marca/logo/webya-negro.svg', svg: svgWordmark(LOGO_TRAZOS, LOGO_VIEWBOX, NEGRO) },
-  { archivo: 'docs/marca/logo/webya-blanco.svg', svg: svgWordmark(LOGO_TRAZOS, LOGO_VIEWBOX, BLANCO) },
+  {
+    archivo: 'docs/marca/logo/webya-negro.svg',
+    svg: svgWordmark(LOGO_TRAZOS, LOGO_VIEWBOX, NEGRO),
+  },
+  {
+    archivo: 'docs/marca/logo/webya-blanco.svg',
+    svg: svgWordmark(LOGO_TRAZOS, LOGO_VIEWBOX, BLANCO),
+  },
   { archivo: 'docs/marca/logo/webya-compacta-negro.svg', svg: svgCompacta(NEGRO) },
   { archivo: 'docs/marca/logo/webya-compacta-blanco.svg', svg: svgCompacta(BLANCO) },
   {

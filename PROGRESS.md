@@ -3,7 +3,7 @@
 - [x] Fase 1 — Auditoría V2 (`AUDIT_V2.md`)
 - [x] Fase 2 — Sistema visual: sin sombras, brillos ni degradados; tipografía y subrayados estilo Apple
 - [x] Fase 3 — Home corta (hub) + páginas propias + menú completo + barra inferior en celular + copy en "nosotros"
-- [ ] Fase 4 — Velocidad y pantalla de carga con el logo vectorial
+- [x] Fase 4 — Velocidad y pantalla de carga con el logo vectorial
 - [ ] Fase 5 — Demos: hub `/demos`, página web y tienda en vivo
 - [ ] Fase 6 — Configurador `/armar` mejorado
 - [ ] Fase 7 — SEO (JSON-LD completo, sitemap) y accesibilidad

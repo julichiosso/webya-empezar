@@ -7,12 +7,14 @@
  * - `[data-loop]`: `.on` mientras está en pantalla; fuera de pantalla las animaciones en bucle se pausan.
  * - `[data-steps]` + `[data-step="n"]`: el paso que cruza el centro de la pantalla queda en `data-paso`.
  *
+ * `.listo` en <html> cuando el documento terminó de llegar: saca la pantalla de carga inicial.
+ *
  * `.mo` en <html> solo se pone si hay IntersectionObserver y no hay prefers-reduced-motion: sin eso,
  * nada se oculta y todo se ve quieto. Un MutationObserver toma lo que llega en navegaciones del cliente.
  */
 export const SCRIPT_MOVIMIENTO = `(function(){
 var d=document,h=d.documentElement,w=window;
-if(!('IntersectionObserver' in w))return;
+if(!('IntersectionObserver' in w)){if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',function(){h.classList.add('listo');});else h.classList.add('listo');return;}
 var quieto=w.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(!quieto)h.classList.add('mo');
 function contar(el){
@@ -35,5 +37,9 @@ function iniciar(){
 ver(d);
 new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType===1)ver(n);});});}).observe(d.body,{childList:true,subtree:true});
 }
-if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',iniciar);else iniciar();
+function listo(){h.classList.add('listo');}
+if(d.readyState==='loading'){d.addEventListener('DOMContentLoaded',iniciar);d.addEventListener('DOMContentLoaded',listo);}else{iniciar();listo();}
 })();`;
+
+/** Sin JS nadie saca la pantalla de carga inicial: con esto no se muestra (va en <noscript>). */
+export const ESTILO_SIN_JS = '.carga-inicial{display:none}';
