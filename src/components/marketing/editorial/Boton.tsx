@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { cn } from '@/components/ui/clases';
 import { CTA } from '@/content/home';
-import { Avion } from './Iconos';
 
 interface BotonProps {
   href: string;
@@ -90,20 +89,47 @@ export function Boton({
   );
 }
 
-/** Botón de envío de un formulario: el mismo gesto y el avioncito que sale volando mientras envía. */
-export function BotonForm({ texto, cargando }: { texto: string; cargando: boolean }) {
+/**
+ * El avión de papel del botón Enviar, en vector: al pasar el mouse se dibuja entero, trazo a trazo
+ * (cuerpo y pliegue del ala). Mientras envía despega dejando una estela que se traza detrás, sale de
+ * cuadro y se vuelve a dibujar en su lugar. Solo stroke-dashoffset, transform y opacity.
+ */
+function AvionDibujado() {
+  return (
+    <span aria-hidden="true" className="e-avion-caja">
+      <svg
+        viewBox="0 0 24 24"
+        className="e-avion"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path className="e-avion-estela" pathLength={1} d="M10.1 13.3C17 9.5 25 2.5 36-6" />
+        <g className="e-avion-cuerpo">
+          <path pathLength={1} d="M20.5 3.5 3.5 10.6l6.6 2.7 2.8 6.7z" />
+          <path pathLength={1} d="m20.5 3.5-10.4 9.8" />
+        </g>
+      </svg>
+    </span>
+  );
+}
+
+/**
+ * Envío de un formulario: solo el avión, sin caja ni borde. Al pasar el mouse se dibuja entero; mientras
+ * envía despega con su estela y vuelve. El texto ("Enviar") es el nombre accesible.
+ */
+export function BotonAvion({ texto, cargando }: { texto: string; cargando: boolean }) {
   return (
     <button
       type="submit"
+      aria-label={texto}
       aria-disabled={cargando || undefined}
       data-enviando={cargando || undefined}
-      className="e-btn e-btn-primario shrink-0"
+      className="e-avion-boton shrink-0"
     >
-      <TrazoBoton />
-      <TextoBoton>{texto}</TextoBoton>
-      <span aria-hidden="true" className="e-avion-caja">
-        <Avion className="e-avion" />
-      </span>
+      <AvionDibujado />
     </button>
   );
 }
