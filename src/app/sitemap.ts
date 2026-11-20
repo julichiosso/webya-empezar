@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     pagina('/', 1),
     ...Object.values(LANDINGS).map((l) => pagina(l.ruta, 0.9)),
     pagina('/campo', 0.9),
+    pagina('/protectoras', 0.9),
     pagina('/proyectos', 0.8),
     ...CASOS.map((p) => pagina(`/proyectos/${p.id}`, 0.7)),
     pagina('/armar', 0.8),
@@ -29,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     pagina('/demos/turnos', 0.5),
     pagina('/demos/web', 0.5),
     pagina('/demos/tienda', 0.5),
+    pagina('/demos/protectora', 0.5),
     pagina('/privacidad', 0.2, 'yearly'),
     pagina('/terminos', 0.2, 'yearly'),
   ];

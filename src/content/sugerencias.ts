@@ -38,6 +38,22 @@ export const SUGERENCIAS: readonly Sugerencia[] = [
     href: '/proyectos',
   },
   {
+    id: 'inicio-entidades',
+    ruta: '/',
+    seccion: 'section[aria-label="Qué hacemos por tu negocio"]',
+    texto: '¿Tenés una protectora o un club? Mirá cómo se ordena todo.',
+    accion: 'Ver demo',
+    href: '/demos/protectora',
+  },
+  {
+    id: 'protectoras',
+    ruta: '/protectoras',
+    seccion: 'section[aria-labelledby="titulo-modulos"]',
+    texto: 'Probá cómo se adopta, se dona y se gestiona, con datos de ejemplo.',
+    accion: 'Ver demo',
+    href: '/demos/protectora',
+  },
+  {
     id: 'turnero',
     ruta: '/turnero',
     seccion: 'section[aria-labelledby="titulo-producto"]',

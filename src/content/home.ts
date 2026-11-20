@@ -58,6 +58,7 @@ export const HEADER = {
     ],
     otros: [
       { href: '/campo', texto: 'Campo y agro' },
+      { href: '/protectoras', texto: 'Protectoras y entidades' },
       { href: '/demos', texto: 'Demos' },
       { href: '/proyectos', texto: 'Proyectos' },
       { href: '/nosotros', texto: 'Quiénes somos' },
@@ -137,6 +138,13 @@ export const RUBROS_HOME = [
     ejemplo: 'Agronomías, acopios, veterinarias y contratistas',
     sistema: 'Sistemas para el campo',
     href: '/campo',
+  },
+  {
+    id: 'entidades',
+    nombre: 'Protectoras y entidades',
+    ejemplo: 'Refugios, fundaciones, clubes y cooperadoras',
+    sistema: 'Adopciones y socios',
+    href: '/demos/protectora',
   },
   {
     id: 'servicios',
