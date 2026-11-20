@@ -92,10 +92,12 @@ export const HERO = {
   y: 'y',
   /** Dónde atendemos: con el mini mapa, lleva a /zona. */
   zona: {
-    titulo: '¿Sos de San Jorge, San Francisco o la zona?',
-    texto: (localidades: number | string) =>
-      `Te atendemos en persona en ${localidades} localidades. Mirá el mapa de zonas.`,
-    alt: 'Mapa chico de las dos zonas de atención: San Francisco y San Jorge con sus alrededores.',
+    rotulo: 'Dónde atendemos',
+    atendemos: 'Atendemos en',
+    detalle: 'En persona o por WhatsApp.',
+    ver: 'Ver el mapa',
+    aria: (localidades: number | string) =>
+      `Atendemos en San Jorge, San Francisco y ${localidades} localidades de la zona, en persona o por WhatsApp. Ver el mapa de zonas.`,
   },
 } as const;
 

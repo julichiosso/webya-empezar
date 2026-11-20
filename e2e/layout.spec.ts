@@ -66,13 +66,13 @@ test('la home entra en la primera pantalla: el lema, las dos acciones y el busca
   expect(buscador!.y, 'buscador').toBeLessThan(vh);
 });
 
-test('la home muestra dónde atendemos con el mapa de zonas, que lleva a /zona', async ({
-  page,
-}) => {
+test('la home muestra dónde atendemos y lleva al mapa de zonas', async ({ page }) => {
   await page.goto('/');
-  const zona = page.getByRole('link', { name: /¿Sos de San Jorge, San Francisco o la zona\?/ });
+  const zona = page.getByRole('link', {
+    name: /^Atendemos en San Jorge, San Francisco y \d+ localidades/,
+  });
   await expect(zona).toHaveCount(1);
-  await expect(zona.getByRole('img', { name: /Mapa chico de las dos zonas/ })).toBeVisible();
+  await expect(zona).toBeVisible();
   await zona.click();
   await expect(page).toHaveURL(/\/zona$/);
   await expect(page.getByRole('img', { name: /Mapa de la zona/ })).toBeVisible();

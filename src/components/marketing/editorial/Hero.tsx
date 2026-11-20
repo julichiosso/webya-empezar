@@ -23,7 +23,7 @@ const EN_PRODUCCION = PROYECTOS.filter((p) => p.estado === 'produccion');
 export function HeroInicio() {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
-    <section className="tono-oscuro overflow-hidden" aria-labelledby="titulo-hero">
+    <section className="tono-oscuro" aria-labelledby="titulo-hero">
       <div className="e-wrap grid grid-cols-12 pt-7 lg:items-center lg:gap-x-12 lg:pt-10 lg:pb-12">
         <div className="col-span-12 min-w-0 lg:col-span-7">
           <TituloPalabras
@@ -105,7 +105,7 @@ export function HeroInicio() {
               </li>
             ))}
           </ul>
-          <div className="mt-5 pb-8 lg:pb-0">
+          <div className="mt-8 pb-8 lg:pb-0">
             <MiniMapaZona />
           </div>
         </div>

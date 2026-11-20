@@ -208,7 +208,7 @@ export function Buscador() {
           id={`${id}-lista`}
           role="listbox"
           aria-label={B.sugerencias}
-          className="e-sugerencias absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-2xl border border-ed-line-strong bg-ed-bg p-1.5"
+          className="e-sugerencias absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-[1.25rem] p-1.5"
         >
           {opciones.map((o, i) => (
             <li
@@ -219,15 +219,14 @@ export function Buscador() {
               onMouseEnter={() => setActivo(i)}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => ir(o)}
-              className={cn(
-                'flex min-h-14 cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5',
-                i === activo ? 'bg-ed-surface' : '',
-              )}
+              className="e-sugerencia-op flex min-h-14 cursor-pointer items-center gap-3 rounded-[0.875rem] px-3.5 py-2.5"
             >
-              {o.externo ? <WhatsApp className="shrink-0 text-ed-muted" /> : null}
+              {o.externo ? <WhatsApp className="shrink-0" /> : null}
               <span className="min-w-0">
                 <span className="block truncate text-[0.9375rem] font-medium">{o.titulo}</span>
-                <span className="block truncate text-[0.8125rem] text-ed-muted">{o.texto}</span>
+                <span className="e-sugerencia-ayuda block truncate text-[0.8125rem] text-ed-muted">
+                  {o.texto}
+                </span>
               </span>
             </li>
           ))}
