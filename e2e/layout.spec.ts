@@ -51,12 +51,15 @@ test('la home entra en la primera pantalla: el lema, las dos acciones y el busca
   );
   // En escritorio están en el hero; en el celular, en la barra fija de abajo. Siempre a la vista.
   for (const nombre of ['Armá tu sistema', 'Escribinos']) {
-    const caja = await page
+    const cajas = await page
       .getByRole('link', { name: new RegExp(`^${nombre}`) })
-      .filter({ visible: true })
-      .first()
-      .boundingBox();
-    expect(caja!.y + caja!.height, nombre).toBeLessThanOrEqual(vh);
+      .evaluateAll((els) =>
+        els.map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0),
+      );
+    expect(
+      cajas.some((r) => r.top >= 0 && r.bottom <= vh),
+      nombre,
+    ).toBe(true);
   }
   const hero = page.locator('#titulo-hero').locator('xpath=ancestor::section');
   const buscador = await hero.getByRole('combobox').boundingBox();
