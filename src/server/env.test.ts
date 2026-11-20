@@ -92,10 +92,61 @@ describe('loadEnv', () => {
     );
   });
 
-  it('falla en Vercel si el repositorio no persiste (archivo o memoria)', () => {
+  it('falla en Vercel con archivo, o sin base ni avisos (el contacto se perdería)', () => {
     const base = { NODE_ENV: 'production', IP_HASH_SALT: SALT, VERCEL: '1' };
     expect(() => loadEnv({ ...base, LEAD_REPOSITORY: 'file' })).toThrow(/no persiste/);
-    expect(() => loadEnv(base)).toThrow(/no persiste/);
+    expect(() => loadEnv(base)).toThrow(/se perderían/);
+  });
+
+  it('en Vercel con Neon (DATABASE_URL) usa postgres', () => {
+    const env = loadEnv({
+      NODE_ENV: 'production',
+      VERCEL: '1',
+      DATABASE_URL: 'postgresql://u:p@ep-x.neon.tech/neondb?sslmode=require',
+    });
+    expect(env.LEAD_REPOSITORY).toBe('postgres');
+    expect(env.DATABASE_URL).toContain('neon.tech');
+  });
+
+  it('acepta POSTGRES_URL si es la que cargó Vercel', () => {
+    const env = loadEnv({
+      NODE_ENV: 'production',
+      VERCEL: '1',
+      POSTGRES_URL: 'postgres://u:p@ep-x.neon.tech/neondb',
+    });
+    expect(env.LEAD_REPOSITORY).toBe('postgres');
+  });
+
+  it('en Vercel sin base pero con Telegram funciona solo con avisos', () => {
+    const env = loadEnv({
+      NODE_ENV: 'production',
+      VERCEL: '1',
+      TELEGRAM_BOT_TOKEN: '123456:abcdefghij',
+      TELEGRAM_CHAT_ID: '42',
+    });
+    expect(env.LEAD_REPOSITORY).toBe('memory');
+  });
+
+  it('sin IP_HASH_SALT deriva la sal de un secreto del servidor, estable y sin exponerlo', () => {
+    const fuente = {
+      NODE_ENV: 'production',
+      VERCEL: '1',
+      DATABASE_URL: 'postgresql://u:secreto@ep-x.neon.tech/neondb',
+    };
+    const a = loadEnv(fuente).IP_HASH_SALT;
+    expect(a).toMatch(/^[0-9a-f]{64}$/);
+    expect(a).not.toContain('secreto');
+    expect(loadEnv(fuente).IP_HASH_SALT).toBe(a);
+  });
+
+  it('no usa postgres fuera de Vercel sin confirmarlo', () => {
+    const fuente = {
+      NODE_ENV: 'development',
+      LEAD_REPOSITORY: 'postgres',
+      DATABASE_URL: 'postgres://u:p@h/db',
+    };
+    expect(() => loadEnv(fuente)).toThrow(/ALLOW_DB_IN_DEV/);
+    expect(loadEnv({ ...fuente, ALLOW_DB_IN_DEV: '1' }).LEAD_REPOSITORY).toBe('postgres');
   });
 
   it('permite `next start` local en producción con repositorio en archivo', () => {
