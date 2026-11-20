@@ -47,6 +47,7 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
   }, []);
 
   const r = resumen(estado);
+  const pasos = [!!estado.tipo, !!estado.rubro, !!estado.tipo && estado.modulos.length > 0];
   const mensaje = mensajeDe(estado);
   const destino = mensaje ? enlaceContacto(mensaje) : null;
   const modulos = modulosDe(estado.tipo);
@@ -190,9 +191,12 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
 
       <aside className="col-span-12 lg:col-span-5" aria-labelledby="titulo-resumen">
         <div className="rounded-2xl border border-ed-line p-6 md:p-8 lg:sticky lg:top-24">
-          <h3 id="titulo-resumen" className="e-rotulo text-ed-muted">
-            {C.resumen.titulo}
-          </h3>
+          <div className="flex items-center justify-between gap-4">
+            <h3 id="titulo-resumen" className="e-rotulo text-ed-muted">
+              {C.resumen.titulo}
+            </h3>
+            <Progreso pasos={pasos} />
+          </div>
           <Resumen estado={estado} />
           <div className="mt-8 hidden flex-col gap-3 lg:flex">
             <BotonEnviar
@@ -229,6 +233,7 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
 
       {/* Celular: el botón queda a mano (abajo, con el pulgar) mientras se recorre el configurador. */}
       <div className="sticky bottom-0 z-30 col-span-12 -mx-[clamp(1rem,4vw,3rem)] border-t border-ed-line bg-ed-bg px-[clamp(1rem,4vw,3rem)] pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
+        <Progreso pasos={pasos} className="mb-2" />
         <p className="e-chico mb-2 truncate text-ed-muted" aria-hidden="true">
           {r.tipo
             ? [r.tipo, r.rubro, r.modulos.length ? `+${r.modulos.length}` : '']
@@ -243,6 +248,28 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
           alFaltar={() => primerTipo.current?.focus()}
         />
       </div>
+    </div>
+  );
+}
+
+/** Tres segmentos que se llenan a medida que se completa cada paso. */
+function Progreso({ pasos, className }: { pasos: readonly boolean[]; className?: string }) {
+  const hechos = pasos.filter(Boolean).length;
+  return (
+    <div
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={pasos.length}
+      aria-valuenow={hechos}
+      aria-valuetext={C.progreso(hechos)}
+      className={`flex w-24 gap-1 ${className ?? ''}`}
+    >
+      {pasos.map((p, i) => (
+        <span
+          key={i}
+          className={`h-1 flex-1 rounded-full transition-colors duration-300 ${p ? 'bg-ed-fg' : 'bg-ed-line-strong'}`}
+        />
+      ))}
     </div>
   );
 }

@@ -15,12 +15,12 @@ export interface RubroConfig {
 export const RUBROS_CONFIG: readonly RubroConfig[] = [
   {
     id: 'gastronomia',
-    nombre: 'Pizzería o comida',
+    nombre: 'Gastronomía',
     demo: { href: '/demos/pedidos', texto: 'Ver demo de pedidos' },
   },
   {
     id: 'comercio',
-    nombre: 'Joyería o comercio',
+    nombre: 'Comercio o tienda',
     demo: { href: '/demos/tienda', texto: 'Ver demo de tienda' },
   },
   {
@@ -197,7 +197,7 @@ export const CONFIGURADOR = {
   otroPlaceholder: 'Contanos en pocas palabras',
   otroEtiqueta: 'Tu rubro',
   nombreEtiqueta: 'Nombre de tu negocio (opcional)',
-  nombrePlaceholder: 'Ej.: Pizzería Don Pepe',
+  nombrePlaceholder: 'Ej.: Heladería La Esquina',
   resumen: {
     titulo: 'Tu pedido',
     vacio: 'Elegí qué querés armar y lo vas viendo acá.',
@@ -213,6 +213,8 @@ export const CONFIGURADOR = {
   aclaracion:
     'Se abre WhatsApp con todo escrito. Te respondemos con el presupuesto, sin compromiso.',
   verDemo: 'Ver demo',
+  /** Progreso de los tres pasos (barra del resumen y del celular). */
+  progreso: (hechos: number) => `${hechos} de tres pasos listos`,
   reiniciar: 'Empezar de nuevo',
 } as const;
 

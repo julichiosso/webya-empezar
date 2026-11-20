@@ -2,6 +2,19 @@
 
 Decisiones tomadas en modo autónomo. Cada una: qué y por qué. La V2 (segunda ronda, MEGA PROMPT V2) va primero.
 
+## V2 · Fase 6 — Configurador
+
+- **`/armar`, una sola vista**: tres pasos, resumen en vivo y una barra de progreso de tres segmentos (en el
+  resumen y en la barra fija del celular, con `role="progressbar"`). Copy sin contradicciones: "Tres pasos, un
+  toque cada uno".
+- **Botón final "Enviarnos mi pedido por WhatsApp"**, con el mensaje prellenado sin nombres de personas.
+- **No sumé un guardado del lead por API.** El configurador no pide teléfono ni mail: guardar "alguien eligió
+  turnero" sin forma de contactarlo es ruido. El envío ya queda medido (`configurador_enviar` por
+  `/api/eventos`, un `sendBeacon` con rate limit) y el pedido llega completo por WhatsApp. Si más adelante se
+  pide el teléfono en el configurador, `/api/leads` ya existe (validación, rate limit, anti-spam).
+- **Rubros para cualquier negocio**: "Gastronomía" y "Comercio o tienda" en lugar de "Pizzería o comida" y
+  "Joyería o comercio"; el "Ver demo" del resumen lleva a la demo de cada rubro.
+
 ## V2 · Fase 5 — Demos
 
 - **Cuatro demos en `/demos`**, cada una con la misma barra (es una demo, qué más hace el sistema real,
