@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { CTA, HERO, MARCA, RUBROS_HOME, RUTAS } from '@/content/home';
+import { AvisosDiferidos } from './AvisosDiferidos';
 import { Boton } from './Boton';
+import { Buscador } from './Buscador';
 import { PROYECTOS } from '@/content/proyectos';
 import { TituloPalabras } from './TituloPalabras';
 
@@ -17,6 +19,7 @@ const EN_PRODUCCION = PROYECTOS.filter((p) => p.estado === 'produccion');
 export function HeroInicio() {
   return (
     <section className="tono-oscuro" aria-labelledby="titulo-hero">
+      <AvisosDiferidos enProduccion={EN_PRODUCCION.length} />
       <div className="e-wrap grid grid-cols-12 gap-x-6 pt-7 pb-7 lg:items-center lg:gap-x-12 lg:pt-16 lg:pb-14">
         <div className="col-span-12 lg:col-span-7">
           <TituloPalabras
@@ -32,14 +35,22 @@ export function HeroInicio() {
           >
             {HERO.bajada}
           </p>
-          <div
-            className="e-hero-aparece mt-5 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3 lg:mt-8"
-            style={aparece(2)}
-          >
-            <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
-            <Boton href={RUTAS.demos} variante="secundario" externo icono={false}>
-              {CTA.verDemo}
-            </Boton>
+          <div className="flex flex-col">
+            <div
+              className="e-hero-aparece relative z-20 order-2 mt-6 max-w-[34rem] lg:order-1 lg:mt-8"
+              style={aparece(2)}
+            >
+              <Buscador />
+            </div>
+            <div
+              className="e-hero-aparece order-1 mt-5 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3 lg:order-2 lg:mt-7"
+              style={aparece(3)}
+            >
+              <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
+              <Boton href={RUTAS.demos} variante="secundario" externo icono={false}>
+                {CTA.verDemo}
+              </Boton>
+            </div>
           </div>
         </div>
         <div className="e-hero-aparece col-span-12 mt-7 lg:col-span-5 lg:mt-0" style={aparece(3)}>
