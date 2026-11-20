@@ -26,6 +26,12 @@ export interface EventosAnalitica {
   demo_cta_click: { demo: string; origen: string };
   demo_qr_celular: { demo: string };
   demo_whatsapp_click: { demo: string };
+  // Buscador del hero: a qué sugerencia fue (el texto escrito nunca se manda).
+  buscador_elegido: { destino: string; rubro: string };
+  // Cualquier link a WhatsApp del sitio (dónde estaba, no qué dice).
+  whatsapp_click: { donde: string };
+  // Sugerencias del celular: cuál se mostró, cuál se tocó y cuál se cerró.
+  sugerencia: { id: string; accion: 'vista' | 'toque' | 'cerrada' };
 }
 
 export type NombreEvento = keyof EventosAnalitica;
@@ -43,6 +49,9 @@ export const NOMBRES_EVENTO = [
   'demo_cta_click',
   'demo_qr_celular',
   'demo_whatsapp_click',
+  'buscador_elegido',
+  'whatsapp_click',
+  'sugerencia',
 ] as const satisfies readonly NombreEvento[];
 export type Sink = <E extends NombreEvento>(evento: E, props: EventosAnalitica[E]) => void;
 
