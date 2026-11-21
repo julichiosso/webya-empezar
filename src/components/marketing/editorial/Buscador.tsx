@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { cn } from '@/components/ui/clases';
 import { BUSCADOR as B, LARGO_BUSQUEDA } from '@/content/buscador';
 import { track } from '@/lib/analytics';
 import { limpiarConsulta } from '@/lib/busqueda';
