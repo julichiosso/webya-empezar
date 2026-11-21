@@ -4,36 +4,10 @@ import { MAPA_LIMITE, MAPA_PROYECCION as P } from '@/config/zona-geo';
 import { HERO, RUTAS } from '@/content/home';
 import { LOCALIDADES, ORDEN_ZONAS, localidadesDe } from '@/content/zona';
 import { encuadre, proyectar, zonaSuave } from '@/lib/mapa';
+import { keyframesRodillo } from '@/lib/rodillo';
 
 /** Cuánto queda cada localidad a la vista en el rodillo (segundos). */
 const PASO = 1.8;
-/** Alto de cada renglón del rodillo, en em. */
-const RENGLON = 1.15;
-
-/**
- * Keyframes del rodillo y del pulso de los puntos, calculados para la cantidad de localidades: cada nombre
- * se queda quieto el 80 % de su turno y sube al siguiente con una curva firme. El punto de esa localidad se
- * enciende en el mismo turno. Un solo reloj para los dos: quedan sincronizados sin JavaScript.
- */
-function keyframes(n: number): string {
-  const turno = 100 / n;
-  const curva = 'animation-timing-function:cubic-bezier(.7,0,.2,1)';
-  let rodillo = '';
-  for (let i = 0; i < n; i++) {
-    const inicio = (i * turno).toFixed(3);
-    const quieto = (i * turno + turno * 0.8).toFixed(3);
-    rodillo += `${inicio}%{transform:translate3d(0,${-i * RENGLON}em,0);animation-timing-function:linear}`;
-    rodillo += `${quieto}%{transform:translate3d(0,${-i * RENGLON}em,0);${curva}}`;
-  }
-  rodillo += `100%{transform:translate3d(0,${-n * RENGLON}em,0)}`;
-  const fin = (turno * 0.8).toFixed(3);
-  const apaga = turno.toFixed(3);
-  return (
-    `@keyframes e-rodillo{${rodillo}}` +
-    `@keyframes e-zona-pulso{0%,${fin}%{transform:scale(1.9);opacity:1}${apaga}%,100%{transform:scale(1);opacity:.45}}`
-  );
-}
-
 /**
  * Dónde atendemos, en el hero: un rodillo que va pasando cada localidad ("Atendemos en Sastre…") y, al lado,
  * el mapa real de las dos zonas con el punto de esa localidad encendido. Todo es un link a /zona.
@@ -68,7 +42,7 @@ export function MiniMapaZona() {
       className="e-zona-vivo group relative flex items-center gap-5 py-2"
       style={{ '--ciclo': `${ciclo}s` } as CSSProperties}
     >
-      <style dangerouslySetInnerHTML={{ __html: keyframes(n) }} />
+      <style dangerouslySetInnerHTML={{ __html: keyframesRodillo(n) }} />
       <svg
         viewBox={`${v.x} ${v.y} ${v.w} ${v.h}`}
         aria-hidden="true"
