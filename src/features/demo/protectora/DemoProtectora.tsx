@@ -42,19 +42,19 @@ export function DemoProtectora() {
     <div className="pr-paleta min-h-dvh">
       <TecladoAbierto />
       <BarraDemo demo={DEMO} onReiniciar={reiniciar} />
-      <div className="mx-auto max-w-md px-4 pt-5 pb-10 md:my-8 md:rounded-[2rem] md:border md:border-[var(--pr-linea)] md:px-6 md:pb-8">
+      <div className="mx-auto max-w-md px-4 pt-5 pb-10 md:my-8 md:rounded-[2rem] md:border md:border-(--pr-linea) md:px-6 md:pb-8">
         <header>
-          <p className="text-[0.75rem] font-semibold tracking-[0.12em] text-[var(--pr-tinta-2)] uppercase">
+          <p className="text-[0.75rem] font-semibold tracking-[0.12em] text-(--pr-tinta-2) uppercase">
             {ORG.ficticia}
           </p>
           <h1 className="pr-titulo mt-1 text-[2rem] leading-tight font-semibold">{ORG.nombre}</h1>
-          <p className="text-[var(--pr-tinta-2)]">{ORG.lema}</p>
+          <p className="text-(--pr-tinta-2)">{ORG.lema}</p>
         </header>
 
         <div
           role="group"
           aria-label={U.vistas.etiqueta}
-          className="mt-5 grid grid-cols-2 gap-1 rounded-full bg-[var(--pr-papel)] p-1"
+          className="mt-5 grid grid-cols-2 gap-1 rounded-full bg-(--pr-papel) p-1"
         >
           {(['publica', 'admin'] as const).map((v) => (
             <button
@@ -67,22 +67,20 @@ export function DemoProtectora() {
               }}
               className={cn(
                 'relative min-h-11 rounded-full text-[0.9375rem] font-semibold',
-                vista === v
-                  ? 'bg-[var(--pr-tinta)] text-[var(--pr-fondo)]'
-                  : 'text-[var(--pr-tinta-2)]',
+                vista === v ? 'bg-(--pr-tinta) text-(--pr-fondo)' : 'text-(--pr-tinta-2)',
               )}
             >
               {U.vistas[v]}
               {v === 'admin' && e.aviso && vista !== 'admin' ? (
                 <span
                   aria-hidden="true"
-                  className="absolute top-2 right-4 size-2 rounded-full bg-[var(--pr-acento)]"
+                  className="absolute top-2 right-4 size-2 rounded-full bg-(--pr-acento)"
                 />
               ) : null}
             </button>
           ))}
         </div>
-        <p className="mt-2 text-center text-[0.75rem] text-[var(--pr-tinta-2)]">{U.aviso}</p>
+        <p className="mt-2 text-center text-[0.75rem] text-(--pr-tinta-2)">{U.aviso}</p>
 
         <div key={ronda} className="mt-5">
           {vista === 'publica' ? (

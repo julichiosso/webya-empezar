@@ -130,21 +130,21 @@ export function PanelDueno({
   };
 
   return (
-    <div className="t-paleta t-panel relative h-full overflow-hidden bg-[var(--t-panel)] text-[var(--t-tinta)]">
+    <div className="t-paleta t-panel relative h-full overflow-hidden bg-(--t-panel) text-(--t-tinta)">
       <div ref={scroller} className="d-barra-fina h-full overflow-y-auto overscroll-contain">
-        <header className="sticky top-0 z-10 border-b border-[var(--t-linea)] bg-[var(--t-panel)]/95 px-4 pt-4 pb-3 backdrop-blur">
+        <header className="sticky top-0 z-10 border-b border-(--t-linea) bg-(--t-panel)/95 px-4 pt-4 pb-3 backdrop-blur">
           <div className="flex items-center justify-between">
             <p className="text-[1.0625rem] font-bold">{PANEL_TURNOS.marca}</p>
             <div className="flex items-center gap-2">
-              <p className="flex items-center gap-1.5 text-[0.75rem] font-medium text-[var(--t-gris)]">
-                <span className="t-late size-1.5 rounded-full bg-[var(--t-verde-punto)]" />
+              <p className="flex items-center gap-1.5 text-[0.75rem] font-medium text-(--t-gris)">
+                <span className="t-late size-1.5 rounded-full bg-(--t-verde-punto)" />
                 {PANEL_TURNOS.enVivo} · {aHhmm(ahora)}
               </p>
               <button
                 type="button"
                 onClick={onAdelantar}
                 aria-label={PANEL_TURNOS.adelantarAria}
-                className="rounded-full border border-[var(--t-linea-2)] bg-[var(--t-fondo)] px-2.5 py-1 text-[0.6875rem] font-semibold"
+                className="rounded-full border border-(--t-linea-2) bg-(--t-fondo) px-2.5 py-1 text-[0.6875rem] font-semibold"
               >
                 {PANEL_TURNOS.adelantar}
               </button>
@@ -153,7 +153,7 @@ export function PanelDueno({
           <div
             role="tablist"
             aria-label={PANEL_TURNOS.pestanasAria}
-            className="mt-3 grid grid-cols-2 gap-1 rounded-xl bg-[var(--t-linea)] p-1"
+            className="mt-3 grid grid-cols-2 gap-1 rounded-xl bg-(--t-linea) p-1"
           >
             {(['inicio', 'agenda'] as const).map((p) => (
               <button
@@ -162,7 +162,7 @@ export function PanelDueno({
                 role="tab"
                 aria-selected={pestana === p}
                 onClick={() => setPestana(p)}
-                className="rounded-lg py-1.5 text-[0.8125rem] font-semibold text-[var(--t-tinta-2)] aria-selected:bg-[var(--t-fondo)] aria-selected:text-[var(--t-tinta)]"
+                className="rounded-lg py-1.5 text-[0.8125rem] font-semibold text-(--t-tinta-2) aria-selected:bg-(--t-fondo) aria-selected:text-(--t-tinta)"
               >
                 {PANEL_TURNOS.pestanas[p]}
               </button>
@@ -246,7 +246,7 @@ export function PanelDueno({
         {carteles.map((c) => (
           <div
             key={c.id}
-            className="t-entra pointer-events-auto flex items-start gap-3 rounded-xl bg-[var(--t-tinta)] px-3.5 py-3 text-[0.8125rem] text-[var(--t-fondo)]"
+            className="t-entra pointer-events-auto flex items-start gap-3 rounded-xl bg-(--t-tinta) px-3.5 py-3 text-[0.8125rem] text-(--t-fondo)"
           >
             <p className="min-w-0 flex-1">
               {c.titulo ? <span className="block font-semibold">{c.titulo}</span> : null}
@@ -304,7 +304,7 @@ function Inicio({
 
   return (
     <>
-      <p className="text-[0.75rem] font-medium text-[var(--t-gris)] first-letter:uppercase">
+      <p className="text-[0.75rem] font-medium text-(--t-gris) first-letter:uppercase">
         {FECHAS.dia(DIAS_LARGO[f.getDay()]!, f.getDate(), MESES[f.getMonth()]!)}
       </p>
       <h2 className="mt-0.5 text-[1.375rem] font-bold tracking-tight">
@@ -312,8 +312,8 @@ function Inicio({
       </h2>
 
       {resolver.length > 0 ? (
-        <section className="mt-4 rounded-2xl bg-[var(--t-rojo-suave)] p-3.5">
-          <h3 className="text-[0.75rem] font-semibold text-[var(--t-rojo)] uppercase">
+        <section className="mt-4 rounded-2xl bg-(--t-rojo-suave) p-3.5">
+          <h3 className="text-[0.75rem] font-semibold text-(--t-rojo) uppercase">
             {PANEL_TURNOS.aResolver}
           </h3>
           <ul className="mt-2 space-y-1.5">
@@ -327,7 +327,7 @@ function Inicio({
                 <button
                   type="button"
                   onClick={() => onAbrir(t)}
-                  className="shrink-0 font-semibold text-[var(--t-rojo)] underline underline-offset-4"
+                  className="shrink-0 font-semibold text-(--t-rojo) underline underline-offset-4"
                 >
                   {PANEL_TURNOS.resolver}
                 </button>
@@ -343,13 +343,10 @@ function Inicio({
         return (
           <section
             key={t.id}
-            className="t-entra mt-4 overflow-hidden rounded-2xl bg-[var(--t-tinta)] text-[var(--t-fondo)]"
+            className="t-entra mt-4 overflow-hidden rounded-2xl bg-(--t-tinta) text-(--t-fondo)"
           >
             <div className="h-1 bg-white/15">
-              <div
-                className="h-full bg-[var(--t-verde-punto)]"
-                style={{ width: `${avance * 100}%` }}
-              />
+              <div className="h-full bg-(--t-verde-punto)" style={{ width: `${avance * 100}%` }} />
             </div>
             <div className="p-4">
               <p className="text-[0.75rem] font-medium opacity-70">
@@ -368,7 +365,7 @@ function Inicio({
                 <button
                   type="button"
                   onClick={() => onTermine(t)}
-                  className="h-10 rounded-xl bg-[var(--t-fondo)] text-[0.8125rem] font-semibold text-[var(--t-tinta)]"
+                  className="h-10 rounded-xl bg-(--t-fondo) text-[0.8125rem] font-semibold text-(--t-tinta)"
                 >
                   {PANEL_TURNOS.termine}
                 </button>
@@ -387,10 +384,10 @@ function Inicio({
 
       {fila.length > 0 ? (
         <section className="mt-5">
-          <h3 className="text-[0.75rem] font-semibold text-[var(--t-gris)] uppercase">
+          <h3 className="text-[0.75rem] font-semibold text-(--t-gris) uppercase">
             {PANEL_TURNOS.fila}
           </h3>
-          <ul className="mt-2 divide-y divide-[var(--t-linea)] overflow-hidden rounded-2xl border border-[var(--t-linea)] bg-[var(--t-fondo)]">
+          <ul className="mt-2 divide-y divide-(--t-linea) overflow-hidden rounded-2xl border border-(--t-linea) bg-(--t-fondo)">
             {fila.map((t, i) => (
               <li key={t.id}>
                 <FilaTurno
@@ -410,13 +407,13 @@ function Inicio({
             type="button"
             aria-expanded={verAtendidos}
             onClick={() => setVerAtendidos((v) => !v)}
-            className="flex w-full items-center justify-between text-[0.75rem] font-semibold text-[var(--t-gris)] uppercase"
+            className="flex w-full items-center justify-between text-[0.75rem] font-semibold text-(--t-gris) uppercase"
           >
             {PANEL_TURNOS.atendidos(atendidos.length, pesos(entro))}
             <span aria-hidden="true">{verAtendidos ? '−' : '+'}</span>
           </button>
           {verAtendidos ? (
-            <ul className="mt-2 divide-y divide-[var(--t-linea)] overflow-hidden rounded-2xl border border-[var(--t-linea)] bg-[var(--t-fondo)]">
+            <ul className="mt-2 divide-y divide-(--t-linea) overflow-hidden rounded-2xl border border-(--t-linea) bg-(--t-fondo)">
               {atendidos.map((t) => (
                 <li key={t.id}>
                   <FilaTurno t={t} onAbrir={onAbrir} />
@@ -428,7 +425,7 @@ function Inicio({
       ) : null}
 
       {manana.length > 0 ? (
-        <p className="mt-6 text-[0.8125rem] text-[var(--t-gris)]">
+        <p className="mt-6 text-[0.8125rem] text-(--t-gris)">
           {PANEL_TURNOS.manana(manana.length, aHhmm(Math.min(...manana.map((t) => t.inicio))))}
         </p>
       ) : null}
@@ -447,10 +444,10 @@ function Insignia({
     <span
       className={cn(
         'rounded-md px-1.5 py-0.5 text-[0.6875rem] font-semibold',
-        tono === 'verde' && 'bg-[var(--t-verde-suave)] text-[var(--t-verde)]',
-        tono === 'ambar' && 'bg-[var(--t-ambar-suave)] text-[var(--t-ambar)]',
-        tono === 'rojo' && 'bg-[var(--t-rojo-suave)] text-[var(--t-rojo)]',
-        tono === 'gris' && 'bg-[var(--t-suave)] text-[var(--t-gris)]',
+        tono === 'verde' && 'bg-(--t-verde-suave) text-(--t-verde)',
+        tono === 'ambar' && 'bg-(--t-ambar-suave) text-(--t-ambar)',
+        tono === 'rojo' && 'bg-(--t-rojo-suave) text-(--t-rojo)',
+        tono === 'gris' && 'bg-(--t-suave) text-(--t-gris)',
       )}
     >
       {children}
@@ -488,7 +485,7 @@ function FilaTurno({
     <button
       type="button"
       onClick={() => onAbrir(t)}
-      className="flex min-h-16 w-full items-center gap-3 px-3.5 py-2.5 text-left hover:bg-[var(--t-suave)]"
+      className="flex min-h-16 w-full items-center gap-3 px-3.5 py-2.5 text-left hover:bg-(--t-suave)"
     >
       <span className="w-11 shrink-0 text-[0.875rem] font-semibold tabular-nums">
         {aHhmm(t.inicio)}
@@ -502,7 +499,7 @@ function FilaTurno({
             </Insignia>
           ))}
         </span>
-        <span className="block text-[0.75rem] text-[var(--t-gris)]">
+        <span className="block text-[0.75rem] text-(--t-gris)">
           {t.servicioNombre}
           {p ? ` · ${p.nombre}` : ''}
           {extra ? ` · ${extra}` : ''}
@@ -566,7 +563,7 @@ function Agenda({
               type="button"
               aria-pressed={d === dia}
               onClick={() => setDia(d)}
-              className="flex h-16 flex-col items-center justify-center rounded-xl text-[0.6875rem] font-medium aria-pressed:bg-[var(--t-tinta)] aria-pressed:text-[var(--t-fondo)]"
+              className="flex h-16 flex-col items-center justify-center rounded-xl text-[0.6875rem] font-medium aria-pressed:bg-(--t-tinta) aria-pressed:text-(--t-fondo)"
             >
               <span className="opacity-70">
                 {d === 0 ? FECHAS.hoy : d === 1 ? FECHAS.mananaCorto : DIAS_CORTO[f.getDay()]}
@@ -584,7 +581,7 @@ function Agenda({
             type="button"
             aria-pressed={prof === x.id}
             onClick={() => setProf(x.id)}
-            className="rounded-full border border-[var(--t-linea)] bg-[var(--t-fondo)] px-3 py-1.5 text-[0.75rem] font-semibold aria-pressed:border-[var(--t-tinta)] aria-pressed:bg-[var(--t-tinta)] aria-pressed:text-[var(--t-fondo)]"
+            className="rounded-full border border-(--t-linea) bg-(--t-fondo) px-3 py-1.5 text-[0.75rem] font-semibold aria-pressed:border-(--t-tinta) aria-pressed:bg-(--t-tinta) aria-pressed:text-(--t-fondo)"
           >
             {x.nombre}
           </button>
@@ -597,19 +594,19 @@ function Agenda({
           MESES[fechaDe(dia).getMonth()]!,
         )}
       </p>
-      <p className="text-[0.75rem] text-[var(--t-gris)]">
+      <p className="text-[0.75rem] text-(--t-gris)">
         {cerrado
           ? PANEL_TURNOS.agenda.cerrado
           : PANEL_TURNOS.agenda.resumen(delDia.length, pesos(senas))}
       </p>
       {items.length > 0 ? (
-        <ul className="mt-3 divide-y divide-[var(--t-linea)] overflow-hidden rounded-2xl border border-[var(--t-linea)] bg-[var(--t-fondo)]">
+        <ul className="mt-3 divide-y divide-(--t-linea) overflow-hidden rounded-2xl border border-(--t-linea) bg-(--t-fondo)">
           {items.map((it) => (
             <li key={`${it.tipo}${it.inicio}${it.tipo === 'turno' ? it.t.id : ''}`}>
               {it.tipo === 'turno' ? (
                 <FilaTurno t={it.t} onAbrir={onAbrir} />
               ) : (
-                <div className="flex min-h-12 items-center gap-3 px-3.5 py-2 text-[0.8125rem] text-[var(--t-gris)]">
+                <div className="flex min-h-12 items-center gap-3 px-3.5 py-2 text-[0.8125rem] text-(--t-gris)">
                   <span className="w-11 shrink-0 tabular-nums">{aHhmm(it.inicio)}</span>
                   {it.tipo === 'libre'
                     ? PANEL_TURNOS.agenda.libre(aHhmm(it.fin))
@@ -647,21 +644,18 @@ function Hoja({
       role="dialog"
       aria-modal="true"
       aria-label={titulo}
-      className="absolute inset-0 z-20 flex items-end bg-[var(--t-tinta)]/40"
+      className="absolute inset-0 z-20 flex items-end bg-(--t-tinta)/40"
       onClick={(ev) => ev.target === ev.currentTarget && onCerrar()}
     >
-      <div className="t-entra max-h-[92%] w-full overflow-y-auto rounded-t-2xl bg-[var(--t-fondo)] px-4 pt-2 pb-5">
-        <span
-          aria-hidden="true"
-          className="mx-auto block h-1 w-10 rounded-full bg-[var(--t-linea)]"
-        />
+      <div className="t-entra max-h-[92%] w-full overflow-y-auto rounded-t-2xl bg-(--t-fondo) px-4 pt-2 pb-5">
+        <span aria-hidden="true" className="mx-auto block h-1 w-10 rounded-full bg-(--t-linea)" />
         <div className="mt-2 flex items-center justify-between gap-3">
           <p className="text-[1.0625rem] font-bold">{titulo}</p>
           <button
             type="button"
             onClick={onCerrar}
             aria-label={HOJA_TURNO.cerrar}
-            className="grid size-11 place-items-center rounded-full hover:bg-[var(--t-suave)]"
+            className="grid size-11 place-items-center rounded-full hover:bg-(--t-suave)"
           >
             <svg
               viewBox="0 0 24 24"
@@ -725,11 +719,11 @@ function HojaTurno({
         </Insignia>
       </div>
       {faltas.length > 0 ? (
-        <p className="mt-3 rounded-lg bg-[var(--t-rojo-suave)] px-3 py-2 text-[0.75rem] font-medium text-[var(--t-rojo)]">
+        <p className="mt-3 rounded-lg bg-(--t-rojo-suave) px-3 py-2 text-[0.75rem] font-medium text-(--t-rojo)">
           {HOJA_TURNO.faltas(faltas.length, diaCorto(faltas[0]!.dia))}
         </p>
       ) : null}
-      <dl className="mt-3 divide-y divide-[var(--t-linea)] border-y border-[var(--t-linea)] text-[0.8125rem]">
+      <dl className="mt-3 divide-y divide-(--t-linea) border-y border-(--t-linea) text-[0.8125rem]">
         {[
           [HOJA_TURNO.cuando, fechaLarga(t.dia, t.inicio)],
           [HOJA_TURNO.servicio, t.servicioNombre],
@@ -743,15 +737,15 @@ function HojaTurno({
             : []),
         ].map(([k, v]) => (
           <div key={k} className="flex justify-between gap-4 py-2">
-            <dt className="text-[var(--t-gris)]">{k}</dt>
+            <dt className="text-(--t-gris)">{k}</dt>
             <dd className="text-right font-medium">{v}</dd>
           </div>
         ))}
       </dl>
 
-      <p className="mt-2 text-[0.75rem] text-[var(--t-gris)]">{HOJA_TURNO.origen[t.origen]}</p>
+      <p className="mt-2 text-[0.75rem] text-(--t-gris)">{HOJA_TURNO.origen[t.origen]}</p>
       {pregunta ? (
-        <div className="mt-4 rounded-xl bg-[var(--t-suave)] p-3.5">
+        <div className="mt-4 rounded-xl bg-(--t-suave) p-3.5">
           <p className="text-[0.8125rem]">
             {pregunta === 'cancelar'
               ? HOJA_TURNO.cancelarPregunta(t.cliente, pesos(t.sena))
@@ -761,14 +755,14 @@ function HojaTurno({
             <button
               type="button"
               onClick={pregunta === 'cancelar' ? onCancelar : onDevolver}
-              className={cn(boton, 'bg-[var(--t-rojo)] text-white')}
+              className={cn(boton, 'bg-(--t-rojo) text-white')}
             >
               {pregunta === 'cancelar' ? HOJA_TURNO.siCancelar : HOJA_TURNO.siDevolver}
             </button>
             <button
               type="button"
               onClick={() => setPregunta(undefined)}
-              className={cn(boton, 'border border-[var(--t-linea)]')}
+              className={cn(boton, 'border border-(--t-linea)')}
             >
               {HOJA_TURNO.no}
             </button>
@@ -781,7 +775,7 @@ function HojaTurno({
               <button
                 type="button"
                 onClick={onAtendido}
-                className={cn(boton, 'bg-[var(--t-tinta)] text-[var(--t-fondo)]')}
+                className={cn(boton, 'bg-(--t-tinta) text-(--t-fondo)')}
               >
                 {HOJA_TURNO.atendido}
               </button>
@@ -789,7 +783,7 @@ function HojaTurno({
                 <button
                   type="button"
                   onClick={onNoVino}
-                  className={cn(boton, 'border border-[var(--t-linea)]')}
+                  className={cn(boton, 'border border-(--t-linea)')}
                 >
                   {HOJA_TURNO.noVino}
                 </button>
@@ -797,7 +791,7 @@ function HojaTurno({
               <button
                 type="button"
                 onClick={() => setPregunta('cancelar')}
-                className={cn(boton, 'col-span-2 text-[var(--t-rojo)]')}
+                className={cn(boton, 'col-span-2 text-(--t-rojo)')}
               >
                 {HOJA_TURNO.cancelar}
               </button>
@@ -810,7 +804,7 @@ function HojaTurno({
             <button
               type="button"
               onClick={onRestaurar}
-              className={cn(boton, 'col-span-2 border border-[var(--t-linea)]')}
+              className={cn(boton, 'col-span-2 border border-(--t-linea)')}
             >
               {HOJA_TURNO.restaurar}
             </button>
@@ -819,7 +813,7 @@ function HojaTurno({
             <button
               type="button"
               onClick={() => setPregunta('devolver')}
-              className={cn(boton, 'col-span-2 border border-[var(--t-linea)]')}
+              className={cn(boton, 'col-span-2 border border-(--t-linea)')}
             >
               {HOJA_TURNO.devolver(pesos(t.sena))}
             </button>
@@ -844,11 +838,11 @@ function Cobro({
   if (saldo === 0)
     return (
       <>
-        <p className="mt-2 text-[0.875rem] text-[var(--t-gris)]">{COBRO.todoPago}</p>
+        <p className="mt-2 text-[0.875rem] text-(--t-gris)">{COBRO.todoPago}</p>
         <button
           type="button"
           onClick={() => onListo(null)}
-          className="mt-4 h-11 w-full rounded-xl bg-[var(--t-tinta)] text-[0.875rem] font-semibold text-[var(--t-fondo)]"
+          className="mt-4 h-11 w-full rounded-xl bg-(--t-tinta) text-[0.875rem] font-semibold text-(--t-fondo)"
         >
           {COBRO.listo(pesos(0))}
         </button>
@@ -863,9 +857,9 @@ function Cobro({
           inputMode="numeric"
           value={monto}
           onChange={(ev) => setMonto(ev.target.value)}
-          className="mt-1 h-11 w-full rounded-lg border border-[var(--t-linea)] px-3 text-[1rem] tabular-nums outline-none focus:border-[var(--t-tinta)]"
+          className="mt-1 h-11 w-full rounded-lg border border-(--t-linea) px-3 text-[1rem] tabular-nums outline-none focus:border-(--t-tinta)"
         />
-        <span className="mt-1 block text-[0.75rem] text-[var(--t-gris)]">{COBRO.ayuda}</span>
+        <span className="mt-1 block text-[0.75rem] text-(--t-gris)">{COBRO.ayuda}</span>
       </label>
       <div className="mt-3 grid grid-cols-4 gap-1.5">
         {(Object.keys(COBRO.medios) as Medio[]).map((m) => (
@@ -874,7 +868,7 @@ function Cobro({
             type="button"
             aria-pressed={medio === m}
             onClick={() => setMedio(m)}
-            className="h-10 rounded-lg border border-[var(--t-linea)] text-[0.75rem] font-semibold aria-pressed:border-[var(--t-tinta)] aria-pressed:bg-[var(--t-tinta)] aria-pressed:text-[var(--t-fondo)]"
+            className="h-10 rounded-lg border border-(--t-linea) text-[0.75rem] font-semibold aria-pressed:border-(--t-tinta) aria-pressed:bg-(--t-tinta) aria-pressed:text-(--t-fondo)"
           >
             {COBRO.medios[m]}
           </button>
@@ -883,14 +877,14 @@ function Cobro({
       <button
         type="button"
         onClick={() => onListo({ monto: valor, medio })}
-        className="mt-4 h-11 w-full rounded-xl bg-[var(--t-tinta)] text-[0.875rem] font-semibold text-[var(--t-fondo)]"
+        className="mt-4 h-11 w-full rounded-xl bg-(--t-tinta) text-[0.875rem] font-semibold text-(--t-fondo)"
       >
         {COBRO.listo(pesos(valor))}
       </button>
       <button
         type="button"
         onClick={() => onListo(null)}
-        className="mt-2 w-full py-2 text-[0.8125rem] font-medium text-[var(--t-gris)] underline underline-offset-4"
+        className="mt-2 w-full py-2 text-[0.8125rem] font-medium text-(--t-gris) underline underline-offset-4"
       >
         {COBRO.sinAnotar}
       </button>

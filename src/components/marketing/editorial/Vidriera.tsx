@@ -43,7 +43,7 @@ function Celular({ p, copia }: { p: Pieza; copia: boolean }) {
   // Cuánto se desplaza la captura para recorrerla entera (0 si entra en la pantalla).
   const bajar = img && !p.completa ? Math.max(0, 1 - PANTALLA / (img.alto / img.ancho)) : 0;
   return (
-    <figure className="w-[8.75rem] shrink-0 sm:w-[10rem] lg:w-[11.25rem]">
+    <figure className="w-35 shrink-0 sm:w-40 lg:w-45">
       <Telefono
         className="max-w-none"
         decorativo={!img || copia}

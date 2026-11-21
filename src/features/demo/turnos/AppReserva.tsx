@@ -237,7 +237,7 @@ function Logo({ className }: { className?: string }) {
     <span
       aria-hidden="true"
       className={cn(
-        'grid shrink-0 place-items-center rounded-lg bg-[var(--t-tinta)] font-semibold text-[var(--t-fondo)]',
+        'grid shrink-0 place-items-center rounded-lg bg-(--t-tinta) font-semibold text-(--t-fondo)',
         className,
       )}
     >
@@ -275,33 +275,33 @@ function estadoApertura(ahora: number) {
 function Portada({ ahora }: { ahora: number }) {
   const estado = estadoApertura(ahora);
   return (
-    <header className="border-b border-[var(--t-linea)] px-5 pt-5 pb-5">
+    <header className="border-b border-(--t-linea) px-5 pt-5 pb-5">
       <div className="flex items-center gap-3.5">
         <Logo className="size-16 rounded-2xl text-[1.5rem]" />
         <div className="min-w-0">
           <p className="truncate text-[1.375rem] leading-tight font-semibold tracking-tight">
             {NEGOCIO_DEMO.nombre}
           </p>
-          <p className="mt-0.5 text-[0.8125rem] text-[var(--t-gris)]">{NEGOCIO_DEMO.direccion}</p>
+          <p className="mt-0.5 text-[0.8125rem] text-(--t-gris)">{NEGOCIO_DEMO.direccion}</p>
           <p className="mt-1 flex items-center gap-1.5 text-[0.8125rem] font-medium">
             <span
               className={cn(
                 'size-1.5 rounded-full',
-                estado.abierto ? 't-late bg-[var(--t-verde-punto)]' : 'bg-[var(--t-gris)]',
+                estado.abierto ? 't-late bg-(--t-verde-punto)' : 'bg-(--t-gris)',
               )}
             />
             {estado.texto}
           </p>
         </div>
       </div>
-      <p className="mt-3 text-[0.8125rem] text-[var(--t-tinta-2)]">{NEGOCIO_DEMO.descripcion}</p>
-      <ul className="mt-4 grid grid-cols-4 divide-x divide-[var(--t-linea)] rounded-2xl border border-[var(--t-linea)]">
+      <p className="mt-3 text-[0.8125rem] text-(--t-tinta-2)">{NEGOCIO_DEMO.descripcion}</p>
+      <ul className="mt-4 grid grid-cols-4 divide-x divide-(--t-linea) rounded-2xl border border-(--t-linea)">
         {PORTADA.acciones.map((a, i) => (
           <li
             key={a}
             className="flex h-14 flex-col items-center justify-center gap-1 text-[0.6875rem] font-medium"
           >
-            <span className={i === 0 ? 'text-[var(--t-whatsapp)]' : undefined}>
+            <span className={i === 0 ? 'text-(--t-whatsapp)' : undefined}>
               <IconoAccion i={i} />
             </span>
             {a}
@@ -322,7 +322,7 @@ function IconoAccion({ i }: { i: number }) {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="size-[1.125rem]"
+      className="size-4.5"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.7"
@@ -337,12 +337,12 @@ function IconoAccion({ i }: { i: number }) {
 
 function BarraNegocio({ onVolver }: { onVolver: () => void }) {
   return (
-    <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-[var(--t-linea)] bg-[var(--t-fondo)] px-3 py-2.5">
+    <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-(--t-linea) bg-(--t-fondo) px-3 py-2.5">
       <button
         type="button"
         onClick={onVolver}
         aria-label={PASOS.volver}
-        className="grid size-10 place-items-center rounded-full hover:bg-[var(--t-suave)]"
+        className="grid size-10 place-items-center rounded-full hover:bg-(--t-suave)"
       >
         <svg
           viewBox="0 0 24 24"
@@ -376,13 +376,13 @@ function Progreso({ paso, onIr }: { paso: number; onIr: (i: number) => void }) {
             <span
               className={cn(
                 'block h-1 rounded-full',
-                i <= paso ? 'bg-[var(--t-tinta)]' : 'bg-[var(--t-linea)]',
+                i <= paso ? 'bg-(--t-tinta)' : 'bg-(--t-linea)',
               )}
             />
             <span
               className={cn(
                 'mt-1.5 block text-[0.6875rem] font-medium',
-                i <= paso ? 'text-[var(--t-tinta)]' : 'text-[var(--t-gris)]',
+                i <= paso ? 'text-(--t-tinta)' : 'text-(--t-gris)',
               )}
             >
               {i + 1}. {n}
@@ -398,7 +398,7 @@ function Titulo({ children, bajada }: { children: ReactNode; bajada?: string }) 
   return (
     <div className="mb-4">
       <h2 className="text-[1.375rem] leading-tight font-bold tracking-tight">{children}</h2>
-      {bajada ? <p className="mt-1 text-[0.8125rem] text-[var(--t-gris)]">{bajada}</p> : null}
+      {bajada ? <p className="mt-1 text-[0.8125rem] text-(--t-gris)">{bajada}</p> : null}
     </div>
   );
 }
@@ -409,8 +409,8 @@ function Pastilla({ children, tono = 'verde' }: { children: ReactNode; tono?: 'v
       className={cn(
         't-entra inline-block rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold',
         tono === 'verde'
-          ? 'bg-[var(--t-verde-suave)] text-[var(--t-verde)]'
-          : 'bg-[var(--t-suave)] text-[var(--t-gris)]',
+          ? 'bg-(--t-verde-suave) text-(--t-verde)'
+          : 'bg-(--t-suave) text-(--t-gris)',
       )}
     >
       {children}
@@ -437,7 +437,7 @@ function Servicios({
     <>
       <Titulo bajada={ELEGIR_SERVICIO.bajada}>{ELEGIR_SERVICIO.titulo}</Titulo>
       {r && deSiempre ? (
-        <div className="t-entra mb-4 rounded-2xl bg-[var(--t-tinta)] p-4 text-[var(--t-fondo)]">
+        <div className="t-entra mb-4 rounded-2xl bg-(--t-tinta) p-4 text-(--t-fondo)">
           <p className="text-[0.9375rem] font-semibold">
             {ELEGIR_SERVICIO.deSiempre(r.nombre.split(' ')[0]!)}
           </p>
@@ -448,13 +448,13 @@ function Servicios({
           <button
             type="button"
             onClick={() => onDeSiempre(r.servicioId, deSiempre)}
-            className="mt-3 rounded-full bg-[var(--t-fondo)] px-4 py-2 text-[0.8125rem] font-semibold text-[var(--t-tinta)]"
+            className="mt-3 rounded-full bg-(--t-fondo) px-4 py-2 text-[0.8125rem] font-semibold text-(--t-tinta)"
           >
             {ELEGIR_SERVICIO.reservar}
           </button>
         </div>
       ) : null}
-      <ul className="divide-y divide-[var(--t-linea)] overflow-hidden rounded-2xl border border-[var(--t-linea)]">
+      <ul className="divide-y divide-(--t-linea) overflow-hidden rounded-2xl border border-(--t-linea)">
         {SERVICIOS_DEMO.map((s, i) => {
           const libre = primerLibre(e, s.id, null, ahora, ahoraReal);
           return (
@@ -462,15 +462,15 @@ function Servicios({
               <button
                 type="button"
                 onClick={() => onElegir(s.id)}
-                className="group relative flex min-h-[4.5rem] w-full items-center gap-3 px-4 py-3 text-left hover:bg-[var(--t-suave)]"
+                className="group relative flex min-h-18 w-full items-center gap-3 px-4 py-3 text-left hover:bg-(--t-suave)"
               >
                 <span
                   aria-hidden="true"
-                  className="absolute inset-y-3 left-0 w-[3px] origin-center scale-y-0 rounded-r bg-[var(--t-tinta)] transition-transform group-hover:scale-y-100"
+                  className="absolute inset-y-3 left-0 w-[3px] origin-center scale-y-0 rounded-r bg-(--t-tinta) transition-transform group-hover:scale-y-100"
                 />
                 <span className="min-w-0 flex-1">
                   <span className="block text-[0.9375rem] font-semibold">{s.nombre}</span>
-                  <span className="block text-[0.75rem] text-[var(--t-gris)]">
+                  <span className="block text-[0.75rem] text-(--t-gris)">
                     {s.descripcion} · {ELEGIR_SERVICIO.minutos(s.duracionMin)}
                   </span>
                   <span className="mt-1.5 block" style={{ animationDelay: `${i * 70}ms` }}>
@@ -487,7 +487,7 @@ function Servicios({
                   <span className="block text-[0.9375rem] font-semibold tabular-nums">
                     {pesos(s.precio)}
                   </span>
-                  <span className="block text-[0.6875rem] text-[var(--t-gris)]">
+                  <span className="block text-[0.6875rem] text-(--t-gris)">
                     {ELEGIR_SERVICIO.sena(pesos(senaDe(s)))}
                   </span>
                 </span>
@@ -496,7 +496,7 @@ function Servicios({
           );
         })}
       </ul>
-      <p className="mt-8 text-center text-[0.625rem] tracking-[0.2em] text-[var(--t-gris)] uppercase">
+      <p className="mt-8 text-center text-[0.625rem] tracking-[0.2em] text-(--t-gris) uppercase">
         {PORTADA.firma}
       </p>
     </>
@@ -539,17 +539,17 @@ function Profesionales({
                 type="button"
                 aria-pressed={elegido === o.id}
                 onClick={() => onElegir(o.id)}
-                className="flex h-full w-full flex-col items-start gap-2 rounded-2xl border border-[var(--t-linea)] p-3.5 text-left hover:border-[var(--t-tinta)] aria-pressed:border-[var(--t-tinta)]"
+                className="flex h-full w-full flex-col items-start gap-2 rounded-2xl border border-(--t-linea) p-3.5 text-left hover:border-(--t-tinta) aria-pressed:border-(--t-tinta)"
               >
                 <span
                   style={o.color ? { background: o.color, color: 'var(--t-fondo)' } : undefined}
-                  className="grid size-10 place-items-center rounded-full bg-[var(--t-suave)] text-[0.875rem] font-semibold"
+                  className="grid size-10 place-items-center rounded-full bg-(--t-suave) text-[0.875rem] font-semibold"
                 >
                   {o.inicial || <Estrellita />}
                 </span>
                 <span className="text-[0.9375rem] font-semibold">{o.nombre}</span>
                 {o.id === null ? (
-                  <span className="text-[0.75rem] text-[var(--t-gris)]">
+                  <span className="text-[0.75rem] text-(--t-gris)">
                     {ELEGIR_PROFESIONAL.cualquieraTexto}
                   </span>
                 ) : null}
@@ -614,7 +614,7 @@ function Horarios({
     return (
       <>
         <Titulo>{ELEGIR_HORARIO.titulo}</Titulo>
-        <p className="text-[0.875rem] text-[var(--t-gris)]">{ELEGIR_HORARIO.sinHorarios}</p>
+        <p className="text-[0.875rem] text-(--t-gris)">{ELEGIR_HORARIO.sinHorarios}</p>
       </>
     );
 
@@ -626,14 +626,14 @@ function Horarios({
       {aviso ? (
         <p
           role="alert"
-          className="mb-4 rounded-xl bg-[var(--t-rojo-suave)] px-3.5 py-2.5 text-[0.8125rem] font-medium text-[var(--t-rojo)]"
+          className="mb-4 rounded-xl bg-(--t-rojo-suave) px-3.5 py-2.5 text-[0.8125rem] font-medium text-(--t-rojo)"
         >
           {aviso}
         </p>
       ) : null}
-      <div className="rounded-2xl bg-[var(--t-tinta)] p-4 text-[var(--t-fondo)]">
+      <div className="rounded-2xl bg-(--t-tinta) p-4 text-(--t-fondo)">
         <p className="flex items-center gap-2 text-[0.75rem] font-medium opacity-80">
-          <span className="t-late size-1.5 rounded-full bg-[var(--t-verde-punto)]" />
+          <span className="t-late size-1.5 rounded-full bg-(--t-verde-punto)" />
           {ELEGIR_HORARIO.masCercano}
         </p>
         <p className="mt-1.5 text-[1.5rem] leading-tight font-bold tabular-nums">
@@ -642,7 +642,7 @@ function Horarios({
         <button
           type="button"
           onClick={() => onElegir(cercano.dia, cercano.inicio)}
-          className="mt-3 rounded-full bg-[var(--t-fondo)] px-4 py-2 text-[0.8125rem] font-semibold text-[var(--t-tinta)]"
+          className="mt-3 rounded-full bg-(--t-fondo) px-4 py-2 text-[0.8125rem] font-semibold text-(--t-tinta)"
         >
           {ELEGIR_HORARIO.reservar}
         </button>
@@ -650,9 +650,7 @@ function Horarios({
 
       <div className="mt-6 flex items-baseline justify-between">
         <p className="text-[0.9375rem] font-semibold">{ELEGIR_HORARIO.elegi}</p>
-        <p className="text-[0.75rem] text-[var(--t-gris)]">
-          {ELEGIR_HORARIO.diasConLugar(dias.length)}
-        </p>
+        <p className="text-[0.75rem] text-(--t-gris)">{ELEGIR_HORARIO.diasConLugar(dias.length)}</p>
       </div>
       <div className="d-sin-barra -mx-5 mt-3 flex gap-2 overflow-x-auto [mask-image:linear-gradient(90deg,transparent,#000_1.25rem,#000_calc(100%-1.25rem),transparent)] px-5">
         {dias.map((d) => {
@@ -663,7 +661,7 @@ function Horarios({
               type="button"
               aria-pressed={d.dia === elegido.dia}
               onClick={() => setDia(d.dia)}
-              className="t-elegible relative flex h-[4.25rem] w-14 shrink-0 flex-col items-center justify-center rounded-xl border border-[var(--t-linea)] aria-pressed:border-[var(--t-tinta)] aria-pressed:bg-[var(--t-tinta)] aria-pressed:text-[var(--t-fondo)]"
+              className="t-elegible relative flex h-17 w-14 shrink-0 flex-col items-center justify-center rounded-xl border border-(--t-linea) aria-pressed:border-(--t-tinta) aria-pressed:bg-(--t-tinta) aria-pressed:text-(--t-fondo)"
             >
               <span className="text-[0.6875rem] font-medium">
                 {d.dia === 0
@@ -676,14 +674,14 @@ function Horarios({
                 {f.getDate()}
               </span>
               {d.slots.length <= POCOS_HORARIOS ? (
-                <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-[var(--t-ambar-punto)]" />
+                <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-(--t-ambar-punto)" />
               ) : null}
             </button>
           );
         })}
       </div>
       {pocos ? (
-        <p className="mt-3 text-[0.75rem] font-semibold text-[var(--t-ambar)]">
+        <p className="mt-3 text-[0.75rem] font-semibold text-(--t-ambar)">
           {ELEGIR_HORARIO.quedan(elegido.slots.length)}
         </p>
       ) : null}
@@ -691,7 +689,7 @@ function Horarios({
         .filter((m) => grupos[m].length > 0)
         .map((m) => (
           <div key={m} className="mt-4">
-            <p className="text-[0.75rem] font-semibold text-[var(--t-gris)]">
+            <p className="text-[0.75rem] font-semibold text-(--t-gris)">
               {ELEGIR_HORARIO.momentos[m]}
             </p>
             <div className="mt-2 grid grid-cols-4 gap-2">
@@ -705,7 +703,7 @@ function Horarios({
                     setTimeout(() => onElegir(elegido.dia, s), 160);
                   }}
                   style={{ animationDelay: `${i * 16}ms` }}
-                  className="t-entra t-elegible h-11 rounded-xl border border-[var(--t-linea)] text-[0.875rem] font-semibold tabular-nums hover:border-[var(--t-tinta)] aria-pressed:bg-[var(--t-tinta)] aria-pressed:text-[var(--t-fondo)]"
+                  className="t-entra t-elegible h-11 rounded-xl border border-(--t-linea) text-[0.875rem] font-semibold tabular-nums hover:border-(--t-tinta) aria-pressed:bg-(--t-tinta) aria-pressed:text-(--t-fondo)"
                 >
                   {aHhmm(s)}
                 </button>
@@ -771,14 +769,14 @@ function Datos({
         placeholder={extra.ejemplo}
         aria-invalid={Boolean(errores[clave])}
         onChange={(ev) => cambiar(ev.target.value)}
-        className="mt-1 h-11 w-full rounded-lg border border-[var(--t-linea-2)] bg-[var(--t-fondo)] px-3 text-[1rem] outline-none focus:border-[var(--t-tinta)] aria-invalid:border-[var(--t-rojo)]"
+        className="mt-1 h-11 w-full rounded-lg border border-(--t-linea-2) bg-(--t-fondo) px-3 text-[1rem] outline-none focus:border-(--t-tinta) aria-invalid:border-(--t-rojo)"
       />
       {errores[clave] ? (
-        <span className="mt-1 block text-[0.75rem] font-medium text-[var(--t-rojo)]">
+        <span className="mt-1 block text-[0.75rem] font-medium text-(--t-rojo)">
           {errores[clave]}
         </span>
       ) : extra.ayuda ? (
-        <span className="mt-1 block text-[0.75rem] text-[var(--t-gris)]">{extra.ayuda}</span>
+        <span className="mt-1 block text-[0.75rem] text-(--t-gris)">{extra.ayuda}</span>
       ) : null}
     </label>
   );
@@ -786,9 +784,9 @@ function Datos({
   return (
     <>
       <Titulo bajada={r ? DATOS.hola(r.nombre.split(' ')[0]!) : undefined}>{DATOS.titulo}</Titulo>
-      <div className="rounded-2xl border border-[var(--t-linea)] p-3.5">
+      <div className="rounded-2xl border border-(--t-linea) p-3.5">
         <div className="flex items-center gap-3">
-          <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-[var(--t-tinta)] leading-none text-[var(--t-fondo)]">
+          <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-(--t-tinta) leading-none text-(--t-fondo)">
             <span className="text-center">
               <span className="block text-[0.6875rem] font-medium opacity-75">
                 {MESES[f.getMonth()]!.slice(0, 3)}
@@ -800,18 +798,18 @@ function Datos({
             <span className="block text-[0.875rem] font-semibold">
               {fechaLarga(eleccion.dia, eleccion.inicio)}
             </span>
-            <span className="block text-[0.75rem] text-[var(--t-gris)]">
+            <span className="block text-[0.75rem] text-(--t-gris)">
               {s.nombre} · {ELEGIR_SERVICIO.minutos(s.duracionMin)}
             </span>
           </span>
         </div>
-        <div className="mt-3 grid grid-cols-2 divide-x divide-[var(--t-linea)] border-t border-[var(--t-linea)] pt-3 text-center">
+        <div className="mt-3 grid grid-cols-2 divide-x divide-(--t-linea) border-t border-(--t-linea) pt-3 text-center">
           <span>
-            <span className="block text-[0.6875rem] text-[var(--t-gris)]">{DATOS.senaAhora}</span>
+            <span className="block text-[0.6875rem] text-(--t-gris)">{DATOS.senaAhora}</span>
             <span className="block text-[0.9375rem] font-bold tabular-nums">{pesos(sena)}</span>
           </span>
           <span>
-            <span className="block text-[0.6875rem] text-[var(--t-gris)]">{DATOS.enLocal}</span>
+            <span className="block text-[0.6875rem] text-(--t-gris)">{DATOS.enLocal}</span>
             <span className="block text-[0.9375rem] font-bold tabular-nums">
               {pesos(s.precio - sena)}
             </span>
@@ -834,8 +832,7 @@ function Datos({
         })}
         <label htmlFor={`${id}-nota`} className="block">
           <span className="text-[0.8125rem] font-semibold">
-            {DATOS.nota}{' '}
-            <span className="font-normal text-[var(--t-gris)]">· {DATOS.opcional}</span>
+            {DATOS.nota} <span className="font-normal text-(--t-gris)">· {DATOS.opcional}</span>
           </span>
           <textarea
             id={`${id}-nota`}
@@ -844,14 +841,14 @@ function Datos({
             rows={2}
             placeholder={DATOS.notaEjemplo}
             onChange={(ev) => setNota(ev.target.value)}
-            className="mt-1 w-full resize-none rounded-lg border border-[var(--t-linea-2)] bg-[var(--t-fondo)] px-3 py-2 text-[1rem] outline-none focus:border-[var(--t-tinta)]"
+            className="mt-1 w-full resize-none rounded-lg border border-(--t-linea-2) bg-(--t-fondo) px-3 py-2 text-[1rem] outline-none focus:border-(--t-tinta)"
           />
         </label>
       </div>
       <button
         type="button"
         onClick={enviar}
-        className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[var(--t-mp)] text-[1rem] font-semibold text-white hover:bg-[var(--t-mp-hover)]"
+        className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-(--t-mp) text-[1rem] font-semibold text-white hover:bg-(--t-mp-hover)"
       >
         {DATOS.pagar(pesos(sena))}
         <span aria-hidden="true">→</span>
@@ -859,13 +856,13 @@ function Datos({
       <p className="mt-4 text-[0.75rem] font-semibold">{DATOS.protegido}</p>
       <ul className="mt-2 space-y-1.5">
         {DATOS.garantias.map((g) => (
-          <li key={g} className="flex gap-2 text-[0.75rem] text-[var(--t-gris)]">
+          <li key={g} className="flex gap-2 text-[0.75rem] text-(--t-gris)">
             <Tilde />
             {g}
           </li>
         ))}
       </ul>
-      <p className="mt-3 text-[0.75rem] text-[var(--t-gris)]">{NEGOCIO_DEMO.politica}</p>
+      <p className="mt-3 text-[0.75rem] text-(--t-gris)">{NEGOCIO_DEMO.politica}</p>
     </>
   );
 }
@@ -874,7 +871,7 @@ function Tilde({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
-      className={cn('mt-0.5 size-3.5 shrink-0 text-[var(--t-verde)]', className)}
+      className={cn('mt-0.5 size-3.5 shrink-0 text-(--t-verde)', className)}
       fill="none"
       stroke="currentColor"
       strokeWidth="2.4"
@@ -891,14 +888,14 @@ function Espera({ titulo, texto }: { titulo: string; texto: string }) {
       role="status"
       className="flex h-full flex-col items-center justify-center px-8 text-center"
     >
-      <span className="relative grid size-[4.5rem] place-items-center">
-        <span className="t-anillo absolute inset-0 rounded-full border-2 border-[var(--t-linea)] border-t-[var(--t-tinta)]" />
+      <span className="relative grid size-18 place-items-center">
+        <span className="t-anillo absolute inset-0 rounded-full border-2 border-(--t-linea) border-t-(--t-tinta)" />
         <span className="t-respira">
           <Logo className="size-8 rounded-lg text-[0.6875rem]" />
         </span>
       </span>
       <p className="mt-5 text-[1.0625rem] font-semibold">{titulo}</p>
-      <p className="mt-1 text-[0.8125rem] text-[var(--t-gris)]">{texto}</p>
+      <p className="mt-1 text-[0.8125rem] text-(--t-gris)">{texto}</p>
     </div>
   );
 }
@@ -913,13 +910,13 @@ function Checkout({
   onRechazado: () => void;
 }) {
   return (
-    <div className="flex min-h-full flex-col bg-[var(--t-suave)] px-5 pt-8 pb-6">
-      <p className="text-[1.125rem] font-bold text-[var(--t-mp-texto)]">{CHECKOUT.marca}</p>
-      <p className="mt-4 rounded-xl bg-[var(--t-ambar-suave)] px-3.5 py-2.5 text-[0.75rem] font-medium text-[var(--t-ambar)]">
+    <div className="flex min-h-full flex-col bg-(--t-suave) px-5 pt-8 pb-6">
+      <p className="text-[1.125rem] font-bold text-(--t-mp-texto)">{CHECKOUT.marca}</p>
+      <p className="mt-4 rounded-xl bg-(--t-ambar-suave) px-3.5 py-2.5 text-[0.75rem] font-medium text-(--t-ambar)">
         {CHECKOUT.aviso}
       </p>
-      <div className="mt-4 rounded-2xl bg-[var(--t-fondo)] p-4">
-        <p className="text-[0.8125rem] text-[var(--t-gris)]">
+      <div className="mt-4 rounded-2xl bg-(--t-fondo) p-4">
+        <p className="text-[0.8125rem] text-(--t-gris)">
           {CHECKOUT.concepto(turno.servicioNombre)}
         </p>
         <p className="mt-0.5 text-[1.5rem] font-bold tabular-nums">{pesos(turno.sena)}</p>
@@ -928,27 +925,25 @@ function Checkout({
       <button
         type="button"
         onClick={onAprobado}
-        className="mt-3 h-12 rounded-xl bg-[var(--t-mp)] text-[0.9375rem] font-semibold text-white hover:bg-[var(--t-mp-hover)]"
+        className="mt-3 h-12 rounded-xl bg-(--t-mp) text-[0.9375rem] font-semibold text-white hover:bg-(--t-mp-hover)"
       >
         {CHECKOUT.aprobado}
       </button>
       <button
         type="button"
         onClick={onRechazado}
-        className="mt-2 h-12 rounded-xl border border-[var(--t-linea)] bg-[var(--t-fondo)] text-[0.9375rem] font-semibold"
+        className="mt-2 h-12 rounded-xl border border-(--t-linea) bg-(--t-fondo) text-[0.9375rem] font-semibold"
       >
         {CHECKOUT.rechazado}
       </button>
       <button
         type="button"
         onClick={onRechazado}
-        className="mt-3 text-[0.8125rem] font-medium text-[var(--t-gris)] underline underline-offset-4"
+        className="mt-3 text-[0.8125rem] font-medium text-(--t-gris) underline underline-offset-4"
       >
         {CHECKOUT.volver}
       </button>
-      <p className="mt-auto pt-8 text-center text-[0.6875rem] text-[var(--t-gris)]">
-        {CHECKOUT.pie}
-      </p>
+      <p className="mt-auto pt-8 text-center text-[0.6875rem] text-(--t-gris)">{CHECKOUT.pie}</p>
     </div>
   );
 }
@@ -1018,7 +1013,7 @@ function MiReserva({
   const enc = encabezado[turno.estado] ?? encabezado.cancelado!;
 
   const boton =
-    'flex h-11 w-full items-center justify-center rounded-xl border border-[var(--t-linea)] text-[0.875rem] font-semibold hover:border-[var(--t-tinta)]';
+    'flex h-11 w-full items-center justify-center rounded-xl border border-(--t-linea) text-[0.875rem] font-semibold hover:border-(--t-tinta)';
 
   return (
     <div className="t-entra px-5 pt-8 pb-8">
@@ -1027,9 +1022,9 @@ function MiReserva({
         <span
           className={cn(
             'mt-1 grid size-6 shrink-0 place-items-center rounded-full',
-            enc.tono === 'verde' && 'bg-[var(--t-verde-suave)] text-[var(--t-verde)]',
-            enc.tono === 'ambar' && 'bg-[var(--t-ambar-suave)] text-[var(--t-ambar)]',
-            enc.tono === 'gris' && 'bg-[var(--t-suave)] text-[var(--t-gris)]',
+            enc.tono === 'verde' && 'bg-(--t-verde-suave) text-(--t-verde)',
+            enc.tono === 'ambar' && 'bg-(--t-ambar-suave) text-(--t-ambar)',
+            enc.tono === 'gris' && 'bg-(--t-suave) text-(--t-gris)',
           )}
         >
           {enc.tono === 'verde' ? (
@@ -1040,19 +1035,17 @@ function MiReserva({
         </span>
         <div>
           <h2 className="text-[1.25rem] leading-tight font-bold">{enc.titulo}</h2>
-          {enc.texto ? (
-            <p className="mt-1 text-[0.8125rem] text-[var(--t-gris)]">{enc.texto}</p>
-          ) : null}
+          {enc.texto ? <p className="mt-1 text-[0.8125rem] text-(--t-gris)">{enc.texto}</p> : null}
         </div>
       </div>
 
       {pendiente ? (
-        <p className="mt-4 rounded-xl bg-[var(--t-ambar-suave)] px-3.5 py-2.5 text-[0.8125rem] font-semibold text-[var(--t-ambar)] tabular-nums">
+        <p className="mt-4 rounded-xl bg-(--t-ambar-suave) px-3.5 py-2.5 text-[0.8125rem] font-semibold text-(--t-ambar) tabular-nums">
           {MI_RESERVA.guardado(mmss)}
         </p>
       ) : null}
 
-      <dl className="mt-5 divide-y divide-[var(--t-linea)] border-y border-[var(--t-linea)] text-[0.875rem]">
+      <dl className="mt-5 divide-y divide-(--t-linea) border-y border-(--t-linea) text-[0.875rem]">
         {[
           [MI_RESERVA.servicio, turno.servicioNombre],
           [MI_RESERVA.cuando, fechaLarga(turno.dia, turno.inicio)],
@@ -1065,7 +1058,7 @@ function MiReserva({
           [MI_RESERVA.enLocal, pesos(saldoDe(turno))],
         ].map(([k, v]) => (
           <div key={k} className="flex justify-between gap-4 py-2.5">
-            <dt className="text-[var(--t-gris)]">{k}</dt>
+            <dt className="text-(--t-gris)">{k}</dt>
             <dd className="text-right font-medium">{v}</dd>
           </div>
         ))}
@@ -1077,7 +1070,7 @@ function MiReserva({
             <button
               type="button"
               onClick={onVerPanel}
-              className="flex h-11 w-full items-center justify-center rounded-xl bg-[var(--t-tinta)] text-[0.875rem] font-semibold text-[var(--t-fondo)]"
+              className="flex h-11 w-full items-center justify-center rounded-xl bg-(--t-tinta) text-[0.875rem] font-semibold text-(--t-fondo)"
             >
               {MI_RESERVA.verPanel}
             </button>
@@ -1095,19 +1088,17 @@ function MiReserva({
             <button type="button" onClick={onOtro} className={boton}>
               {MI_RESERVA.otro}
             </button>
-            <div className="border-t border-[var(--t-linea)] pt-3">
+            <div className="border-t border-(--t-linea) pt-3">
               {horasFaltan > NEGOCIO_DEMO.cancelacionHoras ? (
                 preguntar ? (
-                  <div className="rounded-xl bg-[var(--t-suave)] p-3.5">
+                  <div className="rounded-xl bg-(--t-suave) p-3.5">
                     <p className="text-[0.875rem] font-semibold">{MI_RESERVA.cancelarPregunta}</p>
-                    <p className="mt-1 text-[0.75rem] text-[var(--t-gris)]">
-                      {NEGOCIO_DEMO.politica}
-                    </p>
+                    <p className="mt-1 text-[0.75rem] text-(--t-gris)">{NEGOCIO_DEMO.politica}</p>
                     <div className="mt-3 flex gap-2">
                       <button
                         type="button"
                         onClick={onSoltar}
-                        className="rounded-full bg-[var(--t-tinta)] px-4 py-2 text-[0.8125rem] font-semibold text-[var(--t-fondo)]"
+                        className="rounded-full bg-(--t-tinta) px-4 py-2 text-[0.8125rem] font-semibold text-(--t-fondo)"
                       >
                         {MI_RESERVA.si}
                       </button>
@@ -1124,13 +1115,13 @@ function MiReserva({
                   <button
                     type="button"
                     onClick={() => setPreguntar(true)}
-                    className="text-[0.8125rem] font-medium text-[var(--t-rojo)]"
+                    className="text-[0.8125rem] font-medium text-(--t-rojo)"
                   >
                     {MI_RESERVA.cancelar}
                   </button>
                 )
               ) : (
-                <p className="text-[0.75rem] text-[var(--t-gris)]">{MI_RESERVA.cancelarTarde}</p>
+                <p className="text-[0.75rem] text-(--t-gris)">{MI_RESERVA.cancelarTarde}</p>
               )}
             </div>
           </>
@@ -1139,15 +1130,15 @@ function MiReserva({
             <button
               type="button"
               onClick={onPagar}
-              className="flex h-12 w-full items-center justify-center rounded-xl bg-[var(--t-mp)] text-[0.9375rem] font-semibold text-white hover:bg-[var(--t-mp-hover)]"
+              className="flex h-12 w-full items-center justify-center rounded-xl bg-(--t-mp) text-[0.9375rem] font-semibold text-white hover:bg-(--t-mp-hover)"
             >
               {MI_RESERVA.pagarMp(pesos(turno.sena))}
             </button>
-            <div className="border-t border-[var(--t-linea)] pt-3">
+            <div className="border-t border-(--t-linea) pt-3">
               <button
                 type="button"
                 onClick={onSoltar}
-                className="text-[0.8125rem] font-medium text-[var(--t-gris)] underline underline-offset-4"
+                className="text-[0.8125rem] font-medium text-(--t-gris) underline underline-offset-4"
               >
                 {MI_RESERVA.soltar}
               </button>
@@ -1157,7 +1148,7 @@ function MiReserva({
           <button
             type="button"
             onClick={onOtro}
-            className="flex h-11 w-full items-center justify-center rounded-xl bg-[var(--t-tinta)] text-[0.875rem] font-semibold text-[var(--t-fondo)]"
+            className="flex h-11 w-full items-center justify-center rounded-xl bg-(--t-tinta) text-[0.875rem] font-semibold text-(--t-fondo)"
           >
             {MI_RESERVA.otro}
           </button>

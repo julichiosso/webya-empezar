@@ -121,7 +121,7 @@ export function BarraDemo({
           id={id}
           role="region"
           aria-label={BARRA_DEMOS.aviso.titulo}
-          className="absolute inset-x-0 top-full border-b border-ed-line bg-ed-bg px-4 py-5 md:right-5 md:left-auto md:w-[24rem] md:rounded-b-2xl md:border-x"
+          className="absolute inset-x-0 top-full border-b border-ed-line bg-ed-bg px-4 py-5 md:right-5 md:left-auto md:w-96 md:rounded-b-2xl md:border-x"
         >
           <p className="text-[0.9375rem] font-semibold">{BARRA_DEMOS.aviso.titulo}</p>
           <p className="mt-1 text-[0.8125rem] text-ed-muted">{BARRA_DEMOS.aviso.texto}</p>
@@ -158,7 +158,7 @@ function Info() {
   return (
     <svg
       viewBox="0 0 20 20"
-      className="size-[1.125rem]"
+      className="size-4.5"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.6"

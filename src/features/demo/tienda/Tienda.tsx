@@ -66,7 +66,7 @@ export function Tienda({
     pantalla.tipo === 'producto' ? productos.find((p) => p.id === pantalla.id) : undefined;
 
   const botonMarca =
-    'inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[var(--marca)] px-4 text-[0.9375rem] font-semibold text-white active:opacity-80';
+    'inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-(--marca) px-4 text-[0.9375rem] font-semibold text-white active:opacity-80';
 
   return (
     <div
@@ -79,7 +79,7 @@ export function Tienda({
           onClick={() => setPantalla({ tipo: 'inicio' })}
           className="flex min-w-0 flex-1 items-center gap-2.5 text-left"
         >
-          <span className="grid size-8 shrink-0 place-items-center overflow-hidden rounded-lg bg-[var(--marca)] text-[0.9375rem] font-bold text-white">
+          <span className="grid size-8 shrink-0 place-items-center overflow-hidden rounded-lg bg-(--marca) text-[0.9375rem] font-bold text-white">
             {logo ? (
               // eslint-disable-next-line @next/next/no-img-element -- logo local (blob:) de la persona
               <img src={logo} alt="" className="size-full object-cover" />
@@ -97,7 +97,7 @@ export function Tienda({
         >
           <Bolsa className="size-6" />
           {cantidad > 0 ? (
-            <span className="absolute top-0.5 right-0.5 grid min-w-4 place-items-center rounded-full bg-[var(--marca)] px-1 text-[0.625rem] font-bold text-white tabular-nums">
+            <span className="absolute top-0.5 right-0.5 grid min-w-4 place-items-center rounded-full bg-(--marca) px-1 text-[0.625rem] font-bold text-white tabular-nums">
               {cantidad}
             </span>
           ) : null}
@@ -106,7 +106,7 @@ export function Tienda({
 
       {pantalla.tipo === 'inicio' ? (
         <>
-          <section className="bg-[var(--marca)] px-4 py-8 text-white @3xl:px-10 @3xl:py-14">
+          <section className="bg-(--marca) px-4 py-8 text-white @3xl:px-10 @3xl:py-14">
             <p className="text-[0.75rem] font-semibold tracking-wide uppercase opacity-80">
               {rubro.nombre}
             </p>
@@ -127,7 +127,7 @@ export function Tienda({
                   type="button"
                   aria-pressed={categoria === valor}
                   onClick={() => setCategoria(valor)}
-                  className="min-h-9 shrink-0 rounded-full border border-neutral-300 px-3.5 text-[0.8125rem] font-medium aria-pressed:border-[var(--marca)] aria-pressed:bg-[var(--marca)] aria-pressed:text-white"
+                  className="min-h-9 shrink-0 rounded-full border border-neutral-300 px-3.5 text-[0.8125rem] font-medium aria-pressed:border-(--marca) aria-pressed:bg-(--marca) aria-pressed:text-white"
                 >
                   {c}
                 </button>
@@ -158,7 +158,7 @@ export function Tienda({
                   <button
                     type="button"
                     onClick={() => agregar(p.id)}
-                    className="mt-2 min-h-9 rounded-lg border border-[var(--marca)] text-[0.8125rem] font-semibold text-[var(--marca)] active:opacity-70"
+                    className="mt-2 min-h-9 rounded-lg border border-(--marca) text-[0.8125rem] font-semibold text-(--marca) active:opacity-70"
                   >
                     {T.agregar}
                   </button>
@@ -212,7 +212,7 @@ export function Tienda({
       ) : null}
 
       {pantalla.tipo === 'carrito' ? (
-        <section className="px-4 py-4 @3xl:mx-auto @3xl:max-w-[36rem] @3xl:py-10">
+        <section className="px-4 py-4 @3xl:mx-auto @3xl:max-w-144 @3xl:py-10">
           <button
             type="button"
             onClick={() => setPantalla({ tipo: 'inicio' })}

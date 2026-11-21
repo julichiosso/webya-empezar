@@ -55,14 +55,14 @@ export function Compartir({ animal, onCerrar }: { animal: Animal; onCerrar: () =
       role="dialog"
       aria-modal="true"
       aria-labelledby="compartir-titulo"
-      className="fixed inset-0 z-50 grid place-items-center bg-[var(--pr-tinta)]/60 p-4"
+      className="fixed inset-0 z-50 grid place-items-center bg-(--pr-tinta)/60 p-4"
       onClick={(e) => e.target === e.currentTarget && onCerrar()}
     >
       <div className="pr-paleta w-full max-w-sm rounded-3xl p-5">
         <h3 id="compartir-titulo" className="pr-titulo text-[1.25rem] font-semibold">
           {C.titulo}
         </h3>
-        <p className="text-[0.875rem] text-[var(--pr-tinta-2)]">{C.texto}</p>
+        <p className="text-[0.875rem] text-(--pr-tinta-2)">{C.texto}</p>
         <svg
           ref={svg}
           xmlns="http://www.w3.org/2000/svg"

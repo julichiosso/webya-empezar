@@ -39,7 +39,7 @@ export function HeroInicio() {
           >
             {HERO.bajada}
           </p>
-          <div className="e-hero-aparece relative z-20 mt-6 max-w-[34rem]" style={aparece(2)}>
+          <div className="e-hero-aparece relative z-20 mt-6 max-w-136" style={aparece(2)}>
             <Buscador />
           </div>
           {/* En el celular y la tablet las dos acciones viven en la barra fija de abajo, a mano del pulgar. */}

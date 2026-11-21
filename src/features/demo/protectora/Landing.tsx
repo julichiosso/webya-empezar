@@ -33,13 +33,13 @@ function PantallaFicha() {
   return (
     <Marco>
       <div className="pr-tono-arena grid aspect-square place-items-center rounded-xl">
-        <Ilustracion especie={luna.especie} className="w-1/2 text-[var(--pr-tinta)]" />
+        <Ilustracion especie={luna.especie} className="w-1/2 text-(--pr-tinta)" />
       </div>
       <p className="pr-titulo mt-2 text-[1.125rem] font-semibold">{luna.nombre}</p>
-      <p className="text-[0.6875rem] text-[var(--pr-tinta-2)]">
+      <p className="text-[0.6875rem] text-(--pr-tinta-2)">
         {U.ficha.edad(luna.edadMeses)} · {TAMANOS[luna.tamano]} · {luna.caracter}
       </p>
-      <p className="mt-1 line-clamp-2 text-[0.625rem] leading-snug text-[var(--pr-tinta-2)]">
+      <p className="mt-1 line-clamp-2 text-[0.625rem] leading-snug text-(--pr-tinta-2)">
         {luna.historia}
       </p>
       <span className="pr-boton mt-2.5 min-h-8 w-full text-[0.75rem]">{U.ficha.quiero}</span>
@@ -56,10 +56,10 @@ function PantallaSolicitud() {
       {[U.solicitud.nombre, U.solicitud.telefono, U.solicitud.vivienda].map((c) => (
         <div key={c} className="mt-2">
           <p className="text-[0.625rem] font-medium">{c}</p>
-          <div className="mt-0.5 h-7 rounded-lg border border-[var(--pr-linea)] bg-[var(--pr-papel)]" />
+          <div className="mt-0.5 h-7 rounded-lg border border-(--pr-linea) bg-(--pr-papel)" />
         </div>
       ))}
-      <p className="mt-2 text-[0.5625rem] leading-snug text-[var(--pr-tinta-2)]">
+      <p className="mt-2 text-[0.5625rem] leading-snug text-(--pr-tinta-2)">
         {U.solicitud.consentimiento}
       </p>
       <span className="pr-boton mt-2.5 min-h-8 w-full text-[0.75rem]">{U.solicitud.enviar}</span>
@@ -84,9 +84,7 @@ function PantallaEntrevista() {
             key={n}
             className={cn(
               'rounded-lg border px-2.5 py-2 text-[0.6875rem]',
-              n === 1
-                ? 'border-[var(--pr-tinta)] font-semibold'
-                : 'border-[var(--pr-linea)] bg-[var(--pr-papel)]',
+              n === 1 ? 'border-(--pr-tinta) font-semibold' : 'border-(--pr-linea) bg-(--pr-papel)',
             )}
           >
             {fechaActividad(d, h, new Date(2026, 10, 20))}
@@ -102,13 +100,13 @@ function PantallaAdoptado() {
   return (
     <Marco>
       <div className="pr-tono-salvia grid aspect-square place-items-center rounded-xl">
-        <Ilustracion especie={rulo.especie} className="w-1/2 text-[var(--pr-tinta)]" />
+        <Ilustracion especie={rulo.especie} className="w-1/2 text-(--pr-tinta)" />
       </div>
-      <p className="mt-2 inline-block rounded-full bg-[var(--pr-ok-suave)] px-2 py-0.5 text-[0.6875rem] font-semibold text-[var(--pr-ok)]">
+      <p className="mt-2 inline-block rounded-full bg-(--pr-ok-suave) px-2 py-0.5 text-[0.6875rem] font-semibold text-(--pr-ok)">
         {ESTADOS.adoptado}
       </p>
       <p className="pr-titulo mt-1 text-[1.125rem] font-semibold">{rulo.nombre}</p>
-      <p className="text-[0.625rem] leading-snug text-[var(--pr-tinta-2)]">{rulo.historia}</p>
+      <p className="text-[0.625rem] leading-snug text-(--pr-tinta-2)">{rulo.historia}</p>
     </Marco>
   );
 }
@@ -130,7 +128,7 @@ export function LandingProtectoras() {
         bajada={P.hero.bajada}
         vidriera={
           <div className="flex justify-center">
-            <Telefono etiqueta={P.hero.telefonoAlt} className="max-w-[15rem] md:max-w-[17rem]">
+            <Telefono etiqueta={P.hero.telefonoAlt} className="max-w-60 md:max-w-68">
               <PantallaFicha />
             </Telefono>
           </div>

@@ -271,7 +271,7 @@ export function Casos({
             <li key={c.id}>
               <details className="e-tarjeta-caso group rounded-[1.5rem] bg-ed-surface">
                 <summary className="flex min-h-11 cursor-pointer list-none gap-4 p-4 [&::-webkit-details-marker]:hidden">
-                  <span className="relative w-[5.5rem] shrink-0 sm:w-[7rem]">
+                  <span className="relative w-22 shrink-0 sm:w-28">
                     {visuales[c.id]?.miniatura}
                   </span>
                   <span className="flex min-w-0 flex-1 flex-col">

@@ -47,7 +47,7 @@ export function Composicion({
 
   if (!desktop) {
     return (
-      <div className={cn('relative aspect-[16/10]', className)}>
+      <div className={cn('relative aspect-16/10', className)}>
         <div className="absolute inset-y-[4%] left-[22%] w-[25%]">{celular}</div>
         <div className="absolute inset-y-[4%] right-[22%] w-[25%]" aria-hidden="true">
           <Telefono className="max-w-none">
@@ -59,17 +59,14 @@ export function Composicion({
   }
 
   return (
-    <div className={cn('relative aspect-[16/10]', className)}>
+    <div className={cn('relative aspect-16/10', className)}>
       <div className="absolute top-0 left-0 w-[82%] overflow-hidden rounded-xl border border-ed-line-strong bg-ed-bg">
-        <div
-          aria-hidden="true"
-          className="flex h-[1.375rem] items-center gap-1.5 bg-ed-surface px-3"
-        >
+        <div aria-hidden="true" className="flex h-5.5 items-center gap-1.5 bg-ed-surface px-3">
           <span className="size-2 rounded-full border border-ed-line-strong" />
           <span className="size-2 rounded-full border border-ed-line-strong" />
           <span className="size-2 rounded-full border border-ed-line-strong" />
         </div>
-        <div className="relative aspect-[16/10]">
+        <div className="relative aspect-16/10">
           <Image
             src={desktop.src}
             alt={desktop.alt}

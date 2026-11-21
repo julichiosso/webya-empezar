@@ -17,7 +17,7 @@ export function Retrato({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'relative aspect-[4/5] overflow-hidden rounded-2xl border border-ed-line bg-ed-surface',
+        'relative aspect-4/5 overflow-hidden rounded-2xl border border-ed-line bg-ed-surface',
         className,
       )}
     >
@@ -33,7 +33,7 @@ export function Retrato({ className }: { className?: string }) {
         <span
           role="img"
           aria-label={NOSOTROS.fotoAlt}
-          className="absolute inset-0 grid place-items-center text-[clamp(2.5rem,9vw,5.5rem)] font-semibold tracking-[-0.05em] text-ed-muted"
+          className="absolute inset-0 grid place-items-center text-[clamp(2.5rem,9vw,5.5rem)] font-semibold tracking-tighter text-ed-muted"
         >
           {NOSOTROS.iniciales}
         </span>

@@ -106,7 +106,7 @@ export function PasosTurnero({
         })}
       </ol>
       <div className="flex justify-center lg:col-span-5 lg:col-start-8">
-        <div className="relative w-full max-w-[13rem] md:max-w-[16rem]">
+        <div className="relative w-full max-w-52 md:max-w-64">
           <Telefono etiqueta={etiqueta}>
             {pantallas ? (
               pantallas.map((p, i) => (

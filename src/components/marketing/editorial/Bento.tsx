@@ -126,8 +126,8 @@ export function Bento() {
                   className={cn(
                     'e-celda group flex h-full flex-col justify-between rounded-2xl border border-ed-line bg-ed-bg active:opacity-70',
                     estrella
-                      ? 'tono-oscuro min-h-[15rem] gap-8 p-5 md:min-h-[20rem] md:p-8 lg:min-h-full'
-                      : 'min-h-[9.5rem] gap-4 p-4 md:min-h-[13rem] md:gap-8 md:p-7',
+                      ? 'tono-oscuro min-h-60 gap-8 p-5 md:min-h-80 md:p-8 lg:min-h-full'
+                      : 'min-h-38 gap-4 p-4 md:min-h-52 md:gap-8 md:p-7',
                   )}
                 >
                   <div className="flex items-start justify-between gap-4">

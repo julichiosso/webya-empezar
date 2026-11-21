@@ -30,19 +30,19 @@ interface Props {
 }
 
 const TONO_FRANJA: Record<EstadoFranja, string> = {
-  pasado: 'bg-[var(--p-fondo)] text-[var(--p-txt-2)]',
-  pausado: 'bg-[var(--p-rojo-suave)] ring-[var(--p-rojo)]/25',
-  lleno: 'bg-[var(--p-rojo-suave)] ring-[var(--p-rojo)]/25',
-  casi: 'bg-[var(--p-card)]',
-  libre: 'bg-[var(--p-card)]',
+  pasado: 'bg-(--p-fondo) text-(--p-txt-2)',
+  pausado: 'bg-(--p-rojo-suave) ring-(--p-rojo)/25',
+  lleno: 'bg-(--p-rojo-suave) ring-(--p-rojo)/25',
+  casi: 'bg-(--p-card)',
+  libre: 'bg-(--p-card)',
 };
 
 const TONO_BADGE: Record<EstadoFranja, string> = {
-  pasado: 'bg-[var(--p-linea)] text-[var(--p-txt-2)]',
-  pausado: 'bg-[var(--p-rojo-suave)] text-[var(--p-rojo-texto)]',
-  lleno: 'bg-[var(--p-rojo-suave)] text-[var(--p-rojo-texto)]',
-  casi: 'bg-[var(--p-ambar-suave)] text-[var(--p-txt)]',
-  libre: 'bg-[var(--p-verde-suave)] text-[var(--p-txt)]',
+  pasado: 'bg-(--p-linea) text-(--p-txt-2)',
+  pausado: 'bg-(--p-rojo-suave) text-(--p-rojo-texto)',
+  lleno: 'bg-(--p-rojo-suave) text-(--p-rojo-texto)',
+  casi: 'bg-(--p-ambar-suave) text-(--p-txt)',
+  libre: 'bg-(--p-verde-suave) text-(--p-txt)',
 };
 
 /** El panel del dueño: el local, las franjas de hoy con sus pedidos, y los productos. */
@@ -87,27 +87,25 @@ export function Panel({ e, ahora, set, onComanda, onConfirmar, visible = true }:
         ref={scroller}
         className="d-barra-fina relative h-full overflow-y-auto overscroll-contain"
       >
-        <header className="sticky top-0 z-10 border-b border-[var(--p-linea)] bg-[var(--p-fondo)]/90 px-4 pt-4 pb-3 backdrop-blur">
+        <header className="sticky top-0 z-10 border-b border-(--p-linea) bg-(--p-fondo)/90 px-4 pt-4 pb-3 backdrop-blur">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-[1.0625rem] font-bold">{PANEL.marca}</p>
-              <p className="text-[0.75rem] text-[var(--p-txt-2)] tabular-nums">
+              <p className="text-[0.75rem] text-(--p-txt-2) tabular-nums">
                 {PANEL.hoy(NOCHE_DEMO.dia, minAHhmm(ahora))}
               </p>
             </div>
             <span
               className={cn(
                 'flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.75rem] font-semibold',
-                e.abierto
-                  ? 'bg-[var(--p-verde-suave)]'
-                  : 'bg-[var(--p-rojo-suave)] text-[var(--p-rojo-texto)]',
+                e.abierto ? 'bg-(--p-verde-suave)' : 'bg-(--p-rojo-suave) text-(--p-rojo-texto)',
               )}
             >
               <span
                 aria-hidden="true"
                 className={cn(
                   'size-1.5 rounded-full',
-                  e.abierto ? 'bg-[var(--p-verde)]' : 'bg-[var(--p-rojo)]',
+                  e.abierto ? 'bg-(--p-verde)' : 'bg-(--p-rojo)',
                 )}
               />
               {e.abierto ? PANEL.abierto : PANEL.cerrado}
@@ -116,7 +114,7 @@ export function Panel({ e, ahora, set, onComanda, onConfirmar, visible = true }:
           <div
             role="tablist"
             aria-label={PANEL.pestanasAria}
-            className="mt-3 grid grid-cols-2 gap-1 rounded-xl bg-[var(--p-linea)] p-1"
+            className="mt-3 grid grid-cols-2 gap-1 rounded-xl bg-(--p-linea) p-1"
           >
             {(['turnos', 'productos'] as const).map((p) => (
               <button
@@ -125,7 +123,7 @@ export function Panel({ e, ahora, set, onComanda, onConfirmar, visible = true }:
                 role="tab"
                 aria-selected={pestana === p}
                 onClick={() => setPestana(p)}
-                className="rounded-lg py-1.5 text-[0.8125rem] font-semibold text-[var(--p-txt-2)] aria-selected:bg-[var(--p-card)] aria-selected:text-[var(--p-txt)]"
+                className="rounded-lg py-1.5 text-[0.8125rem] font-semibold text-(--p-txt-2) aria-selected:bg-(--p-card) aria-selected:text-(--p-txt)"
               >
                 {p === 'turnos' ? PANEL.turnos : PANEL.productos}
               </button>
@@ -136,10 +134,10 @@ export function Panel({ e, ahora, set, onComanda, onConfirmar, visible = true }:
         <div className="px-4 pt-3 pb-8">
           {pestana === 'turnos' ? (
             <>
-              <div className="flex items-center justify-between rounded-2xl bg-[var(--p-card)] px-4 py-3">
+              <div className="flex items-center justify-between rounded-2xl bg-(--p-card) px-4 py-3">
                 <span>
                   <span className="block text-[0.875rem] font-semibold">{PANEL.localAbierto}</span>
-                  <span className="block text-[0.75rem] text-[var(--p-txt-2)]">
+                  <span className="block text-[0.75rem] text-(--p-txt-2)">
                     {PANEL.horario(NOCHE_DEMO.apertura, NOCHE_DEMO.cierre)}
                   </span>
                 </span>
@@ -161,9 +159,9 @@ export function Panel({ e, ahora, set, onComanda, onConfirmar, visible = true }:
                       key={f.inicio}
                       data-franja={f.inicio}
                       className={cn(
-                        'rounded-2xl p-3.5 ring-1 ring-[var(--p-linea)] transition-shadow',
+                        'rounded-2xl p-3.5 ring-1 ring-(--p-linea) transition-shadow',
                         TONO_FRANJA[est],
-                        conNuevo && 'ring-2 ring-[var(--p-azul)]',
+                        conNuevo && 'ring-2 ring-(--p-azul)',
                       )}
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -199,22 +197,22 @@ export function Panel({ e, ahora, set, onComanda, onConfirmar, visible = true }:
                         ) : null}
                       </div>
                       <div className="mt-2.5 flex items-center gap-2.5">
-                        <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--p-linea)]">
+                        <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-(--p-linea)">
                           <span
                             className={cn(
                               'block h-full rounded-full',
                               est === 'lleno' || est === 'pausado'
-                                ? 'bg-[var(--p-rojo)]'
+                                ? 'bg-(--p-rojo)'
                                 : est === 'casi'
-                                  ? 'bg-[var(--p-ambar)]'
-                                  : 'bg-[var(--p-verde)]',
+                                  ? 'bg-(--p-ambar)'
+                                  : 'bg-(--p-verde)',
                             )}
                             style={{
                               width: `${Math.min(100, (f.pedidos / Math.max(1, f.capacidad)) * 100)}%`,
                             }}
                           />
                         </span>
-                        <span className="text-[0.75rem] text-[var(--p-txt-2)] tabular-nums">
+                        <span className="text-[0.75rem] text-(--p-txt-2) tabular-nums">
                           {PANEL.ocupacion(f.pedidos, f.capacidad)}
                         </span>
                       </div>
@@ -224,7 +222,7 @@ export function Panel({ e, ahora, set, onComanda, onConfirmar, visible = true }:
                             type="button"
                             aria-expanded={abierta}
                             onClick={() => alternar(f.inicio)}
-                            className="rounded-lg bg-[var(--p-azul-suave)] px-2.5 py-1.5 text-[0.75rem] font-semibold text-[var(--p-azul)]"
+                            className="rounded-lg bg-(--p-azul-suave) px-2.5 py-1.5 text-[0.75rem] font-semibold text-(--p-azul)"
                           >
                             {abierta ? PANEL.ocultarPedidos : PANEL.verPedidos(pedidos.length)}
                           </button>
@@ -233,14 +231,14 @@ export function Panel({ e, ahora, set, onComanda, onConfirmar, visible = true }:
                           <button
                             type="button"
                             onClick={() => set((x) => alternarBloqueo(x, f.inicio))}
-                            className="rounded-lg bg-[var(--p-linea)] px-2.5 py-1.5 text-[0.75rem] font-semibold"
+                            className="rounded-lg bg-(--p-linea) px-2.5 py-1.5 text-[0.75rem] font-semibold"
                           >
                             {f.bloqueado ? PANEL.habilitar : PANEL.pausar}
                           </button>
                         ) : null}
                       </div>
                       {abierta ? (
-                        <ul className="mt-3 space-y-2 border-t border-[var(--p-linea)] pt-3">
+                        <ul className="mt-3 space-y-2 border-t border-(--p-linea) pt-3">
                           {[...pedidos].reverse().map((p) => (
                             <FilaPedido
                               key={p.id}
@@ -288,28 +286,27 @@ function FilaPedido({
   return (
     <li
       className={cn(
-        'm-aparece rounded-xl bg-[var(--p-card)] p-3 ring-1 ring-[var(--p-linea)]',
-        nuevo && 'ring-2 ring-[var(--p-azul)]',
+        'm-aparece rounded-xl bg-(--p-card) p-3 ring-1 ring-(--p-linea)',
+        nuevo && 'ring-2 ring-(--p-azul)',
       )}
     >
       <div className="flex items-start justify-between gap-2">
         <p className="text-[0.8125rem] font-semibold">
-          <span className="text-[var(--p-txt-2)] tabular-nums">{PANEL.numero(p.id)}</span>{' '}
-          {p.nombre}
+          <span className="text-(--p-txt-2) tabular-nums">{PANEL.numero(p.id)}</span> {p.nombre}
           {nuevo ? (
-            <span className="ml-1.5 rounded bg-[var(--p-azul)] px-1.5 py-0.5 text-[0.625rem] font-bold text-white uppercase">
+            <span className="ml-1.5 rounded bg-(--p-azul) px-1.5 py-0.5 text-[0.625rem] font-bold text-white uppercase">
               {PANEL.nuevo}
             </span>
           ) : null}
         </p>
         <p className="text-[0.8125rem] font-semibold tabular-nums">{pesos(p.total)}</p>
       </div>
-      <p className="mt-1 text-[0.75rem] text-[var(--p-txt-2)]">{p.lineas.join(' · ')}</p>
+      <p className="mt-1 text-[0.75rem] text-(--p-txt-2)">{p.lineas.join(' · ')}</p>
       <div className="mt-2 flex items-center gap-1.5">
         <span
           className={cn(
             'rounded-md px-1.5 py-0.5 text-[0.6875rem] font-semibold',
-            p.estado === 'confirmado' ? 'bg-[var(--p-verde-suave)]' : 'bg-[var(--p-ambar-suave)]',
+            p.estado === 'confirmado' ? 'bg-(--p-verde-suave)' : 'bg-(--p-ambar-suave)',
           )}
         >
           {PANEL.estadoPedido[p.estado]}
@@ -318,7 +315,7 @@ function FilaPedido({
         <button
           type="button"
           onClick={onComanda}
-          className="rounded-lg px-2 py-1 text-[0.75rem] font-semibold text-[var(--p-azul)]"
+          className="rounded-lg px-2 py-1 text-[0.75rem] font-semibold text-(--p-azul)"
         >
           {PANEL.verComanda}
         </button>
@@ -326,7 +323,7 @@ function FilaPedido({
           <button
             type="button"
             onClick={onConfirmar}
-            className="rounded-lg bg-[var(--p-azul)] px-2.5 py-1 text-[0.75rem] font-semibold text-white"
+            className="rounded-lg bg-(--p-azul) px-2.5 py-1 text-[0.75rem] font-semibold text-white"
           >
             {PANEL.confirmar}
           </button>
@@ -339,15 +336,15 @@ function FilaPedido({
 function Productos({ e, set }: { e: EstadoDemo; set: StoreDemo['set'] }) {
   return (
     <>
-      <p className="rounded-xl bg-[var(--p-azul-suave)] px-3 py-2.5 text-[0.75rem]">
+      <p className="rounded-xl bg-(--p-azul-suave) px-3 py-2.5 text-[0.75rem]">
         {PANEL.avisoProductos}
       </p>
       {SECCIONES.map((s) => (
         <section key={s.id} className="mt-4">
-          <h3 className="px-1 text-[0.75rem] font-semibold text-[var(--p-txt-2)] uppercase">
+          <h3 className="px-1 text-[0.75rem] font-semibold text-(--p-txt-2) uppercase">
             {s.nombre}
           </h3>
-          <ul className="mt-1.5 divide-y divide-[var(--p-linea)] overflow-hidden rounded-2xl bg-[var(--p-card)]">
+          <ul className="mt-1.5 divide-y divide-(--p-linea) overflow-hidden rounded-2xl bg-(--p-card)">
             {PRODUCTOS.filter((p) => p.seccion === s.id).map((p) => {
               const est = e.productos[p.id]!;
               return (
@@ -355,7 +352,7 @@ function Productos({ e, set }: { e: EstadoDemo; set: StoreDemo['set'] }) {
                   key={p.id}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2',
-                    !est.activo && 'text-[var(--p-txt-2)]',
+                    !est.activo && 'text-(--p-txt-2)',
                   )}
                 >
                   <Dibujo producto={p} className="size-9 shrink-0" />
@@ -367,7 +364,7 @@ function Productos({ e, set }: { e: EstadoDemo; set: StoreDemo['set'] }) {
                     aria-pressed={est.destacado}
                     aria-label={PANEL.destacado(p.nombre)}
                     onClick={() => set((x) => alternarProducto(x, p.id, 'destacado'))}
-                    className="grid size-8 place-items-center rounded-full text-[var(--p-txt-2)] aria-pressed:text-[var(--p-ambar)]"
+                    className="grid size-8 place-items-center rounded-full text-(--p-txt-2) aria-pressed:text-(--p-ambar)"
                   >
                     <Estrella llena={est.destacado} />
                   </button>
@@ -409,11 +406,11 @@ function Comanda({ p, onCerrar }: { p: Pedido; onCerrar: () => void }) {
       role="dialog"
       aria-modal="true"
       aria-label={COMANDA.aria}
-      className="fixed inset-0 z-50 grid place-items-center bg-[var(--p-txt)]/50 p-4"
+      className="fixed inset-0 z-50 grid place-items-center bg-(--p-txt)/50 p-4"
       onClick={(ev) => ev.target === ev.currentTarget && onCerrar()}
     >
-      <div className="m-aparece w-full max-w-[20rem] rounded-[22px] bg-[var(--p-card)] p-4">
-        <div className="m-ticket rounded-lg border border-dashed border-[var(--p-linea)] p-4">
+      <div className="m-aparece w-full max-w-80 rounded-[22px] bg-(--p-card) p-4">
+        <div className="m-ticket rounded-lg border border-dashed border-(--p-linea) p-4">
           <p className="text-center font-bold">{COMANDA.marca}</p>
           <p className="mt-1 text-center">{COMANDA.titulo(p.id)}</p>
           <p className="text-center">{PANEL.hoy(NOCHE_DEMO.dia, minAHhmm(p.creado))}</p>
@@ -438,14 +435,14 @@ function Comanda({ p, onCerrar }: { p: Pedido; onCerrar: () => void }) {
             ref={cerrar}
             type="button"
             onClick={onCerrar}
-            className="rounded-xl bg-[var(--p-linea)] py-2.5 text-[0.8125rem] font-semibold"
+            className="rounded-xl bg-(--p-linea) py-2.5 text-[0.8125rem] font-semibold"
           >
             {COMANDA.cerrar}
           </button>
           <button
             type="button"
             onClick={imprimir}
-            className="rounded-xl bg-[var(--p-azul)] py-2.5 text-[0.8125rem] font-semibold text-white"
+            className="rounded-xl bg-(--p-azul) py-2.5 text-[0.8125rem] font-semibold text-white"
           >
             {COMANDA.imprimir}
           </button>
@@ -472,15 +469,15 @@ function Interruptor({
       aria-label={etiqueta}
       onClick={onClick}
       className={cn(
-        'relative h-[1.75rem] w-[2.875rem] shrink-0 rounded-full transition-colors duration-200',
-        activo ? 'bg-[var(--p-verde)]' : 'bg-[var(--p-linea)]',
+        'relative h-7 w-11.5 shrink-0 rounded-full transition-colors duration-200',
+        activo ? 'bg-(--p-verde)' : 'bg-(--p-linea)',
       )}
     >
       <span
         aria-hidden="true"
         className={cn(
-          'absolute top-0.5 left-0.5 size-6 rounded-full bg-[var(--p-card)] ring-1 ring-[var(--p-linea)] transition-transform duration-200',
-          activo && 'translate-x-[1.125rem]',
+          'absolute top-0.5 left-0.5 size-6 rounded-full bg-(--p-card) ring-1 ring-(--p-linea) transition-transform duration-200',
+          activo && 'translate-x-4.5',
         )}
       />
     </button>
@@ -501,7 +498,7 @@ function BotonRedondo({
       type="button"
       aria-label={etiqueta}
       onClick={onClick}
-      className="grid size-7 place-items-center rounded-full bg-[var(--p-linea)]"
+      className="grid size-7 place-items-center rounded-full bg-(--p-linea)"
     >
       {children}
     </button>

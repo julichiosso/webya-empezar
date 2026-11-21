@@ -38,7 +38,7 @@ export function MarcoVista({
         <span className="mx-auto rounded-md border border-ed-line px-3 py-0.5 text-[0.6875rem] text-ed-muted">
           {dominio}
         </span>
-        <span aria-hidden="true" className="w-[3.25rem]" />
+        <span aria-hidden="true" className="w-13" />
       </div>
       <div className="relative min-h-0 flex-1">
         <Escalado ancho={1280}>{children}</Escalado>

@@ -59,7 +59,7 @@ export function EscenarioDemo({
       <main>
         <h1 className="sr-only">{titulo}</h1>
         <div className="d-escenario hidden justify-center gap-8 px-6 py-6 lg:flex xl:gap-12">
-          <div className="w-[13rem] shrink-0 pt-2">
+          <div className="w-52 shrink-0 pt-2">
             <ol aria-label={guia.aria} className="space-y-2">
               {guia.pasos.map((p, i) => (
                 <li
@@ -96,7 +96,7 @@ export function EscenarioDemo({
               <Escalado>{cliente('escritorio')}</Escalado>
             </Telefono>
           </div>
-          <div className="w-full max-w-[30rem] min-w-0">
+          <div className="w-full max-w-120 min-w-0">
             <p className="mb-2 text-center text-[0.75rem] text-ed-muted">{lados.panel}</p>
             <div
               ref={panelRef}

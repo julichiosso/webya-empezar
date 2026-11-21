@@ -34,7 +34,7 @@ function Tilde() {
       stroke="currentColor"
       strokeWidth={2.2}
       aria-hidden="true"
-      className="mt-0.5 size-4 shrink-0 text-[var(--sitio)]"
+      className="mt-0.5 size-4 shrink-0 text-(--sitio)"
     >
       <path d="m5 12.5 4.5 4.5L19 7.5" />
     </svg>
@@ -55,7 +55,7 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
   };
   const N = rubro.negocio;
   const boton =
-    'inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--sitio)] px-5 text-[0.9375rem] font-semibold text-white active:opacity-80';
+    'inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-(--sitio) px-5 text-[0.9375rem] font-semibold text-white active:opacity-80';
   return (
     <div
       ref={caja}
@@ -63,7 +63,7 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
       style={{ '--sitio': rubro.color } as CSSProperties}
     >
       <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b border-neutral-200 bg-white px-5 @3xl:px-10">
-        <span className="grid size-8 place-items-center rounded-lg bg-[var(--sitio)] text-[0.9375rem] font-bold text-white">
+        <span className="grid size-8 place-items-center rounded-lg bg-(--sitio) text-[0.9375rem] font-bold text-white">
           {N.inicial}
         </span>
         <span className="min-w-0 flex-1 truncate text-[0.9375rem] font-semibold">{N.nombre}</span>
@@ -82,7 +82,7 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
           type="button"
           onClick={onWhatsApp}
           aria-label={UI.whatsapp}
-          className="grid size-10 place-items-center rounded-full text-[var(--sitio)] active:opacity-70 @3xl:hidden"
+          className="grid size-10 place-items-center rounded-full text-(--sitio) active:opacity-70 @3xl:hidden"
         >
           <IconoWhatsApp className="size-6" />
         </button>
@@ -93,7 +93,7 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
         className="px-5 pt-10 pb-12 @3xl:grid @3xl:grid-cols-2 @3xl:items-center @3xl:gap-12 @3xl:px-10 @3xl:py-20"
       >
         <div>
-          <p className="text-[0.8125rem] font-semibold tracking-wide text-[var(--sitio)] uppercase">
+          <p className="text-[0.8125rem] font-semibold tracking-wide text-(--sitio) uppercase">
             {N.actividad}
           </p>
           <h2 className="mt-3 text-[2.125rem] leading-[1.05] font-bold tracking-tight @3xl:text-[3.25rem]">
@@ -118,9 +118,9 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
         </div>
         <div
           aria-hidden="true"
-          className="mt-8 grid aspect-[4/3] place-items-center rounded-3xl bg-[color-mix(in_srgb,var(--sitio)_12%,white)] @3xl:mt-0"
+          className="mt-8 grid aspect-4/3 place-items-center rounded-3xl bg-[color-mix(in_srgb,var(--sitio)_12%,white)] @3xl:mt-0"
         >
-          <span className="grid size-24 place-items-center rounded-3xl bg-[var(--sitio)] text-[3rem] font-bold text-white @3xl:size-32 @3xl:text-[4rem]">
+          <span className="grid size-24 place-items-center rounded-3xl bg-(--sitio) text-[3rem] font-bold text-white @3xl:size-32 @3xl:text-[4rem]">
             {N.inicial}
           </span>
         </div>
@@ -136,7 +136,7 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
         <ul className="mt-6 grid gap-3 @3xl:grid-cols-3 @3xl:gap-5">
           {rubro.servicios.items.map((s) => (
             <li key={s.nombre} className="rounded-2xl border border-neutral-200 p-5">
-              <span className="block size-2 rounded-full bg-[var(--sitio)]" aria-hidden="true" />
+              <span className="block size-2 rounded-full bg-(--sitio)" aria-hidden="true" />
               <p className="mt-4 text-[1.0625rem] font-semibold">{s.nombre}</p>
               <p className="mt-1 text-[0.9375rem] text-neutral-600">{s.texto}</p>
             </li>
@@ -206,7 +206,7 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
         </div>
         <div
           aria-hidden="true"
-          className="relative mt-8 aspect-[4/3] overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-100 @3xl:mt-0"
+          className="relative mt-8 aspect-4/3 overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-100 @3xl:mt-0"
         >
           <svg
             viewBox="0 0 200 150"
@@ -218,7 +218,7 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
             <path d="M-10 40h220M-10 105h220M60-10v170M140-10v170" />
             <path d="M-10 150 200 10" strokeWidth={3} />
           </svg>
-          <span className="absolute top-1/2 left-1/2 grid size-9 -translate-x-1/2 -translate-y-full [transform:translate(-50%,-100%)_rotate(45deg)] place-items-center rounded-full rounded-br-none bg-[var(--sitio)]">
+          <span className="absolute top-1/2 left-1/2 grid size-9 -translate-x-1/2 -translate-y-full [transform:translate(-50%,-100%)_rotate(45deg)] place-items-center rounded-full rounded-br-none bg-(--sitio)">
             <span className="size-3 rounded-full bg-white" />
           </span>
         </div>

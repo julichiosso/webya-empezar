@@ -20,7 +20,7 @@ export function BarraCelular() {
         aria-label={BARRA_CELULAR.etiqueta}
         className="e-barra-celular tono-oscuro fixed inset-x-0 bottom-0 z-30 bg-ed-surface px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="mx-auto grid max-w-[34rem] grid-cols-2 gap-2.5">
+        <div className="mx-auto grid max-w-136 grid-cols-2 gap-2.5">
           <a
             href={contacto.href}
             target="_blank"

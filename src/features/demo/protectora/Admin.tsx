@@ -33,16 +33,16 @@ export function Admin({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
             d({ tipo: 'verAviso' });
             setSeccion('solicitudes');
           }}
-          className="pr-push mb-4 flex w-full items-center gap-3 rounded-2xl border border-[var(--pr-linea)] bg-[var(--pr-papel)] p-3 text-left"
+          className="pr-push mb-4 flex w-full items-center gap-3 rounded-2xl border border-(--pr-linea) bg-(--pr-papel) p-3 text-left"
         >
           <span
             aria-hidden="true"
-            className="grid size-9 shrink-0 place-items-center rounded-xl bg-[var(--pr-acento)] text-white"
+            className="grid size-9 shrink-0 place-items-center rounded-xl bg-(--pr-acento) text-white"
           >
             <Ilustracion especie="perro" className="size-6" ojos="var(--pr-acento)" />
           </span>
           <span className="min-w-0 flex-1 text-[0.8125rem] leading-snug">
-            <span className="flex justify-between text-[var(--pr-tinta-2)]">
+            <span className="flex justify-between text-(--pr-tinta-2)">
               <span>{A.push.app}</span>
               <span>{A.push.cuando}</span>
             </span>
@@ -70,8 +70,8 @@ export function Admin({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
             className={cn(
               'min-h-11 shrink-0 rounded-full px-4 text-[0.9375rem] font-medium',
               seccion === s
-                ? 'bg-[var(--pr-tinta)] text-[var(--pr-fondo)]'
-                : 'bg-[var(--pr-papel)] text-[var(--pr-tinta-2)]',
+                ? 'bg-(--pr-tinta) text-(--pr-fondo)'
+                : 'bg-(--pr-papel) text-(--pr-tinta-2)',
             )}
           >
             {A[s]}
@@ -89,7 +89,7 @@ export function Admin({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
 }
 
 function Solicitudes({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
-  if (e.solicitudes.length === 0) return <p className="text-[var(--pr-tinta-2)]">{A.vacio}</p>;
+  if (e.solicitudes.length === 0) return <p className="text-(--pr-tinta-2)">{A.vacio}</p>;
   return (
     <ul className="space-y-2.5">
       {e.solicitudes.map((s) => {
@@ -97,12 +97,12 @@ function Solicitudes({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
         const i = ORDEN_SOLICITUD.indexOf(s.estado);
         const siguiente = ORDEN_SOLICITUD[i + 1];
         return (
-          <li key={s.id} className="rounded-2xl bg-[var(--pr-papel)] p-4">
+          <li key={s.id} className="rounded-2xl bg-(--pr-papel) p-4">
             <p className="flex items-center justify-between gap-3">
               <span className="font-semibold">
                 {s.persona} · {animal?.nombre}
               </span>
-              <span className="rounded-full bg-[var(--pr-acento-suave)] px-2.5 py-0.5 text-[0.75rem] font-semibold text-[var(--pr-acento)]">
+              <span className="rounded-full bg-(--pr-acento-suave) px-2.5 py-0.5 text-[0.75rem] font-semibold text-(--pr-acento)">
                 {ESTADOS_SOLICITUD[s.estado]}
               </span>
             </p>
@@ -150,13 +150,13 @@ function Cargar({ d }: { d: Dispatch<Accion> }) {
         type="button"
         onClick={() => setFoto(true)}
         className={cn(
-          'grid aspect-[4/3] w-full place-items-center rounded-2xl border border-dashed border-[var(--pr-linea)]',
-          foto ? 'pr-tono-cielo border-solid' : 'bg-[var(--pr-papel)]',
+          'grid aspect-4/3 w-full place-items-center rounded-2xl border border-dashed border-(--pr-linea)',
+          foto ? 'pr-tono-cielo border-solid' : 'bg-(--pr-papel)',
         )}
       >
         {foto ? (
           <span className="grid justify-items-center gap-2">
-            <Ilustracion especie={especie} className="w-24 text-[var(--pr-tinta)]" />
+            <Ilustracion especie={especie} className="w-24 text-(--pr-tinta)" />
             <span className="text-[0.875rem] font-medium">{N.fotoLista}</span>
           </span>
         ) : (
@@ -178,7 +178,7 @@ function Cargar({ d }: { d: Dispatch<Accion> }) {
           {(['perro', 'gato'] as const).map((s) => (
             <label
               key={s}
-              className="flex min-h-12 items-center gap-3 rounded-xl bg-[var(--pr-papel)] px-3.5"
+              className="flex min-h-12 items-center gap-3 rounded-xl bg-(--pr-papel) px-3.5"
             >
               <input
                 type="radio"
@@ -216,8 +216,8 @@ function Cargar({ d }: { d: Dispatch<Accion> }) {
         />
       </label>
       <p aria-live="polite" className="min-h-5 text-[0.875rem] font-medium">
-        {error ? <span className="text-[var(--pr-acento)]">{error}</span> : null}
-        {publicado ? <span className="text-[var(--pr-ok)]">{N.publicado(publicado)}</span> : null}
+        {error ? <span className="text-(--pr-acento)">{error}</span> : null}
+        {publicado ? <span className="text-(--pr-ok)">{N.publicado(publicado)}</span> : null}
       </p>
       <button type="submit" className="pr-boton w-full">
         {N.publicar}
@@ -237,17 +237,13 @@ function Socios({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
         return (
           <li
             key={s.id}
-            className="flex items-center justify-between gap-3 rounded-2xl bg-[var(--pr-papel)] p-4"
+            className="flex items-center justify-between gap-3 rounded-2xl bg-(--pr-papel) p-4"
           >
             <span className="min-w-0">
               <span className="block font-semibold">{s.nombre}</span>
-              <span className="block text-[0.8125rem] text-[var(--pr-tinta-2)]">
+              <span className="block text-[0.8125rem] text-(--pr-tinta-2)">
                 {cuota?.nombre} ·{' '}
-                <span
-                  className={
-                    s.debe ? 'font-semibold text-[var(--pr-acento)]' : 'text-[var(--pr-ok)]'
-                  }
-                >
+                <span className={s.debe ? 'font-semibold text-(--pr-acento)' : 'text-(--pr-ok)'}>
                   {s.debe ? A.debe(s.debe) : A.alDia}
                 </span>
               </span>
@@ -258,7 +254,7 @@ function Socios({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
                 target="_blank"
                 rel="noopener"
                 onClick={() => d({ tipo: 'recordar', socio: s.id })}
-                className="min-h-11 shrink-0 rounded-full border border-[var(--pr-linea)] px-3.5 py-2.5 text-[0.8125rem] font-semibold"
+                className="min-h-11 shrink-0 rounded-full border border-(--pr-linea) px-3.5 py-2.5 text-[0.8125rem] font-semibold"
               >
                 {recordado ? A.recordado : A.recordar}
               </a>
@@ -275,12 +271,12 @@ function Cuentas() {
   const ingresos = total(CUENTAS.ingresos);
   const gastos = total(CUENTAS.gastos);
   const bloque = (titulo: string, xs: readonly { nombre: string; monto: number }[]) => (
-    <div className="rounded-2xl bg-[var(--pr-papel)] p-4">
+    <div className="rounded-2xl bg-(--pr-papel) p-4">
       <h4 className="font-semibold">{titulo}</h4>
       <dl className="mt-2 space-y-1.5 text-[0.9375rem]">
         {xs.map((x) => (
           <div key={x.nombre} className="flex justify-between gap-3">
-            <dt className="text-[var(--pr-tinta-2)]">{x.nombre}</dt>
+            <dt className="text-(--pr-tinta-2)">{x.nombre}</dt>
             <dd className="tabular-nums">{pesos(x.monto)}</dd>
           </div>
         ))}
@@ -291,11 +287,11 @@ function Cuentas() {
     <div className="space-y-3">
       {bloque(A.ingresos, CUENTAS.ingresos)}
       {bloque(A.gastos, CUENTAS.gastos)}
-      <p className="flex justify-between rounded-2xl bg-[var(--pr-tinta)] p-4 font-semibold text-[var(--pr-fondo)]">
+      <p className="flex justify-between rounded-2xl bg-(--pr-tinta) p-4 font-semibold text-(--pr-fondo)">
         <span>{A.saldo}</span>
         <span className="tabular-nums">{pesos(ingresos - gastos)}</span>
       </p>
-      <p className="text-[0.8125rem] text-[var(--pr-tinta-2)]">{A.cuentasNota}</p>
+      <p className="text-[0.8125rem] text-(--pr-tinta-2)">{A.cuentasNota}</p>
     </div>
   );
 }

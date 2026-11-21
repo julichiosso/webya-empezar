@@ -102,7 +102,7 @@ export function Configurador({ inicial }: { inicial?: TipoId }) {
             {SERVICIOS.map((s, i) => (
               <label
                 key={s.id}
-                className={`${OPCION} min-h-[4.5rem] flex-col justify-center gap-3 p-4 sm:min-h-[6.5rem] sm:justify-between sm:p-5`}
+                className={`${OPCION} min-h-18 flex-col justify-center gap-3 p-4 sm:min-h-26 sm:justify-between sm:p-5`}
               >
                 <input
                   ref={i === 0 ? primerTipo : undefined}

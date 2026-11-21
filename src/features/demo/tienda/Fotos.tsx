@@ -97,7 +97,7 @@ export function FotoProducto({
   return (
     <span
       aria-hidden="true"
-      className={`grid size-full place-items-center bg-[color-mix(in_srgb,var(--marca)_9%,white)] text-[var(--marca)] ${className ?? ''}`}
+      className={`grid size-full place-items-center bg-[color-mix(in_srgb,var(--marca)_9%,white)] text-(--marca) ${className ?? ''}`}
     >
       <svg
         viewBox="0 0 64 64"

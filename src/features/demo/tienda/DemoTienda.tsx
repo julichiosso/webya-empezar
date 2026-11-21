@@ -91,7 +91,7 @@ export function DemoTienda() {
       <main>
         <h1 className="sr-only">{UI.titulo}</h1>
         <div className="d-escenario hidden justify-center gap-8 px-6 py-6 lg:flex xl:gap-12">
-          <div className="d-barra-fina d-ventana relative w-[22rem] shrink-0 overflow-y-auto pr-2">
+          <div className="d-barra-fina d-ventana relative w-88 shrink-0 overflow-y-auto pr-2">
             <div className="mb-8">
               <SelectorVista
                 vista={vista}
@@ -104,9 +104,7 @@ export function DemoTienda() {
             {armador(false)}
             <EnUso proyecto="petrucci" className="mt-6" />
           </div>
-          <div
-            className={cn('min-w-0', vista === 'escritorio' ? 'w-full max-w-[62rem]' : 'shrink-0')}
-          >
+          <div className={cn('min-w-0', vista === 'escritorio' ? 'w-full max-w-248' : 'shrink-0')}>
             <p className="mb-2 text-center text-[0.75rem] text-ed-muted">{UI.ladoTienda}</p>
             <MarcoVista vista={vista} dominio={dominioDe(e.nombre)}>
               {tienda}

@@ -45,8 +45,8 @@ export function Publica({
             className={cn(
               'min-h-11 shrink-0 rounded-full px-4 text-[0.9375rem] font-medium',
               seccion === s
-                ? 'bg-[var(--pr-tinta)] text-[var(--pr-fondo)]'
-                : 'bg-[var(--pr-papel)] text-[var(--pr-tinta-2)]',
+                ? 'bg-(--pr-tinta) text-(--pr-fondo)'
+                : 'bg-(--pr-papel) text-(--pr-tinta-2)',
             )}
           >
             {U.secciones[s]}
@@ -108,8 +108,8 @@ function Adoptar({
             className={cn(
               'min-h-10 rounded-full border px-3.5 text-[0.875rem]',
               filtro === f
-                ? 'border-[var(--pr-tinta)] font-semibold'
-                : 'border-[var(--pr-linea)] text-[var(--pr-tinta-2)]',
+                ? 'border-(--pr-tinta) font-semibold'
+                : 'border-(--pr-linea) text-(--pr-tinta-2)',
             )}
           >
             {f === 'todos' ? U.filtros.todos : ESPECIES[f]}
@@ -122,22 +122,22 @@ function Adoptar({
             <button
               type="button"
               onClick={() => setAbierto(a.id)}
-              className="w-full overflow-hidden rounded-2xl bg-[var(--pr-papel)] text-left"
+              className="w-full overflow-hidden rounded-2xl bg-(--pr-papel) text-left"
             >
               <span className={cn('grid aspect-square place-items-center', `pr-tono-${a.tono}`)}>
-                <Ilustracion especie={a.especie} className="w-3/5 text-[var(--pr-tinta)]" />
+                <Ilustracion especie={a.especie} className="w-3/5 text-(--pr-tinta)" />
               </span>
               <span className="block p-3">
                 <span className="pr-titulo block text-[1.125rem] font-semibold">{a.nombre}</span>
-                <span className="block text-[0.8125rem] text-[var(--pr-tinta-2)]">
+                <span className="block text-[0.8125rem] text-(--pr-tinta-2)">
                   {U.ficha.edad(a.edadMeses)} · {TAMANOS[a.tamano]}
                 </span>
                 <span
                   className={cn(
                     'mt-1.5 inline-block rounded-full px-2 py-0.5 text-[0.75rem] font-semibold',
                     a.estado === 'adoptado'
-                      ? 'bg-[var(--pr-ok-suave)] text-[var(--pr-ok)]'
-                      : 'bg-[var(--pr-acento-suave)] text-[var(--pr-acento)]',
+                      ? 'bg-(--pr-ok-suave) text-(--pr-ok)'
+                      : 'bg-(--pr-acento-suave) text-(--pr-acento)',
                   )}
                 >
                   {ESTADOS[a.estado]}
@@ -169,24 +169,24 @@ function Ficha({
         {U.ficha.volver}
       </button>
       <div
-        className={cn('mt-2 grid aspect-[4/3] place-items-center rounded-2xl', `pr-tono-${a.tono}`)}
+        className={cn('mt-2 grid aspect-4/3 place-items-center rounded-2xl', `pr-tono-${a.tono}`)}
       >
-        <Ilustracion especie={a.especie} className="w-2/5 text-[var(--pr-tinta)]" />
+        <Ilustracion especie={a.especie} className="w-2/5 text-(--pr-tinta)" />
       </div>
       <h3 id={`ficha-${a.id}`} className="pr-titulo mt-4 text-[1.75rem] font-semibold">
         {a.nombre}
       </h3>
-      <p className="text-[var(--pr-tinta-2)]">
+      <p className="text-(--pr-tinta-2)">
         {U.ficha.edad(a.edadMeses)} · {TAMANOS[a.tamano]} · {ESTADOS[a.estado]}
       </p>
       <p className="mt-3 font-medium">{a.caracter}</p>
-      <p className="mt-1 leading-relaxed text-[var(--pr-tinta-2)]">{a.historia}</p>
+      <p className="mt-1 leading-relaxed text-(--pr-tinta-2)">{a.historia}</p>
       <ul className="mt-3 flex flex-wrap gap-2 text-[0.8125rem]">
         {a.castrado ? (
-          <li className="rounded-full bg-[var(--pr-papel)] px-2.5 py-1">{U.ficha.castrado}</li>
+          <li className="rounded-full bg-(--pr-papel) px-2.5 py-1">{U.ficha.castrado}</li>
         ) : null}
         {a.vacunado ? (
-          <li className="rounded-full bg-[var(--pr-papel)] px-2.5 py-1">{U.ficha.vacunado}</li>
+          <li className="rounded-full bg-(--pr-papel) px-2.5 py-1">{U.ficha.vacunado}</li>
         ) : null}
       </ul>
       <div className="mt-5 grid gap-2.5">
@@ -232,9 +232,9 @@ function Solicitud({
 
   if (listo) {
     return (
-      <div role="status" className="rounded-2xl bg-[var(--pr-papel)] p-5">
+      <div role="status" className="rounded-2xl bg-(--pr-papel) p-5">
         <p className="pr-titulo text-[1.5rem] font-semibold">{S.listo}</p>
-        <p className="mt-2 leading-relaxed text-[var(--pr-tinta-2)]">{S.queSigue}</p>
+        <p className="mt-2 leading-relaxed text-(--pr-tinta-2)">{S.queSigue}</p>
         <button type="button" onClick={onVolver} className="pr-boton-2 mt-5 w-full">
           {U.ficha.volver}
         </button>
@@ -273,7 +273,7 @@ function Solicitud({
           {S.viviendas.map((v) => (
             <label
               key={v}
-              className="flex min-h-12 items-center gap-3 rounded-xl bg-[var(--pr-papel)] px-3.5"
+              className="flex min-h-12 items-center gap-3 rounded-xl bg-(--pr-papel) px-3.5"
             >
               <input
                 type="radio"
@@ -295,10 +295,10 @@ function Solicitud({
         />
         <span>{S.consentimiento}</span>
       </label>
-      <p aria-live="polite" className="min-h-5 text-[0.875rem] font-medium text-[var(--pr-acento)]">
+      <p aria-live="polite" className="min-h-5 text-[0.875rem] font-medium text-(--pr-acento)">
         {error}
       </p>
-      <div className="e-config-barra sticky z-10 -mx-4 bg-[var(--pr-fondo)] px-4 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <div className="e-config-barra sticky z-10 -mx-4 bg-(--pr-fondo) px-4 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <button type="submit" className="pr-boton w-full">
           {S.enviar}
         </button>
@@ -321,14 +321,14 @@ function Socios({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
       <div
         role="status"
         aria-label={S.carnet}
-        className="rounded-3xl bg-[var(--pr-tinta)] p-6 text-[var(--pr-fondo)]"
+        className="rounded-3xl bg-(--pr-tinta) p-6 text-(--pr-fondo)"
       >
         <p className="text-[0.8125rem] tracking-[0.12em] uppercase opacity-80">{S.carnet}</p>
         <p className="pr-titulo mt-6 text-[1.75rem] font-semibold">{e.carnet.nombre}</p>
         <p className="mt-1 opacity-80">
           {c?.nombre} · {S.numero(e.carnet.numero)}
         </p>
-        <p className="mt-6 inline-block rounded-full bg-[var(--pr-ok-suave)] px-3 py-1 text-[0.8125rem] font-semibold text-[var(--pr-ok)]">
+        <p className="mt-6 inline-block rounded-full bg-(--pr-ok-suave) px-3 py-1 text-[0.8125rem] font-semibold text-(--pr-ok)">
           {S.alDia}
         </p>
       </div>
@@ -346,13 +346,13 @@ function Socios({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
       className="space-y-4"
     >
       <h3 className="pr-titulo text-[1.375rem] font-semibold">{S.titulo}</h3>
-      <p className="text-[var(--pr-tinta-2)]">{S.texto}</p>
+      <p className="text-(--pr-tinta-2)">{S.texto}</p>
       <fieldset className="grid gap-2">
         <legend className="sr-only">{S.titulo}</legend>
         {CUOTAS.map((c) => (
           <label
             key={c.id}
-            className="flex min-h-14 items-center justify-between gap-3 rounded-xl bg-[var(--pr-papel)] px-4"
+            className="flex min-h-14 items-center justify-between gap-3 rounded-xl bg-(--pr-papel) px-4"
           >
             <span className="flex items-center gap-3">
               <input
@@ -367,7 +367,7 @@ function Socios({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
           </label>
         ))}
       </fieldset>
-      <p className="text-[0.8125rem] text-[var(--pr-tinta-2)]">{S.montoEjemplo}</p>
+      <p className="text-[0.8125rem] text-(--pr-tinta-2)">{S.montoEjemplo}</p>
       <label className="block">
         <span className="mb-1.5 block text-[0.9375rem] font-medium">{S.nombre}</span>
         <input
@@ -394,14 +394,14 @@ function Donar({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
   const avance = Math.min(1, e.juntado / CAMPANA.meta);
   return (
     <div className="space-y-5">
-      <section aria-labelledby="campana" className="rounded-2xl bg-[var(--pr-papel)] p-5">
-        <p className="text-[0.8125rem] tracking-[0.12em] text-[var(--pr-tinta-2)] uppercase">
+      <section aria-labelledby="campana" className="rounded-2xl bg-(--pr-papel) p-5">
+        <p className="text-[0.8125rem] tracking-[0.12em] text-(--pr-tinta-2) uppercase">
           {D.titulo}
         </p>
         <h3 id="campana" className="pr-titulo mt-1 text-[1.375rem] font-semibold">
           {CAMPANA.titulo}
         </h3>
-        <p className="mt-1 text-[var(--pr-tinta-2)]">{CAMPANA.texto}</p>
+        <p className="mt-1 text-(--pr-tinta-2)">{CAMPANA.texto}</p>
         <div
           className="pr-barra mt-4"
           role="progressbar"
@@ -429,8 +429,8 @@ function Donar({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
               className={cn(
                 'min-h-12 rounded-xl border tabular-nums',
                 monto === m
-                  ? 'border-[var(--pr-tinta)] font-semibold'
-                  : 'border-[var(--pr-linea)] bg-[var(--pr-papel)]',
+                  ? 'border-(--pr-tinta) font-semibold'
+                  : 'border-(--pr-linea) bg-(--pr-papel)',
               )}
             >
               {pesos(m)}
@@ -449,7 +449,7 @@ function Donar({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
         {D.donar} {pesos(monto)}
       </button>
       {gracias ? (
-        <p role="status" className="font-medium text-[var(--pr-ok)]">
+        <p role="status" className="font-medium text-(--pr-ok)">
           {D.gracias}
         </p>
       ) : null}
@@ -457,7 +457,7 @@ function Donar({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
         <p className="font-medium">{D.especie}</p>
         <ul className="mt-2 flex flex-wrap gap-2 text-[0.875rem]">
           {ESPECIE_NECESARIA.map((x) => (
-            <li key={x} className="rounded-full bg-[var(--pr-papel)] px-3 py-1.5">
+            <li key={x} className="rounded-full bg-(--pr-papel) px-3 py-1.5">
               {x}
             </li>
           ))}
@@ -474,7 +474,7 @@ function Sumate({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
   return (
     <div>
       <h3 className="pr-titulo text-[1.375rem] font-semibold">{S.titulo}</h3>
-      <p className="mt-1 text-[var(--pr-tinta-2)]">{S.texto}</p>
+      <p className="mt-1 text-(--pr-tinta-2)">{S.texto}</p>
       <ul className="mt-4 space-y-2.5">
         {ACTIVIDADES.map((a) => {
           const quedan = a.cupo - (e.anotados[a.id] ?? 0);
@@ -482,11 +482,11 @@ function Sumate({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
           return (
             <li
               key={a.id}
-              className="flex items-center justify-between gap-3 rounded-2xl bg-[var(--pr-papel)] p-4"
+              className="flex items-center justify-between gap-3 rounded-2xl bg-(--pr-papel) p-4"
             >
               <span className="min-w-0">
                 <span className="block font-semibold">{a.nombre}</span>
-                <span className="block text-[0.8125rem] text-[var(--pr-tinta-2)]">
+                <span className="block text-[0.8125rem] text-(--pr-tinta-2)">
                   {fechaActividad(a.dias, a.hora)} · {quedan > 0 ? S.lugares(quedan) : S.lleno}
                 </span>
               </span>
@@ -498,10 +498,10 @@ function Sumate({ e, d }: { e: EstadoDemo; d: Dispatch<Accion> }) {
                 className={cn(
                   'min-h-11 shrink-0 rounded-full px-4 text-[0.875rem] font-semibold',
                   mio
-                    ? 'bg-[var(--pr-ok-suave)] text-[var(--pr-ok)]'
+                    ? 'bg-(--pr-ok-suave) text-(--pr-ok)'
                     : quedan <= 0
-                      ? 'text-[var(--pr-tinta-2)]'
-                      : 'bg-[var(--pr-acento)] text-white',
+                      ? 'text-(--pr-tinta-2)'
+                      : 'bg-(--pr-acento) text-white',
                 )}
               >
                 {mio ? S.anotado : quedan <= 0 ? S.lleno : S.anotarme}

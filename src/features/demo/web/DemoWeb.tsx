@@ -89,7 +89,7 @@ export function DemoWeb() {
       <main>
         <h1 className="sr-only">{UI.titulo}</h1>
         <div className="d-escenario hidden justify-center gap-8 px-6 py-6 lg:flex xl:gap-12">
-          <div className="w-[15rem] shrink-0 space-y-6 pt-2">
+          <div className="w-60 shrink-0 space-y-6 pt-2">
             <ol aria-label={UI.guia.aria} className="space-y-2">
               {UI.guia.pasos.map((p, i) => (
                 <li
@@ -130,9 +130,7 @@ export function DemoWeb() {
             />
             <EnUso proyecto="lorena" />
           </div>
-          <div
-            className={cn('min-w-0', vista === 'escritorio' ? 'w-full max-w-[62rem]' : 'shrink-0')}
-          >
+          <div className={cn('min-w-0', vista === 'escritorio' ? 'w-full max-w-248' : 'shrink-0')}>
             <p className="mb-2 text-center text-[0.75rem] text-ed-muted">{UI.ladoSitio}</p>
             <div className="relative">
               <MarcoVista vista={vista} dominio={UI.dominio}>

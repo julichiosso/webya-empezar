@@ -26,7 +26,7 @@ export default function Demos() {
           {HUB_DEMOS.volver}
         </Link>
       </header>
-      <main className="mx-auto w-full max-w-[60rem] px-4 pt-8 pb-12 md:pt-16">
+      <main className="mx-auto w-full max-w-240 px-4 pt-8 pb-12 md:pt-16">
         <h1 className="e-h2">{HUB_DEMOS.titulo}</h1>
         <p className="e-cuerpo mt-2 text-ed-muted">{HUB_DEMOS.bajada}</p>
         <ul className="mt-6 grid gap-3 sm:grid-cols-2 md:mt-10 md:gap-4">

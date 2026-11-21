@@ -90,7 +90,7 @@ export function Telefono({
 }) {
   return (
     <div
-      className={cn('e-tel relative mx-auto w-full max-w-[17.5rem]', className)}
+      className={cn('e-tel relative mx-auto w-full max-w-70', className)}
       role={etiqueta ? 'img' : undefined}
       aria-label={etiqueta}
       aria-hidden={etiqueta || !decorativo ? undefined : true}
@@ -197,7 +197,7 @@ function EscenaSena() {
  */
 function EscenaAviso() {
   return (
-    <div className="absolute inset-x-0 -top-[var(--tel-barra)] bottom-0">
+    <div className="absolute inset-x-0 -top-(--tel-barra) bottom-0">
       <Image
         src={T.aviso.src}
         alt={T.aviso.alt}
@@ -363,7 +363,7 @@ export function FlujoPedidos() {
       role="img"
       aria-label={P.alt}
     >
-      <Telefono className="max-w-[15.5rem] sm:max-w-[17.5rem]">
+      <Telefono className="max-w-62 sm:max-w-70">
         <div className="e-estado e-bucle absolute inset-0" style={{ '--n': 0 } as CSSProperties}>
           <EstadoCarrito />
         </div>
@@ -440,7 +440,7 @@ function PantallaWeb() {
     <>
       <BarraApp titulo={W.app} />
       <div className="p-4">
-        <div className="aspect-[4/3] rounded-xl bg-ed-surface" />
+        <div className="aspect-4/3 rounded-xl bg-ed-surface" />
         <p className="mt-4 text-[1.125rem] leading-tight font-semibold">{W.titulo}</p>
         <div className="mt-2 space-y-1.5">
           <div className="h-1.5 w-full rounded-full bg-ed-line" />
