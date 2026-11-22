@@ -23,3 +23,6 @@ e2e/.screenshots-actual
 
 # Worktrees de los subagentes (cada uno es su propio checkout)
 .claude/worktrees/
+
+# Estudio de referencias de diseño: solo local, nunca al repo.
+/design-refs/study/
