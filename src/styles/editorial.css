@@ -2014,3 +2014,43 @@ html[data-texto-grande] {
 .tono-oscuro .d-sin-foco:focus-visible {
   outline: none;
 }
+
+/* Hub de demos: el nombre de cada demo, enorme y en contorno, detrás de su fila. Se desliza apenas con el
+   scroll donde el navegador lo permite; si no (o con movimiento reducido), queda quieto. */
+.d-palabra-fondo {
+  position: absolute;
+  inset-block: 0;
+  right: -2%;
+  display: flex;
+  align-items: center;
+  font-size: clamp(4rem, 2rem + 9vw, 10rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--e-line-strong);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+}
+@supports (animation-timeline: view()) {
+  @keyframes d-palabra-desliza {
+    from {
+      transform: translate3d(8%, 0, 0);
+    }
+    to {
+      transform: translate3d(-8%, 0, 0);
+    }
+  }
+  .mo .d-palabra-fondo {
+    animation: d-palabra-desliza linear both;
+    animation-timeline: view();
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .d-palabra-fondo {
+    animation: none !important;
+  }
+}

@@ -5,8 +5,53 @@ import type { TipoId } from '../servicios';
  */
 
 export const HUB_DEMOS = {
-  titulo: 'Probá un sistema',
-  bajada: 'Con datos de ejemplo. Sin registrarte.',
+  titulo: 'Probá tu sistema. Armalo vos.',
+  bajada: 'Con tu nombre, tu logo y tus colores. Sin registrarte.',
+  pregunta: '¿Qué tipo de negocio tenés?',
+  indice: 'Todas las demos',
+  personalizable: 'Personalizable',
+  misDemos: 'Seguí donde dejaste',
+  misDemosAyuda: 'Lo que armaste quedó guardado en este dispositivo.',
+  retomar: 'Seguir',
+  como: {
+    titulo: 'Cómo funciona',
+    pasos: [
+      { titulo: 'Elegís.', texto: 'Tu rubro y tu sistema.' },
+      { titulo: 'Armás.', texto: 'Tu nombre, tu logo y tus colores.' },
+      { titulo: 'Nos lo mandás.', texto: 'Por WhatsApp, con un toque.' },
+    ],
+  },
+  preguntas: {
+    titulo: 'Preguntas',
+    items: [
+      {
+        p: '¿Lo que escribo se envía a algún lado?',
+        r: 'No. Todo queda en tu dispositivo hasta que vos nos lo mandes.',
+      },
+      {
+        p: '¿Las fotos que subo se publican?',
+        r: 'No. No salen de tu celular o tu compu.',
+      },
+      {
+        p: '¿El sistema real es igual a la demo?',
+        r: 'Tiene más funciones y se arma a la medida de tu negocio.',
+      },
+      {
+        p: '¿Cuánto sale?',
+        r: 'Depende de lo que necesites. Mandanos tu demo y te pasamos una propuesta.',
+      },
+    ],
+  },
+  cierre: 'Escribinos',
+  abrirPregunta: '+',
+  rubrosGrandes: [
+    { id: 'gastronomia', nombre: 'Pizzería o comida', demo: 'pedidos' },
+    { id: 'estetica', nombre: 'Peluquería o barbería', demo: 'turnos' },
+    { id: 'salud', nombre: 'Consultorio', demo: 'turnos' },
+    { id: 'comercio', nombre: 'Comercio o tienda', demo: 'tienda' },
+    { id: 'servicios', nombre: 'Profesional u oficio', demo: 'web' },
+    { id: 'entidades', nombre: 'Protectora o club', demo: 'protectora' },
+  ],
   volver: 'Volver al sitio',
   abrir: 'Ver demo',
   rubros: 'O elegí tu rubro',
