@@ -133,28 +133,14 @@ export const HERO_3D = {
   },
 } as const;
 
-/** Header de la home 3D: dos píldoras, "Escribinos" y "Menú". */
+/** Header: dos píldoras, "Escribinos" y "Menú" (el menú se arma desde HEADER.menu, como el pie). */
 export const HEADER_3D = {
   escribinos: 'Escribinos',
   menu: 'Menú',
   menuAria: 'Abrir el menú',
   cerrar: 'Cerrar',
   cerrarAria: 'Cerrar el menú',
-  /** Menú a pantalla completa: todo el sitio en tipografía grande. */
-  links: [
-    { href: '/turnero', texto: 'Turnero' },
-    { href: '/pedidos', texto: 'Pedidos' },
-    { href: '/tienda', texto: 'Tienda' },
-    { href: '/web', texto: 'Web' },
-    { href: '/campo', texto: 'Campo' },
-    { href: '/protectoras', texto: 'Protectoras' },
-    { href: '/proyectos', texto: 'Proyectos' },
-    { href: '/demos', texto: 'Demos' },
-    { href: '/zona', texto: 'Zona' },
-    { href: '/nosotros', texto: 'Nosotros' },
-  ],
   buscar: '¿Qué necesitás?',
-  zona: 'San Francisco · San Jorge · toda la zona',
 } as const;
 
 /** "¿Qué necesita tu negocio?": el buscador grande y los rubros, en una sola pantalla. */
@@ -415,6 +401,8 @@ export const FRASES = {
 /** "Te escribimos nosotros": dejan su WhatsApp y el pedido llega al instante (API de leads). */
 export const CONTACTO_RAPIDO = {
   titulo: 'O te escribimos nosotros.',
+  /** En la tarjeta del menú. */
+  tituloCorto: 'Te escribimos nosotros.',
   whatsapp: 'Tu WhatsApp',
   whatsappAyuda: 'Con código de área.',
   negocio: 'Tu negocio (opcional)',

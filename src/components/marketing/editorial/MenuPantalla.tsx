@@ -1,49 +1,61 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useId, useRef, useState } from 'react';
-import { LogoWebya } from '@/brand/logo/LogoWebya';
-import { CTA, HEADER, HEADER_3D as H, MARCA, RUTAS } from '@/content/home';
+import { CTA, HEADER, HEADER_3D as H, RUTAS } from '@/content/home';
 import { Buscador } from './Buscador';
+import { ContactoRapido } from './ContactoRapido';
 import { WhatsApp } from './Iconos';
 
-/** Los dos puntos de la píldora "Menú ••" (el estado del botón, no un ícono de hamburguesa). */
-function Puntos({ cuantos }: { cuantos: 1 | 2 }) {
+/** Los puntos de las píldoras: el estado del botón, no un ícono de hamburguesa. */
+function Puntos({ cuantos, vertical = false }: { cuantos: 1 | 2 | 3; vertical?: boolean }) {
   return (
-    <span aria-hidden="true" className="m3d-puntos">
-      <span />
-      {cuantos === 2 ? <span /> : null}
+    <span aria-hidden="true" className={vertical ? 'm3d-puntos m3d-puntos-v' : 'm3d-puntos'}>
+      {Array.from({ length: cuantos }, (_, i) => (
+        <span key={i} />
+      ))}
     </span>
   );
 }
 
-const FOCABLES = 'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+const FOCABLES =
+  'a[href], button:not([disabled]), input:not([disabled]), textarea, [tabindex]:not([tabindex="-1"])';
+
+/** Todo el sitio, desde el mismo manifiesto que el pie: productos y el resto. */
+const LINKS = [...HEADER.menu.links, ...HEADER.menu.otros];
+
+const activo = (ruta: string, href: string) => ruta === href || ruta.startsWith(`${href}/`);
 
 /**
- * Menú a pantalla completa (todas las medidas): todo el sitio en tipografía enorme, el buscador,
- * "Armá tu sistema" destacado y "Escribinos". Fondo negro plano. Se abre con la píldora "Menú ••" y se
- * cierra con "Cerrar", Escape o al elegir un link. El foco queda adentro mientras está abierto y vuelve a
- * la píldora al cerrar. Letra de 28 px o más y toques de 56 px: para dueños de cualquier edad.
+ * Menú en tarjetas flotantes bajo las píldoras (la página sigue a la vista): el buscador y todo el sitio
+ * con un punto en la página actual; "Armá tu sistema" destacado en negro; y "Te escribimos nosotros" para
+ * dejar el WhatsApp. La píldora pasa a "Cerrar". Se cierra con Escape, tocando afuera o eligiendo un link;
+ * el foco queda adentro mientras está abierto y vuelve a la píldora. En el celular, las tarjetas ocupan el
+ * ancho con letra grande y toques de 56 px.
  */
 export function MenuPantalla({ contacto, externo }: { contacto: string; externo: boolean }) {
   const [abierto, setAbierto] = useState(false);
+  const ruta = usePathname() ?? '/';
   const id = useId();
   const panel = useRef<HTMLDivElement>(null);
-  const abridor = useRef<HTMLButtonElement>(null);
-  const cerrarBtn = useRef<HTMLButtonElement>(null);
+  const boton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!abierto) return;
     const raiz = panel.current;
-    cerrarBtn.current?.focus();
+    const btn = boton.current;
+    raiz?.querySelector<HTMLElement>('nav a[href]')?.focus();
     const alTeclear = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setAbierto(false);
         return;
       }
-      if (e.key !== 'Tab' || !raiz) return;
-      // Trampa de foco: Tab y Shift+Tab dan la vuelta adentro del menú.
-      const f = [...raiz.querySelectorAll<HTMLElement>(FOCABLES)].filter((el) => el.offsetParent);
+      if (e.key !== 'Tab' || !raiz || !btn) return;
+      // Trampa de foco: el botón "Cerrar" y las tarjetas; Tab y Shift+Tab dan la vuelta.
+      const f = [btn, ...raiz.querySelectorAll<HTMLElement>(FOCABLES)].filter(
+        (el) => el.offsetParent && el.getAttribute('aria-hidden') !== 'true',
+      );
       const primero = f[0];
       const ultimo = f[f.length - 1];
       if (!primero || !ultimo) return;
@@ -56,13 +68,11 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
       }
     };
     document.addEventListener('keydown', alTeclear);
-    const antes = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const boton = abridor.current;
+    document.documentElement.toggleAttribute('data-menu', true);
     return () => {
       document.removeEventListener('keydown', alTeclear);
-      document.body.style.overflow = antes;
-      boton?.focus();
+      document.documentElement.removeAttribute('data-menu');
+      btn?.focus();
     };
   }, [abierto]);
 
@@ -71,18 +81,19 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
   return (
     <>
       <button
-        ref={abridor}
+        ref={boton}
         type="button"
         aria-expanded={abierto}
         aria-controls={id}
-        aria-label={HEADER.menu.abrirAria}
-        onClick={() => setAbierto(true)}
-        className="m3d-pildora m3d-pildora-gris"
+        aria-label={abierto ? HEADER.menu.cerrarAria : HEADER.menu.abrirAria}
+        onClick={() => setAbierto((a) => !a)}
+        className={abierto ? 'm3d-pildora m3d-pildora-blanca' : 'm3d-pildora m3d-pildora-gris'}
       >
-        <span aria-hidden="true">{H.menu}</span>
-        <Puntos cuantos={2} />
+        <span aria-hidden="true">{abierto ? H.cerrar : H.menu}</span>
+        {abierto ? <Puntos cuantos={3} vertical /> : <Puntos cuantos={2} />}
       </button>
 
+      {abierto ? <div className="m3d-fondo" aria-hidden="true" onClick={cerrar} /> : null}
       <div
         id={id}
         ref={panel}
@@ -90,56 +101,54 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
         role="dialog"
         aria-modal="true"
         aria-label={H.menu}
-        className="m3d-panel tono-oscuro"
+        className="m3d-panel"
       >
-        <div className="m3d-barra e-wrap">
-          <Link href="/" onClick={cerrar} aria-label={MARCA.inicio} className="m3d-logo">
-            <LogoWebya decorativo className="h-6 w-auto" />
-          </Link>
-          <button
-            ref={cerrarBtn}
-            type="button"
-            onClick={cerrar}
-            aria-label={HEADER.menu.cerrarAria}
-            className="m3d-pildora m3d-pildora-clara"
-          >
-            <span aria-hidden="true">{H.cerrar}</span>
-            <span aria-hidden="true" className="m3d-x" />
-          </button>
-        </div>
-
-        <div className="m3d-cuerpo e-wrap">
-          <nav aria-label={HEADER.navegacion} className="m3d-nav">
-            <ul>
-              {H.links.map((l, i) => (
-                <li key={l.href} style={{ '--i': i } as React.CSSProperties}>
-                  <Link href={l.href} onClick={cerrar} className="m3d-link">
-                    {l.texto}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div className="tono-claro m3d-buscar">
+        <div className="m3d-tarjeta tono-claro">
+          <div className="m3d-buscar">
             <Buscador compacto etiqueta={H.buscar} />
           </div>
-          <div className="m3d-acciones">
-            <Link href={RUTAS.armar} onClick={cerrar} className="m3d-armar">
-              {CTA.armar}
-            </Link>
-            <a
-              href={contacto}
-              target={externo ? '_blank' : undefined}
-              rel={externo ? 'noopener' : undefined}
-              aria-label={externo ? `${CTA.escribinos}${CTA.pestana}` : undefined}
-              onClick={cerrar}
-              className="m3d-escribinos"
-            >
-              {externo ? <WhatsApp /> : null}
-              <span>{CTA.escribinos}</span>
-            </a>
-            <p className="m3d-zona">{H.zona}</p>
-          </div>
+          <nav aria-label={HEADER.navegacion}>
+            <ul className="m3d-lista">
+              {LINKS.map((l, i) => {
+                const aca = activo(ruta, l.href);
+                return (
+                  <li key={l.href} style={{ '--i': i } as React.CSSProperties}>
+                    <Link
+                      href={l.href}
+                      onClick={cerrar}
+                      aria-current={aca ? 'page' : undefined}
+                      className="m3d-link"
+                    >
+                      <span>{l.texto}</span>
+                      {aca ? <span aria-hidden="true" className="m3d-aca" /> : null}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
+
+        <div className="m3d-tarjeta m3d-tarjeta-negra tono-oscuro">
+          <Link href={RUTAS.armar} onClick={cerrar} className="m3d-armar">
+            <span>{CTA.armar}</span>
+            <span aria-hidden="true" className="m3d-flecha" />
+          </Link>
+          <a
+            href={contacto}
+            target={externo ? '_blank' : undefined}
+            rel={externo ? 'noopener' : undefined}
+            aria-label={externo ? `${CTA.escribinos}${CTA.pestana}` : undefined}
+            onClick={cerrar}
+            className="m3d-escribinos"
+          >
+            {externo ? <WhatsApp /> : null}
+            <span>{CTA.escribinos}</span>
+          </a>
+        </div>
+
+        <div className="m3d-tarjeta tono-claro">
+          <ContactoRapido compacto />
         </div>
       </div>
     </>

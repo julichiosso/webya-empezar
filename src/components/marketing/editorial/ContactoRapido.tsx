@@ -26,7 +26,12 @@ const CAMPO =
  */
 export function ContactoRapido({
   inicial,
-}: { inicial?: { negocio?: string; texto?: string } } = {}) {
+  compacto = false,
+}: {
+  inicial?: { negocio?: string; texto?: string };
+  /** Solo el WhatsApp y enviar (la tarjeta del menú). */
+  compacto?: boolean;
+} = {}) {
   const id = useId();
   const [whatsapp, setWhatsapp] = useState('');
   const [negocio, setNegocio] = useState(inicial?.negocio ?? '');
@@ -99,13 +104,13 @@ export function ContactoRapido({
     <form
       onSubmit={enviar}
       noValidate
-      className="rounded-3xl bg-ed-surface p-6 md:p-8"
+      className={compacto ? 'relative' : 'rounded-3xl bg-ed-surface p-6 md:p-8'}
       aria-labelledby={`${id}-titulo`}
     >
-      <p id={`${id}-titulo`} className="e-h3 max-w-[24ch]">
-        {C.titulo}
+      <p id={`${id}-titulo`} className={compacto ? 'm3d-tarjeta-titulo' : 'e-h3 max-w-[24ch]'}>
+        {compacto ? C.tituloCorto : C.titulo}
       </p>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+      <div className={compacto ? 'mt-4' : 'mt-5 grid gap-4 sm:grid-cols-2'}>
         <label className="block">
           <span className="e-chico text-ed-muted">{C.whatsapp}</span>
           <input
@@ -126,30 +131,34 @@ export function ContactoRapido({
             {error || C.whatsappAyuda}
           </span>
         </label>
-        <label className="block">
-          <span className="e-chico text-ed-muted">{C.negocio}</span>
-          <input
-            type="text"
-            autoComplete="organization"
-            maxLength={LIMITES_BASE.nombreNegocio}
-            value={negocio}
-            onChange={(e) => setNegocio(e.target.value)}
-            placeholder={C.negocioPlaceholder}
-            className={CAMPO}
+        {compacto ? null : (
+          <label className="block">
+            <span className="e-chico text-ed-muted">{C.negocio}</span>
+            <input
+              type="text"
+              autoComplete="organization"
+              maxLength={LIMITES_BASE.nombreNegocio}
+              value={negocio}
+              onChange={(e) => setNegocio(e.target.value)}
+              placeholder={C.negocioPlaceholder}
+              className={CAMPO}
+            />
+          </label>
+        )}
+      </div>
+      {compacto ? null : (
+        <label className="mt-4 block">
+          <span className="e-chico text-ed-muted">{C.mensaje}</span>
+          <textarea
+            rows={2}
+            maxLength={LIMITES_BASE.necesidadLibre}
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+            placeholder={C.mensajePlaceholder}
+            className={`${CAMPO} resize-none py-3`}
           />
         </label>
-      </div>
-      <label className="mt-4 block">
-        <span className="e-chico text-ed-muted">{C.mensaje}</span>
-        <textarea
-          rows={2}
-          maxLength={LIMITES_BASE.necesidadLibre}
-          value={texto}
-          onChange={(e) => setTexto(e.target.value)}
-          placeholder={C.mensajePlaceholder}
-          className={`${CAMPO} resize-none py-3`}
-        />
-      </label>
+      )}
       {/* Trampa para bots: invisible y fuera del recorrido con teclado. */}
       <input
         type="text"
