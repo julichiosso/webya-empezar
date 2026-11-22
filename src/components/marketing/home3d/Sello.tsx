@@ -17,6 +17,7 @@ export function Sello({
   giro,
   foto,
   className,
+  idArco = 'h3d-sello-arco',
 }: {
   href: string;
   externo: boolean;
@@ -24,6 +25,8 @@ export function Sello({
   giro: string;
   foto: null | { src: string; ancho: number; alto: number };
   className?: string;
+  /** Id del arco del texto (único si hay dos sellos en la página). */
+  idArco?: string;
 }) {
   return (
     <a
@@ -35,10 +38,10 @@ export function Sello({
     >
       <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false" className="h3d-sello-giro">
         <defs>
-          <path id="h3d-sello-arco" d="M60 60m-47 0a47 47 0 1 1 94 0a47 47 0 1 1-94 0" />
+          <path id={idArco} d="M60 60m-47 0a47 47 0 1 1 94 0a47 47 0 1 1-94 0" />
         </defs>
         <text>
-          <textPath href="#h3d-sello-arco" textLength="290" lengthAdjust="spacing">
+          <textPath href={`#${idArco}`} textLength="290" lengthAdjust="spacing">
             {giro}
           </textPath>
         </text>

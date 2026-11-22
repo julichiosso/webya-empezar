@@ -76,6 +76,16 @@ export function Hero3D() {
 
         <Funcionando rotulo={H.funcionando} clientes={CLIENTES} className="h3d-zona-franja" />
       </div>
+      {/* En la compu el sello queda fijo abajo a la derecha cuando el hero ya pasó (CSS). */}
+      <Sello
+        href={contacto.href}
+        externo={externo}
+        aria={externo ? H.sello.aria : H.sello.ariaMail}
+        giro={H.sello.giro}
+        foto={NOSOTROS.foto}
+        className="h3d-sello-fijo"
+        idArco="h3d-sello-arco-fijo"
+      />
     </section>
   );
 }
