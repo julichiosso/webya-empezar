@@ -47,7 +47,7 @@ export function Asistente({
   return (
     <section
       aria-label={ESTUDIO.asistente.aria}
-      className="tono-claro fixed inset-x-0 top-14 bottom-0 z-30 flex bg-ed-bg lg:static lg:inset-auto lg:min-h-[calc(100svh-3.5rem)]"
+      className="tono-claro fixed inset-x-0 top-14 bottom-0 z-50 flex bg-ed-bg lg:static lg:inset-auto lg:min-h-[calc(100svh-3.5rem)]"
     >
       <div className="flex min-w-0 flex-1 flex-col lg:mx-auto lg:max-w-xl lg:py-10">
         <div className="flex items-center justify-between gap-3 px-4 pt-4 lg:px-0">
@@ -79,7 +79,7 @@ export function Asistente({
           <h2
             ref={titulo}
             tabIndex={-1}
-            className="text-[1.875rem] leading-tight font-semibold tracking-[-0.03em] outline-none md:text-[2.25rem]"
+            className="d-sin-foco text-[1.875rem] leading-tight font-semibold tracking-[-0.03em] md:text-[2.25rem]"
           >
             {paso.titulo}
           </h2>

@@ -2,15 +2,27 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { EscenarioDemo, type Vista } from '@/components/marketing/editorial/EscenarioDemo';
-import { BARRA_DEMO, GUIA, LADOS, VISTAS } from '@/content/demos/pedidos/ui';
+import { APP, BARRA_DEMO, GUIA, LADOS, VISTAS } from '@/content/demos/pedidos/ui';
+import { ESTUDIO } from '@/content/demos/studio';
+import { generador } from '@/domain/studio/semilla';
 import { track } from '@/lib/analytics';
 import { AppCliente } from './AppCliente';
 import { Panel } from './Panel';
-import { ahoraDemo, crearEstado, crearStore, type Pedido } from './store';
+import { Asistente } from '../studio/Asistente';
+import { BotonPersonalizar } from '../studio/BotonPersonalizar';
+import { ControlSimulador } from '../studio/ControlSimulador';
+import { ProveedorMarca } from '../studio/MarcaContexto';
+import { estiloMarca } from '../studio/marca';
+import { useMarcaEstudio } from '../studio/useMarcaEstudio';
+import { useSimulador } from '../studio/useSimulador';
+import { VistaMarca } from '../studio/VistaMarca';
+import { ahoraDemo, crearEstado, crearStore, simularPedido, type Pedido } from './store';
 
 const DEMO = 'pedidos';
 /** El CTA lleva al configurador de la página de pizzerías, con "pedidos" ya elegido. */
 const CTA_HREF = '/pizzerias#armar';
+/** Pedidos que entran en "Simular un día de trabajo". */
+const SIMULADOS = 8;
 
 /**
  * Demo del sistema de pedidos: el estado y los eventos; el escenario (escritorio y celular) es el común
@@ -26,6 +38,25 @@ export function DemoPedidos() {
   const [ronda, setRonda] = useState(0);
   const panel = useRef<HTMLDivElement>(null);
   const ahora = ahoraDemo(e, ahoraReal);
+  const studio = useMarcaEstudio({
+    demo: DEMO,
+    inicial: { nombre: APP.marcaInicial, colorId: 'azul', fuenteId: 'fuerte' },
+  });
+  const sim = useSimulador<number>({
+    demo: DEMO,
+    eventos: () => {
+      const azar = generador(Date.now());
+      return Array.from({ length: SIMULADOS }, (_, i) => ({
+        espera: 2200 + Math.floor(azar() * 2200),
+        dato: i,
+      }));
+    },
+    onEvento: (i) => {
+      const azar = generador(e.inicioReal + i * 7919);
+      store.set((x) => simularPedido(x, ahoraDemo(x, Date.now()), azar));
+      setNovedad(true);
+    },
+  });
 
   useEffect(() => {
     track('demo_view', { demo: DEMO, cocina: 'pizzeria' });
@@ -47,6 +78,7 @@ export function DemoPedidos() {
     }
   };
   const reiniciar = () => {
+    sim.detener();
     const ya = Date.now();
     store.set(() => crearEstado(ya));
     setAhoraReal(ya);
@@ -85,22 +117,50 @@ export function DemoPedidos() {
   const hechos = [e.ultimoPropio != null, e.ultimoPropio != null && llego, e.comandaVista];
 
   return (
-    <EscenarioDemo
-      demo="pedidos"
-      titulo={BARRA_DEMO.titulo}
-      claseRaiz="m-paleta"
-      guia={GUIA}
-      hechos={hechos}
-      lados={LADOS}
-      vistas={VISTAS}
-      colorBarra={{ fondo: 'var(--m-oscuro)', claro: true }}
-      vista={vista}
-      onVista={cambiarVista}
-      novedad={novedad}
-      onReiniciar={reiniciar}
-      panelRef={panel}
-      cliente={(i) => <AppCliente key={`${i}${ronda}`} {...comunes} />}
-      panel={(i, visible) => <Panel key={`${i}${ronda}`} {...panelProps} visible={visible} />}
-    />
+    <ProveedorMarca marca={studio.marca}>
+      <EscenarioDemo
+        demo="pedidos"
+        titulo={BARRA_DEMO.titulo}
+        claseRaiz="m-paleta m-marca"
+        estilo={estiloMarca(studio.marca)}
+        estudio={{
+          ...studio.controles,
+          reiniciar: () => {
+            studio.controles.reiniciar();
+            reiniciar();
+          },
+        }}
+        extra={<BotonPersonalizar onClick={studio.abrirGuia} />}
+        herramientas={<ControlSimulador sim={sim} />}
+        arriba={
+          studio.guia ? (
+            <Asistente
+              demo={DEMO}
+              pasos={studio.pasos}
+              onTerminar={studio.cerrarGuia}
+              vista={
+                <VistaMarca
+                  marca={studio.marca}
+                  linea={ESTUDIO.asistente.vistaLinea}
+                  boton={APP.vistaBoton}
+                />
+              }
+            />
+          ) : undefined
+        }
+        guia={GUIA}
+        hechos={hechos}
+        lados={LADOS}
+        vistas={VISTAS}
+        colorBarra={{ fondo: 'var(--m-oscuro)', claro: true }}
+        vista={vista}
+        onVista={cambiarVista}
+        novedad={novedad}
+        onReiniciar={reiniciar}
+        panelRef={panel}
+        cliente={(i) => <AppCliente key={`${i}${ronda}`} {...comunes} />}
+        panel={(i, visible) => <Panel key={`${i}${ronda}`} {...panelProps} visible={visible} />}
+      />
+    </ProveedorMarca>
   );
 }

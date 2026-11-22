@@ -24,9 +24,9 @@ export function ControlSimulador({ sim, className }: { sim: Sim; className?: str
             type="button"
             aria-pressed={sim.rapido}
             onClick={() => sim.setRapido(!sim.rapido)}
-            className="min-h-14 rounded-full border border-ed-line-strong px-5 text-[1.0625rem] aria-pressed:bg-ed-surface"
+            className="min-h-14 rounded-full border border-ed-line-strong px-5 text-[1.0625rem] aria-pressed:border-ed-fg aria-pressed:bg-ed-fg aria-pressed:text-ed-bg"
           >
-            {sim.rapido ? S.normal : S.rapido}
+            {S.rapido}
           </button>
           <button
             type="button"

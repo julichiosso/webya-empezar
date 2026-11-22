@@ -2009,3 +2009,8 @@ html[data-texto-grande] {
     animation: none !important;
   }
 }
+/* Títulos que reciben el foco por código (cada paso del asistente): lo anuncian los lectores, sin recuadro. */
+.tono-claro .d-sin-foco:focus-visible,
+.tono-oscuro .d-sin-foco:focus-visible {
+  outline: none;
+}

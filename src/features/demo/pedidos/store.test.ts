@@ -15,6 +15,7 @@ import {
   crearStore,
   franjasConConteo,
   productosVisibles,
+  simularPedido,
   totalItems,
 } from './store';
 
@@ -98,5 +99,27 @@ describe('demo de pedidos: estado', () => {
     s.set((e) => agregar(e, 'muzzarella', 'xl'));
     s.set((e) => e);
     expect(avisos).toBe(1);
+  });
+});
+
+describe('simular un día de trabajo', () => {
+  it('entra un pedido de otro cliente en una franja con lugar, sin tocar el carrito', () => {
+    const e = crearEstado(0);
+    const ahora = ahoraDemo(e, 0);
+    const azar = () => 0.3;
+    const d = simularPedido(e, ahora, azar);
+    expect(d.pedidos.length).toBe(e.pedidos.length + 1);
+    const nuevo = d.pedidos.at(-1)!;
+    expect(nuevo.propio).toBe(false);
+    expect(nuevo.estado).toBe('pendiente');
+    expect(nuevo.lineas.length).toBeGreaterThan(0);
+    const f = d.franjas.find((x) => x.inicio === nuevo.franja)!;
+    expect(f.bloqueado).toBe(false);
+    expect(d.carrito).toEqual(e.carrito);
+  });
+
+  it('con el local cerrado no entra nada', () => {
+    const e = alternarAbierto(crearEstado(0));
+    expect(simularPedido(e, ahoraDemo(e, 0), () => 0.5)).toBe(e);
   });
 });

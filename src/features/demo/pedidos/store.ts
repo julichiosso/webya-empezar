@@ -295,3 +295,37 @@ export function crearStore(ahoraReal: number): StoreDemo {
     },
   };
 }
+
+/**
+ * "Simular un día de trabajo": un pedido de otro cliente que entra solo, en la primera franja con lugar.
+ * `azar` (0 a 1) elige qué pide y su nombre de ejemplo: con la misma secuencia, el mismo día. Si no hay
+ * lugar o el local está cerrado, no entra nada (como en el sistema real).
+ */
+export function simularPedido(e: EstadoDemo, ahora: number, azar: () => number): EstadoDemo {
+  const c = cotizar(e, ahora, { modo: 'asap' });
+  if (!c) return e;
+  const visibles = productosVisibles(e);
+  const pizzas = visibles.filter((p) => p.seccion === 'pizzas');
+  const otros = visibles.filter((p) => p.seccion !== 'pizzas');
+  if (pizzas.length === 0) return e;
+  const pizza = pizzas[Math.floor(azar() * pizzas.length)]!;
+  const items: ItemCarrito[] = [
+    { clave: '', productoId: pizza.id, tamanio: azar() < 0.5 ? 'xl' : 'clasica', cantidad: 1 },
+  ];
+  const extra = otros[Math.floor(azar() * otros.length)];
+  if (extra && azar() < 0.6)
+    items.push({ clave: '', productoId: extra.id, tamanio: 'unico', cantidad: 1 });
+  const id = Math.max(PRIMER_ID - 1, ...e.pedidos.map((p) => p.id)) + 1;
+  const pedido: Pedido = {
+    id,
+    franja: c.franja.inicio,
+    retiro: c.retiro.hora,
+    creado: ahora,
+    nombre: NOMBRES_EJEMPLO[Math.floor(azar() * NOMBRES_EJEMPLO.length)]!,
+    lineas: items.map(lineaDe),
+    total: totalItems(items),
+    estado: 'pendiente',
+    propio: false,
+  };
+  return { ...e, pedidos: [...e.pedidos, pedido] };
+}

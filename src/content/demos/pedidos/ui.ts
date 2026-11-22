@@ -45,6 +45,10 @@ export const VISTAS = {
 
 export const APP = {
   marca: 'TU PIZZERÍA',
+  /** La marca con la que arranca el estudio (la persona la cambia por la suya). */
+  marcaInicial: 'Tu Pizzería',
+  vistaBoton: 'Hacer mi pedido',
+  simulados: (n: number | string) => `Pedidos simulados: ${n}`,
   carritoAria: (n: number | string) => `Ver el carrito: ${n} productos`,
   takeAway: 'Take away',
   titulo: ['Pedí tu pizza', 'y retirala sin esperar.'],

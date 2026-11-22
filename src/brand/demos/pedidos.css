@@ -26,6 +26,14 @@
   --m-vidrio: #cfe3d4;
   --m-plato: #ece6da;
 }
+/* Demo Studio: el acento pasa a ser el color que eligió la persona (con el contraste ya corregido). */
+.m-paleta.m-marca {
+  --m-acento: var(--marca);
+  --m-sobre-acento: var(--marca-tinta);
+  --m-acento-texto: var(--marca-texto);
+  --m-acento-claro: var(--marca-claro);
+  --m-acento-suave: color-mix(in srgb, var(--marca) 14%, transparent);
+}
 .m-app {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;

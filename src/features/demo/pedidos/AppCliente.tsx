@@ -15,6 +15,7 @@ import {
 } from '@/content/demos/pedidos/carta';
 import { APP, CARRITO, ENVIADO, mensajeWhatsapp, pesos } from '@/content/demos/pedidos/ui';
 import { franjasElegibles, minAHhmm } from '@/domain/retiro/franjas';
+import { NombreMarca, useMarca } from '../studio/MarcaContexto';
 import { Dibujo } from './Dibujo';
 import {
   agregar,
@@ -219,6 +220,7 @@ function Encabezado({
   onCarrito: () => void;
   cantidad: number;
 }) {
+  const marca = useMarca();
   return (
     <div className="sticky top-0 z-10 flex items-center justify-between bg-(--m-oscuro) px-4 py-2.5">
       {atras ? (
@@ -239,7 +241,11 @@ function Encabezado({
         aria-label={APP.inicioAria}
         className="m-titulo text-[1.375rem]"
       >
-        {APP.marca}
+        <NombreMarca
+          respaldo={APP.marca}
+          className="max-w-[11rem]"
+          conFuente={marca?.fuenteId !== 'fuerte'}
+        />
       </button>
       <button
         type="button"

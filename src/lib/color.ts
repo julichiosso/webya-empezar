@@ -9,6 +9,8 @@ export const AA_GRANDE = 3;
 
 /** Fondo blanco de referencia (vistas previas de las demos). */
 export const BLANCO = '#ffffff';
+/** Fondo oscuro de referencia (apps oscuras de las demos). */
+export const NEGRO_SUAVE = '#141210';
 
 function canales(hex: string): [number, number, number] {
   const m = /^#([0-9a-f]{6})$/i.exec(hex);

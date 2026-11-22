@@ -13,6 +13,7 @@ export const ESTUDIO = {
   deshacer: 'Deshacer',
   rehacer: 'Rehacer',
   personalizar: 'Personalizar',
+  personalizarAria: 'Personalizar la demo con tu negocio',
   textoGrande: 'Texto grande',
   quiero: 'Quiero este sistema',
   aviso: 'Demostración con datos de ejemplo.',
@@ -59,6 +60,15 @@ export const ESTUDIO = {
     saltarTodo: 'Ver la demo así',
     listo: 'Ver mi sistema',
     finTitulo: 'Listo. Mirá cómo quedó tu sistema.',
+    pasos: {
+      nombre: '¿Cómo se llama tu negocio?',
+      color: 'Elegí un color',
+      colorAyuda: 'El de tu logo o tu local.',
+      logo: 'Subí tu logo',
+      logoAyuda: 'O una foto de tu local. Si no tenés, seguimos igual.',
+      fuente: 'Elegí un estilo de letra',
+    },
+    vistaLinea: 'Así te ven tus clientes.',
   },
   campos: {
     nombre: 'Nombre de tu negocio',
@@ -86,7 +96,6 @@ export const ESTUDIO = {
     seguir: 'Seguir',
     detener: 'Terminar',
     rapido: 'Más rápido',
-    normal: 'Normal',
     terminado: 'Terminó el día.',
     aria: 'Simulación de un día de trabajo',
   },
@@ -96,6 +105,14 @@ export const ESTUDIO = {
     tablet: 'Tablet',
     compu: 'Computadora',
   },
+} as const;
+
+/** Líneas del resumen de "Enviarnos lo que armé" (lo que es de la marca; cada demo suma lo suyo). */
+export const RESUMEN_MARCA = {
+  negocio: (nombre: string) => `Negocio: ${nombre}`,
+  color: (color: string) => `Color: ${color}`,
+  letra: (letra: string) => `Letra: ${letra}`,
+  logo: 'Con logo propio',
 } as const;
 
 /** Colores para la marca de la demo: los clásicos de un comercio. El contraste se corrige solo. */
