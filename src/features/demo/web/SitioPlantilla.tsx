@@ -1,7 +1,9 @@
 'use client';
 
 import { useRef, type CSSProperties } from 'react';
-import { DEMO_WEB_UI, type RubroWeb } from '@/content/demos/web/datos';
+import { fuenteMarca } from '@/content/demos/studio';
+import { DEMO_WEB_UI, RUBROS_WEB as TODOS, type RubroWeb } from '@/content/demos/web/datos';
+import { useMarca } from '../studio/MarcaContexto';
 
 const UI = DEMO_WEB_UI;
 
@@ -54,19 +56,33 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
     if (raiz && destino) raiz.scrollTo({ top: destino.offsetTop - 56, behavior: 'smooth' });
   };
   const N = rubro.negocio;
+  const marca = useMarca();
+  // El nombre que escribió la persona; si dejó el de ejemplo, el de cada rubro.
+  const nombre =
+    marca && !NOMBRES_EJEMPLO.has(marca.nombre) && marca.nombre.trim() ? marca.nombre : N.nombre;
+  const inicial = (nombre.trim()[0] ?? N.inicial).toUpperCase();
+  const fuente = marca ? { fontFamily: fuenteMarca(marca.fuenteId).pila } : undefined;
   const boton =
     'inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-(--sitio) px-5 text-[0.9375rem] font-semibold text-white active:opacity-80';
   return (
     <div
       ref={caja}
       className="d-sin-barra @container relative h-full overflow-y-auto bg-white text-neutral-900"
-      style={{ '--sitio': rubro.color } as CSSProperties}
+      style={{ '--sitio': marca ? 'var(--marca-texto)' : rubro.color } as CSSProperties}
     >
       <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b border-neutral-200 bg-white px-5 @3xl:px-10">
-        <span className="grid size-8 place-items-center rounded-lg bg-(--sitio) text-[0.9375rem] font-bold text-white">
-          {N.inicial}
+        {marca?.logo ? (
+          // Foto local (blob:) ya achicada: next/image no aplica.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={marca.logo} alt="" className="size-8 rounded-lg object-cover" />
+        ) : (
+          <span className="grid size-8 place-items-center rounded-lg bg-(--sitio) text-[0.9375rem] font-bold text-white">
+            {inicial}
+          </span>
+        )}
+        <span className="min-w-0 flex-1 truncate text-[0.9375rem] font-semibold" style={fuente}>
+          {nombre}
         </span>
-        <span className="min-w-0 flex-1 truncate text-[0.9375rem] font-semibold">{N.nombre}</span>
         <nav aria-label={UI.navAria} className="hidden @3xl:block">
           <ul className="flex gap-6 text-[0.875rem] text-neutral-600">
             {(Object.keys(UI.nav) as SeccionId[]).map((id) => (
@@ -120,9 +136,13 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
           aria-hidden="true"
           className="mt-8 grid aspect-4/3 place-items-center rounded-3xl bg-[color-mix(in_srgb,var(--sitio)_12%,white)] @3xl:mt-0"
         >
-          <span className="grid size-24 place-items-center rounded-3xl bg-(--sitio) text-[3rem] font-bold text-white @3xl:size-32 @3xl:text-[4rem]">
-            {N.inicial}
-          </span>
+          {marca?.logo ? (
+            // Foto local (blob:) ya achicada.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={marca.logo} alt="" className="size-full rounded-3xl object-cover" />
+          ) : (
+            <Composicion />
+          )}
         </div>
       </section>
 
@@ -225,8 +245,33 @@ export function SitioPlantilla({ rubro, onWhatsApp }: { rubro: RubroWeb; onWhats
       </section>
 
       <footer className="border-t border-neutral-200 px-5 py-8 text-[0.8125rem] text-neutral-500 @3xl:px-10">
-        {UI.pie(N.nombre)}
+        {UI.pie(nombre)}
       </footer>
     </div>
+  );
+}
+
+/** Los nombres de ejemplo de cada rubro: si la persona no escribió el suyo, cada rubro muestra el propio. */
+const NOMBRES_EJEMPLO = new Set(TODOS.map((r) => r.negocio.nombre));
+
+/**
+ * La imagen del hero cuando no hay foto: una composición plana en el color del negocio (círculo, arco y
+ * bandas), en lugar de una letra sola. Decorativa.
+ */
+function Composicion() {
+  return (
+    <svg viewBox="0 0 400 300" className="size-full" aria-hidden="true">
+      <circle cx="285" cy="118" r="78" fill="var(--sitio)" />
+      <path
+        d="M40 260a160 160 0 0 1 320 0"
+        fill="none"
+        stroke="var(--sitio)"
+        strokeWidth="18"
+        opacity="0.35"
+      />
+      <rect x="48" y="62" width="120" height="16" rx="8" fill="var(--sitio)" opacity="0.55" />
+      <rect x="48" y="94" width="84" height="16" rx="8" fill="var(--sitio)" opacity="0.3" />
+      <circle cx="285" cy="118" r="30" fill="white" opacity="0.9" />
+    </svg>
   );
 }

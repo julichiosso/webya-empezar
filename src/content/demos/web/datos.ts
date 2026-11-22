@@ -184,6 +184,8 @@ export const RUBROS_WEB: readonly RubroWeb[] = [
 ];
 
 export const DEMO_WEB_UI = {
+  vistaBoton: 'Escribinos por WhatsApp',
+  resumenRubro: (rubro: string) => `Rubro: ${rubro}`,
   titulo: 'Demo de página web',
   descripcion:
     'Así se ve una página web armada por Webya, en el celular y en la computadora, según el rubro.',

@@ -12,6 +12,13 @@ import {
 import { cn } from '@/components/ui/clases';
 import { DEMO_WEB_UI as UI, RUBROS_WEB, type RubroWebId } from '@/content/demos/web/datos';
 import { track } from '@/lib/analytics';
+import { ESTUDIO } from '@/content/demos/studio';
+import { Asistente } from '../studio/Asistente';
+import { BotonPersonalizar } from '../studio/BotonPersonalizar';
+import { ProveedorMarca } from '../studio/MarcaContexto';
+import { estiloMarca } from '../studio/marca';
+import { useMarcaEstudio } from '../studio/useMarcaEstudio';
+import { VistaMarca } from '../studio/VistaMarca';
 import { SitioPlantilla } from './SitioPlantilla';
 
 /**
@@ -25,6 +32,11 @@ export function DemoWeb() {
   const [aviso, setAviso] = useState(false);
   const [hechos, setHechos] = useState([false, false, false]);
   const rubro = RUBROS_WEB.find((r) => r.id === rubroId) ?? RUBROS_WEB[0]!;
+  const studio = useMarcaEstudio({
+    demo: 'web',
+    inicial: { nombre: RUBROS_WEB[0]!.negocio.nombre, colorId: 'petroleo', fuenteId: 'moderna' },
+    extraResumen: [UI.resumenRubro(rubro.etiqueta)],
+  });
 
   const marcar = (i: number) => setHechos((h) => h.map((x, j) => x || j === i));
   const elegirRubro = (id: RubroWebId) => {
@@ -84,75 +96,103 @@ export function DemoWeb() {
   );
 
   return (
-    <div className="tono-oscuro min-h-svh bg-ed-bg text-ed-fg">
-      <BarraDemo demo="web" onReiniciar={reiniciar} />
-      <main>
-        <h1 className="sr-only">{UI.titulo}</h1>
-        <div className="d-escenario hidden justify-center gap-8 px-6 py-6 lg:flex xl:gap-12">
-          <div className="w-60 shrink-0 space-y-6 pt-2">
-            <ol aria-label={UI.guia.aria} className="space-y-2">
-              {UI.guia.pasos.map((p, i) => (
-                <li
-                  key={p.titulo}
-                  aria-current={actual === i ? 'step' : undefined}
-                  className={cn(
-                    'flex gap-3 rounded-xl border p-3 transition-colors',
-                    actual === i ? 'border-ed-fg' : 'border-transparent',
-                  )}
-                >
-                  <span
+    <ProveedorMarca marca={studio.marca}>
+      <div className="tono-oscuro min-h-svh bg-ed-bg text-ed-fg" style={estiloMarca(studio.marca)}>
+        <BarraDemo
+          demo="web"
+          estudio={{
+            ...studio.controles,
+            reiniciar: () => {
+              studio.controles.reiniciar();
+              reiniciar();
+            },
+          }}
+          extra={<BotonPersonalizar onClick={studio.abrirGuia} />}
+        />
+        {studio.guia ? (
+          <Asistente
+            demo="web"
+            pasos={studio.pasos}
+            onTerminar={studio.cerrarGuia}
+            vista={
+              <VistaMarca
+                marca={studio.marca}
+                linea={ESTUDIO.asistente.vistaLinea}
+                boton={UI.vistaBoton}
+              />
+            }
+          />
+        ) : null}
+        <main className={studio.guia ? 'hidden' : undefined}>
+          <h1 className="sr-only">{UI.titulo}</h1>
+          <div className="d-escenario hidden justify-center gap-8 px-6 py-6 lg:flex xl:gap-12">
+            <div className="w-60 shrink-0 space-y-6 pt-2">
+              <ol aria-label={UI.guia.aria} className="space-y-2">
+                {UI.guia.pasos.map((p, i) => (
+                  <li
+                    key={p.titulo}
+                    aria-current={actual === i ? 'step' : undefined}
                     className={cn(
-                      'grid size-6 shrink-0 place-items-center rounded-full text-[0.6875rem] font-bold tabular-nums',
-                      hechos[i] ? 'bg-ed-fg text-ed-bg' : 'border border-ed-line-strong',
+                      'flex gap-3 rounded-xl border p-3 transition-colors',
+                      actual === i ? 'border-ed-fg' : 'border-transparent',
                     )}
                   >
-                    {hechos[i] ? <Tilde className="size-3" /> : i + 1}
-                  </span>
-                  <span>
-                    <span className="block text-[0.8125rem] font-semibold">{p.titulo}</span>
-                    <span className="mt-0.5 block text-[0.75rem] leading-snug text-ed-muted">
-                      {p.texto}
+                    <span
+                      className={cn(
+                        'grid size-7 shrink-0 place-items-center rounded-full text-[0.875rem] font-bold tabular-nums',
+                        hechos[i] ? 'bg-ed-fg text-ed-bg' : 'border border-ed-line-strong',
+                      )}
+                    >
+                      {hechos[i] ? <Tilde className="size-3" /> : i + 1}
                     </span>
-                  </span>
-                </li>
-              ))}
-            </ol>
-            <div>
-              <p className="e-rotulo mb-2 text-ed-muted">{UI.rubro}</p>
-              <div className="[&>div]:flex-wrap">{chips}</div>
+                    <span>
+                      <span className="block text-[1rem] font-semibold">{p.titulo}</span>
+                      <span className="mt-0.5 block text-[0.9375rem] leading-snug text-ed-muted">
+                        {p.texto}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <div>
+                <p className="e-rotulo mb-2 text-ed-muted">{UI.rubro}</p>
+                <div className="[&>div]:flex-wrap">{chips}</div>
+              </div>
+              <SelectorVista
+                vista={vista}
+                onVista={elegirVista}
+                etiqueta={UI.vista}
+                celular={UI.celular}
+                computadora={UI.computadora}
+              />
+              <EnUso proyecto="lorena" />
             </div>
-            <SelectorVista
-              vista={vista}
-              onVista={elegirVista}
-              etiqueta={UI.vista}
-              celular={UI.celular}
-              computadora={UI.computadora}
-            />
-            <EnUso proyecto="lorena" />
-          </div>
-          <div className={cn('min-w-0', vista === 'escritorio' ? 'w-full max-w-248' : 'shrink-0')}>
-            <p className="mb-2 text-center text-[0.75rem] text-ed-muted">{UI.ladoSitio}</p>
-            <div className="relative">
-              <MarcoVista vista={vista} dominio={UI.dominio}>
-                <div className="relative h-full">
-                  {sitio}
-                  {avisoUI}
-                </div>
-              </MarcoVista>
+            <div
+              className={cn('min-w-0', vista === 'escritorio' ? 'w-full max-w-248' : 'shrink-0')}
+            >
+              <p className="mb-2 text-center text-[0.75rem] text-ed-muted">{UI.ladoSitio}</p>
+              <div className="relative">
+                <MarcoVista vista={vista} dominio={UI.dominio}>
+                  <div className="relative h-full">
+                    {sitio}
+                    {avisoUI}
+                  </div>
+                </MarcoVista>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex h-[calc(100svh-3.5rem-var(--d-cta))] flex-col lg:hidden">
-          <div className="d-sin-barra shrink-0 overflow-x-auto border-b border-ed-line px-3 py-2">
-            {chips}
+          <div className="flex h-[calc(100svh-3.5rem-var(--d-cta))] flex-col lg:hidden">
+            <div className="d-sin-barra shrink-0 overflow-x-auto border-b border-ed-line px-3 py-2">
+              {chips}
+            </div>
+            <div className="relative min-h-0 flex-1">
+              {sitio}
+              {avisoUI}
+            </div>
           </div>
-          <div className="relative min-h-0 flex-1">
-            {sitio}
-            {avisoUI}
-          </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </ProveedorMarca>
   );
 }
