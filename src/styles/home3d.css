@@ -36,7 +36,8 @@
 .h3d-escenario {
   position: sticky;
   top: 3.5rem;
-  min-height: calc(100svh - 3.5rem);
+  /* Pantalla − header − cartel de anuncios (2,25 rem): la franja de clientes entra al cargar. */
+  min-height: calc(100svh - 3.5rem - 2.25rem);
   overflow: hidden;
   display: grid;
   padding-inline: clamp(1rem, 4vw, 3rem);
@@ -453,7 +454,7 @@ html:not(.mo) .h3d-marquesina-pista {
     /* Alto libre: pantalla − header − franja − lema; el símbolo llena el 75 % de arriba del canvas. */
     width: min(
       68vw,
-      calc((100svh - 3.5rem - 5.5rem - 3 * clamp(3.5rem, 1rem + 4.6vw, 6.75rem)) * 1.6 / 0.75)
+      calc((100svh - 3.5rem - 2.25rem - 5.5rem - 3 * clamp(3.5rem, 1rem + 4.6vw, 6.75rem)) * 1.6 / 0.75)
     );
     min-width: 0;
   }
@@ -858,5 +859,20 @@ html:has(#hero):not([data-hero-paso]) .e-barra-celular {
     visibility: visible;
     transform: none;
     transition-delay: 0s;
+  }
+}
+
+/* Pantallas muy bajas (iPhone SE de 568 px): símbolo más chico, el texto sigue en 17 px o más. */
+@media (max-width: 767.98px) and (max-height: 600px) {
+  .h3d-escenario {
+    grid-template-rows: auto auto minmax(6rem, 1fr) auto auto auto;
+    row-gap: 0.25rem;
+    padding-top: 0.25rem;
+  }
+  .h3d-lema {
+    font-size: 2.125rem;
+  }
+  .h3d-necesita {
+    min-height: 3.25rem;
   }
 }
