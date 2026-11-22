@@ -27,6 +27,8 @@ export const RUTAS = {
   armarTipo: (tipo: string) => `/armar?tipo=${tipo}`,
   armarCaso: (tipo: string, rubro: string) => `/armar?tipo=${tipo}&rubro=${rubro}`,
   demos: '/demos',
+  /** Abre la demo con el asistente para personalizarla. */
+  conGuia: (href: string) => `${href}?guia=si`,
   proyectos: '/proyectos',
   nosotros: '/nosotros',
   zona: '/zona',
@@ -109,7 +111,7 @@ export const ESCAPARATE_AVISO = {
   app: 'Pedidos',
   cuando: 'ahora',
   titulo: 'Nuevo pedido',
-  texto: 'Retira a las 21:15',
+  texto: 'Para retirar, con su horario',
 } as const;
 
 /**

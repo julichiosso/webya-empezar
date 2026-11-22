@@ -87,7 +87,7 @@ export default function Demos() {
               return (
                 <li key={r.id}>
                   <Link
-                    href={`${d.href}?guia=1`}
+                    href={RUTAS.conGuia(d.href)}
                     prefetch={false}
                     className="flex min-h-18 items-center justify-between gap-3 rounded-2xl bg-ed-surface px-5 text-[1.1875rem] font-semibold transition-colors hover:bg-ed-fg hover:text-ed-bg"
                   >

@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react';
-import { HERO, RUBROS_HOME, SECCIONES } from '@/content/home';
+import { HERO, RUBROS_HOME, RUTAS, SECCIONES } from '@/content/home';
 import { Chevron } from './Iconos';
 import { TituloPalabras } from './TituloPalabras';
 
 /** Las demos se abren con el asistente ("?guia=1"): la persona pone su nombre enseguida. */
-const destino = (href: string) => (href.startsWith('/demos/') ? `${href}?guia=1` : href);
+const destino = (href: string) => (href.startsWith(RUTAS.demos + '/') ? RUTAS.conGuia(href) : href);
 
 /**
  * "Elegí tu rubro y probalo": filas grandes, una por rubro, con su ejemplo y el sistema que le sirve.

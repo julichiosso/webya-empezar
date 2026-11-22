@@ -44,7 +44,8 @@ export function useMarcaEstudio({
 
   useEffect(() => {
     const visto = `webya:guia:${demo}`;
-    let abrir = new URLSearchParams(window.location.search).get('guia') === '1';
+    const pedido = new URLSearchParams(window.location.search).get('guia');
+    let abrir = pedido === 'si' || pedido === '1';
     try {
       if (!abrir && window.matchMedia('(max-width: 63.99rem)').matches)
         abrir = !window.localStorage.getItem(visto) && !window.localStorage.getItem(clave);
