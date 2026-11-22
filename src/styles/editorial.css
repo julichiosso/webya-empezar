@@ -770,7 +770,7 @@ dd {
  * pantalla (barra de la demo 3rem, rótulos 1.75rem y 3rem de aire).
  */
 .d-escenario {
-  --d-alto: clamp(28rem, calc(100svh - 7.75rem), 46rem);
+  --d-alto: clamp(28rem, calc(100svh - 8.25rem), 46rem);
 }
 .d-escenario .d-tel {
   width: calc(var(--d-alto) / 2.1);
@@ -1930,4 +1930,82 @@ html[data-teclado] .e-barra-celular {
     opacity 700ms var(--ease-editorial),
     transform 600ms var(--ease-editorial);
   transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+/* ==========================================================================
+ * Demo Studio: hoja (menú y "Enviarnos lo que armé"), texto grande y barra fija del celular.
+ * ========================================================================== */
+
+/* "Texto grande": las demos miden en rem; subir la raíz agranda todo un escalón. */
+html[data-texto-grande] {
+  font-size: 118.75%;
+}
+
+/* Alto de la barra fija de abajo en el celular ("Quiero este sistema"): las demos le dejan lugar. */
+:root {
+  --d-cta: calc(4.875rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 64rem) {
+  :root {
+    --d-cta: 0px;
+  }
+}
+
+.d-hoja {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  color: var(--e-fg);
+}
+.d-hoja::backdrop {
+  background: color-mix(in srgb, #000 45%, transparent);
+}
+.d-hoja-caja {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  max-height: 88dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 1.5rem 1.5rem 0 0;
+  background: var(--e-bg);
+  padding: 1.25rem 1rem max(1.5rem, env(safe-area-inset-bottom));
+}
+@media (min-width: 64rem) {
+  .d-hoja-caja {
+    inset-block: 0;
+    inset-inline: auto 0;
+    width: 28rem;
+    max-height: none;
+    border-radius: 1.5rem 0 0 1.5rem;
+    padding: 1.5rem;
+  }
+}
+@keyframes d-hoja-sube {
+  from {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+@keyframes d-hoja-entra {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+.mo .d-hoja[open] .d-hoja-caja {
+  animation: d-hoja-sube 320ms var(--ease-editorial);
+}
+@media (min-width: 64rem) {
+  .mo .d-hoja[open] .d-hoja-caja {
+    animation-name: d-hoja-entra;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .d-hoja-caja {
+    animation: none !important;
+  }
 }

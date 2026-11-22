@@ -26,6 +26,14 @@ export interface EventosAnalitica {
   demo_cta_click: { demo: string; origen: string };
   demo_qr_celular: { demo: string };
   demo_whatsapp_click: { demo: string };
+  // Demo Studio: qué hizo, nunca lo que escribió.
+  demo_asistente: { demo: string; paso: number; accion: 'siguiente' | 'saltar' | 'fin' };
+  demo_simulacion: { demo: string; accion: 'inicio' | 'pausa' | 'fin' };
+  demo_accion: {
+    demo: string;
+    accion: 'deshacer' | 'rehacer' | 'reiniciar' | 'compartir' | 'texto_grande';
+  };
+  demo_enviada: { demo: string; canal: 'whatsapp' | 'mail' | 'copiar' };
   // Buscador del hero: a qué sugerencia fue (el texto escrito nunca se manda).
   buscador_elegido: { destino: string; rubro: string };
   // Cualquier link a WhatsApp del sitio (dónde estaba, no qué dice).
@@ -49,6 +57,10 @@ export const NOMBRES_EVENTO = [
   'demo_cta_click',
   'demo_qr_celular',
   'demo_whatsapp_click',
+  'demo_asistente',
+  'demo_simulacion',
+  'demo_accion',
+  'demo_enviada',
   'buscador_elegido',
   'whatsapp_click',
   'sugerencia',

@@ -112,7 +112,25 @@ export function DemoTienda() {
           </div>
         </div>
 
-        <div className="flex h-[calc(100svh-2.75rem)] flex-col lg:hidden">
+        <div className="flex h-[calc(100svh-3.5rem-var(--d-cta))] flex-col lg:hidden">
+          <nav
+            aria-label={UI.movil.aria}
+            className="flex shrink-0 justify-center border-b border-ed-line bg-ed-bg px-4 py-2"
+          >
+            <div className="grid w-full max-w-sm grid-cols-2 gap-1 rounded-full border border-ed-line-strong p-1">
+              {(['armar', 'ver'] as const).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  aria-pressed={cara === c}
+                  onClick={() => setCara(c)}
+                  className="flex min-h-12 items-center justify-center rounded-full px-5 text-[1.0625rem] font-semibold text-ed-muted aria-pressed:bg-ed-fg aria-pressed:text-ed-bg"
+                >
+                  {c === 'armar' ? UI.movil.armar : UI.movil.ver}
+                </button>
+              ))}
+            </div>
+          </nav>
           <div className="relative min-h-0 flex-1">
             <div
               className={cara === 'armar' ? 'relative h-full overflow-y-auto px-4 py-5' : 'hidden'}
@@ -121,24 +139,6 @@ export function DemoTienda() {
             </div>
             <div className={cara === 'ver' ? 'h-full' : 'hidden'}>{tienda}</div>
           </div>
-          <nav
-            aria-label={UI.movil.aria}
-            className="flex shrink-0 justify-center border-t border-ed-line bg-ed-bg px-4 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
-          >
-            <div className="flex gap-1 rounded-full border border-ed-line-strong p-1">
-              {(['armar', 'ver'] as const).map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  aria-pressed={cara === c}
-                  onClick={() => setCara(c)}
-                  className="flex min-h-11 items-center rounded-full px-5 text-[0.875rem] font-semibold text-ed-muted aria-pressed:bg-ed-fg aria-pressed:text-ed-bg"
-                >
-                  {c === 'armar' ? UI.movil.armar : UI.movil.ver}
-                </button>
-              ))}
-            </div>
-          </nav>
         </div>
       </main>
     </div>

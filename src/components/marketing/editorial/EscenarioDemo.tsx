@@ -3,6 +3,7 @@
 import type { ReactNode, RefObject } from 'react';
 import { cn } from '@/components/ui/clases';
 import { getDemo, type DemoInfo } from '@/content/demos/hub';
+import type { ControlesEstudio } from '@/domain/studio/controles';
 import { BarraDemo } from './BarraDemo';
 import { EnUso } from './EnUso';
 import { Tilde } from './Iconos';
@@ -34,6 +35,9 @@ export function EscenarioDemo({
   panelRef,
   cliente,
   panel,
+  estudio,
+  extra,
+  arriba,
 }: {
   demo: DemoInfo['id'];
   titulo: string;
@@ -50,16 +54,23 @@ export function EscenarioDemo({
   panelRef: RefObject<HTMLDivElement | null>;
   cliente: (i: Instancia) => ReactNode;
   panel: (i: Instancia, visible: boolean) => ReactNode;
+  /** Demo personalizable: historial, link y resumen para la barra. */
+  estudio?: ControlesEstudio;
+  /** Botón propio de la demo en la barra (por ejemplo, "Personalizar"). */
+  extra?: ReactNode;
+  /** Algo arriba del escenario (el asistente o el estudio de marca). */
+  arriba?: ReactNode;
 }) {
   const enUso = getDemo(demo).enUso;
   const actual = hechos.findIndex((h) => !h);
   return (
     <div className={cn('tono-oscuro min-h-svh bg-ed-bg text-ed-fg', claseRaiz)}>
-      <BarraDemo demo={demo} onReiniciar={onReiniciar} />
+      <BarraDemo demo={demo} onReiniciar={onReiniciar} estudio={estudio} extra={extra} />
       <main>
         <h1 className="sr-only">{titulo}</h1>
+        {arriba}
         <div className="d-escenario hidden justify-center gap-8 px-6 py-6 lg:flex xl:gap-12">
-          <div className="w-52 shrink-0 pt-2">
+          <div className="w-60 shrink-0 pt-2">
             <ol aria-label={guia.aria} className="space-y-2">
               {guia.pasos.map((p, i) => (
                 <li
@@ -72,7 +83,7 @@ export function EscenarioDemo({
                 >
                   <span
                     className={cn(
-                      'grid size-6 shrink-0 place-items-center rounded-full text-[0.6875rem] font-bold tabular-nums',
+                      'grid size-7 shrink-0 place-items-center rounded-full text-[0.875rem] font-bold tabular-nums',
                       hechos[i] ? 'bg-lima text-tinta' : 'border border-ed-line-strong',
                     )}
                   >
@@ -80,8 +91,8 @@ export function EscenarioDemo({
                     {hechos[i] ? <span className="sr-only">{guia.hecho}</span> : null}
                   </span>
                   <span>
-                    <span className="block text-[0.8125rem] font-semibold">{p.titulo}</span>
-                    <span className="mt-0.5 block text-[0.75rem] leading-snug text-ed-muted">
+                    <span className="block text-[1rem] font-semibold">{p.titulo}</span>
+                    <span className="mt-0.5 block text-[0.9375rem] leading-snug text-ed-muted">
                       {p.texto}
                     </span>
                   </span>
@@ -91,13 +102,13 @@ export function EscenarioDemo({
             {enUso ? <EnUso proyecto={enUso} className="mt-6" /> : null}
           </div>
           <div className="shrink-0">
-            <p className="mb-2 text-center text-[0.75rem] text-ed-muted">{lados.cliente}</p>
+            <p className="mb-2 text-center text-[0.9375rem] text-ed-muted">{lados.cliente}</p>
             <Telefono className="d-tel shrink-0" decorativo={false} colorBarra={colorBarra}>
               <Escalado>{cliente('escritorio')}</Escalado>
             </Telefono>
           </div>
           <div className="w-full max-w-120 min-w-0">
-            <p className="mb-2 text-center text-[0.75rem] text-ed-muted">{lados.panel}</p>
+            <p className="mb-2 text-center text-[0.9375rem] text-ed-muted">{lados.panel}</p>
             <div
               ref={panelRef}
               tabIndex={-1}
@@ -108,31 +119,31 @@ export function EscenarioDemo({
           </div>
         </div>
 
-        <div className="flex h-[calc(100svh-2.75rem)] flex-col lg:hidden">
-          <div className="relative min-h-0 flex-1">
-            <div className={vista === 'cliente' ? 'h-full' : 'hidden'}>{cliente('movil')}</div>
-            <div className={vista === 'duenio' ? 'h-full' : 'hidden'}>
-              {panel('movil', vista === 'duenio')}
-            </div>
-          </div>
+        <div className="flex h-[calc(100svh-3.5rem-var(--d-cta))] flex-col lg:hidden">
           <nav
             aria-label={vistas.aria}
-            className="flex shrink-0 justify-center border-t border-ed-line bg-ed-bg px-4 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
+            className="flex shrink-0 justify-center border-b border-ed-line bg-ed-bg px-4 py-2"
           >
-            <div className="flex gap-1 rounded-full border border-ed-line-strong p-1">
+            <div className="grid w-full max-w-sm grid-cols-2 gap-1 rounded-full border border-ed-line-strong p-1">
               <BotonVista activa={vista === 'cliente'} onClick={() => onVista('cliente')}>
                 {vistas.cliente}
               </BotonVista>
               <BotonVista activa={vista === 'duenio'} onClick={() => onVista('duenio')}>
                 {vistas.duenio}
                 {novedad && vista === 'cliente' ? (
-                  <span className="size-2 rounded-full bg-lima">
+                  <span className="size-2.5 rounded-full bg-lima">
                     <span className="sr-only">{vistas.novedad}</span>
                   </span>
                 ) : null}
               </BotonVista>
             </div>
           </nav>
+          <div className="relative min-h-0 flex-1">
+            <div className={vista === 'cliente' ? 'h-full' : 'hidden'}>{cliente('movil')}</div>
+            <div className={vista === 'duenio' ? 'h-full' : 'hidden'}>
+              {panel('movil', vista === 'duenio')}
+            </div>
+          </div>
         </div>
       </main>
     </div>
@@ -153,7 +164,7 @@ function BotonVista({
       type="button"
       aria-pressed={activa}
       onClick={onClick}
-      className="flex min-h-11 items-center gap-2 rounded-full px-5 text-[0.875rem] font-semibold text-ed-muted aria-pressed:bg-ed-fg aria-pressed:text-ed-bg"
+      className="flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-[1.0625rem] font-semibold text-ed-muted aria-pressed:bg-ed-fg aria-pressed:text-ed-bg"
     >
       {children}
     </button>

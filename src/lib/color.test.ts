@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { conAlfa, contraste, mezclar } from './color';
+import { AA_TEXTO, ajustarContraste, conAlfa, contraste, mezclar, tintaSobre } from './color';
 
 describe('color', () => {
   it('calcula el contraste WCAG (blanco/negro = 21, igual = 1)', () => {
@@ -20,5 +20,19 @@ describe('color', () => {
 
   it('rechaza colores que no son #rrggbb', () => {
     expect(() => contraste('red', '#000000')).toThrow();
+  });
+});
+
+describe('tinta y ajuste de contraste para colores elegidos por la persona', () => {
+  it('sobre amarillo, tinta oscura; sobre azul marino, blanca', () => {
+    expect(tintaSobre('#ffd400')).toBe('#111111');
+    expect(tintaSobre('#0b2545')).toBe('#ffffff');
+  });
+  it('un color claro sobre blanco se oscurece hasta ser legible', () => {
+    const c = ajustarContraste('#ffd400', '#ffffff');
+    expect(contraste(c, '#ffffff')).toBeGreaterThanOrEqual(AA_TEXTO);
+  });
+  it('si ya era legible, no se toca', () => {
+    expect(ajustarContraste('#1d4ed8', '#ffffff')).toBe('#1d4ed8');
   });
 });

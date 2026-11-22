@@ -143,7 +143,7 @@ export function DemoWeb() {
           </div>
         </div>
 
-        <div className="flex h-[calc(100svh-2.75rem)] flex-col lg:hidden">
+        <div className="flex h-[calc(100svh-3.5rem-var(--d-cta))] flex-col lg:hidden">
           <div className="d-sin-barra shrink-0 overflow-x-auto border-b border-ed-line px-3 py-2">
             {chips}
           </div>

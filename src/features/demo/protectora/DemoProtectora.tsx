@@ -39,7 +39,7 @@ export function DemoProtectora() {
   };
 
   return (
-    <div className="pr-paleta min-h-dvh">
+    <div className="pr-paleta min-h-dvh pb-(--d-cta)">
       <TecladoAbierto />
       <BarraDemo demo={DEMO} onReiniciar={reiniciar} />
       <div className="mx-auto max-w-md px-4 pt-5 pb-10 md:my-8 md:rounded-[2rem] md:border md:border-(--pr-linea) md:px-6 md:pb-8">

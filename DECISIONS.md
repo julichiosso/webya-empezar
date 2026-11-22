@@ -585,3 +585,16 @@ queda lo que funciona por debajo o suma prueba real.
   protectoras, nosotros, zona, demos y casos. Lo legal queda completo.
 - Casos: el panel muestra solo el desafío y las acciones; el detalle (lo que armamos, qué ve el cliente) vive
   en la página de cada caso.
+
+## Demo Studio, fases 1 y 2: auditoría y motor (2026-11-22)
+
+- Auditoría en `AUDIT_DEMOS.md`; motor en `DEMO_STUDIO_SPEC.md`. Rama `demo-studio`.
+- Librerías: **ninguna nueva**. La plataforma alcanza y pesa cero: contraste con la fórmula WCAG que ya estaba
+  en `lib/color.ts` (en vez de culori), compresión del link con `CompressionStream` (en vez de lz-string),
+  hojas con `<dialog>` nativo (en vez de Radix/Vaul: foco atrapado y Escape vienen dados), estado con
+  `useReducer` + historial propio (en vez de Zustand) y Zod, que ya estaba, para validar lo que llega de un link.
+- Herramientas: Playwright del repo (capturas y E2E) y los MCP de Playwright y Chrome DevTools ya conectados.
+  Nada con escritura a producción ni a datos de clientes; no hay acceso a los repos de los clientes.
+- "Qué más hace" ya no se abre solo: tapaba la demo en el celular. Vive en el Menú.
+- Las imágenes "rotas" de "Conocé cómo ya lo usa…" eran del servidor local sin optimizador de imágenes; en
+  producción cargan.

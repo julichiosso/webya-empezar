@@ -7,6 +7,9 @@
 export const AA_TEXTO = 4.5;
 export const AA_GRANDE = 3;
 
+/** Fondo blanco de referencia (vistas previas de las demos). */
+export const BLANCO = '#ffffff';
+
 function canales(hex: string): [number, number, number] {
   const m = /^#([0-9a-f]{6})$/i.exec(hex);
   if (!m?.[1]) throw new Error(`Color inválido: ${hex}`);
@@ -41,4 +44,26 @@ export function mezclar(color: string, fondo: string, alfa: number): string {
 /** `#ff5b24` + 0.14 → `rgb(255 91 36 / 0.14)` (mismo formato que usa globals.css). */
 export function conAlfa(hex: string, alfa: number): string {
   return `rgb(${canales(hex).join(' ')} / ${alfa})`;
+}
+
+/** Tinta legible sobre `fondo`: blanco o casi negro, la de más contraste (para botones de color elegido). */
+export function tintaSobre(fondo: string, clara = '#ffffff', oscura = '#111111'): string {
+  return contraste(clara, fondo) >= contraste(oscura, fondo) ? clara : oscura;
+}
+
+/**
+ * Oscurece (o aclara) `color` en pasos chicos hasta que su texto sobre `fondo` llegue a `minimo`. Sirve para
+ * que el color que elige una persona en una demo nunca deje un texto ilegible. Devuelve el color original si
+ * ya alcanza; si no hay forma, el que más se acercó.
+ */
+export function ajustarContraste(color: string, fondo: string, minimo = AA_TEXTO): string {
+  if (contraste(color, fondo) >= minimo) return color;
+  const oscurecer = contraste('#000000', fondo) >= contraste('#ffffff', fondo);
+  const objetivo = oscurecer ? '#000000' : '#ffffff';
+  let mejor = color;
+  for (let a = 0.08; a <= 1; a += 0.08) {
+    mejor = mezclar(objetivo, color, a);
+    if (contraste(mejor, fondo) >= minimo) return mejor;
+  }
+  return mejor;
 }
