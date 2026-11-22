@@ -31,7 +31,8 @@ export function BarraCelular() {
             <WhatsApp />
             <span>{CTA.escribinos}</span>
           </a>
-          <Link href={RUTAS.armar} className="e-btn e-btn-primario e-btn-chico">
+          {/* Sin precarga: en la home la barra arranca escondida y el configurador pesa. */}
+          <Link href={RUTAS.armar} prefetch={false} className="e-btn e-btn-primario e-btn-chico">
             {CTA.armar}
           </Link>
         </div>

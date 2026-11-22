@@ -2,7 +2,7 @@ import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { enlaceContacto } from '@/components/marketing/editorial/contacto';
 import { CIERRE, CTA, RUTAS } from '@/content/home';
 import { Boton } from './Boton';
-import { ContactoRapido } from './ContactoRapido';
+import { ContactoDiferido } from './ContactoDiferido';
 import { WhatsApp } from './Iconos';
 import { TituloPalabras } from './TituloPalabras';
 
@@ -31,7 +31,7 @@ export function Cierre({ armar = RUTAS.armar }: { armar?: string }) {
           </Boton>
         </div>
         <div className="mt-14 w-full max-w-xl text-left md:mt-16" data-reveal="">
-          <ContactoRapido />
+          <ContactoDiferido />
         </div>
       </div>
     </section>

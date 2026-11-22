@@ -1,12 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useId, useRef, useState } from 'react';
-import { CTA, HEADER, HEADER_3D as H, RUTAS } from '@/content/home';
-import { Buscador } from './Buscador';
-import { ContactoRapido } from './ContactoRapido';
-import { WhatsApp } from './Iconos';
+import { CTA, HEADER, HEADER_3D as H } from '@/content/home';
+import type { MenuTarjetas as TarjetasMenu } from './MenuTarjetas';
+
+/** Las tarjetas (buscador, sitio, formulario) se piden recién al abrir el menú: fuera del JS inicial. */
+type Tarjetas = typeof TarjetasMenu;
 
 /** Los puntos de las píldoras: el estado del botón, no un ícono de hamburguesa. */
 function Puntos({ cuantos, vertical = false }: { cuantos: 1 | 2 | 3; vertical?: boolean }) {
@@ -22,11 +22,6 @@ function Puntos({ cuantos, vertical = false }: { cuantos: 1 | 2 | 3; vertical?: 
 const FOCABLES =
   'a[href], button:not([disabled]), input:not([disabled]), textarea, [tabindex]:not([tabindex="-1"])';
 
-/** Todo el sitio, desde el mismo manifiesto que el pie: productos y el resto. */
-const LINKS = [...HEADER.menu.links, ...HEADER.menu.otros];
-
-const activo = (ruta: string, href: string) => ruta === href || ruta.startsWith(`${href}/`);
-
 /**
  * Menú en tarjetas flotantes bajo las píldoras (la página sigue a la vista): el buscador y todo el sitio
  * con un punto en la página actual; "Armá tu sistema" destacado en negro; y "Te escribimos nosotros" para
@@ -36,6 +31,8 @@ const activo = (ruta: string, href: string) => ruta === href || ruta.startsWith(
  */
 export function MenuPantalla({ contacto, externo }: { contacto: string; externo: boolean }) {
   const [abierto, setAbierto] = useState(false);
+  /** Una vez pedidas, las tarjetas quedan (cerrar y abrir no las vuelve a pedir). */
+  const [MenuTarjetas, setTarjetas] = useState<Tarjetas | null>(null);
   const ruta = usePathname() ?? '/';
   const id = useId();
   const panel = useRef<HTMLDivElement>(null);
@@ -45,7 +42,18 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
     if (!abierto) return;
     const raiz = panel.current;
     const btn = boton.current;
-    raiz?.querySelector<HTMLElement>('nav a[href]')?.focus();
+    // El primer link recibe el foco apenas llegan las tarjetas (la primera vez se cargan aparte).
+    const enfocar = () => raiz?.querySelector<HTMLElement>('nav a[href]')?.focus();
+    enfocar();
+    const espera = raiz
+      ? new MutationObserver(() => {
+          if (raiz.querySelector('nav a[href]')) {
+            enfocar();
+            espera?.disconnect();
+          }
+        })
+      : null;
+    espera?.observe(raiz!, { childList: true, subtree: true });
     const alTeclear = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setAbierto(false);
@@ -70,6 +78,7 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
     document.addEventListener('keydown', alTeclear);
     document.documentElement.toggleAttribute('data-menu', true);
     return () => {
+      espera?.disconnect();
       document.removeEventListener('keydown', alTeclear);
       document.documentElement.removeAttribute('data-menu');
       btn?.focus();
@@ -86,7 +95,11 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
         aria-expanded={abierto}
         aria-controls={id}
         aria-label={abierto ? HEADER.menu.cerrarAria : HEADER.menu.abrirAria}
-        onClick={() => setAbierto((a) => !a)}
+        onClick={() => {
+          if (!MenuTarjetas)
+            void import('./MenuTarjetas').then((mod) => setTarjetas(() => mod.MenuTarjetas));
+          setAbierto((a) => !a);
+        }}
         className={abierto ? 'm3d-pildora m3d-pildora-blanca' : 'm3d-pildora m3d-pildora-gris'}
       >
         <span aria-hidden="true">{abierto ? H.cerrar : H.menu}</span>
@@ -103,53 +116,9 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
         aria-label={H.menu}
         className="m3d-panel"
       >
-        <div className="m3d-tarjeta tono-claro">
-          <div className="m3d-buscar">
-            <Buscador compacto etiqueta={H.buscar} />
-          </div>
-          <nav aria-label={HEADER.navegacion}>
-            <ul className="m3d-lista">
-              {LINKS.map((l, i) => {
-                const aca = activo(ruta, l.href);
-                return (
-                  <li key={l.href} style={{ '--i': i } as React.CSSProperties}>
-                    <Link
-                      href={l.href}
-                      onClick={cerrar}
-                      aria-current={aca ? 'page' : undefined}
-                      className="m3d-link"
-                    >
-                      <span>{l.texto}</span>
-                      {aca ? <span aria-hidden="true" className="m3d-aca" /> : null}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
-        </div>
-
-        <div className="m3d-tarjeta m3d-tarjeta-negra tono-oscuro">
-          <Link href={RUTAS.armar} onClick={cerrar} className="m3d-armar">
-            <span>{CTA.armar}</span>
-            <span aria-hidden="true" className="m3d-flecha" />
-          </Link>
-          <a
-            href={contacto}
-            target={externo ? '_blank' : undefined}
-            rel={externo ? 'noopener' : undefined}
-            aria-label={externo ? `${CTA.escribinos}${CTA.pestana}` : undefined}
-            onClick={cerrar}
-            className="m3d-escribinos"
-          >
-            {externo ? <WhatsApp /> : null}
-            <span>{CTA.escribinos}</span>
-          </a>
-        </div>
-
-        <div className="m3d-tarjeta tono-claro">
-          <ContactoRapido compacto />
-        </div>
+        {MenuTarjetas ? (
+          <MenuTarjetas ruta={ruta} contacto={contacto} externo={externo} cerrar={cerrar} />
+        ) : null}
       </div>
     </>
   );
