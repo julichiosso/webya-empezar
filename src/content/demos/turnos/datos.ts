@@ -34,6 +34,7 @@ export interface ProfesionalDemo {
 
 export const NEGOCIO_DEMO = {
   nombre: 'Tu peluquería',
+  reservar: 'Reservar turno',
   /** El logo genérico del sistema: la inicial sobre un cuadrado negro. */
   inicial: 'T',
   descripcion: 'Cortes, color y barbería. Reservá online y pagá el resto en el local.',

@@ -433,3 +433,43 @@ export function crearStore(ahoraReal: number): StoreDemo {
     },
   };
 }
+
+/**
+ * "Simular un día de trabajo": una reserva de otro cliente que entra sola, ya con la seña pagada y la
+ * etiqueta "Nueva" (como en el sistema real: no hay que aprobarla). Servicio y nombre salen de `azar`;
+ * va al primer horario libre de cualquier profesional. Si no queda lugar, no entra nada.
+ */
+export function simularReserva(
+  e: EstadoDemo,
+  ahora: number,
+  ahoraReal: number,
+  azar: () => number,
+  cliente: string,
+): EstadoDemo {
+  const s = SERVICIOS_DEMO[Math.floor(azar() * SERVICIOS_DEMO.length)];
+  if (!s) return e;
+  const libre = primerLibre(e, s.id, null, ahora, ahoraReal);
+  if (!libre) return e;
+  const p = profesionalesDe(s.id).find((x) =>
+    slotsDe(e, x, s, libre.dia, ahora, ahoraReal).includes(libre.inicio),
+  );
+  if (!p) return e;
+  const turno: Turno = {
+    id: Math.max(0, ...e.turnos.map((t) => t.id)) + 1,
+    dia: libre.dia,
+    inicio: libre.inicio,
+    fin: libre.inicio + s.duracionMin,
+    servicioId: s.id,
+    servicioNombre: s.nombre,
+    precio: s.precio,
+    sena: senaDe(s),
+    profesionalId: p.id,
+    cliente,
+    estado: 'confirmado',
+    senaEstado: 'pagada',
+    propio: false,
+    origen: azar() < 0.3 ? 'bot' : 'web',
+    nueva: true,
+  };
+  return { ...e, turnos: [...e.turnos, turno] };
+}

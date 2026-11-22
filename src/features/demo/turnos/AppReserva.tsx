@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { cn } from '@/components/ui/clases';
 import { HORARIO_NEGOCIO, NEGOCIO_DEMO, SERVICIOS_DEMO } from '@/content/demos/turnos/datos';
+import { NombreMarca, useMarca } from '../studio/MarcaContexto';
 import {
   CHECKOUT,
   DATOS,
@@ -233,15 +234,25 @@ export function AppReserva({ e, ahora, ahoraReal, desfase, set, onConfirmado, on
 /* ---------------- Partes ---------------- */
 
 function Logo({ className }: { className?: string }) {
+  const marca = useMarca();
+  if (marca?.logo)
+    return (
+      // Foto local (blob:) ya achicada: next/image no aplica.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={marca.logo} alt="" className={cn('shrink-0 object-cover', className)} />
+    );
   return (
     <span
       aria-hidden="true"
       className={cn(
-        'grid shrink-0 place-items-center rounded-lg bg-(--t-tinta) font-semibold text-(--t-fondo)',
+        'grid shrink-0 place-items-center rounded-lg font-semibold',
+        marca ? 'bg-(--marca) text-(--marca-tinta)' : 'bg-(--t-tinta) text-(--t-fondo)',
         className,
       )}
     >
-      {NEGOCIO_DEMO.inicial}
+      {marca
+        ? (marca.nombre.trim()[0] ?? NEGOCIO_DEMO.inicial).toUpperCase()
+        : NEGOCIO_DEMO.inicial}
     </span>
   );
 }
@@ -280,7 +291,7 @@ function Portada({ ahora }: { ahora: number }) {
         <Logo className="size-16 rounded-2xl text-[1.5rem]" />
         <div className="min-w-0">
           <p className="truncate text-[1.375rem] leading-tight font-semibold tracking-tight">
-            {NEGOCIO_DEMO.nombre}
+            <NombreMarca respaldo={NEGOCIO_DEMO.nombre} />
           </p>
           <p className="mt-0.5 text-[0.8125rem] text-(--t-gris)">{NEGOCIO_DEMO.direccion}</p>
           <p className="mt-1 flex items-center gap-1.5 text-[0.8125rem] font-medium">
@@ -356,7 +367,9 @@ function BarraNegocio({ onVolver }: { onVolver: () => void }) {
         </svg>
       </button>
       <Logo className="size-8 rounded-lg text-[0.6875rem]" />
-      <p className="text-[0.9375rem] font-semibold">{NEGOCIO_DEMO.nombre}</p>
+      <p className="min-w-0 truncate text-[0.9375rem] font-semibold">
+        <NombreMarca respaldo={NEGOCIO_DEMO.nombre} />
+      </p>
     </div>
   );
 }

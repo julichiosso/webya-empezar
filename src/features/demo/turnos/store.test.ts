@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  simularReserva,
   aHhmm,
   ahoraDemo,
   aResolver,
@@ -119,5 +120,22 @@ describe('demo de turnos', () => {
       estado: 'cancelado',
       senaEstado: 'devuelta',
     });
+  });
+});
+
+describe('simular un día de trabajo', () => {
+  it('entra una reserva confirmada, con seña pagada y marcada como nueva', () => {
+    const e = crearEstado(0);
+    const ahora = ahoraDemo(e, 0);
+    const d = simularReserva(e, ahora, 0, () => 0.4, 'Lucía Bianchi');
+    expect(d.turnos.length).toBe(e.turnos.length + 1);
+    const t = d.turnos.at(-1)!;
+    expect(t).toMatchObject({
+      estado: 'confirmado',
+      senaEstado: 'pagada',
+      nueva: true,
+      propio: false,
+    });
+    expect(t.cliente).toBe('Lucía Bianchi');
   });
 });
