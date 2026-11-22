@@ -10,6 +10,7 @@
 /* Animaciones de las ilustraciones (cargando, error, 404): 1 KB, mejor en la hoja global que precargada aparte. */
 @import '../brand/ilustracion/movimiento.css';
 @import '../styles/editorial.css';
+@import '../styles/home3d.css';
 
 @layer base {
   html {

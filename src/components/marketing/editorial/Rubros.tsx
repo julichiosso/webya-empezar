@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
-import { HERO, RUBROS_HOME, RUTAS, SECCIONES } from '@/content/home';
+import { HERO, NECESITA, RUBROS_HOME, RUTAS } from '@/content/home';
+import { Buscador } from './Buscador';
 import { Chevron } from './Iconos';
 import { TituloPalabras } from './TituloPalabras';
 
@@ -7,19 +8,23 @@ import { TituloPalabras } from './TituloPalabras';
 const destino = (href: string) => (href.startsWith(RUTAS.demos + '/') ? RUTAS.conGuia(href) : href);
 
 /**
- * "Elegí tu rubro y probalo": filas grandes, una por rubro, con su ejemplo y el sistema que le sirve.
- * Cada una abre su demo (en otra pestaña) lista para personalizar.
+ * "¿Qué necesita tu negocio?": una sola idea por pantalla. El buscador grande (la persona cuenta su
+ * problema con sus palabras) y, abajo, los rubros en filas grandes que abren la demo lista para
+ * personalizar (en otra pestaña). Es a donde lleva la píldora del hero.
  */
 export function Rubros() {
-  const S = SECCIONES.rubros;
+  const S = NECESITA;
   return (
-    <section id={S.id} className="tono-gris a-seccion" aria-labelledby="titulo-rubros">
+    <section id={S.id} className="tono-gris a-seccion scroll-mt-14" aria-labelledby="titulo-rubros">
       <div className="e-wrap">
         <div className="text-center">
           <TituloPalabras lineas={[S.titulo]} id="titulo-rubros" className="a-titulo" />
           <p className="a-sub mt-3 text-ed-muted" data-reveal="">
             {S.bajada}
           </p>
+        </div>
+        <div className="relative z-20 mx-auto mt-8 max-w-2xl md:mt-10" data-reveal="">
+          <Buscador />
         </div>
         <ul className="mx-auto mt-10 max-w-4xl border-t border-ed-line md:mt-12">
           {RUBROS_HOME.map((r, i) => (

@@ -7,6 +7,8 @@
  * - `[data-loop]`: `.on` mientras está en pantalla; fuera de pantalla las animaciones en bucle se pausan.
  * - `[data-steps]` + `[data-step="n"]`: el paso que cruza el centro de la pantalla queda en `data-paso`.
  *
+ * `.ahorro` en <html> si el navegador pide ahorrar datos: el hero no pide los posters extra.
+ *
  * `.listo` en <html> cuando el documento terminó de llegar: saca la pantalla de carga inicial.
  *
  * `.mo` en <html> solo se pone si hay IntersectionObserver y no hay prefers-reduced-motion: sin eso,
@@ -17,6 +19,7 @@ var d=document,h=d.documentElement,w=window;
 if(!('IntersectionObserver' in w)){if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',function(){h.classList.add('listo');});else h.classList.add('listo');return;}
 var quieto=w.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(!quieto)h.classList.add('mo');
+try{var cx=navigator.connection;if(cx&&cx.saveData)h.classList.add('ahorro');}catch(e){}
 function contar(el){
 if(quieto)return;
 var fin=parseInt(el.getAttribute('data-count'),10);if(!(fin>0))return;

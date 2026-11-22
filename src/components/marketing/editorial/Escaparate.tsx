@@ -17,8 +17,8 @@ const ORDEN = [
 ] as const;
 
 /**
- * Escaparate del hero de la home: tres iPhones con los sitios reales de clientes, el del medio adelante.
- * Entran desde abajo al cargar y cada captura se recorre sola de arriba a abajo (solo transform; se pausa
+ * Escaparate de la home ("El producto a la vista"): tres iPhones con los sitios reales de clientes, el del
+ * medio adelante. Suben desde abajo al entrar en pantalla y cada captura se recorre sola de arriba a abajo (solo transform; se pausa
  * fuera de pantalla y queda quieta con movimiento reducido).
  */
 export function Escaparate({ className }: { className?: string }) {
@@ -27,7 +27,7 @@ export function Escaparate({ className }: { className?: string }) {
       className={cn('flex items-start justify-center gap-[3%]', className)}
       data-loop=""
       aria-hidden="true"
-      // El script de movimiento le pone .on antes de hidratar (está en la primera pantalla).
+      // El script de movimiento le pone .on al entrar en pantalla (puede ser antes de hidratar).
       suppressHydrationWarning
     >
       {ORDEN.map((o, i) => {
@@ -47,7 +47,6 @@ export function Escaparate({ className }: { className?: string }) {
                   alt=""
                   width={img.ancho}
                   height={img.alto}
-                  priority={i === 1}
                   sizes="(min-width: 768px) 18rem, 44vw"
                   className={
                     bajar

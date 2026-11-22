@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist } from 'next/font/google';
+import { Geist, Instrument_Serif } from 'next/font/google';
 import { ViewTransition } from 'react';
 import { preload } from 'react-dom';
 import { FUENTE_PRECARGADA } from '@/brand/tipografia/fuente';
@@ -16,6 +16,17 @@ const geist = Geist({
   subsets: ['latin'],
   variable: '--font-geist',
   display: 'swap',
+});
+
+// Cursiva de contraste: solo para la palabra clave de los titulares (Crecé, Armá). Sin preload: no es
+// texto de lectura y el fallback ajustado de next/font evita que mueva la línea al llegar.
+const cursiva = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  style: 'italic',
+  variable: '--font-cursiva',
+  display: 'swap',
+  preload: false,
 });
 
 // Metadata base del sitio. Cada página completa lo suyo (título, canonical, Open Graph).
@@ -43,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }
   return (
     // suppressHydrationWarning: el script de movimiento le pone la clase .mo a <html> antes de hidratar.
-    <html lang="es-AR" className={geist.variable} suppressHydrationWarning>
+    <html lang="es-AR" className={`${geist.variable} ${cursiva.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_MOVIMIENTO }} />
       </head>

@@ -664,3 +664,47 @@ suman avisos. El lockfile solo agrega three, cobe y los tipos (más el reacomodo
 - `@gltf-transform/cli`, Draco, KTX2: no hay modelo ni texturas externas que comprimir (todo es procedural).
 - Blender: no está en la máquina. La vía B se hace renderizando la misma escena en Chromium headless.
 - Fuente cursiva: Instrument Serif itálica (OFL) por `next/font`, sin preload (solo la usa una palabra).
+
+### El objeto: símbolo `<w>` en tres piezas (Fase 2)
+
+- Forma propia: los corchetes de `<webya>` y la "w" del logo de Julián, redibujados como trazos de ancho
+  horizontal constante (como el logo) y extruidos con bisel. Tres piezas = tres estados del lema.
+- Vía elegida: **híbrida**. La variante A (procedural en vivo, three.js) y la B (render previo) salen de la
+  **misma escena**: `scripts/render-poster.mjs` la dibuja en Chromium headless con SwiftShader y guarda los
+  tres estados en `public/home3d/simbolo-{0,1,2}.webp` (1600 × 1000, 44–108 KB, con transparencia). El poster
+  del estado 0 es el LCP; el canvas aparece encima solo si el dispositivo puede, sin salto (mismo encuadre).
+- Material: metal grafito cepillado (textura generada en código, sin archivos). Se descartó piedra volcánica:
+  sin texturas externas (CSP) quedaba plástica. Si Julián prefiere otra superficie, se cambia en `escena.ts`.
+- "Digitalizá": grilla fina en GLSL (en `lib/home3d`) y aristas sobre el metal; "Crecé": armado, 8 % más
+  grande, y brotan los surcos.
+- Puntero: parallax y giro suave + una luz cálida que sigue al mouse (la "marca" sobre el metal). Celular:
+  arrastre horizontal con `touch-action: pan-y` (el scroll vertical nunca se bloquea) y vaivén en reposo.
+
+### Hero, header y resto de la home (Fases 3 a 5)
+
+- Tramo fijo de 145 svh (celular) / 165 svh (compu) solo con movimiento permitido; `--p` lo escribe un
+  listener pasivo. Con movimiento reducido: una pantalla, poster quieto y el lema completo.
+- Sin WebGL (gama baja, `saveData`, 2 núcleos, < 4 GB): los tres posters se funden con el scroll y flotan
+  apenas (CSS). Con `saveData` (clase `.ahorro` del script de movimiento) no se piden los posters extra.
+- Lema: las palabras se "encienden" con el estado (mínimo 0,5 de opacidad: > 3:1 sobre hueso). *Crecé* en
+  Instrument Serif itálica.
+- Buscador: en el hero queda una píldora "¿Qué necesita tu negocio?" que lleva a la sección 2, donde está
+  el buscador grande con los rubros. Ponerlo entero en el hero ensuciaba la composición y en 360 px no
+  entraba con el símbolo (capturas en la sesión).
+- Globo: `cobe` (puntos), gira y frena en la zona con San Francisco y San Jorge; lleva a `/zona`. Se pide
+  al entrar en pantalla y solo en equipos capaces; si no, un dibujo SVG.
+- Sello: "escribinos •" girando alrededor de la cara de la empresa. **Sin foto de Julián todavía**: va la "w"
+  de la marca sobre negro (misma regla que Quiénes somos: nunca iniciales). Con `NOSOTROS.foto` cargada,
+  aparece sola.
+- Franja "Funcionando en": los tres clientes en producción verificados, en tipografía (no hay logos
+  autorizados). Quieta en la compu, marquesina lenta en el celular (pausa al tocar o enfocar).
+- Header: logo y dos píldoras ("Escribinos •" negra con el punto lima de estado, "Menú ••" gris) en **todo
+  el sitio**; en el celular solo "Menú". Header plano: se sacó el blur (vidrio esmerilado).
+- Menú a pantalla completa en todos los anchos: tipografía enorme, buscador, "Armá tu sistema" en lima y
+  "Escribinos"; trampa de foco, Escape cierra y el foco vuelve a la píldora. **Sin "Cafeterías"**: la página
+  no existe todavía y un link roto resta confianza.
+- Barra de atajos del celular: se oculta mientras se ve el hero (ahí están el sello y la franja).
+- Blanco hueso (`#fafaf8`) en todo el sitio (`tono-claro` y `tono-gris` más cálidos).
+- Home: Hero → ¿Qué necesita tu negocio? → El producto a la vista (iPhones que suben al entrar) → Productos
+  → Proyectos → Zona → Quiénes somos → Cierre. Sale "Por qué Webya" (lo dice Quiénes somos).
+- Sin R3F, GSAP ni Lenis (ver Fase 1). Chunk 3D diferido: ~142 KB gzip (three + escena); globo ~6 KB.

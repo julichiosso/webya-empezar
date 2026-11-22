@@ -307,6 +307,24 @@ export const EDITORIAL = {
 } as const;
 
 /**
+ * Hero 3D de la home (src/components/marketing/home3d): el símbolo `<w>` en metal oscuro sobre blanco hueso.
+ * El brote es el único acento del hero (puntas de los surcos y el punto de estado); verde sobrio, no lima,
+ * para que se lea sobre el hueso.
+ */
+export const HOME3D = {
+  hueso: '#fafaf8',
+  metal: '#141414',
+  /** Luz que sigue al puntero sobre el metal: cálida y tenue. */
+  luzPuntero: '#fff1dc',
+  /** Grilla de "Digitalizá" sobre el metal. */
+  grilla: '#e8e8e2',
+  brote: '#4f7a1f',
+  /** Globo de puntos: base y tierra. */
+  globoBase: '#f0f0ec',
+  globoPunto: '#1d1d1f',
+} as const;
+
+/**
  * Color de arriba de cada captura de sitio (medido en el archivo): la barra de estado del teléfono lo
  * toma, como hace Safari con la página.
  */

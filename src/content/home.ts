@@ -110,6 +110,77 @@ export const HERO = {
   },
 } as const;
 
+/**
+ * Hero con el símbolo 3D `<w>`: el lema a la izquierda (la última palabra en cursiva), la bajada con la
+ * zona a la derecha, el globo, el sello para escribirnos y la franja de clientes reales al pie.
+ */
+export const HERO_3D = {
+  /** Las palabras del lema; la de `cursiva` va en la itálica de contraste. */
+  lema: LEMA,
+  cursiva: 2,
+  bajada: 'Turnos, pedidos y tiendas online para negocios de San Francisco, San Jorge y toda la zona.',
+  /** Atajo al buscador de la sección siguiente. */
+  necesita: '¿Qué necesita tu negocio?',
+  funcionando: 'Funcionando en',
+  globo: {
+    aria: 'Atendemos en San Francisco y San Jorge. Ver la zona de atención.',
+  },
+  sello: {
+    /** Gira alrededor del sello (se repite hasta cerrar el círculo). */
+    giro: 'escribinos • escribinos • escribinos • ',
+    aria: 'Escribinos por WhatsApp, se abre en otra pestaña',
+    ariaMail: 'Escribinos por mail',
+  },
+} as const;
+
+/** Header de la home 3D: dos píldoras, "Escribinos" y "Menú". */
+export const HEADER_3D = {
+  escribinos: 'Escribinos',
+  menu: 'Menú',
+  menuAria: 'Abrir el menú',
+  cerrar: 'Cerrar',
+  cerrarAria: 'Cerrar el menú',
+  /** Menú a pantalla completa: todo el sitio en tipografía grande. */
+  links: [
+    { href: '/turnero', texto: 'Turnero' },
+    { href: '/pedidos', texto: 'Pedidos' },
+    { href: '/tienda', texto: 'Tienda' },
+    { href: '/web', texto: 'Web' },
+    { href: '/campo', texto: 'Campo' },
+    { href: '/protectoras', texto: 'Protectoras' },
+    { href: '/proyectos', texto: 'Proyectos' },
+    { href: '/demos', texto: 'Demos' },
+    { href: '/zona', texto: 'Zona' },
+    { href: '/nosotros', texto: 'Nosotros' },
+  ],
+  buscar: '¿Qué necesitás?',
+  zona: 'San Francisco · San Jorge · toda la zona',
+} as const;
+
+/** "¿Qué necesita tu negocio?": el buscador grande y los rubros, en una sola pantalla. */
+export const NECESITA = {
+  id: 'necesita',
+  titulo: '¿Qué necesita tu negocio?',
+  bajada: 'Contanos con tus palabras o elegí tu rubro.',
+} as const;
+
+/** El producto a la vista: los celulares con trabajos reales suben al scrollear. */
+export const PRODUCTO_VISTA = {
+  id: 'en-uso',
+  rotulo: 'En uso',
+  titulo: ['Sistemas reales.', 'En el celular de tus clientes.'],
+  bajada: 'Pizzería, joyería y estética. Funcionando hoy.',
+} as const;
+
+/** Quiénes somos, en la home: una pantalla. */
+export const NOSOTROS_HOME = {
+  id: 'quienes-somos',
+  rotulo: 'Quiénes somos',
+  titulo: ['Te atiende', 'quien lo programa.'],
+  texto: 'Webya nace en San Jorge. Fundada por Julián Chiosso, Técnico Universitario en Programación (UTN).',
+  ver: 'Conocenos',
+} as const;
+
 /** El aviso de ejemplo sobre el celular del medio del hero (muestra la función, no un pedido real). */
 export const ESCAPARATE_AVISO = {
   app: 'Pedidos',

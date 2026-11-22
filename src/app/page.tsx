@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { Bento } from '@/components/marketing/editorial/Bento';
 import { Cierre } from '@/components/marketing/editorial/Cierre';
 import { FranjaZona } from '@/components/marketing/editorial/FranjaZona';
-import { HeroInicio } from '@/components/marketing/editorial/Hero';
+import { Hero3D } from '@/components/marketing/home3d/Hero3D';
+import { NosotrosHome } from '@/components/marketing/home3d/NosotrosHome';
+import { ProductoVista } from '@/components/marketing/home3d/ProductoVista';
 import { Pagina } from '@/components/marketing/editorial/Pagina';
-import { Porque } from '@/components/marketing/editorial/Porque';
 import { ProyectosInicio } from '@/components/marketing/editorial/Proyectos';
 import { Rubros } from '@/components/marketing/editorial/Rubros';
 import { SEO_SITIO, jsonLdNegocio, serializarLd } from '@/content/seo';
@@ -37,20 +38,21 @@ const LD = jsonLdNegocio({
 });
 
 /**
- * Home, como la portada de una marca de tecnología: el lema y los sitios reales en iPhones, los productos
- * en tarjetas (nombre, una línea, demo y más info), encontrar tu rubro, los proyectos, por qué Webya y el
- * cierre. Poco texto: la gente no lee. Lo largo vive en la página de cada producto.
+ * Home: cada pantalla, una sola idea. El símbolo 3D con el lema (Creá. Digitalizá. Crecé.), qué necesita tu
+ * negocio (buscador y rubros), el producto en celulares reales, los productos, los proyectos, la zona,
+ * quiénes somos y el cierre. Poco texto: la gente no lee. Lo largo vive en la página de cada producto.
  */
 export default function Inicio() {
   return (
     <Pagina>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializarLd(LD) }} />
-      <HeroInicio />
+      <Hero3D />
       <Rubros />
+      <ProductoVista />
       <Bento />
       <ProyectosInicio />
       <FranjaZona />
-      <Porque />
+      <NosotrosHome />
       <Cierre />
     </Pagina>
   );

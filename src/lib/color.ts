@@ -69,3 +69,9 @@ export function ajustarContraste(color: string, fondo: string, minimo = AA_TEXTO
   }
   return mejor;
 }
+
+/** Color hex a [r, g, b] de 0 a 1 (para WebGL: el globo del hero). */
+export function aVec3(hex: string): [number, number, number] {
+  const n = parseInt(hex.replace('#', '').slice(0, 6), 16);
+  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+}

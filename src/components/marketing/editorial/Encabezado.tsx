@@ -1,21 +1,22 @@
 import Link from 'next/link';
 import { LogoWebya } from '@/brand/logo/LogoWebya';
 import { MENSAJE_CONTACTO } from '@/content/configurador';
-import { CTA, HEADER, MARCA, RUTAS } from '@/content/home';
-import { Boton } from './Boton';
+import { HEADER, MARCA } from '@/content/home';
 import { enlaceContacto } from './contacto';
-import { MenuMovil } from './MenuMovil';
+import { MenuPantalla, PildoraEscribinos } from './MenuPantalla';
 
 export const ID_PRINCIPAL = 'contenido';
 
 /**
- * Header fijo: logo `<webya>`, los productos y proyectos (escritorio), Demos y "Armá tu sistema". En el
- * celular, el logo y el menú a un toque (los atajos de acción viven en la barra de abajo).
- * Fondo negro plano con una línea fina abajo: sin blur ni sombra.
+ * Header fijo: el logo `<webya>` y dos píldoras, "Escribinos •" (negra) y "Menú ••" (gris), que abre el
+ * menú a pantalla completa. En el celular, solo "Menú": "Escribinos" vive en el sello del hero, en el
+ * menú y en la barra de abajo. Fondo plano con una línea fina abajo: sin blur ni sombra.
  */
 export function Encabezado() {
+  const contacto = enlaceContacto(MENSAJE_CONTACTO);
+  const externo = contacto.canal === 'whatsapp';
   return (
-    <header className="tono-claro a-nav sticky top-0 z-40">
+    <header className="tono-hueso a-nav sticky top-0 z-40">
       <a
         href={`#${ID_PRINCIPAL}`}
         className="e-saltar e-btn e-btn-primario e-btn-chico top-2 left-4 z-50 -translate-y-24 focus:translate-y-0"
@@ -30,35 +31,10 @@ export function Encabezado() {
         >
           <LogoWebya decorativo className="h-5 w-auto" />
         </Link>
-        <nav aria-label={HEADER.navegacion} className="hidden lg:block">
-          <ul className="flex items-center gap-7">
-            {HEADER.links.map((l) => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className="e-link e-link-nav text-[0.8125rem] text-ed-fg/80 hover:text-ed-fg"
-                >
-                  {l.texto}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div className="hidden items-center gap-3 lg:flex">
-          <a
-            href={RUTAS.demos}
-            target="_blank"
-            rel="noopener"
-            aria-label={`${HEADER.demos}${CTA.pestana}`}
-            className="e-link e-link-nav flex min-h-11 items-center px-2 text-[0.8125rem] text-ed-fg/80 hover:text-ed-fg"
-          >
-            {HEADER.demos}
-          </a>
-          <Boton href={RUTAS.armar} chico>
-            {CTA.armar}
-          </Boton>
+        <div className="flex items-center gap-2">
+          <PildoraEscribinos href={contacto.href} externo={externo} />
+          <MenuPantalla contacto={contacto.href} externo={externo} />
         </div>
-        <MenuMovil contacto={enlaceContacto(MENSAJE_CONTACTO).href} />
       </div>
     </header>
   );
