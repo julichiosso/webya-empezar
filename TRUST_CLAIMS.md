@@ -13,3 +13,6 @@ Lo que no está verificado **no se publica**.
 | Atención en San Francisco, San Jorge y la zona | Franja de zona, /zona | `content/zona.ts` | Verificado (lo dice Julián) |
 | Seña con Mercado Pago, avisos al celular | Turnero | Sistema real (DEMO_SPEC_TURNOS) | Verificado |
 | Copias de seguridad, soporte, plazos, garantías | — | — | No se afirman |
+| Logos de clientes | — | Falta la autorización de cada cliente | No se publican: el hero usa los nombres en tipografía |
+| Foto de Julián en el sello del hero | — | Falta la foto | Mientras tanto, la marca (nunca iniciales) |
+| Globo con San Francisco y San Jorge | Hero | Coordenadas reales de las dos ciudades (`home3d/Globo.tsx`) | Verificado |

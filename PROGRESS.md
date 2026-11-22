@@ -1,5 +1,18 @@
 # PROGRESS — V3 (cierre) y protectoras
 
+## Home 3D (rama `home-3d`, 2026-11-22)
+
+- [x] Fase 1 — Auditoría (`AUDIT_HOME.md`), three y cobe instalados y registrados (`DECISIONS.md`), licencias (`ASSETS_LICENSES.md`)
+- [x] Fase 2 — Símbolo `<w>` en tres piezas: escena procedural + posters de la misma escena (vía híbrida)
+- [x] Fase 3 — Hero escritorio y celular, poster primero, capacidad, tres estados con el scroll, plan B y movimiento reducido
+- [x] Fase 4 — Header con píldoras, menú a pantalla completa, sello, globo, franja "Funcionando en"
+- [x] Fase 5 — Resto de la home en el mismo lenguaje (necesita, producto a la vista, productos, proyectos, zona, nosotros, cierre)
+- [x] Fase 0 — Estudio de la referencia (`REFERENCIA_NOTAS.md`) y faltantes (`GAPS.md`)
+- [x] Fase 6 — Presupuestos (JS inicial < 160 KB, CLS < 0,05), axe limpio en todas las páginas, regresión visual de la home en 7 anchos
+- [x] Fase 7 — Publicado en `main` a pedido de Julián (2026-11-22)
+- [ ] Lighthouse móvil medido en producción (PageSpeed Insights)
+- [ ] Prueba en iPhone y Android reales; con CPU 4× y 4G lenta
+
 ## V3 — Cierre (2026-11-20)
 
 - [x] Auditoría del repo (`AUDIT_V3.md`)

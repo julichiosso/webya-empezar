@@ -708,3 +708,38 @@ suman avisos. El lockfile solo agrega three, cobe y los tipos (más el reacomodo
 - Home: Hero → ¿Qué necesita tu negocio? → El producto a la vista (iPhones que suben al entrar) → Productos
   → Proyectos → Zona → Quiénes somos → Cierre. Sale "Por qué Webya" (lo dice Quiénes somos).
 - Sin R3F, GSAP ni Lenis (ver Fase 1). Chunk 3D diferido: ~142 KB gzip (three + escena); globo ~6 KB.
+
+### Segunda vuelta "tipo Apple" (pedido de Julián con capturas, 2026-11-22)
+
+- Fase 0 hecha después: `REFERENCIA_NOTAS.md` (observación, capturas solo locales en `design-refs/study/`,
+  ignorada por git). Lo faltante del estado asumido, en `GAPS.md`.
+- **Menú en tarjetas flotantes** bajo las píldoras (como la referencia, sin la tarjeta de "academy"): buscador
+  y todo el sitio con un punto en la página actual (`aria-current`), tarjeta negra "Armá tu sistema" con
+  flecha lima, y "Te escribimos nosotros" (el `ContactoRapido` existente en modo compacto: solo WhatsApp).
+  La píldora pasa a "Cerrar ⋮". Fondo apenas oscurecido; Escape, tocar afuera o elegir un link lo cierran.
+  La lista sale de `HEADER.menu` (el mismo manifiesto que el pie): se borró la lista duplicada.
+- **Material**: cerámica negra con laca (clearcoat 1, rugosidad 0,24): los biseles agarran la luz.
+- **Entrada al cargar**: el poster sube y crece apenas (1,6 s) y el lema aparece palabra por palabra desde una
+  máscara. Solo transform y clip-path: el LCP se pinta en el primer cuadro.
+- **Celulares ligados al scroll** (`animation-timeline: view()`, con el subir-al-entrar de antes como
+  respaldo), **productos que se apilan** en el celular (sticky) y **sello fijo** abajo a la derecha en la
+  compu una vez que pasa el hero (en el celular, la barra de atajos ocupa ese lugar).
+- **Contraste**: el gris secundario sobre hueso no llegaba a 4,5:1 (axe): `--e-muted` pasa a `#5e5e63`
+  (claro) y `#5a5a5f` (gris).
+- **iPhone SE**: en pantallas de menos de 700 px de alto el lema baja a 40 px y la bajada a 17 px: entra todo.
+- **Navegadores automatizados** (`navigator.webdriver`): ven el poster. En los tests, el WebGL por software
+  saturaba la CPU (timeouts) y sumaba el chunk 3D a la medición de JS inicial. El 3D se prueba aparte,
+  forzado (`?simbolo=3d`), y en ese modo la escena nunca se rinde.
+- Pantalla de carga: la existente solo aparece si el documento tarda más de 450 ms; el poster es la primera
+  imagen que se ve después, sin otra espera.
+- Baseline visual nuevo: `e2e/home3d.spec.ts-snapshots/home-hero-*.png` (primera pantalla de la home, quieta,
+  en los 7 anchos). No había baselines previos de otras páginas.
+- **JS inicial** (tope del repo 160 KB gzip, medido hasta `networkidle`): el contenido del menú se pide al
+  abrirlo y el formulario "te escribimos nosotros" del cierre al acercarse (con `import()` explícito: con
+  `next/dynamic` se precargaba igual). El link "Armá tu sistema" de la barra del celular va sin precarga:
+  en la home arranca escondida y precargaba el configurador entero (~15 KB). Resultado: pasa el tope;
+  el chunk 3D (~142 KB) y el globo (~6 KB) siguen aparte y solo en equipos capaces.
+- **CLS**: el lugar del formulario diferido se reserva con su alto real (33 rem en el celular).
+- **Altura del hero**: descuenta el cartel de anuncios (2,25 rem). En pantallas de menos de 600 px de alto
+  (iPhone SE de 2016, 320 × 568) la franja de clientes asoma al scrollear; desde 360 × 640 entra todo.
+- Línea base visual: se regeneró a propósito por el cambio de diseño (solo `home-hero-*` de la home).
