@@ -4,7 +4,7 @@ Lo que no está verificado **no se publica**.
 
 | Afirmación | Dónde | Cómo se verifica | Estado |
 |---|---|---|---|
-| "Primer mes con descuento" | Cartel superior | Julián confirma que existe, el porcentaje y las condiciones | **Pendiente: no se publica** |
+| "Primer mes con descuento" | Cartel superior | Confirmado por Julián el 2026-11-22 | Verificado (el porcentaje y las condiciones se dan por WhatsApp) |
 | Micio's Pizzería, Joyería Petrucci y Lorena Almagro usan sistemas de Webya | Hero, casos | Sitios en producción (`content/proyectos.ts`, estado `produccion`) | Verificado |
 | "Probalo en vivo antes de decidir" | Cartel, hub | Las demos funcionan sin registro | Verificado |
 | "Las fotos que subas no salen de tu dispositivo" | Demos | `lib/imagen-local.ts`: no hay request; URL `blob:` | Verificado en código |

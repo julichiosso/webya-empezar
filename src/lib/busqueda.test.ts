@@ -27,7 +27,7 @@ describe('buscador del hero', () => {
 
   it('no devuelve nada con texto vacío, de relleno o sin sentido', () => {
     expect(buscar(DESTINOS_BUSQUEDA, '')).toEqual([]);
-    expect(buscar(DESTINOS_BUSQUEDA, 'a')).toEqual([]);
+    // Una letra sola ya sugiere (ver "consultas cortas"): acá solo lo vacío y lo que no dice nada.
     expect(buscar(DESTINOS_BUSQUEDA, 'para mi')).toEqual([]);
     expect(buscar(DESTINOS_BUSQUEDA, 'xqzwv')).toEqual([]);
   });
@@ -80,5 +80,20 @@ describe('búsqueda por intención: errores de tipeo, demos y rubro', () => {
   it('distancia corta apenas supera el máximo', () => {
     expect(distancia('turnos', 'turnso', 1)).toBe(1);
     expect(distancia('a', 'abcdef', 2)).toBe(3);
+  });
+});
+
+describe('consultas cortas', () => {
+  const items = [
+    { titulo: 'Pedidos online', palabras: ['pizzería', 'delivery'] },
+    { titulo: 'Turnero', palabras: ['peluquería', 'turnos'] },
+    { titulo: 'Tienda', palabras: ['ropa'] },
+  ];
+  it('con una letra sugiere lo que empieza así', () => {
+    expect(buscar(items, 'p').map((i) => i.titulo)).toEqual(['Pedidos online', 'Turnero']);
+    expect(buscar(items, 'ro').map((i) => i.titulo)).toEqual(['Tienda']);
+  });
+  it('vacío no sugiere nada', () => {
+    expect(buscar(items, '  ')).toEqual([]);
   });
 });

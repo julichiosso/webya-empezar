@@ -34,13 +34,15 @@ export function Rubros() {
                 target="_blank"
                 rel="noopener"
                 aria-label={HERO.rubroAria(r.nombre, r.sistema)}
-                className="group flex min-h-20 items-center gap-4 py-4 active:opacity-60"
+                className="group flex min-h-16 items-center gap-4 py-3 active:opacity-60 sm:min-h-20 sm:py-4"
               >
                 <span className="min-w-0 flex-1">
                   <span className="block text-[1.25rem] leading-tight font-semibold tracking-[-0.02em] md:text-[1.5rem]">
                     {r.nombre}
                   </span>
-                  <span className="mt-1 block text-[1rem] text-ed-muted">{r.ejemplo}</span>
+                  <span className="mt-1 block text-[1rem] text-ed-muted max-sm:hidden">
+                    {r.ejemplo}
+                  </span>
                 </span>
                 <span className="hidden shrink-0 text-[1rem] text-ed-muted sm:block">
                   {r.sistema}

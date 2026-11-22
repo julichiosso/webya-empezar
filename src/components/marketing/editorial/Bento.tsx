@@ -69,7 +69,7 @@ function Grande({ id, proyecto, oscura, i }: (typeof GRANDES)[number] & { i: num
   return (
     <li
       className={cn(
-        'a-tile min-h-[27rem] px-6 pt-10 md:min-h-[36rem] md:pt-14',
+        'a-tile min-h-[22rem] px-6 pt-8 md:min-h-[36rem] md:pt-14',
         oscura && 'tono-oscuro',
       )}
       data-reveal=""
@@ -100,7 +100,7 @@ function Chica({ id, i }: { id: CeldaId; i: number }) {
   const t = BENTO.celdas[id];
   return (
     <li
-      className="a-tile justify-center px-6 py-10 md:py-12"
+      className="a-tile justify-center px-6 py-7 md:py-12"
       data-reveal=""
       style={{ '--i': i } as CSSProperties}
     >

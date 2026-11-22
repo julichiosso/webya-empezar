@@ -44,7 +44,14 @@ function Lupa() {
  * escrito a WhatsApp, por si no está en la página. Compacto: sin rótulo visible (lo dice el título de la
  * sección) ni ejemplos abajo (los rubros ya están a la vista).
  */
-export function Buscador({ compacto = false }: { compacto?: boolean }) {
+export function Buscador({
+  compacto = false,
+  etiqueta = B.etiqueta,
+}: {
+  compacto?: boolean;
+  /** El rótulo del campo (en el menú del celular: "¿Qué necesitás?"). */
+  etiqueta?: string;
+}) {
   const router = useRouter();
   const id = useId();
   const caja = useRef<HTMLInputElement>(null);
@@ -53,6 +60,7 @@ export function Buscador({ compacto = false }: { compacto?: boolean }) {
   const [activo, setActivo] = useState(0);
   const [enFoco, setEnFoco] = useState(false);
   const [ejemplo, setEjemplo] = useState(0);
+  const [letras, setLetras] = useState(0);
   const [indice, setIndice] = useState<IndiceBuscador | null>(null);
   const pedido = useRef(false);
 
@@ -67,19 +75,49 @@ export function Buscador({ compacto = false }: { compacto?: boolean }) {
       });
   };
 
-  // Con el campo vacío y sin foco, rotan ejemplos de cómo escribir. Quieto si se pidió menos movimiento.
+  // Con el campo vacío y sin foco, el campo "escribe solo" ejemplos de cómo pedir lo que se necesita: letra por
+  // letra, una pausa para leer y lo borra. Con menos movimiento pedido, el ejemplo queda escrito y quieto.
   useEffect(() => {
     if (texto || enFoco) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const t = setInterval(() => {
-      if (!document.hidden) setEjemplo((i) => (i + 1) % B.ejemplosRotan.length);
-    }, 3200);
-    return () => clearInterval(t);
-  }, [texto, enFoco]);
+    const frase = B.ejemplosRotan[ejemplo] ?? '';
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const t = setTimeout(() => setLetras(frase.length), 0);
+      return () => clearTimeout(t);
+    }
+    let n = 0;
+    let borrando = false;
+    let t: ReturnType<typeof setTimeout>;
+    const paso = () => {
+      if (document.hidden) {
+        t = setTimeout(paso, 500);
+        return;
+      }
+      if (!borrando) {
+        n += 1;
+        setLetras(n);
+        if (n >= frase.length) {
+          borrando = true;
+          t = setTimeout(paso, 1900);
+          return;
+        }
+        t = setTimeout(paso, 55 + Math.random() * 45);
+        return;
+      }
+      n -= 2;
+      setLetras(Math.max(0, n));
+      if (n <= 0) {
+        t = setTimeout(() => setEjemplo((i) => (i + 1) % B.ejemplosRotan.length), 350);
+        return;
+      }
+      t = setTimeout(paso, 22);
+    };
+    t = setTimeout(paso, 600);
+    return () => clearTimeout(t);
+  }, [texto, enFoco, ejemplo]);
 
   const consulta = texto.trim();
   const opciones = useMemo<Opcion[]>(() => {
-    if (consulta.length < 2) return [];
+    if (consulta.length < 1) return [];
     const encontrados = indice ? indice.buscar(indice.DESTINOS_BUSQUEDA, consulta, 4) : [];
     const rubro = indice ? indice.detectarRubro(consulta, indice.RUBRO_POR_PALABRA) : null;
     const armable = indice
@@ -138,9 +176,9 @@ export function Buscador({ compacto = false }: { compacto?: boolean }) {
           htmlFor={`${id}-caja`}
           className={compacto ? 'sr-only' : 'e-rotulo mb-2.5 block text-ed-muted'}
         >
-          {B.etiqueta}
+          {etiqueta}
         </label>
-        <div className="e-buscador relative flex min-h-14 items-center gap-3 rounded-2xl bg-ed-surface px-4">
+        <div className="e-buscador relative flex min-h-16 items-center gap-3 rounded-2xl bg-ed-surface px-4">
           <Lupa />
           <input
             ref={caja}
@@ -178,16 +216,16 @@ export function Buscador({ compacto = false }: { compacto?: boolean }) {
               setTimeout(() => setAbierto(false), 120);
             }}
             onKeyDown={teclas}
-            className="min-w-0 flex-1 scroll-mt-24 bg-transparent py-3 text-base placeholder:text-ed-muted focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+            className="min-w-0 flex-1 scroll-mt-24 bg-transparent py-3 text-[1.125rem] placeholder:text-ed-muted focus:outline-none [&::-webkit-search-cancel-button]:hidden"
           />
           {!texto && !enFoco ? (
             // El ejemplo que rota: decorativo (el campo ya tiene su etiqueta), no recibe toques.
             <span
-              key={ejemplo}
               aria-hidden="true"
-              className="e-buscador-ejemplo pointer-events-none absolute inset-y-0 right-4 left-12 flex items-center truncate text-base text-ed-muted"
+              className="pointer-events-none absolute inset-y-0 right-4 left-12 flex items-center overflow-hidden text-[1.125rem] whitespace-nowrap text-ed-muted"
             >
-              {B.ejemplosRotan[ejemplo]}
+              {(B.ejemplosRotan[ejemplo] ?? '').slice(0, letras)}
+              <span className="e-cursor" />
             </span>
           ) : null}
           {texto ? (
@@ -237,7 +275,8 @@ export function Buscador({ compacto = false }: { compacto?: boolean }) {
       ) : null}
 
       {!texto && !compacto ? (
-        <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2">
+        // En el celular no: el campo ya escribe ejemplos solo y la pantalla es chica.
+        <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2 max-sm:hidden">
           <span className="e-chico text-ed-muted">{B.ejemplosEtiqueta}</span>
           {B.ejemplos.map((ej) => (
             <button
@@ -249,7 +288,7 @@ export function Buscador({ compacto = false }: { compacto?: boolean }) {
                 setAbierto(true);
                 caja.current?.focus();
               }}
-              className="min-h-11 rounded-full bg-ed-surface px-3.5 text-[0.8125rem] text-ed-muted transition-colors hover:text-ed-fg lg:min-h-8 lg:px-3"
+              className="min-h-11 rounded-full bg-ed-surface px-4 text-[0.9375rem] text-ed-fg/80 transition-colors hover:text-ed-fg max-sm:[&:nth-of-type(n+4)]:hidden"
             >
               {ej}
             </button>

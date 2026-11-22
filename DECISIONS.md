@@ -614,3 +614,15 @@ queda lo que funciona por debajo o suma prueba real.
   `--e-*` y la capa `a-*`); no se crea otro archivo de tokens para no duplicar.
 - Pendiente del prompt (no hecho en esta pasada, por pedido de ir rápido): Lighthouse, regresión visual en
   7 anchos, test de enlaces internos, fondos dinámicos por scroll en todo el sitio, página /cafeterias.
+
+## Celular más corto, menú nuevo y buscador que escribe solo (2026-11-22)
+
+- Menú del celular a pantalla completa (antes quedaba debajo del cartel y tapaba medio header): barra propia
+  con logo y "Cerrar", buscador, los cuatro productos con una línea, "Probalo gratis", el resto en botones
+  de a dos y las dos acciones fijas abajo. Letra de 17–21 px y toques de 56 px.
+- Buscador del hero: escribe solo los ejemplos letra por letra (quieto con movimiento reducido), campo de 64
+  px con letra de 18 px y sugerencias desde la primera letra (por comienzo de palabra, primero los nombres).
+  En el celular sin los chips de ejemplo.
+- Celular más corto: rubros sin la línea de ejemplo, tarjetas de productos y razones más bajas.
+- El descuento del primer mes vuelve al cartel: Julián confirmó que es real.
+- Canonical en `webya-empezar.vercel.app` mientras no esté el dominio propio (`NEXT_PUBLIC_SITE_URL` lo cambia).

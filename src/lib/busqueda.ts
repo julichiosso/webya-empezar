@@ -122,7 +122,22 @@ function puntaje(item: Buscable, consulta: string, tokens: readonly string[]): n
 /** Los destinos que mejor coinciden con lo escrito, de mayor a menor (como mucho `max`). */
 export function buscar<T extends Buscable>(items: readonly T[], texto: string, max = 5): T[] {
   const consulta = normalizar(texto);
-  if (consulta.length < 2) return [];
+  if (!consulta) return [];
+  // Con una o dos letras ya hay sugerencias: lo que tenga una palabra que empiece así ("p" → pedidos,
+  // página, peluquería). Pensado para quien escribe despacio en el celular.
+  if (consulta.length < 3) {
+    const empieza = items.filter((it) =>
+      [it.titulo, ...it.palabras].some((w) =>
+        normalizar(w)
+          .split(' ')
+          .some((x) => x.startsWith(consulta)),
+      ),
+    );
+    // Primero lo que se llama así ("p" → Pedidos, Página web), después lo que lo menciona.
+    const primero = (it: T) => (normalizar(it.titulo).startsWith(consulta) ? 0 : 1);
+    const orden = [...empieza].sort((x, y) => primero(x) - primero(y));
+    if (consulta.length < 2 || orden.length) return orden.slice(0, max);
+  }
   const tokens = consulta.split(' ').filter((t) => t.length >= 2 && !RELLENO.has(t));
   if (tokens.length === 0 && !consulta.includes(' ')) return [];
   return items

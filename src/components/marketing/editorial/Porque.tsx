@@ -16,7 +16,7 @@ export function Porque() {
           {PORQUE.map((r, i) => (
             <li
               key={r.id}
-              className="a-tile justify-center px-8 py-12 md:min-h-72"
+              className="a-tile justify-center px-6 py-8 md:min-h-72 md:px-8 md:py-12"
               data-reveal=""
               style={{ '--i': i % 2 } as CSSProperties}
             >

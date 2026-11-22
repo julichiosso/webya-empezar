@@ -7,7 +7,8 @@ export const siteConfig = {
    * Dominio canónico, fijo: canonical, Open Graph, sitemap y JSON-LD apuntan siempre a webya.dev, aunque el
    * sitio se sirva desde un deploy de Vercel (*.vercel.app). Los links internos son relativos.
    */
-  url: 'https://webya.dev',
+  // Por ahora el sitio vive en Vercel; con el dominio propio alcanza con NEXT_PUBLIC_SITE_URL.
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://webya-empezar.vercel.app',
   /**
    * WhatsApp de Julián (formato wa.me: 54 + 9 + característica sin 0 + número sin 15). Es público
    * (va en cada link wa.me), por eso tiene valor por defecto; NEXT_PUBLIC_WHATSAPP_NUMBER lo pisa.

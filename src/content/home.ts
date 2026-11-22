@@ -48,15 +48,19 @@ export const HEADER = {
   demos: 'Demos',
   menu: {
     abrir: 'Menú',
+    cerrar: 'Cerrar',
     abrirAria: 'Abrir el menú',
     cerrarAria: 'Cerrar el menú',
     productos: 'Qué armamos',
-    webya: 'Webya',
+    webya: 'Más',
+    buscar: '¿Qué necesitás?',
+    probar: 'Probalo gratis',
+    probarTexto: 'Demos en vivo, sin registrarte.',
     links: [
-      { href: '/turnero', texto: 'Turnero con seña' },
-      { href: '/pedidos', texto: 'Pedidos online' },
-      { href: '/tienda', texto: 'Tienda y catálogo' },
-      { href: '/web', texto: 'Página web' },
+      { href: '/turnero', texto: 'Turnero con seña', detalle: 'Reservas con seña. Sin faltazos.' },
+      { href: '/pedidos', texto: 'Pedidos online', detalle: 'La cocina, en orden.' },
+      { href: '/tienda', texto: 'Tienda y catálogo', detalle: 'Vendé aunque esté cerrado.' },
+      { href: '/web', texto: 'Página web', detalle: 'Que te encuentren en Google.' },
     ],
     otros: [
       { href: '/campo', texto: 'Campo y agro' },
@@ -379,6 +383,13 @@ export interface Anuncio {
 export const ANUNCIOS = {
   etiqueta: 'Novedades',
   items: <readonly Anuncio[]>[
+    {
+      texto: 'Primer mes con descuento.',
+      corto: 'Primer mes con descuento.',
+      link: 'Consultá',
+      destino: 'whatsapp',
+      mensaje: 'Hola, vengo de webya.dev. Quiero saber del descuento del primer mes.',
+    },
     {
       texto: 'Probalo en vivo antes de decidir.',
       corto: 'Probalo en vivo antes de decidir.',

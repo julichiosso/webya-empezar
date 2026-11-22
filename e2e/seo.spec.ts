@@ -4,7 +4,7 @@ test.beforeEach(({}, info) => {
   test.skip(info.project.name !== 'desktop', 'SEO: un proyecto alcanza');
 });
 
-const SITIO = 'https://webya.dev';
+const SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://webya-empezar.vercel.app';
 
 for (const ruta of [
   '/',
