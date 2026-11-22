@@ -635,3 +635,32 @@ queda lo que funciona por debajo o suma prueba real.
 - Sin IA ni servidor: diez problemas comunes con sus frases (`PROBLEMAS` en `content/buscador-destinos.ts`)
   y `detectarProblema` en `lib/busqueda.ts`, con tests. Todo en el navegador; no se envía ni guarda nada.
 - El rótulo pasa a "Contanos qué le pasa a tu negocio" y los ejemplos que se escriben solos son problemas.
+
+## Home 3D (rama `home-3d`, 2026-11-22)
+
+Pedido: hero con un objeto 3D protagonista de nivel "agencia premium", inspirado en la estructura y el ritmo
+de un sitio de referencia, con identidad 100 % Webya. Nada copiado: ni forma, ni texturas, ni textos, ni
+paleta. Trabajo autónomo; las decisiones quedan acá.
+
+### Herramientas instaladas (Fase 1)
+
+| Qué | Origen | Para qué | Permisos |
+|---|---|---|---|
+| `three@0.187.0` | npm, github.com/mrdoob/three.js (MIT) | Escena del símbolo | Solo navegador, sin red |
+| `cobe@2.0.1` | npm, github.com/shuding/cobe (MIT, 13 KB) | Globo de puntos | Solo navegador, sin red (revisado: no hace fetch) |
+| `@types/three` | npm, DefinitelyTyped (MIT) | Tipos | Desarrollo |
+| MCP Playwright / Chrome DevTools / Context7 | Ya conectados en el entorno | Ver el trabajo, docs al día | Lectura del sitio local |
+
+`pnpm audit`: 1 moderada preexistente (minimatch dentro de eslint-config-next, solo desarrollo). Las nuevas no
+suman avisos. El lockfile solo agrega three, cobe y los tipos (más el reacomodo de `supports-color`).
+
+**No instalados, a propósito**:
+- `@react-three/fiber` y `drei`: la escena es un solo objeto con tres piezas; R3F suma ~45 KB gzip y un
+  reconciliador para algo que se resuelve con 200 líneas de three. `Environment` de drei baja HDRI de un CDN
+  (lo bloquea la CSP). Se usa `RoomEnvironment` de three (procedural).
+- `gsap`/`ScrollTrigger` y `lenis`: el sitio ya tiene su motor de movimiento sin librerías. La línea de tiempo
+  de los tres estados es una sola variable `--p` (0 → 1) que escribe un listener pasivo de scroll y leen el
+  CSS y la escena. Lenis cambia el scroll nativo: peor para accesibilidad y para personas mayores.
+- `@gltf-transform/cli`, Draco, KTX2: no hay modelo ni texturas externas que comprimir (todo es procedural).
+- Blender: no está en la máquina. La vía B se hace renderizando la misma escena en Chromium headless.
+- Fuente cursiva: Instrument Serif itálica (OFL) por `next/font`, sin preload (solo la usa una palabra).
