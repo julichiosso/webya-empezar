@@ -8,7 +8,9 @@ async function auditar(page: Page) {
   // content-visibility:auto deja sin pintar las secciones fuera de pantalla y les reserva un alto
   // estimado: mientras axe recorre la página el layout se corre y toma el fondo de otra sección
   // (falsos positivos de contraste). Se audita con todo pintado; los colores reales no cambian.
-  await page.addStyleTag({ content: '.e-seccion{content-visibility:visible!important}' });
+  await page.addStyleTag({
+    content: '.e-seccion,.a-seccion{content-visibility:visible!important}',
+  });
   await page.waitForTimeout(300);
   const r = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])

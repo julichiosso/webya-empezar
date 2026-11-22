@@ -93,7 +93,9 @@ export function Sugerencias() {
           }
         }
       },
-      { threshold: 0.3 },
+      // Franja del medio de la pantalla: vale igual para secciones cortas y para las que miden varias
+      // pantallas (con un porcentaje de la sección, las largas nunca llegaban).
+      { rootMargin: '-35% 0px -35% 0px', threshold: 0 },
     );
     for (const s of propias) {
       const el = document.querySelector(s.seccion);
