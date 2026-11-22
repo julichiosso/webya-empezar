@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useReducer, useRef, useState, type ChangeEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { BarraDemo } from '@/components/marketing/editorial/BarraDemo';
 import { enlaceContacto } from '@/components/marketing/editorial/contacto';
 import { EnUso } from '@/components/marketing/editorial/EnUso';
@@ -13,13 +13,23 @@ import {
 import { cn } from '@/components/ui/clases';
 import {
   COLORES_TIENDA,
+  resumenTienda,
   DEMO_TIENDA_UI as UI,
   MAX_PRODUCTOS,
   RUBROS_TIENDA,
   mensajeTienda,
 } from '@/content/demos/tienda/datos';
 import { track } from '@/lib/analytics';
-import { estadoInicial, leerPrecio, reducirTienda, rubroDe, type EstadoTienda } from './estado';
+import { useEstudio } from '../studio/useEstudio';
+import {
+  estadoInicial,
+  leerPrecio,
+  reducirTienda,
+  rubroDe,
+  tiendaPortable,
+  validarTienda,
+  type EstadoTienda,
+} from './estado';
 import { FotoProducto } from './Fotos';
 import { Tienda } from './Tienda';
 
@@ -40,7 +50,24 @@ const urlLocal = (e: ChangeEvent<HTMLInputElement>) => {
  * abre WhatsApp con el resumen. Es una vista previa: la tienda real se arma con el cliente.
  */
 export function DemoTienda() {
-  const [e, despachar] = useReducer(reducirTienda, undefined, () => estadoInicial());
+  const {
+    estado: e,
+    aplicar: despachar,
+    controles,
+  } = useEstudio({
+    clave: 'webya:demo:tienda',
+    reducir: reducirTienda,
+    inicial: () => estadoInicial(),
+    validar: validarTienda,
+    portable: tiendaPortable,
+    resumen: (x) =>
+      resumenTienda({
+        nombre: x.nombre,
+        rubro: rubroDe(x.rubroId).nombre,
+        color: COLORES_TIENDA.find((c) => c.id === x.colorId)?.nombre ?? '',
+        productos: x.productos,
+      }),
+  });
   const [vista, setVista] = useState<VistaDispositivo>('movil');
   const [cara, setCara] = useState<'armar' | 'ver'>('armar');
   const urls = useRef(new Set<string>());
@@ -87,7 +114,7 @@ export function DemoTienda() {
 
   return (
     <div className="tono-oscuro min-h-svh bg-ed-bg text-ed-fg">
-      <BarraDemo demo="tienda" onReiniciar={() => despachar({ tipo: 'reiniciar' })} />
+      <BarraDemo demo="tienda" estudio={controles} />
       <main>
         <h1 className="sr-only">{UI.titulo}</h1>
         <div className="d-escenario hidden justify-center gap-8 px-6 py-6 lg:flex xl:gap-12">

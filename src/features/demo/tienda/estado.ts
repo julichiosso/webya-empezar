@@ -1,3 +1,6 @@
+import { z } from 'zod';
+// Antes de construir los esquemas: sin eval (CSP). Ver lib/zod-sin-eval.ts.
+import '@/lib/zod-sin-eval';
 import {
   COLORES_TIENDA,
   MAX_PRODUCTOS,
@@ -110,3 +113,40 @@ export function reducirTienda(e: EstadoTienda, a: AccionTienda): EstadoTienda {
       return estadoInicial();
   }
 }
+
+const esquemaTienda = z.object({
+  rubroId: z.string().max(40),
+  nombre: z.string().max(40),
+  colorId: z.string().max(40),
+  productos: z
+    .array(
+      z.object({
+        id: z.number().int().nonnegative(),
+        nombre: z.string().max(40),
+        precio: z.number().int().min(0).max(99_999_999),
+        foto: z.string().max(20),
+      }),
+    )
+    .min(1)
+    .max(MAX_PRODUCTOS),
+  siguiente: z.number().int().positive(),
+});
+
+/** Lo que llega de un link compartido o del guardado: solo rubros, colores y fotos de la lista. */
+export function validarTienda(v: unknown): EstadoTienda | null {
+  const r = esquemaTienda.safeParse(v);
+  if (!r.success) return null;
+  const d = r.data;
+  if (!RUBROS_TIENDA.some((x) => x.id === d.rubroId)) return null;
+  if (!COLORES_TIENDA.some((c) => c.id === d.colorId)) return null;
+  const fotos = new Set(RUBROS_TIENDA.flatMap((x) => x.productos.map((q) => q.foto)));
+  if (!d.productos.every((q) => fotos.has(q.foto as FotoId))) return null;
+  return { ...d, productos: d.productos.map((q) => ({ ...q, foto: q.foto as FotoId })) };
+}
+
+/** Sin fotos locales (blob:), que no sobreviven fuera de esta pestaña. */
+export const tiendaPortable = (e: EstadoTienda): EstadoTienda => ({
+  ...e,
+  logo: undefined,
+  productos: e.productos.map((q) => ({ ...q, propia: undefined })),
+});

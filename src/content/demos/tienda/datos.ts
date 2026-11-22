@@ -198,3 +198,18 @@ export function mensajeTienda(d: {
     .filter(Boolean)
     .join('\n');
 }
+
+/** Lo que armó la persona, en líneas cortas (resumen de "Enviarnos lo que armé"). */
+export function resumenTienda(d: {
+  nombre: string;
+  rubro: string;
+  color: string;
+  productos: readonly { nombre: string }[];
+}): string[] {
+  const productos = d.productos.map((p) => p.nombre.trim()).filter(Boolean);
+  return [
+    `Negocio: ${d.nombre.trim() || 'sin nombre todavía'} (${d.rubro})`,
+    `Color: ${d.color}`,
+    productos.length ? `Productos: ${productos.join(', ')}` : '',
+  ].filter(Boolean);
+}
