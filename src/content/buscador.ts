@@ -5,24 +5,28 @@
  */
 
 export const BUSCADOR = {
-  etiqueta: '¿Qué necesita tu negocio?',
-  placeholder: 'Escribí lo que necesitás',
+  etiqueta: 'Contanos qué le pasa a tu negocio',
+  placeholder: 'Escribilo como se lo contarías a alguien',
   /** Rotan en el campo vacío, como ejemplos de cómo escribir. */
   ejemplosRotan: [
-    'Quiero recibir pedidos de mi pizzería',
-    'Necesito que no se me pierdan los turnos',
-    'Quiero vender online mis productos',
-    'Necesito una página para mi consultorio',
+    'Me reservan turno y después no vienen',
+    'Los viernes no doy abasto con los pedidos',
+    'Nadie me encuentra en Google',
+    'Mando fotos de productos una por una',
+    'Llevo todo en un cuaderno',
   ],
   /** Atajos: los cinco pedidos más comunes. */
   ejemplos: [
-    'turnos para mi peluquería',
-    'pedidos para mi pizzería',
-    'vender online',
-    'página para mi consultorio',
+    'me reservan y no vienen',
+    'no doy abasto con los pedidos',
+    'nadie me encuentra',
+    'quiero vender online',
     'cuánto sale',
   ],
-  ejemplosEtiqueta: 'Probá con',
+  ejemplosEtiqueta: 'Por ejemplo',
+  /** El buscador que escucha: primero la empatía, después la solución. */
+  escucha: 'Te entendemos',
+  solucion: (sistema: string) => `Lo resolvemos con: ${sistema}. Tocá para ver cómo.`,
   sugerencias: 'Sugerencias',
   limpiar: 'Borrar',
   /** Armar ese sistema en /armar, con el tipo (y el rubro, si lo nombró) ya elegidos. */

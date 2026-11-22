@@ -449,3 +449,163 @@ export const RUBRO_POR_PALABRA: Readonly<Record<string, string>> = {
   bomberos: 'entidades',
   adopcion: 'entidades',
 };
+
+/**
+ * El buscador que escucha: problemas comunes de un negocio, dichos como los dice el dueño, con una frase de
+ * empatía y la solución que ofrecemos. Las claves van normalizadas (sin tildes, minúscula) y se buscan
+ * dentro de lo escrito. Nada se envía ni se guarda.
+ */
+export interface Problema {
+  id: string;
+  claves: readonly string[];
+  /** Lo primero que lee la persona: que la entendimos. */
+  escucha: string;
+  /** Destino del buscador que lo resuelve (y su demo, si hay). */
+  destino: string;
+  demo?: string;
+}
+
+export const PROBLEMAS: readonly Problema[] = [
+  {
+    id: 'faltazos',
+    claves: [
+      'no vienen',
+      'no viene',
+      'no se presenta',
+      'faltan',
+      'faltazo',
+      'plantad',
+      'cancelan',
+      'se olvidan del turno',
+    ],
+    escucha: 'Que te reserven y no vengan es tiempo y plata que no vuelve.',
+    destino: 'turnero',
+    demo: 'demo-turnos',
+  },
+  {
+    id: 'turnos-desorden',
+    claves: [
+      'se me pierden los turnos',
+      'turnos por whatsapp',
+      'anoto los turnos',
+      'agenda',
+      'se superponen',
+      'a toda hora',
+      'reservas',
+    ],
+    escucha: 'Atender turnos por mensaje, a cualquier hora, cansa a cualquiera.',
+    destino: 'turnero',
+    demo: 'demo-turnos',
+  },
+  {
+    id: 'pedidos-caos',
+    claves: [
+      'no doy abasto',
+      'explota',
+      'colapsa',
+      'muchos pedidos',
+      'se pierden pedidos',
+      'pedidos mal',
+      'telefono no para',
+      'viernes',
+      'fin de semana',
+      'la cocina',
+    ],
+    escucha: 'Cuando todos piden a la misma hora, la cocina no da abasto. Le pasa a muchos.',
+    destino: 'pedidos',
+    demo: 'demo-pedidos',
+  },
+  {
+    id: 'no-me-encuentran',
+    claves: [
+      'no me encuentran',
+      'nadie me encuentra',
+      'no aparezco',
+      'google',
+      'no tengo pagina',
+      'no me conocen',
+      'pocos clientes',
+      'clientes nuevos',
+    ],
+    escucha: 'Si no te encuentran, eligen a otro. Y no es por falta de calidad.',
+    destino: 'web',
+    demo: 'demo-web',
+  },
+  {
+    id: 'consultas-repetidas',
+    claves: [
+      'fotos una por una',
+      'mandar fotos',
+      'mando fotos',
+      'preguntan lo mismo',
+      'preguntan precios',
+      'me preguntan',
+      'catalogo',
+      'lista de precios',
+    ],
+    escucha: 'Contestar lo mismo todo el día te saca tiempo para vender.',
+    destino: 'catalogo',
+    demo: 'demo-tienda',
+  },
+  {
+    id: 'vender-mas',
+    claves: [
+      'vender online',
+      'vender por internet',
+      'cuando esta cerrado',
+      'vender mas',
+      'vendo poco',
+      'no vendo',
+      'pocas ventas',
+      'tienda online',
+    ],
+    escucha: 'Vender más sin estar todo el día en el local se puede.',
+    destino: 'tienda',
+    demo: 'demo-tienda',
+  },
+  {
+    id: 'todo-a-mano',
+    claves: [
+      'planilla',
+      'excel',
+      'papel',
+      'cuaderno',
+      'desorden',
+      'todo a mano',
+      'me olvido',
+      'no tengo control',
+      'cuanto gano',
+      'las cuentas',
+    ],
+    escucha: 'Llevar todo a mano y en la cabeza agota. No tiene que ser así.',
+    destino: 'medida',
+  },
+  {
+    id: 'entidad',
+    claves: [
+      'adopcion',
+      'adoptar',
+      'socios',
+      'cuotas',
+      'donaciones',
+      'voluntarios',
+      'refugio',
+      'protectora',
+    ],
+    escucha: 'Sostener una organización entre tantos mensajes es mucho trabajo.',
+    destino: 'protectoras',
+    demo: 'demo-protectora',
+  },
+  {
+    id: 'campo',
+    claves: ['camiones', 'cosecha', 'acopio', 'insumos', 'maquinaria', 'el campo'],
+    escucha: 'En el campo, el orden ahorra horas, llamadas y viajes.',
+    destino: 'campo',
+  },
+  {
+    id: 'precio',
+    claves: ['caro', 'cuanto sale', 'cuanto cuesta', 'presupuesto', 'no tengo plata', 'precio'],
+    escucha: 'Es lógico querer saber cuánto vas a invertir antes de decidir.',
+    destino: 'precio',
+  },
+];

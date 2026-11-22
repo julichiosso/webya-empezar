@@ -626,3 +626,12 @@ queda lo que funciona por debajo o suma prueba real.
 - Celular más corto: rubros sin la línea de ejemplo, tarjetas de productos y razones más bajas.
 - El descuento del primer mes vuelve al cartel: Julián confirmó que es real.
 - Canonical en `webya-empezar.vercel.app` mientras no esté el dominio propio (`NEXT_PUBLIC_SITE_URL` lo cambia).
+
+## El buscador que escucha (2026-11-22)
+
+- Pedido de Julián: que el buscador funcione "como un psicólogo" del negocio. La persona cuenta su problema
+  con sus palabras y el buscador responde primero con empatía ("Te entendemos: que te reserven y no vengan
+  es tiempo y plata que no vuelve") y después con la solución, su demo, el configurador y WhatsApp.
+- Sin IA ni servidor: diez problemas comunes con sus frases (`PROBLEMAS` en `content/buscador-destinos.ts`)
+  y `detectarProblema` en `lib/busqueda.ts`, con tests. Todo en el navegador; no se envía ni guarda nada.
+- El rótulo pasa a "Contanos qué le pasa a tu negocio" y los ejemplos que se escriben solos son problemas.

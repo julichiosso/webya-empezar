@@ -5,7 +5,8 @@
 export {
   ARMABLES,
   DESTINOS_BUSQUEDA,
+  PROBLEMAS,
   RUBRO_POR_PALABRA,
   hrefArmar,
 } from '@/content/buscador-destinos';
-export { buscar, detectarRubro } from '@/lib/busqueda';
+export { buscar, detectarProblema, detectarRubro } from '@/lib/busqueda';

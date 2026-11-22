@@ -97,3 +97,23 @@ describe('consultas cortas', () => {
     expect(buscar(items, '  ')).toEqual([]);
   });
 });
+
+describe('el buscador que escucha', () => {
+  it('reconoce el problema dicho con palabras de todos los días', async () => {
+    const { PROBLEMAS } = await import('@/content/buscador-destinos');
+    const { detectarProblema } = await import('./busqueda');
+    expect(detectarProblema('Me reservan y NO VIENEN', PROBLEMAS)?.destino).toBe('turnero');
+    expect(detectarProblema('los viernes no doy abasto', PROBLEMAS)?.destino).toBe('pedidos');
+    expect(detectarProblema('nadie me encuentra en Google', PROBLEMAS)?.destino).toBe('web');
+    expect(detectarProblema('hola', PROBLEMAS)).toBeNull();
+  });
+
+  it('cada problema lleva a un destino que existe', async () => {
+    const { PROBLEMAS, DESTINOS_BUSQUEDA } = await import('@/content/buscador-destinos');
+    const ids = new Set(DESTINOS_BUSQUEDA.map((d) => d.id));
+    for (const p of PROBLEMAS) {
+      expect(ids.has(p.destino), p.id).toBe(true);
+      if (p.demo) expect(ids.has(p.demo), p.id).toBe(true);
+    }
+  });
+});

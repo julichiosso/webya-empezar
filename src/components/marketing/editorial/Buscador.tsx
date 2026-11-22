@@ -18,6 +18,8 @@ interface Opcion {
   href: string;
   externo?: boolean;
   rubro?: string;
+  /** La respuesta del buscador que escucha: se muestra distinta, arriba de todo. */
+  escucha?: boolean;
 }
 
 function Lupa() {
@@ -118,10 +120,39 @@ export function Buscador({
   const consulta = texto.trim();
   const opciones = useMemo<Opcion[]>(() => {
     if (consulta.length < 1) return [];
-    const encontrados = indice ? indice.buscar(indice.DESTINOS_BUSQUEDA, consulta, 4) : [];
+    const problema = indice ? indice.detectarProblema(consulta, indice.PROBLEMAS) : null;
+    const destino = problema
+      ? indice!.DESTINOS_BUSQUEDA.find((d) => d.id === problema.destino)
+      : undefined;
+    const demo = problema?.demo
+      ? indice!.DESTINOS_BUSQUEDA.find((d) => d.id === problema.demo)
+      : undefined;
+    const escuchados: Opcion[] = destino
+      ? [
+          {
+            id: `escucha-${problema!.id}`,
+            titulo: problema!.escucha,
+            texto: B.solucion(destino.titulo),
+            href: destino.href,
+            escucha: true,
+          },
+          ...(demo ? [demo] : []),
+        ]
+      : [];
+    const usados = new Set(escuchados.map((o) => o.id).concat(destino ? [destino.id] : []));
+    const encontrados = [
+      ...escuchados,
+      ...(indice ? indice.buscar(indice.DESTINOS_BUSQUEDA, consulta, 4) : []).filter(
+        (d) => !usados.has(d.id),
+      ),
+    ].slice(0, 4);
     const rubro = indice ? indice.detectarRubro(consulta, indice.RUBRO_POR_PALABRA) : null;
     const armable = indice
-      ? encontrados.find((d) => d.armar || indice.ARMABLES.includes(d.id))
+      ? ((destino && (destino.armar || indice.ARMABLES.includes(destino.id))
+          ? destino
+          : encontrados.find(
+              (d) => 'palabras' in d && (d.armar || indice.ARMABLES.includes(d.id)),
+            )) as (typeof indice.DESTINOS_BUSQUEDA)[number] | undefined)
       : undefined;
     return [
       ...encontrados,
@@ -264,8 +295,23 @@ export function Buscador({
             >
               {o.externo ? <WhatsApp className="shrink-0" /> : null}
               <span className="min-w-0">
-                <span className="block truncate text-[0.9375rem] font-medium">{o.titulo}</span>
-                <span className="e-sugerencia-ayuda block truncate text-[0.8125rem] text-ed-muted">
+                {o.escucha ? (
+                  <span className="block text-[0.75rem] font-semibold tracking-[0.06em] text-ed-muted uppercase">
+                    {B.escucha}
+                  </span>
+                ) : null}
+                <span
+                  className={
+                    o.escucha
+                      ? 'block text-[1.0625rem] leading-snug font-semibold'
+                      : 'block truncate text-[0.9375rem] font-medium'
+                  }
+                >
+                  {o.titulo}
+                </span>
+                <span
+                  className={`e-sugerencia-ayuda block text-[0.875rem] text-ed-muted ${o.escucha ? 'mt-0.5' : 'truncate'}`}
+                >
                   {o.texto}
                 </span>
               </span>

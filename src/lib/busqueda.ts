@@ -166,3 +166,16 @@ export function detectarRubro(
   }
   return null;
 }
+
+/**
+ * El problema que cuenta la persona ("me reservan y no vienen"), si alguna de sus claves aparece en lo
+ * escrito. Null si no reconoce ninguno: entonces manda el buscador de siempre.
+ */
+export function detectarProblema<P extends { claves: readonly string[] }>(
+  texto: string,
+  problemas: readonly P[],
+): P | null {
+  const t = ` ${normalizar(texto)} `;
+  if (t.trim().length < 4) return null;
+  return problemas.find((p) => p.claves.some((c) => t.includes(c))) ?? null;
+}
