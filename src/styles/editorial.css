@@ -47,7 +47,7 @@
   /* Blanco hueso (home 3D, 2026-11-22): el mismo papel en todo el sitio. */
   --e-bg: #fafaf8;
   --e-fg: #1d1d1f;
-  --e-muted: #6e6e73;
+  --e-muted: #5e5e63;
   --e-line: #e4e4de;
   --e-line-strong: #a1a1a6;
   --e-surface: #f0f0ec;
@@ -1744,7 +1744,7 @@ html[data-teclado] .e-barra-celular {
 .tono-gris {
   --e-bg: #f1f1ed;
   --e-fg: #1d1d1f;
-  --e-muted: #6e6e73;
+  --e-muted: #5a5a5f;
   --e-line: #e5e5ea;
   --e-line-strong: #a1a1a6;
   --e-surface: #ffffff;
