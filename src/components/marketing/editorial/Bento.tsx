@@ -133,7 +133,7 @@ export function Bento() {
   return (
     <section
       id={S.id}
-      className="tono-claro pt-6 pb-[clamp(4rem,8vw,8rem)] md:pt-10"
+      className="tono-claro py-[clamp(4rem,8vw,8rem)]"
       aria-labelledby="titulo-que-armamos"
     >
       <div className="e-wrap">

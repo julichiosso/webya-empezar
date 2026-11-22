@@ -15,7 +15,7 @@ const LINK = 'e-link e-link-nav inline-flex min-h-8 items-center text-ed-muted h
 export function Pie() {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
-    <footer className="tono-gris text-[0.75rem]">
+    <footer className="tono-oscuro border-t border-ed-line text-[0.75rem]">
       <div className="e-wrap flex flex-wrap items-center justify-between gap-3 border-b border-ed-line pt-10 pb-6">
         <LogoWebya decorativo className="h-5 w-auto" />
         <p className="text-ed-muted">{FRASES.promesa}</p>

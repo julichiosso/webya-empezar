@@ -83,6 +83,7 @@ export const HERO = {
   /** Una sola línea: qué armamos. La gente no lee; esto sí. */
   bajada: 'Turnos, pedidos y ventas online. Todo desde tu celular.',
   verDemos: 'Ver demos',
+  /** El celular apila el lema (una palabra por línea); la compu lo muestra en una. */
   rubros: 'Elegí tu rubro y probalo',
   /** Lo que aparece en cada fila al pasar el mouse. */
   probar: 'Ver demo',
@@ -101,6 +102,14 @@ export const HERO = {
     aria: (localidades: number | string) =>
       `Atendemos en San Jorge, San Francisco y ${localidades} localidades de la zona, en persona o por WhatsApp. Ver el mapa de zonas.`,
   },
+} as const;
+
+/** El aviso de ejemplo sobre el celular del medio del hero (muestra la función, no un pedido real). */
+export const ESCAPARATE_AVISO = {
+  app: 'Pedidos',
+  cuando: 'ahora',
+  titulo: 'Nuevo pedido',
+  texto: 'Retira a las 21:15',
 } as const;
 
 /**
@@ -167,8 +176,13 @@ export const SECCIONES = {
   },
   rubros: {
     id: 'rubros',
-    titulo: '¿Cuál es tu rubro?',
-    bajada: 'Tocá el tuyo y probalo en vivo.',
+    titulo: 'Elegí tu rubro y probalo.',
+    bajada: 'Se abre la demo, lista para poner tu nombre.',
+  },
+  zona: {
+    texto: 'Atención en San Francisco y San Jorge',
+    detalle: 'y toda la zona',
+    ver: 'Ver el mapa',
   },
   porque: {
     id: 'por-que-webya',
@@ -351,16 +365,18 @@ export const CONTACTO_RAPIDO = {
  * Barra de anuncios (arriba de todo, en todas las páginas): una línea por vez, sin etiquetas.
  * El descuento del primer mes lo pidió Julián; el porcentaje se suma acá cuando lo defina.
  */
+/** Un anuncio de la barra: un link interno o, con destino 'whatsapp', un mensaje ya escrito. */
+export interface Anuncio {
+  texto: string;
+  corto: string;
+  link: string;
+  destino: string;
+  mensaje: string;
+}
+
 export const ANUNCIOS = {
   etiqueta: 'Novedades',
-  items: [
-    {
-      texto: 'Primer mes con descuento.',
-      corto: 'Primer mes con descuento.',
-      link: 'Consultá',
-      destino: 'whatsapp',
-      mensaje: 'Hola, vengo de webya.dev. Quiero saber del descuento del primer mes.',
-    },
+  items: <readonly Anuncio[]>[
     {
       texto: 'Probalo en vivo antes de decidir.',
       corto: 'Probalo en vivo antes de decidir.',

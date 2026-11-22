@@ -4,6 +4,7 @@ import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { CTA, HERO, RUTAS } from '@/content/home';
 import { PROYECTOS } from '@/content/proyectos';
 import { Boton } from './Boton';
+import { Buscador } from './Buscador';
 import { enlaceContacto } from './contacto';
 import { Escaparate } from './Escaparate';
 import { WhatsApp } from './Iconos';
@@ -15,9 +16,9 @@ const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
 const EN_PRODUCCION = PROYECTOS.filter((p) => p.estado === 'produccion');
 
 /**
- * Hero de la home, como la portada de un producto: el nombre arriba, el lema enorme y centrado, una línea,
- * dos acciones y, abajo, tres iPhones con sitios reales de clientes. Poco texto: la imagen convence.
- * En el celular, "Escribinos" vive en la barra fija de abajo (a mano del pulgar).
+ * Hero de la home, como la portada de un producto: el nombre arriba, el lema enorme (una línea en la compu,
+ * una palabra por línea en el celular), una línea de bajada, el buscador con sus sugerencias, las dos
+ * acciones, la prueba social y, abajo, tres iPhones con sitios reales de clientes completos.
  */
 export function HeroInicio() {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
@@ -30,9 +31,9 @@ export function HeroInicio() {
         <TituloPalabras
           as="h1"
           id="titulo-hero"
-          lineas={[HERO.titulo.join(' ')]}
+          lineas={HERO.titulo}
           alCargar
-          className="a-hero mt-2 max-w-[12ch] md:mt-3 md:max-w-none"
+          className="a-hero a-hero-lema mt-2 md:mt-3"
         />
         <p
           // Sin animación de entrada: es candidato a LCP y se pinta en el primer cuadro.
@@ -40,20 +41,27 @@ export function HeroInicio() {
         >
           {HERO.bajada}
         </p>
-        <div className="e-hero-aparece mt-7 flex flex-wrap justify-center gap-3" style={aparece(2)}>
-          <Boton href={RUTAS.demos}>{HERO.verDemos}</Boton>
-          <span className="hidden lg:contents">
-            <Boton
-              href={contacto.href}
-              variante="secundario"
-              externo
-              icono={contacto.canal === 'whatsapp' ? <WhatsApp /> : false}
-            >
-              {CTA.escribinos}
-            </Boton>
-          </span>
+        <div
+          className="e-hero-aparece relative z-20 mt-7 w-full max-w-xl text-left"
+          style={aparece(2)}
+        >
+          <Buscador />
         </div>
-        <p className="e-hero-aparece e-chico mt-6 text-ed-muted" style={aparece(3)}>
+        <div
+          className="e-hero-aparece mt-6 flex w-full flex-wrap justify-center gap-3"
+          style={aparece(3)}
+        >
+          <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
+          <Boton
+            href={contacto.href}
+            variante="secundario"
+            externo
+            icono={contacto.canal === 'whatsapp' ? <WhatsApp /> : false}
+          >
+            {CTA.escribinos}
+          </Boton>
+        </div>
+        <p className="e-hero-aparece e-chico mt-6 text-ed-muted" style={aparece(4)}>
           {HERO.confianza}{' '}
           {EN_PRODUCCION.map((p, i) => (
             <span key={p.id}>

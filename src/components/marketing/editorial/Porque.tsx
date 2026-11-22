@@ -1,12 +1,10 @@
 import type { CSSProperties } from 'react';
 import { PORQUE, SECCIONES } from '@/content/home';
 import { LinkChevron } from './LinkChevron';
-import { MiniMapaZona } from './MiniMapaZona';
 import { TituloPalabras } from './TituloPalabras';
 
 /**
- * Por qué Webya: tres razones grandes, una línea cada una, y el mapa de dónde atendemos. Tarjetas grises
- * como en la vidriera de productos.
+ * Por qué Webya: tres razones grandes, una línea cada una. Tarjetas grises como en la vidriera de productos.
  */
 export function Porque() {
   const S = SECCIONES.porque;
@@ -14,7 +12,7 @@ export function Porque() {
     <section id={S.id} className="tono-claro a-seccion" aria-labelledby="titulo-porque">
       <div className="e-wrap">
         <TituloPalabras lineas={[S.titulo]} id="titulo-porque" className="a-titulo text-center" />
-        <ul className="mt-10 grid grid-cols-1 gap-3 md:mt-14 md:grid-cols-2 md:gap-4">
+        <ul className="mt-10 grid grid-cols-1 gap-3 md:mt-14 md:grid-cols-3 md:gap-4">
           {PORQUE.map((r, i) => (
             <li
               key={r.id}
@@ -31,15 +29,6 @@ export function Porque() {
               ) : null}
             </li>
           ))}
-          <li
-            className="a-tile justify-center px-6 py-8 md:min-h-72"
-            data-reveal=""
-            style={{ '--i': 1 } as CSSProperties}
-          >
-            <div className="text-left">
-              <MiniMapaZona />
-            </div>
-          </li>
         </ul>
       </div>
     </section>

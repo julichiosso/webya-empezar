@@ -10,17 +10,18 @@ export const NOSOTROS = {
       'Webya es Julián Chiosso, desarrollador de San Jorge y Técnico Universitario en Programación (UTN). Trabajamos directo con cada negocio, de la primera charla al soporte.',
   },
   rotulo: 'Quiénes somos',
-  titulo: ['Una persona real.', 'De acá.'],
-  presentacion: 'Soy Julián Chiosso. El que te escucha es el que programa tu sistema.',
-  firma: 'Julián Chiosso',
-  cargo: 'Desarrollador · Técnico Universitario en Programación (UTN)',
-  fotoAlt: 'Julián Chiosso, de Webya',
+  titulo: ['Software hecho', 'en San Jorge.'],
+  presentacion:
+    'Diseñamos y programamos sistemas para negocios de la zona. Quien te escucha es quien programa tu sistema.',
+  firma: 'Webya',
+  cargo: 'Fundada por Julián Chiosso, Técnico Universitario en Programación (UTN)',
+  fotoAlt: 'Webya, San Jorge, Santa Fe',
   /**
-   * Foto de Julián. Mientras no esté (null), se muestran sus iniciales. Para cargarla: subir
-   * public/nosotros/julian.webp (ver IMAGENES.md) y completar acá.
+   * Foto del equipo o del lugar de trabajo. Mientras no esté (null), se muestra la marca (nunca iniciales).
+   * Para cargarla: subir public/nosotros/equipo.webp (ver IMAGENES.md) y completar acá.
    */
   foto: null as null | { src: string; ancho: number; alto: number },
-  iniciales: 'JC',
+  ciudad: 'San Jorge, Santa Fe',
   proceso: {
     rotulo: 'Cómo trabajamos',
     titulo: 'Cuatro pasos.',

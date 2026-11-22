@@ -598,3 +598,19 @@ queda lo que funciona por debajo o suma prueba real.
 - "Qué más hace" ya no se abre solo: tapaba la demo en el celular. Vive en el Menú.
 - Las imágenes "rotas" de "Conocé cómo ya lo usa…" eran del servidor local sin optimizador de imágenes; en
   producción cargan.
+
+## Unificación de la versión negra y la blanca (2026-11-22)
+
+- Ver `AUDIT_UNIFICACION.md`, `PARITY_MATRIX.md` y `TRUST_CLAIMS.md`. Rama `unificacion`, solo preview.
+- Hero fusionado: lema en una línea en la compu y apilado en el celular, buscador con chips debajo de la
+  bajada, "Armá tu sistema" + "Escribinos", prueba social y tres iPhones completos (sin superponerse) con un
+  aviso de pedido que entra cada 9 s.
+- Rubros en sección propia ("Elegí tu rubro y probalo"), filas grandes que abren la demo con el asistente.
+  Zona en franja propia ("Atención en San Francisco y San Jorge · y toda la zona" → /zona); sin el mapa gota.
+- Cartel: fuera "Primer mes con descuento" hasta que Julián lo confirme.
+- Quiénes somos institucional: la marca sobre negro en lugar de las iniciales "JC", voz de empresa y Julián
+  como fundador. Pie oscuro.
+- Sistema de diseño: se consolida en lo que ya existe (`tono-claro`, `tono-gris`, `tono-oscuro` con tokens
+  `--e-*` y la capa `a-*`); no se crea otro archivo de tokens para no duplicar.
+- Pendiente del prompt (no hecho en esta pasada, por pedido de ir rápido): Lighthouse, regresión visual en
+  7 anchos, test de enlaces internos, fondos dinámicos por scroll en todo el sitio, página /cafeterias.

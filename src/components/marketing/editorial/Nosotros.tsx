@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
+import { LogoWebya } from '@/brand/logo/LogoWebya';
 import { cn } from '@/components/ui/clases';
 import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { CTA, RUTAS } from '@/content/home';
@@ -11,7 +12,7 @@ import { FondoGrilla } from './FondoGrilla';
 import { enlaceContacto } from './contacto';
 import { ProyectosInicio } from './Proyectos';
 
-/** Retrato de Julián o, mientras falte la foto, sus iniciales en un cuadro prolijo. */
+/** La foto del equipo o, mientras no esté, la marca sobre negro con la ciudad: institucional, sin iniciales. */
 export function Retrato({ className }: { className?: string }) {
   const f = NOSOTROS.foto;
   return (
@@ -33,9 +34,10 @@ export function Retrato({ className }: { className?: string }) {
         <span
           role="img"
           aria-label={NOSOTROS.fotoAlt}
-          className="absolute inset-0 grid place-items-center text-[clamp(2.5rem,9vw,5.5rem)] font-semibold tracking-tighter text-ed-muted"
+          className="tono-oscuro absolute inset-0 flex flex-col items-center justify-center gap-4 bg-ed-bg p-6"
         >
-          {NOSOTROS.iniciales}
+          <LogoWebya decorativo className="h-auto w-3/5" />
+          <span className="text-[0.9375rem] text-ed-muted">{NOSOTROS.ciudad}</span>
         </span>
       )}
     </div>

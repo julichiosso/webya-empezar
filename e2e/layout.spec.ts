@@ -41,7 +41,7 @@ for (const ruta of RUTAS) {
   });
 }
 
-test('la home entra en la primera pantalla: el lema, las demos y las dos acciones', async ({
+test('la home entra en la primera pantalla: el lema, el buscador y las dos acciones', async ({
   page,
 }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
@@ -49,9 +49,11 @@ test('la home entra en la primera pantalla: el lema, las demos y las dos accione
   await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(
     'Creá. Digitalizá. Crecé.',
   );
-  // En escritorio están en el hero y el header; en el celular, "Ver demos" en el hero y el resto en la
-  // barra fija de abajo. Siempre a la vista.
-  for (const nombre of ['Ver demos', 'Armá tu sistema', 'Escribinos']) {
+  const hero = page.locator('#titulo-hero').locator('xpath=ancestor::section');
+  const buscador = await hero.getByRole('combobox').boundingBox();
+  expect(buscador!.y, 'buscador').toBeLessThan(vh);
+  // En el hero y, en el celular, también en la barra fija de abajo. Siempre a la vista.
+  for (const nombre of ['Armá tu sistema', 'Escribinos']) {
     const cajas = await page
       .getByRole('link', { name: new RegExp(`^${nombre}`) })
       .evaluateAll((els) =>
@@ -66,9 +68,7 @@ test('la home entra en la primera pantalla: el lema, las demos y las dos accione
 
 test('la home muestra dónde atendemos y lleva al mapa de zonas', async ({ page }) => {
   await page.goto('/');
-  const zona = page.getByRole('link', {
-    name: /^Atendemos en San Jorge, San Francisco y \d+ localidades/,
-  });
+  const zona = page.getByRole('link', { name: /Atención en San Francisco y San Jorge/ });
   await expect(zona).toHaveCount(1);
   await expect(zona).toBeVisible();
   await zona.click();
