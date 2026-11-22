@@ -34,6 +34,8 @@ export interface OpcionesEscena {
   alPintar?: () => void;
   /** Llamado si el rendimiento no alcanza ni con la calidad mínima: vuelve el poster. */
   alRendirse?: () => void;
+  /** Forzado (`?simbolo=3d`): baja la resolución pero nunca se rinde (capturas con WebGL por software). */
+  sinRendirse?: boolean;
 }
 
 export interface Escena {
@@ -85,7 +87,7 @@ export function montarEscena(canvas: HTMLCanvasElement, op: OpcionesEscena): Esc
   const pmrem = new PMREMGenerator(renderer);
   const entorno = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
   scene.environment = entorno;
-  scene.environmentIntensity = 1.25;
+  scene.environmentIntensity = 1.5;
 
   // El canvas siempre mide 16:10 (igual que el poster): a esta distancia entran 8 unidades a lo ancho.
   const camara = new PerspectiveCamera(24, ASPECTO, 0.1, 100);
@@ -107,13 +109,13 @@ export function montarEscena(canvas: HTMLCanvasElement, op: OpcionesEscena): Esc
   textura.repeat.set(0.9, 0.9);
   const metal = new MeshPhysicalMaterial({
     color: new Color(HOME3D.metal),
-    metalness: 0.9,
-    roughness: 0.3,
+    metalness: 0.55,
+    roughness: 0.24,
     roughnessMap: textura,
     bumpMap: textura,
     bumpScale: 0.35,
-    clearcoat: 0.35,
-    clearcoatRoughness: 0.5,
+    clearcoat: 1,
+    clearcoatRoughness: 0.08,
   });
   const cantidadGrilla = { value: 0 };
   const grilla = materialGrilla(cantidadGrilla);
@@ -248,7 +250,7 @@ export function montarEscena(canvas: HTMLCanvasElement, op: OpcionesEscena): Esc
       if (cuadros === 40) {
         if (acumulado / cuadros > 28) {
           bajadas++;
-          if (bajadas > 2) {
+          if (bajadas > 2 && !op.sinRendirse) {
             op.alRendirse?.();
             return;
           }
