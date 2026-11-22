@@ -57,11 +57,9 @@ test('configurador con todo elegido sin violaciones', async ({ page }) => {
   await auditar(page);
 });
 
-test('menú del celular abierto sin violaciones', async ({ page }, info) => {
-  test.skip(info.project.name === 'desktop', 'el menú es del celular y la tablet');
+test('menú abierto sin violaciones', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
-  const boton = page.getByRole('button', { name: 'Abrir el menú' });
-  test.skip(!(await boton.isVisible()), 'en este ancho el menú está en el header');
-  await boton.click();
+  await page.getByRole('button', { name: 'Abrir el menú' }).click();
+  await page.getByRole('dialog', { name: 'Menú' }).getByRole('navigation').waitFor();
   await auditar(page);
 });

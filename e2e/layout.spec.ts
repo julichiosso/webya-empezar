@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test';
 
 /**
  * Layout de las páginas del sistema editorial en todos los viewports del config (celulares, tablet y
- * escritorios de 1440 y 1920): nada desborda, un solo h1 y "Armá tu sistema" siempre a mano (en el
- * header en escritorio, en la barra de abajo en el celular).
+ * escritorios de 1440 y 1920): nada desborda, un solo h1 y el header con sus píldoras ("Menú" siempre;
+ * "Escribinos" desde la tablet). "Armá tu sistema" vive en el menú, en la barra del celular y en la página.
  */
 const RUTAS = [
   '/',
@@ -18,7 +18,7 @@ const RUTAS = [
 ];
 
 for (const ruta of RUTAS) {
-  test(`${ruta}: sin scroll horizontal, un h1 y el CTA del header visible`, async ({ page }) => {
+  test(`${ruta}: sin scroll horizontal, un h1 y las píldoras del header`, async ({ page }) => {
     await page.goto(ruta, { waitUntil: 'networkidle' });
     // Recorre la página para que entren todas las secciones (reveals y carriles).
     const alto = await page.evaluate(() => document.documentElement.scrollHeight);
@@ -31,17 +31,17 @@ for (const ruta of RUTAS) {
     expect(scrollW, 'ancho de página').toBeLessThanOrEqual(vw);
     await expect(page.locator('h1')).toHaveCount(1);
 
-    const cta = page
-      .getByRole('link', { name: 'Armá tu sistema', exact: true })
-      .filter({ visible: true })
-      .first();
-    await expect(cta).toBeVisible();
-    const caja = await cta.boundingBox();
-    expect(caja!.height).toBeGreaterThanOrEqual(44);
+    const banner = page.getByRole('banner');
+    const menu = banner.getByRole('button', { name: 'Abrir el menú' });
+    await expect(menu).toBeVisible();
+    expect((await menu.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    const escribinos = banner.getByRole('link', { name: /^Escribinos/ });
+    if (vw >= 768) await expect(escribinos).toBeVisible();
+    else await expect(escribinos).toBeHidden();
   });
 }
 
-test('la home entra en la primera pantalla: el lema, el buscador y las dos acciones', async ({
+test('la home entra en la primera pantalla: el lema, la bajada, el buscador, el sello y los clientes', async ({
   page,
 }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
@@ -49,20 +49,17 @@ test('la home entra en la primera pantalla: el lema, el buscador y las dos accio
   await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(
     'Creá. Digitalizá. Crecé.',
   );
-  const hero = page.locator('#titulo-hero').locator('xpath=ancestor::section');
-  const buscador = await hero.getByRole('combobox').boundingBox();
-  expect(buscador!.y, 'buscador').toBeLessThan(vh);
-  // En el hero y, en el celular, también en la barra fija de abajo. Siempre a la vista.
-  for (const nombre of ['Armá tu sistema', 'Escribinos']) {
-    const cajas = await page
-      .getByRole('link', { name: new RegExp(`^${nombre}`) })
-      .evaluateAll((els) =>
-        els.map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0),
-      );
-    expect(
-      cajas.some((r) => r.top >= 0 && r.bottom <= vh),
-      nombre,
-    ).toBe(true);
+  const hero = page.locator('#hero');
+  const visibles = [
+    hero.getByText(/^Turnos, pedidos y tiendas online/),
+    hero.getByRole('link', { name: '¿Qué necesita tu negocio?' }),
+    hero.getByRole('link', { name: /^Escribinos por/ }),
+    // En pantallas de menos de 600 px de alto (iPhone SE de 2016) la franja asoma al scrollear.
+    ...(vh >= 600 ? [hero.getByRole('link', { name: /^Micio/ }).first()] : []),
+  ];
+  for (const el of visibles) {
+    const caja = (await el.boundingBox())!;
+    expect(caja.y + caja.height, (await el.textContent()) ?? '').toBeLessThanOrEqual(vh + 1);
   }
 });
 
@@ -76,17 +73,24 @@ test('la home muestra dónde atendemos y lleva al mapa de zonas', async ({ page 
   await expect(page.getByRole('img', { name: /Mapa de la zona/ })).toBeVisible();
 });
 
-test('menú del celular: se abre, lleva a la página y se cierra con Escape', async ({
+test('menú en tarjetas: se abre, atrapa el foco, Escape lo cierra y lleva a la página', async ({
   page,
-}, info) => {
-  test.skip(info.project.name === 'desktop', 'el menú es del celular y la tablet');
+}) => {
   await page.goto('/', { waitUntil: 'networkidle' });
   const boton = page.getByRole('button', { name: 'Abrir el menú' });
-  test.skip(!(await boton.isVisible()), 'en este ancho el menú está en el header');
   await boton.click();
+  const menu = page.getByRole('dialog', { name: 'Menú' });
+  await expect(menu).toBeVisible();
+  // El foco entra al primer link del sitio; la píldora pasa a "Cerrar".
+  await expect(menu.getByRole('navigation').getByRole('link').first()).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Cerrar el menú' })).toBeVisible();
+  // Shift+Tab desde el primero da la vuelta adentro del menú.
+  await page.keyboard.press('Shift+Tab');
+  await expect(menu.locator(':focus')).toHaveCount(1);
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', { name: 'Abrir el menú' })).toBeVisible();
+  await expect(menu).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Abrir el menú' })).toBeFocused();
   await page.getByRole('button', { name: 'Abrir el menú' }).click();
-  await page.getByRole('banner').getByRole('link', { name: 'Quiénes somos' }).click();
+  await menu.getByRole('link', { name: 'Quiénes somos', exact: true }).click();
   await expect(page).toHaveURL(/\/nosotros$/);
 });

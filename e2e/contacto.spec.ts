@@ -13,6 +13,8 @@ test('"te escribimos nosotros": el número queda guardado como lead y avisa que 
   page,
 }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
+  // El formulario se carga al acercarse al final de la página.
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
   const form = page.locator('form').filter({ hasText: CONTACTO_RAPIDO.titulo });
   const n = numero();
   await form.getByRole('textbox', { name: CONTACTO_RAPIDO.whatsapp }).fill(n);
@@ -31,6 +33,8 @@ test('"te escribimos nosotros": el número queda guardado como lead y avisa que 
 
 test('un número inválido no se envía y dice cómo corregirlo', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
+  // El formulario se carga al acercarse al final de la página.
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
   const form = page.locator('form').filter({ hasText: CONTACTO_RAPIDO.titulo });
   await form.getByRole('textbox', { name: CONTACTO_RAPIDO.whatsapp }).fill('123');
   await form.getByRole('button', { name: CONTACTO_RAPIDO.enviar }).click();
