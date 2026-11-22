@@ -42,7 +42,7 @@ export function DemoProtectora() {
     <div className="pr-paleta min-h-dvh pb-(--d-cta)">
       <TecladoAbierto />
       <BarraDemo demo={DEMO} onReiniciar={reiniciar} />
-      <div className="mx-auto max-w-md px-4 pt-5 pb-10 md:my-8 md:rounded-[2rem] md:border md:border-(--pr-linea) md:px-6 md:pb-8">
+      <div className="mx-auto max-w-md px-4 pt-5 pb-10 md:my-8 md:rounded-[2rem] md:border md:border-(--pr-linea) md:px-6 md:pb-8 lg:max-w-6xl lg:px-10">
         <header>
           <p className="text-[0.75rem] font-semibold tracking-[0.12em] text-(--pr-tinta-2) uppercase">
             {ORG.ficticia}
@@ -54,7 +54,7 @@ export function DemoProtectora() {
         <div
           role="group"
           aria-label={U.vistas.etiqueta}
-          className="mt-5 grid grid-cols-2 gap-1 rounded-full bg-(--pr-papel) p-1"
+          className="mt-5 grid grid-cols-2 gap-1 rounded-full bg-(--pr-papel) p-1 lg:hidden"
         >
           {(['publica', 'admin'] as const).map((v) => (
             <button
@@ -82,12 +82,26 @@ export function DemoProtectora() {
         </div>
         <p className="mt-2 text-center text-[0.75rem] text-(--pr-tinta-2)">{U.aviso}</p>
 
-        <div key={ronda} className="mt-5">
-          {vista === 'publica' ? (
+        {/* Celular: una vista por vez. Compu: las dos lado a lado, sincronizadas en vivo. */}
+        <div key={ronda} className="mt-5 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
+          <section
+            aria-label={U.vistas.publica}
+            className={vista === 'publica' ? undefined : 'hidden lg:block'}
+          >
+            <p className="mb-3 hidden text-[1rem] font-semibold text-(--pr-tinta-2) lg:block">
+              {U.vistas.publica}
+            </p>
             <Publica e={e} d={d} onCompartir={setCompartir} />
-          ) : (
+          </section>
+          <section
+            aria-label={U.vistas.admin}
+            className={vista === 'admin' ? undefined : 'hidden lg:block'}
+          >
+            <p className="mb-3 hidden text-[1rem] font-semibold text-(--pr-tinta-2) lg:block">
+              {U.vistas.admin}
+            </p>
             <Admin e={e} d={d} />
-          )}
+          </section>
         </div>
       </div>
 

@@ -33,7 +33,12 @@ function PantallaFicha() {
   return (
     <Marco>
       <div className="pr-tono-arena grid aspect-square place-items-center rounded-xl">
-        <Ilustracion especie={luna.especie} className="w-1/2 text-(--pr-tinta)" />
+        <Ilustracion
+          especie={luna.especie}
+          semilla={luna.id}
+          tamano={luna.tamano}
+          className="w-1/2 text-(--pr-tinta)"
+        />
       </div>
       <p className="pr-titulo mt-2 text-[1.125rem] font-semibold">{luna.nombre}</p>
       <p className="text-[0.6875rem] text-(--pr-tinta-2)">
@@ -100,7 +105,12 @@ function PantallaAdoptado() {
   return (
     <Marco>
       <div className="pr-tono-salvia grid aspect-square place-items-center rounded-xl">
-        <Ilustracion especie={rulo.especie} className="w-1/2 text-(--pr-tinta)" />
+        <Ilustracion
+          especie={rulo.especie}
+          semilla={rulo.id}
+          tamano={rulo.tamano}
+          className="w-1/2 text-(--pr-tinta)"
+        />
       </div>
       <p className="mt-2 inline-block rounded-full bg-(--pr-ok-suave) px-2 py-0.5 text-[0.6875rem] font-semibold text-(--pr-ok)">
         {ESTADOS.adoptado}

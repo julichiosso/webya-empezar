@@ -125,7 +125,12 @@ function Adoptar({
               className="w-full overflow-hidden rounded-2xl bg-(--pr-papel) text-left"
             >
               <span className={cn('grid aspect-square place-items-center', `pr-tono-${a.tono}`)}>
-                <Ilustracion especie={a.especie} className="w-3/5 text-(--pr-tinta)" />
+                <Ilustracion
+                  especie={a.especie}
+                  semilla={a.id}
+                  tamano={a.tamano}
+                  className="w-3/5 text-(--pr-tinta)"
+                />
               </span>
               <span className="block p-3">
                 <span className="pr-titulo block text-[1.125rem] font-semibold">{a.nombre}</span>
@@ -171,7 +176,12 @@ function Ficha({
       <div
         className={cn('mt-2 grid aspect-4/3 place-items-center rounded-2xl', `pr-tono-${a.tono}`)}
       >
-        <Ilustracion especie={a.especie} className="w-2/5 text-(--pr-tinta)" />
+        <Ilustracion
+          especie={a.especie}
+          semilla={a.id}
+          tamano={a.tamano}
+          className="w-2/5 text-(--pr-tinta)"
+        />
       </div>
       <h3 id={`ficha-${a.id}`} className="pr-titulo mt-4 text-[1.75rem] font-semibold">
         {a.nombre}

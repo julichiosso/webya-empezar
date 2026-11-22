@@ -73,7 +73,13 @@ export function Compartir({ animal, onCerrar }: { animal: Animal; onCerrar: () =
         >
           <rect width={LADO} height={LADO} fill={K.tonos[animal.tono]} />
           <g transform="translate(300 90)" color={K.tinta}>
-            <Ilustracion especie={animal.especie} tam={480} ojos={K.tonos[animal.tono]} />
+            <Ilustracion
+              especie={animal.especie}
+              semilla={animal.id}
+              tamano={animal.tamano}
+              tam={480}
+              ojos={K.tonos[animal.tono]}
+            />
           </g>
           <text
             x="80"
