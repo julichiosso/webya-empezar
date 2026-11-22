@@ -7,8 +7,11 @@ async function abrir(page: Page) {
   await page.goto('/demos/protectora', { waitUntil: 'networkidle' });
 }
 
-const vista = (page: Page, nombre: 'Vista pública' | 'Vista administración') =>
-  page.getByRole('button', { name: nombre, exact: true }).click();
+/** En el celular se cambia de vista; en la compu las dos están a la vista (no hay selector). */
+async function vista(page: Page, nombre: 'Vista pública' | 'Vista administración') {
+  const b = page.getByRole('button', { name: nombre, exact: true });
+  if (await b.isVisible()) await b.click();
+}
 
 test.describe('demo protectora', () => {
   test('adoptar: ficha, solicitud con consentimiento y aviso en la administración', async ({

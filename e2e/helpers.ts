@@ -120,3 +120,11 @@ export async function completarDatos(page: Page) {
   await w.getByLabel(/algo más/i).fill('Quiero turnos online');
   await w.getByRole('button', { name: 'Enviar mis datos' }).click();
 }
+
+/** Las demos sin el asistente de primera vez (se abre solo en el celular): los tests prueban la demo. */
+export async function sinGuia(page: Page) {
+  await page.addInitScript(() => {
+    for (const d of ['pedidos', 'turnos', 'web', 'tienda', 'protectora'])
+      localStorage.setItem(`webya:guia:${d}`, '1');
+  });
+}

@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
-import { BARRA_DEMOS } from '../src/content/demos/hub';
+import { sinGuia } from './helpers';
+
+test.beforeEach(({ page }) => sinGuia(page));
 import {
   CHECKOUT,
   COBRO,
@@ -17,7 +19,6 @@ const escritorio = (page: Page) => (page.viewportSize()?.width ?? 0) >= 1024;
 
 async function reservarYPagar(page: Page, resultado: string) {
   await page.goto('/demos/turnos');
-  await page.getByRole('button', { name: BARRA_DEMOS.aviso.cerrar }).click();
   await page.getByRole('button', { name: /^Corte Lavado/ }).click();
   await page.getByRole('button', { name: /Cualquiera/ }).click();
   await page.getByRole('button', { name: 'Reservar', exact: true }).first().click();
@@ -67,7 +68,6 @@ test('si el pago no sale, el horario queda guardado con su contador', async ({ p
 
 test('el cobro deja anotar lo que pagó y con qué medio', async ({ page }) => {
   await page.goto('/demos/turnos');
-  await page.getByRole('button', { name: BARRA_DEMOS.aviso.cerrar }).click();
   if (!escritorio(page)) await page.getByRole('button', { name: VISTAS_TURNOS.duenio }).click();
   await page
     .getByRole('button', { name: PANEL_TURNOS.termine })

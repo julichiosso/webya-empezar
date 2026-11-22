@@ -1,11 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
-import { BARRA_DEMOS } from '../src/content/demos/hub';
+import { ESTUDIO } from '../src/content/demos/studio';
+import { sinGuia } from './helpers';
+
+test.beforeEach(({ page }) => sinGuia(page));
 import { APP, CARRITO, COMANDA, ENVIADO, PANEL, VISTAS } from '../src/content/demos/pedidos/ui';
 
 /** Entra a la demo y pasa el aviso "Esto es una demo" (se abre solo la primera vez). */
 async function entrar(page: Page, ruta: string) {
   await page.goto(ruta);
-  await page.getByRole('button', { name: BARRA_DEMOS.aviso.cerrar }).click();
 }
 
 /**
@@ -64,12 +66,13 @@ test('/demo/gastronomia lleva a la demo nueva', async ({ page }) => {
 
 test('la demo avisa que es una demo y qué más hace el sistema real', async ({ page }) => {
   await page.goto('/demos/pedidos');
-  const aviso = page.getByRole('region', { name: BARRA_DEMOS.aviso.titulo });
-  await expect(aviso).toContainText(BARRA_DEMOS.aviso.ademas);
-  await page.getByRole('button', { name: BARRA_DEMOS.aviso.cerrar }).click();
-  await expect(aviso).toBeHidden();
-  await page.getByRole('button', { name: BARRA_DEMOS.infoAria }).click();
-  await expect(aviso).toBeVisible();
+  // Ya no se abre solo: vive en el Menú.
+  await page.getByRole('button', { name: ESTUDIO.menuAria }).click();
+  const menu = page.getByRole('dialog', { name: ESTUDIO.menuTitulo });
+  await expect(menu).toContainText(ESTUDIO.queMas);
+  await expect(menu).toContainText(ESTUDIO.aviso);
+  await menu.getByRole('button', { name: ESTUDIO.cerrar }).click();
+  await expect(menu).toBeHidden();
 });
 
 test('desde /demos se elige qué sistema probar', async ({ page }) => {

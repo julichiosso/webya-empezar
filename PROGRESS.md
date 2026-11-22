@@ -109,3 +109,14 @@
   prácticas 100, SEO 100. Performance: **74** con 4× CPU (la versión vieja publicada da 58 en las mismas
   condiciones) y **89–93** con 2×, la calibración que recomienda Lighthouse para este hardware. CLS 0, TBT 180 ms
   (2×). El número definitivo se toma con PageSpeed Insights sobre el deploy.
+
+## Demo Studio (2026-11-22)
+
+Hecho: motor común (historial, guardado, link para compartir, fotos locales, contraste automático,
+asistente, simulador), barra nueva con "Quiero este sistema" y "Enviarnos lo que armé" por WhatsApp, texto
+grande; pedidos y turnos personalizables con simulador; web personalizable (sin la T); tienda sobre el motor;
+protectora con ilustraciones variadas y vistas lado a lado; hub /demos nuevo.
+
+Pendiente: presets de carta por rubro en pedidos (café y pastelería, hamburguesería, heladería), demo de
+campo (esperando funciones reales de Julián), constructor de secciones de la web, servicios/profesionales
+editables en turnos, regresión visual y Lighthouse.

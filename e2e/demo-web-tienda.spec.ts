@@ -1,6 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import { DEMO_TIENDA_UI } from '../src/content/demos/tienda/datos';
 import { DEMO_WEB_UI, RUBROS_WEB } from '../src/content/demos/web/datos';
+import { sinGuia } from './helpers';
+
+test.beforeEach(({ page }) => sinGuia(page));
 
 /** La parte visible de la demo (escritorio o celular: cada una se monta una vez). */
 const visible = (page: Page) => page.getByRole('main');
