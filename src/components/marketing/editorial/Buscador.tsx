@@ -41,9 +41,10 @@ function Lupa() {
  * Buscador del hero: la persona escribe lo que necesita con sus palabras y aparecen sugerencias a medida
  * que escribe (combobox accesible: flechas, Enter, Escape). Todo se busca en el navegador; lo escrito se
  * limpia y se recorta, nunca se interpreta como HTML ni se envía. La última opción siempre lleva lo
- * escrito a WhatsApp, por si no está en la página.
+ * escrito a WhatsApp, por si no está en la página. Compacto: sin rótulo visible (lo dice el título de la
+ * sección) ni ejemplos abajo (los rubros ya están a la vista).
  */
-export function Buscador() {
+export function Buscador({ compacto = false }: { compacto?: boolean }) {
   const router = useRouter();
   const id = useId();
   const caja = useRef<HTMLInputElement>(null);
@@ -133,7 +134,10 @@ export function Buscador() {
   return (
     <div className="relative">
       <form role="search" onSubmit={(e) => e.preventDefault()} className="relative">
-        <label htmlFor={`${id}-caja`} className="e-rotulo mb-2.5 block text-ed-muted">
+        <label
+          htmlFor={`${id}-caja`}
+          className={compacto ? 'sr-only' : 'e-rotulo mb-2.5 block text-ed-muted'}
+        >
           {B.etiqueta}
         </label>
         <div className="e-buscador relative flex min-h-14 items-center gap-3 rounded-2xl bg-ed-surface px-4">
@@ -232,7 +236,7 @@ export function Buscador() {
         </ul>
       ) : null}
 
-      {!texto ? (
+      {!texto && !compacto ? (
         <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2">
           <span className="e-chico text-ed-muted">{B.ejemplosEtiqueta}</span>
           {B.ejemplos.map((ej) => (

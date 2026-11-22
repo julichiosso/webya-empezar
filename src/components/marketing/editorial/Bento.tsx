@@ -1,171 +1,156 @@
-import Link from 'next/link';
+import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { BENTO, SECCIONES } from '@/content/home';
-import { CabezaSeccion } from './CabezaSeccion';
-import { FondoGrilla } from './FondoGrilla';
+import { getProyecto } from '@/content/proyectos';
+import { LinkChevron } from './LinkChevron';
+import { Telefono } from './Pantallas';
+import { TituloPalabras } from './TituloPalabras';
 
 type CeldaId = keyof typeof BENTO.celdas;
 
-/** Cuadrados redondeados (radio 3) como un solo path: muchos <rect> sueltos sumaban nodos al DOM. */
-function grilla(
-  filas: number,
-  columnas: number,
-  x0: number,
-  y0: number,
-  paso: number,
-  lado: number,
-  pasoY = paso,
-) {
-  let d = '';
-  for (let f = 0; f < filas; f++)
-    for (let c = 0; c < columnas; c++) {
-      const x = x0 + c * paso;
-      const y = y0 + f * pasoY;
-      const l = lado - 6;
-      d += `M${x + 3} ${y}h${l}a3 3 0 0 1 3 3v${l}a3 3 0 0 1-3 3h-${l}a3 3 0 0 1-3-3v-${l}a3 3 0 0 1 3-3z`;
-    }
-  return d;
-}
+/** Las cuatro grandes llevan el sitio real de un cliente en el teléfono. */
+const GRANDES: readonly { id: CeldaId; proyecto: string; oscura?: boolean }[] = [
+  { id: 'turnero', proyecto: 'canina', oscura: true },
+  { id: 'pedidos', proyecto: 'micios' },
+  { id: 'tienda', proyecto: 'petrucci' },
+  { id: 'web', proyecto: 'lorena', oscura: true },
+];
 
-/** Dibujos de línea (pathLength=1: se trazan al entrar en pantalla). Decorativos. */
-const DIBUJOS: Record<CeldaId, React.ReactNode> = {
-  turnero: (
+/** Dibujos de línea de las tarjetas chicas (se trazan al entrar en pantalla). Decorativos. */
+const DIBUJOS: Partial<Record<CeldaId, React.ReactNode>> = {
+  campo: (
     <>
-      <path className="e-trazo" pathLength={1} d={grilla(4, 7, 4, 8, 22, 16)} />
-      <rect
-        x={4 + 4 * 22}
-        y={8 + 2 * 22}
-        width={16}
-        height={16}
-        rx={3}
-        fill="currentColor"
-        stroke="none"
+      <circle className="e-trazo" pathLength={1} cx={86} cy={26} r={12} />
+      <path className="e-trazo" pathLength={1} d="M6 84h108M14 84c10-22 26-34 46-34s36 12 46 34" />
+      <path
+        className="e-trazo"
+        pathLength={1}
+        d="M30 84l10-18M50 84l6-22M70 84l-2-22M90 84l-8-18"
       />
-      <circle className="e-trazo" pathLength={1} cx={196} cy={50} r={30} />
-      <path className="e-trazo" pathLength={1} d="M196 20a30 30 0 0 1 0 60" strokeWidth={6} />
     </>
   ),
-  pedidos: (
+  entidades: (
     <>
       <path
         className="e-trazo"
         pathLength={1}
-        d="M20 6h60v84l-7.5-6-7.5 6-7.5-6-7.5 6-7.5-6-7.5 6-7.5-6-7.5 6z"
+        d="M60 86 22 50a20 20 0 0 1 38-24 20 20 0 0 1 38 24z"
       />
-      <path className="e-trazo" pathLength={1} d="M32 26h36M32 40h36M32 54h20" />
-      <path className="e-trazo" pathLength={1} d="M104 48h64M150 32l18 16-18 16" />
-    </>
-  ),
-  tienda: (
-    <>
-      <path className="e-trazo" pathLength={1} d="M24 34h72l-6 56H30z" />
-      <path className="e-trazo" pathLength={1} d="M44 34v-8a16 16 0 0 1 32 0v8" />
-    </>
-  ),
-  catalogo: (
-    <>
-      <path className="e-trazo" pathLength={1} d={grilla(2, 3, 8, 10, 38, 30, 40)} />
-    </>
-  ),
-  web: (
-    <>
-      <rect className="e-trazo" pathLength={1} x={6} y={8} width={108} height={78} rx={6} />
-      <path className="e-trazo" pathLength={1} d="M6 24h108M20 44h50M20 56h70M20 68h40" />
     </>
   ),
   medida: (
     <>
-      <path className="e-trazo" pathLength={1} d="M10 20h40v40H10zM70 40h40v40H70z" />
-      <path className="e-trazo" pathLength={1} d="M50 40h20M30 60v20h40" />
+      <path className="e-trazo" pathLength={1} d="M14 20h36v36H14zM70 44h36v36H70z" />
+      <path className="e-trazo" pathLength={1} d="M50 38h20M32 56v24h38" />
     </>
   ),
 };
+const CHICAS: readonly CeldaId[] = ['campo', 'entidades', 'medida'];
 
-interface CeldaDef {
-  id: CeldaId;
-  clases: string;
-  ancho: number;
+function Acciones({ id }: { id: CeldaId }) {
+  const t = BENTO.celdas[id];
+  return (
+    <div className="mt-3 flex flex-wrap items-center justify-center gap-x-6">
+      {t.demo ? (
+        <LinkChevron href={t.demo} externo>
+          {BENTO.verDemo}
+        </LinkChevron>
+      ) : null}
+      <LinkChevron href={t.href}>{BENTO.masInfo}</LinkChevron>
+    </div>
+  );
 }
 
-/** Escritorio: el turnero ocupa dos filas; abajo, tres iguales. Celular: el turnero arriba y el resto de a dos. */
-const CELDAS: readonly CeldaDef[] = [
-  { id: 'turnero', clases: 'col-span-2 md:col-span-12 lg:col-span-7 lg:row-span-2', ancho: 240 },
-  { id: 'pedidos', clases: 'md:col-span-6 lg:col-span-5', ancho: 180 },
-  { id: 'tienda', clases: 'md:col-span-6 lg:col-span-5', ancho: 120 },
-  { id: 'catalogo', clases: 'md:col-span-4', ancho: 120 },
-  { id: 'web', clases: 'md:col-span-4', ancho: 120 },
-  { id: 'medida', clases: 'col-span-2 md:col-span-4', ancho: 120 },
-];
+/** Tarjeta grande: nombre, una línea, dos acciones y el teléfono con un sitio real, cortado abajo. */
+function Grande({ id, proyecto, oscura, i }: (typeof GRANDES)[number] & { i: number }) {
+  const t = BENTO.celdas[id];
+  const img = getProyecto(proyecto)?.imagenes.mobile;
+  return (
+    <li
+      className={cn(
+        'a-tile min-h-[27rem] px-6 pt-10 md:min-h-[36rem] md:pt-14',
+        oscura && 'tono-oscuro',
+      )}
+      data-reveal=""
+      style={{ '--i': i % 2 } as CSSProperties}
+    >
+      <h3 className="a-tile-titulo">{t.titulo}</h3>
+      <p className="a-sub mt-2 text-ed-muted">{t.texto}</p>
+      <Acciones id={id} />
+      {img ? (
+        <div className="a-tile-visual mt-auto w-[62%] max-w-64 translate-y-[38%] pt-10 md:max-w-72">
+          <Telefono className="max-w-none" barra={!img.completa} colorBarra={img.barra}>
+            <Image
+              src={img.src}
+              alt=""
+              fill
+              sizes="(min-width: 768px) 18rem, 60vw"
+              className="object-cover object-top"
+            />
+          </Telefono>
+        </div>
+      ) : null}
+    </li>
+  );
+}
 
-/** Bento "Qué armamos": grilla asimétrica, cada tarjeta lleva a la página de su producto. */
+/** Tarjeta chica: dibujo de línea, nombre, una línea y sus acciones. */
+function Chica({ id, i }: { id: CeldaId; i: number }) {
+  const t = BENTO.celdas[id];
+  return (
+    <li
+      className="a-tile justify-center px-6 py-10 md:py-12"
+      data-reveal=""
+      style={{ '--i': i } as CSSProperties}
+    >
+      <svg
+        viewBox="0 0 120 100"
+        className="h-16 w-auto md:h-20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        aria-hidden="true"
+        data-draw=""
+      >
+        {DIBUJOS[id]}
+      </svg>
+      <h3 className="mt-5 text-[1.5rem] leading-tight font-semibold tracking-[-0.03em] md:text-[1.75rem]">
+        {t.titulo}
+      </h3>
+      <p className="e-cuerpo mt-1 text-ed-muted">{t.texto}</p>
+      <Acciones id={id} />
+    </li>
+  );
+}
+
+/**
+ * Productos de la home, como la vidriera de una marca de tecnología: cuatro tarjetas grandes con el sitio
+ * real de un cliente en el teléfono y tres chicas. Cada una: nombre, una línea, "Ver demo" y "Más info".
+ */
 export function Bento() {
   const S = SECCIONES.queArmo;
   return (
     <section
       id={S.id}
-      className="tono-claro e-seccion e-con-fondo"
+      className="tono-claro pt-6 pb-[clamp(4rem,8vw,8rem)] md:pt-10"
       aria-labelledby="titulo-que-armamos"
     >
-      <FondoGrilla />
       <div className="e-wrap">
-        <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-que-armamos" />
-        <ul className="mt-8 grid grid-cols-2 gap-2.5 md:mt-12 md:grid-cols-12 md:gap-4">
-          {CELDAS.map((c, i) => {
-            const t = BENTO.celdas[c.id];
-            const estrella = c.id === 'turnero';
-            return (
-              <li
-                key={c.id}
-                className={c.clases}
-                data-reveal=""
-                style={{ '--i': i % 4 } as CSSProperties}
-              >
-                <Link
-                  href={t.href}
-                  className={cn(
-                    'e-celda group flex h-full flex-col justify-between rounded-2xl border border-ed-line bg-ed-bg active:opacity-70',
-                    estrella
-                      ? 'tono-oscuro min-h-60 gap-8 p-5 md:min-h-80 md:p-8 lg:min-h-full'
-                      : 'min-h-38 gap-4 p-4 md:min-h-52 md:gap-8 md:p-7',
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <svg
-                      viewBox={`0 0 ${c.ancho} 100`}
-                      className={cn('h-14 w-auto md:h-20', estrella ? 'md:h-28' : 'max-md:hidden')}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      aria-hidden="true"
-                      data-draw=""
-                    >
-                      {DIBUJOS[c.id]}
-                    </svg>
-                  </div>
-                  <div>
-                    <h3
-                      className={
-                        estrella
-                          ? 'e-h2'
-                          : 'text-[1.0625rem] leading-tight font-semibold tracking-[-0.02em] md:text-[1.375rem]'
-                      }
-                    >
-                      {t.titulo}
-                    </h3>
-                    <p
-                      className={cn(
-                        'mt-2 max-w-[40ch] text-ed-muted',
-                        estrella ? 'e-lead' : 'text-[0.8125rem] leading-snug md:text-[0.9375rem]',
-                      )}
-                    >
-                      {t.texto}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            );
-          })}
+        <TituloPalabras
+          lineas={[S.titulo]}
+          id="titulo-que-armamos"
+          className="a-titulo mx-auto text-center"
+        />
+        <ul className="mt-10 grid grid-cols-1 gap-3 md:mt-14 md:grid-cols-2 md:gap-4">
+          {GRANDES.map((g, i) => (
+            <Grande key={g.id} {...g} i={i} />
+          ))}
+        </ul>
+        <ul className="mt-3 grid grid-cols-1 gap-3 md:mt-4 md:grid-cols-3 md:gap-4">
+          {CHICAS.map((id, i) => (
+            <Chica key={id} id={id} i={i} />
+          ))}
         </ul>
       </div>
     </section>

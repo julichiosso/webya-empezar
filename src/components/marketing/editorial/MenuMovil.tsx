@@ -49,7 +49,7 @@ export function MenuMovil({ contacto }: { contacto: string }) {
       <div
         id={id}
         hidden={!abierto}
-        className="tono-oscuro fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto"
+        className="tono-claro fixed inset-x-0 top-14 bottom-0 z-40 overflow-y-auto"
       >
         <nav
           aria-label={HEADER.navegacion}

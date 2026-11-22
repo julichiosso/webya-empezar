@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import { Bento } from '@/components/marketing/editorial/Bento';
 import { Cierre } from '@/components/marketing/editorial/Cierre';
 import { HeroInicio } from '@/components/marketing/editorial/Hero';
-import { Manifiesto } from '@/components/marketing/editorial/Manifiesto';
-import { NosotrosInicio } from '@/components/marketing/editorial/Nosotros';
 import { Pagina } from '@/components/marketing/editorial/Pagina';
+import { Porque } from '@/components/marketing/editorial/Porque';
 import { ProyectosInicio } from '@/components/marketing/editorial/Proyectos';
+import { Rubros } from '@/components/marketing/editorial/Rubros';
 import { SEO_SITIO, jsonLdNegocio, serializarLd } from '@/content/seo';
 import { siteConfig } from '@/lib/site-config';
 
@@ -36,20 +36,19 @@ const LD = jsonLdNegocio({
 });
 
 /**
- * Home hub: en la primera pantalla, la marca, qué armamos, el buscador, las dos acciones, los rubros y
- * dónde atendemos. Después, qué hacemos (Creá, Digitalizá, Crecé), el bento que lleva a cada producto, los proyectos reales, quiénes somos y el
- * cierre. Lo largo (cada
- * producto, el configurador, la zona) vive en su propia página.
+ * Home, como la portada de una marca de tecnología: el lema y los sitios reales en iPhones, los productos
+ * en tarjetas (nombre, una línea, demo y más info), encontrar tu rubro, los proyectos, por qué Webya y el
+ * cierre. Poco texto: la gente no lee. Lo largo vive en la página de cada producto.
  */
 export default function Inicio() {
   return (
     <Pagina>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializarLd(LD) }} />
       <HeroInicio />
-      <Manifiesto />
       <Bento />
+      <Rubros />
       <ProyectosInicio />
-      <NosotrosInicio />
+      <Porque />
       <Cierre />
     </Pagina>
   );

@@ -41,7 +41,7 @@ for (const ruta of RUTAS) {
   });
 }
 
-test('la home entra en la primera pantalla: el lema, las dos acciones y el buscador', async ({
+test('la home entra en la primera pantalla: el lema, las demos y las dos acciones', async ({
   page,
 }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
@@ -49,8 +49,9 @@ test('la home entra en la primera pantalla: el lema, las dos acciones y el busca
   await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(
     'Creá. Digitalizá. Crecé.',
   );
-  // En escritorio están en el hero; en el celular, en la barra fija de abajo. Siempre a la vista.
-  for (const nombre of ['Armá tu sistema', 'Escribinos']) {
+  // En escritorio están en el hero y el header; en el celular, "Ver demos" en el hero y el resto en la
+  // barra fija de abajo. Siempre a la vista.
+  for (const nombre of ['Ver demos', 'Armá tu sistema', 'Escribinos']) {
     const cajas = await page
       .getByRole('link', { name: new RegExp(`^${nombre}`) })
       .evaluateAll((els) =>
@@ -61,9 +62,6 @@ test('la home entra en la primera pantalla: el lema, las dos acciones y el busca
       nombre,
     ).toBe(true);
   }
-  const hero = page.locator('#titulo-hero').locator('xpath=ancestor::section');
-  const buscador = await hero.getByRole('combobox').boundingBox();
-  expect(buscador!.y, 'buscador').toBeLessThan(vh);
 });
 
 test('la home muestra dónde atendemos y lleva al mapa de zonas', async ({ page }) => {

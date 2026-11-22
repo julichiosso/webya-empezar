@@ -1,8 +1,7 @@
 /**
- * Fondo técnico de las secciones claras: una grilla fina con marcas en las intersecciones, como un plano
- * de ingeniería. Negro muy tenue, sin color; se desvanece hacia los bordes. Detrás del contenido y oculto
- * a lectores. La sección que lo usa lleva `e-con-fondo`.
+ * Antes: una grilla técnica de fondo en las secciones claras. Desde el rediseño "empresa" (fondos planos,
+ * blanco y gris, como una marca de tecnología) no dibuja nada; queda para no tocar cada sección.
  */
 export function FondoGrilla() {
-  return <span aria-hidden="true" className="e-fondo-grilla" />;
+  return null;
 }

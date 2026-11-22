@@ -75,12 +75,12 @@ export default async function PaginaCaso({ params }: Props) {
   return (
     <Pagina>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializarLd(ld) }} />
-      <section className="tono-oscuro" aria-labelledby="titulo-hero">
-        <div className="e-wrap pt-8 pb-10 md:pt-14 md:pb-14">
+      <section className="tono-claro" aria-labelledby="titulo-hero">
+        <div className="e-wrap flex flex-col items-center pt-8 pb-10 text-center md:pt-12 md:pb-14">
           <Link href={RUTAS.proyectos} className="e-link e-chico text-ed-muted">
             {UI.caso.volver}
           </Link>
-          <p className="e-chico mt-8 text-ed-muted">
+          <p className="a-ceja mt-8 text-ed-muted">
             {p.rubro} · {p.ciudad} · {ESTADO_PROYECTO[p.estado]}
           </p>
           <TituloPalabras
@@ -88,10 +88,10 @@ export default async function PaginaCaso({ params }: Props) {
             id="titulo-hero"
             lineas={[p.cliente]}
             alCargar
-            className="e-display e-hero-compacto mt-3 max-w-[18ch]"
+            className="a-hero mt-2 max-w-[16ch]"
           />
-          <p className="e-lead mt-4 text-ed-muted">{p.sistema}</p>
-          <ul className="mt-5 flex flex-wrap gap-1.5">
+          <p className="a-sub mt-3 text-ed-muted">{p.sistema}</p>
+          <ul className="mt-5 flex flex-wrap justify-center gap-1.5">
             {p.etiquetas.map((e) => (
               <li key={e} className="rounded-full bg-ed-surface px-3 py-1.5 text-[0.8125rem]">
                 {e}
@@ -105,7 +105,7 @@ export default async function PaginaCaso({ params }: Props) {
               </Boton>
             </div>
           ) : null}
-          <div className="mt-10 rounded-[1.75rem] bg-ed-surface p-4 sm:p-7 md:mt-14 md:p-10">
+          <div className="mt-10 w-full rounded-[1.75rem] bg-ed-surface p-4 text-left sm:p-7 md:mt-14 md:p-10">
             <Composicion caso={p} prioridad tamanos="(min-width: 1024px) 56rem, 92vw" />
           </div>
         </div>

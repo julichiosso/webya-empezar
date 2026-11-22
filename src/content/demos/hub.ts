@@ -6,11 +6,11 @@ import type { TipoId } from '../servicios';
 
 export const HUB_DEMOS = {
   titulo: 'Probá un sistema',
-  bajada: 'Elegí cuál. Se abre como el sistema de verdad, con datos de ejemplo.',
+  bajada: 'Con datos de ejemplo. Sin registrarte.',
   volver: 'Volver al sitio',
   abrir: 'Ver demo',
   rubros: 'O elegí tu rubro',
-  nota: 'Cada demo muestra una parte del sistema. El que se instala en tu negocio tiene más funciones y se ajusta a cómo trabajás.',
+  nota: 'El sistema real tiene más funciones.',
   seo: {
     titulo: 'Demos de sistemas para negocios',
     descripcion:
@@ -41,8 +41,7 @@ export const DEMOS: readonly DemoInfo[] = [
     href: '/demos/pedidos',
     rubro: 'Gastronomía',
     titulo: 'Pedidos online',
-    texto:
-      'El cliente arma el pedido desde el celular, elige a qué hora lo retira y el pedido entra al panel del local.',
+    texto: 'Piden del celular y eligen la hora.',
     barra: 'Pedidos',
     enUso: 'micios',
     ademas: [
@@ -60,7 +59,7 @@ export const DEMOS: readonly DemoInfo[] = [
     href: '/demos/turnos',
     rubro: 'Peluquería, estética y salud',
     titulo: 'Turnos con seña',
-    texto: 'El cliente elige servicio, día y hora, paga la seña y el turno entra solo a tu agenda.',
+    texto: 'Reservan y pagan la seña.',
     barra: 'Turnos',
     ademas: [
       'Cobra la seña de verdad con Mercado Pago y la acredita sola',
@@ -78,8 +77,7 @@ export const DEMOS: readonly DemoInfo[] = [
     href: '/demos/web',
     rubro: 'Profesionales, salud y comercios',
     titulo: 'Página web',
-    texto:
-      'La misma página para cada rubro: cambiá de negocio, mirala en el celular y en la compu y tocá WhatsApp.',
+    texto: 'Cambiá de rubro y mirala en vivo.',
     barra: 'Página web',
     enUso: 'lorena',
     ademas: [
@@ -97,7 +95,7 @@ export const DEMOS: readonly DemoInfo[] = [
     href: '/demos/tienda',
     rubro: 'Comercios y tiendas',
     titulo: 'Tienda en vivo',
-    texto: 'Poné tu nombre, tus colores y tres productos, y mirá tu tienda armada al instante.',
+    texto: 'Tu nombre, tus colores, tu tienda.',
     barra: 'Tienda online',
     enUso: 'petrucci',
     ademas: [
@@ -115,8 +113,7 @@ export const DEMOS: readonly DemoInfo[] = [
     href: '/demos/protectora',
     rubro: 'Protectoras, clubes y entidades',
     titulo: 'Protectoras y entidades',
-    texto:
-      'Adoptar, hacerse socio, donar y anotarse como voluntario; y del otro lado, cómo lo gestiona el equipo.',
+    texto: 'Adopciones, socios y donaciones.',
     barra: 'Protectoras',
     ademas: [
       'Se arma con el nombre, los colores y los módulos de cada organización',

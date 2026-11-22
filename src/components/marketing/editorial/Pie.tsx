@@ -5,24 +5,27 @@ import { enlaceContacto } from '@/components/marketing/editorial/contacto';
 import { CTA, FRASES, HEADER, PIE } from '@/content/home';
 import { siteConfig } from '@/lib/site-config';
 
-const TITULO = 'e-rotulo text-ed-muted';
-const LINK = 'e-link e-link-nav e-link-alto text-ed-muted hover:text-ed-fg';
+const TITULO = 'text-[0.75rem] font-semibold text-ed-fg';
+const LINK = 'e-link e-link-nav inline-flex min-h-8 items-center text-ed-muted hover:text-ed-fg';
 
-/** Pie: lema, productos, Webya (demos, proyectos, nosotros, zona), contacto, legales y el logo. */
+/**
+ * Pie sobrio, como el de una marca de tecnología: gris claro, letra chica y todo ordenado en columnas
+ * (productos, Webya, contacto y legales). Arriba, el logo y la promesa en una línea.
+ */
 export function Pie() {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
-    <footer className="tono-oscuro">
-      <div className="e-wrap grid grid-cols-12 gap-x-6 gap-y-10 py-14 md:py-20">
-        <div className="col-span-12 lg:col-span-4">
-          <p className="e-h2 max-w-[14ch]">{FRASES.promesa}</p>
-          <p className="e-chico mt-4 text-ed-muted">{FRASES.lema}</p>
-        </div>
-        <nav className="col-span-6 sm:col-span-3 lg:col-span-2" aria-labelledby="pie-productos">
+    <footer className="tono-gris text-[0.75rem]">
+      <div className="e-wrap flex flex-wrap items-center justify-between gap-3 border-b border-ed-line pt-10 pb-6">
+        <LogoWebya decorativo className="h-5 w-auto" />
+        <p className="text-ed-muted">{FRASES.promesa}</p>
+      </div>
+      <div className="e-wrap grid grid-cols-12 gap-x-6 gap-y-8 py-8">
+        <nav className="col-span-6 sm:col-span-3" aria-labelledby="pie-productos">
           <h2 id="pie-productos" className={TITULO}>
             {PIE.productos}
           </h2>
-          <ul className="e-chico mt-4">
+          <ul className="mt-2">
             {HEADER.menu.links.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className={LINK}>
@@ -32,11 +35,11 @@ export function Pie() {
             ))}
           </ul>
         </nav>
-        <nav className="col-span-6 sm:col-span-3 lg:col-span-2" aria-labelledby="pie-webya">
+        <nav className="col-span-6 sm:col-span-3" aria-labelledby="pie-webya">
           <h2 id="pie-webya" className={TITULO}>
             {PIE.webya}
           </h2>
-          <ul className="e-chico mt-4">
+          <ul className="mt-2">
             {HEADER.menu.otros.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className={LINK}>
@@ -46,9 +49,9 @@ export function Pie() {
             ))}
           </ul>
         </nav>
-        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+        <div className="col-span-6 sm:col-span-3">
           <h2 className={TITULO}>{PIE.contacto}</h2>
-          <ul className="e-chico mt-4">
+          <ul className="mt-2">
             {contacto.canal === 'whatsapp' ? (
               <li>
                 <a
@@ -80,9 +83,9 @@ export function Pie() {
             </li>
           </ul>
         </div>
-        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+        <div className="col-span-6 sm:col-span-3">
           <h2 className={TITULO}>{PIE.legal}</h2>
-          <ul className="e-chico mt-4">
+          <ul className="mt-2">
             <li>
               <Link href="/privacidad" className={LINK}>
                 {PIE.privacidad}
@@ -96,11 +99,8 @@ export function Pie() {
           </ul>
         </div>
       </div>
-      <div className="e-wrap" aria-hidden="true">
-        <LogoWebya decorativo className="h-auto w-[min(100%,34rem)]" />
-      </div>
-      <div className="e-wrap py-8">
-        <p className="e-chico text-ed-muted">{PIE.derechos(new Date().getFullYear())}</p>
+      <div className="e-wrap border-t border-ed-line py-5">
+        <p className="text-ed-muted">{PIE.derechos(new Date().getFullYear())}</p>
       </div>
     </footer>
   );

@@ -15,20 +15,20 @@ export const ID_PRINCIPAL = 'contenido';
  */
 export function Encabezado() {
   return (
-    <header className="tono-oscuro sticky top-0 z-40">
+    <header className="tono-claro a-nav sticky top-0 z-40">
       <a
         href={`#${ID_PRINCIPAL}`}
         className="e-saltar e-btn e-btn-primario e-btn-chico top-2 left-4 z-50 -translate-y-24 focus:translate-y-0"
       >
         {HEADER.saltar}
       </a>
-      <div className="e-wrap flex h-16 items-center justify-between gap-4">
+      <div className="e-wrap flex h-14 items-center justify-between gap-4">
         <Link
           href="/"
           aria-label={MARCA.inicio}
           className="-m-2 inline-flex min-h-11 items-center p-2"
         >
-          <LogoWebya decorativo className="h-6 w-auto" />
+          <LogoWebya decorativo className="h-5 w-auto" />
         </Link>
         <nav aria-label={HEADER.navegacion} className="hidden lg:block">
           <ul className="flex items-center gap-7">
@@ -36,7 +36,7 @@ export function Encabezado() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="e-link e-link-nav e-chico text-ed-muted hover:text-ed-fg"
+                  className="e-link e-link-nav text-[0.8125rem] text-ed-fg/80 hover:text-ed-fg"
                 >
                   {l.texto}
                 </Link>
@@ -50,7 +50,7 @@ export function Encabezado() {
             target="_blank"
             rel="noopener"
             aria-label={`${HEADER.demos}${CTA.pestana}`}
-            className="e-link e-link-nav e-chico flex min-h-11 items-center px-2 text-ed-muted hover:text-ed-fg"
+            className="e-link e-link-nav flex min-h-11 items-center px-2 text-[0.8125rem] text-ed-fg/80 hover:text-ed-fg"
           >
             {HEADER.demos}
           </a>

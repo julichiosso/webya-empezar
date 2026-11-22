@@ -25,17 +25,17 @@ export function HeroZona() {
   const d = datosZona();
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
-    <section className="tono-oscuro" aria-labelledby="titulo-hero">
-      <div className="e-wrap pt-10 pb-12 md:pt-20 md:pb-20">
+    <section className="tono-claro" aria-labelledby="titulo-hero">
+      <div className="e-wrap flex flex-col items-center pt-10 pb-12 text-center md:pt-16 md:pb-16">
         <TituloPalabras
           as="h1"
           id="titulo-hero"
           lineas={Z.titulo}
           alCargar
-          className="e-display max-w-[14ch]"
+          className="a-hero max-w-[14ch]"
         />
         <p
-          className="e-lead e-hero-aparece mt-6 max-w-[40ch] text-ed-muted md:mt-8"
+          className="a-sub e-hero-aparece mt-4 max-w-[36ch] text-ed-muted md:mt-5"
           style={aparece(1)}
         >
           {Z.bajada}
@@ -43,10 +43,7 @@ export function HeroZona() {
         <p className="e-hero-aparece e-chico mt-4 text-ed-muted" style={aparece(2)}>
           {Z.datos(d.zonas, d.localidades)}
         </p>
-        <div
-          className="e-hero-aparece mt-7 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3"
-          style={aparece(3)}
-        >
+        <div className="e-hero-aparece mt-7 flex flex-wrap justify-center gap-3" style={aparece(3)}>
           <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
           <Boton
             href={contacto.href}

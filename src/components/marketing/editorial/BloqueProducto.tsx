@@ -4,10 +4,9 @@ import { CTA, RUTAS } from '@/content/home';
 import type { Landing } from '@/content/landings';
 import { getProyecto } from '@/content/proyectos';
 import { Boton } from './Boton';
-import { CabezaSeccion } from './CabezaSeccion';
-import { FondoGrilla } from './FondoGrilla';
 import { FlujoPedidos, Telefono } from './Pantallas';
 import { PasosTurnero } from './PasosTurnero';
+import { TituloPalabras } from './TituloPalabras';
 
 /** Captura real del proyecto que prueba cada producto (la tienda y la web). */
 const PRUEBA: Partial<Record<Landing['tipo'], string>> = { tienda: 'petrucci', web: 'lorena' };
@@ -29,29 +28,38 @@ function Visual({ landing }: { landing: Landing }) {
   );
 }
 
-function Ctas({ landing }: { landing: Landing }) {
+/** La prueba (dónde funciona) y las dos acciones, centradas. */
+function Cierre({ landing }: { landing: Landing }) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row">
-      <Boton href={RUTAS.armarTipo(landing.tipo)}>{CTA.armar}</Boton>
-      <Boton href={landing.demo} variante="secundario" externo>
-        {CTA.verDemo}
-      </Boton>
+    <div className="mt-12 flex flex-col items-center gap-5 text-center md:mt-16" data-reveal="">
+      <p className="a-sub text-ed-muted">{landing.bloque.prueba}</p>
+      <div className="flex flex-wrap justify-center gap-3">
+        <Boton href={RUTAS.armarTipo(landing.tipo)}>{CTA.armar}</Boton>
+        <Boton href={landing.demo} variante="secundario" externo>
+          {CTA.verDemo}
+        </Boton>
+      </div>
     </div>
   );
 }
 
+/** Título de sección centrado, grande. */
+function Titulo({ texto, id }: { texto: string; id: string }) {
+  return <TituloPalabras lineas={[texto]} id={id} className="a-titulo mx-auto text-center" />;
+}
+
 /**
- * El producto contado en orden: dolor → solución → puntos → prueba → acción. El turnero se cuenta en
- * pasos con el teléfono que los muestra; el resto, en dos columnas con la captura o el flujo.
+ * El producto contado como la página de un producto de tecnología: un título, la idea en una línea, las
+ * cuatro funciones en tarjetas y el teléfono real al lado. El turnero se cuenta en pasos con el teléfono
+ * que los muestra. Al final, dónde funciona y las dos acciones.
  */
 export function BloqueProducto({ landing }: { landing: Landing }) {
   const B = landing.bloque;
   if (landing.tipo === 'turnero') {
     return (
-      <section className="tono-claro e-seccion e-con-fondo" aria-labelledby="titulo-producto">
-        <FondoGrilla />
+      <section className="tono-gris a-seccion" aria-labelledby="titulo-producto">
         <div className="e-wrap">
-          <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
+          <Titulo texto={B.titulo} id="titulo-producto" />
           <div className="mt-10 md:mt-14">
             <PasosTurnero
               pasos={B.puntos.map((p) => ({
@@ -62,75 +70,62 @@ export function BloqueProducto({ landing }: { landing: Landing }) {
               etiqueta={B.alt}
             />
           </div>
-          <div className="mt-10 flex flex-col gap-6 pt-8 md:flex-row md:items-center md:justify-between">
-            <p className="e-lead max-w-[46ch]">{B.prueba}</p>
-            <Ctas landing={landing} />
-          </div>
+          <Cierre landing={landing} />
         </div>
       </section>
     );
   }
   return (
-    <section className="tono-claro e-seccion e-con-fondo" aria-labelledby="titulo-producto">
-      <FondoGrilla />
+    <section className="tono-gris a-seccion" aria-labelledby="titulo-producto">
       <div className="e-wrap">
-        <CabezaSeccion rotulo={B.rotulo} titulo={B.titulo} idTitulo="titulo-producto" />
-        <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-10 md:mt-12">
-          <div className="col-span-12 lg:col-span-6">
-            <p className="e-h3 max-w-[30ch] font-medium" data-reveal="">
-              {B.dolor}
-            </p>
-            <p
-              className="e-lead mt-5 max-w-[48ch] text-ed-muted"
-              data-reveal=""
-              style={{ '--i': 1 } as CSSProperties}
-            >
-              {B.solucion}
-            </p>
-            <dl className="mt-8 grid grid-cols-1 sm:grid-cols-2">
-              {B.puntos.map((p, i) => (
-                <div
-                  key={p.titulo}
-                  className="py-4 sm:odd:pr-6 sm:even:pl-6"
-                  data-reveal=""
-                  style={{ '--i': i } as CSSProperties}
-                >
-                  <dt className="font-semibold">{p.titulo}</dt>
-                  <dd className="e-chico mt-1 text-ed-muted">{p.texto}</dd>
-                </div>
-              ))}
-            </dl>
-            <p className="e-cuerpo mt-6">{B.prueba}</p>
-            <div className="mt-6">
-              <Ctas landing={landing} />
+        <Titulo texto={B.titulo} id="titulo-producto" />
+        <p className="a-sub mx-auto mt-3 max-w-[30ch] text-center text-ed-muted" data-reveal="">
+          {B.solucion}
+        </p>
+        <div className="mt-10 grid grid-cols-1 gap-3 md:mt-14 md:gap-4 lg:grid-cols-12">
+          <div className="a-tile justify-center px-6 py-10 lg:col-span-5" data-reveal="">
+            <div className="w-full max-w-72">
+              <Visual landing={landing} />
             </div>
           </div>
-          <div className="col-span-12 lg:col-span-5 lg:col-start-8" data-reveal="">
-            <Visual landing={landing} />
+          <div className="grid grid-cols-2 gap-3 md:gap-4 lg:col-span-7">
+            {B.puntos.map((p, i) => (
+              <div
+                key={p.titulo}
+                className="a-tile justify-center px-4 py-8 md:px-8 md:py-12"
+                data-reveal=""
+                style={{ '--i': i } as CSSProperties}
+              >
+                <p className="text-[1.25rem] leading-tight font-semibold tracking-[-0.03em] md:text-[1.75rem]">
+                  {p.titulo}
+                </p>
+                <p className="e-chico mt-2 text-ed-muted md:text-[1rem]">{p.texto}</p>
+              </div>
+            ))}
           </div>
         </div>
+        <Cierre landing={landing} />
       </div>
     </section>
   );
 }
 
-/** "Para quién": los rubros con su lenguaje, para que cada negocio se reconozca. */
+/** "Para quién": los rubros como chips, para que cada negocio se reconozca de un vistazo. */
 export function ParaQuien({ landing }: { landing: Landing }) {
   const P = landing.paraQuien;
   return (
-    <section className="tono-oscuro e-seccion" aria-labelledby="titulo-para-quien">
-      <div className="e-wrap">
-        <CabezaSeccion rotulo={P.rotulo} titulo={P.titulo} idTitulo="titulo-para-quien" />
-        <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
+    <section className="tono-claro a-seccion" aria-labelledby="titulo-para-quien">
+      <div className="e-wrap flex flex-col items-center">
+        <Titulo texto={P.titulo} id="titulo-para-quien" />
+        <ul className="mt-8 flex max-w-3xl flex-wrap justify-center gap-2.5 md:mt-10">
           {P.rubros.map((r, i) => (
             <li
               key={r.titulo}
-              className="py-4 sm:pr-6"
+              className="a-chip"
               data-reveal=""
-              style={{ '--i': i % 3 } as CSSProperties}
+              style={{ '--i': i % 4 } as CSSProperties}
             >
-              <p className="font-semibold">{r.titulo}</p>
-              <p className="e-chico mt-1 text-ed-muted">{r.texto}</p>
+              {r.titulo}
             </li>
           ))}
         </ul>

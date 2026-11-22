@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
-import { CTA, PROYECTOS_UI, RUTAS, SECCIONES } from '@/content/home';
+import { PROYECTOS_UI, RUTAS, SECCIONES } from '@/content/home';
 import { CASOS, ESTADO_PROYECTO, datosCasos, dominioDe, type Proyecto } from '@/content/proyectos';
-import { Boton } from './Boton';
-import { CabezaSeccion } from './CabezaSeccion';
 import Image from 'next/image';
 import { Casos, type CasoVista, type VisualesCaso } from './Casos';
 import { Composicion } from './Composicion';
-import { FondoGrilla } from './FondoGrilla';
+import { LinkChevron } from './LinkChevron';
 import { PantallaProyecto, Telefono } from './Pantallas';
+import { TituloPalabras } from './TituloPalabras';
 
 /** Lo que el componente de casos necesita de cada proyecto (todo sale del manifiesto). */
 const vista = (p: Proyecto): CasoVista => ({
@@ -59,40 +58,31 @@ export function SeccionCasos({ enPagina = false }: { enPagina?: boolean }) {
   return (
     <section
       id={S.id}
-      className="tono-oscuro e-seccion"
+      className="tono-oscuro a-seccion"
       style={enPagina ? { paddingTop: 0 } : undefined}
       aria-labelledby={enPagina ? undefined : 'titulo-proyectos'}
     >
       <div className="e-wrap">
         {enPagina ? null : (
-          <CabezaSeccion
-            rotulo={S.rotulo}
-            titulo={S.titulo}
-            bajada={S.bajada}
-            idTitulo="titulo-proyectos"
+          <TituloPalabras
+            lineas={[S.titulo]}
+            id="titulo-proyectos"
+            className="a-titulo mx-auto text-center"
           />
         )}
         <p
-          className={
-            enPagina ? 'e-chico text-ed-muted' : 'e-chico mt-6 text-ed-muted md:col-start-4'
-          }
+          className={enPagina ? 'e-chico text-ed-muted' : 'e-chico mt-4 text-center text-ed-muted'}
         >
           {textoDatos()}
         </p>
         <div className="mt-6 md:mt-8">
           <Casos casos={CASOS.map(vista)} visuales={visuales()} />
         </div>
-        <div className="mt-12 flex flex-col gap-5 rounded-[1.75rem] bg-ed-surface p-6 md:mt-16 md:flex-row md:items-center md:justify-between md:p-8">
-          <p className="e-h3">{PROYECTOS_UI.proximo.titulo}</p>
-          <div className="grid grid-cols-1 gap-3 sm:flex">
-            <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
-            {enPagina ? null : (
-              <Boton href={RUTAS.proyectos} variante="secundario">
-                {PROYECTOS_UI.verTodos}
-              </Boton>
-            )}
+        {enPagina ? null : (
+          <div className="mt-10 flex justify-center">
+            <LinkChevron href={RUTAS.proyectos}>{PROYECTOS_UI.verTodos}</LinkChevron>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
@@ -108,12 +98,12 @@ function Tarjeta({ p, i }: { p: Proyecto; i: number }) {
   return (
     <article
       id={`proyecto-${p.id}`}
-      className="flex scroll-mt-24 flex-col"
+      className="flex w-full scroll-mt-24 flex-col md:w-[calc(50%-0.75rem)] xl:w-[calc(33.333%-1rem)]"
       aria-labelledby={`titulo-proyecto-${p.id}`}
       data-reveal=""
       style={{ '--i': i % 3 } as CSSProperties}
     >
-      <div className="rounded-[1.5rem] bg-ed-surface p-5">
+      <div className="rounded-[1.75rem] bg-ed-surface p-5">
         <Composicion caso={p} tamanos="(min-width: 768px) 24rem, 88vw" />
       </div>
       <p className="e-chico mt-4 text-ed-muted">
@@ -145,13 +135,16 @@ export function ProyectosGrilla({
   return (
     <section
       id={S.id}
-      className="tono-claro e-seccion e-con-fondo scroll-mt-16"
+      className="tono-gris a-seccion scroll-mt-16"
       aria-labelledby="titulo-proyectos"
     >
-      <FondoGrilla />
       <div className="e-wrap">
-        <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-proyectos" />
-        <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-14 md:mt-12 md:grid-cols-2 xl:grid-cols-3">
+        <TituloPalabras
+          lineas={[S.titulo]}
+          id="titulo-proyectos"
+          className="a-titulo mx-auto text-center"
+        />
+        <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-14 md:mt-12">
           {lista.map((p, i) => (
             <Tarjeta key={p.id} p={p} i={i} />
           ))}

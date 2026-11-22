@@ -27,13 +27,13 @@ export function Anuncios() {
     <div
       role="region"
       aria-label={ANUNCIOS.etiqueta}
-      className="tono-oscuro bg-ed-surface"
+      className="tono-gris"
       onMouseEnter={() => setPausa(true)}
       onMouseLeave={() => setPausa(false)}
       onFocus={() => setPausa(true)}
       onBlur={() => setPausa(false)}
     >
-      <div className="e-wrap relative h-10 overflow-hidden">
+      <div className="e-wrap relative h-9 overflow-hidden">
         {ANUNCIOS.items.map((a, i) => {
           const estado =
             i === activo ? 'activo' : i === (activo - 1 + total) % total ? 'sale' : 'espera';

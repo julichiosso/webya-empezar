@@ -10,7 +10,8 @@ import { SugerenciasDiferidas } from './SugerenciasDiferidas';
  */
 export function Pagina({ children, barra = true }: { children: React.ReactNode; barra?: boolean }) {
   return (
-    <>
+    // Base blanca: el header translúcido deja ver lo que pasa debajo, nunca el fondo oscuro global.
+    <div className="tono-claro">
       <div aria-hidden="true" className="e-progreso-lectura" />
       <Anuncios />
       <Encabezado />
@@ -20,6 +21,6 @@ export function Pagina({ children, barra = true }: { children: React.ReactNode; 
       <Pie />
       {barra ? <BarraCelular /> : null}
       {barra ? <SugerenciasDiferidas /> : null}
-    </>
+    </div>
   );
 }

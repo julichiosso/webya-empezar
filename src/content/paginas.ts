@@ -10,9 +10,8 @@ export const NOSOTROS = {
       'Webya es Julián Chiosso, desarrollador de San Jorge y Técnico Universitario en Programación (UTN). Trabajamos directo con cada negocio, de la primera charla al soporte.',
   },
   rotulo: 'Quiénes somos',
-  titulo: ['Detrás de Webya', 'hay una persona de acá.'],
-  presentacion:
-    'Soy Julián Chiosso, desarrollador de San Jorge y Técnico Universitario en Programación (UTN). Armo sistemas para negocios de la zona y trabajo directo con cada cliente: el que te escucha es el que programa tu sistema.',
+  titulo: ['Una persona real.', 'De acá.'],
+  presentacion: 'Soy Julián Chiosso. El que te escucha es el que programa tu sistema.',
   firma: 'Julián Chiosso',
   cargo: 'Desarrollador · Técnico Universitario en Programación (UTN)',
   fotoAlt: 'Julián Chiosso, de Webya',
@@ -24,29 +23,29 @@ export const NOSOTROS = {
   iniciales: 'JC',
   proceso: {
     rotulo: 'Cómo trabajamos',
-    titulo: 'Cuatro pasos, sin vueltas.',
+    titulo: 'Cuatro pasos.',
     pasos: [
       {
         titulo: 'Hablamos',
-        texto: 'Nos contás cómo trabajás hoy y qué querés resolver. Sin formularios ni compromiso.',
+        texto: 'Contás qué querés resolver.',
       },
       {
         titulo: 'Armamos',
-        texto: 'Diseñamos y programamos tu sistema a la medida de tu negocio, no una plantilla.',
+        texto: 'A tu medida, no una plantilla.',
       },
       {
         titulo: 'Probás',
-        texto: 'Lo usás antes de lanzarlo y ajustamos lo que haga falta, juntos.',
+        texto: 'Lo usás y ajustamos.',
       },
       {
-        titulo: 'Lanzamos y te acompañamos',
-        texto: 'Lo publicamos, te enseñamos a usarlo y seguimos a un mensaje de distancia.',
+        titulo: 'Lanzamos',
+        texto: 'Y seguimos a un mensaje.',
       },
     ],
   },
   contacto: {
     rotulo: 'Contacto',
-    titulo: 'Escribinos por donde te quede cómodo.',
+    titulo: 'Escribinos.',
     whatsapp: 'WhatsApp',
     mail: 'Mail',
     instagram: 'Instagram',
@@ -61,7 +60,7 @@ export const ZONA = {
       'Sistemas, tiendas online y turnos para negocios de San Francisco (Córdoba), San Jorge (Santa Fe) y toda la zona. Atendemos en persona o por WhatsApp.',
   },
   titulo: ['San Francisco', 'y San Jorge.'],
-  bajada: 'Y toda la zona. Sistemas, tiendas y turnos para los negocios de la región.',
+  bajada: 'Y toda la zona. En persona o por WhatsApp.',
   /** Los números salen del manifiesto de la zona (nunca a mano). */
   datos: (zonas: number | string, localidades: number | string) =>
     `${zonas} zonas · ${localidades} localidades · En persona o por WhatsApp`,
@@ -88,8 +87,8 @@ export const PROYECTOS_PAGINA = {
       "Sistemas funcionando en negocios de San Jorge: pedidos online de Micio's Pizzería, tienda de Joyería Petrucci, sitio de la fonoaudióloga Lorena Almagro y más.",
   },
   rotulo: 'Proyectos reales',
-  titulo: ['Negocios de acá,', 'con su sistema funcionando.'],
-  bajada: 'Trabajos reales, con nombre y apellido. Cada uno resolvió un problema concreto.',
+  titulo: ['Negocios reales.', 'Funcionando.'],
+  bajada: 'Con nombre y apellido.',
 } as const;
 
 export const ARMAR = {
@@ -107,55 +106,49 @@ export const CAMPO = {
       'Turnos de descarga para acopios, pedidos de insumos, catálogos de maquinaria y páginas para contratistas rurales. Sistemas para el campo de San Jorge, San Francisco y la zona.',
   },
   rotulo: 'Campo y agro',
-  titulo: ['Sistemas para el campo,', 'pensados desde acá.'],
-  bajada:
-    'Agronomías, acopios, veterinarias rurales, contratistas y talleres de maquinaria: ordenamos lo que hoy se resuelve por teléfono, papel y WhatsApp.',
+  titulo: ['Sistemas', 'para el campo.'],
+  bajada: 'Lo que hoy va por papel y WhatsApp, ordenado.',
   soluciones: {
     rotulo: 'Qué armamos para el campo',
-    titulo: 'Lo que hoy se anota en un cuaderno, en el celular.',
+    titulo: 'Del cuaderno al celular.',
     items: [
       {
         titulo: 'Turnos de descarga',
-        texto:
-          'En cosecha, cada camión con su horario para descargar en la planta o el acopio. Menos fila en la ruta.',
+        texto: 'Cada camión con su horario.',
         href: '/turnero',
         producto: 'Turnero',
       },
       {
         titulo: 'Pedidos de insumos',
-        texto:
-          'El productor pide semillas, fertilizantes o repuestos desde el celular y el pedido llega ordenado.',
+        texto: 'Semillas y repuestos, desde el celular.',
         href: '/pedidos',
         producto: 'Pedidos online',
       },
       {
         titulo: 'Maquinaria y repuestos',
-        texto:
-          'Equipos usados, repuestos y precios a la vista, con la consulta directa a tu WhatsApp.',
+        texto: 'Precios a la vista y consulta por WhatsApp.',
         href: '/tienda',
         producto: 'Catálogo',
       },
       {
         titulo: 'Contratistas rurales',
-        texto:
-          'Siembra, pulverización, cosecha o fletes: qué hacés, en qué zona y cómo te contratan.',
+        texto: 'Qué hacés y cómo te contratan.',
         href: '/web',
         producto: 'Página web',
       },
       {
         titulo: 'Veterinaria rural',
-        texto: 'Visitas al campo y consultas con agenda propia y el aviso al celular.',
+        texto: 'Visitas y consultas con agenda.',
         href: '/turnero',
         producto: 'Turnero',
       },
       {
         titulo: 'A medida',
-        texto:
-          'Stock del galpón, órdenes de trabajo o registro de lotes: lo que hoy vive en una planilla.',
+        texto: 'Lo que hoy vive en una planilla.',
         href: '/armar?tipo=medida',
         producto: 'Sistema a medida',
       },
     ],
   },
-  nota: 'Se arman sobre los mismos sistemas que ya funcionan en negocios de la zona, adaptados a cómo trabaja el campo.',
+  nota: 'Sobre sistemas que ya funcionan en la zona.',
 } as const;

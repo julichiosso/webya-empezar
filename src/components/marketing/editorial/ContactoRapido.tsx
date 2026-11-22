@@ -99,7 +99,7 @@ export function ContactoRapido({
     <form
       onSubmit={enviar}
       noValidate
-      className="rounded-2xl border border-ed-line p-5 md:p-7"
+      className="rounded-3xl bg-ed-surface p-6 md:p-8"
       aria-labelledby={`${id}-titulo`}
     >
       <p id={`${id}-titulo`} className="e-h3 max-w-[24ch]">

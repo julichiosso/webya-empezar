@@ -76,11 +76,13 @@ export const BARRA_CELULAR = {
 export const LEMA = ['Creá.', 'Digitalizá.', 'Crecé.'] as const;
 
 export const HERO = {
+  /** Arriba del titular, como el nombre de un producto. */
+  ceja: 'Software para tu negocio',
   /** El lema es el H1: cada palabra entra en secuencia y queda fija. */
   titulo: LEMA,
-  /** Una sola frase que baja el lema a tierra: qué armamos y para quién. */
-  bajada:
-    'Armamos los turnos, los pedidos y la venta online de tu negocio, y vos lo manejás desde el celular.',
+  /** Una sola línea: qué armamos. La gente no lee; esto sí. */
+  bajada: 'Turnos, pedidos y ventas online. Todo desde tu celular.',
+  verDemos: 'Ver demos',
   rubros: 'Elegí tu rubro y probalo',
   /** Lo que aparece en cada fila al pasar el mouse. */
   probar: 'Ver demo',
@@ -88,7 +90,7 @@ export const HERO = {
   rubroAria: (rubro: string, sistema: string) =>
     `${rubro}: ver demo de ${sistema.toLowerCase()}, se abre en otra pestaña`,
   /** Prueba al toque, en la primera pantalla: los negocios que ya lo usan. */
-  confianza: 'Funcionando en',
+  confianza: 'Ya lo usan',
   y: 'y',
   /** Dónde atendemos: con el mini mapa, lleva a /zona. */
   zona: {
@@ -160,58 +162,99 @@ export const RUBROS_HOME = [
 export const SECCIONES = {
   queArmo: {
     id: 'que-armamos',
-    rotulo: 'Qué armamos',
-    titulo: 'Lo que tu negocio necesita para vender online.',
+    rotulo: 'Productos',
+    titulo: 'Elegí qué necesitás.',
+  },
+  rubros: {
+    id: 'rubros',
+    titulo: '¿Cuál es tu rubro?',
+    bajada: 'Tocá el tuyo y probalo en vivo.',
+  },
+  porque: {
+    id: 'por-que-webya',
+    titulo: 'Por qué Webya.',
   },
   proyectos: {
     id: 'proyectos',
     rotulo: 'Proyectos',
-    titulo: 'Negocios de acá, con su sistema funcionando.',
-    bajada: 'Lo que armamos para negocios de la zona y cómo se usa todos los días.',
+    titulo: 'Negocios reales. Funcionando.',
+    bajada: '',
   },
   nosotros: {
     id: 'nosotros',
     rotulo: 'Quiénes somos',
-    titulo: 'Una persona real, de acá, que te responde.',
+    titulo: 'Una persona real, de acá.',
   },
 } as const;
 
-/** Bento "Qué armamos": cada tarjeta es un link a su página. */
+/** Tarjetas de producto de la home: nombre, una línea y dos acciones. */
 export const BENTO = {
+  verDemo: 'Ver demo',
+  masInfo: 'Más info',
   celdas: {
     turnero: {
-      titulo: 'Turnero con seña',
-      texto:
-        'Tus clientes reservan y pagan la seña con Mercado Pago. El turno queda asegurado y a vos te llega el aviso.',
+      titulo: 'Turnero',
+      texto: 'Reservas con seña. Sin faltazos.',
       href: '/turnero',
+      demo: '/demos/turnos',
     },
     pedidos: {
       titulo: 'Pedidos online',
-      texto: 'Carrito, hora de retiro y la comanda impresa sola.',
+      texto: 'La cocina, en orden.',
       href: '/pedidos',
+      demo: '/demos/pedidos',
     },
     tienda: {
       titulo: 'Tienda online',
-      texto: 'Vendés aunque el local esté cerrado.',
+      texto: 'Vendé aunque esté cerrado.',
       href: '/tienda',
-    },
-    catalogo: {
-      titulo: 'Catálogo digital',
-      texto: 'Fotos, precios y la consulta directo a tu WhatsApp.',
-      href: '/tienda#catalogo',
+      demo: '/demos/tienda',
     },
     web: {
       titulo: 'Página web',
-      texto: 'Que te encuentren en Google y te escriban con un toque.',
+      texto: 'Que te encuentren en Google.',
       href: '/web',
+      demo: '/demos/web',
+    },
+    campo: {
+      titulo: 'Campo y agro',
+      texto: 'Sistemas para el agro.',
+      href: '/campo',
+      demo: '',
+    },
+    entidades: {
+      titulo: 'Protectoras',
+      texto: 'Adopciones y socios.',
+      href: '/protectoras',
+      demo: '/demos/protectora',
     },
     medida: {
-      titulo: 'Sistema a medida',
-      texto: '¿Algo que hoy hacés a mano? Lo pensamos con vos y lo armamos.',
+      titulo: 'A medida',
+      texto: 'Lo que hoy hacés a mano.',
       href: '/armar?tipo=medida',
+      demo: '',
     },
   },
 } as const;
+
+/** Por qué Webya: tres razones en una línea cada una (la cuarta tarjeta es el mapa de la zona). */
+export const PORQUE = [
+  {
+    id: 'demo',
+    titulo: 'Probalo antes.',
+    texto: 'Demos en vivo, sin registrarte.',
+    link: 'Ver demos',
+    href: '/demos',
+  },
+  { id: 'celular', titulo: 'Lo manejás vos.', texto: 'Todo desde tu celular.', link: '', href: '' },
+  {
+    id: 'persona',
+    titulo: 'Te atiende quien lo programa.',
+    texto: 'Sin call center.',
+    link: 'Conocenos',
+    href: '/nosotros',
+  },
+] as const;
 
 export const PROYECTOS_UI = {
   verTodos: 'Ver todos los proyectos',
@@ -243,8 +286,8 @@ export const PROYECTOS_UI = {
     volver: 'Todos los proyectos',
     anterior: 'Caso anterior',
     siguiente: 'Caso siguiente',
-    cierre: '¿Querés algo así para tu negocio?',
-    cierreBajada: 'Lo armamos a la medida de cómo trabajás. Contanos y te pasamos una propuesta.',
+    cierre: '¿Querés uno así?',
+    cierreBajada: 'Te pasamos una propuesta concreta.',
     mensaje: (cliente: string) =>
       `Hola, vengo de webya.dev. Vi el caso de ${cliente} y quiero algo parecido para mi negocio.`,
     seoTitulo: (cliente: string, sistema: string) => `${cliente}: ${sistema.toLowerCase()}`,
@@ -252,18 +295,9 @@ export const PROYECTOS_UI = {
   mockupAlt: (sistema: string) => `Esquema del ${sistema.toLowerCase()}`,
 } as const;
 
-/** Quiénes somos, resumido para la home (la versión completa vive en /nosotros). */
-export const NOSOTROS_HOME = {
-  texto:
-    'Webya es Julián Chiosso, desarrollador de San Jorge y Técnico Universitario en Programación (UTN). Trabajamos directo con cada cliente: el que te escucha es el que programa tu sistema.',
-  link: 'Conocé cómo trabajamos',
-  fotoAlt: 'Julián Chiosso, de Webya',
-} as const;
-
 export const CIERRE = {
-  titulo: 'Contanos qué necesitás.',
-  bajada:
-    'Armá tu sistema en tres pasos o escribinos por WhatsApp. Te respondemos con una propuesta concreta.',
+  titulo: '¿Empezamos?',
+  bajada: 'Te pasamos una propuesta concreta.',
 } as const;
 
 export const PIE = {
@@ -287,31 +321,22 @@ export const FRASES = {
   rubros: 'Web · Sistemas · Automatización',
 } as const;
 
-export const MANIFIESTO = {
-  etiqueta: 'Qué hacemos por tu negocio',
-  pasos: [
-    { palabra: 'Creá.', texto: 'Tu página, tu tienda o tu sistema, a la medida de tu negocio.' },
-    { palabra: 'Digitalizá.', texto: 'Los turnos, pedidos y consultas que hoy hacés a mano.' },
-    { palabra: 'Crecé.', texto: 'Tu negocio atiende todo el día, aunque esté cerrado.' },
-  ],
-} as const;
-
 /** "Te escribimos nosotros": dejan su WhatsApp y el pedido llega al instante (API de leads). */
 export const CONTACTO_RAPIDO = {
-  titulo: 'O dejanos tu WhatsApp y te escribimos nosotros.',
+  titulo: 'O te escribimos nosotros.',
   whatsapp: 'Tu WhatsApp',
-  whatsappAyuda: 'Con código de área, como lo usás en WhatsApp.',
+  whatsappAyuda: 'Con código de área.',
   negocio: 'Tu negocio (opcional)',
   negocioPlaceholder: 'Ej.: Agronomía del Centro',
   mensaje: '¿Qué necesitás? (opcional)',
-  mensajePlaceholder: 'Contanos en pocas palabras',
+  mensajePlaceholder: 'En pocas palabras',
   enviar: 'Enviar',
   enviando: 'Enviando…',
   listoTitulo: 'Enviado.',
-  listo: 'Nos ponemos en contacto con vos por WhatsApp a la brevedad.',
-  error: 'No se pudo enviar. Escribinos directo, con lo que pusiste ya escrito:',
+  listo: 'Te escribimos por WhatsApp.',
+  error: 'No se pudo enviar. Escribinos directo:',
   errorBoton: 'Abrir WhatsApp',
-  privacidad: 'Usamos tu número solo para responderte.',
+  privacidad: 'Solo para responderte.',
   mensajeRespaldo: (negocio: string, texto: string) =>
     [
       'Hola, vengo de webya.dev.',
@@ -330,22 +355,22 @@ export const ANUNCIOS = {
   etiqueta: 'Novedades',
   items: [
     {
-      texto: 'Primer mes con descuento para negocios que arrancan con Webya.',
+      texto: 'Primer mes con descuento.',
       corto: 'Primer mes con descuento.',
       link: 'Consultá',
       destino: 'whatsapp',
       mensaje: 'Hola, vengo de webya.dev. Quiero saber del descuento del primer mes.',
     },
     {
-      texto: 'Probá cualquier sistema en vivo antes de decidir.',
+      texto: 'Probalo en vivo antes de decidir.',
       corto: 'Probalo en vivo antes de decidir.',
       link: 'Ver demos',
       destino: '/demos',
       mensaje: '',
     },
     {
-      texto: 'Ahora también armamos sistemas para el campo y el agro.',
-      corto: 'Sistemas para el campo y el agro.',
+      texto: 'Nuevo: sistemas para el campo.',
+      corto: 'Nuevo: sistemas para el campo.',
       link: 'Conocé más',
       destino: '/campo',
       mensaje: '',

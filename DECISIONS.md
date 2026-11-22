@@ -564,3 +564,24 @@ queda lo que funciona por debajo o suma prueba real.
   San Francisco en sus coordenadas reales, el área de cada una, el límite entre Córdoba y Santa Fe (aproximado) y
   pueblos de referencia. Los puntos laten tres veces y paran.
 - Proyecto sin sitio publicado con una demo de su sistema (Peluquería Canina): "Probá la demo" la abre directo.
+
+## Rediseño "empresa", estilo Apple (2026-11-22)
+
+- Pedido de Julián: "muchísimo más empresarial, tipo Apple", textos muy breves en todo el sistema ("la gente no
+  lee") y todo fácil de encontrar. Objetivo: que confíen en Webya y compren.
+- Fondo claro por defecto (blanco y gris `#f5f5f7`), negro solo para contraste (tarjetas puntuales, casos,
+  cierre). Nuevo tono `.tono-gris` y capa `a-*` en `editorial.css`: titulares grandes y centrados, una línea de
+  bajada, dos acciones, tarjetas redondeadas y links con chevron ("Ver demo ›", "Más info ›").
+- Header blanco translúcido y fino (blur, como Apple); el pie pasó a gris claro, letra chica y en columnas.
+  Sin la grilla técnica de fondo (`FondoGrilla` ya no dibuja).
+- Home: hero centrado con el lema en una línea, "Ver demos" + "Escribinos" y tres iPhones con los sitios reales
+  (Petrucci, Micio's y Lorena) que se recorren solos. Después: productos en tarjetas (cuatro grandes con el sitio
+  real de un cliente, tres chicas), "¿Cuál es tu rubro?" (buscador + chips), casos, "Por qué Webya" (tres
+  razones + el mapa de la zona) y el cierre "¿Empezamos?". Salen el manifiesto y "Quiénes somos" de la home.
+- El buscador dejó el hero (le sacaba foco) y vive en "¿Cuál es tu rubro?", en modo compacto (sin rótulo
+  visible ni ejemplos: el título de la sección ya pregunta y los rubros están a la vista).
+- Páginas de producto: hero centrado, la vidriera a todo el ancho abajo, las funciones en tarjetas 2×2 junto
+  al teléfono real y "Para quién" como chips. Copy recortado a la mitad o menos en productos, campo,
+  protectoras, nosotros, zona, demos y casos. Lo legal queda completo.
+- Casos: el panel muestra solo el desafío y las acciones; el detalle (lo que armamos, qué ve el cliente) vive
+  en la página de cada caso.

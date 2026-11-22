@@ -71,25 +71,9 @@ function Acciones({ caso }: { caso: CasoVista }) {
   );
 }
 
-/** Lo que armamos, como etiquetas (sin viñetas). */
-function Armamos({ caso, cuantos = 4 }: { caso: CasoVista; cuantos?: number }) {
-  return (
-    <ul className="flex flex-wrap gap-1.5">
-      {caso.armamos.slice(0, cuantos).map((a) => (
-        <li
-          key={a}
-          className="rounded-full bg-ed-bg px-3 py-1.5 text-[0.8125rem] leading-tight text-ed-fg"
-        >
-          {a}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 /**
  * Casos de éxito. Escritorio: índice (pestañas: flechas del teclado, el indicador se desliza) y el panel
- * del caso activo con la composición escritorio + celular, el desafío, lo que armamos y qué ve el cliente;
+ * del caso activo con la composición escritorio + celular, el desafío en una línea y las acciones;
  * al pasar el mouse o con el foco cambia el panel (fundido corto), al hacer clic se abre el caso. Celular:
  * tarjetas apiladas que se expanden al tocarlas. Los filtros por tipo cambian las dos vistas.
  */
@@ -206,7 +190,7 @@ export function Casos({
                     {c.cliente}
                   </span>
                   <span className="e-chico mt-1 block text-ed-muted">
-                    {c.rubro} · {c.ciudad} · {c.etiquetas.join(' · ')}
+                    {c.rubro} · {c.ciudad}
                   </span>
                 </span>
               </button>
@@ -240,22 +224,10 @@ export function Casos({
                   </div>
                 ))}
               </div>
-              <div key={activo.id} className="e-texto-caso mt-7 grid grid-cols-2 gap-x-8 gap-y-5">
-                <div>
-                  <p className="e-rotulo text-ed-muted">{UI.desafio}</p>
-                  <p className="e-cuerpo mt-2">{activo.desafio}</p>
-                </div>
-                <div>
-                  <p className="e-rotulo text-ed-muted">{UI.ve}</p>
-                  <p className="e-cuerpo mt-2">{activo.ve}</p>
-                </div>
-                <div className="col-span-2">
-                  <p className="e-rotulo text-ed-muted">{UI.armamos}</p>
-                  <div className="mt-2.5">
-                    <Armamos caso={activo} />
-                  </div>
-                </div>
-                <div className="col-span-2 pt-1">
+              {/* Poco texto: el desafío en una línea y las acciones. El detalle vive en la página del caso. */}
+              <div key={activo.id} className="e-texto-caso mt-7">
+                <p className="e-lead max-w-[48ch]">{activo.desafio}</p>
+                <div className="mt-5">
                   <Acciones caso={activo} />
                 </div>
               </div>
@@ -284,7 +256,6 @@ export function Casos({
                     <span className="e-chico mt-1 text-ed-muted">
                       {c.rubro} · {c.ciudad}
                     </span>
-                    <span className="e-chico mt-1 text-ed-muted">{c.etiquetas.join(' · ')}</span>
                     <span className="e-chico mt-auto pt-3 font-medium">
                       <span className="group-open:hidden">{UI.abrir}</span>
                       <span className="hidden group-open:inline">{UI.cerrar}</span>
@@ -292,16 +263,7 @@ export function Casos({
                   </span>
                 </summary>
                 <div className="space-y-4 px-4 pb-5">
-                  <div>
-                    <p className="e-rotulo text-ed-muted">{UI.desafio}</p>
-                    <p className="e-cuerpo mt-1.5">{c.desafio}</p>
-                  </div>
-                  <div>
-                    <p className="e-rotulo text-ed-muted">{UI.armamos}</p>
-                    <div className="mt-2">
-                      <Armamos caso={c} />
-                    </div>
-                  </div>
+                  <p className="e-cuerpo">{c.desafio}</p>
                   <Acciones caso={c} />
                 </div>
               </details>

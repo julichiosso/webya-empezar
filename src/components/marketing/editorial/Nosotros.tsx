@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { cn } from '@/components/ui/clases';
 import { MENSAJE_CONTACTO } from '@/content/configurador';
-import { CTA, NOSOTROS_HOME, RUTAS, SECCIONES } from '@/content/home';
+import { CTA, RUTAS } from '@/content/home';
 import { NOSOTROS } from '@/content/paginas';
 import { siteConfig } from '@/lib/site-config';
 import { CabezaSeccion } from './CabezaSeccion';
@@ -128,31 +128,5 @@ export function NosotrosPagina() {
         </div>
       </section>
     </>
-  );
-}
-
-/** Home: quiénes somos en pocas líneas, con el retrato y el link a /nosotros. */
-export function NosotrosInicio() {
-  const S = SECCIONES.nosotros;
-  return (
-    <section
-      id={S.id}
-      className="tono-claro e-seccion e-con-fondo"
-      aria-labelledby="titulo-nosotros"
-    >
-      <FondoGrilla />
-      <div className="e-wrap">
-        <CabezaSeccion rotulo={S.rotulo} titulo={S.titulo} idTitulo="titulo-nosotros" />
-        <div className="mt-8 grid grid-cols-12 items-center gap-x-6 gap-y-6 md:mt-12">
-          <Retrato className="col-span-4 sm:col-span-3 md:col-span-2 md:col-start-4" />
-          <div className="col-span-12 sm:col-span-9 md:col-span-6" data-reveal="">
-            <p className="e-lead max-w-[46ch]">{NOSOTROS_HOME.texto}</p>
-            <Link href={RUTAS.nosotros} className="e-link e-cuerpo mt-6 font-medium">
-              {NOSOTROS_HOME.link}
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }

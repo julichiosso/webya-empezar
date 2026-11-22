@@ -68,3 +68,17 @@ export const Cerrar = ({ className }: IconoProps) => (
     <path d="M6 6l12 12M18 6 6 18" />
   </svg>
 );
+
+export const Chevron = ({ className }: IconoProps) => (
+  <svg
+    {...base}
+    width={14}
+    height={14}
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={`a-chevron ${className ?? ''}`}
+  >
+    <path d="m9 5 7 7-7 7" />
+  </svg>
+);

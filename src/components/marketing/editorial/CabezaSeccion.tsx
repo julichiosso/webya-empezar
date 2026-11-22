@@ -11,28 +11,26 @@ interface Props {
 }
 
 /**
- * Cabeza de capítulo: línea fina que se extiende, rótulo a la izquierda (3 de 12
- * columnas), titular grande a la derecha. En celular se apila.
+ * Cabeza de sección centrada, como en la página de un producto: el rótulo chico arriba, el titular
+ * grande y, si hace falta, una línea de bajada.
  */
 export function CabezaSeccion({ rotulo, titulo, bajada, idTitulo, className, children }: Props) {
   return (
-    <header className={cn('grid grid-cols-12 gap-x-6 gap-y-6', className)}>
-      <p className="e-rotulo col-span-12 text-ed-muted md:col-span-3" data-reveal="">
+    <header className={cn('flex flex-col items-center text-center', className)}>
+      <p className="a-ceja text-ed-muted" data-reveal="">
         {rotulo}
       </p>
-      <div className="col-span-12 md:col-span-9">
-        <TituloPalabras lineas={[titulo]} id={idTitulo} className="e-h2 max-w-[18ch]" />
-        {bajada ? (
-          <p
-            className="e-lead mt-4 max-w-[52ch] text-ed-muted"
-            data-reveal=""
-            style={{ '--i': 2 } as React.CSSProperties}
-          >
-            {bajada}
-          </p>
-        ) : null}
-        {children}
-      </div>
+      <TituloPalabras lineas={[titulo]} id={idTitulo} className="a-titulo mt-2 max-w-[20ch]" />
+      {bajada ? (
+        <p
+          className="a-sub mt-3 max-w-[36ch] text-ed-muted"
+          data-reveal=""
+          style={{ '--i': 2 } as React.CSSProperties}
+        >
+          {bajada}
+        </p>
+      ) : null}
+      {children}
     </header>
   );
 }

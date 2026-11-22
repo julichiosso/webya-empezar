@@ -93,6 +93,8 @@ export function Vidriera({ producto }: { producto: Producto }) {
       // Con movimiento reducido se desliza a mano: tiene que poder recorrerse con el teclado.
       tabIndex={0}
       data-loop=""
+      // El script de movimiento le pone .on antes de hidratar (está en la primera pantalla).
+      suppressHydrationWarning
     >
       {/* Dos mitades iguales (con su espacio al final): correr la pista −50 % da una vuelta exacta. */}
       <div className="e-vidriera-pista e-bucle flex w-max">

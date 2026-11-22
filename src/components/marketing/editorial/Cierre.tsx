@@ -7,36 +7,30 @@ import { WhatsApp } from './Iconos';
 import { TituloPalabras } from './TituloPalabras';
 
 /**
- * Cierre de página: los tres caminos para contactarnos, al toque. Armar el sistema, escribirnos por
- * WhatsApp o dejar el número para que te escribamos nosotros (queda guardado en el sistema de leads).
+ * Cierre de página, centrado y corto: una pregunta, una línea y las acciones (armar el sistema o
+ * escribirnos). Abajo, dejar el número para que te escribamos nosotros (queda en el sistema de leads).
  */
 export function Cierre({ armar = RUTAS.armar }: { armar?: string }) {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
     <section className="tono-oscuro" aria-labelledby="titulo-cierre">
-      <div className="e-wrap grid grid-cols-12 gap-y-10 py-[clamp(4rem,8vw,8rem)] lg:gap-x-12">
-        <div className="col-span-12 min-w-0 lg:col-span-5">
-          <TituloPalabras
-            lineas={[CIERRE.titulo]}
-            id="titulo-cierre"
-            className="e-display e-hero-compacto"
-          />
-          <p className="e-lead mt-5 max-w-[40ch] text-ed-muted" data-reveal="">
-            {CIERRE.bajada}
-          </p>
-          <div className="mt-7 grid grid-cols-1 gap-3 sm:flex" data-reveal="">
-            <Boton href={armar}>{CTA.armar}</Boton>
-            <Boton
-              href={contacto.href}
-              variante="secundario"
-              externo
-              icono={contacto.canal === 'whatsapp' ? <WhatsApp /> : false}
-            >
-              {CTA.escribinos}
-            </Boton>
-          </div>
+      <div className="e-wrap flex flex-col items-center py-[clamp(4.5rem,9vw,9rem)] text-center">
+        <TituloPalabras lineas={[CIERRE.titulo]} id="titulo-cierre" className="a-hero" />
+        <p className="a-sub mt-4 text-ed-muted" data-reveal="">
+          {CIERRE.bajada}
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-3" data-reveal="">
+          <Boton href={armar}>{CTA.armar}</Boton>
+          <Boton
+            href={contacto.href}
+            variante="secundario"
+            externo
+            icono={contacto.canal === 'whatsapp' ? <WhatsApp /> : false}
+          >
+            {CTA.escribinos}
+          </Boton>
         </div>
-        <div className="col-span-12 min-w-0 lg:col-span-7" data-reveal="">
+        <div className="mt-14 w-full max-w-xl text-left md:mt-16" data-reveal="">
           <ContactoRapido />
         </div>
       </div>

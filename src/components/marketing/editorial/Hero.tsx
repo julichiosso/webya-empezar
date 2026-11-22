@@ -1,13 +1,12 @@
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { MENSAJE_CONTACTO } from '@/content/configurador';
-import { CTA, HERO, RUBROS_HOME, RUTAS } from '@/content/home';
+import { CTA, HERO, RUTAS } from '@/content/home';
 import { PROYECTOS } from '@/content/proyectos';
 import { Boton } from './Boton';
-import { Buscador } from './Buscador';
 import { enlaceContacto } from './contacto';
+import { Escaparate } from './Escaparate';
 import { WhatsApp } from './Iconos';
-import { MiniMapaZona } from './MiniMapaZona';
 import { TituloPalabras } from './TituloPalabras';
 
 const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
@@ -16,35 +15,34 @@ const aparece = (i: number) => ({ '--i': i }) as CSSProperties;
 const EN_PRODUCCION = PROYECTOS.filter((p) => p.estado === 'produccion');
 
 /**
- * Hero de la home. En cinco segundos: la marca (Creá. Digitalizá. Crecé.), qué armamos y para quién,
- * qué hacer ahora (buscar, armar, escribir) y por qué confiar (negocios reales). Al lado (abajo en el
- * celular), "Elegí tu rubro": cada rubro abre su demo; y debajo, dónde atendemos con el mapa de zonas.
+ * Hero de la home, como la portada de un producto: el nombre arriba, el lema enorme y centrado, una línea,
+ * dos acciones y, abajo, tres iPhones con sitios reales de clientes. Poco texto: la imagen convence.
+ * En el celular, "Escribinos" vive en la barra fija de abajo (a mano del pulgar).
  */
 export function HeroInicio() {
   const contacto = enlaceContacto(MENSAJE_CONTACTO);
   return (
-    <section className="tono-oscuro" aria-labelledby="titulo-hero">
-      <div className="e-wrap grid grid-cols-12 pt-7 lg:items-center lg:gap-x-12 lg:pt-10 lg:pb-12">
-        <div className="col-span-12 min-w-0 lg:col-span-7">
-          <TituloPalabras
-            as="h1"
-            id="titulo-hero"
-            lineas={HERO.titulo}
-            alCargar
-            className="e-lema"
-          />
-          <p
-            // Sin animación de entrada: es el LCP de la home y se pinta en el primer cuadro.
-            className="e-lead mt-5 max-w-[38ch] text-ed-muted"
-          >
-            {HERO.bajada}
-          </p>
-          <div className="e-hero-aparece relative z-20 mt-6 max-w-136" style={aparece(2)}>
-            <Buscador />
-          </div>
-          {/* En el celular y la tablet las dos acciones viven en la barra fija de abajo, a mano del pulgar. */}
-          <div className="e-hero-aparece mt-5 hidden gap-3 lg:flex" style={aparece(3)}>
-            <Boton href={RUTAS.armar}>{CTA.armar}</Boton>
+    <section className="tono-claro overflow-hidden" aria-labelledby="titulo-hero">
+      <div className="e-wrap flex flex-col items-center pt-10 text-center md:pt-16">
+        <p className="a-ceja e-hero-aparece text-ed-muted" style={aparece(0)}>
+          {HERO.ceja}
+        </p>
+        <TituloPalabras
+          as="h1"
+          id="titulo-hero"
+          lineas={[HERO.titulo.join(' ')]}
+          alCargar
+          className="a-hero mt-2 max-w-[12ch] md:mt-3 md:max-w-none"
+        />
+        <p
+          // Sin animación de entrada: es candidato a LCP y se pinta en el primer cuadro.
+          className="a-sub mt-4 max-w-[28ch] text-ed-muted md:mt-5 md:max-w-none"
+        >
+          {HERO.bajada}
+        </p>
+        <div className="e-hero-aparece mt-7 flex flex-wrap justify-center gap-3" style={aparece(2)}>
+          <Boton href={RUTAS.demos}>{HERO.verDemos}</Boton>
+          <span className="hidden lg:contents">
             <Boton
               href={contacto.href}
               variante="secundario"
@@ -53,63 +51,25 @@ export function HeroInicio() {
             >
               {CTA.escribinos}
             </Boton>
-          </div>
-          <div className="e-hero-aparece e-chico mt-6 text-ed-muted lg:mt-8" style={aparece(4)}>
-            <p>
-              {HERO.confianza}{' '}
-              {EN_PRODUCCION.map((p, i) => (
-                <span key={p.id}>
-                  {i === 0 ? null : i === EN_PRODUCCION.length - 1 ? ` ${HERO.y} ` : ', '}
-                  <Link
-                    href={`${RUTAS.proyectos}/${p.id}`}
-                    prefetch={false}
-                    className="e-link e-link-nav text-ed-fg"
-                  >
-                    {p.cliente}
-                  </Link>
-                </span>
-              ))}
-            </p>
-          </div>
+          </span>
         </div>
-        <div
-          className="e-hero-aparece col-span-12 mt-8 min-w-0 lg:col-span-5 lg:mt-0"
-          style={aparece(3)}
-        >
-          <p className="e-rotulo text-ed-muted">{HERO.rubros}</p>
-          <ul className="mt-2">
-            {RUBROS_HOME.map((r) => (
-              <li key={r.id}>
-                <a
-                  href={r.href}
-                  target="_blank"
-                  rel="noopener"
-                  aria-label={HERO.rubroAria(r.nombre, r.sistema)}
-                  className="e-fila group relative flex min-h-12 items-center gap-4 rounded-xl py-2 active:opacity-60 lg:min-h-14"
-                >
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[0.9375rem] leading-tight font-medium lg:text-[1.0625rem]">
-                      {r.nombre}
-                    </span>
-                    <span className="mt-0.5 block truncate text-[0.75rem] text-ed-muted lg:text-[0.8125rem]">
-                      {r.ejemplo}
-                    </span>
-                  </span>
-                  <span className="e-fila-rol e-chico hidden shrink-0 text-ed-muted sm:inline-grid">
-                    <span>{r.sistema}</span>
-                    <span aria-hidden="true" className="font-medium text-ed-fg">
-                      {HERO.probar}
-                    </span>
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 pb-8 lg:pb-0">
-            <MiniMapaZona />
-          </div>
-        </div>
+        <p className="e-hero-aparece e-chico mt-6 text-ed-muted" style={aparece(3)}>
+          {HERO.confianza}{' '}
+          {EN_PRODUCCION.map((p, i) => (
+            <span key={p.id}>
+              {i === 0 ? null : i === EN_PRODUCCION.length - 1 ? ` ${HERO.y} ` : ', '}
+              <Link
+                href={`${RUTAS.proyectos}/${p.id}`}
+                prefetch={false}
+                className="e-link e-link-nav font-medium text-ed-fg"
+              >
+                {p.cliente}
+              </Link>
+            </span>
+          ))}
+        </p>
       </div>
+      <Escaparate className="e-wrap mt-10 max-w-5xl pb-[10%] md:mt-14 md:pb-16" />
     </section>
   );
 }
@@ -120,55 +80,50 @@ interface HeroPaginaProps {
   bajada?: string;
   /** Botones u otro contenido debajo de la bajada. */
   children?: React.ReactNode;
-  /** A la derecha (abajo en el celular): la vidriera de trabajos hechos. */
+  /** Abajo, a todo el ancho: la vidriera de trabajos hechos. */
   vidriera?: React.ReactNode;
 }
 
-/** Hero de las páginas propias (productos, proyectos, nosotros, zona): rótulo, titular, bajada y CTA. */
+/**
+ * Hero de las páginas propias (productos, proyectos, nosotros, zona), como la portada de un producto:
+ * nombre, titular grande y centrado, una línea y las acciones. La vidriera va abajo, a todo el ancho.
+ */
 export function HeroPagina({ rotulo, titulo, bajada, children, vidriera }: HeroPaginaProps) {
   return (
-    <section className="tono-oscuro overflow-hidden" aria-labelledby="titulo-hero">
-      <div
-        className={
-          vidriera
-            ? 'e-wrap grid grid-cols-12 gap-y-10 pt-8 pb-10 md:pt-14 md:pb-14 lg:items-center lg:gap-x-10 lg:pt-16'
-            : 'e-wrap pt-8 pb-10 md:pt-16 md:pb-16 lg:pt-20'
-        }
-      >
-        <div className={vidriera ? 'col-span-12 min-w-0 lg:col-span-6' : undefined}>
-          <p className="e-rotulo e-hero-aparece text-ed-muted" style={aparece(0)}>
-            {rotulo}
+    <section className="tono-claro overflow-hidden" aria-labelledby="titulo-hero">
+      <div className="e-wrap flex flex-col items-center pt-10 pb-12 text-center md:pt-16 md:pb-16">
+        <p className="a-ceja e-hero-aparece text-ed-muted" style={aparece(0)}>
+          {rotulo}
+        </p>
+        <TituloPalabras
+          as="h1"
+          id="titulo-hero"
+          lineas={titulo}
+          alCargar
+          className="a-hero mt-2 max-w-[16ch] md:mt-3"
+        />
+        {bajada ? (
+          <p
+            className="a-sub e-hero-aparece mt-4 max-w-[36ch] text-ed-muted md:mt-5"
+            style={aparece(1)}
+          >
+            {bajada}
           </p>
-          <TituloPalabras
-            as="h1"
-            id="titulo-hero"
-            lineas={titulo}
-            alCargar
-            className="e-display e-hero-compacto mt-4 max-w-[18ch] md:mt-6"
-          />
-          {bajada ? (
-            <p
-              className="e-lead e-hero-aparece mt-5 max-w-[46ch] text-ed-muted md:mt-7"
-              style={aparece(1)}
-            >
-              {bajada}
-            </p>
-          ) : null}
-          {children ? (
-            <div
-              className="e-hero-aparece mt-6 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3 md:mt-8"
-              style={aparece(2)}
-            >
-              {children}
-            </div>
-          ) : null}
-        </div>
-        {vidriera ? (
-          <div className="e-hero-aparece col-span-12 min-w-0 lg:col-span-6" style={aparece(3)}>
-            {vidriera}
+        ) : null}
+        {children ? (
+          <div
+            className="e-hero-aparece mt-7 flex flex-wrap justify-center gap-3"
+            style={aparece(2)}
+          >
+            {children}
           </div>
         ) : null}
       </div>
+      {vidriera ? (
+        <div className="e-hero-aparece e-wrap pb-14 md:pb-20" style={aparece(3)}>
+          {vidriera}
+        </div>
+      ) : null}
     </section>
   );
 }
