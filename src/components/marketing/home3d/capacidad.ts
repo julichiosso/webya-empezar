@@ -8,6 +8,8 @@ export interface Capacidad {
   memoria: number | null;
   ahorroDatos: boolean;
   movimientoReducido: boolean;
+  /** Navegador manejado por un programa (tests, bots): ven el poster salvo que se fuerce el 3D. */
+  automatizado: boolean;
 }
 
 export function medirCapacidad(): Capacidad {
@@ -30,12 +32,13 @@ export function medirCapacidad(): Capacidad {
     memoria: typeof nav.deviceMemory === 'number' ? nav.deviceMemory : null,
     ahorroDatos: !!nav.connection?.saveData || /(^|-)2g$/.test(nav.connection?.effectiveType ?? ''),
     movimientoReducido: matchMedia('(prefers-reduced-motion: reduce)').matches,
+    automatizado: navigator.webdriver === true,
   };
 }
 
 /** La regla, separada para probarla. */
 export function alcanza(c: Capacidad): boolean {
-  if (!c.webgl2 || c.ahorroDatos || c.movimientoReducido) return false;
+  if (!c.webgl2 || c.ahorroDatos || c.movimientoReducido || c.automatizado) return false;
   if (c.nucleos < 4) return false;
   if (c.memoria !== null && c.memoria < 4) return false;
   return true;

@@ -12,6 +12,7 @@ const capaz: Capacidad = {
   memoria: 8,
   ahorroDatos: false,
   movimientoReducido: false,
+  automatizado: false,
 };
 
 describe('capacidad: WebGL solo donde no perjudica', () => {
@@ -24,6 +25,7 @@ describe('capacidad: WebGL solo donde no perjudica', () => {
     ['movimiento reducido', { movimientoReducido: true }],
     ['2 núcleos', { nucleos: 2 }],
     ['2 GB de memoria', { memoria: 2 }],
+    ['navegador automatizado', { automatizado: true }],
   ])('%s → poster', (_, cambio) => expect(alcanza({ ...capaz, ...cambio })).toBe(false));
 });
 

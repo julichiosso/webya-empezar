@@ -59,6 +59,7 @@ export function ObjetoHero({ className }: { className?: string }) {
           escena = montarEscena(canvas, {
             progreso: captura !== null ? () => Number(captura) / 2 : () => progresoHero.valor,
             captura: captura !== null,
+            sinRendirse: forzar,
             alPintar: () => {
               setEn3d(true);
               window.__simbolo = 'listo';
