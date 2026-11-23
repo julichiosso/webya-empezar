@@ -11,6 +11,7 @@
 @import '../brand/ilustracion/movimiento.css';
 @import '../styles/editorial.css';
 @import '../styles/home3d.css';
+@import '../styles/home.css';
 
 @layer base {
   html {

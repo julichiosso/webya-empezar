@@ -334,3 +334,34 @@ export const BARRA_CAPTURA = {
   fonosanjorge: '#fef6f0',
   abelardo: '#271f1b',
 } as const;
+
+/**
+ * La calle del hero (components/marketing/inicio/Calle): luces cálidas al atardecer, frías cuando los
+ * negocios ya son digitales, y el color de cada rubro en su sitio de la vidriera.
+ */
+export const CALLE = {
+  acentos: ['#e8b56a', '#6f97e0', '#e2763c', '#3fae78'],
+  papel: '#ffffff',
+  tinta: '#1d1d1f',
+  tarjeta: '#eef0f4',
+  calidoArriba: '#ffe3a8',
+  calidoAbajo: '#ffb866',
+  frioArriba: '#f4f7ff',
+  frioAbajo: '#c9d6ff',
+  derrame: '#ffd38a',
+  derrameFrio: '#dbe5ff',
+  farol: '#ffe6b0',
+  haloPantalla: '#e9efff',
+  lampara: '#fff2d6',
+  cartel: '#fffaf0',
+  pantalla: '#0b0b0d',
+} as const;
+
+/** Fondo y luz de la escena de cada trabajo en la home, tomados de la marca de cada cliente. */
+export const ESCENA_TRABAJOS = {
+  micios: { fondo: '#16110e', luz: 'rgb(198 241 53 / 0.16)', claro: false },
+  petrucci: { fondo: '#e9e4dc', luz: 'rgb(255 255 255 / 0.85)', claro: true },
+  lorena: { fondo: '#f4e3d6', luz: 'rgb(255 255 255 / 0.8)', claro: true },
+  canina: { fondo: '#dfe6ef', luz: 'rgb(255 255 255 / 0.85)', claro: true },
+  base: { fondo: '#ecebe6', luz: 'rgb(255 255 255 / 0.8)', claro: true },
+} as const;

@@ -133,6 +133,83 @@ export const HERO_3D = {
   },
 } as const;
 
+/**
+ * Hero "Abierto siempre": una calle de negocios que se hace de noche al bajar. Los demás cierran; el tuyo
+ * sigue atendiendo en su vidriera-pantalla. Después, toda la calle se enciende. Una palabra del lema por
+ * momento y una sola línea debajo, que acompaña lo que pasa en la calle.
+ */
+export const HERO_CALLE = {
+  lema: LEMA,
+  /** Una línea por momento: la primera es la bajada de siempre (la que queda sin movimiento). */
+  lineas: [
+    'Turnos, pedidos y tiendas online para negocios de San Francisco, San Jorge y la zona.',
+    'Bajás la persiana. Tu negocio sigue tomando turnos, pedidos y consultas.',
+    'Y cuando un negocio se enciende, la calle entera crece.',
+  ],
+  armar: 'Armá tu sistema',
+  trabajos: 'Ver trabajos',
+  /** Carteles de la calle (rubros, no negocios inventados) y el del medio, que es el tuyo. */
+  carteles: { tuNegocio: 'Tu negocio', abierto: 'ABIERTO' },
+  rubros: ['PANADERÍA', 'LIBRERÍA', 'FERRETERÍA', 'FARMACIA'],
+  /** El sello fijo para escribirnos (en la compu, cuando el hero ya pasó). */
+  sello: {
+    /** Gira alrededor del sello (se repite hasta cerrar el círculo). */
+    giro: 'escribinos • escribinos • escribinos • ',
+    aria: 'Escribinos por WhatsApp, se abre en otra pestaña',
+    ariaMail: 'Escribinos por mail',
+  },
+  escena:
+    'Ilustración: una calle de negocios que se hace de noche. Los demás locales cierran y el tuyo sigue abierto, con tu sitio en la vidriera.',
+} as const;
+
+/** "Confían en Webya": los logos de los clientes, cada uno en una vidriera encendida de la misma calle. */
+export const CONFIAN = {
+  id: 'confian',
+  rotulo: 'Confían en Webya',
+  logos: [
+    { id: 'micios', nombre: "Micio's Pizzería", src: '/confian/micios.svg', ancho: 907, alto: 381 },
+    {
+      id: 'petrucci',
+      nombre: 'Joyería Petrucci',
+      src: '/confian/petrucci.svg',
+      ancho: 240,
+      alto: 275,
+    },
+    {
+      id: 'fonosanjorge',
+      nombre: 'Fono San Jorge',
+      src: '/confian/fonosanjorge.svg',
+      ancho: 764,
+      alto: 102,
+    },
+    {
+      id: 'abelardo',
+      nombre: 'Abelardo Pizzería',
+      src: '/confian/abelardo.webp',
+      ancho: 362,
+      alto: 360,
+    },
+    {
+      id: 'carribar',
+      nombre: 'Carribar Las Maris',
+      src: '/confian/carribar.webp',
+      ancho: 150,
+      alto: 150,
+      redondo: true,
+    },
+  ],
+} as const;
+
+/** "Últimos trabajos": tarjetas grandes con la escena de cada caso, qué armamos y el rubro. */
+export const TRABAJOS = {
+  id: 'trabajos',
+  titulo: 'Últimos trabajos',
+  bajada: 'Diseñamos y construimos sistemas que ya son parte del día a día de negocios reales.',
+  verTodos: 'Ver todos los proyectos',
+  /** Qué armamos, en la línea chica de arriba del nombre, cuando el nombre del sistema no alcanza. */
+  que: { canina: 'Turnero con seña por Mercado Pago' },
+} as const;
+
 /** Header: dos píldoras, "Escribinos" y "Menú" (el menú se arma desde HEADER.menu, como el pie). */
 export const HEADER_3D = {
   escribinos: 'Escribinos',
@@ -163,7 +240,8 @@ export const NOSOTROS_HOME = {
   id: 'quienes-somos',
   rotulo: 'Quiénes somos',
   titulo: ['Te atiende', 'quien lo programa.'],
-  texto: 'Webya nace en San Jorge. Fundada por Julián Chiosso, Técnico Universitario en Programación (UTN).',
+  texto:
+    'Webya nace en San Jorge. Fundada por Julián Chiosso, Técnico Universitario en Programación (UTN).',
   ver: 'Conocenos',
 } as const;
 
