@@ -8,14 +8,22 @@ import type { MenuTarjetas as TarjetasMenu } from './MenuTarjetas';
 /** Las tarjetas (buscador, sitio, formulario) se piden recién al abrir el menú: fuera del JS inicial. */
 type Tarjetas = typeof TarjetasMenu;
 
-/** Los puntos de las píldoras: el estado del botón, no un ícono de hamburguesa. */
-function Puntos({ cuantos, vertical = false }: { cuantos: 1 | 2 | 3; vertical?: boolean }) {
+/**
+ * Ícono de la píldora del menú: dos líneas que se cruzan en una X al abrir (un solo trazo por línea, sin
+ * puntos ni hamburguesa de tres rayas).
+ */
+function IconoMenu({ abierto }: { abierto: boolean }) {
   return (
-    <span aria-hidden="true" className={vertical ? 'm3d-puntos m3d-puntos-v' : 'm3d-puntos'}>
-      {Array.from({ length: cuantos }, (_, i) => (
-        <span key={i} />
-      ))}
-    </span>
+    <svg
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      focusable="false"
+      className="m3d-icono"
+      data-abierto={abierto || undefined}
+    >
+      <path d="M2.5 5.5h11" />
+      <path d="M2.5 10.5h11" />
+    </svg>
   );
 }
 
@@ -103,7 +111,7 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
         className={abierto ? 'm3d-pildora m3d-pildora-blanca' : 'm3d-pildora m3d-pildora-gris'}
       >
         <span aria-hidden="true">{abierto ? H.cerrar : H.menu}</span>
-        {abierto ? <Puntos cuantos={3} vertical /> : <Puntos cuantos={2} />}
+        <IconoMenu abierto={abierto} />
       </button>
 
       {abierto ? <div className="m3d-fondo" aria-hidden="true" onClick={cerrar} /> : null}
@@ -124,7 +132,7 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
   );
 }
 
-/** Píldora negra "Escribinos •" del header (el punto es el estado: estamos atendiendo). */
+/** Píldora negra "Escribinos" del header. */
 export function PildoraEscribinos({ href, externo }: { href: string; externo: boolean }) {
   return (
     <a
@@ -135,7 +143,6 @@ export function PildoraEscribinos({ href, externo }: { href: string; externo: bo
       className="m3d-pildora m3d-pildora-negra"
     >
       <span>{H.escribinos}</span>
-      <Puntos cuantos={1} />
     </a>
   );
 }

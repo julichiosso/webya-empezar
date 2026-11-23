@@ -8,13 +8,22 @@ import { SugerenciasDiferidas } from './SugerenciasDiferidas';
  * Esqueleto de toda página del sitio: header, contenido, pie y la barra de atajos del celular (salvo
  * donde la página ya tiene la suya, como el configurador) con las sugerencias según la sección.
  */
-export function Pagina({ children, barra = true }: { children: React.ReactNode; barra?: boolean }) {
+export function Pagina({
+  children,
+  barra = true,
+  headerEncima = false,
+}: {
+  children: React.ReactNode;
+  barra?: boolean;
+  /** La primera sección pasa por debajo del header transparente (la home). */
+  headerEncima?: boolean;
+}) {
   return (
-    // Base blanca: el header translúcido deja ver lo que pasa debajo, nunca el fondo oscuro global.
+    // Base blanca: el header transparente deja ver lo que pasa debajo, nunca el fondo oscuro global.
     <div className="tono-claro">
       <div aria-hidden="true" className="e-progreso-lectura" />
       <Anuncios />
-      <Encabezado />
+      <Encabezado encima={headerEncima} />
       <main id={ID_PRINCIPAL} tabIndex={-1} className="outline-none">
         {children}
       </main>
