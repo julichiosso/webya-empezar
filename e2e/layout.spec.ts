@@ -41,7 +41,7 @@ for (const ruta of RUTAS) {
   });
 }
 
-test('la home entra en la primera pantalla: el lema, la bajada, el buscador, el sello y los clientes', async ({
+test('la home entra en la primera pantalla: el lema, la bajada y las dos acciones', async ({
   page,
 }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
@@ -52,10 +52,9 @@ test('la home entra en la primera pantalla: el lema, la bajada, el buscador, el 
   const hero = page.locator('#hero');
   const visibles = [
     hero.getByText(/^Turnos, pedidos y tiendas online/),
-    hero.getByRole('link', { name: '¿Qué necesita tu negocio?' }),
-    hero.getByRole('link', { name: /^Escribinos por/ }),
-    // En pantallas de menos de 600 px de alto (iPhone SE de 2016) la franja asoma al scrollear.
-    ...(vh >= 600 ? [hero.getByRole('link', { name: /^Micio/ }).first()] : []),
+    hero.getByRole('link', { name: 'Armá tu sistema' }),
+    // En pantallas de menos de 600 px de alto (iPhone SE de 2016) queda una sola acción.
+    ...(vh >= 600 ? [hero.getByRole('link', { name: 'Ver trabajos' })] : []),
   ];
   for (const el of visibles) {
     const caja = (await el.boundingBox())!;

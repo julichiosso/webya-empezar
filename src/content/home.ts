@@ -111,29 +111,6 @@ export const HERO = {
 } as const;
 
 /**
- * Hero con el símbolo 3D `<w>`: el lema a la izquierda (la última palabra en cursiva), la bajada con la
- * zona a la derecha, el globo, el sello para escribirnos y la franja de clientes reales al pie.
- */
-export const HERO_3D = {
-  /** Las palabras del lema; la de `cursiva` va en la itálica de contraste. */
-  lema: LEMA,
-  cursiva: 2,
-  bajada: 'Turnos, pedidos y tiendas online para negocios de San Francisco, San Jorge y toda la zona.',
-  /** Atajo al buscador de la sección siguiente. */
-  necesita: '¿Qué necesita tu negocio?',
-  funcionando: 'Funcionando en',
-  globo: {
-    aria: 'Atendemos en San Francisco y San Jorge. Ver la zona de atención.',
-  },
-  sello: {
-    /** Gira alrededor del sello (se repite hasta cerrar el círculo). */
-    giro: 'escribinos • escribinos • escribinos • ',
-    aria: 'Escribinos por WhatsApp, se abre en otra pestaña',
-    ariaMail: 'Escribinos por mail',
-  },
-} as const;
-
-/**
  * Hero "Abierto siempre": una calle de negocios que se hace de noche al bajar. Los demás cierran; el tuyo
  * sigue atendiendo en su vidriera-pantalla. Después, toda la calle se enciende. Una palabra del lema por
  * momento y una sola línea debajo, que acompaña lo que pasa en la calle.

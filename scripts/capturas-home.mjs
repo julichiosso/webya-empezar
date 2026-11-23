@@ -1,6 +1,6 @@
 /**
- * Capturas de la home en los 7 anchos de referencia, con WebGL de verdad (SwiftShader) o con el poster.
- * Verifica que el canvas del símbolo dibujó (window.__simbolo === 'listo') antes de capturar.
+ * Capturas de la home en los 7 anchos de referencia: el hero en distintos momentos del scroll, el menú o
+ * cada sección como la recorre una persona.
  *
  * Uso: node scripts/capturas-home.mjs [--url http://localhost:3300] [--salida dir] [--modo 3d|poster]
  *      [--anchos 360x640,390x844] [--scroll 0,0.5,1] [--texto 200] [--ruta /]
@@ -29,7 +29,12 @@ const SECCIONES = process.argv.includes('--secciones');
 
 mkdirSync(SALIDA, { recursive: true });
 const navegador = await chromium.launch({
-  args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
+  args: [
+    '--use-gl=angle',
+    '--use-angle=swiftshader',
+    '--enable-unsafe-swiftshader',
+    '--ignore-gpu-blocklist',
+  ],
 });
 
 for (const [ancho, alto] of ANCHOS) {
@@ -45,9 +50,6 @@ for (const [ancho, alto] of ANCHOS) {
   await pagina.goto(`${URL_BASE}${RUTA}${q}`, { waitUntil: 'load', timeout: 120_000 });
   if (TEXTO !== 100) {
     await pagina.addStyleTag({ content: `html{font-size:${TEXTO}% !important}` });
-  }
-  if (MODO === '3d' && RUTA === '/') {
-    await pagina.waitForFunction(() => window.__simbolo === 'listo', null, { timeout: 90_000 });
   }
   if (SECCIONES) {
     const total = await pagina.locator('main > section').count();

@@ -24,269 +24,20 @@
   outline: 2px solid var(--e-foco);
   outline-offset: 3px;
 }
-
-.h3d {
-  --p: 0;
-  position: relative;
-}
 /* Con movimiento: un tramo fijo para recorrer los tres estados. */
-.mo .h3d {
-  height: 145svh;
-}
-.h3d-escenario {
-  position: sticky;
-  top: 3.5rem;
-  /* Pantalla − header − cartel de anuncios (2,25 rem): la franja de clientes entra al cargar. */
-  min-height: calc(100svh - 3.5rem - 2.25rem);
-  overflow: hidden;
-  display: grid;
-  padding-inline: clamp(1rem, 4vw, 3rem);
-  padding-top: 1rem;
-  /* Celular: lema, símbolo, bajada, buscador, franja. */
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto auto minmax(9rem, 1fr) auto auto auto;
-  grid-template-areas:
-    'lema globo'
-    'lema sello'
-    'objeto objeto'
-    'bajada bajada'
-    'necesita necesita'
-    'franja franja';
-  row-gap: 0.75rem;
-}
 
 /* El lema: tres palabras, una por línea. Con movimiento, cada una se enciende en su estado. */
-.h3d-lema {
-  grid-area: lema;
-  position: relative;
-  z-index: 2;
-  margin: 0;
-  font-size: clamp(2.75rem, 1.6rem + 6vw, 6.25rem);
-  line-height: 0.98;
-  letter-spacing: -0.05em;
-  font-weight: 600;
-}
-.h3d-palabra {
-  display: block;
-}
-.h3d-cursiva {
-  font-family: var(--font-cursiva), ui-serif, Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-}
-.mo .h3d-palabra {
-  /* 0,5 de opacidad mínima: sobre el hueso sigue arriba de 3:1 (texto grande, AA). */
-  opacity: calc(0.5 + 0.5 * clamp(0, (var(--p) * 2 - var(--i) + 0.75) * 2.2, 1));
-}
-
-.h3d-bajada {
-  grid-area: bajada;
-  position: relative;
-  z-index: 2;
-  margin: 0;
-  max-width: 30ch;
-  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.5rem);
-  line-height: 1.35;
-  letter-spacing: -0.015em;
-  font-weight: 500;
-  color: var(--e-muted);
-  text-wrap: balance;
-}
-
-.h3d-necesita {
-  grid-area: necesita;
-  position: relative;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  min-height: 3.5rem;
-  padding-inline: 1.5rem;
-  border: 1px solid var(--e-line-strong);
-  border-radius: 999px;
-  background: var(--e-bg);
-  font-size: 1.125rem;
-  font-weight: 500;
-  transition:
-    background-color var(--t-rapida) var(--ease-editorial),
-    color var(--t-rapida) var(--ease-editorial);
-}
-.h3d-necesita svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-}
-.h3d-necesita:hover {
-  background: var(--e-invert);
-  color: var(--e-invert-fg);
-}
 
 /* El símbolo: siempre 16:10 (igual que el poster), centrado en su zona. */
-.h3d-zona-objeto {
-  grid-area: objeto;
-  align-self: center;
-  justify-self: center;
-  /* Celular: de borde a borde (el canvas tiene aire propio a los costados). */
-  width: min(100vw, calc((100svh - 30rem) * 1.6));
-  min-width: min(100vw, 18rem);
-}
-.h3d-objeto {
-  position: relative;
-  aspect-ratio: 1.6;
-  z-index: 1;
-}
-.h3d-poster,
-.h3d-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  user-select: none;
-}
-.h3d-poster {
-  object-fit: contain;
-  transition: opacity 600ms var(--ease-editorial);
-}
-.h3d-canvas {
-  opacity: 0;
-  transition: opacity 700ms var(--ease-editorial);
-  /* El arrastre horizontal gira el símbolo; el vertical sigue siendo el scroll de la página. */
-  touch-action: pan-y;
-}
-.h3d-en3d .h3d-canvas {
-  opacity: 1;
-}
-.h3d-en3d .h3d-poster {
-  opacity: 0 !important;
-}
 /* Sin WebGL: los posters de los tres estados se funden con el scroll. */
-.h3d-poster-1,
-.h3d-poster-2 {
-  opacity: 0;
-}
-.mo .h3d-poster-1 {
-  opacity: clamp(0, (var(--p) - 0.22) * 4, 1);
-}
-.mo .h3d-poster-2 {
-  opacity: clamp(0, (var(--p) - 0.62) * 4, 1);
-}
-.mo .h3d-poster-0 {
-  opacity: calc(1 - clamp(0, (var(--p) - 0.32) * 4, 1));
-}
 /* Movimiento reducido o ahorro de datos: un solo poster, sin pedir los otros. */
-html:not(.mo) .h3d-poster-1,
-html:not(.mo) .h3d-poster-2,
-.ahorro .h3d-poster-1,
-.ahorro .h3d-poster-2 {
-  display: none;
-}
-.ahorro .h3d-poster-0 {
-  opacity: 1 !important;
-}
 /* Plan B quieto pero vivo: el poster flota apenas (solo transform). */
-.mo .h3d-objeto:not(.h3d-en3d) {
-  animation: h3d-flota 7s ease-in-out infinite;
-}
-@keyframes h3d-flota {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-1.5%);
-  }
-}
 
 /* Surcos: del pie del símbolo hacia el frente. Se dibujan al entrar y crecen con el scroll. */
-.h3d-surcos {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 42%;
-  width: 100%;
-  z-index: 0;
-  pointer-events: none;
-  transform-origin: 50% 100%;
-}
-.mo .h3d-surcos {
-  transform: scaleY(calc(0.55 + var(--p) * 0.45));
-}
-.h3d-surcos-lineas path {
-  fill: none;
-  stroke: var(--e-line-strong);
-  stroke-width: 1;
-  opacity: 0.7;
-}
-.mo .h3d-surcos-lineas path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 1400ms var(--ease-editorial);
-}
-.mo .h3d-surcos.in .h3d-surcos-lineas path {
-  stroke-dashoffset: 0;
-}
-.h3d-brotes path {
-  fill: none;
-  stroke: var(--e-brote);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-}
-.mo .h3d-brotes {
-  opacity: clamp(0, (var(--p) - 0.7) * 4, 1);
-}
 
 /* Globo: arriba a la derecha. */
-.h3d-zona-globo {
-  grid-area: globo;
-  align-self: start;
-}
-.h3d-globo {
-  position: relative;
-  z-index: 2;
-  display: block;
-  width: 4.75rem;
-  aspect-ratio: 1;
-  border-radius: 999px;
-}
-.h3d-globo-dibujo {
-  position: absolute;
-  inset: 0;
-  fill: none;
-  stroke: var(--e-line-strong);
-  stroke-width: 1;
-  transition: opacity 500ms var(--ease-editorial);
-}
-.h3d-globo-punto {
-  fill: var(--e-brote);
-  stroke: none;
-}
-.h3d-globo-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 600ms var(--ease-editorial);
-}
-.h3d-globo-vivo .h3d-globo-canvas {
-  opacity: 1;
-}
-.h3d-globo-vivo .h3d-globo-dibujo {
-  opacity: 0;
-}
 
 /* Sello: en el celular, a la derecha del lema (no tapa el símbolo ni los botones). */
-.h3d-zona-sello {
-  grid-area: sello;
-  align-self: end;
-  justify-self: end;
-}
 .h3d-sello {
   position: relative;
   z-index: 3;
@@ -311,11 +62,6 @@ html:not(.mo) .h3d-poster-2,
 .mo .h3d-sello-giro {
   animation: h3d-gira 18s linear infinite;
 }
-@keyframes h3d-gira {
-  to {
-    transform: rotate(360deg);
-  }
-}
 .h3d-sello-cara {
   display: grid;
   place-items: center;
@@ -336,80 +82,8 @@ html:not(.mo) .h3d-poster-2,
 }
 
 /* Funcionando en…: al pie. */
-.h3d-zona-franja {
-  grid-area: franja;
-}
-.h3d-funcionando {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  min-height: 3.5rem;
-  border-top: 1px solid var(--e-line);
-  margin-inline: calc(-1 * clamp(1rem, 4vw, 3rem));
-  padding-inline: clamp(1rem, 4vw, 3rem);
-  background: var(--e-bg);
-}
-.h3d-funcionando-rotulo {
-  flex-shrink: 0;
-  margin: 0;
-  font-size: 1rem;
-  color: var(--e-muted);
-}
-.h3d-marquesina {
-  min-width: 0;
-  flex: 1;
-  overflow: hidden;
-}
-.h3d-marquesina-pista {
-  display: flex;
-  width: max-content;
-}
-.h3d-marca-fila {
-  display: flex;
-  gap: 2.25rem;
-  padding-right: 2.25rem;
-  margin: 0;
-  list-style: none;
-}
-.h3d-marca-fila a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 3rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-}
-.h3d-marca-fila a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-.mo .h3d-marquesina.on .h3d-marquesina-pista {
-  animation: h3d-marquesina 26s linear infinite;
-}
-.h3d-marquesina:hover .h3d-marquesina-pista,
-.h3d-marquesina:focus-within .h3d-marquesina-pista {
-  animation-play-state: paused;
-}
-@keyframes h3d-marquesina {
-  to {
-    transform: translateX(-50%);
-  }
-}
-html:not(.mo) .h3d-marca-fila[aria-hidden] {
-  display: none;
-}
-html:not(.mo) .h3d-marquesina-pista {
-  width: auto;
-  flex-wrap: wrap;
-}
 
 @media (min-width: 768px) and (max-width: 1023.98px) {
-  .h3d-globo {
-    width: 7rem;
-  }
   .h3d-sello {
     width: 6.5rem;
   }
@@ -417,70 +91,9 @@ html:not(.mo) .h3d-marquesina-pista {
 
 /* Compu: el símbolo al centro, el lema abajo a la izquierda, la bajada a la derecha. */
 @media (min-width: 1024px) {
-  .mo .h3d {
-    height: 165svh;
-  }
-  .h3d-escenario {
-    padding-top: 1.5rem;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto auto;
-    grid-template-areas:
-      'objeto objeto objeto'
-      'lema necesita bajada'
-      'franja franja franja';
-    row-gap: 1.25rem;
-  }
   /* El símbolo ocupa el alto libre y su borde de abajo (vacío) pasa por detrás del lema. */
-  .h3d-zona-objeto {
-    grid-row: 1 / 3;
-    align-self: start;
-  }
-  .h3d-lema {
-    align-self: end;
-    font-size: clamp(3.5rem, 1rem + 4.6vw, 6.75rem);
-  }
-  .h3d-bajada {
-    align-self: end;
-    justify-self: end;
-    text-align: right;
-    max-width: 24ch;
-    padding-bottom: 0.4rem;
-  }
-  .h3d-necesita {
-    align-self: end;
-    margin-bottom: 0.25rem;
-  }
-  .h3d-zona-objeto {
-    /* Alto libre: pantalla − header − franja − lema; el símbolo llena el 75 % de arriba del canvas. */
-    width: min(
-      68vw,
-      calc((100svh - 3.5rem - 2.25rem - 5.5rem - 3 * clamp(3.5rem, 1rem + 4.6vw, 6.75rem)) * 1.6 / 0.75)
-    );
-    min-width: 0;
-  }
-  .h3d-zona-globo {
-    grid-area: objeto;
-    justify-self: end;
-    align-self: start;
-  }
-  .h3d-globo {
-    width: 8.5rem;
-  }
-  .h3d-zona-sello {
-    grid-area: objeto;
-    align-self: center;
-  }
   .h3d-sello {
     width: 7.5rem;
-  }
-  .h3d-marquesina-pista {
-    width: auto;
-  }
-  .mo .h3d-marquesina.on .h3d-marquesina-pista {
-    animation: none;
-  }
-  .h3d-marca-fila[aria-hidden] {
-    display: none;
   }
 }
 
@@ -533,20 +146,7 @@ html:not(.mo) .h3d-marquesina-pista {
     font-size: 1rem;
   }
 }
-.m3d-puntos {
-  display: inline-flex;
-  gap: 3px;
-}
-.m3d-puntos > span {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: currentColor;
-}
 /* El punto de "Escribinos": el único acento (estamos atendiendo). */
-.m3d-pildora-negra .m3d-puntos > span {
-  background: var(--color-lima);
-}
 
 /* Menú en tarjetas flotantes bajo las píldoras: la página sigue a la vista. */
 .m3d-pildora-blanca {
@@ -555,14 +155,6 @@ html:not(.mo) .h3d-marquesina-pista {
   background: var(--e-bg);
   color: var(--e-fg);
   border: 1px solid var(--e-line);
-}
-.m3d-puntos-v {
-  flex-direction: column;
-  gap: 2px;
-}
-.m3d-puntos-v > span {
-  width: 4px;
-  height: 4px;
 }
 .m3d-fondo {
   position: fixed;
@@ -593,17 +185,6 @@ html:not(.mo) .h3d-marquesina-pista {
 }
 .mo .m3d-panel:not([hidden]) {
   animation: m3d-despliega 360ms var(--ease-editorial) both;
-}
-@keyframes m3d-despliega {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -0.5rem, 0) scale(0.96);
-  }
-}
-@keyframes m3d-aparece {
-  from {
-    opacity: 0;
-  }
 }
 .m3d-tarjeta {
   border-radius: 1.5rem;
@@ -658,12 +239,6 @@ html:not(.mo) .h3d-marquesina-pista {
 .mo .m3d-panel:not([hidden]) .m3d-lista li {
   animation: m3d-entra 420ms var(--ease-editorial) both;
   animation-delay: calc(80ms + var(--i) * 22ms);
-}
-@keyframes m3d-entra {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 0.4em, 0);
-  }
 }
 .m3d-armar {
   display: flex;
@@ -748,11 +323,6 @@ html:has(#hero):not([data-hero-paso]) .e-barra-celular {
 }
 
 /* Celular: los surcos solo en la franja de abajo (no pasan por detrás de la bajada). */
-@media (max-width: 1023.98px) {
-  .h3d-surcos {
-    height: 24%;
-  }
-}
 
 /* El producto a la vista: los celulares esperan quietos abajo hasta entrar en pantalla y ahí suben. */
 .mo .h3d-vista [data-loop]:not(.on) .a-escaparate-tel {
@@ -762,42 +332,9 @@ html:has(#hero):not([data-hero-paso]) .e-barra-celular {
 /* ── Toques de producto: entrada, celulares ligados al scroll, productos que se apilan, sello fijo ── */
 
 /* Entrada al cargar (solo transform y clip: el poster es el LCP y se pinta en el primer cuadro). */
-.mo .h3d-poster-0 {
-  animation: h3d-llega 1600ms var(--ease-editorial) both;
-}
-@keyframes h3d-llega {
-  from {
-    transform: translate3d(0, 5%, 0) scale(0.9);
-  }
-}
-.mo .h3d-palabra {
-  animation: h3d-sube 1100ms var(--ease-editorial) both;
-  animation-delay: calc(120ms + var(--i) * 120ms);
-}
-@keyframes h3d-sube {
-  from {
-    clip-path: inset(0 0 100% 0);
-    transform: translate3d(0, 0.35em, 0);
-  }
-  to {
-    clip-path: inset(0 0 -20% 0);
-    transform: none;
-  }
-}
 
 /* iPhone SE y pantallas bajas: todo el hero entra en una pantalla sin bajar de 17 px. */
 @media (max-width: 767.98px) and (max-height: 700px) {
-  .h3d-escenario {
-    row-gap: 0.5rem;
-    padding-top: 0.5rem;
-  }
-  .h3d-lema {
-    font-size: 2.5rem;
-  }
-  .h3d-bajada {
-    font-size: 1.0625rem;
-  }
-  .h3d-globo,
   .h3d-sello {
     width: 4.5rem;
   }
@@ -809,11 +346,6 @@ html:has(#hero):not([data-hero-paso]) .e-barra-celular {
     animation: h3d-telefono linear both;
     animation-timeline: view();
     animation-range: entry 0% cover 50%;
-  }
-  @keyframes h3d-telefono {
-    from {
-      transform: translate3d(0, calc(30% + var(--i) * 8%), 0) scale(0.9);
-    }
   }
 }
 
@@ -863,16 +395,3 @@ html:has(#hero):not([data-hero-paso]) .e-barra-celular {
 }
 
 /* Pantallas muy bajas (iPhone SE de 568 px): símbolo más chico, el texto sigue en 17 px o más. */
-@media (max-width: 767.98px) and (max-height: 600px) {
-  .h3d-escenario {
-    grid-template-rows: auto auto minmax(6rem, 1fr) auto auto auto;
-    row-gap: 0.25rem;
-    padding-top: 0.25rem;
-  }
-  .h3d-lema {
-    font-size: 2.125rem;
-  }
-  .h3d-necesita {
-    min-height: 3.25rem;
-  }
-}

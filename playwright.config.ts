@@ -46,7 +46,7 @@ export default defineConfig({
     })),
     ...Object.entries(escritoriosGrandes).map(([name, viewport]) => ({
       name,
-      testMatch: /(layout|a11y|consola|home3d).spec.ts/,
+      testMatch: /(layout|a11y|consola|home).spec.ts/,
       use: { ...devices['Desktop Chrome'], viewport, browserName: 'chromium' as const },
     })),
   ],
