@@ -57,8 +57,7 @@ const e = (() => {
   const gIntArriba = anguloAltura(eInt, barra.arriba); // negativo (arriba del centro)
   const derArriba = enElipse(eInt, gIntArriba);
   const izqArriba = enElipse(eInt, 180 - gIntArriba);
-  const ojo =
-    `M${pt(...derArriba)}A${eInt.rx} ${eInt.ry} 0 0 0 ${pt(...izqArriba)}Z`;
+  const ojo = `M${pt(...derArriba)}A${eInt.rx} ${eInt.ry} 0 0 0 ${pt(...izqArriba)}Z`;
   return contorno + ojo;
 })();
 
@@ -105,4 +104,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="136 0 934 281" wid
   .map((d) => `<path d="${d}"/>`)
   .join('')}</g></svg>\n`;
 writeFileSync('public/webya-logo-vector.svg', svg);
-console.log('listo:', Object.entries(TRAZOS).map(([l, d]) => `${l} ${d.length}`).join(', '));
+process.stdout.write(
+  `listo: ${Object.entries(TRAZOS)
+    .map(([l, d]) => `${l} ${d.length}`)
+    .join(', ')}
+`,
+);
