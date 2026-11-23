@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import { Bento } from '@/components/marketing/editorial/Bento';
 import { Cierre } from '@/components/marketing/editorial/Cierre';
 import { FranjaZona } from '@/components/marketing/editorial/FranjaZona';
-import { Hero3D } from '@/components/marketing/home3d/Hero3D';
 import { NosotrosHome } from '@/components/marketing/home3d/NosotrosHome';
 import { ProductoVista } from '@/components/marketing/home3d/ProductoVista';
 import { Pagina } from '@/components/marketing/editorial/Pagina';
-import { ProyectosInicio } from '@/components/marketing/editorial/Proyectos';
 import { Rubros } from '@/components/marketing/editorial/Rubros';
+import { Confian } from '@/components/marketing/inicio/Confian';
+import { HeroCalle } from '@/components/marketing/inicio/HeroCalle';
+import { Trabajos } from '@/components/marketing/inicio/Trabajos';
 import { SEO_SITIO, jsonLdNegocio, serializarLd } from '@/content/seo';
 import { siteConfig } from '@/lib/site-config';
 
@@ -38,19 +39,21 @@ const LD = jsonLdNegocio({
 });
 
 /**
- * Home: cada pantalla, una sola idea. El símbolo 3D con el lema (Creá. Digitalizá. Crecé.), qué necesita tu
- * negocio (buscador y rubros), el producto en celulares reales, los productos, los proyectos, la zona,
- * quiénes somos y el cierre. Poco texto: la gente no lee. Lo largo vive en la página de cada producto.
+ * Home: cada pantalla, una sola idea. La calle que se hace de noche (tu negocio sigue abierto), los
+ * clientes en sus vidrieras, los últimos trabajos, qué necesita tu negocio (buscador y rubros), el
+ * producto en celulares reales, los productos, la zona, quiénes somos y el cierre. Poco texto: la gente
+ * no lee. Lo largo vive en la página de cada producto.
  */
 export default function Inicio() {
   return (
-    <Pagina>
+    <Pagina headerEncima>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializarLd(LD) }} />
-      <Hero3D />
+      <HeroCalle />
+      <Confian />
+      <Trabajos />
       <Rubros />
       <ProductoVista />
       <Bento />
-      <ProyectosInicio />
       <FranjaZona />
       <NosotrosHome />
       <Cierre />
