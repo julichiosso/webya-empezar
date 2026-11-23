@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Instrument_Serif } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { ViewTransition } from 'react';
 import { preload } from 'react-dom';
 import { FUENTE_PRECARGADA } from '@/brand/tipografia/fuente';
@@ -11,22 +11,13 @@ import { ESTILO_SIN_JS, SCRIPT_MOVIMIENTO } from '@/lib/motion/script';
 import { siteConfig } from '@/lib/site-config';
 import './globals.css';
 
-// Una sola familia (variable): UI, titulares y cifras. Un archivo woff2 para todo el sitio.
-const geist = Geist({
+// Una sola familia (variable, con tamaño óptico): UI, titulares y cifras. Inter es la pariente libre más
+// cercana a la letra de Apple: neutra, precisa y muy legible en pantallas chicas.
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-geist',
+  axes: ['opsz'],
+  variable: '--font-texto',
   display: 'swap',
-});
-
-// Cursiva de contraste: solo para la palabra clave de los titulares (Crecé, Armá). Sin preload: no es
-// texto de lectura y el fallback ajustado de next/font evita que mueva la línea al llegar.
-const cursiva = Instrument_Serif({
-  subsets: ['latin'],
-  weight: '400',
-  style: 'italic',
-  variable: '--font-cursiva',
-  display: 'swap',
-  preload: false,
 });
 
 // Metadata base del sitio. Cada página completa lo suyo (título, canonical, Open Graph).
@@ -54,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }
   return (
     // suppressHydrationWarning: el script de movimiento le pone la clase .mo a <html> antes de hidratar.
-    <html lang="es-AR" className={`${geist.variable} ${cursiva.variable}`} suppressHydrationWarning>
+    <html lang="es-AR" className={inter.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_MOVIMIENTO }} />
       </head>

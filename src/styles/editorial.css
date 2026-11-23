@@ -110,13 +110,16 @@
 
 /* ---------- Tipografía ---------- */
 
-/* Geist con sus ajustes finos: kerning, ligaduras contextuales y tamaño óptico. Tres pesos: 400/500/600. */
+/* Inter con sus ajustes finos: kerning, ligaduras contextuales, tamaño óptico y la "a" y la "l" de
+   pantalla (cv05: l con cola; ss03: comas redondeadas). Tres pesos: 400/500/600. */
 body {
   font-optical-sizing: auto;
   font-kerning: normal;
   font-feature-settings:
     'kern' 1,
-    'calt' 1;
+    'calt' 1,
+    'cv05' 1,
+    'ss03' 1;
 }
 h1,
 h2,

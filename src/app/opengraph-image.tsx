@@ -14,11 +14,11 @@ export const contentType = 'image/png';
 
 /** Imagen para compartir (se genera en el build): negro plano, logo `<webya>`, titular y zona. */
 export default async function Image() {
-  const geist = (peso: number) =>
+  const fuente = (peso: number) =>
     readFile(
-      join(process.cwd(), `node_modules/@fontsource/geist/files/geist-latin-${peso}-normal.woff`),
+      join(process.cwd(), `node_modules/@fontsource/inter/files/inter-latin-${peso}-normal.woff`),
     );
-  const [semibold, regular] = await Promise.all([geist(600), geist(400)]);
+  const [semibold, regular] = await Promise.all([fuente(600), fuente(400)]);
   const { tinta, blanco, gris, linea, lima } = EDITORIAL;
 
   return new ImageResponse(
@@ -32,7 +32,7 @@ export default async function Image() {
         background: tinta,
         color: blanco,
         padding: '64px 72px',
-        fontFamily: 'Geist',
+        fontFamily: 'Inter',
       }}
     >
       <svg viewBox={LOGO_ENCUADRE} width={200} height={60}>
@@ -73,8 +73,8 @@ export default async function Image() {
     {
       ...size,
       fonts: [
-        { name: 'Geist', data: semibold, weight: 600, style: 'normal' },
-        { name: 'Geist', data: regular, weight: 400, style: 'normal' },
+        { name: 'Inter', data: semibold, weight: 600, style: 'normal' },
+        { name: 'Inter', data: regular, weight: 400, style: 'normal' },
       ],
     },
   );

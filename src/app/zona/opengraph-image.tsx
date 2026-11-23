@@ -13,11 +13,11 @@ export const contentType = 'image/png';
 
 /** Imagen para compartir /zona: el titular con las dos ciudades y el mapa real de la zona. */
 export default async function Image() {
-  const geist = (peso: number) =>
+  const fuente = (peso: number) =>
     readFile(
-      join(process.cwd(), `node_modules/@fontsource/geist/files/geist-latin-${peso}-normal.woff`),
+      join(process.cwd(), `node_modules/@fontsource/inter/files/inter-latin-${peso}-normal.woff`),
     );
-  const [semibold, regular] = await Promise.all([geist(600), geist(400)]);
+  const [semibold, regular] = await Promise.all([fuente(600), fuente(400)]);
   const { tinta, blanco, gris } = EDITORIAL;
   const punto = (lat: number, lng: number) => proyectar(P, lat, lng);
   const zonas = ORDEN_ZONAS.map((z) =>
@@ -40,7 +40,7 @@ export default async function Image() {
         background: tinta,
         color: blanco,
         padding: '40px 72px',
-        fontFamily: 'Geist',
+        fontFamily: 'Inter',
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 640 }}>
@@ -62,8 +62,8 @@ export default async function Image() {
     {
       ...size,
       fonts: [
-        { name: 'Geist', data: semibold, weight: 600, style: 'normal' },
-        { name: 'Geist', data: regular, weight: 400, style: 'normal' },
+        { name: 'Inter', data: semibold, weight: 600, style: 'normal' },
+        { name: 'Inter', data: regular, weight: 400, style: 'normal' },
       ],
     },
   );

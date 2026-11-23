@@ -349,7 +349,7 @@
   --color-plano-cota: var(--plano-cota);
   --color-seccion-borde: var(--seccion-borde);
 
-  --font-sans: var(--font-geist), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: var(--font-texto), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --text-display: clamp(2.5rem, 1.7rem + 4.2vw, 4.75rem);
   --text-display--line-height: 1;
   --text-display--letter-spacing: -0.045em;
