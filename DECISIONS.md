@@ -743,3 +743,35 @@ suman avisos. El lockfile solo agrega three, cobe y los tipos (más el reacomodo
 - **Altura del hero**: descuenta el cartel de anuncios (2,25 rem). En pantallas de menos de 600 px de alto
   (iPhone SE de 2016, 320 × 568) la franja de clientes asoma al scrollear; desde 360 × 640 entra todo.
 - Línea base visual: se regeneró a propósito por el cambio de diseño (solo `home-hero-*` de la home).
+
+## 2026-11-23 · Home "Abierto siempre" (reemplaza al hero 3D)
+
+Pedido de Julián: el hero 3D no lo convencía; quería un header transparente que pase a blanco sobre lo
+oscuro, todo vectorial, Apple, sin la cursiva ni el globo con el puntito ("muy de IA"), los trabajos como
+tarjetas grandes y una franja "Confían en Webya" con los logos de los clientes, en un contexto propio.
+
+- **Hero: una calle de pueblo en SVG** (`components/marketing/inicio/Calle.tsx`). Al bajar se hace de
+  noche: los vecinos (panadería, librería, ferretería, farmacia: rubros, no negocios inventados) bajan la
+  persiana y "Tu negocio" sigue abierto, con sitios reales hechos por Webya en la vidriera y el cartel de
+  ABIERTO en lima. Al final la calle entera se enciende, cada vidriera con su sitio. El lema enciende una
+  palabra por momento y la línea de abajo acompaña. El reloj de la fachada avanza de las 19 a la 1.
+- **Tres capas apiladas** (día, noche, luces): el paso a la noche es un fundido de opacidad entre capas;
+  solo se repintan las luces. `--p` lo escribe `ProgresoCalle`; sin movimiento, la calle queda quieta y de
+  noche (una pantalla).
+- **Header transparente**: sin fondo ni línea. `TonoHeader` mira qué hay debajo del logo (`.tono-oscuro` o
+  `[data-oscuro]`) y le pone `data-sobre="oscuro"`; el CSS cambia la paleta. Píldoras sin puntos: "Menú"
+  lleva dos líneas que se cruzan al abrir.
+- **Confían en Webya**: la calle sigue de noche y cada vidriera encendida es un cliente con su logo en sus
+  colores (Micio's, Petrucci, Fono San Jorge, Abelardo, Carribar Las Maris; logos entregados por Julián).
+  En el celular pasa en marquesina; sin movimiento, en filas.
+- **Últimos trabajos**: título grande, tarjetas de a dos con la escena del caso (notebook y teléfono en CSS,
+  fondo de la marca del cliente), qué armamos • rubro y el nombre. Reemplaza al índice de casos en la home;
+  /proyectos sigue con el suyo.
+- **Logos en vector**: el wordmark de Webya redibujado con rectas y elipses sobre las medidas del calco
+  (`scripts/redibujar-logo.mjs`, mismas coordenadas); Petrucci con el texto pasado a curvas; Fono San
+  Jorge nuevo (globo de diálogo con la onda de la voz). Abelardo (PNG dentro de un SVG de 950 KB) y Carribar
+  quedan como WebP livianos.
+- **Tipografía**: Inter variable con tamaño óptico (la más cercana a SF), sin Instrument Serif.
+- **Fuera**: three.js, cobe, el globo, los posters y el chunk 3D. JS inicial vuelve bajo 160 KB (el botón
+  "Armá tu sistema" del hero va sin precarga, como la barra del celular).
+- Línea base visual nueva: `e2e/home.spec.ts-snapshots/home-hero-*.png` (la calle de noche, 7 anchos).
