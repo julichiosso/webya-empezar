@@ -136,3 +136,110 @@
   letter-spacing: -0.005em;
   text-transform: none;
 }
+
+/* ── Toldo entre el hero y "Confían en Webya" ─────────────────────────────────────────────────────
+   Rayas tinta/papel (una lima), borde de abajo ondulado (un semicírculo por raya) con máscara, línea de
+   arriba de 2 px y sombra corta y dura. Se despliega de arriba hacia abajo al entrar en pantalla. */
+.cf {
+  --raya: 12px;
+  --toldo: 14px;
+  position: relative;
+  padding-top: calc(var(--toldo) + var(--raya) / 2 + clamp(2rem, 4vw, 3rem));
+}
+@media (min-width: 768px) {
+  .cf {
+    --raya: 18px;
+    --toldo: 20px;
+  }
+}
+.cf-toldo {
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(var(--toldo) + var(--raya) / 2);
+  /* Contorno de 1,5 px en tinta (también en las ondas claras) y sombra corta y dura. Va en el contenedor:
+     en la tela la recortaría la máscara. */
+  filter: drop-shadow(0 1.5px 0 var(--e-fg)) drop-shadow(0 3px 0 rgb(0 0 0 / 0.12));
+}
+.cf-toldo-tela {
+  position: absolute;
+  inset: 0;
+  border-top: 2px solid var(--e-fg);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--e-fg) 0 var(--raya),
+    var(--e-surface) var(--raya) calc(var(--raya) * 2)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / 100% var(--toldo) no-repeat,
+    radial-gradient(
+        circle calc(var(--raya) / 2) at calc(var(--raya) / 2) var(--toldo),
+        #000 96%,
+        transparent
+      )
+      0 0 / var(--raya) 100% repeat-x;
+  mask:
+    linear-gradient(#000 0 0) top / 100% var(--toldo) no-repeat,
+    radial-gradient(
+        circle calc(var(--raya) / 2) at calc(var(--raya) / 2) var(--toldo),
+        #000 96%,
+        transparent
+      )
+      0 0 / var(--raya) 100% repeat-x;
+  transform-origin: 50% 0;
+}
+/* La única raya lima, cerca del 70 % del ancho y alineada a la trama. */
+.cf-toldo-lima {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 70%;
+  left: round(down, 70%, calc(var(--raya) * 2));
+  width: var(--raya);
+  background: #c6f135;
+}
+.cf-toldo[data-reveal] {
+  opacity: 1;
+  animation: none !important;
+  transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cf-toldo-tela {
+  transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.mo .cf-toldo[data-reveal]:not(.in) {
+  opacity: 1;
+  transform: none;
+}
+.mo .cf-toldo:not(.in) .cf-toldo-tela {
+  transform: scaleY(0);
+}
+.mo .cf-toldo.in .cf-toldo-lima {
+  animation: cf-lima 520ms ease-out 480ms 1;
+}
+@keyframes cf-lima {
+  40% {
+    opacity: 0.25;
+  }
+}
+/* "Confían en Webya" como cartel de la calle (igual que PANADERÍA o LIBRERÍA). */
+.cf-rotulo {
+  justify-self: center;
+  width: fit-content;
+  margin-inline: auto;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--e-fg);
+  border-radius: 0.375rem;
+  color: var(--e-fg);
+  font-weight: 600;
+  line-height: 1.35;
+}
+@media (max-width: 1023.98px) {
+  .cf-rotulo {
+    max-width: 13em;
+    text-align: center;
+  }
+}
+@media (min-width: 1024px) {
+  .cf-rotulo {
+    margin-left: clamp(1rem, 4vw, 3rem);
+  }
+}

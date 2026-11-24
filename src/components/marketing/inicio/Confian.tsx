@@ -103,6 +103,12 @@ export function Confian() {
   );
   return (
     <section id={C.id} className="tono-hueso cf" aria-labelledby="titulo-confian">
+      {/* El toldo de la calle, a todo el ancho: se despliega al entrar en pantalla. */}
+      <div className="cf-toldo" data-reveal="" aria-hidden="true">
+        <span className="cf-toldo-tela">
+          <span className="cf-toldo-lima" />
+        </span>
+      </div>
       <div className="cf-marco">
         <h2 id="titulo-confian" className="cf-rotulo">
           {C.rotulo}
