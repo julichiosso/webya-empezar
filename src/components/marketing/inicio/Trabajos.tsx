@@ -10,22 +10,17 @@ import { TituloPalabras } from '../editorial/TituloPalabras';
 /** Fondo de la escena de cada caso, tomado de la marca del cliente (y una luz suave arriba). */
 const ESCENA: Record<string, { fondo: string; luz: string; claro: boolean }> = ESCENA_TRABAJOS;
 
-/** Notebook en vector (CSS): pantalla con borde negro, cámara y la base de aluminio con su muesca. */
-function Notebook({ img }: { img: ImagenProyecto }) {
+/** La captura real del sitio, a sangre en la tarjeta, recortada desde arriba. */
+function Captura({ img, clase }: { img: ImagenProyecto; clase: string }) {
   return (
-    <div className="tb-notebook">
-      <div className="tb-notebook-tapa">
-        <div className="tb-notebook-pantalla">
-          <Image
-            src={img.src}
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 34rem, 80vw"
-            className="object-cover object-top"
-          />
-        </div>
-      </div>
-      <div className="tb-notebook-base" aria-hidden="true" />
+    <div className={`tb-captura ${clase}`}>
+      <Image
+        src={img.src}
+        alt=""
+        fill
+        sizes="(min-width: 768px) 46vw, 92vw"
+        className="object-cover object-top"
+      />
     </div>
   );
 }
@@ -60,8 +55,14 @@ function Escena({ p }: { p: Proyecto }) {
       <div className="tb-equipos">
         {desktop ? (
           <>
-            <Notebook img={desktop} />
-            {mobile ? <Telefono img={mobile} className="tb-telefono-lado" /> : null}
+            <Captura img={desktop} clase="tb-captura-compu" />
+            {mobile ? (
+              <>
+                {/* En el celular, la captura del celular a sangre (ya es vertical). */}
+                <Captura img={mobile} clase="tb-captura-movil" />
+                <Telefono img={mobile} className="tb-telefono-asoma" />
+              </>
+            ) : null}
           </>
         ) : mobile ? (
           <Telefono img={mobile} className="tb-telefono-solo" />

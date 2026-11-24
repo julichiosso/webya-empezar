@@ -243,3 +243,75 @@
     margin-left: clamp(1rem, 4vw, 3rem);
   }
 }
+
+/* ── Últimos trabajos: la captura real a sangre y un solo iPhone que asoma desde abajo ───────────── */
+.tb-escena {
+  aspect-ratio: 4 / 5;
+}
+@media (min-width: 768px) {
+  .tb-escena {
+    aspect-ratio: 4 / 3;
+  }
+}
+.tb-equipos {
+  display: block;
+}
+.tb-captura {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.tb-captura img {
+  transition: transform 700ms var(--ease-editorial);
+}
+@media (hover: hover) {
+  .tb-tarjeta:hover .tb-equipos {
+    transform: none;
+  }
+  .tb-tarjeta:hover .tb-captura img {
+    transform: scale(1.03) translate3d(0, -2%, 0);
+  }
+  .tb-tarjeta:hover .tb-telefono-asoma {
+    translate: 0 -4%;
+  }
+}
+/* El teléfono: más chico que la captura, abajo a la derecha, cortado por el borde de la tarjeta. */
+.tb-telefono-asoma {
+  position: absolute;
+  right: 6%;
+  bottom: -16%;
+  width: 30%;
+  transition: translate 700ms var(--ease-editorial);
+}
+@media (min-width: 768px) {
+  .tb-telefono-asoma {
+    width: 22%;
+    bottom: -18%;
+  }
+}
+/* Sin captura de compu (el turnero): el teléfono solo, al medio, asomando desde abajo. */
+.tb-telefono-solo {
+  position: absolute;
+  left: 50%;
+  bottom: -14%;
+  width: 48%;
+  translate: -50% 0;
+}
+@media (min-width: 768px) {
+  .tb-telefono-solo {
+    width: 32%;
+    bottom: -20%;
+  }
+}
+.tb-captura-movil {
+  display: none;
+}
+@media (max-width: 767.98px) {
+  .tb-escena:has(.tb-captura-movil) .tb-captura-compu,
+  .tb-escena:has(.tb-captura-movil) .tb-telefono-asoma {
+    display: none;
+  }
+  .tb-captura-movil {
+    display: block;
+  }
+}
