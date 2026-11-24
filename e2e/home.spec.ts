@@ -86,7 +86,7 @@ test.describe('movimiento reducido', () => {
     for (const palabra of await hero.locator('.hc-palabra').all()) {
       await expect(palabra).toHaveCSS('opacity', '1');
     }
-    await expect(hero.getByText(/^Turnos, pedidos y tiendas online/)).toBeVisible();
+    await expect(hero.getByText(/^Turnos con seña, pedidos y tiendas online/)).toBeVisible();
     await expect(hero.locator('.hc-noche')).toHaveCSS('opacity', '1');
   });
 });
