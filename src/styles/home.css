@@ -465,6 +465,50 @@ header.a-nav[data-sobre='oscuro'] {
   --c-reflejo: #ffffff;
   --c-neon: #c9c9cc;
 }
+/* De día, cada frente con los colores de un pueblo: paredes a la cal, carpintería pintada y el cartel
+   del rubro hecho a mano. Tinta cálida en vez de negro puro. El tuyo, con el toldo de la marca. */
+.c-dia {
+  color: #2b2622;
+}
+.c-dia .c-v0 {
+  --c-pared-0: #f2e2bf;
+  --c-pared-1: #f2e2bf;
+  --c-toldo: #b4553d;
+  --c-cartel: #2f5d4f;
+  --c-rubro: #f6efe0;
+  --c-puerta: #2f5d4f;
+}
+.c-dia .c-v1 {
+  --c-pared-0: #dde6e0;
+  --c-pared-1: #dde6e0;
+  --c-cartel: #6a4330;
+  --c-rubro: #f6efe0;
+  --c-puerta: #6a4330;
+}
+.c-dia .c-v2 {
+  --c-pared-0: #ecd5cc;
+  --c-pared-1: #ecd5cc;
+  --c-toldo: #2e4a66;
+  --c-cartel: #2e4a66;
+  --c-rubro: #f6efe0;
+  --c-puerta: #f7f1ea;
+}
+.c-dia .c-v3 {
+  --c-pared-0: #e3e9ef;
+  --c-pared-1: #e3e9ef;
+  --c-toldo: #3f7a63;
+  --c-toldo-claro: #f7f4ec;
+  --c-cartel: #f7f4ec;
+  --c-rubro: #2b2622;
+  --c-puerta: #3f7a63;
+}
+.c-dia .c-tu {
+  --c-pared-0: #fbf8f1;
+  --c-pared-1: #fbf8f1;
+  --c-toldo: #2b2622;
+  --c-toldo-claro: #c6f135;
+  --c-puerta: #2b2622;
+}
 .c-noche {
   color: #34343a;
   --c-pared-0: #161618;
@@ -534,11 +578,12 @@ header.a-nav[data-sobre='oscuro'] {
   stroke-width: 1.25;
   vector-effect: non-scaling-stroke;
 }
+/* El cartel del rubro, pintado: minúscula, sin letras espaciadas. */
 .c-rubro,
 .c-rubro-luz {
-  font-size: 12.5px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.24em;
+  letter-spacing: -0.005em;
   fill: var(--c-rubro);
 }
 .c-vidrio {

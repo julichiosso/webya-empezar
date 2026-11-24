@@ -207,7 +207,7 @@ function Puerta({ x, y, w, h }: { x: number; y: number; w: number; h: number }) 
 function FrenteVecino({ v, i, capa }: { v: Vecino; i: number; capa: string }) {
   const p = partes(v);
   return (
-    <g>
+    <g className={`c-v${i}`}>
       <path d={remate(v, p.arriba, p.cornisa)} className={`c-pared c-pared-${i % 2}`} />
       <path d={remate(v, p.arriba, p.cornisa)} className="c-linea" fill="none" />
       <rect
@@ -279,7 +279,7 @@ export const NEON = { x: 902, y: 330, w: 76, h: 28 };
 function FrenteTuNegocio({ capa }: { capa: string }) {
   const { x, ancho } = C;
   return (
-    <g>
+    <g className="c-tu">
       <path
         d={`M${x + 8} ${C_CORNISA}V${C.arriba + 20}H${x + ancho - 8}V${C_CORNISA}Z`}
         className="c-pared c-pared-1"

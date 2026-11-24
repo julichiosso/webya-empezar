@@ -132,7 +132,7 @@ export const HERO_CALLE = {
   ],
   /** Carteles de la calle (rubros, no negocios inventados) y el del medio, que es el tuyo. */
   carteles: { tuNegocio: 'Tu negocio', abierto: 'ABIERTO' },
-  rubros: ['PANADERÍA', 'LIBRERÍA', 'PELUQUERÍA', 'CONSULTORIO'],
+  rubros: ['Panadería', 'Librería', 'Peluquería', 'Consultorio'],
   /** La luna o el sol del hero: un interruptor de día y noche. */
   astro: { dia: 'Hacer de día', noche: 'Hacer de noche', pista: 'Hacé de día' },
   escena:
