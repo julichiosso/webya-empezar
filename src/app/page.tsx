@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Bento } from '@/components/marketing/editorial/Bento';
 import { Cierre } from '@/components/marketing/editorial/Cierre';
 import { FranjaZona } from '@/components/marketing/editorial/FranjaZona';
 import { NosotrosHome } from '@/components/marketing/home3d/NosotrosHome';
@@ -8,6 +7,7 @@ import { Pagina } from '@/components/marketing/editorial/Pagina';
 import { Rubros } from '@/components/marketing/editorial/Rubros';
 import { Confian } from '@/components/marketing/inicio/Confian';
 import { HeroCalle } from '@/components/marketing/inicio/HeroCalle';
+import { Servicios } from '@/components/marketing/inicio/Servicios';
 import { Trabajos } from '@/components/marketing/inicio/Trabajos';
 import { SEO_SITIO, jsonLdNegocio, serializarLd } from '@/content/seo';
 import { siteConfig } from '@/lib/site-config';
@@ -40,8 +40,8 @@ const LD = jsonLdNegocio({
 
 /**
  * Home: cada pantalla, una sola idea. La calle que se hace de noche (tu negocio sigue abierto), los
- * clientes en sus vidrieras, los últimos trabajos, qué necesita tu negocio (buscador y rubros), el
- * producto en celulares reales, los productos, la zona, quiénes somos y el cierre. Poco texto: la gente
+ * clientes que pasan en la cinta, los últimos trabajos, qué hacemos (los productos con fotos), qué
+ * necesita tu negocio (buscador y rubros), el producto en celulares reales, la zona, quiénes somos y el cierre. Poco texto: la gente
  * no lee. Lo largo vive en la página de cada producto.
  */
 export default function Inicio() {
@@ -51,9 +51,9 @@ export default function Inicio() {
       <HeroCalle />
       <Confian />
       <Trabajos />
+      <Servicios />
       <Rubros />
       <ProductoVista />
-      <Bento />
       <FranjaZona />
       <NosotrosHome />
       <Cierre />

@@ -5,6 +5,7 @@ import { ESCENA_TRABAJOS } from '@/brand/tokens/colores';
 import { RUTAS, TRABAJOS as T } from '@/content/home';
 import { CASOS, type ImagenProyecto, type Proyecto } from '@/content/proyectos';
 import { LinkChevron } from '../editorial/LinkChevron';
+import { TituloPalabras } from '../editorial/TituloPalabras';
 
 /** Fondo de la escena de cada caso, tomado de la marca del cliente (y una luz suave arriba). */
 const ESCENA: Record<string, { fondo: string; luz: string; claro: boolean }> = ESCENA_TRABAJOS;
@@ -80,9 +81,7 @@ export function Trabajos() {
     <section id={T.id} className="tono-hueso tb" aria-labelledby="titulo-trabajos">
       <div className="e-wrap">
         <div className="tb-cabeza">
-          <h2 id="titulo-trabajos" className="tb-titulo">
-            {T.titulo}
-          </h2>
+          <TituloPalabras lineas={[T.titulo]} id="titulo-trabajos" className="tb-titulo" />
           <p className="tb-bajada">{T.bajada}</p>
         </div>
         <ul className="tb-grilla">
