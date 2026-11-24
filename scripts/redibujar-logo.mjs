@@ -65,7 +65,9 @@ const e = (() => {
 const b =
   rect(552, 4, 584, 209) +
   elipse({ cx: 642, cy: 134.5, rx: 80, ry: 79.5 }) +
-  elipse({ cx: 636, cy: 133.5, rx: 52, ry: 48.5 }, false);
+  elipse({ cx: 636, cy: 133.5, rx: 52, ry: 48.5 }, false) +
+  // Relleno de la muesca de abajo (panza con asta): a tamaño chico parecía un corte.
+  rect(584, 189, 614, 209);
 
 // ── y: brazo izquierdo recto y el derecho que se curva en la cola, terminada en punta.
 const y =
@@ -80,7 +82,9 @@ const y =
 const a =
   elipse({ cx: 977, cy: 134.5, rx: 80, ry: 79.5 }) +
   elipse({ cx: 982, cy: 133.5, rx: 52, ry: 48.5 }, false) +
-  rect(1034, 59, 1065, 209);
+  rect(1034, 59, 1065, 209) +
+  // Relleno de la muesca de arriba (panza con asta): a tamaño chico parecía un corte.
+  rect(1001, 59, 1034, 80);
 
 const TRAZOS = { w, e, b, y, a };
 
