@@ -94,30 +94,44 @@ test.describe('movimiento reducido', () => {
 test.describe('acciones del hero', () => {
   soloEn(['desktop', 'iphone-15']);
 
-  test('"Ver trabajos" baja a los trabajos y "Armá tu sistema" abre el configurador', async ({
+  test('"Probá las demos" abre las demos, "Armá tu sistema" el configurador y cada local su demo', async ({
     page,
   }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const hero = page.locator('#hero');
-    await hero.getByRole('link', { name: 'Ver trabajos' }).click();
-    await expect(page).toHaveURL(/#trabajos$/);
-    await expect(page.getByRole('heading', { name: 'Últimos trabajos' })).toBeInViewport();
+    await hero.getByRole('link', { name: 'Probá las demos' }).click();
+    await expect(page).toHaveURL(/\/demos$/);
     await page.goto('/', { waitUntil: 'networkidle' });
     await hero.getByRole('link', { name: 'Armá tu sistema' }).click();
     await expect(page).toHaveURL(/\/armar$/);
-  });
-
-  test('en la compu, el botón flotante para escribirnos aparece al pasar el hero y abre WhatsApp', async ({
-    page,
-  }, info) => {
-    test.skip(info.project.name !== 'desktop', 'el sello fijo es de la compu');
     await page.goto('/', { waitUntil: 'networkidle' });
-    const sello = page.getByRole('link', { name: /^Escribinos por/ });
-    await expect(sello).toBeHidden();
-    await page.locator('#trabajos').evaluate((el) => el.scrollIntoView());
-    await expect(sello).toBeVisible();
-    await expect(sello).toHaveAttribute('href', /^https:\/\/wa\.me\//);
-    await expect(sello).toHaveAttribute('target', '_blank');
+    await expect(hero.getByRole('link', { name: /: probá la demo/ })).toHaveCount(4);
+    await expect(hero.getByRole('link', { name: /Peluquería/ })).toHaveAttribute(
+      'href',
+      '/demos/turnos',
+    );
+  });
+});
+
+test.describe('asistente', () => {
+  soloEn(['desktop', 'iphone-15']);
+
+  test('la carita abre el chat, entiende el problema y pasa a WhatsApp', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const carita = page.getByRole('button', { name: 'Abrir el asistente de Webya' });
+    await expect(carita).toBeVisible();
+    await carita.click();
+    const chat = page.getByRole('dialog', { name: 'Asistente de Webya' });
+    await expect(chat).toBeVisible();
+    await chat.getByRole('button', { name: 'Me reservan y no vienen' }).click();
+    await expect(chat.getByRole('link', { name: /Turnos con seña/ })).toBeVisible();
+    await chat.getByRole('textbox').fill('quiero hablar con una persona');
+    await chat.getByRole('button', { name: 'Enviar' }).click();
+    const wa = chat.getByRole('link', { name: 'Seguir por WhatsApp' }).first();
+    await expect(wa).toHaveAttribute('href', /^https:\/\/wa\.me\/.*asistente/);
+    await page.keyboard.press('Escape');
+    await expect(chat).toBeHidden();
+    await expect(carita).toBeFocused();
   });
 });
 

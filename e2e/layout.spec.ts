@@ -54,7 +54,7 @@ test('la home entra en la primera pantalla: el lema, la bajada y las dos accione
     hero.getByText(/^Turnos, pedidos y tiendas online/),
     hero.getByRole('link', { name: 'Armá tu sistema' }),
     // En pantallas de menos de 600 px de alto (iPhone SE de 2016) queda una sola acción.
-    ...(vh >= 600 ? [hero.getByRole('link', { name: 'Ver trabajos' })] : []),
+    ...(vh >= 600 ? [hero.getByRole('link', { name: 'Probá las demos' })] : []),
   ];
   for (const el of visibles) {
     const caja = (await el.boundingBox())!;

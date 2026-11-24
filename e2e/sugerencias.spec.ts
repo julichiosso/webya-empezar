@@ -12,25 +12,25 @@ test.describe('sugerencias del celular', () => {
 
   test('aparece según la sección que se mira, se cierra y no vuelve', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    await page.locator('#que-armamos').scrollIntoViewIfNeeded();
+    await page.locator('#servicios').scrollIntoViewIfNeeded();
     const aviso = page.getByRole('complementary', { name: SUGERENCIAS_UI.etiqueta });
     await expect(aviso).toContainText(QUE_ARMAMOS.texto, { timeout: 8000 });
     await expect(aviso).toHaveCount(1);
 
-    // No tapa la barra de atajos: queda por encima.
+    // No tapa la carita del asistente: queda por encima.
     const caja = (await aviso.boundingBox())!;
-    const barra = (await page.getByRole('navigation', { name: 'Atajos' }).boundingBox())!;
-    expect(caja.y + caja.height).toBeLessThanOrEqual(barra.y);
+    const carita = (await page.getByRole('button', { name: 'Abrir el asistente de Webya' }).boundingBox())!;
+    expect(caja.y + caja.height).toBeLessThanOrEqual(carita.y);
 
     await aviso.getByRole('button', { name: SUGERENCIAS_UI.cerrar }).click();
     await expect(aviso).toHaveCount(0);
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.locator('#que-armamos').scrollIntoViewIfNeeded();
+    await page.locator('#servicios').scrollIntoViewIfNeeded();
     await page.waitForTimeout(2500);
     await expect(page.getByText(QUE_ARMAMOS.texto)).toHaveCount(0);
   });
 
-  test('mientras se escribe no aparece nada y la barra de atajos se corre', async ({ page }) => {
+  test('mientras se escribe no aparece nada y la carita se corre', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByRole('combobox').focus();
     await expect(page.locator('html')).toHaveAttribute('data-teclado', '');
