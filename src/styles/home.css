@@ -275,7 +275,9 @@ header.a-nav[data-sobre='oscuro'] {
   font-size: clamp(1.0625rem, 0.95rem + 0.45vw, 1.3125rem);
   line-height: 1.4;
   letter-spacing: -0.01em;
-  color: color-mix(in srgb, currentColor 66%, transparent);
+  /* Qué hacemos y para quién: en tinta (no en gris) y sin cortes feos de línea. */
+  color: color-mix(in srgb, currentColor 86%, transparent);
+  text-wrap: balance;
   transition:
     opacity 450ms var(--ease-editorial),
     transform 450ms var(--ease-editorial);
@@ -407,6 +409,16 @@ header.a-nav[data-sobre='oscuro'] {
 @media (min-width: 768px) {
   .hc-escenario {
     --alto-calle: min(max(35vw, 46svh), 58svh);
+  }
+}
+/* Tablet vertical (va después de la regla de 768, que la pisaría): sobra alto, así que la calle crece un
+   poco y el texto baja, para repartir el aire en vez de dejar un hueco entre los dos. */
+@media (min-width: 600px) and (max-width: 1023.98px) and (orientation: portrait) {
+  .hc-escenario {
+    --alto-calle: 55svh;
+  }
+  .hc-texto {
+    padding-top: calc(3.5rem + 9svh);
   }
 }
 .hc-noche {

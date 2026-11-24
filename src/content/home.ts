@@ -114,12 +114,14 @@ export const HERO_CALLE = {
   lema: LEMA,
   /** Una línea por momento: la primera es la bajada de siempre (la que queda sin movimiento). */
   lineas: [
-    'Turnos, pedidos y tiendas online para negocios de San Francisco, San Jorge y la zona.',
+    'Turnos con seña, pedidos y tiendas online para negocios de San Francisco, San Jorge y la zona.',
     'Bajás la persiana. Tu negocio sigue tomando turnos, pedidos y consultas.',
     'Amanece, y la calle entera quiere lo mismo que vos.',
   ],
   armar: 'Armá tu sistema',
   demos: 'Probá las demos',
+  /** Debajo de los botones: de dónde somos y cómo se presupuesta (TRUST_CLAIMS: zona, precio a medida). */
+  confianza: 'Somos de San Jorge. Te pasamos el presupuesto por WhatsApp, sin compromiso.',
   /** Pista sobre la calle: los locales se tocan. */
   pista: 'Tocá un local y probá su demo',
   /** Cada local de la calle lleva a la demo de su rubro; el del medio, a armar el tuyo. */

@@ -54,9 +54,7 @@ export function HeroCalle() {
               {H.demos}
             </Link>
           </div>
-          <p className="hc-pista" aria-hidden="true">
-            {H.pista}
-          </p>
+          <p className="hc-confianza">{H.confianza}</p>
         </div>
 
         <figure className="hc-figura" aria-label={H.escena}>

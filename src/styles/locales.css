@@ -64,14 +64,32 @@
   opacity: 1;
   transform: translate3d(-50%, 0, 0);
 }
-/* La pista: una línea chica debajo de los botones, sin globo. */
+/* La pista: sobre la calle, arriba del primer local (encuadre 1600 × 560: x 40, techo en y 194). */
 .hc-pista {
-  margin: 0.875rem 0 0;
+  position: absolute;
+  left: 2.5%;
+  top: 27%;
+  margin: 0;
   font-size: 0.875rem;
+  font-weight: 500;
   color: var(--e-muted);
+  white-space: nowrap;
+  pointer-events: none;
 }
 .hc[data-oscuro] .hc-pista {
   color: rgb(245 245 247 / 0.6);
+}
+/* Debajo de los botones: de dónde somos y cómo se presupuesta. */
+.hc-confianza {
+  margin: 0.875rem 0 0;
+  max-width: 34rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--e-muted);
+  text-wrap: balance;
+}
+.hc[data-oscuro] .hc-confianza {
+  color: rgb(245 245 247 / 0.66);
 }
 /* Celular: la pista no (los locales se tocan igual) y los dos botones lado a lado. */
 @media (max-width: 767.98px) {

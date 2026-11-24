@@ -662,11 +662,14 @@ const pct = (n: number, total: number) => `${((n / total) * 100).toFixed(3)}%`;
 /**
  * Los locales se tocan: un link invisible sobre cada fachada (misma geometría que el dibujo) que lleva a
  * la demo de su rubro; el del medio, a armar el tuyo. Al pasar el mouse o con el foco, el local se marca
- * y aparece qué demo abre. La pista ("Tocá un local…") vive debajo de los botones del hero.
+ * y aparece qué demo abre. La pista ("Tocá un local…") va sobre la vereda, arriba del primer local.
  */
 export function LocalesCalle() {
   return (
     <div className="hc-locales">
+      <p className="hc-pista" aria-hidden="true">
+        {H.pista}
+      </p>
       {CAJAS.map((c, i) => {
         const local = H.locales[i];
         if (!local) return null;
