@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { CONFIAN, HERO_CALLE } from '@/content/home';
-import { NOCHE, calcularProgreso, pasoDe } from './ProgresoCalle';
+import { calcularProgreso, nocheDe, pasoDe } from './ProgresoCalle';
 
 describe('progreso de la calle', () => {
   it('arriba es 0, al soltar el escenario es 1 y no se pasa', () => {
@@ -22,9 +22,12 @@ describe('progreso de la calle', () => {
     expect(HERO_CALLE.lineas).toHaveLength(HERO_CALLE.lema.length);
   });
 
-  it('se hace de noche antes de que tu negocio quede solo abierto (paso 1)', () => {
-    expect(pasoDe(NOCHE)).toBe(0);
-    expect(NOCHE).toBeLessThan(0.3);
+  it('de día arriba, de noche en "Digitalizá" y amanece en "Crecé"', () => {
+    expect(nocheDe(0)).toBe(0);
+    expect(nocheDe(0.45)).toBe(1);
+    expect(nocheDe(1)).toBe(0);
+    expect(pasoDe(0.45)).toBe(1);
+    expect(nocheDe(0.25)).toBeGreaterThan(0.5);
   });
 });
 

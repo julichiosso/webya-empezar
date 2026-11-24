@@ -2,16 +2,23 @@ import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { MENSAJE_CONTACTO } from '@/content/configurador';
 import { HERO_CALLE as H, RUTAS, TRABAJOS } from '@/content/home';
-import { NOSOTROS } from '@/content/paginas';
 import { enlaceContacto } from '../editorial/contacto';
-import { Sello } from '../home3d/Sello';
+import { Astro } from './Astro';
 import { Calle } from './Calle';
+import { EscribinosFlotante } from './EscribinosFlotante';
 import { ProgresoCalle } from './ProgresoCalle';
 
 const ID = 'hero';
 
 /** Capturas reales (sitios hechos por Webya) que pasan por la vidriera-pantalla de tu negocio. */
 const SITIOS = ['/calle/micios.webp', '/calle/petrucci.webp', '/calle/lorena.webp'] as const;
+
+/** Nubes de día (línea, como la calle): posición, escala y cuánto tardan en cruzar. */
+const NUBES = [
+  { x: '7%', y: '30%', s: 0.9, d: '70s' },
+  { x: '44%', y: '0%', s: 0.65, d: '95s' },
+  { x: '78%', y: '42%', s: 0.8, d: '80s' },
+] as const;
 
 /**
  * Hero "Abierto siempre". Arriba, el lema (Creá. Digitalizá. Crecé.) y una línea; abajo, una calle de
@@ -29,11 +36,21 @@ export function HeroCalle() {
     <section id={ID} className="tono-hueso hc" aria-labelledby="titulo-hero">
       <ProgresoCalle id={ID} />
       <div className="hc-escenario">
-        <div className="hc-cielo" aria-hidden="true">
-          <svg viewBox="0 0 40 40" className="hc-luna" focusable="false">
-            <path d="M27 6a16 16 0 1 0 7 22A13 13 0 0 1 27 6Z" />
-          </svg>
+        <div className="hc-cielo" aria-hidden="true" />
+        <div className="hc-nubes" aria-hidden="true">
+          {NUBES.map((n, i) => (
+            <svg
+              key={i}
+              viewBox="0 0 120 48"
+              className="hc-nube"
+              style={{ '--x': n.x, '--y': n.y, '--s': n.s, '--d': n.d } as CSSProperties}
+              focusable="false"
+            >
+              <path d="M18 40h84a14 14 0 0 0 0-28 22 22 0 0 0-40-6 18 18 0 0 0-30 12A12 12 0 0 0 18 40Z" />
+            </svg>
+          ))}
         </div>
+        <Astro idHero={ID} textos={H.astro} />
 
         <div className="hc-texto">
           <h1 id="titulo-hero" className="hc-lema">
@@ -74,16 +91,8 @@ export function HeroCalle() {
           <Calle sitios={SITIOS} />
         </figure>
       </div>
-      {/* En la compu, el sello para escribirnos queda fijo abajo a la derecha cuando el hero ya pasó. */}
-      <Sello
-        href={contacto.href}
-        externo={externo}
-        aria={externo ? H.sello.aria : H.sello.ariaMail}
-        giro={H.sello.giro}
-        foto={NOSOTROS.foto}
-        className="h3d-sello-fijo"
-        idArco="h3d-sello-arco-fijo"
-      />
+      {/* En la compu, el botón para escribirnos queda fijo abajo a la derecha cuando el hero ya pasó. */}
+      <EscribinosFlotante href={contacto.href} externo={externo} />
     </section>
   );
 }

@@ -506,6 +506,9 @@ function Luces({ sitios }: { sitios: readonly string[] }) {
                 className="c-carpinteria-noche"
               />
               <SitioVidriera x={vid.x} y={vid.y + 26} w={vid.w} h={vid.h - 26} acento={v.acento} />
+            </g>
+            {/* El cartel encendido y la luz en la vereda: solo mientras es de noche. */}
+            <g className="c-luz c-de-noche" style={tramo(v.crece)}>
               <path d={derrame} fill="url(#c-derrame-frio)" />
               <rect {...cuadro(p.cartel)} rx={3} className="c-cartel-luz" />
               <text
@@ -523,7 +526,7 @@ function Luces({ sitios }: { sitios: readonly string[] }) {
 
       {/* Faroles de la calle. */}
       {FAROLES.map((x) => (
-        <g key={x} className="c-luz" style={tramo(0.22)}>
+        <g key={x} className="c-luz c-de-noche" style={tramo(0.22)}>
           <path d={`M${x + 32} ${PISO - 172}h12l66 172H${x - 34}Z`} fill="url(#c-cono)" />
           <ellipse cx={x + 38} cy={PISO + 8} rx={86} ry={9} fill="url(#c-halo)" opacity={0.5} />
           <circle cx={x + 38} cy={PISO - 176} r={18} fill="url(#c-halo)" />
@@ -532,7 +535,7 @@ function Luces({ sitios }: { sitios: readonly string[] }) {
       ))}
 
       {/* Tu negocio: cartel iluminado, farol de pared, pantalla y "Abierto". */}
-      <g className="c-luz" style={tramo(0.24)}>
+      <g className="c-luz c-de-noche" style={tramo(0.24)}>
         <rect {...cuadro(C_CARTEL)} rx={8} fill={K.cartel} />
         <text x={800} y={116} textAnchor="middle" className="c-tu-negocio c-tu-negocio-luz">
           {H.carteles.tuNegocio}
@@ -540,7 +543,7 @@ function Luces({ sitios }: { sitios: readonly string[] }) {
         <circle cx={FAROL_PARED.x} cy={FAROL_PARED.y + 12} r={34} fill="url(#c-halo)" />
         <path d={`M${FAROL_PARED.x - 6} ${FAROL_PARED.y}h12l-2 18h-8Z`} fill={K.lampara} />
       </g>
-      <g className="c-luz" style={tramo(0.3)}>
+      <g className="c-luz c-de-noche" style={tramo(0.3)}>
         <ellipse
           cx={PANTALLA.x + PANTALLA.w / 2}
           cy={PANTALLA.y + PANTALLA.h / 2}
@@ -552,6 +555,8 @@ function Luces({ sitios }: { sitios: readonly string[] }) {
           d={`M${PANTALLA.x - 12} ${PISO}h${PANTALLA.w + 24}l60 28H${PANTALLA.x - 72}Z`}
           fill="url(#c-derrame-frio)"
         />
+      </g>
+      <g className="c-luz" style={tramo(0.3)}>
         <g clipPath="url(#c-recorte-pantalla)">
           <rect {...cuadro(PANTALLA)} fill={K.pantalla} />
           {sitios.map((src, i) => (
@@ -570,7 +575,7 @@ function Luces({ sitios }: { sitios: readonly string[] }) {
         </g>
         <rect {...cuadro(PANTALLA)} className="c-pantalla-borde" />
       </g>
-      <g className="c-luz" style={tramo(0.37)}>
+      <g className="c-luz c-de-noche" style={tramo(0.37)}>
         <rect {...cuadro(NEON)} rx={14} className="c-neon-halo" />
         <rect {...cuadro(NEON)} rx={14} className="c-neon" />
         <text
@@ -589,7 +594,7 @@ function Luces({ sitios }: { sitios: readonly string[] }) {
           cx={RELOJ.cx}
           cy={RELOJ.cy}
           r={RELOJ.r + 14}
-          className="c-luz c-reloj-halo"
+          className="c-luz c-de-noche c-reloj-halo"
           style={tramo(0.22)}
         />
         <path d={`M${RELOJ.cx} ${RELOJ.cy - RELOJ.r - 10}v10`} className="c-reloj-soporte" />

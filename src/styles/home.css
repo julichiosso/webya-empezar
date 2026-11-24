@@ -70,22 +70,46 @@ header.a-nav[data-sobre='oscuro'] {
 }
 
 /* ── Hero: la calle ─────────────────────────────────────────────────────────────────────────────────── */
+/* `--noche` registrada: así se puede fundir cuando alguien toca la luna o el sol. */
+@property --noche {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
 .hc {
-  /* Sin movimiento (o sin JS): la calle quieta y ya de noche. */
-  --p: 1;
-  --noche: clamp(0, calc((var(--p) - 0.1) / 0.22), 1);
+  /* Sin movimiento (o sin JS): la calle quieta, de noche, con tu negocio abierto. */
+  --p: 0.5;
+  /* Anochece entre 0,10 y 0,30; amanece entre 0,66 y 0,86 (igual que nocheDe en ProgresoCalle). */
+  --noche: min(
+    clamp(0, calc((var(--p) - 0.1) / 0.2), 1),
+    clamp(0, calc((0.86 - var(--p)) / 0.2), 1)
+  );
+  --mx: 0;
+  --my: 0;
   position: relative;
 }
+.hc[data-cielo='dia'] {
+  --noche: 0;
+}
+.hc[data-cielo='noche'] {
+  --noche: 1;
+}
+.hc[data-cambiando] {
+  transition: --noche 850ms var(--ease-editorial);
+}
+/* Un tramo corto: la historia entra en un par de pasadas del dedo y la inercia la completa. */
 .mo .hc {
   --p: 0;
-  height: 230svh;
+  height: 180svh;
 }
 @media (min-width: 768px) {
   .mo .hc {
-    height: 260svh;
+    height: 210svh;
   }
 }
 .hc-escenario {
+  /* Alto de la calle: en el celular, más alta que el ancho (se ve el frente del medio). */
+  --alto-calle: min(max(35vw, 52svh), 58svh);
   position: sticky;
   top: 0;
   height: 100svh;
@@ -99,18 +123,130 @@ header.a-nav[data-sobre='oscuro'] {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, #05060a 0%, #0b0d14 55%, #141724 100%);
+  background: linear-gradient(180deg, #050505 0%, #0b0b0c 60%, #151515 100%);
   opacity: var(--noche);
   will-change: opacity;
 }
-.hc-luna {
+
+/* Nubes de día: línea fina, como la calle; cruzan despacio y se van al anochecer. */
+.hc-nubes {
   position: absolute;
-  top: 5.75rem;
-  right: 1.5rem;
-  width: clamp(1.75rem, 2.6vw, 2.5rem);
+  inset: auto 0 calc(var(--alto-calle) * 0.83) 0;
+  height: 6.5rem;
+  z-index: -1;
+  overflow: hidden;
+  opacity: calc(1 - var(--noche));
+  pointer-events: none;
+}
+.hc-nube {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: calc(7.5rem * var(--s));
+  fill: #ffffff;
+  stroke: #1d1d1f;
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+  translate: calc(var(--mx) * -10px) 0;
+}
+@media (max-width: 767.98px) {
+  .hc-nube:nth-child(2) {
+    display: none;
+  }
+}
+.mo .hc-nube {
+  animation: hc-nube var(--d) ease-in-out infinite alternate;
+}
+@keyframes hc-nube {
+  to {
+    transform: translate3d(-12vw, 0, 0);
+  }
+}
+
+/* La luna o el sol: un interruptor del cielo, alineado con el borde del header. */
+.hc-astro {
+  position: absolute;
+  z-index: 3;
+  top: calc(3.5rem + 0.75rem);
+  right: clamp(0.25rem, calc(4vw - 0.75rem), 2.25rem);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 3rem;
+  min-height: 3rem;
+  justify-content: center;
+  border-radius: 999px;
+  cursor: pointer;
+  translate: calc(var(--mx) * -6px) calc(var(--my) * -4px);
+}
+@media (min-width: 1024px) {
+  .hc-astro {
+    top: calc(4rem + 1rem);
+  }
+}
+.hc-astro svg {
+  order: 2;
+  width: 3rem;
+  height: 3rem;
+  overflow: visible;
+}
+.hc-astro-disco {
+  fill: #f6b93b;
+  transition: fill 600ms var(--ease-editorial);
+}
+.hc-astro[data-noche] .hc-astro-disco {
   fill: #f1ede2;
-  opacity: clamp(0, calc((var(--p) - 0.24) / 0.1), 1);
-  transform: translate3d(0, calc((1 - var(--noche)) * 1.5rem), 0);
+}
+.hc-astro-sombra {
+  transform: translate(16px, -16px);
+  transition: transform 650ms var(--ease-editorial);
+}
+.hc-astro[data-noche] .hc-astro-sombra {
+  transform: none;
+}
+.hc-astro-rayos {
+  stroke: #f6b93b;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  transform-origin: 24px 24px;
+  transition:
+    transform 650ms var(--ease-editorial),
+    opacity 400ms var(--ease-editorial);
+}
+.hc-astro[data-noche] .hc-astro-rayos {
+  opacity: 0;
+  transform: rotate(-60deg) scale(0.5);
+}
+.mo .hc-astro:not([data-noche]) .hc-astro-rayos {
+  animation: hc-rayos 24s linear infinite;
+}
+@keyframes hc-rayos {
+  to {
+    rotate: 360deg;
+  }
+}
+/* La pista ("Hacé de día") asoma de noche en la compu. */
+.hc-astro-pista {
+  order: 1;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgb(245 245 247 / 0.7);
+  opacity: 0;
+  translate: 0.5rem 0;
+  transition:
+    opacity 300ms var(--ease-editorial),
+    translate 300ms var(--ease-editorial);
+}
+@media (hover: hover) {
+  .hc-astro[data-noche]:hover .hc-astro-pista,
+  .hc-astro[data-noche]:focus-visible .hc-astro-pista {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.hc-astro:active svg {
+  transform: scale(0.92);
 }
 
 /* Texto: centrado, arriba. De noche pasa a blanco. */
@@ -260,12 +396,15 @@ header.a-nav[data-sobre='oscuro'] {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  /* Profundidad: el puntero mueve apenas la calle (más que el texto y el cielo). */
+  translate: calc(var(--mx) * -14px) calc(var(--my) * -6px);
+  transition: translate 300ms var(--ease-editorial);
 }
 .hc-svg {
   position: absolute;
   left: 50%;
   bottom: 0;
-  height: min(max(35vw, 52svh), 58svh);
+  height: var(--alto-calle);
   width: auto;
   aspect-ratio: 1600 / 560;
   overflow: visible;
@@ -273,8 +412,8 @@ header.a-nav[data-sobre='oscuro'] {
 }
 /* Celulares bajos (iPhone SE): lema más chico y una sola acción, para que la calle no quede tapada. */
 @media (max-height: 700px) and (max-width: 767.98px) {
-  .hc-svg {
-    height: 40svh;
+  .hc-escenario {
+    --alto-calle: 40svh;
   }
   .hc-texto {
     padding-top: calc(3.5rem + 0.75rem);
@@ -295,12 +434,8 @@ header.a-nav[data-sobre='oscuro'] {
   }
 }
 @media (min-width: 768px) {
-  .hc-svg {
-    height: min(max(35vw, 46svh), 58svh);
-  }
-  .hc-luna {
-    top: clamp(6rem, 30svh, 17rem);
-    right: clamp(1.5rem, 7vw, 7rem);
+  .hc-escenario {
+    --alto-calle: min(max(35vw, 46svh), 58svh);
   }
 }
 .hc-noche {
@@ -331,22 +466,22 @@ header.a-nav[data-sobre='oscuro'] {
   --c-neon: #c9c9cc;
 }
 .c-noche {
-  color: #2f323c;
-  --c-pared-0: #14151b;
-  --c-pared-1: #111218;
-  --c-cornisa: #1a1c23;
-  --c-vidrio: #0a0b0f;
-  --c-fina: #262832;
-  --c-vereda: #101116;
-  --c-cordon: #181a20;
-  --c-asfalto: #0b0c10;
-  --c-puerta: #121319;
-  --c-cartel: #15171d;
-  --c-rubro: #3b3e49;
-  --c-toldo: #262833;
-  --c-toldo-claro: #16171d;
+  color: #34343a;
+  --c-pared-0: #161618;
+  --c-pared-1: #131315;
+  --c-cornisa: #1c1c1f;
+  --c-vidrio: #0b0b0c;
+  --c-fina: #2a2a2e;
+  --c-vereda: #111112;
+  --c-cordon: #19191b;
+  --c-asfalto: #0b0b0c;
+  --c-puerta: #141416;
+  --c-cartel: #18181b;
+  --c-rubro: #414147;
+  --c-toldo: #29292d;
+  --c-toldo-claro: #18181b;
   --c-reflejo: transparent;
-  --c-neon: #2a2d36;
+  --c-neon: #2c2c30;
 }
 .c-linea,
 .c-fina,
@@ -422,11 +557,12 @@ header.a-nav[data-sobre='oscuro'] {
 .c-farol {
   fill: currentColor;
 }
+/* Marco de la vidriera grande: fino y del tono de la fachada (nada de bordes negros gruesos). */
 .c-marco {
-  fill: #1d1d1f;
-}
-.c-noche .c-marco {
-  fill: #050507;
+  fill: var(--c-cornisa);
+  stroke: currentColor;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
 }
 .c-toldo-liso {
   fill: var(--c-toldo);
@@ -490,6 +626,10 @@ header.a-nav[data-sobre='oscuro'] {
 .c-luz {
   opacity: clamp(0, calc((var(--p) - var(--a)) / 0.06), 1);
 }
+/* Lo que solo tiene sentido de noche (carteles, faroles, halos) se apaga al amanecer. */
+.c-luz.c-de-noche {
+  opacity: calc(clamp(0, calc((var(--p) - var(--a)) / 0.06), 1) * var(--noche));
+}
 .c-luz-rato {
   opacity: calc(
     clamp(0, calc((var(--p) - var(--a)) / 0.06), 1) *
@@ -497,7 +637,7 @@ header.a-nav[data-sobre='oscuro'] {
   );
 }
 .c-carpinteria-noche {
-  stroke: #9fb0d6;
+  stroke: #b9b9c0;
   stroke-width: 1;
   opacity: 0.6;
 }
@@ -622,155 +762,157 @@ header.a-nav[data-sobre='oscuro'] {
   }
 }
 
-/* ── Confían en Webya: la calle sigue, de noche, con una vidriera encendida por cliente ────────────── */
+/* ── Confían en Webya: la cinta de logos con el horizonte del pueblo detrás ───────────────────────── */
 .cf {
-  position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, #0b0c10 0%, #0d0e13 100%);
-  padding-top: clamp(3.5rem, 8vw, 6rem);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--e-line);
+}
+.cf-marco {
+  display: grid;
+  gap: 1.25rem;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .cf-marco {
+    grid-template-columns: 13rem 1fr;
+    gap: 0;
+  }
 }
 .cf-rotulo {
-  margin: 0 0 clamp(1.75rem, 3.5vw, 2.75rem);
+  margin: 0;
+  padding-inline: clamp(1rem, 4vw, 3rem);
   text-align: center;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #8e8e93;
+  color: var(--e-muted);
 }
-/* El frente: una pared continua con cornisa doble; las vidrieras se abren en ella. */
-.cf-calle {
+@media (min-width: 1024px) {
+  .cf-rotulo {
+    text-align: left;
+    padding-right: 0;
+  }
+}
+/* La ventana: los bordes se desvanecen; adentro, tres capas a distinta velocidad. */
+.cf-ventana {
   position: relative;
-  border-top: 1px solid #23252d;
-  background: linear-gradient(180deg, #16171e 0, #16171e 0.6rem, #121319 0.6rem, #121319 100%);
-  padding: 2.25rem 0 0;
+  height: 7.5rem;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
 }
-.cf-calle::before {
-  content: '';
+.cf-techos {
   position: absolute;
-  inset: 0.6rem 0 auto;
-  border-top: 1px solid #23252d;
+  left: 0;
+  bottom: 1.25rem;
+  height: 4.5rem;
+  width: auto;
+  aspect-ratio: 2400 / 71;
+  fill: none;
+  stroke: var(--e-line-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.55;
 }
-.cf-pista {
+.cf-cinta {
+  position: absolute;
+  inset: 0 auto 1.25rem 0;
   display: flex;
   width: max-content;
 }
 .cf-fila {
   display: flex;
-  gap: clamp(1.25rem, 2.4vw, 2.25rem);
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
   margin: 0;
-  padding: 0 clamp(0.625rem, 1.2vw, 1.125rem);
+  padding: 0 clamp(1.25rem, 2.5vw, 2.25rem);
   list-style: none;
 }
-.cf-local {
-  position: relative;
-  display: grid;
-  justify-items: center;
-}
-.cf-vidriera {
-  position: relative;
+.cf-logo-caja {
   display: grid;
   place-items: center;
-  width: clamp(9.5rem, 15vw, 13rem);
-  aspect-ratio: 4 / 3.3;
-  border: 0.5rem solid #050507;
-  border-top-width: 1.75rem;
-  border-radius: 0.25rem 0.25rem 0 0;
-  background: radial-gradient(120% 90% at 50% 10%, #fffdf7 0%, #fbf2e1 55%, #f1e0c2 100%);
-  box-shadow:
-    0 0 0 1px #2a2c35,
-    0 0 2.5rem rgb(255 214 150 / 0.22);
-  transition: box-shadow 400ms var(--ease-editorial);
+  width: clamp(6.5rem, 10vw, 8.5rem);
+  height: 3.75rem;
 }
-/* La banderola (arriba) y el reflejo del vidrio. */
-.cf-vidriera::before {
-  content: '';
-  position: absolute;
-  inset: -1.75rem -0.5rem auto;
-  height: 1.75rem;
-  background: linear-gradient(180deg, #1c1d24, #0a0a0d);
-  border-bottom: 1px solid #2c2e37;
-}
-.cf-vidriera::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 58%, rgb(255 255 255 / 0.5) 62%, transparent 70%);
-  pointer-events: none;
-}
-.cf-local:hover .cf-vidriera {
-  box-shadow:
-    0 0 0 1px #3a3c46,
-    0 0 3.5rem rgb(255 214 150 / 0.38);
-}
-/* El logo ocupa una caja fija dentro del vidrio (no estira la vidriera) y se ajusta sin deformarse. */
 .cf-logo {
-  position: absolute;
-  inset: 19% 14%;
-  width: 72%;
-  height: 62%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 3.75rem;
   object-fit: contain;
+  filter: grayscale(1) contrast(1.05);
+  opacity: 0.72;
+  transition:
+    filter 300ms var(--ease-editorial),
+    opacity 300ms var(--ease-editorial),
+    transform 300ms var(--ease-editorial);
 }
 .cf-logo-redondo {
-  inset: 13% auto;
-  left: 50%;
-  width: auto;
-  height: 74%;
-  aspect-ratio: 1;
-  translate: -50% 0;
-  object-fit: cover;
+  height: 3.75rem;
+  width: 3.75rem;
   border-radius: 999px;
+  object-fit: cover;
 }
-/* La luz de la vidriera sobre la vereda. */
-.cf-derrame {
-  width: 135%;
-  height: 2.25rem;
-  background: linear-gradient(180deg, rgb(255 214 150 / 0.28), transparent);
-  clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
+@media (hover: hover) {
+  .cf-logo-caja:hover .cf-logo {
+    filter: none;
+    opacity: 1;
+    transform: scale(1.06);
+  }
 }
+/* La vereda: una línea con juntas que pasa más rápido que todo (lo más cercano). */
 .cf-vereda {
-  height: clamp(2.5rem, 5vw, 3.5rem);
-  margin-top: -2.25rem;
-  border-top: 1px solid #2a2c35;
-  background:
-    repeating-linear-gradient(90deg, transparent 0 63px, rgb(255 255 255 / 0.05) 63px 64px),
-    linear-gradient(180deg, #101116, #0b0c10);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1.25rem;
+  height: 0.5rem;
+  border-top: 1px solid var(--e-line-strong);
+  background: repeating-linear-gradient(90deg, var(--e-line) 0 1px, transparent 1px 3rem);
+  background-size: 3rem 100%;
 }
 
-/* Sin movimiento (y en la compu): las vidrieras quietas, centradas y, si no entran, en dos filas. La
-   copia de la marquesina no se ve. */
-.cf-pista {
-  width: auto;
-  justify-content: center;
+/* Con movimiento: cada capa a su velocidad (lo más cercano, más rápido). */
+.mo .cf-cinta {
+  animation: cf-pasa 38s linear infinite;
 }
-.cf-fila {
-  flex-wrap: wrap;
-  justify-content: center;
-  row-gap: 0;
+.mo .cf-techos {
+  animation: cf-pasa 90s linear infinite;
 }
-.cf-fila[aria-hidden] {
-  display: none;
-}
-/* Celular y tablet con movimiento: la calle pasa despacio, en una sola fila. */
-@media (max-width: 1023.98px) {
-  .mo .cf-calle {
-    overflow: hidden;
-  }
-  .mo .cf-pista {
-    width: max-content;
-    animation: cf-pasa 34s linear infinite;
-  }
-  .mo .cf-fila {
-    flex-wrap: nowrap;
-  }
-  .mo .cf-fila[aria-hidden] {
-    display: flex;
-  }
+.mo .cf-vereda {
+  animation: cf-baldosas 1.2s linear infinite;
 }
 @keyframes cf-pasa {
   to {
     transform: translate3d(-50%, 0, 0);
   }
+}
+@keyframes cf-baldosas {
+  to {
+    background-position: -3rem 0;
+  }
+}
+/* Sin movimiento: los logos quietos y centrados (en filas si no entran); las copias no se ven. */
+html:not(.mo) .cf-ventana {
+  height: auto;
+  padding-bottom: 1.25rem;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+html:not(.mo) .cf-cinta {
+  position: relative;
+  inset: auto;
+  width: auto;
+  justify-content: center;
+}
+html:not(.mo) .cf-fila {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+html:not(.mo) .cf-fila[aria-hidden] {
+  display: none;
 }
 
 /* ── Últimos trabajos ──────────────────────────────────────────────────────────────────────────────── */
@@ -959,4 +1101,473 @@ header.a-nav[data-sobre='oscuro'] {
 .tb-telefono-solo {
   width: 27%;
   translate: 0 6%;
+}
+
+/* ── Qué hacemos: tarjetas oscuras que se apilan ─────────────────────────────────────────────────── */
+.sv {
+  padding-block: clamp(4rem, 9vw, 7.5rem);
+}
+.sv-cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem 3rem;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+.sv-ceja {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--e-muted);
+}
+.sv-titulo {
+  margin: 0;
+  max-width: 14ch;
+  font-size: clamp(2.5rem, 1.2rem + 4.4vw, 5.25rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  font-weight: 500;
+}
+.sv-armar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.sv-armar svg,
+.sv-flecha svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--t-rapida) var(--ease-editorial);
+}
+.sv-armar:hover svg {
+  transform: translateX(3px);
+}
+.sv-pila {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Se apilan: cada tarjeta se queda arriba un poco más abajo que la anterior. */
+.sv-item {
+  position: sticky;
+  top: calc(4.5rem + var(--i) * 0.75rem);
+}
+@media (min-width: 1024px) {
+  .sv-item {
+    top: calc(6rem + var(--i) * 1rem);
+  }
+}
+.sv-tarjeta {
+  display: grid;
+  gap: 1.5rem;
+  padding: clamp(1rem, 2.6vw, 2.5rem);
+  border-radius: clamp(1.5rem, 2.4vw, 2.25rem);
+  background: #0b0b0c;
+  box-shadow: 0 -1px 0 rgb(255 255 255 / 0.06) inset;
+  transform-origin: 50% 0;
+}
+@media (min-width: 900px) {
+  .sv-tarjeta {
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    min-height: min(34rem, 70svh);
+  }
+}
+.sv-texto {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.25rem 0.25rem;
+}
+@media (min-width: 900px) {
+  .sv-texto {
+    padding: 1.5rem 0 0.5rem 1.5rem;
+  }
+}
+.sv-numero {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #a1a1a6;
+}
+.sv-icono {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.08);
+}
+.sv-icono svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: none;
+  stroke: #f5f5f7;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sv-nombre {
+  margin: 1.5rem 0 0;
+  font-size: clamp(2.125rem, 1.4rem + 2.6vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+  color: #f5f5f7;
+}
+.sv-desc {
+  margin: 1rem 0 0;
+  max-width: 28rem;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  line-height: 1.45;
+  color: #a1a1a6;
+}
+.sv-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(255 255 255 / 0.12);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #f5f5f7;
+}
+@media (min-width: 900px) {
+  .sv-link {
+    margin-top: auto;
+  }
+}
+.sv-flecha {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: #f5f5f7;
+  color: #0a0a0a;
+  transition: transform var(--t-media) var(--ease-editorial);
+}
+.sv-link:hover .sv-flecha {
+  transform: scale(1.08);
+}
+.sv-link:hover .sv-flecha svg {
+  transform: translateX(2px);
+}
+.sv-foto {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: clamp(1rem, 1.6vw, 1.5rem);
+  background: #1a1a1c;
+}
+@media (min-width: 900px) {
+  .sv-foto {
+    aspect-ratio: auto;
+    min-height: 100%;
+  }
+}
+/* Movimiento ligado al scroll (donde el navegador lo soporta): la foto se acerca al pasar y la tarjeta
+   de atrás se achica apenas cuando la de adelante la tapa. */
+@supports (animation-timeline: view()) {
+  .mo .sv-foto img {
+    animation: sv-acerca linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 60%;
+  }
+  .mo .sv-tarjeta {
+    animation: sv-atras linear both;
+    animation-timeline: view();
+    animation-range: exit -10% exit 60%;
+  }
+}
+@keyframes sv-acerca {
+  from {
+    transform: scale(1.18);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes sv-atras {
+  to {
+    transform: scale(0.94);
+    filter: brightness(0.6);
+  }
+}
+
+/* ── Escribinos flotante: grilla isométrica que flota y se abre con una frase ─────────────────────── */
+.ef {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .ef {
+    position: fixed;
+    right: clamp(1rem, 4vw, 3rem);
+    bottom: 1.5rem;
+    z-index: 35;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 23rem;
+    height: 4rem;
+    border-radius: 1.25rem;
+    background: #0b0b0c;
+    color: #f5f5f7;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.08) inset,
+      0 1rem 2.5rem -1rem rgb(0 0 0 / 0.45);
+    /* Cerrado se ve solo el cuadro de la derecha; abierto, todo. */
+    clip-path: inset(0 0 0 calc(100% - 4rem) round 1.25rem);
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 1rem;
+    transition:
+      clip-path 520ms var(--ease-editorial),
+      opacity 400ms var(--ease-editorial),
+      translate 400ms var(--ease-editorial),
+      visibility 0s linear 400ms;
+  }
+  html[data-hero-paso] .ef {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition-delay: 0s;
+  }
+  .ef:hover,
+  .ef:focus-visible {
+    clip-path: inset(0 0 0 0 round 1.25rem);
+  }
+  .ef:focus-visible {
+    outline: 2px solid #c6f135;
+    outline-offset: 3px;
+  }
+}
+.ef-cuadro {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 4rem;
+  height: 4rem;
+  overflow: hidden;
+  border-radius: 1.25rem;
+}
+.ef-grilla {
+  position: absolute;
+  inset: -25%;
+  width: 150%;
+  height: 150%;
+  fill: none;
+  stroke-width: 0.6;
+}
+.ef-grilla-atras {
+  stroke: rgb(255 255 255 / 0.12);
+}
+.ef-grilla-adelante {
+  stroke: rgb(198 241 53 / 0.35);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 62%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 62%);
+}
+.mo .ef-grilla-atras {
+  animation: ef-flota 9s ease-in-out infinite alternate;
+}
+.mo .ef-grilla-adelante {
+  animation: ef-flota 6s ease-in-out -2s infinite alternate-reverse;
+}
+@keyframes ef-flota {
+  from {
+    transform: translate3d(-4px, 3px, 0);
+  }
+  to {
+    transform: translate3d(4px, -3px, 0);
+  }
+}
+.ef-w {
+  position: relative;
+  width: 1.75rem;
+  fill: #f5f5f7;
+  transition: transform 400ms var(--ease-editorial);
+}
+.ef:hover .ef-w {
+  transform: scale(1.1) rotate(-6deg);
+}
+.ef-mensaje {
+  display: grid;
+  flex: 1;
+  gap: 0.25rem;
+  min-width: 0;
+  padding-left: 1.25rem;
+}
+.ef-frases {
+  display: grid;
+}
+.ef-frase {
+  grid-area: 1 / 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  opacity: 0;
+}
+.ef-frase:first-child {
+  opacity: 1;
+}
+.mo .ef:hover .ef-frase,
+.mo .ef:focus-visible .ef-frase {
+  animation: ef-frase 9s linear infinite;
+  animation-delay: calc(var(--i) * 3s);
+}
+@keyframes ef-frase {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0.4rem, 0);
+  }
+  5%,
+  30% {
+    opacity: 1;
+    transform: none;
+  }
+  35%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -0.4rem, 0);
+  }
+}
+.ef-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #c6f135;
+}
+.ef-cta svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Menú en tarjetas: alineado con los bordes del header, lista tranquila ───────────────────────── */
+/* Colgado del borde de abajo del header (que es sticky): nunca tapa el logo, haya o no cartel arriba. */
+.m3d-panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: clamp(1rem, 4vw, 3rem);
+  max-height: calc(100svh - 7.5rem);
+}
+@media (max-width: 767.98px) {
+  .m3d-panel {
+    left: clamp(1rem, 4vw, 3rem);
+    right: clamp(1rem, 4vw, 3rem);
+  }
+}
+.m3d-tarjeta {
+  border: 0;
+  box-shadow: 0 1.25rem 3rem -1.5rem rgb(0 0 0 / 0.35);
+}
+.m3d-link {
+  min-height: 3.25rem;
+  font-size: 1.1875rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  text-transform: none;
+  border-bottom: 1px solid var(--e-line);
+}
+.m3d-lista li:last-child .m3d-link {
+  border-bottom: 0;
+}
+.m3d-link::after {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.25rem;
+  border-top: 1.6px solid currentColor;
+  border-right: 1.6px solid currentColor;
+  opacity: 0.35;
+  transform: rotate(45deg);
+}
+.m3d-link[aria-current='page']::after {
+  display: none;
+}
+@media (max-width: 767.98px) {
+  .m3d-link {
+    min-height: 3.375rem;
+    font-size: 1.1875rem;
+  }
+}
+/* Abierto con el dedo o el mouse: sin anillo de foco hasta que se use el teclado. */
+.m3d-panel[data-puntero] :focus-visible {
+  outline: none;
+}
+
+/* Trabajos: al entrar, la escena se acerca y los equipos suben (ligado al scroll donde se puede). */
+@supports (animation-timeline: view()) {
+  .mo .tb-escena {
+    animation: tb-acerca linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 45%;
+  }
+}
+@keyframes tb-acerca {
+  from {
+    transform: translate3d(0, 2.5rem, 0) scale(0.92);
+    opacity: 0.4;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.m3d-aca {
+  display: none;
+}
+.m3d-link[aria-current='page'] {
+  font-weight: 650;
+}
+
+/* Celular: la foto arriba, más baja, y las tarjetas una debajo de otra (sin apilar: más fluido). */
+@media (max-width: 899.98px) {
+  .sv-item {
+    position: static;
+  }
+  .sv-foto {
+    order: -1;
+    aspect-ratio: 16 / 10;
+  }
+  .sv-link {
+    margin-top: 1.5rem;
+  }
+}
+.cf {
+  padding-block: clamp(2rem, 4vw, 3rem) clamp(1.25rem, 2.5vw, 2rem);
 }

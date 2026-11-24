@@ -121,20 +121,15 @@ export const HERO_CALLE = {
   lineas: [
     'Turnos, pedidos y tiendas online para negocios de San Francisco, San Jorge y la zona.',
     'Bajás la persiana. Tu negocio sigue tomando turnos, pedidos y consultas.',
-    'Y cuando un negocio se enciende, la calle entera crece.',
+    'Amanece, y la calle entera quiere lo mismo que vos.',
   ],
   armar: 'Armá tu sistema',
   trabajos: 'Ver trabajos',
   /** Carteles de la calle (rubros, no negocios inventados) y el del medio, que es el tuyo. */
   carteles: { tuNegocio: 'Tu negocio', abierto: 'ABIERTO' },
   rubros: ['PANADERÍA', 'LIBRERÍA', 'FERRETERÍA', 'FARMACIA'],
-  /** El sello fijo para escribirnos (en la compu, cuando el hero ya pasó). */
-  sello: {
-    /** Gira alrededor del sello (se repite hasta cerrar el círculo). */
-    giro: 'escribinos • escribinos • escribinos • ',
-    aria: 'Escribinos por WhatsApp, se abre en otra pestaña',
-    ariaMail: 'Escribinos por mail',
-  },
+  /** La luna o el sol del hero: un interruptor de día y noche. */
+  astro: { dia: 'Hacer de día', noche: 'Hacer de noche', pista: 'Hacé de día' },
   escena:
     'Ilustración: una calle de negocios que se hace de noche. Los demás locales cierran y el tuyo sigue abierto, con tu sitio en la vidriera.',
 } as const;
@@ -185,6 +180,72 @@ export const TRABAJOS = {
   verTodos: 'Ver todos los proyectos',
   /** Qué armamos, en la línea chica de arriba del nombre, cuando el nombre del sistema no alcanza. */
   que: { canina: 'Turnero con seña por Mercado Pago' },
+} as const;
+
+/**
+ * "Qué hacemos": los cuatro productos en tarjetas grandes que se apilan al bajar, cada una con una foto
+ * comercial (Unsplash, ver ASSETS_LICENSES.md), qué resuelve en una línea y el link a su página.
+ */
+export const SERVICIOS_HOME = {
+  id: 'servicios',
+  ceja: 'Qué hacemos',
+  titulo: 'Software que trabaja mientras atendés.',
+  armar: 'Armá tu sistema',
+  conoce: 'Conocé más',
+  items: [
+    {
+      id: 'web',
+      icono: 'web',
+      ceja: 'Que te encuentren',
+      titulo: 'Página web',
+      texto: 'Tu negocio en Google, con tu dirección propia y WhatsApp a un toque.',
+      href: '/web',
+      foto: { src: '/servicios/web.webp', alt: 'Equipo trabajando junto en una laptop.' },
+    },
+    {
+      id: 'tienda',
+      icono: 'tienda',
+      ceja: 'Vendé aunque esté cerrado',
+      titulo: 'Tienda online',
+      texto: 'Tu catálogo con fotos y precios. Lo cargás desde el celular y te piden por WhatsApp.',
+      href: '/tienda',
+      foto: {
+        src: '/servicios/tienda.webp',
+        alt: 'Dueña de un negocio revisa un pedido en el celular, rodeada de cajas listas para enviar.',
+      },
+    },
+    {
+      id: 'pedidos',
+      icono: 'pedidos',
+      ceja: 'La cocina, en orden',
+      titulo: 'Pedidos online',
+      texto: 'Pedidos con hora de retiro y la comanda que sale sola. Sin teléfono sonando.',
+      href: '/pedidos',
+      foto: { src: '/servicios/pedidos.webp', alt: 'Pizzero preparando una pizza en la cocina.' },
+    },
+    {
+      id: 'turnos',
+      icono: 'turnos',
+      ceja: 'Chau faltazos',
+      titulo: 'Turnero con seña',
+      texto: 'Reservan y pagan la seña con Mercado Pago. El turno queda asegurado.',
+      href: '/turnero',
+      foto: { src: '/servicios/turnos.webp', alt: 'Peluquera atendiendo a una clienta sonriente.' },
+    },
+  ],
+} as const;
+
+/** El botón flotante para escribirnos (compu): al pasar el mouse se abre con una frase que vende. */
+export const ESCRIBINOS_FLOTANTE = {
+  frases: [
+    '¿Te buscan en Google y no te encuentran?',
+    'Turnos, pedidos y ventas, aunque estés cerrado.',
+    'Contanos tu negocio y te mostramos cómo quedaría.',
+  ],
+  cta: 'Escribinos por WhatsApp',
+  ctaMail: 'Escribinos por mail',
+  aria: 'Escribinos por WhatsApp, se abre en otra pestaña',
+  ariaMail: 'Escribinos por mail',
 } as const;
 
 /** Header: dos píldoras, "Escribinos" y "Menú" (el menú se arma desde HEADER.menu, como el pie). */
