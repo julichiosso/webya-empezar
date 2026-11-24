@@ -39,4 +39,6 @@ if (con.length) {
   for (const a of con) console.error(`  ${relative(process.cwd(), a)}`);
   process.exit(1);
 }
-console.log(`chequear-pendientes: sin [COMPLETAR] en ${revisados.length} archivos publicados.`);
+process.stdout.write(
+  `chequear-pendientes: sin [COMPLETAR] en ${revisados.length} archivos publicados.\n`,
+);

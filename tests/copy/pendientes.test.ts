@@ -21,7 +21,9 @@ const enLista = new Set(ids(readFileSync(join(process.cwd(), 'TODO-contenido.md'
 
 describe('pendientes de contenido', () => {
   it('cada [COMPLETAR] del código figura en TODO-contenido.md', () => {
-    const faltan = [...enCodigo].filter(([id]) => !enLista.has(id)).map(([id, a]) => `${id} (${a})`);
+    const faltan = [...enCodigo]
+      .filter(([id]) => !enLista.has(id))
+      .map(([id, a]) => `${id} (${a})`);
     expect(faltan).toEqual([]);
   });
 

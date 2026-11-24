@@ -2,25 +2,25 @@
 
 Lo que no está verificado **no se publica**.
 
-| Afirmación | Dónde | Cómo se verifica | Estado |
-|---|---|---|---|
-| "Primer mes con descuento" | Cartel superior | Confirmado por Julián el 2026-11-22 | Verificado (el porcentaje y las condiciones se dan por WhatsApp) |
-| Micio's Pizzería, Joyería Petrucci y Lorena Almagro usan sistemas de Webya | Hero, casos | Sitios en producción (`content/proyectos.ts`, estado `produccion`) | Verificado |
-| "Probalo en vivo antes de decidir" | Cartel, hub | Las demos funcionan sin registro | Verificado |
-| "Las fotos que subas no salen de tu dispositivo" | Demos | `lib/imagen-local.ts`: no hay request; URL `blob:` | Verificado en código |
-| "Te atiende quien lo programa" | Por qué Webya | Julián es quien programa y atiende | Verificado (lo dice Julián) |
-| Técnico Universitario en Programación (UTN) | Quiénes somos | Título de Julián | Dicho por Julián; falta constancia pública |
-| Atención en San Francisco, San Jorge y la zona | Franja de zona, /zona | `content/zona.ts` | Verificado (lo dice Julián) |
-| Seña con Mercado Pago, avisos al celular | Turnero | Sistema real (DEMO_SPEC_TURNOS) | Verificado |
-| El bot confirma y recuerda el turno al cliente | Turnero | Confirmado por Julián el 2026-11-24 | Verificado (lo dice Julián; el canal no se nombra) |
-| En el turnero el dueño maneja todo: horarios, servicios, % de seña y su cuenta de Mercado Pago o bancaria | Turnero, Preguntas | Confirmado por Julián el 2026-11-24 | Verificado (lo dice Julián) |
-| Los datos son del negocio y se exportan cuando quiera (Excel, PDF u otro formato) | Preguntas | Confirmado por Julián el 2026-11-24 | Verificado (lo dice Julián) |
-| Si se da de baja, el sistema deja de verse y de funcionar | Preguntas | Confirmado por Julián el 2026-11-24 | Verificado (lo dice Julián) |
-| El precio se presupuesta a medida por WhatsApp; no hay precio fijo | Preguntas, asistente | Confirmado por Julián el 2026-11-24 | Verificado. "Desde $X" y plazo de respuesta: pendientes en `TODO-contenido.md` |
-| Qué pasa con el sistema si Julián no está | — | Sin respuesta todavía | No se afirma (pendiente en `TODO-contenido.md`) |
-| Dónde se aloja y de quién es el dominio | — | "En la web, con dominio propio": no queda claro de quién es el dominio | No se afirma |
-| Testimonios de clientes | Inicio | Permiso explícito y por escrito de cada cliente | No se publica ninguno hasta tenerlo (la sección queda oculta vacía) |
-| Copias de seguridad, soporte, plazos, garantías | — | — | No se afirman |
-| Logos de clientes | — | Falta la autorización de cada cliente | No se publican: el hero usa los nombres en tipografía |
-| Foto de Julián en el sello del hero | — | Falta la foto | Mientras tanto, la marca (nunca iniciales) |
-| Globo con San Francisco y San Jorge | Hero | Coordenadas reales de las dos ciudades (`home3d/Globo.tsx`) | Verificado |
+| Afirmación                                                                                                | Dónde                 | Cómo se verifica                                                       | Estado                                                                         |
+| --------------------------------------------------------------------------------------------------------- | --------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| "Primer mes con descuento"                                                                                | Cartel superior       | Confirmado por Julián el 2026-11-22                                    | Verificado (el porcentaje y las condiciones se dan por WhatsApp)               |
+| Micio's Pizzería, Joyería Petrucci y Lorena Almagro usan sistemas de Webya                                | Hero, casos           | Sitios en producción (`content/proyectos.ts`, estado `produccion`)     | Verificado                                                                     |
+| "Probalo en vivo antes de decidir"                                                                        | Cartel, hub           | Las demos funcionan sin registro                                       | Verificado                                                                     |
+| "Las fotos que subas no salen de tu dispositivo"                                                          | Demos                 | `lib/imagen-local.ts`: no hay request; URL `blob:`                     | Verificado en código                                                           |
+| "Te atiende quien lo programa"                                                                            | Por qué Webya         | Julián es quien programa y atiende                                     | Verificado (lo dice Julián)                                                    |
+| Técnico Universitario en Programación (UTN)                                                               | Quiénes somos         | Título de Julián                                                       | Dicho por Julián; falta constancia pública                                     |
+| Atención en San Francisco, San Jorge y la zona                                                            | Franja de zona, /zona | `content/zona.ts`                                                      | Verificado (lo dice Julián)                                                    |
+| Seña con Mercado Pago, avisos al celular                                                                  | Turnero               | Sistema real (DEMO_SPEC_TURNOS)                                        | Verificado                                                                     |
+| El bot confirma y recuerda el turno al cliente                                                            | Turnero               | Confirmado por Julián el 2026-11-24                                    | Verificado (lo dice Julián; el canal no se nombra)                             |
+| En el turnero el dueño maneja todo: horarios, servicios, % de seña y su cuenta de Mercado Pago o bancaria | Turnero, Preguntas    | Confirmado por Julián el 2026-11-24                                    | Verificado (lo dice Julián)                                                    |
+| Los datos son del negocio y se exportan cuando quiera (Excel, PDF u otro formato)                         | Preguntas             | Confirmado por Julián el 2026-11-24                                    | Verificado (lo dice Julián)                                                    |
+| Si se da de baja, el sistema deja de verse y de funcionar                                                 | Preguntas             | Confirmado por Julián el 2026-11-24                                    | Verificado (lo dice Julián)                                                    |
+| El precio se presupuesta a medida por WhatsApp; no hay precio fijo                                        | Preguntas, asistente  | Confirmado por Julián el 2026-11-24                                    | Verificado. "Desde $X" y plazo de respuesta: pendientes en `TODO-contenido.md` |
+| Qué pasa con el sistema si Julián no está                                                                 | —                     | Sin respuesta todavía                                                  | No se afirma (pendiente en `TODO-contenido.md`)                                |
+| Dónde se aloja y de quién es el dominio                                                                   | —                     | "En la web, con dominio propio": no queda claro de quién es el dominio | No se afirma                                                                   |
+| Testimonios de clientes                                                                                   | Inicio                | Permiso explícito y por escrito de cada cliente                        | No se publica ninguno hasta tenerlo (la sección queda oculta vacía)            |
+| Copias de seguridad, soporte, plazos, garantías                                                           | —                     | —                                                                      | No se afirman                                                                  |
+| Logos de clientes                                                                                         | —                     | Falta la autorización de cada cliente                                  | No se publican: el hero usa los nombres en tipografía                          |
+| Foto de Julián en el sello del hero                                                                       | —                     | Falta la foto                                                          | Mientras tanto, la marca (nunca iniciales)                                     |
+| Globo con San Francisco y San Jorge                                                                       | Hero                  | Coordenadas reales de las dos ciudades (`home3d/Globo.tsx`)            | Verificado                                                                     |
