@@ -128,41 +128,6 @@ header.a-nav[data-sobre='oscuro'] {
   will-change: opacity;
 }
 
-/* Nubes de día: línea fina, como la calle; cruzan despacio y se van al anochecer. */
-.hc-nubes {
-  position: absolute;
-  inset: auto 0 calc(var(--alto-calle) * 0.83) 0;
-  height: 6.5rem;
-  z-index: -1;
-  overflow: hidden;
-  opacity: calc(1 - var(--noche));
-  pointer-events: none;
-}
-.hc-nube {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: calc(7.5rem * var(--s));
-  fill: #ffffff;
-  stroke: #1d1d1f;
-  stroke-width: 1.2;
-  vector-effect: non-scaling-stroke;
-  translate: calc(var(--mx) * -10px) 0;
-}
-@media (max-width: 767.98px) {
-  .hc-nube:nth-child(2) {
-    display: none;
-  }
-}
-.mo .hc-nube {
-  animation: hc-nube var(--d) ease-in-out infinite alternate;
-}
-@keyframes hc-nube {
-  to {
-    transform: translate3d(-12vw, 0, 0);
-  }
-}
-
 /* La luna o el sol: un interruptor del cielo, alineado con el borde del header. */
 .hc-astro {
   position: absolute;
@@ -184,14 +149,15 @@ header.a-nav[data-sobre='oscuro'] {
     top: calc(4rem + 1rem);
   }
 }
+/* Un control, no un dibujo: chico y en tinta, como el resto de la interfaz. */
 .hc-astro svg {
   order: 2;
-  width: 3rem;
-  height: 3rem;
+  width: 2.25rem;
+  height: 2.25rem;
   overflow: visible;
 }
 .hc-astro-disco {
-  fill: #f6b93b;
+  fill: #2b2622;
   transition: fill 600ms var(--ease-editorial);
 }
 .hc-astro[data-noche] .hc-astro-disco {
@@ -205,7 +171,7 @@ header.a-nav[data-sobre='oscuro'] {
   transform: none;
 }
 .hc-astro-rayos {
-  stroke: #f6b93b;
+  stroke: #2b2622;
   stroke-width: 2.2;
   stroke-linecap: round;
   transform-origin: 24px 24px;
@@ -216,14 +182,6 @@ header.a-nav[data-sobre='oscuro'] {
 .hc-astro[data-noche] .hc-astro-rayos {
   opacity: 0;
   transform: rotate(-60deg) scale(0.5);
-}
-.mo .hc-astro:not([data-noche]) .hc-astro-rayos {
-  animation: hc-rayos 24s linear infinite;
-}
-@keyframes hc-rayos {
-  to {
-    rotate: 360deg;
-  }
 }
 /* La pista ("Hacé de día") asoma de noche en la compu. */
 .hc-astro-pista {
