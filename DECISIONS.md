@@ -775,3 +775,25 @@ tarjetas grandes y una franja "Confían en Webya" con los logos de los clientes,
 - **Fuera**: three.js, cobe, el globo, los posters y el chunk 3D. JS inicial vuelve bajo 160 KB (el botón
   "Armá tu sistema" del hero va sin precarga, como la barra del celular).
 - Línea base visual nueva: `e2e/home.spec.ts-snapshots/home-hero-*.png` (la calle de noche, 7 anchos).
+
+## 2026-11-24 · Home más "videojuego", fluida y con producto
+
+Pedido de Julián: más sorpresa y menos "típico de IA", sin el azul de la noche, mobile fluido para gente
+que scrollea rápido, la luna como interruptor, la franja de logos rápida como la de Axus, una sección de
+servicios con fotos comerciales, un "Escribinos" propio y nada de bordes negros.
+
+- **Hero**: la historia termina en un amanecer (anochece 0,10–0,30, amanece 0,66–0,86); la noche es negra
+  neutra. `--p` sigue al scroll con inercia (140 ms): un scroll rápido igual muestra cada cambio completo.
+  Tramo más corto (180 svh celular, 210 svh compu). La luna/el sol es un botón: tocarlo cambia el cielo
+  (`data-cielo`, con `--noche` registrada para fundir); en la compu, pasar el mouse por la luna ya amanece.
+  Nubes de línea de día, sobre los techos (nunca detrás del texto), y profundidad con el puntero.
+  Sin movimiento: calle quieta de noche (`--p: 0.5`).
+- **Confían en Webya**: cinta continua de logos en gris (color al pasar el mouse) con el horizonte del
+  pueblo en línea detrás, más lento, y la vereda adelante, más rápida (paralaje de tres capas).
+- **Qué hacemos**: cuatro tarjetas oscuras que se apilan (sticky) con fotos de Unsplash (licencia libre,
+  ver ASSETS_LICENSES.md); en el celular, una debajo de otra con la foto arriba.
+- **Escribinos flotante**: reemplaza al sello. Cuadro negro con dos grillas isométricas que flotan y la
+  "w"; se abre con `clip-path` mostrando frases comerciales que rotan.
+- **Menú**: colgado del borde del header (no tapa el logo con el cartel de anuncios), con los márgenes
+  del header, lista en minúsculas con separadores; si se abrió con el dedo o el mouse, el foco entra igual
+  pero sin anillo hasta que se use el teclado.
