@@ -50,6 +50,42 @@ export function BotonAsistente() {
     };
   }, []);
 
+  // Sobre fondos oscuros la carita pasa a color papel (si no, es negro sobre negro).
+  useEffect(() => {
+    const el = boton.current;
+    if (!el) return;
+    let raf = 0;
+    const medir = () => {
+      raf = 0;
+      const r = el.getBoundingClientRect();
+      const x = r.right - r.height / 2;
+      const y = r.top + r.height / 2;
+      let oscuro = false;
+      for (const o of document.querySelectorAll<HTMLElement>('.tono-oscuro, [data-oscuro]')) {
+        if (o.contains(el) || o.offsetParent === null) continue;
+        const b = o.getBoundingClientRect();
+        if (b.top <= y && b.bottom >= y && b.left <= x && b.right >= x) {
+          oscuro = true;
+          break;
+        }
+      }
+      el.toggleAttribute('data-sobre-oscuro', oscuro);
+    };
+    const pedir = () => {
+      if (!raf) raf = requestAnimationFrame(medir);
+    };
+    medir();
+    window.addEventListener('scroll', pedir, { passive: true });
+    window.addEventListener('resize', pedir, { passive: true });
+    window.addEventListener('webya:tono', pedir);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', pedir);
+      window.removeEventListener('resize', pedir);
+      window.removeEventListener('webya:tono', pedir);
+    };
+  }, []);
+
   const abrir = () => {
     if (!PanelChat) void import('./PanelAsistente').then((m) => setPanel(() => m.PanelAsistente));
     setAbierto(true);

@@ -478,3 +478,45 @@ html[data-teclado] .ast {
   box-shadow: 0 0 0 1px var(--e-line-strong) inset;
   font-weight: 500;
 }
+
+/* Objeto real, no sticker: anillo fino, un brillo plano arriba y sombra corta y dura. */
+.ast {
+  box-shadow:
+    0 0 0 1.5px rgb(255 255 255 / 0.22) inset,
+    0 3px 0 rgb(0 0 0 / 0.28);
+}
+.ast-cara::after {
+  content: '';
+  position: absolute;
+  inset: 3px 8px auto;
+  height: 2px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.18);
+}
+/* Sobre lo oscuro: cuerpo papel, cara en tinta, sonrisa lima más profunda (contraste ≥ 3:1). */
+.ast[data-sobre-oscuro],
+.ast[data-sobre-oscuro] .ast-cara,
+.ast[data-sobre-oscuro] .ast-mensaje {
+  background: #f1efe8;
+  color: #0b0b0c;
+}
+.ast[data-sobre-oscuro] {
+  box-shadow:
+    0 0 0 1.5px rgb(0 0 0 / 0.35) inset,
+    0 3px 0 rgb(0 0 0 / 0.45);
+}
+.ast[data-sobre-oscuro] .ast-ojos {
+  fill: #0b0b0c;
+}
+.ast[data-sobre-oscuro] .ast-boca {
+  stroke: #6f8f14;
+}
+.ast[data-sobre-oscuro] .ast-grilla-atras {
+  stroke: rgb(0 0 0 / 0.12);
+}
+.ast[data-sobre-oscuro] .ast-grilla-adelante {
+  stroke: rgb(111 143 20 / 0.4);
+}
+.ast[data-sobre-oscuro] .ast-invita {
+  color: #4f6a0c;
+}
