@@ -15,6 +15,15 @@ header.a-nav {
 header.a-nav::before {
   content: none;
 }
+/* El logo lleva su píldora, como "Escribinos" y "Menú": sobre la calle dibujada no se pisa con nada. */
+header.a-nav [data-logo] {
+  margin: 0 0 0 -0.875rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--e-bg) 84%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
 header.a-nav-encima {
   margin-bottom: -3.5rem;
 }
