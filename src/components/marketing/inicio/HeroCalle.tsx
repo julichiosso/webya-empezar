@@ -4,6 +4,7 @@ import { HERO_CALLE as H, RUTAS } from '@/content/home';
 import { Astro } from './Astro';
 import { Calle, LocalesCalle } from './Calle';
 import { ProgresoCalle } from './ProgresoCalle';
+import { VidrieraTurno } from './VidrieraTurno';
 
 const ID = 'hero';
 
@@ -96,6 +97,7 @@ export function HeroCalle() {
 
         <figure className="hc-figura" aria-label={H.escena}>
           <Calle sitios={SITIOS} />
+          <VidrieraTurno />
           <Repartidor />
           <LocalesCalle />
         </figure>
