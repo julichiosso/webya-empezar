@@ -1244,11 +1244,6 @@ header.a-nav[data-sobre='oscuro'] {
     animation-timeline: view();
     animation-range: entry 0% cover 60%;
   }
-  .mo .sv-tarjeta {
-    animation: sv-atras linear both;
-    animation-timeline: view();
-    animation-range: exit -10% exit 60%;
-  }
 }
 @keyframes sv-acerca {
   from {
@@ -1256,12 +1251,6 @@ header.a-nav[data-sobre='oscuro'] {
   }
   to {
     transform: scale(1);
-  }
-}
-@keyframes sv-atras {
-  to {
-    transform: scale(0.94);
-    filter: brightness(0.6);
   }
 }
 
@@ -1347,7 +1336,7 @@ header.a-nav[data-sobre='oscuro'] {
 /* Celular: la foto arriba, más baja, y las tarjetas una debajo de otra (sin apilar: más fluido). */
 @media (max-width: 899.98px) {
   .sv-item {
-    top: calc(4.25rem + var(--i) * 0.75rem);
+    top: calc(4.25rem + var(--i) * 0.875rem);
   }
   .sv-foto {
     order: -1;
@@ -1365,4 +1354,12 @@ header.a-nav[data-sobre='oscuro'] {
 .sv-tarjeta {
   max-height: 80svh;
   overflow: hidden;
+}
+
+/* El mazo: cada tarjeta se achica según cuántas tiene encima (--d, lo escribe PilaTarjetas), desde su
+   borde de arriba, que queda asomando. Solo transform. */
+.sv-tarjeta {
+  transform: scale(max(0.82, calc(1 - var(--d, 0) * 0.06)));
+  transform-origin: 50% 0;
+  will-change: transform;
 }

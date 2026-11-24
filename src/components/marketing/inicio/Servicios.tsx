@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { RUTAS, SERVICIOS_HOME as S } from '@/content/home';
 import { TituloPalabras } from '../editorial/TituloPalabras';
+import { PilaTarjetas } from './PilaTarjetas';
 
 /**
  * "Qué hacemos": título grande con la acción a la derecha y los cuatro productos en tarjetas oscuras que
@@ -12,6 +13,7 @@ import { TituloPalabras } from '../editorial/TituloPalabras';
 export function Servicios() {
   return (
     <section id={S.id} className="tono-hueso sv" aria-labelledby="titulo-servicios">
+      <PilaTarjetas id={S.id} />
       <div className="e-wrap">
         <div className="sv-cabeza">
           <div>
