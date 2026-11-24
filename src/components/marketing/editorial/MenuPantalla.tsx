@@ -45,12 +45,15 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
   const id = useId();
   const panel = useRef<HTMLDivElement>(null);
   const boton = useRef<HTMLButtonElement>(null);
+  /** Se abrió con el dedo o el mouse: el foco entra igual, pero sin dibujar el anillo hasta usar el teclado. */
+  const porPuntero = useRef(false);
 
   useEffect(() => {
     if (!abierto) return;
     const raiz = panel.current;
     const btn = boton.current;
     // El primer link recibe el foco apenas llegan las tarjetas (la primera vez se cargan aparte).
+    if (porPuntero.current) raiz?.setAttribute('data-puntero', '');
     const enfocar = () => raiz?.querySelector<HTMLElement>('nav a[href]')?.focus();
     enfocar();
     const espera = raiz
@@ -63,6 +66,7 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
       : null;
     espera?.observe(raiz!, { childList: true, subtree: true });
     const alTeclear = (e: KeyboardEvent) => {
+      raiz?.removeAttribute('data-puntero');
       if (e.key === 'Escape') {
         setAbierto(false);
         return;
@@ -103,7 +107,8 @@ export function MenuPantalla({ contacto, externo }: { contacto: string; externo:
         aria-expanded={abierto}
         aria-controls={id}
         aria-label={abierto ? HEADER.menu.cerrarAria : HEADER.menu.abrirAria}
-        onClick={() => {
+        onClick={(e) => {
+          porPuntero.current = e.detail > 0;
           if (!MenuTarjetas)
             void import('./MenuTarjetas').then((mod) => setTarjetas(() => mod.MenuTarjetas));
           setAbierto((a) => !a);
