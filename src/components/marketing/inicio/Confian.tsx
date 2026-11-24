@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { FLAGS } from '@/config/flags';
 import { CONFIAN as C } from '@/content/home';
 
 /** Ancho de un tramo del horizonte (se repite dos veces para que la vuelta no se note). */
@@ -84,6 +85,7 @@ const TECHOS = horizonte();
  * queda quieta y se desliza con el dedo.
  */
 export function Confian() {
+  if (!FLAGS.logosConfian) return null;
   const fila = (copia: boolean) => (
     <ul className="cf-fila" aria-hidden={copia || undefined}>
       {C.logos.map((l) => (
