@@ -441,6 +441,10 @@ header.a-nav[data-sobre='oscuro'] {
   opacity: var(--noche);
   will-change: opacity;
 }
+/* A pleno día (ProgresoCalle → data-de-dia) la capa de noche no se pinta: ahorra pintar la calle dos veces. */
+.hc[data-de-dia] .hc-noche {
+  visibility: hidden;
+}
 .hc-dia {
   opacity: calc(1 - var(--noche));
 }
@@ -789,7 +793,7 @@ header.a-nav[data-sobre='oscuro'] {
   animation: hc-palabra 900ms var(--ease-editorial) backwards;
   animation-delay: calc(var(--i) * 110ms);
 }
-.mo .hc-lineas,
+/* La bajada no entra con fundido: es el elemento más grande en el celular (LCP) y tiene que pintarse ya. */
 .mo .hc-acciones {
   animation: hc-palabra 900ms var(--ease-editorial) 380ms backwards;
 }

@@ -54,6 +54,19 @@ export function ProgresoCalle({ id }: { id: string }) {
     };
     const cielo = () => el.dataset.cielo;
 
+    // Las capturas de la vidriera de noche no compiten con la primera pantalla: se cargan al primer
+    // scroll o al tocar la luna (la noche empieza recién al 10 % del recorrido: llegan a tiempo). Por
+    // tiempo no: Chrome las tomaría como LCP. Sin movimiento no hacen falta: la vidriera muestra el
+    // turno confirmado encima.
+    let cargadas = false;
+    const cargarSitios = () => {
+      if (cargadas) return;
+      cargadas = true;
+      el.querySelectorAll<SVGImageElement>('image[data-src]').forEach((img) => {
+        img.setAttribute('href', img.dataset.src ?? '');
+      });
+    };
+
     const cuadro = (t: number) => {
       raf = 0;
       const dt = antes ? Math.min(64, t - antes) : 16;
@@ -74,6 +87,8 @@ export function ProgresoCalle({ id }: { id: string }) {
       }
       const c = cielo();
       marcarOscuro(c ? c === 'noche' : nocheDe(p) >= 0.5);
+      // A pleno día la capa de noche (una copia entera de la calle) ni se pinta.
+      el.toggleAttribute('data-de-dia', !c && nocheDe(p) === 0);
       if (p !== objetivo) raf = requestAnimationFrame(cuadro);
       else antes = 0;
     };
@@ -89,6 +104,7 @@ export function ProgresoCalle({ id }: { id: string }) {
         return;
       }
       objetivo = calcularProgreso(r.top, r.height, window.innerHeight);
+      if (objetivo > 0 || cielo()) cargarSitios();
       // Los píxeles fraccionarios del scroll no dejan llegar justo a los extremos: se pegan.
       if (objetivo > 0.997) objetivo = 1;
       else if (objetivo < 0.003) objetivo = 0;

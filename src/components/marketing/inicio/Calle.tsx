@@ -398,11 +398,13 @@ function Bici() {
 function Escena({ capa }: { capa: string }) {
   return (
     <>
-      <rect x={-1200} y={PISO} width={4000} height={28} className="c-vereda" />
-      <path d={`M-1200 ${PISO + 14}H2800`} className="c-baldosas" />
-      <rect x={-1200} y={PISO + 28} width={4000} height={8} className="c-cordon" />
-      <rect x={-1200} y={PISO + 36} width={4000} height={200} className="c-asfalto" />
-      <path d={`M-1200 ${PISO}H2800M-1200 ${PISO + 28}H2800`} className="c-linea" />
+      {/* Vereda y calle: pasan los bordes del dibujo lo justo para pantallas muy anchas (no más: cada
+          capa se pinta entera). */}
+      <rect x={-600} y={PISO} width={2800} height={28} className="c-vereda" />
+      <path d={`M-600 ${PISO + 14}H2200`} className="c-baldosas" />
+      <rect x={-600} y={PISO + 28} width={2800} height={8} className="c-cordon" />
+      <rect x={-600} y={PISO + 36} width={2800} height={200} className="c-asfalto" />
+      <path d={`M-600 ${PISO}H2200M-600 ${PISO + 28}H2200`} className="c-linea" />
       {VECINOS.map((v, i) => (
         <FrenteVecino key={v.rubro} v={v} i={i} capa={capa} />
       ))}
@@ -586,7 +588,7 @@ function Luces({ sitios }: { sitios: readonly string[] }) {
           {sitios.map((src, i) => (
             <image
               key={src}
-              href={src}
+              data-src={src}
               x={PANTALLA.x}
               y={PANTALLA.y}
               width={PANTALLA.w}
