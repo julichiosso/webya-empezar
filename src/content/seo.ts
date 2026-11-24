@@ -21,7 +21,7 @@ export const SEO_SITIO = {
   og: {
     alt: `Webya: ${LEMA.join(' ')} Turnos, pedidos y tiendas online para negocios de San Jorge y zona.`,
     titulo: LEMA.join(' '),
-    pie: 'San Jorge y zona · San Francisco',
+    pie: 'San Jorge, San Francisco y la zona',
   },
 } as const;
 

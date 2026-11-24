@@ -190,7 +190,7 @@ export function Casos({
                     {c.cliente}
                   </span>
                   <span className="e-chico mt-1 block text-ed-muted">
-                    {c.rubro} · {c.ciudad}
+                    {c.rubro}, {c.ciudad}
                   </span>
                 </span>
               </button>
@@ -208,7 +208,7 @@ export function Casos({
             <>
               <div className="e-chico flex items-center justify-between gap-4 text-ed-muted">
                 <span>
-                  {activo.rubro} · {activo.ciudad}
+                  {activo.rubro}, {activo.ciudad}
                 </span>
                 <Estado caso={activo} />
               </div>
@@ -254,7 +254,7 @@ export function Casos({
                       {c.cliente}
                     </span>
                     <span className="e-chico mt-1 text-ed-muted">
-                      {c.rubro} · {c.ciudad}
+                      {c.rubro}, {c.ciudad}
                     </span>
                     <span className="e-chico mt-auto pt-3 font-medium">
                       <span className="group-open:hidden">{UI.abrir}</span>

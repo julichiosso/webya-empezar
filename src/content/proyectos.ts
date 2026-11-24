@@ -172,7 +172,7 @@ export const PROYECTOS: readonly Proyecto[] = [
   },
   {
     id: 'lorena',
-    cliente: 'Lorena Almagro · Fonoaudióloga',
+    cliente: 'Lorena Almagro, fonoaudióloga',
     rubro: 'Salud',
     ciudad: 'San Jorge',
     tipo: 'web',

@@ -5,7 +5,7 @@ import { CASOS, datosCasos } from '../src/content/proyectos';
 test('la barra de datos sale del manifiesto y los filtros cambian los casos', async ({ page }) => {
   await page.goto('/proyectos', { waitUntil: 'networkidle' });
   const d = datosCasos();
-  await expect(page.getByText(`${d.casos} casos · ${d.enProduccion} en producción`)).toBeVisible();
+  await expect(page.getByText(`${d.casos} casos, ${d.enProduccion} en producción`)).toBeVisible();
 
   await page.getByRole('button', { name: PROYECTOS_UI.filtros.tipos.web, exact: true }).click();
   const web = CASOS.filter((c) => c.tipo === 'web');
@@ -23,7 +23,7 @@ test('el índice es navegable con flechas y el panel muestra el caso elegido', a
     !['desktop', 'desktop-1440', 'desktop-1920'].includes(info.project.name),
     'pestañas: escritorio',
   );
-  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.goto('/proyectos', { waitUntil: 'networkidle' });
   const tabs = page.getByRole('tab');
   await tabs.first().focus();
   await page.keyboard.press('ArrowDown');

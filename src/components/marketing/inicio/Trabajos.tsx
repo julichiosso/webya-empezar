@@ -90,9 +90,7 @@ export function Trabajos() {
               <Link href={`${RUTAS.proyectos}/${p.id}`} className="tb-tarjeta">
                 <Escena p={p} />
                 <p className="tb-meta">
-                  <span>{(T.que as Record<string, string>)[p.id] ?? p.sistema}</span>
-                  <span aria-hidden="true">•</span>
-                  <span>{p.rubro}</span>
+                  {T.meta((T.que as Record<string, string>)[p.id] ?? p.sistema, p.rubro)}
                 </p>
                 <h3 className="tb-nombre">{p.cliente}</h3>
               </Link>

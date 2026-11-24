@@ -9,7 +9,7 @@ export const MARCA = {
   nombre: 'Webya',
   fundador: 'Julián Chiosso',
   ciudad: 'San Jorge, Santa Fe',
-  zona: 'Atención en San Jorge y zona · San Francisco y alrededores',
+  zona: 'Atención en San Jorge, San Francisco y alrededores',
   inicio: 'Webya, inicio',
 } as const;
 
@@ -185,6 +185,8 @@ export const TRABAJOS = {
   verTodos: 'Ver todos los proyectos',
   /** Qué armamos, en la línea chica de arriba del nombre, cuando el nombre del sistema no alcanza. */
   que: { canina: 'Turnero con seña por Mercado Pago' },
+  /** La línea chica de cada trabajo: qué armamos y para qué rubro. */
+  meta: (sistema: string, rubro: string) => `${sistema} para ${rubro.toLowerCase()}`,
 } as const;
 
 /**
@@ -193,15 +195,12 @@ export const TRABAJOS = {
  */
 export const SERVICIOS_HOME = {
   id: 'servicios',
-  ceja: 'Qué hacemos',
   titulo: 'Software que trabaja mientras atendés.',
   armar: 'Armá tu sistema',
   conoce: 'Conocé más',
   items: [
     {
       id: 'web',
-      icono: 'web',
-      ceja: 'Que te encuentren',
       titulo: 'Página web',
       texto: 'Tu negocio en Google, con tu dirección propia y WhatsApp a un toque.',
       href: '/web',
@@ -209,8 +208,6 @@ export const SERVICIOS_HOME = {
     },
     {
       id: 'tienda',
-      icono: 'tienda',
-      ceja: 'Vendé aunque esté cerrado',
       titulo: 'Tienda online',
       texto: 'Tu catálogo con fotos y precios. Lo cargás desde el celular y te piden por WhatsApp.',
       href: '/tienda',
@@ -221,8 +218,6 @@ export const SERVICIOS_HOME = {
     },
     {
       id: 'pedidos',
-      icono: 'pedidos',
-      ceja: 'La cocina, en orden',
       titulo: 'Pedidos online',
       texto: 'Pedidos con hora de retiro y la comanda que sale sola. Sin teléfono sonando.',
       href: '/pedidos',
@@ -230,8 +225,6 @@ export const SERVICIOS_HOME = {
     },
     {
       id: 'turnos',
-      icono: 'turnos',
-      ceja: 'Chau faltazos',
       titulo: 'Turnero con seña',
       texto: 'Reservan y pagan la seña con Mercado Pago. El turno queda asegurado.',
       href: '/turnero',
@@ -454,7 +447,7 @@ export const PROYECTOS_UI = {
   verDemo: 'Ver demo',
   /** Barra de datos: los números salen del manifiesto, nunca se escriben a mano. */
   datos: (casos: number | string, enProduccion: number | string, rubros: string, lugar: string) =>
-    `${casos} casos · ${enProduccion} en producción · ${rubros} · ${lugar}`,
+    `${casos} casos, ${enProduccion} en producción. ${rubros}. ${lugar}.`,
   filtros: {
     aria: 'Filtrar por tipo de sistema',
     todos: 'Todos',
@@ -496,14 +489,14 @@ export const PIE = {
   instagram: 'Instagram',
   privacidad: 'Privacidad',
   terminos: 'Términos',
-  derechos: (anio: number | string) => `© ${anio} Webya · San Jorge, Santa Fe`,
+  derechos: (anio: number | string) => `© ${anio} Webya, San Jorge, Santa Fe`,
 } as const;
 
 /** Las frases de Webya (las de la bio de Instagram): la franja de la home y los fondos vectoriales. */
 export const FRASES = {
   lema: LEMA.join(' '),
   promesa: 'Tu negocio. Nuestra tecnología.',
-  rubros: 'Web · Sistemas · Automatización',
+  rubros: 'Web, sistemas y automatización',
 } as const;
 
 /** "Te escribimos nosotros": dejan su WhatsApp y el pedido llega al instante (API de leads). */

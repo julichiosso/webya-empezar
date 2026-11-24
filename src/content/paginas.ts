@@ -64,7 +64,7 @@ export const ZONA = {
   bajada: 'Y toda la zona. En persona o por WhatsApp.',
   /** Los números salen del manifiesto de la zona (nunca a mano). */
   datos: (zonas: number | string, localidades: number | string) =>
-    `${zonas} zonas · ${localidades} localidades · En persona o por WhatsApp`,
+    `${zonas} zonas, ${localidades} localidades. En persona o por WhatsApp.`,
   mapaAlt: (localidades: string) =>
     `Mapa de la zona de atención, con el límite entre Santa Fe y Córdoba, las rutas principales y las localidades donde atendemos: ${localidades}.`,
   provincias: { cordoba: 'CÓRDOBA', santaFe: 'SANTA FE' },

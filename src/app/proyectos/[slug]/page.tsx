@@ -81,7 +81,7 @@ export default async function PaginaCaso({ params }: Props) {
             {UI.caso.volver}
           </Link>
           <p className="a-ceja mt-8 text-ed-muted">
-            {p.rubro} · {p.ciudad} · {ESTADO_PROYECTO[p.estado]}
+            {p.rubro}, {p.ciudad}. {ESTADO_PROYECTO[p.estado]}
           </p>
           <TituloPalabras
             as="h1"

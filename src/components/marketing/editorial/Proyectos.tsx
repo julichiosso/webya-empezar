@@ -107,7 +107,7 @@ function Tarjeta({ p, i }: { p: Proyecto; i: number }) {
         <Composicion caso={p} tamanos="(min-width: 768px) 24rem, 88vw" />
       </div>
       <p className="e-chico mt-4 text-ed-muted">
-        {p.rubro} · {p.ciudad} · {ESTADO_PROYECTO[p.estado]}
+        {p.rubro}, {p.ciudad}. {ESTADO_PROYECTO[p.estado]}
       </p>
       <h3 id={`titulo-proyecto-${p.id}`} className="e-h3 mt-2">
         {p.cliente}
