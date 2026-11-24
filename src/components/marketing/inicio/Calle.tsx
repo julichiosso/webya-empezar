@@ -157,7 +157,7 @@ function Toldo({
   }
   const contorno = `M${x} ${y}H${x + w}L${x + w + 10} ${y + alto}${ondasVuelta}Z`;
   return (
-    <g>
+    <g className="c-toldo">
       <clipPath id={id}>
         <path d={contorno} />
       </clipPath>
@@ -180,6 +180,8 @@ function Vidriera({ x, y, w, h }: { x: number; y: number; w: number; h: number }
   return (
     <g>
       <rect x={x} y={y} width={w} height={h} className="c-vidrio" />
+      {/* Luz tibia que se prende al pasar por el local (la maneja el CSS con :has). */}
+      <rect x={x} y={y} width={w} height={h} className="c-encendido" />
       <path d={`M${x} ${y + 26}H${x + w}M${x + w / 2} ${y + 26}V${y + h}`} className="c-fina" />
       {/* Reflejo: dos diagonales cortas, solo de día. */}
       <path
@@ -191,14 +193,28 @@ function Vidriera({ x, y, w, h }: { x: number; y: number; w: number; h: number }
   );
 }
 
+/**
+ * Puerta: el vano oscuro de adentro y la hoja, con la bisagra a la izquierda (el picaporte está a la
+ * derecha). Al pasar por el local, la hoja se abre hacia adentro (se angosta contra la bisagra).
+ */
 function Puerta({ x, y, w, h }: { x: number; y: number; w: number; h: number }) {
   return (
     <g>
-      <rect x={x} y={y} width={w} height={h} className="c-puerta" />
-      <rect x={x + 9} y={y + 10} width={w - 18} height={h * 0.52} className="c-vidrio" />
-      <rect x={x + 9} y={y + 10} width={w - 18} height={h * 0.52} className="c-fina" fill="none" />
-      <path d={`M${x + 9} ${y + h * 0.7}H${x + w - 9}`} className="c-fina" />
-      <circle cx={x + w - 14} cy={y + h * 0.62} r={2.6} className="c-tinta" />
+      <rect x={x} y={y} width={w} height={h} className="c-adentro" />
+      <g className="c-hoja">
+        <rect x={x} y={y} width={w} height={h} className="c-puerta" />
+        <rect x={x + 9} y={y + 10} width={w - 18} height={h * 0.52} className="c-vidrio" />
+        <rect
+          x={x + 9}
+          y={y + 10}
+          width={w - 18}
+          height={h * 0.52}
+          className="c-fina"
+          fill="none"
+        />
+        <path d={`M${x + 9} ${y + h * 0.7}H${x + w - 9}`} className="c-fina" />
+        <circle cx={x + w - 14} cy={y + h * 0.62} r={2.6} className="c-tinta" />
+      </g>
       <rect x={x} y={y} width={w} height={h} className="c-linea" fill="none" />
     </g>
   );
@@ -340,8 +356,16 @@ function FrenteTuNegocio({ capa }: { capa: string }) {
         className="c-linea"
       />
       <Puerta {...C_PUERTA} />
-      {/* Cartel de abierto apagado (el encendido está en las luces). */}
+      {/* Cartel de abierto apagado (el de noche está en las luces). De día, el tuyo se prende al cargar. */}
       <rect {...cuadro(NEON)} rx={14} className="c-neon-apagado" />
+      {capa === 'dia' ? (
+        <g className="c-neon-dia">
+          <rect {...cuadro(NEON)} rx={14} />
+          <text x={NEON.x + NEON.w / 2} y={NEON.y + 18.5} textAnchor="middle">
+            {H.carteles.abierto}
+          </text>
+        </g>
+      ) : null}
       <rect x={C_PUERTA.x - 8} y={PISO} width={C_PUERTA.w + 16} height={6} className="c-escalon" />
     </g>
   );
@@ -651,10 +675,21 @@ export function Calle({ sitios }: { sitios: readonly string[] }) {
 }
 
 /** Caja de cada local en el encuadre (izquierda a derecha), para los links que van encima del dibujo. */
+/** `frente`: la clase del frente en el dibujo (c-v0…c-v3, c-tu), para que el CSS abra su puerta. */
 const CAJAS = [
-  ...VECINOS.slice(0, 2).map((v) => ({ x: v.x, ancho: v.ancho, arriba: PISO - v.alto })),
-  { x: C.x, ancho: C.ancho, arriba: C_CARTEL.y },
-  ...VECINOS.slice(2).map((v) => ({ x: v.x, ancho: v.ancho, arriba: PISO - v.alto })),
+  ...VECINOS.slice(0, 2).map((v, i) => ({
+    frente: `v${i}`,
+    x: v.x,
+    ancho: v.ancho,
+    arriba: PISO - v.alto,
+  })),
+  { frente: 'tu', x: C.x, ancho: C.ancho, arriba: C_CARTEL.y },
+  ...VECINOS.slice(2).map((v, i) => ({
+    frente: `v${i + 2}`,
+    x: v.x,
+    ancho: v.ancho,
+    arriba: PISO - v.alto,
+  })),
 ];
 const [ANCHO_VISTA, ALTO_VISTA] = VISTA.split(' ').slice(2).map(Number) as [number, number];
 const pct = (n: number, total: number) => `${((n / total) * 100).toFixed(3)}%`;
@@ -679,6 +714,7 @@ export function LocalesCalle() {
             href={local.href}
             aria-label={local.texto}
             className="hc-local"
+            data-frente={c.frente}
             style={{
               left: pct(c.x, ANCHO_VISTA),
               width: pct(c.ancho, ANCHO_VISTA),

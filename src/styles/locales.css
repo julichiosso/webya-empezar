@@ -326,3 +326,221 @@
 .sv-link:hover span {
   text-decoration: none;
 }
+
+/* ── La calle viva (Calle.tsx y HeroCalle.tsx) ──────────────────────────────────────────────────────
+   Cuatro movimientos como mucho: nubes que derivan, la bici de reparto que cruza cada tanto, el cartel
+   de abierto que se prende al cargar y el reloj (con el scroll). Todo lo automático va dentro de .mo
+   (sin "reducir movimiento"); sin .mo la calle queda quieta y completa. */
+
+/* Al pasar (o con el foco) por un local, su frente recibe --abre: 1. */
+.hc-figura:has([data-frente='v0']:hover, [data-frente='v0']:focus-visible) .c-v0,
+.hc-figura:has([data-frente='v1']:hover, [data-frente='v1']:focus-visible) .c-v1,
+.hc-figura:has([data-frente='v2']:hover, [data-frente='v2']:focus-visible) .c-v2,
+.hc-figura:has([data-frente='v3']:hover, [data-frente='v3']:focus-visible) .c-v3,
+.hc-figura:has([data-frente='tu']:hover, [data-frente='tu']:focus-visible) .c-tu {
+  --abre: 1;
+}
+/* La puerta se abre hacia adentro: la hoja se angosta contra la bisagra y asoma el local. */
+.c-adentro {
+  fill: #3b3029;
+}
+.c-noche .c-adentro {
+  fill: #050505;
+}
+.c-hoja {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+  transform: scaleX(calc(1 - var(--abre, 0) * 0.72));
+}
+/* En tu negocio la puerta no se abre: lleva el cartel de abierto (y su momento es la vidriera). */
+.c-tu .c-hoja {
+  transform: none;
+}
+/* Su globo va adentro de la fachada: arriba se pisaría con el texto del hero. */
+.hc-local[data-frente='tu'] .hc-local-rotulo {
+  bottom: auto;
+  top: 24%;
+}
+/* La vidriera se entibia. */
+.c-encendido {
+  fill: #ffd38a;
+  opacity: calc(var(--abre, 0) * 0.42);
+  pointer-events: none;
+}
+.c-toldo {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+.mo .c-hoja {
+  transition: transform 450ms var(--ease-editorial);
+}
+.mo .c-encendido {
+  transition: opacity 300ms var(--ease-editorial);
+}
+/* El toldo flamea una vez al entrar. */
+.mo .hc-figura:has([data-frente='v0']:hover) .c-v0 .c-toldo,
+.mo .hc-figura:has([data-frente='v2']:hover) .c-v2 .c-toldo,
+.mo .hc-figura:has([data-frente='v3']:hover) .c-v3 .c-toldo,
+.mo .hc-figura:has([data-frente='tu']:hover) .c-tu .c-toldo {
+  animation: c-flamea 900ms ease-in-out;
+}
+@keyframes c-flamea {
+  30% {
+    transform: scaleY(1.09);
+  }
+  60% {
+    transform: scaleY(0.96);
+  }
+  80% {
+    transform: scaleY(1.03);
+  }
+}
+
+/* "ABIERTO" de tu negocio, de día: un cartel de led que se prende con un parpadeo al cargar. */
+.c-neon-dia rect {
+  fill: #2b2622;
+}
+.c-neon-dia text,
+.c-neon-texto {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.c-neon-dia text {
+  fill: #c6f135;
+}
+.mo .c-neon-dia {
+  animation: c-prende 1.3s linear 0.9s backwards;
+}
+@keyframes c-prende {
+  0% {
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  24% {
+    opacity: 0.2;
+  }
+  34% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.35;
+  }
+  54%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Nubes: rellenas, sin contorno; derivan muy despacio y se van al anochecer. */
+.hc-nubes {
+  position: absolute;
+  inset: auto 0 calc(var(--alto-calle) * 0.84) 0;
+  height: 7rem;
+  z-index: -1;
+  opacity: calc(1 - var(--noche));
+  pointer-events: none;
+}
+.hc-nube {
+  position: absolute;
+  width: 9rem;
+}
+.hc-nube[data-i='0'] {
+  left: 7%;
+  top: 8%;
+}
+.hc-nube[data-i='1'] {
+  left: 74%;
+  top: 46%;
+  width: 6.5rem;
+}
+.hc-nube-cuerpo {
+  fill: #ffffff;
+}
+.hc-nube-sombra {
+  fill: #ece6da;
+}
+/* En el celular no hay cielo libre entre el texto y la calle: sin nubes. */
+@media (max-width: 767.98px) {
+  .hc-nubes {
+    display: none;
+  }
+}
+.mo .hc-nube {
+  animation: hc-deriva 90s ease-in-out infinite alternate;
+}
+.mo .hc-nube[data-i='1'] {
+  animation-duration: 120s;
+  animation-direction: alternate-reverse;
+}
+@keyframes hc-deriva {
+  to {
+    transform: translate3d(7vw, 0, 0);
+  }
+}
+
+/* La bici de reparto: misma caja que la calle; cruza en ~11 s y espera ~15 s antes de volver a pasar. */
+.hc-pasa {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 0;
+  height: var(--alto-calle);
+  aspect-ratio: 1600 / 560;
+  transform: translateX(-50%);
+  overflow: hidden;
+  pointer-events: none;
+  display: none;
+}
+.mo .hc-pasa {
+  display: block;
+}
+.hc-pasa-tira {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(-10%, 0, 0);
+}
+.mo .hc-pasa-tira {
+  animation: hc-cruza 26s linear 3s infinite;
+}
+@keyframes hc-cruza {
+  0% {
+    transform: translate3d(-10%, 0, 0);
+  }
+  42%,
+  100% {
+    transform: translate3d(105%, 0, 0);
+  }
+}
+.hc-repartidor {
+  position: absolute;
+  left: 0;
+  /* Las ruedas sobre el borde de la vereda (y 500 de 560): más abajo, la calle puede quedar fuera de pantalla. */
+  bottom: 10.5%;
+  width: 7.5%;
+  color: #2b2622;
+  overflow: visible;
+}
+.hc[data-oscuro] .hc-repartidor {
+  color: #d9d4ca;
+}
+.hc-rep-linea {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hc-rep-cabeza {
+  fill: currentColor;
+}
+.hc-rep-caja {
+  fill: #c6f135;
+  stroke: currentColor;
+  stroke-width: 3;
+}
+.hc-rep-farol {
+  fill: #fff2d6;
+}
