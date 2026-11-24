@@ -1347,11 +1347,11 @@ header.a-nav[data-sobre='oscuro'] {
 /* Celular: la foto arriba, más baja, y las tarjetas una debajo de otra (sin apilar: más fluido). */
 @media (max-width: 899.98px) {
   .sv-item {
-    position: static;
+    top: calc(4.25rem + var(--i) * 0.75rem);
   }
   .sv-foto {
     order: -1;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
   }
   .sv-link {
     margin-top: 1.5rem;
@@ -1359,4 +1359,10 @@ header.a-nav[data-sobre='oscuro'] {
 }
 .cf {
   padding-block: clamp(2rem, 4vw, 3rem) clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* Tarjetas apiladas: nunca más altas que la pantalla (así el sticky no se rompe en iOS). */
+.sv-tarjeta {
+  max-height: 80svh;
+  overflow: hidden;
 }
