@@ -54,6 +54,22 @@ test.describe('la calle con el scroll', () => {
   });
 });
 
+test.describe('la luna', () => {
+  soloEn(['desktop', 'iphone-15']);
+
+  test('de noche, tocar la luna hace de día y el header vuelve a negro', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const hero = page.locator('#hero');
+    await irAlTramo(page, 0.45);
+    await expect(hero).toHaveAttribute('data-oscuro', '');
+    await hero.getByRole('button', { name: 'Hacer de día' }).click();
+    await expect(hero).toHaveAttribute('data-cielo', 'dia');
+    await expect(hero).not.toHaveAttribute('data-oscuro', '');
+    await expect(page.locator('header.a-nav')).not.toHaveAttribute('data-sobre', 'oscuro');
+    await expect(hero.getByRole('button', { name: 'Hacer de noche' })).toBeVisible();
+  });
+});
+
 test.describe('movimiento reducido', () => {
   soloEn(['desktop', 'iphone-15']);
   test.use({ reducedMotion: 'reduce' });
@@ -91,7 +107,7 @@ test.describe('acciones del hero', () => {
     await expect(page).toHaveURL(/\/armar$/);
   });
 
-  test('en la compu, el sello para escribirnos aparece al pasar el hero y abre WhatsApp', async ({
+  test('en la compu, el botón flotante para escribirnos aparece al pasar el hero y abre WhatsApp', async ({
     page,
   }, info) => {
     test.skip(info.project.name !== 'desktop', 'el sello fijo es de la compu');
