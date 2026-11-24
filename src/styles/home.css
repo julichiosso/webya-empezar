@@ -236,18 +236,22 @@ header.a-nav[data-sobre='oscuro'] {
 }
 .hc-palabra {
   display: block;
-  transition: opacity 500ms var(--ease-editorial);
+  width: fit-content;
+  margin-inline: auto;
+  /* El subrayado lima de la palabra del momento: crece de izquierda a derecha. */
+  background: linear-gradient(#c6f135, #c6f135) no-repeat 0 94% / 0% 0.14em;
+  transition: background-size 650ms var(--ease-editorial);
 }
 @media (min-width: 768px) {
   .hc-palabra {
     display: inline;
   }
 }
-/* Con movimiento, se enciende la palabra del momento; las otras quedan tenues. */
-.hc[data-paso='0'] .hc-palabra:not([data-i='0']),
-.hc[data-paso='1'] .hc-palabra:not([data-i='1']),
-.hc[data-paso='2'] .hc-palabra:not([data-i='2']) {
-  opacity: 0.26;
+/* Con movimiento, la palabra del momento se subraya; las tres quedan siempre en tinta (nada en gris). */
+.hc[data-paso='0'] .hc-palabra[data-i='0'],
+.hc[data-paso='1'] .hc-palabra[data-i='1'],
+.hc[data-paso='2'] .hc-palabra[data-i='2'] {
+  background-size: 100% 0.14em;
 }
 
 /* Una línea por momento, apiladas en el mismo lugar. */

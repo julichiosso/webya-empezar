@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { CSSProperties } from 'react';
+import { Fragment, type CSSProperties } from 'react';
 import { HERO_CALLE as H, RUTAS } from '@/content/home';
 import { Astro } from './Astro';
 import { Calle, LocalesCalle } from './Calle';
@@ -30,15 +30,12 @@ export function HeroCalle() {
         <div className="hc-texto">
           <h1 id="titulo-hero" className="hc-lema">
             {H.lema.map((palabra, i) => (
-              <span
-                key={palabra}
-                className="hc-palabra"
-                data-i={i}
-                style={{ '--i': i } as CSSProperties}
-              >
-                {palabra}
+              <Fragment key={palabra}>
+                <span className="hc-palabra" data-i={i} style={{ '--i': i } as CSSProperties}>
+                  {palabra}
+                </span>
                 {i < H.lema.length - 1 ? ' ' : null}
-              </span>
+              </Fragment>
             ))}
           </h1>
           <div className="hc-lineas">
