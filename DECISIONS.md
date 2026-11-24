@@ -797,3 +797,16 @@ servicios con fotos comerciales, un "Escribinos" propio y nada de bordes negros.
 - **Menú**: colgado del borde del header (no tapa el logo con el cartel de anuncios), con los márgenes
   del header, lista en minúsculas con separadores; si se abrió con el dedo o el mouse, el foco entra igual
   pero sin anillo hasta que se use el teclado.
+
+## 2026-11-24 · Asistente, locales que se tocan y sin flechitas
+
+- **Asistente** (`components/marketing/asistente`): reemplaza la barra del celular y el botón flotante. Una
+  carita (cuadro negro con grillas que flotan, ojos que parpadean y miran al puntero) en todo el sitio; al
+  tocarla se abre un chat que entiende lo mismo que el buscador (problemas, rubros, productos), responde
+  las preguntas de siempre con lo que el sitio ya dice y, si no sabe, pasa a WhatsApp con la pregunta
+  escrita. Todo local, sin red; el chat se carga recién al tocar la carita.
+- **Hero**: "Probá las demos" al lado de "Armá tu sistema". Cada local de la calle es un link a la demo de
+  su rubro (panadería → pedidos, librería → tienda, peluquería → turnos, consultorio → web; el del medio,
+  a armar el tuyo), con el local marcado en lima y un cartelito al pasar el mouse.
+- **Cinta de logos**: pasa siempre (con movimiento reducido, más lenta); se frena con el mouse o el dedo.
+- **Sin flechitas** al lado de los links (pedido de Julián: "muy de IA"); el link se marca con subrayado.
