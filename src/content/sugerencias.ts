@@ -24,7 +24,7 @@ export const SUGERENCIAS: readonly Sugerencia[] = [
   {
     id: 'inicio-que-armamos',
     ruta: '/',
-    seccion: '#que-armamos',
+    seccion: '#servicios',
     texto: '¿No sabés por dónde empezar? Elegí lo que necesitás.',
     accion: 'Armá tu sistema',
     href: '/armar',
@@ -32,7 +32,7 @@ export const SUGERENCIAS: readonly Sugerencia[] = [
   {
     id: 'inicio-proyectos',
     ruta: '/',
-    seccion: '#proyectos',
+    seccion: '#trabajos',
     texto: 'Mirá cómo lo usan negocios de la zona, todos los días.',
     accion: 'Ver proyectos',
     href: '/proyectos',

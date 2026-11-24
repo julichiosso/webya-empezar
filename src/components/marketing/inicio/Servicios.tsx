@@ -32,9 +32,6 @@ export function Servicios() {
           </div>
           <Link href={RUTAS.armar} prefetch={false} className="sv-armar">
             {S.armar}
-            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-              <path d="M3 8h10M9 4l4 4-4 4" />
-            </svg>
           </Link>
         </div>
         <ol className="sv-pila">
@@ -56,11 +53,6 @@ export function Servicios() {
                   <p className="sv-desc">{s.texto}</p>
                   <Link href={s.href} aria-label={`${S.conoce}: ${s.titulo}`} className="sv-link">
                     <span>{S.conoce}</span>
-                    <span className="sv-flecha" aria-hidden="true">
-                      <svg viewBox="0 0 16 16" focusable="false">
-                        <path d="M3 8h10M9 4l4 4-4 4" />
-                      </svg>
-                    </span>
                   </Link>
                 </div>
                 <div className="sv-foto">

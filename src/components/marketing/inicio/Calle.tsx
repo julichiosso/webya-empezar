@@ -649,3 +649,49 @@ export function Calle({ sitios }: { sitios: readonly string[] }) {
     </div>
   );
 }
+
+/** Caja de cada local en el encuadre (izquierda a derecha), para los links que van encima del dibujo. */
+const CAJAS = [
+  ...VECINOS.slice(0, 2).map((v) => ({ x: v.x, ancho: v.ancho, arriba: PISO - v.alto })),
+  { x: C.x, ancho: C.ancho, arriba: C_CARTEL.y },
+  ...VECINOS.slice(2).map((v) => ({ x: v.x, ancho: v.ancho, arriba: PISO - v.alto })),
+];
+const [ANCHO_VISTA, ALTO_VISTA] = VISTA.split(' ').slice(2).map(Number) as [number, number];
+const pct = (n: number, total: number) => `${((n / total) * 100).toFixed(3)}%`;
+
+/**
+ * Los locales se tocan: un link invisible sobre cada fachada (misma geometría que el dibujo) que lleva a
+ * la demo de su rubro; el del medio, a armar el tuyo. Al pasar el mouse o con el foco, el local se marca
+ * y aparece qué demo abre. Arriba de la calle, una pista corta.
+ */
+export function LocalesCalle() {
+  return (
+    <div className="hc-locales">
+      <p className="hc-pista" aria-hidden="true">
+        {H.pista}
+      </p>
+      {CAJAS.map((c, i) => {
+        const local = H.locales[i];
+        if (!local) return null;
+        return (
+          <a
+            key={local.href}
+            href={local.href}
+            aria-label={local.texto}
+            className="hc-local"
+            style={{
+              left: pct(c.x, ANCHO_VISTA),
+              width: pct(c.ancho, ANCHO_VISTA),
+              top: pct(c.arriba, ALTO_VISTA),
+              height: pct(PISO - c.arriba, ALTO_VISTA),
+            }}
+          >
+            <span className="hc-local-rotulo" aria-hidden="true">
+              {local.texto.split(': ')[1]}
+            </span>
+          </a>
+        );
+      })}
+    </div>
+  );
+}

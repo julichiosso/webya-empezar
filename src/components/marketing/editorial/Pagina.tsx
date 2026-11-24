@@ -1,11 +1,12 @@
 import { Anuncios } from './Anuncios';
-import { BarraCelular } from './BarraCelular';
+import { BotonAsistente } from '../asistente/BotonAsistente';
 import { Encabezado, ID_PRINCIPAL } from './Encabezado';
 import { Pie } from './Pie';
 import { SugerenciasDiferidas } from './SugerenciasDiferidas';
+import { TecladoAbierto } from './TecladoAbierto';
 
 /**
- * Esqueleto de toda página del sitio: header, contenido, pie y la barra de atajos del celular (salvo
+ * Esqueleto de toda página del sitio: header, contenido, pie y el asistente flotante (salvo
  * donde la página ya tiene la suya, como el configurador) con las sugerencias según la sección.
  */
 export function Pagina({
@@ -28,7 +29,8 @@ export function Pagina({
         {children}
       </main>
       <Pie />
-      {barra ? <BarraCelular /> : null}
+      {barra ? <TecladoAbierto /> : null}
+      {barra ? <BotonAsistente /> : null}
       {barra ? <SugerenciasDiferidas /> : null}
     </div>
   );

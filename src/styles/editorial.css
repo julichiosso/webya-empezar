@@ -1555,7 +1555,8 @@ html:not(.mo) .e-vidriera {
   position: fixed;
   z-index: 29;
   inset-inline: 0.75rem;
-  bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  /* Por encima de la carita del asistente (3,75 rem + 1 rem de margen). */
+  bottom: calc(5.5rem + env(safe-area-inset-bottom));
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -1583,14 +1584,6 @@ html:not(.mo) .e-vidriera {
     opacity: 0;
     transform: translate3d(0, 1rem, 0);
   }
-}
-
-/* La barra de atajos se corre mientras se escribe: no tapa el campo ni el teclado. */
-.e-barra-celular {
-  transition: transform 260ms var(--ease-editorial);
-}
-html[data-teclado] .e-barra-celular {
-  transform: translate3d(0, 110%, 0);
 }
 
 /* Progreso de lectura en el celular: una línea de 2 px arriba, sin JavaScript (scroll-driven). */

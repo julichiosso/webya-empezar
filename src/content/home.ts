@@ -73,11 +73,6 @@ export const HEADER = {
   },
 } as const;
 
-/** Barra fija del celular: los dos atajos que importan, siempre a mano. */
-export const BARRA_CELULAR = {
-  etiqueta: 'Atajos',
-} as const;
-
 /** La línea de marca de Webya, tal cual se publica en Instagram: tres palabras, una por línea. */
 export const LEMA = ['Creá.', 'Digitalizá.', 'Crecé.'] as const;
 
@@ -124,10 +119,20 @@ export const HERO_CALLE = {
     'Amanece, y la calle entera quiere lo mismo que vos.',
   ],
   armar: 'Armá tu sistema',
-  trabajos: 'Ver trabajos',
+  demos: 'Probá las demos',
+  /** Pista sobre la calle: los locales se tocan. */
+  pista: 'Tocá un local y probá su demo',
+  /** Cada local de la calle lleva a la demo de su rubro; el del medio, a armar el tuyo. */
+  locales: [
+    { href: '/demos/pedidos', texto: 'Panadería: probá la demo de pedidos' },
+    { href: '/demos/tienda', texto: 'Librería: probá la demo de tienda' },
+    { href: '/armar', texto: 'Tu negocio: empezá a armar el tuyo' },
+    { href: '/demos/turnos', texto: 'Peluquería: probá la demo de turnos' },
+    { href: '/demos/web', texto: 'Consultorio: probá la demo de página web' },
+  ],
   /** Carteles de la calle (rubros, no negocios inventados) y el del medio, que es el tuyo. */
   carteles: { tuNegocio: 'Tu negocio', abierto: 'ABIERTO' },
-  rubros: ['PANADERÍA', 'LIBRERÍA', 'FERRETERÍA', 'FARMACIA'],
+  rubros: ['PANADERÍA', 'LIBRERÍA', 'PELUQUERÍA', 'CONSULTORIO'],
   /** La luna o el sol del hero: un interruptor de día y noche. */
   astro: { dia: 'Hacer de día', noche: 'Hacer de noche', pista: 'Hacé de día' },
   escena:
@@ -233,19 +238,6 @@ export const SERVICIOS_HOME = {
       foto: { src: '/servicios/turnos.webp', alt: 'Peluquera atendiendo a una clienta sonriente.' },
     },
   ],
-} as const;
-
-/** El botón flotante para escribirnos (compu): al pasar el mouse se abre con una frase que vende. */
-export const ESCRIBINOS_FLOTANTE = {
-  frases: [
-    '¿Te buscan en Google y no te encuentran?',
-    'Turnos, pedidos y ventas, aunque estés cerrado.',
-    'Contanos tu negocio y te mostramos cómo quedaría.',
-  ],
-  cta: 'Escribinos por WhatsApp',
-  ctaMail: 'Escribinos por mail',
-  aria: 'Escribinos por WhatsApp, se abre en otra pestaña',
-  ariaMail: 'Escribinos por mail',
 } as const;
 
 /** Header: dos píldoras, "Escribinos" y "Menú" (el menú se arma desde HEADER.menu, como el pie). */

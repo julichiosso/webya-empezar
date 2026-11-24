@@ -266,11 +266,6 @@ html[data-menu] body {
   overflow: hidden;
 }
 
-/* Barra del celular: no tapa el hero de la home (ahí está el sello y la franja); aparece al pasarlo. */
-html:has(#hero):not([data-hero-paso]) .e-barra-celular {
-  transform: translate3d(0, 110%, 0);
-}
-
 /* Celular: los surcos solo en la franja de abajo (no pasan por detrás de la bajada). */
 
 /* El producto a la vista: los celulares esperan quietos abajo hasta entrar en pantalla y ahí suben. */

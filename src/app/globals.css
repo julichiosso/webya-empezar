@@ -12,6 +12,8 @@
 @import '../styles/editorial.css';
 @import '../styles/home3d.css';
 @import '../styles/home.css';
+@import '../styles/asistente.css';
+@import '../styles/locales.css';
 
 @layer base {
   html {

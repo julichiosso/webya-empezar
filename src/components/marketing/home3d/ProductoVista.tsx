@@ -8,7 +8,11 @@ import { TituloPalabras } from '../editorial/TituloPalabras';
  */
 export function ProductoVista() {
   return (
-    <section id={P.id} className="tono-oscuro h3d-vista overflow-hidden" aria-labelledby="titulo-vista">
+    <section
+      id={P.id}
+      className="tono-oscuro h3d-vista overflow-hidden"
+      aria-labelledby="titulo-vista"
+    >
       <div className="e-wrap pt-[clamp(4.5rem,9vw,9rem)] text-center">
         <p className="a-ceja text-ed-muted" data-reveal="">
           {P.rotulo}

@@ -1,11 +1,8 @@
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
-import { MENSAJE_CONTACTO } from '@/content/configurador';
-import { HERO_CALLE as H, RUTAS, TRABAJOS } from '@/content/home';
-import { enlaceContacto } from '../editorial/contacto';
+import { HERO_CALLE as H, RUTAS } from '@/content/home';
 import { Astro } from './Astro';
-import { Calle } from './Calle';
-import { EscribinosFlotante } from './EscribinosFlotante';
+import { Calle, LocalesCalle } from './Calle';
 import { ProgresoCalle } from './ProgresoCalle';
 
 const ID = 'hero';
@@ -30,8 +27,6 @@ const NUBES = [
  * movimiento, mide una pantalla y se ve la calle ya de noche, quieta.
  */
 export function HeroCalle() {
-  const contacto = enlaceContacto(MENSAJE_CONTACTO);
-  const externo = contacto.canal === 'whatsapp';
   return (
     <section id={ID} className="tono-hueso hc" aria-labelledby="titulo-hero">
       <ProgresoCalle id={ID} />
@@ -78,21 +73,17 @@ export function HeroCalle() {
             <Link href={RUTAS.armar} prefetch={false} className="hc-boton">
               {H.armar}
             </Link>
-            <a href={`#${TRABAJOS.id}`} className="hc-link">
-              {H.trabajos}
-              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                <path d="m6 3.5 4.5 4.5L6 12.5" />
-              </svg>
-            </a>
+            <Link href={RUTAS.demos} prefetch={false} className="hc-boton hc-boton-claro">
+              {H.demos}
+            </Link>
           </div>
         </div>
 
         <figure className="hc-figura" aria-label={H.escena}>
           <Calle sitios={SITIOS} />
+          <LocalesCalle />
         </figure>
       </div>
-      {/* En la compu, el botón para escribirnos queda fijo abajo a la derecha cuando el hero ya pasó. */}
-      <EscribinosFlotante href={contacto.href} externo={externo} />
     </section>
   );
 }
