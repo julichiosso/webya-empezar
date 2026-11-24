@@ -825,3 +825,15 @@
     transform: translate(-50%, -140%);
   }
 }
+
+/* Sin movimiento el hero queda de noche y quieto: la vidriera igual muestra el turno confirmado, como
+   una pantalla encendida (es la versión estática del momento estrella). */
+html:not(.mo) .vt {
+  opacity: 1;
+}
+/* Con el hero fuera de pantalla, las animaciones en bucle se pausan (ProgresoCalle → data-hero-fuera). */
+html[data-hero-fuera] .hc *,
+html[data-hero-fuera] .hc *::before,
+html[data-hero-fuera] .hc *::after {
+  animation-play-state: paused;
+}

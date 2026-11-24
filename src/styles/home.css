@@ -24,6 +24,22 @@ header.a-nav [data-logo] {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
+/* Donde el navegador ata animaciones al scroll, la píldora aparece en los primeros 80 px: arriba de
+   todo no hay nada que tapar y no se nota el recuadro. Donde no, queda siempre (como arriba). */
+@supports (animation-timeline: scroll()) {
+  header.a-nav [data-logo] {
+    animation: logo-pildora linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 80px;
+  }
+  @keyframes logo-pildora {
+    from {
+      background-color: transparent;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+}
 header.a-nav-encima {
   margin-bottom: -3.5rem;
 }

@@ -81,6 +81,8 @@ export function ProgresoCalle({ id }: { id: string }) {
     const medir = () => {
       const r = el.getBoundingClientRect();
       html.toggleAttribute('data-hero-paso', r.bottom < window.innerHeight * 0.55);
+      // Fuera de pantalla, las animaciones en bucle del hero (nubes, bici, vidriera) se pausan.
+      html.toggleAttribute('data-hero-fuera', r.bottom <= 0);
       if (quieto) {
         const c = cielo();
         marcarOscuro(c ? c === 'noche' : true);
@@ -120,6 +122,7 @@ export function ProgresoCalle({ id }: { id: string }) {
       window.removeEventListener('webya:cielo', medir);
       el.removeEventListener('pointermove', alMover);
       html.removeAttribute('data-hero-paso');
+      html.removeAttribute('data-hero-fuera');
     };
   }, [id]);
   return null;
