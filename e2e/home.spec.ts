@@ -1,9 +1,10 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 /**
- * Home "Abierto siempre": la calle del hero se hace de noche con el scroll (y el header pasa a blanco),
- * sin movimiento queda quieta y de noche, las acciones llevan a donde dicen, los logos de "Confían en
- * Webya" cargan y cada trabajo abre su caso. La regresión visual va con movimiento reducido (estable).
+ * Home "El pueblo": el plano del hero con los negocios que se tocan (cada uno abre su ficha con la mini
+ * demo y el link a la demo completa), sin movimiento todo queda quieto y con el turno confirmado, las
+ * acciones llevan a donde dicen, los logos de "Confían en Webya" cargan y cada trabajo abre su caso. La
+ * regresión visual va con movimiento reducido (estable).
  */
 
 const soloEn = (nombres: string[]) =>
@@ -11,62 +12,34 @@ const soloEn = (nombres: string[]) =>
     test.skip(!nombres.includes(info.project.name), `solo en ${nombres.join(', ')}`);
   });
 
-/** Lleva el scroll a una fracción del tramo fijo del hero (0 a 1). */
-async function irAlTramo(page: Page, f: number) {
-  await page.evaluate((fr) => {
-    const h = document.getElementById('hero')!;
-    window.scrollTo(0, h.offsetTop + (h.offsetHeight - window.innerHeight) * fr);
-  }, f);
-}
-
-test.describe('la calle con el scroll', () => {
+test.describe('el plano del pueblo', () => {
   soloEn(['desktop', 'iphone-15']);
 
-  test('el progreso va de 0 a 1, se hace de noche y el header pasa a blanco', async ({ page }) => {
+  test('arranca con la peluquería y cada negocio abre su ficha con su demo', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const hero = page.locator('#hero');
-    const header = page.locator('header.a-nav');
-    const p = () => hero.evaluate((el) => Number(el.style.getPropertyValue('--p') || 0));
+    const ficha = hero.locator('.pb-globo');
+    await expect(hero.getByRole('button', { name: 'Peluquería' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await expect(ficha.getByRole('link', { name: 'Probá la demo de turnos' })).toHaveAttribute(
+      'href',
+      '/demos/turnos',
+    );
 
-    expect(await p()).toBe(0);
-    await expect(hero).toHaveAttribute('data-paso', '0');
-    await expect(hero).not.toHaveAttribute('data-oscuro', '');
-    await expect(header).not.toHaveAttribute('data-sobre', 'oscuro');
-
-    await irAlTramo(page, 0.45);
-    await expect.poll(p).toBeGreaterThan(0.3);
-    await expect(hero).toHaveAttribute('data-paso', '1');
-    await expect(hero).toHaveAttribute('data-oscuro', '');
-    await expect(header).toHaveAttribute('data-sobre', 'oscuro');
-    await expect(hero.getByText(/^Bajás la persiana/)).toBeVisible();
-
-    await irAlTramo(page, 1);
-    await expect.poll(p).toBe(1);
-    await expect(hero).toHaveAttribute('data-paso', '2');
-
-    // Pasado el hero: la franja oscura mantiene el header blanco; en "Últimos trabajos" vuelve a negro.
-    await page.locator('#confian').evaluate((el) => el.scrollIntoView({ block: 'center' }));
-    await expect(page.locator('html')).toHaveAttribute('data-hero-paso', '');
-    await page
-      .locator('#trabajos')
-      .evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + 200));
-    await expect(header).not.toHaveAttribute('data-sobre', 'oscuro');
-  });
-});
-
-test.describe('la luna', () => {
-  soloEn(['desktop', 'iphone-15']);
-
-  test('de noche, tocar la luna hace de día y el header vuelve a negro', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' });
-    const hero = page.locator('#hero');
-    await irAlTramo(page, 0.45);
-    await expect(hero).toHaveAttribute('data-oscuro', '');
-    await hero.getByRole('button', { name: 'Hacer de día' }).click();
-    await expect(hero).toHaveAttribute('data-cielo', 'dia');
-    await expect(hero).not.toHaveAttribute('data-oscuro', '');
-    await expect(page.locator('header.a-nav')).not.toHaveAttribute('data-sobre', 'oscuro');
-    await expect(hero.getByRole('button', { name: 'Hacer de noche' })).toBeVisible();
+    const casos = [
+      ['Pizzería', 'Probá la demo de pedidos', '/demos/pedidos'],
+      ['Comercio', 'Probá la demo de tienda', '/demos/tienda'],
+      ['Consultorio', 'Probá la demo de página web', '/demos/web'],
+      ['Tu negocio', 'Armá tu sistema', '/armar'],
+    ] as const;
+    for (const [rubro, link, href] of casos) {
+      const boton = hero.getByRole('button', { name: rubro });
+      await boton.click();
+      await expect(boton).toHaveAttribute('aria-pressed', 'true');
+      await expect(ficha.getByRole('link', { name: link })).toHaveAttribute('href', href);
+    }
   });
 });
 
@@ -74,29 +47,22 @@ test.describe('movimiento reducido', () => {
   soloEn(['desktop', 'iphone-15']);
   test.use({ reducedMotion: 'reduce' });
 
-  test('sin tramo fijo: la calle quieta y de noche, el lema completo y la bajada', async ({
-    page,
-  }) => {
+  test('todo quieto: el lema completo, la bajada y el turno ya confirmado', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const hero = page.locator('#hero');
-    const vh = page.viewportSize()!.height;
-    expect(await hero.evaluate((el) => (el as HTMLElement).offsetHeight)).toBeLessThan(vh * 1.2);
-    await expect(hero).toHaveAttribute('data-oscuro', '');
-    await expect(page.locator('header.a-nav')).toHaveAttribute('data-sobre', 'oscuro');
-    for (const palabra of await hero.locator('.hc-palabra').all()) {
+    for (const palabra of await hero.locator('.pb-palabra').all()) {
       await expect(palabra).toHaveCSS('opacity', '1');
     }
     await expect(hero.getByText(/^Turnos con seña, pedidos y tiendas online/)).toBeVisible();
-    await expect(hero.locator('.hc-noche')).toHaveCSS('opacity', '1');
+    await expect(hero.locator('.vt-paso-3')).toHaveCSS('opacity', '1');
+    await expect(hero.locator('.pb-reparto')).toBeHidden();
   });
 });
 
 test.describe('acciones del hero', () => {
   soloEn(['desktop', 'iphone-15']);
 
-  test('"Probá las demos" abre las demos, "Armá tu sistema" el configurador y cada local su demo', async ({
-    page,
-  }) => {
+  test('"Probá las demos" abre las demos y "Armá tu sistema" el configurador', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const hero = page.locator('#hero');
     await hero.getByRole('link', { name: 'Probá las demos' }).click();
@@ -104,12 +70,6 @@ test.describe('acciones del hero', () => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await hero.getByRole('link', { name: 'Armá tu sistema' }).click();
     await expect(page).toHaveURL(/\/armar$/);
-    await page.goto('/', { waitUntil: 'networkidle' });
-    await expect(hero.getByRole('link', { name: /: probá la demo/ })).toHaveCount(4);
-    await expect(hero.getByRole('link', { name: /Peluquería/ })).toHaveAttribute(
-      'href',
-      '/demos/turnos',
-    );
   });
 });
 
@@ -201,14 +161,10 @@ test.describe('enlaces internos', () => {
 test.describe('regresión visual', () => {
   test.use({ reducedMotion: 'reduce' });
 
-  test('primera pantalla de la home (la calle de noche)', async ({ page }) => {
+  test('primera pantalla de la home (el plano del pueblo)', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
-    await expect(page.locator('#hero .hc-luces')).toBeVisible();
-    await expect(page).toHaveScreenshot('home-hero.png', {
-      // La pantalla de tu negocio pasa sitios: se tapa para que la captura sea estable.
-      mask: [page.locator('#hero .c-sitio')],
-      maxDiffPixelRatio: 0.03,
-    });
+    await expect(page.locator('#hero .pb-plano')).toBeVisible();
+    await expect(page).toHaveScreenshot('home-hero.png', { maxDiffPixelRatio: 0.03 });
   });
 });

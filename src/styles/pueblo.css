@@ -1,0 +1,805 @@
+/* ─────────────────────────────────────────────────────────────────────────────────────────────────────
+ * Hero "El pueblo" (components/marketing/inicio/HeroPueblo.tsx y MapaPueblo.tsx). Arriba el lema y las
+ * acciones; abajo, el plano de un pueblo visto desde arriba: asfalto, veredas, techos, la plaza al medio
+ * y cinco negocios que se tocan. Todo HTML y CSS. Tres movimientos como mucho: la moto de reparto, el
+ * pulso de tu negocio y el turno del globo; todos dentro de .mo (sin "reducir movimiento").
+ * ───────────────────────────────────────────────────────────────────────────────────────────────────── */
+
+.pb {
+  --pb-tinta: #2b2622;
+  --pb-asfalto: #e6e2d8;
+  --pb-vereda: #f6f3ec;
+  --pb-lima: #c6f135;
+  padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+/* ── Texto ─────────────────────────────────────────────────────────────────────────────────────────── */
+.pb-texto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: calc(3.5rem + clamp(1.25rem, 4.5svh, 3rem)) clamp(1rem, 5vw, 3rem) 0;
+}
+@media (min-width: 1024px) {
+  .pb-texto {
+    padding-top: calc(4rem + clamp(1.5rem, 5svh, 3.5rem));
+  }
+}
+.pb-lema {
+  margin: 0;
+  font-size: clamp(2.75rem, 1.1rem + 5.2vw, 6.25rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+}
+.pb-palabra {
+  display: block;
+}
+@media (min-width: 768px) {
+  .pb-palabra {
+    display: inline-block;
+  }
+}
+.pb-bajada {
+  margin: clamp(0.875rem, 2.2svh, 1.5rem) 0 0;
+  max-width: 36rem;
+  font-size: clamp(1.0625rem, 0.95rem + 0.45vw, 1.3125rem);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: color-mix(in srgb, currentColor 86%, transparent);
+  text-wrap: balance;
+}
+.pb-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.25rem, 3svh, 2rem);
+}
+.pb-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding-inline: 1.5rem;
+  border-radius: 999px;
+  background: var(--e-invert);
+  color: var(--e-invert-fg);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition:
+    transform 160ms var(--ease-editorial),
+    background-color 160ms var(--ease-editorial);
+}
+.pb-boton:hover {
+  background: var(--e-invert-hover);
+}
+.pb-boton:active {
+  transform: scale(0.97);
+}
+.pb-boton-claro {
+  background: var(--e-surface);
+  color: var(--e-fg);
+}
+.pb-boton-claro:hover {
+  background: color-mix(in srgb, var(--e-surface) 85%, var(--e-fg));
+}
+@media (max-width: 767.98px) {
+  .pb-acciones {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+  }
+  .pb-boton {
+    min-height: 2.875rem;
+    padding-inline: 1.0625rem;
+    font-size: 1rem;
+  }
+}
+.pb-confianza {
+  margin: 0.875rem 0 0;
+  max-width: 34rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--e-muted);
+  text-wrap: balance;
+}
+/* Entrada: el lema palabra por palabra, después las acciones y el plano. La bajada no (es el LCP). */
+.mo .pb-palabra {
+  animation: pb-entra 900ms var(--ease-editorial) backwards;
+  animation-delay: calc(var(--i) * 110ms);
+}
+.mo .pb-acciones {
+  animation: pb-entra 900ms var(--ease-editorial) 380ms backwards;
+}
+.mo .pb-mapa {
+  animation: pb-entra 1s var(--ease-editorial) 220ms backwards;
+}
+@keyframes pb-entra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.6em, 0);
+  }
+}
+
+/* ── El plano ──────────────────────────────────────────────────────────────────────────────────────── */
+.pb-mapa {
+  width: min(100%, 78rem);
+  margin: clamp(1.75rem, 4.5svh, 3rem) auto 0;
+  padding-inline: clamp(0.75rem, 3vw, 2rem);
+}
+.pb-lienzo {
+  position: relative;
+  aspect-ratio: 1180 / 400;
+}
+.pb-plano {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: var(--pb-asfalto);
+  box-shadow: inset 0 0 0 1px rgb(43 38 34 / 0.06);
+}
+@media (max-width: 767.98px) {
+  .pb-lienzo {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* Cada pieza trae sus coordenadas (en % del plano): --x… en la compu y --mx… en el celular. */
+.pb-manzana,
+.pb-plaza,
+.pb-negocio {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+}
+@media (max-width: 767.98px) {
+  .pb-plaza,
+  .pb-negocio {
+    left: var(--mx);
+    top: var(--my);
+    width: var(--mw);
+    height: var(--mh);
+  }
+  .pb-manzana[data-plano='compu'] {
+    display: none;
+  }
+}
+@media (min-width: 768px) {
+  .pb-manzana[data-plano='celu'] {
+    display: none;
+  }
+}
+.pb-manzana {
+  border-radius: 0.5rem;
+  background: var(--pb-vereda);
+}
+/* Las casas: techos vistos desde arriba, con una sombra corta abajo. */
+.pb-casa {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  border-radius: 3px;
+  box-shadow: inset 0 -3px 0 rgb(43 38 34 / 0.07);
+}
+.pb-casa[data-techo='0'] {
+  background: #e4d3b4;
+}
+.pb-casa[data-techo='1'] {
+  background: #d79f80;
+}
+.pb-casa[data-techo='2'] {
+  background: #d9d5cc;
+}
+.pb-casa[data-techo='3'] {
+  background: #c9d3c2;
+}
+.pb-casa[data-techo='4'] {
+  background: #ead9bd;
+}
+
+/* La plaza: pasto con árboles, dos diagonales y la cruz de caminos, y el monumento al medio. */
+.pb-plaza {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background:
+    linear-gradient(
+      to top right,
+      transparent calc(50% - 1.5px),
+      #efe8d6 calc(50% - 1.5px) calc(50% + 1.5px),
+      transparent calc(50% + 1.5px)
+    ),
+    linear-gradient(
+      to bottom right,
+      transparent calc(50% - 1.5px),
+      #efe8d6 calc(50% - 1.5px) calc(50% + 1.5px),
+      transparent calc(50% + 1.5px)
+    ),
+    linear-gradient(#efe8d6, #efe8d6) center / 100% 4px no-repeat,
+    linear-gradient(#efe8d6, #efe8d6) center / 4px 100% no-repeat,
+    radial-gradient(circle, #93b67d 0 7px, transparent 8px) 6px 4px / 38px 34px,
+    radial-gradient(circle, #a8c793 0 5px, transparent 6px) 25px 21px / 38px 34px,
+    #cfdfbf;
+}
+.pb-plaza-centro {
+  grid-area: 1 / 1;
+  width: 22%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #efe8d6;
+  box-shadow: inset 0 0 0 3px #ddd2b8;
+}
+.pb-plaza-nombre {
+  grid-area: 1 / 1;
+  align-self: end;
+  margin-bottom: 6%;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.7);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #4d6340;
+}
+
+/* Los negocios: un techo que se toca, con el rubro en un cartel. */
+.pb-negocio {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: #e8c9a6;
+  box-shadow: inset 0 -3px 0 rgb(43 38 34 / 0.1);
+  cursor: pointer;
+  transition:
+    transform 180ms var(--ease-editorial),
+    box-shadow 180ms var(--ease-editorial);
+}
+.pb-negocio[data-negocio='pizzeria'] {
+  background: #e3a98a;
+}
+.pb-negocio[data-negocio='comercio'] {
+  background: #c7d5d9;
+}
+.pb-negocio[data-negocio='consultorio'] {
+  background: #d4d0e2;
+}
+.pb-negocio[data-negocio='tu'] {
+  background: var(--pb-lima);
+}
+.pb-negocio-rubro {
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: #fffdf8;
+  color: var(--pb-tinta);
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.1;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px -2px rgb(43 38 34 / 0.35);
+}
+.pb-negocio[data-negocio='tu'] .pb-negocio-rubro {
+  background: var(--pb-tinta);
+  color: #fffdf8;
+}
+@media (hover: hover) {
+  .pb-negocio:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 -3px 0 rgb(43 38 34 / 0.1),
+      0 8px 16px -8px rgb(43 38 34 / 0.45);
+  }
+}
+.pb-negocio[aria-pressed='true'] {
+  box-shadow:
+    inset 0 -3px 0 rgb(43 38 34 / 0.1),
+    0 0 0 2px var(--pb-tinta);
+}
+.pb-negocio:focus-visible {
+  outline: 3px solid var(--pb-tinta);
+  outline-offset: 3px;
+}
+/* Tu negocio llama la atención con un pulso suave (solo con movimiento). */
+.pb-negocio[data-negocio='tu']::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 8px;
+  box-shadow: 0 0 0 2px var(--pb-lima);
+  opacity: 0;
+  pointer-events: none;
+}
+.mo .pb-negocio[data-negocio='tu']::after {
+  animation: pb-pulso 2.4s ease-out infinite;
+}
+@keyframes pb-pulso {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  80%,
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+/* La moto de reparto: un punto que recorre las calles alrededor de la plaza (solo con movimiento).
+   La capa mide lo mismo que el plano: un translate en % de ella es un % del plano. */
+.pb-reparto {
+  position: absolute;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+.mo .pb-reparto {
+  display: block;
+  animation: pb-recorre 26s linear infinite;
+}
+.pb-reparto-punto {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--pb-lima);
+  box-shadow:
+    0 0 0 2px var(--pb-tinta),
+    0 3px 8px rgb(43 38 34 / 0.35);
+}
+/* Compu: calles en x 19,04 y 80,96, y en y 31,75 y 68,25 (cada tramo dura según su largo real). */
+@keyframes pb-recorre {
+  0%,
+  100% {
+    transform: translate(19.04%, 31.75%);
+  }
+  41.67% {
+    transform: translate(80.96%, 31.75%);
+  }
+  50% {
+    transform: translate(80.96%, 68.25%);
+  }
+  91.67% {
+    transform: translate(19.04%, 68.25%);
+  }
+}
+/* Celular: calles en 32,5 y 67,5 (un cuadrado alrededor de la plaza). */
+@media (max-width: 767.98px) {
+  .mo .pb-reparto {
+    animation-name: pb-recorre-celu;
+    animation-duration: 14s;
+  }
+}
+@keyframes pb-recorre-celu {
+  0%,
+  100% {
+    transform: translate(32.5%, 32.5%);
+  }
+  25% {
+    transform: translate(67.5%, 32.5%);
+  }
+  50% {
+    transform: translate(67.5%, 67.5%);
+  }
+  75% {
+    transform: translate(32.5%, 67.5%);
+  }
+}
+
+.pb-pista {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--e-muted);
+}
+
+/* ── El globo ──────────────────────────────────────────────────────────────────────────────────────── */
+/* La ficha del negocio elegido: en la compu, a la derecha del plano; más chico, debajo. Nunca tapa el
+   plano: todos los negocios se pueden tocar siempre. */
+.pb-marco {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 1024px) {
+  .pb-marco {
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: 1.25rem;
+    align-items: center;
+  }
+}
+.pb-globo {
+  width: 100%;
+  max-width: 24rem;
+  margin-inline: auto;
+  padding: 0.875rem;
+  border-radius: 1rem;
+  background: #fffdf8;
+  color: var(--pb-tinta);
+  box-shadow:
+    0 1.25rem 2.5rem -1rem rgb(43 38 34 / 0.3),
+    0 0 0 1px rgb(43 38 34 / 0.08);
+}
+.mo .pb-globo {
+  animation: pb-globo 260ms var(--ease-editorial);
+}
+@keyframes pb-globo {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+.pb-globo-rubro {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #6b625a;
+}
+.pb-globo-sistema {
+  margin: 0.125rem 0 0;
+  font-size: 1.0625rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+.pb-globo-demo {
+  margin: 0.75rem 0;
+}
+.pb-globo-ver {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  border-radius: 999px;
+  background: var(--pb-tinta);
+  color: #fffdf8;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.pb-globo-ver:hover {
+  background: #000000;
+}
+
+/* Las mini demos (pizzería, comercio, consultorio y tu negocio). */
+.pb-mini {
+  display: grid;
+  gap: 0.375rem;
+  padding: 0.75rem;
+  border: 1px solid #ece6da;
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+.pb-mini-chico {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #6b625a;
+}
+.pb-mini-fila {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.9375rem;
+}
+.pb-mini-titulo {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.pb-mini-boton {
+  margin-top: 0.25rem;
+  padding: 0.4375rem 0.75rem;
+  border-radius: 999px;
+  background: var(--pb-tinta);
+  color: #fffdf8;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: center;
+}
+.pb-mini-wa {
+  background: #1f8f4e;
+}
+
+/* ── El turno con seña del globo de la peluquería (TurnoAnimado.tsx) ─────────────────────────────────
+   Las medidas van en unidades del contenedor: escala con el globo. Sin movimiento, queda confirmado. */
+.vt {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 244 / 162;
+  container-type: size;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid #ece6da;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  color: #2b2622;
+  text-align: center;
+  line-height: 1.15;
+}
+.vt-negocio {
+  margin: 0;
+  padding: 3.2cqw 0 2.6cqw;
+  border-bottom: 0.5cqw solid #ece6da;
+  font-size: 4.6cqw;
+  font-weight: 600;
+  color: #6b625a;
+}
+.vt-pasos {
+  display: grid;
+  place-items: center;
+}
+.vt-paso {
+  grid-area: 1 / 1;
+  display: grid;
+  justify-items: center;
+  gap: 2.4cqw;
+}
+.vt-titulo {
+  margin: 0;
+  font-size: 7.4cqw;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+.vt-dia {
+  margin: 0;
+  font-size: 5cqw;
+  color: #6b625a;
+}
+.vt-horarios {
+  display: flex;
+  gap: 2.4cqw;
+  margin-top: 1cqw;
+}
+.vt-hora {
+  padding: 1.6cqw 3.4cqw;
+  border: 0.5cqw solid #d9d2c5;
+  border-radius: 999px;
+  font-size: 5.2cqw;
+  font-weight: 600;
+}
+.vt-hora-elegida {
+  background: #2b2622;
+  border-color: #2b2622;
+  color: #fffdf8;
+}
+.vt-monto {
+  margin: 0;
+  font-size: 11cqw;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.vt-mp {
+  padding: 2.3cqw 4.6cqw;
+  border-radius: 999px;
+  background: #009ee3;
+  color: #ffffff;
+  font-size: 4.8cqw;
+  font-weight: 600;
+}
+.vt-tilde {
+  display: grid;
+  place-items: center;
+  width: 13cqw;
+  height: 13cqw;
+  border-radius: 50%;
+  background: #c6f135;
+}
+.vt-tilde svg {
+  width: 62%;
+  fill: none;
+  stroke: #2b2622;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* El dedo que toca (solo con movimiento). */
+.vt-dedo {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 8cqw;
+  height: 8cqw;
+  border-radius: 50%;
+  background: rgb(43 38 34 / 0.22);
+  border: 0.5cqw solid rgb(43 38 34 / 0.5);
+  opacity: 0;
+}
+/* El aviso que le llega al dueño, arriba de la vidriera. */
+.vt-aviso {
+  position: absolute;
+  left: 50%;
+  top: 2.5cqw;
+  margin: 0;
+  padding: 1.8cqw 3.6cqw;
+  border-radius: 999px;
+  background: #2b2622;
+  color: #fffdf8;
+  font-size: 4.3cqw;
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translate(-50%, 0);
+}
+/* Sin movimiento: el turno confirmado. */
+.vt-paso-1,
+.vt-paso-2 {
+  opacity: 0;
+}
+
+/* Con movimiento: los tres pasos en bucle (9 s). */
+.mo .vt-paso-1 {
+  animation: vt-p1 9s infinite;
+}
+.mo .vt-paso-2 {
+  animation: vt-p2 9s infinite;
+}
+.mo .vt-paso-3 {
+  animation: vt-p3 9s infinite;
+}
+.mo .vt-hora-elegida {
+  animation: vt-elige 9s infinite;
+}
+.mo .vt-mp {
+  animation: vt-toca 9s infinite;
+}
+.mo .vt-dedo {
+  animation: vt-dedo 9s infinite;
+}
+.mo .vt-aviso {
+  animation: vt-aviso 9s infinite;
+}
+@keyframes vt-p1 {
+  0% {
+    opacity: 0;
+  }
+  4%,
+  29% {
+    opacity: 1;
+  }
+  32%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes vt-p2 {
+  0%,
+  32% {
+    opacity: 0;
+    transform: translateY(3cqh);
+  }
+  36%,
+  61% {
+    opacity: 1;
+    transform: none;
+  }
+  64%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes vt-p3 {
+  0%,
+  64% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  68%,
+  95% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes vt-elige {
+  0%,
+  17% {
+    background: transparent;
+    border-color: #d9d2c5;
+    color: #2b2622;
+  }
+  19%,
+  100% {
+    background: #2b2622;
+    border-color: #2b2622;
+    color: #fffdf8;
+  }
+}
+@keyframes vt-toca {
+  0%,
+  45% {
+    transform: none;
+  }
+  47% {
+    transform: scale(0.93);
+  }
+  50%,
+  100% {
+    transform: none;
+  }
+}
+@keyframes vt-dedo {
+  0%,
+  6% {
+    opacity: 0;
+    transform: translate(10%, 96cqh);
+  }
+  12% {
+    opacity: 1;
+    transform: translate(-50%, 70cqh);
+  }
+  16% {
+    opacity: 1;
+    transform: translate(-50%, 70cqh) scale(0.75);
+  }
+  20%,
+  36% {
+    opacity: 0;
+    transform: translate(-50%, 96cqh);
+  }
+  42% {
+    opacity: 1;
+    transform: translate(-50%, 76cqh);
+  }
+  46% {
+    opacity: 1;
+    transform: translate(-50%, 76cqh) scale(0.75);
+  }
+  50%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 96cqh);
+  }
+}
+@keyframes vt-aviso {
+  0%,
+  66% {
+    opacity: 0;
+    transform: translate(-50%, -140%);
+  }
+  71%,
+  93% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -140%);
+  }
+}
+
+/* Con el plano fuera de pantalla (MapaPueblo → data-fuera), lo que se mueve se pausa. */
+.pb-mapa[data-fuera] *,
+.pb-mapa[data-fuera] *::after {
+  animation-play-state: paused;
+}
+
+/* Celular: carteles más chicos (los de la columna de afuera no se salen del plano) y, en pantallas de
+   menos de 360 px, los dos botones en dos renglones. El mapa nunca agranda la página de costado. */
+.pb-mapa {
+  overflow-x: clip;
+}
+@media (max-width: 767.98px) {
+  .pb-negocio-rubro {
+    padding: 0.1875rem 0.4375rem;
+    font-size: 0.6875rem;
+  }
+}
+@media (max-width: 359.98px) {
+  .pb-acciones {
+    flex-wrap: wrap;
+  }
+}

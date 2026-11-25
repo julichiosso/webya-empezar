@@ -106,42 +106,69 @@ export const HERO = {
 } as const;
 
 /**
- * Hero "Abierto siempre": una calle de negocios que se hace de noche al bajar. Los demás cierran; el tuyo
- * sigue atendiendo en su vidriera-pantalla. Después, toda la calle se enciende. Una palabra del lema por
- * momento y una sola línea debajo, que acompaña lo que pasa en la calle.
+ * Hero "El pueblo": el lema, una línea con qué hacemos y para quién, dos acciones y, abajo, el plano de un
+ * pueblo visto desde arriba (damero con la plaza al medio). Cinco terrenos son negocios: al tocar uno se
+ * abre un globo con la mini demo de su sistema. Los negocios son rubros de ejemplo, no clientes.
  */
-export const HERO_CALLE = {
+export const HERO_MAPA = {
   lema: LEMA,
-  /** Una línea por momento: la primera es la bajada de siempre (la que queda sin movimiento). */
-  lineas: [
+  bajada:
     'Turnos con seña, pedidos y tiendas online para negocios de San Francisco, San Jorge y la zona.',
-    'Bajás la persiana. Tu negocio sigue tomando turnos, pedidos y consultas.',
-    'Amanece, y la calle entera quiere lo mismo que vos.',
-  ],
   armar: 'Armá tu sistema',
   demos: 'Probá las demos',
-  /** Debajo de los botones: de dónde somos y cómo se presupuesta (TRUST_CLAIMS: zona, precio a medida). */
+  /** De dónde somos y cómo se presupuesta (TRUST_CLAIMS: zona, precio a medida). */
   confianza: 'Somos de San Jorge. Te pasamos el presupuesto por WhatsApp, sin compromiso.',
-  /** Pista sobre la calle: los locales se tocan. */
-  pista: 'Tocá un local y probá su demo',
-  /** Cada local de la calle lleva a la demo de su rubro; el del medio, a armar el tuyo. */
-  locales: [
-    { href: '/demos/pedidos', texto: 'Panadería: probá la demo de pedidos' },
-    { href: '/demos/tienda', texto: 'Librería: probá la demo de tienda' },
-    { href: '/armar', texto: 'Tu negocio: empezá a armar el tuyo' },
-    { href: '/demos/turnos', texto: 'Peluquería: probá la demo de turnos' },
-    { href: '/demos/web', texto: 'Consultorio: probá la demo de página web' },
+  pista: 'Tocá un negocio y mirá cómo funciona',
+  plano: 'Plano de un pueblo con negocios de ejemplo. Tocá uno para ver su sistema funcionando.',
+  plaza: 'Plaza',
+  /** Nombre accesible del globo abierto. */
+  globo: (rubro: string, sistema: string) => `${rubro}: ${sistema}`,
+  /** Cada terreno con su rubro, el sistema que muestra y a dónde lleva. */
+  negocios: [
+    {
+      id: 'peluqueria',
+      rubro: 'Peluquería',
+      sistema: 'Turnos con seña',
+      href: '/demos/turnos',
+      ver: 'Probá la demo de turnos',
+    },
+    {
+      id: 'pizzeria',
+      rubro: 'Pizzería',
+      sistema: 'Pedidos online',
+      href: '/demos/pedidos',
+      ver: 'Probá la demo de pedidos',
+    },
+    {
+      id: 'tu',
+      rubro: 'Tu negocio',
+      sistema: 'Lo armamos con vos',
+      href: '/armar',
+      ver: 'Armá tu sistema',
+    },
+    {
+      id: 'comercio',
+      rubro: 'Comercio',
+      sistema: 'Tienda online',
+      href: '/demos/tienda',
+      ver: 'Probá la demo de tienda',
+    },
+    {
+      id: 'consultorio',
+      rubro: 'Consultorio',
+      sistema: 'Página web',
+      href: '/demos/web',
+      ver: 'Probá la demo de página web',
+    },
   ],
-  /** Carteles de la calle (rubros, no negocios inventados) y el del medio, que es el tuyo. */
-  carteles: { tuNegocio: 'Tu negocio', abierto: 'ABIERTO' },
-  rubros: ['Panadería', 'Librería', 'Peluquería', 'Consultorio'],
-  /** La luna o el sol del hero: un interruptor de día y noche. */
-  astro: { dia: 'Hacer de día', noche: 'Hacer de noche', pista: 'Hacé de día' },
-  escena:
-    'Ilustración: una calle de negocios que se hace de noche. Los demás locales cierran y el tuyo sigue abierto, con tu sitio en la vidriera.',
+  /** El globo de tu negocio: no es una demo, es la invitación. */
+  tuNegocio: {
+    titulo: 'Acá va el tuyo',
+    texto: 'Elegís qué necesitás y lo armamos con vos.',
+  },
 } as const;
 
-/** "Confían en Webya": los logos de los clientes, cada uno en una vidriera encendida de la misma calle. */
+/** "Confían en Webya": los logos de los clientes, sobre el horizonte del pueblo. */
 export const CONFIAN = {
   id: 'confian',
   rotulo: 'Confían en Webya',

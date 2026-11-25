@@ -6,7 +6,7 @@ import { ProductoVista } from '@/components/marketing/home3d/ProductoVista';
 import { Pagina } from '@/components/marketing/editorial/Pagina';
 import { Rubros } from '@/components/marketing/editorial/Rubros';
 import { Confian } from '@/components/marketing/inicio/Confian';
-import { HeroCalle } from '@/components/marketing/inicio/HeroCalle';
+import { HeroPueblo } from '@/components/marketing/inicio/HeroPueblo';
 import { Servicios } from '@/components/marketing/inicio/Servicios';
 import { Trabajos } from '@/components/marketing/inicio/Trabajos';
 import { SEO_SITIO, jsonLdNegocio, serializarLd } from '@/content/seo';
@@ -48,7 +48,7 @@ export default function Inicio() {
   return (
     <Pagina headerEncima>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializarLd(LD) }} />
-      <HeroCalle />
+      <HeroPueblo />
       <Confian />
       <Trabajos />
       <Servicios />

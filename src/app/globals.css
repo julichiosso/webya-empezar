@@ -14,6 +14,7 @@
 @import '../styles/home.css';
 @import '../styles/asistente.css';
 @import '../styles/locales.css';
+@import '../styles/pueblo.css';
 
 @layer base {
   html {
