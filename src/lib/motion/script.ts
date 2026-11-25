@@ -1,7 +1,7 @@
 /**
  * Motor de movimiento de todo el sitio: un solo `<script>` en línea (~1 KB), sin React ni librerías.
  *
- * - `[data-reveal]`, `[data-words]`, `[data-draw]`: reciben `.in` una vez al entrar en pantalla (CSS anima
+ * - `[data-reveal]`, `[data-words]`, `[data-draw]`: reciben `data-in` una vez al entrar en pantalla (CSS anima
  *   opacity/transform o el trazo).
  * - `[data-count]`: cuenta de 0 al número que ya trae el HTML (sin JS se ve el número final).
  * - `[data-loop]`: `.on` mientras está en pantalla; fuera de pantalla las animaciones en bucle se pausan.
@@ -27,7 +27,7 @@ var t0=performance.now(),dur=900;
 function paso(t){var p=Math.min(1,(t-t0)/dur);el.textContent=String(Math.round(fin*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(paso);}
 el.textContent='0';requestAnimationFrame(paso);
 }
-var una=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;el.classList.add('in');una.unobserve(el);if(el.hasAttribute('data-count'))contar(el);});},{rootMargin:'0px 0px -8% 0px',threshold:0.1});
+var una=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;el.setAttribute('data-in','');una.unobserve(el);if(el.hasAttribute('data-count'))contar(el);});},{rootMargin:'0px 0px -8% 0px',threshold:0.1});
 var bucle=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('on',e.isIntersecting);});});
 var pasos=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var c=e.target.closest('[data-steps]');if(c)c.setAttribute('data-paso',e.target.getAttribute('data-step'));});},{rootMargin:'-42% 0px -42% 0px'});
 function cada(raiz,sel,fn){if(raiz.matches&&raiz.matches(sel))fn(raiz);raiz.querySelectorAll(sel).forEach(fn);}

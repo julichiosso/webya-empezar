@@ -206,11 +206,11 @@
 .cf-toldo-tela {
   transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.mo .cf-toldo[data-reveal]:not(.in) {
+.mo .cf-toldo[data-reveal]:not([data-in]) {
   opacity: 1;
   transform: none;
 }
-.mo .cf-toldo:not(.in) .cf-toldo-tela {
+.mo .cf-toldo:not([data-in]) .cf-toldo-tela {
   transform: scaleY(0);
 }
 /* "Confían en Webya": texto común, sin recuadro ni mayúsculas espaciadas. */

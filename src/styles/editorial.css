@@ -348,7 +348,7 @@ dd {
     transform 700ms var(--ease-editorial);
   transition-delay: calc(var(--i, 0) * 70ms);
 }
-.mo [data-reveal]:not(.in) {
+.mo [data-reveal]:not([data-in]) {
   opacity: 0;
   transform: translate3d(0, 1.25rem, 0);
 }
@@ -366,7 +366,7 @@ dd {
   transition: transform 800ms var(--ease-editorial);
   transition-delay: calc(var(--i, 0) * 55ms);
 }
-.mo [data-words]:not(.in) .e-palabra > span {
+.mo [data-words]:not([data-in]) .e-palabra > span {
   transform: translate3d(0, 108%, 0);
 }
 
@@ -417,7 +417,7 @@ dd {
   transition: stroke-dashoffset 1400ms var(--ease-editorial);
   transition-delay: calc(var(--i, 0) * 120ms);
 }
-.mo [data-draw]:not(.in) .e-trazo {
+.mo [data-draw]:not([data-in]) .e-trazo {
   stroke-dashoffset: 1;
 }
 
@@ -428,7 +428,7 @@ dd {
   transform-origin: left;
   transition: transform 1100ms var(--ease-editorial);
 }
-.mo .e-regla:not(.in) {
+.mo .e-regla:not([data-in]) {
   transform: scaleX(0);
 }
 
@@ -943,7 +943,7 @@ dd {
   transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.18, 1);
   transition-delay: calc(150ms + var(--i, 0) * 260ms);
 }
-.mo [data-reveal]:not(.in) .e-manifiesto-palabra::after {
+.mo [data-reveal]:not([data-in]) .e-manifiesto-palabra::after {
   clip-path: inset(0 100% 0 0);
 }
 
