@@ -693,3 +693,10 @@ header.a-nav[data-sobre='oscuro'] {
   will-change: transform;
 }
 
+/* "Qué necesita tu negocio" y "Quiénes somos" se pintan siempre: con content-visibility reservaban 1000 px
+   y miden otra cosa (780 px la segunda), así que al llegar rápido abajo la página saltaba (CLS ~0,3). Son
+   livianas: no vale la pena el ahorro. */
+#necesita,
+#quienes-somos {
+  content-visibility: visible;
+}
