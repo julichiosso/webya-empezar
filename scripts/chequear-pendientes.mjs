@@ -6,7 +6,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const RAIZ = join(process.cwd(), '.next');
+const RAIZ = join(process.cwd(), process.env.NEXT_DIST_DIR || '.next');
 const CARPETAS = [join(RAIZ, 'server', 'app'), join(RAIZ, 'static')];
 const PUBLICADO = /\.(html|rsc|body|js|json|txt)$/;
 const SERVIDOR_JS = /[\\/]server[\\/]app[\\/].*\.js$/;

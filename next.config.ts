@@ -32,6 +32,9 @@ const securityHeaders = [
 ];
 
 const config: NextConfig = {
+  // Carpeta del build: por defecto .next. Las pruebas locales usan otra (NEXT_DIST_DIR=.next-pruebas)
+  // para no pisar la de un next dev que esté corriendo (le borraba los estilos a mitad de compilación).
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   poweredByHeader: false,
   reactStrictMode: true,
   experimental: {
